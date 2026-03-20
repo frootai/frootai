@@ -1,0 +1,47 @@
+{
+  "name": "frootai-mcp",
+  "version": "1.0.0",
+  "description": "FrootAI MCP Server — AI architecture knowledge as an agent skill. 17 modules, 200+ terms, 7 decision guides.",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "frootai-mcp": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "knowledge.json",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "build": "node build-knowledge.js",
+    "prepublishOnly": "node build-knowledge.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "architecture",
+    "azure",
+    "llm",
+    "rag",
+    "agents",
+    "frootai",
+    "knowledge-base",
+    "semantic-kernel",
+    "copilot"
+  ],
+  "author": "Pavleen Bali",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitpavleenbali/frootai"
+  },
+  "homepage": "https://gitpavleenbali.github.io/frootai/",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

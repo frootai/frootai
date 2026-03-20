@@ -1,0 +1,8 @@
+node_modules/
+website/build/
+website/.docusaurus/
+website/node_modules/
+mcp-server/node_modules/
+.DS_Store
+*.log
+.env

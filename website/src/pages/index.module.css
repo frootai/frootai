@@ -1,0 +1,504 @@
+/* ================================================================== */
+/*  AIFROOT LANDING PAGE — Root to Fruit theme                         */
+/* ================================================================== */
+
+.hero {
+  padding: 80px 24px 60px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.10) 0%, rgba(99, 102, 241, 0.06) 40%, transparent 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(245, 158, 11, 0.03), transparent 40%),
+              radial-gradient(circle at 70% 50%, rgba(124, 58, 237, 0.03), transparent 40%);
+  animation: heroShift 15s ease-in-out infinite alternate;
+}
+
+@keyframes heroShift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-3%, 2%); }
+}
+
+.heroInner {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.heroLogo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 20px rgba(16, 185, 129, 0.3));
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.heroLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #10b981;
+  margin-bottom: 12px;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 30%, #6366f1 60%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .heroTitle {
+  background: linear-gradient(135deg, #059669 0%, #0891b2 30%, #4f46e5 60%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroAcronym {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-500);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+
+.heroAcronym span {
+  font-weight: 700;
+}
+
+.heroAcronymF { color: #f59e0b; }
+.heroAcronymR { color: #10b981; }
+.heroAcronymO1 { color: #06b6d4; }
+.heroAcronymO2 { color: #6366f1; }
+.heroAcronymT { color: #7c3aed; }
+
+.heroSub {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 12px;
+}
+
+.heroSlogan {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ifm-color-emphasis-400);
+  margin-bottom: 32px;
+}
+
+.heroCta {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.ctaPrimary {
+  padding: 14px 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  color: #fff !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.45);
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  padding: 14px 36px;
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base) !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.ctaSecondary:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.06);
+  color: var(--ifm-font-color-base) !important;
+  text-decoration: none;
+}
+
+/* Stats bar */
+.heroStats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNum {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ifm-color-emphasis-500);
+  margin-top: 2px;
+}
+
+/* ================================================================== */
+/*  FROOT LAYERS SECTION                                               */
+/* ================================================================== */
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.sectionSub {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-500);
+  text-align: center;
+  margin-bottom: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* FROOT Layer Cards */
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 64px;
+}
+
+.layer {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ifm-background-surface-color);
+  transition: border-color 0.3s;
+}
+
+.layer:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.layerHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  cursor: default;
+}
+
+.layerIcon {
+  font-size: 1.8rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.layerTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.layerMeta {
+  font-size: 0.78rem;
+  color: var(--ifm-color-emphasis-500);
+  margin-top: 2px;
+}
+
+.layerModules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 0 24px 24px;
+}
+
+.moduleCard {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  text-decoration: none !important;
+  color: var(--ifm-font-color-base) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.moduleCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.2);
+  text-decoration: none !important;
+}
+
+.moduleId {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.moduleTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.moduleDesc {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-500);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.moduleDuration {
+  font-size: 0.72rem;
+  color: var(--ifm-color-emphasis-400);
+  margin-top: 8px;
+}
+
+.moduleArrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.moduleCard:hover .moduleArrow {
+  opacity: 1;
+  transform: translateY(-50%) translateX(3px);
+}
+
+/* ================================================================== */
+/*  PATHS SECTION                                                      */
+/* ================================================================== */
+
+.paths {
+  margin-bottom: 64px;
+}
+
+.pathGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.pathCard {
+  padding: 24px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 14px;
+  background: var(--ifm-background-surface-color);
+  transition: border-color 0.2s;
+}
+
+.pathCard:hover {
+  border-color: rgba(99,102,241,0.25);
+}
+
+.pathEmoji {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.pathTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.pathDesc {
+  font-size: 0.82rem;
+  color: var(--ifm-color-emphasis-500);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.pathDuration {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-400);
+}
+
+.pathModules {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-400);
+  font-family: var(--ifm-font-family-monospace);
+  margin-top: 4px;
+}
+
+/* ================================================================== */
+/*  LENS SECTION (Telescope / Microscope)                              */
+/* ================================================================== */
+
+.lensSection {
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.lensGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.lensCard {
+  padding: 28px 24px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 14px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.lensCard:hover {
+  border-color: rgba(99,102,241,0.25);
+}
+
+.lensEmoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.lensTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lensList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lensList li {
+  font-size: 0.82rem;
+  color: var(--ifm-color-emphasis-500);
+  line-height: 1.7;
+  padding: 2px 0;
+}
+
+/* ================================================================== */
+/*  CTA SECTION                                                        */
+/* ================================================================== */
+
+.ctaSection {
+  text-align: center;
+  padding: 40px 24px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  background: var(--ifm-background-surface-color);
+}
+
+.ctaDesc {
+  font-size: 0.92rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 20px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #10b981);
+  color: #fff !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+  transition: all 0.3s;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+/* ================================================================== */
+/*  RESPONSIVE                                                         */
+/* ================================================================== */
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.4rem;
+  }
+  .heroStats {
+    gap: 20px;
+  }
+  .heroCta {
+    flex-direction: column;
+    align-items: center;
+  }
+  .lensGrid {
+    grid-template-columns: 1fr;
+  }
+  .pathGrid {
+    grid-template-columns: 1fr;
+  }
+  .layerModules {
+    grid-template-columns: 1fr;
+  }
+}
