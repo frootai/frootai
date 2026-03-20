@@ -511,7 +511,7 @@ export default function FrootAIPage(): JSX.Element {
             <Link className={styles.ctaButton} to="#mcp-tooling" style={{ background: "linear-gradient(135deg, #6366f1, #7c3aed)" }}>
               🔌 Add MCP to Your Agent
             </Link>
-            <Link className={styles.ctaButton} to="https://github.com/gitpavleenbali/azure-wiki" style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+            <Link className={styles.ctaButton} to="https://github.com/gitpavleenbali/frootai" style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
               ⭐ Star on GitHub
             </Link>
           </div>

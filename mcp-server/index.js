@@ -172,7 +172,8 @@ function loadGlossary(modules) {
   let currentDef = [];
 
   for (const line of lines) {
-    const termMatch = line.match(/^### (.+?)(\s+[🌱🪵🌿🏗️🍎])?$/);
+    // Match ### headings, strip any trailing emoji tags
+    const termMatch = line.match(/^### (.+)/);
     if (termMatch) {
       if (currentTerm) {
         glossary[currentTerm.toLowerCase()] = {
@@ -180,7 +181,8 @@ function loadGlossary(modules) {
           definition: currentDef.join("\n").trim(),
         };
       }
-      currentTerm = termMatch[1].trim();
+      // Strip emoji tags like 🌱🪵🌿🏗️🍎 from the end of the term name
+      currentTerm = termMatch[1].replace(/\s*[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}]+\s*$/u, "").trim();
       currentDef = [];
     } else if (currentTerm) {
       currentDef.push(line);

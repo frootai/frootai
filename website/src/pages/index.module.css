@@ -186,7 +186,7 @@
 /* ================================================================== */
 
 .main {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 48px 24px 80px;
 }
@@ -263,7 +263,7 @@
 
 .layerModules {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   padding: 0 24px 24px;
 }
@@ -338,7 +338,7 @@
 
 .pathGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -500,5 +500,14 @@
   }
   .layerModules {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .layerModules {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pathGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
