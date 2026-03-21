@@ -6,3 +6,6 @@ mcp-server/node_modules/
 .DS_Store
 *.log
 .env
+
+# Internal development plans — NOT pushed to remote
+.internal/

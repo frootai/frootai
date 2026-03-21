@@ -1,0 +1,27 @@
+{
+  "content_safety": {
+    "enabled": true,
+    "categories": ["hate", "self_harm", "sexual", "violence"],
+    "severity_threshold": 2,
+    "action": "block"
+  },
+  "pii_detection": {
+    "enabled": true,
+    "categories": ["email", "phone", "ssn", "credit_card"],
+    "action": "redact"
+  },
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block"
+  },
+  "business_rules": {
+    "max_response_tokens": 1000,
+    "require_citations": true,
+    "min_confidence_to_answer": 0.7,
+    "abstention_message": "I don't have enough verified information to answer this accurately."
+  },
+  "_comments": {
+    "severity_threshold": "0-6 scale. 2 = moderate. Lower = stricter filtering.",
+    "min_confidence_to_answer": "0.7 = refuse if ALL retrieved chunks score below this. Lower for recall, higher for precision."
+  }
+}

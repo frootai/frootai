@@ -1,0 +1,16 @@
+{
+  "networking": {
+    "vnet_address_space": "10.0.0.0/16",
+    "subnets": {
+      "private_endpoints": "10.0.1.0/24",
+      "applications": "10.0.2.0/24",
+      "compute": "10.0.3.0/24"
+    }
+  },
+  "services": {
+    "azure_openai": { "sku": "S0", "model": "gpt-4o", "capacity": 80 },
+    "ai_search": { "sku": "standard" },
+    "storage": { "sku": "Standard_LRS", "kind": "StorageV2" },
+    "container_apps": { "plan": "consumption" }
+  }
+}

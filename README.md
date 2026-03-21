@@ -104,9 +104,9 @@ Pre-tuned, deployable AI solutions — infra + AI config + agent instructions + 
 | 01 | [Enterprise RAG Q&A](./solution-plays/01-enterprise-rag/) | AI Search + OpenAI + Container App (pre-tuned) | ✅ Ready |
 | 02 | [AI Landing Zone](./solution-plays/02-ai-landing-zone/) | VNet + PE + RBAC + GPU + AI Services | ✅ Ready |
 | 03 | [Deterministic Agent](./solution-plays/03-deterministic-agent/) | Reliable agent with temp=0, guardrails, eval | ✅ Ready |
-| 04–20 | [See roadmap](./ROADMAP.md) | Call center, IT tickets, multi-agent, and more | 🔜 Coming |
+| 04–20 | More coming soon | Call center, IT tickets, multi-agent, and more | 🔜 Coming |
 
-[📖 All Solution Plays →](./solution-plays/) · [📖 Roadmap →](./ROADMAP.md)
+[📖 All Solution Plays →](./solution-plays/)
 
 ---
 

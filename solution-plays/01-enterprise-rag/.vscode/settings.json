@@ -1,0 +1,12 @@
+{
+  "python.defaultInterpreterPath": "python3",
+  "python.linting.enabled": true,
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "*.bicep": "bicep"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "chat.agent.enabled": true
+}

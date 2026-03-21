@@ -1,0 +1,5 @@
+{"questions": [
+  {"id": "q001", "question": "What is the company's remote work policy?", "ground_truth": "Employees may work remotely up to 3 days per week.", "category": "HR"},
+  {"id": "q002", "question": "How do I request VPN access?", "ground_truth": "Submit a ServiceNow request under Network Access.", "category": "IT"},
+  {"id": "q003", "question": "What is the AI model deployment process?", "ground_truth": "Follow the MLOps pipeline: dev → staging → production with evaluation gates.", "category": "Engineering"}
+]}

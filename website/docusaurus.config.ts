@@ -81,6 +81,11 @@ const config: Config = {
           position: "left",
         },
         {
+          to: "/solution-plays",
+          label: "🎯 Solution Plays",
+          position: "left",
+        },
+        {
           to: "/",
           label: "🌳 FrootAI",
           position: "right",
