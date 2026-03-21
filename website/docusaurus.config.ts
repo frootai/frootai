@@ -114,7 +114,7 @@ const config: Config = {
         {
           title: "Install",
           items: [
-            { label: "npm: frootai-mcp", href: "https://www.npmjs.com/package/frootai-mcp" },
+            { label: "FrootAI MCP (npm)", href: "https://www.npmjs.com/package/frootai-mcp" },
             { label: "VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
           ],
         },

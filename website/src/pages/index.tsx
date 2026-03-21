@@ -47,7 +47,7 @@ const outcomes = [
 function ExpandableLayer({ layer }: { layer: typeof layers[0] }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ border: `1px solid ${layer.color}33`, borderRadius: "12px", overflow: "hidden", marginBottom: "8px" }}>
+    <div className={styles.frootLayer} style={{ "--layer-color": layer.color } as React.CSSProperties}>
       <button onClick={() => setOpen(!open)} style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "12px 16px", background: "transparent", border: "none", cursor: "pointer", color: "var(--ifm-font-color-base)" }}>
         <span style={{ fontSize: "1.2rem" }}>{layer.icon}</span>
         <span style={{ fontWeight: 700, fontSize: "0.88rem", color: layer.color }}>{layer.id} — {layer.title}</span>
@@ -78,13 +78,13 @@ export default function FrootAIPage(): JSX.Element {
         <div className={styles.heroInner}>
           <img src="/frootai/img/aifroot-logo.svg" alt="FrootAI" className={styles.heroLogo} />
 
+          <h1 className={styles.heroTitle}>FrootAI</h1>
+
           <p className={styles.heroLabel}>From the Roots to the Fruits</p>
 
           <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-400)", margin: "0 auto 8px", letterSpacing: "0.03em" }}>
             Infra ⇄ Platform ⇄ Apps
           </p>
-
-          <h1 className={styles.heroTitle}>FrootAI</h1>
 
           <p className={styles.heroAcronym}>
             AI <span className={styles.heroAcronymF}>F</span>oundations · <span className={styles.heroAcronymR}>R</span>easoning · <span className={styles.heroAcronymO1}>O</span>rchestration · <span className={styles.heroAcronymO2}>O</span>perations · <span className={styles.heroAcronymT}>T</span>ransformation
@@ -92,8 +92,11 @@ export default function FrootAIPage(): JSX.Element {
 
           {/* Green translucent mission box */}
           <div style={{ maxWidth: "640px", margin: "16px auto 0", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.25)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.04))" }}>
-            <p style={{ fontSize: "0.84rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.6, margin: 0, textAlign: "center" }}>
+            <p style={{ fontSize: "0.84rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.6, margin: "0 0 8px", textAlign: "center" }}>
               <em>"Build It Yourself (BIY) — A power kit for infrastructure, platform, and application teams to master and bridge the gap with AI Infra, AI Platform, and AI Application Agent Ecosystem."</em>
+            </p>
+            <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", margin: 0, textAlign: "center" }}>
+              From a single token to a production agent fleet.
             </p>
           </div>
         </div>
@@ -158,8 +161,8 @@ export default function FrootAIPage(): JSX.Element {
 
         {/* ═══ 6. CTA ═══ */}
         <section className={styles.ctaSection}>
-          <h2 style={{ fontSize: "1.3rem", fontWeight: 800, textAlign: "center", margin: "0 0 4px" }}>FrootAI — The BIY AI Kit</h2>
-          <h3 style={{ fontSize: "0.85rem", fontWeight: 400, color: "var(--ifm-color-emphasis-500)", textAlign: "center", margin: "0 0 4px" }}>For Infrastructure, Platform, and Application Teams</h3>
+          <h2 className={styles.sectionTitle}>FrootAI — The BIY AI Kit</h2>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", textAlign: "center", margin: "0 0 4px" }}>For Infrastructure, Platform, and Application Teams</p>
           <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 20px" }}>
             Infrastructure are the roots. Platform is the trunk. Application is the fruit.
           </p>
@@ -170,7 +173,6 @@ export default function FrootAIPage(): JSX.Element {
               { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
               { label: "📦 Packages", to: "/packages", color: "#06b6d4" },
               { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#f59e0b" },
-              { label: "📂 GitHub Codebase", to: "https://github.com/gitpavleenbali/frootai", color: "#6366f1" },
             ].map((link) => (
               <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}
                 onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>
