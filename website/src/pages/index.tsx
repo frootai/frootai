@@ -108,7 +108,7 @@ export default function FrootAIPage(): JSX.Element {
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The Ecosystem</h2>
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px", padding: "6px 0" }}>
             {[
               { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "#10b981" },
@@ -121,6 +121,12 @@ export default function FrootAIPage(): JSX.Element {
                 <div style={{ fontSize: "0.72rem", color: card.color }}>{card.sub}</div>
               </Link>
             ))}
+            {/* Coming Soon tile */}
+            <div style={{ padding: "18px", borderRadius: "14px", border: "2px dashed rgba(245, 158, 11, 0.3)", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", opacity: 0.7 }}>
+              <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🔮</div>
+              <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>New Feature</div>
+              <div style={{ fontSize: "0.72rem", color: "#f59e0b" }}>Coming Soon</div>
+            </div>
           </div>
         </section>
 
@@ -168,7 +174,7 @@ export default function FrootAIPage(): JSX.Element {
             <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 16px" }}>
               Infrastructure are the roots. Platform is the trunk. Application is the fruit.
             </p>
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
               {[
                 { label: "🎓 AI Knowledge Hub", to: "/docs/", color: "#f59e0b" },
                 { label: "🔗 Ecosystem", to: "/ecosystem", color: "#10b981" },

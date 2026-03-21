@@ -102,9 +102,9 @@ function PlayCard({ play }: { play: typeof plays[0] }): JSX.Element {
           <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)" }}><strong>Tuning:</strong> {play.tune}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "6px", flexShrink: 0 }}>
-          <Link to={play.github} style={{ padding: "6px 14px", borderRadius: "8px", background: "linear-gradient(135deg, #6366f1, #7c3aed)", color: "#fff", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>GitHub</Link>
-          <Link to={`${play.github}#-devkit--developer-velocity-ecosystem`} style={{ padding: "6px 14px", borderRadius: "8px", border: "1px solid rgba(6,182,212,0.3)", color: "#06b6d4", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>🛠️ DevKit</Link>
-          <Link to={`${play.github}#-tunekit--ai-fine-tuning-ecosystem`} style={{ padding: "6px 14px", borderRadius: "8px", border: "1px solid rgba(124,58,237,0.3)", color: "#7c3aed", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>🎛️ TuneKit</Link>
+          <Link to={play.github} className="glow-btn glow-btn-github">GitHub</Link>
+          <Link to={`${play.github}#-devkit--developer-velocity-ecosystem`} className="glow-btn glow-btn-devkit">🛠️ DevKit</Link>
+          <Link to={`${play.github}#-tunekit--ai-fine-tuning-ecosystem`} className="glow-btn glow-btn-tunekit">🎛️ TuneKit</Link>
         </div>
       </div>
       {/* Expandable user guide */}

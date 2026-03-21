@@ -736,7 +736,8 @@ article .mermaid {
 /* Force ALL inline-styled divs to respect viewport */
 div[style] {
   max-width: 100% !important;
-  overflow-x: hidden;
+  /* NOTE: Do NOT add overflow-x: hidden here — it forces overflow-y: auto
+     per CSS spec, which clips translateY hover animations (border eaten). */
 }
 
 /* Force ALL grids to wrap on small screens */
@@ -789,4 +790,64 @@ div[style] {
   div[style*="gridTemplateColumns"] {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+}
+
+/* ================================================================== */
+/*  GLOW BUTTONS — for solution plays and other pages                  */
+/* ================================================================== */
+
+.glow-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  text-align: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow-btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none !important;
+}
+
+.glow-btn-github {
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: #fff !important;
+}
+.glow-btn-github:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  color: #fff !important;
+}
+
+.glow-btn-devkit {
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #06b6d4 !important;
+  background: transparent;
+}
+.glow-btn-devkit:hover {
+  border-color: #06b6d4;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.06);
+  color: #06b6d4 !important;
+}
+
+.glow-btn-tunekit {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  color: #7c3aed !important;
+  background: transparent;
+}
+.glow-btn-tunekit:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.3);
+  background: rgba(124, 58, 237, 0.06);
+  color: #7c3aed !important;
+}
+
+/* Scrollable table wrapper — for setup guide tools table on mobile */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }

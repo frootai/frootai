@@ -189,7 +189,8 @@ npm install`}
 
         {/* ── 5 Tools Reference ── */}
         <h2 style={h2Style}>Available Tools</h2>
-        <table style={{ width: "100%", fontSize: "0.85rem", borderCollapse: "collapse" }}>
+        <div className="table-scroll-wrapper">
+        <table style={{ width: "100%", fontSize: "0.85rem", borderCollapse: "collapse", minWidth: "600px" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid var(--ifm-color-emphasis-200)" }}>
               <th style={{ padding: "10px 12px", textAlign: "left" }}>Tool</th>
@@ -214,6 +215,7 @@ npm install`}
             ))}
           </tbody>
         </table>
+        </div>
 
         {/* ── Architecture Patterns ── */}
         <h2 style={h2Style}>Architecture Pattern Scenarios</h2>

@@ -86,11 +86,11 @@ export default function MCPToolingPage(): JSX.Element {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <Link to="/setup-guide" style={{ padding: "12px 32px", borderRadius: "10px", background: "linear-gradient(135deg, #059669, #10b981)", color: "#fff", fontWeight: 700, textDecoration: "none", marginRight: "12px" }}>
+          <Link to="/setup-guide" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block", marginRight: "12px" } as React.CSSProperties}>
             📖 Full Setup Guide
           </Link>
-          <Link to="/" style={{ padding: "12px 32px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-300)", color: "var(--ifm-font-color-base)", fontWeight: 600, textDecoration: "none" }}>
-            ← Back to FrootAI
+          <Link to="/" className={styles.glowPill} style={{ "--pill-color": "#f59e0b", display: "inline-block" } as React.CSSProperties}>
+            🌳 Back to FrootAI
           </Link>
         </div>
       </div>
