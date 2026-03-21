@@ -1,0 +1,7 @@
+# Only ship what's needed for the MCP server
+build-knowledge.js
+.github/
+.vscode/
+node_modules/
+*.log
+.DS_Store

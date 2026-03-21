@@ -1,0 +1,130 @@
+{
+  "name": "frootai",
+  "displayName": "FrootAI — AI Architecture Power Kit",
+  "description": "Know the roots. Ship the fruit. 20 solution plays, 17 knowledge modules, 200+ AI terms, MCP integration — right in your editor.",
+  "version": "0.1.0",
+  "publisher": "pavleenbali",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Education",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "architecture",
+    "azure",
+    "mcp",
+    "agents",
+    "rag",
+    "copilot",
+    "frootai",
+    "solution-plays",
+    "devkit",
+    "tunekit"
+  ],
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitpavleenbali/frootai"
+  },
+  "homepage": "https://gitpavleenbali.github.io/frootai/",
+  "license": "MIT",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "frootai-sidebar",
+          "title": "FrootAI",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "frootai-sidebar": [
+        {
+          "id": "frootai.solutionPlays",
+          "name": "Solution Plays"
+        },
+        {
+          "id": "frootai.frootModules",
+          "name": "FROOT Modules"
+        },
+        {
+          "id": "frootai.mcpTools",
+          "name": "MCP Tools"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "frootai.browseSolutionPlays",
+        "title": "FrootAI: Browse Solution Plays"
+      },
+      {
+        "command": "frootai.lookupTerm",
+        "title": "FrootAI: Look Up AI Term"
+      },
+      {
+        "command": "frootai.searchKnowledge",
+        "title": "FrootAI: Search Knowledge Base"
+      },
+      {
+        "command": "frootai.openSetupGuide",
+        "title": "FrootAI: Open Setup Guide"
+      },
+      {
+        "command": "frootai.openSolutionPlay",
+        "title": "FrootAI: Open Solution Play"
+      },
+      {
+        "command": "frootai.initDevKit",
+        "title": "FrootAI: Initialize DevKit for Current Project"
+      },
+      {
+        "command": "frootai.showArchitecturePattern",
+        "title": "FrootAI: Show Architecture Pattern"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "frootai.browseSolutionPlays",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "FrootAI",
+      "properties": {
+        "frootai.mcpServerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the FrootAI MCP server (index.js). Leave empty to use npx frootai-mcp."
+        },
+        "frootai.solutionPlaysPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the solution-plays directory. Leave empty for auto-detect."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node src/extension.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}
