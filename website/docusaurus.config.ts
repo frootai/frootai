@@ -76,8 +76,13 @@ const config: Config = {
           label: "AI Hub",
         },
         {
-          to: "/packages",
-          label: "📦 Packages",
+          to: "/ecosystem",
+          label: "🔗 Ecosystem",
+          position: "left",
+        },
+        {
+          to: "/mcp-tooling",
+          label: "🔌 MCP Tooling",
           position: "left",
         },
         {
@@ -86,10 +91,9 @@ const config: Config = {
           position: "left",
         },
         {
-          to: "/",
-          label: "🌳 FrootAI",
-          position: "right",
-          className: "navbar-frootai",
+          to: "/packages",
+          label: "📦 Packages",
+          position: "left",
         },
         {
           href: "https://github.com/gitpavleenbali/frootai/tree/main/mcp-server",
