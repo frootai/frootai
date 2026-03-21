@@ -5,13 +5,77 @@
 
 ---
 
+## Motto
+
+**FrootAI equips infrastructure and platform teams to go full-stack agentic — from ideation to shipping — without depending on AI application teams for the last 20%.**
+
+The world is changing. Full-stack is no longer back-end + front-end. It's full-stack from an **agentic point of view** — from infrastructure bedrock to production AI agents. FrootAI is the power kit that makes this possible.
+
+---
+
+## The $100B Gap
+
+Infra and platform teams do **80% of the work** — networking, GPU, landing zones, security, identity, hosting, scaling. But they stop at the "AI boundary" because nobody gave them the vocabulary, the patterns, or the packaged solutions to cross it.
+
+Then an application/AI team comes in, does the remaining 20% (tuning temperature, configuring prompts, setting up agents) — and takes **all the credit**.
+
+**FrootAI's play**: Give infra teams the **last mile** — pre-packaged solution plays where they can deploy RAG pipelines, tune AI parameters, configure semantic ranking, set up agent hosting — without needing an AI specialist.
+
+---
+
 ## Vision
 
-FrootAI is not documentation. It's an **engine** — a platform that empowers infrastructure and platform teams to design, deploy, and operate AI solutions end-to-end, without needing a separate AI team for the last 20%.
-
-**The gap we close**: Infra teams build 80% of the stack (networking, GPU, landing zones, security, hosting, scaling) but stop at the "AI boundary." FrootAI gives them the vocabulary, the patterns, the pre-tuned configurations, and the one-command solution plays to cross that boundary.
+FrootAI is not documentation. It's an **engine** — a platform that empowers infrastructure and platform teams to design, deploy, and operate AI solutions end-to-end.
 
 **The outcome**: An infra person runs `azd up`, and a production-grade RAG pipeline deploys — with pre-tuned temperature, chunk sizes, semantic ranking, agent instructions, and evaluation pipeline. No AI specialist needed.
+
+---
+
+## Two Modes of Empowerment
+
+FrootAI operates in **two distinct modes**. Both are equally critical:
+
+### Mode 1: Developer Playground Empowerment 🛠️
+
+*For developers BUILDING AI solutions in VS Code or any IDE.*
+
+When a developer is coding a solution play, FrootAI empowers their IDE:
+
+| Asset | What It Does | How Developer Uses It |
+|-------|-------------|----------------------|
+| **agent.md** | Defines agent personality, constraints, tools | VS Code Copilot reads it → co-coder understands the solution context |
+| **instructions.md** | System prompts, few-shot examples, guardrails | Copilot uses as reference when generating code |
+| **MCP server** | Exposes solution-specific tools + knowledge | Copilot queries MCP for architecture patterns while coding |
+| **plugins/** | Reusable SK/Agent Framework functions | Developer imports and composes into their code |
+| **.vscode/mcp.json** | Auto-connects FrootAI MCP in workspace | Zero-config — open folder, MCP is live |
+
+**The result**: The developer's co-coder (Copilot, Cursor, Claude) becomes **solution-aware**. It doesn't just write generic code — it writes code tuned for THIS solution play with the RIGHT parameters, the RIGHT patterns, the RIGHT guardrails.
+
+### Mode 2: Production AI Tuning 🎛️
+
+*For platform teams DEPLOYING and TUNING AI solutions in production.*
+
+Once infrastructure is deployed, FrootAI provides pre-tuned configuration for the AI layer:
+
+| Asset | What It Does | How Platform Team Uses It |
+|-------|-------------|--------------------------|
+| **config/openai.json** | Model, temperature, top-k, top-p, seed, schema | Review defaults → adjust knobs → deploy |
+| **config/search.json** | Vector config, hybrid weights, reranking, thresholds | Tune retrieval quality for their data |
+| **config/chunking.json** | Chunk size, overlap, strategy | Match to their document types |
+| **agent.md** | Agent behavior in production | System prompt deployed to the runtime |
+| **evaluation/** | Test set + scoring script | Run `eval.py` → verify quality meets targets |
+
+**The result**: The platform team doesn't need to guess AI parameters. They're pre-tuned by architects. They review, adjust if needed, deploy, and validate with the included evaluation pipeline.
+
+### Why Both Modes Matter
+
+```
+Developer Mode:   Coding  →  agent.md + MCP + plugins  →  Solution-aware co-coder
+Production Mode:  Deploy  →  config/ + eval/            →  Pre-tuned, validated AI
+
+Both together:    Ideation → Coding → Deploy → Tune → Evaluate → Ship
+                  ─────────── FrootAI covers the entire journey ───────────────
+```
 
 ---
 
@@ -26,6 +90,12 @@ Layer 1: ⚙️ INFRA BLUEPRINTS       Bicep/Terraform for AI Landing Zones
 ```
 
 Each layer builds on the one below. Solution plays compose all layers into one-click deployments.
+
+**Layer 3 clarification**: MCPs and plugins are NOT just documentation links. They are:
+- **MCP servers** that expose APIs, documentation, knowledge bases, and solution-specific tools
+- **SK plugins** that provide reusable functions for Semantic Kernel / Agent Framework
+- **Skill sets** similar to Anthropic Claude Skills or Azure VS Code skill sets
+- **The knowledge engine** — exposing curated, concise information that any agent can query
 
 ---
 
@@ -174,8 +244,52 @@ solution-plays/
 5. **Open source**: Core is free forever. The community grows the catalog.
 6. **Composable**: Solutions use shared MCPs, plugins, and infra blueprints.
 7. **Agent-native**: Every solution comes with instructions that work in VS Code Copilot, AI Foundry, or standalone.
+8. **Two modes**: Developer playground (agent.md + MCP for coding) AND production tuning (config/ + eval/).
+9. **Agnostic extensibility**: Users bring their own solution plays, infra, and use FrootAI as the skill/knowledge layer.
+
+---
+
+## Competitive Edge
+
+### What Makes FrootAI Different
+
+| Competitor | What They Do | What FrootAI Does Better |
+|-----------|-------------|-------------------------|
+| **awesome-copilot** | Catalogs 244 skills, 179 agents | FrootAI doesn't catalog — it **solves**. Complete solutions, not lists |
+| **Azure Quickstarts** | Deploy templates (Bicep/ARM) | FrootAI adds AI tuning + agent.md + evaluation on top of infra |
+| **LangChain Hub** | Prompt templates | FrootAI gives infra + prompts + evaluation + agent — the whole stack |
+| **Anthropic Skills** | Claude-specific skill sets | FrootAI is cross-platform (Azure, any MCP client) and infra-focused |
+| **Terraform Registry** | Infrastructure modules | FrootAI extends to Layer 5 (AI config + agents + evaluation) |
+
+### The Moat
+
+The moat is **not the code**. It's:
+1. **Curation** — every parameter is tuned by architects who've done this in production
+2. **The two-mode model** — nobody else gives BOTH developer co-coder empowerment AND production AI tuning
+3. **Community** — like Terraform Registry or Awesome lists, value compounds with every contribution
+4. **The vocabulary bridge** — FrootAI gives infra teams the AI vocabulary they need to cross the boundary
+
+### Why This Gets Acquired
+
+| Buyer | Why They'd Want FrootAI |
+|-------|------------------------|
+| **Microsoft** | Complements Azure AI Foundry — platform exists but "infra-to-AI bridge" content doesn't. FrootAI becomes the official getting-started for enterprise AI |
+| **Anthropic** | Claude Skills/Essentials direction — FrootAI is what they're building at cloud.anthropic.com, but for the Azure/infra audience |
+| **Meta** | Llama ecosystem needs deployment patterns — FrootAI provides them |
+| **Consulting firms** | Accenture, Deloitte, Wipro — their consultants need this exact toolkit for every AI engagement |
+
+---
+
+## Revenue Paths
+
+- **Open source core** (free forever) — builds community, trust, adoption
+- **Enterprise solution packs** — premium pre-validated solutions with SLA
+- **Consulting & implementation** — help enterprises deploy customized solution plays
+- **Certification & training** — FrootAI certified architect program
+- **Acquisition** — proven community + adopted toolkit = acquisition target
 
 ---
 
 > **FrootAI** — Know the roots. Ship the fruit.
-> The power kit for infrastructure people to master the AI ecosystem.
+> The power kit that equips infra and platform teams to go full-stack agentic.
+> From ideation to shipping. No silos. No dependencies. Ship it yourself.
