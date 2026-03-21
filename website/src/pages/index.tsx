@@ -93,7 +93,7 @@ export default function FrootAIPage(): JSX.Element {
           {/* Green translucent mission box */}
           <div style={{ maxWidth: "640px", margin: "16px auto 0", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.25)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.04))" }}>
             <p style={{ fontSize: "0.84rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.6, margin: "0 0 8px", textAlign: "center" }}>
-              <em>"Build It Yourself (BIY) — A power kit for infrastructure, platform, and application teams to master and bridge the gap with AI Infra, AI Platform, and AI Application Agent Ecosystem."</em>
+              <em>"Build It Yourself (BIY) — A power kit for infrastructure, platform, and application teams to master and bridge the gap between AI Infra, AI Platform, and the AI Application Agentic Ecosystem."</em>
             </p>
             <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", margin: 0, textAlign: "center" }}>
               From a single token to a production agent fleet.
@@ -110,7 +110,7 @@ export default function FrootAIPage(): JSX.Element {
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
             {[
-              { to: "/ecosystem", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
+              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "#10b981" },
               { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "DevKit + TuneKit", color: "#7c3aed" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#06b6d4" },
