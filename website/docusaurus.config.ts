@@ -86,6 +86,11 @@ const config: Config = {
           position: "left",
         },
         {
+          to: "/packages",
+          label: "🧩 Packages",
+          position: "left",
+        },
+        {
           href: "https://github.com/gitpavleenbali/frootai",
           label: "GitHub",
           position: "right",
