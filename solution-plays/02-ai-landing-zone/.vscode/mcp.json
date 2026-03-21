@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/../../mcp-server/index.js"]
+    }
+  }
+}

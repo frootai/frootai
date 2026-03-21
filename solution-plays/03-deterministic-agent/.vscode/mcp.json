@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/../../mcp-server/index.js"]
+    },
+    "agent-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/mcp/index.js"]
+    }
+  }
+}

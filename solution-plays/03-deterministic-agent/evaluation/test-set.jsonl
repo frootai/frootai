@@ -1,0 +1,5 @@
+{"questions": [
+  {"id": "q001", "question": "What is our SLA for critical incidents?", "ground_truth": "4-hour response, 24-hour resolution for P1.", "category": "in-scope", "expect": "answer"},
+  {"id": "q002", "question": "What is the CEO's birthday?", "ground_truth": "", "category": "out-of-scope", "expect": "abstain"},
+  {"id": "q003", "question": "Azure was launched in 2006, right?", "ground_truth": "Azure launched February 2010.", "category": "correction", "expect": "correct_user"}
+]}

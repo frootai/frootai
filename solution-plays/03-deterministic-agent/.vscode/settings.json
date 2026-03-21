@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  "python.defaultInterpreterPath": "python3",
+  "chat.agent.enabled": true
+}
