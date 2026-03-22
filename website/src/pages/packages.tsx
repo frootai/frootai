@@ -414,6 +414,16 @@ export default function PackagesPage(): JSX.Element {
             <p>No packages match your search. Try a different term.</p>
           </div>
         )}
+
+        {/* Navigation */}
+        <div style={{ textAlign: "center", marginTop: "32px", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
+          <Link to="/ecosystem" style={{ padding: "8px 18px", borderRadius: "10px", border: "1px solid rgba(16,185,129,0.3)", fontSize: "0.78rem", fontWeight: 600, textDecoration: "none", color: "var(--ifm-font-color-base)", transition: "all 0.25s" }}>
+            🔗 Back to Ecosystem
+          </Link>
+          <Link to="/" style={{ padding: "8px 18px", borderRadius: "10px", border: "1px solid rgba(245,158,11,0.3)", fontSize: "0.78rem", fontWeight: 600, textDecoration: "none", color: "var(--ifm-font-color-base)", transition: "all 0.25s" }}>
+            🌳 Back to FrootAI
+          </Link>
+        </div>
       </div>
     </Layout>
   );

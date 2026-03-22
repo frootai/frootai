@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
+import styles from "./index.module.css";
 
 const plays = [
   { id: "01", name: "Enterprise RAG Q&A", icon: "🔍", status: "Ready", cx: "Medium", desc: "Production RAG — AI Search + OpenAI + Container Apps. Pre-tuned: temp=0.1, hybrid 60/40, top-k=5, semantic reranker.", infra: "AI Search · Azure OpenAI · Container Apps · Blob", tune: "temperature · top-k · chunk size · reranking · relevance threshold", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/01-enterprise-rag",
@@ -89,7 +90,7 @@ function PlayCard({ play }: { play: typeof plays[0] }): JSX.Element {
   const [expanded, setExpanded] = useState(false);
   const isReady = play.status === "Ready";
   return (
-    <div style={{ padding: "20px 24px", borderRadius: "16px", border: `1px solid var(--ifm-color-emphasis-200)`, background: "var(--ifm-background-surface-color)", marginBottom: "16px" }}>
+    <div style={{ padding: "20px 24px", borderRadius: "16px", border: "1px solid var(--ifm-color-emphasis-200)", background: "var(--ifm-background-surface-color)", marginBottom: "16px", transition: "border-color 0.2s ease" }} onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.3)")} onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--ifm-color-emphasis-200)")}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: "200px" }}>
           <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 4px" }}>{play.icon} {play.id} — {play.name}</h3>
@@ -165,9 +166,12 @@ export default function SolutionPlaysPage(): JSX.Element {
           {plays.filter(p => p.status === "Ready").length} ready · {plays.filter(p => p.status === "Skeleton").length} skeleton · {plays.length} total
         </p>
         {plays.map((p) => <PlayCard key={p.id} play={p} />)}
-        <div style={{ textAlign: "center", marginTop: "32px" }}>
-          <Link to="/" style={{ display: "inline-block", padding: "12px 32px", borderRadius: "10px", background: "linear-gradient(135deg, #10b981, #06b6d4)", color: "#fff", fontWeight: 700, textDecoration: "none" }}>
-            ← Back to FrootAI
+        <div style={{ textAlign: "center", marginTop: "32px", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
+          <Link to="/ecosystem" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block" } as React.CSSProperties}>
+            🔗 Back to Ecosystem
+          </Link>
+          <Link to="/" className={styles.glowPill} style={{ "--pill-color": "#f59e0b", display: "inline-block" } as React.CSSProperties}>
+            🌳 Back to FrootAI
           </Link>
         </div>
       </div>

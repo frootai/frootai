@@ -21,13 +21,32 @@ export default function SetupGuidePage(): JSX.Element {
   const [activeTab, setActiveTab] = useState<"clone" | "vscode" | "foundry">("clone");
 
   return (
-    <Layout title="Setup Guide — FrootAI MCP Server" description="Step-by-step guide to add FrootAI MCP Server to your AI agent, VS Code, Claude Desktop, or Azure AI Foundry.">
+    <Layout title="Setup Guide — FrootAI" description="Step-by-step guide to set up FrootAI MCP Server and VS Code Extension for your development ecosystem.">
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "40px 24px 80px" }}>
 
-        <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "8px" }}>🔌 FrootAI MCP Setup Guide</h1>
+        <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "8px" }}>📖 FrootAI Setup Guide</h1>
         <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "32px" }}>
-          Add AI architecture knowledge to any agent in under 2 minutes. Works with Claude Desktop, VS Code, Cursor, Windsurf, Azure AI Foundry, and any MCP-compatible client.
+          Two tools, one setup page. Get FrootAI’s <strong>MCP Server</strong> (for your AI agent) and <strong>VS Code Extension</strong> (for you) up and running in minutes.
         </p>
+
+        {/* ══ SECTION SELECTOR ══ */}
+        <div style={{ display: "flex", gap: "12px", marginBottom: "32px", justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={() => { document.getElementById('mcp-section')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ padding: "10px 24px", borderRadius: "10px", border: "2px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 700, fontSize: "0.88rem", cursor: "pointer" }}>
+            📦 MCP Server Setup
+          </button>
+          <button onClick={() => { document.getElementById('vscode-section')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ padding: "10px 24px", borderRadius: "10px", border: "2px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 700, fontSize: "0.88rem", cursor: "pointer" }}>
+            💻 VS Code Extension Setup
+          </button>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* PART 1: MCP SERVER                                     */}
+        {/* ═══════════════════════════════════════════ */}
+        <div id="mcp-section" style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(16,185,129,0.2)", background: "rgba(16,185,129,0.02)", marginBottom: "48px" }}>
+          <h2 style={{ ...h2Style, marginTop: 0, color: "#10b981" }}>📦 Part 1: MCP Server Setup</h2>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "20px" }}>
+            Add AI architecture knowledge to any agent. Works with Claude Desktop, VS Code Copilot, Cursor, Windsurf, Azure MS Foundry, and any MCP-compatible client.
+          </p>
 
         {/* ── Prerequisites ── */}
         <div style={cardStyle}>
@@ -235,9 +254,91 @@ npm install`}
             </div>
           ))}
         </div>
+        </div>{/* end MCP section */}
 
-        {/* ── Troubleshooting ── */}
-        <h2 style={h2Style}>Troubleshooting</h2>
+        {/* ═══════════════════════════════════════════ */}
+        {/* PART 2: VS CODE EXTENSION                  */}
+        {/* ═══════════════════════════════════════════ */}
+        <div id="vscode-section" style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(99,102,241,0.2)", background: "rgba(99,102,241,0.02)", marginBottom: "48px" }}>
+          <h2 style={{ ...h2Style, marginTop: 0, color: "#6366f1" }}>💻 Part 2: VS Code Extension Setup</h2>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "20px" }}>
+            Browse solution plays, search 200+ AI terms, initialize DevKit — right from your editor sidebar.
+          </p>
+
+          <h3 style={h3Style}>Step 1: Install</h3>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)" }}>
+            <strong>Option A (Marketplace):</strong> Open VS Code → Extensions (<code>Ctrl+Shift+X</code>) → Search <strong>"FrootAI"</strong> → Install
+          </p>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)" }}>
+            <strong>Option B (Terminal):</strong>
+          </p>
+          <div style={codeStyle}>{`code --install-extension pavleenbali.frootai`}</div>
+          <p style={{ fontSize: "0.82rem", color: "#6366f1" }}>
+            ✅ Reload VS Code. FrootAI panels appear in your sidebar.
+          </p>
+
+          <h3 style={h3Style}>Step 2: Explore the Sidebar</h3>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "12px" }}>
+            After install, you'll see 3 panels in the sidebar:
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "10px", marginBottom: "20px" }}>
+            {[
+              { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays. Click to open README or folder." },
+              { icon: "📖", title: "FROOT Modules", desc: "17 modules grouped by FROOT layer." },
+              { icon: "🔌", title: "MCP Tools", desc: "See all 6 MCP tools at a glance." },
+            ].map(p => (
+              <div key={p.title} style={{ padding: "12px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
+                <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>{p.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.82rem", marginBottom: "2px" }}>{p.title}</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-500)" }}>{p.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <h3 style={h3Style}>Step 3: Use Commands (Ctrl+Shift+P)</h3>
+          <div style={{ marginBottom: "20px" }}>
+            {[
+              { cmd: "FrootAI: Look Up AI Term", desc: "Type any AI/ML term → jumps to definition" },
+              { cmd: "FrootAI: Search Knowledge Base", desc: "Full-text search across all 17 docs" },
+              { cmd: "FrootAI: Initialize DevKit", desc: "Select a play → copies agent.md + MCP config to your project" },
+              { cmd: "FrootAI: Open Solution Play", desc: "Opens a play's README with option to open folder" },
+              { cmd: "FrootAI: Show Architecture Pattern", desc: "Pick from 7 patterns: RAG, agents, hosting, cost" },
+              { cmd: "FrootAI: Open Setup Guide", desc: "Opens this setup guide page" },
+              { cmd: "FrootAI: Browse Solution Plays", desc: "Opens solution plays page on the website" },
+            ].map(c => (
+              <div key={c.cmd} style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--ifm-color-emphasis-100)", marginBottom: "4px", display: "flex", gap: "10px", alignItems: "center" }}>
+                <code style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6366f1", whiteSpace: "nowrap" }}>{c.cmd}</code>
+                <span style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)" }}>{c.desc}</span>
+              </div>
+            ))}
+          </div>
+
+          <h3 style={h3Style}>Step 4: Initialize DevKit for a Solution Play</h3>
+          <div style={{ padding: "14px 18px", borderRadius: "12px", border: "1px solid rgba(6,182,212,0.2)", background: "rgba(6,182,212,0.03)", fontSize: "0.82rem", lineHeight: 1.7 }}>
+            <p style={{ margin: "0 0 6px" }}><strong>1.</strong> Run <code>Ctrl+Shift+P → FrootAI: Initialize DevKit</code></p>
+            <p style={{ margin: "0 0 6px" }}><strong>2.</strong> Select a solution play (e.g., Enterprise RAG)</p>
+            <p style={{ margin: "0 0 6px" }}><strong>3.</strong> FrootAI copies to your workspace: <code>agent.md</code>, <code>instructions.md</code>, <code>.github/copilot-instructions.md</code>, <code>.vscode/mcp.json</code></p>
+            <p style={{ margin: 0 }}><strong>4.</strong> Start coding — Copilot generates solution-aware code.</p>
+          </div>
+
+          <h3 style={h3Style}>Troubleshooting</h3>
+          <div style={cardStyle}>
+            {[
+              { q: "Extension not showing in sidebar", a: "Reload VS Code (Ctrl+Shift+P → 'Reload Window'). Ensure v0.1.0+ is installed." },
+              { q: "Commands not appearing", a: "Check that FrootAI is enabled in Extensions. Try reinstalling: code --install-extension pavleenbali.frootai" },
+              { q: "DevKit Init copies nothing", a: "Ensure you have a workspace folder open. FrootAI copies files to the root of your active workspace." },
+              { q: "MCP tools panel empty", a: "This is informational — it shows what tools the MCP server exposes. Install the MCP server separately (see Part 1)." },
+            ].map(item => (
+              <details key={item.q} style={{ marginBottom: "8px" }}>
+                <summary style={{ fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>{item.q}</summary>
+                <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", marginTop: "6px" }}>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>{/* end VS Code section */}
+
+        {/* ── General Troubleshooting ── */}
+        <h2 style={h2Style}>General Troubleshooting</h2>
         <div style={cardStyle}>
           {[
             { q: "Server not appearing in tool list", a: "Restart your MCP client after adding the config. Ensure the path to index.js is absolute." },
@@ -259,6 +360,9 @@ npm install`}
           </Link>
           <Link to="/mcp-tooling" className="glow-btn glow-btn-github" style={{ padding: "10px 24px", fontSize: "0.85rem" }}>
             📦 MCP Server
+          </Link>
+          <Link to="/vscode-extension" className="glow-btn glow-btn-github" style={{ padding: "10px 24px", fontSize: "0.85rem" }}>
+            💻 VS Code Extension
           </Link>
           <Link to="/" className="glow-btn glow-btn-tunekit" style={{ padding: "10px 24px", fontSize: "0.85rem" }}>
             🌳 Back to FrootAI

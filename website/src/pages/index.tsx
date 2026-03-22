@@ -106,7 +106,7 @@ export default function FrootAIPage(): JSX.Element {
 
         {/* ═══ 2. ECOSYSTEM (glowing cards) ═══ */}
         <section className={styles.lensSection}>
-          <h2 className={styles.sectionTitle}>Φ Ecosystem</h2>
+          <h2 className={styles.sectionTitle}>FAI Ecosystem</h2>
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px", padding: "6px 0" }}>
             {[
@@ -169,7 +169,7 @@ export default function FrootAIPage(): JSX.Element {
         {/* ═══ 6. CTA ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>
-            FrootAI — The <span style={{ color: "#10b981" }}>B</span>uild <span style={{ color: "#06b6d4" }}>I</span>t <span style={{ color: "#7c3aed" }}>Y</span>ourself AI Kit
+            FrootAI — The <span style={{ color: "#10b981" }}>B</span>uild <span style={{ color: "#06b6d4" }}>I</span>t <span style={{ color: "#7c3aed" }}>Y</span>ourself AI LEGO Kit
           </h2>
           <p className={styles.sectionSub}>
             An Open Glue Binding <span style={{ color: "#10b981", fontWeight: 700 }}>I</span>nfrastructure, <span style={{ color: "#06b6d4", fontWeight: 700 }}>P</span>latform, and <span style={{ color: "#7c3aed", fontWeight: 700 }}>A</span>pplication Teams

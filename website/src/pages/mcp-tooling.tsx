@@ -101,22 +101,16 @@ export default function MCPToolingPage(): JSX.Element {
           </div>
         </div>
 
-        {/* Setup Guide tile + Back */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "14px", marginBottom: "24px", padding: "6px 0" }}>
-          <Link to="/setup-guide" className={styles.glowCard} style={{ "--glow-color": "#10b981", display: "block" } as React.CSSProperties}>
-            <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>📖</div>
-            <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>Full Setup Guide</div>
-            <div style={{ fontSize: "0.72rem", color: "#10b981" }}>Step-by-step MCP config</div>
+        {/* Nav buttons */}
+        <div style={{ textAlign: "center", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
+          <Link to="/setup-guide" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block" } as React.CSSProperties}>
+            📖 Full Setup Guide
           </Link>
-          <Link to="/ecosystem" className={styles.glowCard} style={{ "--glow-color": "#6366f1", display: "block" } as React.CSSProperties}>
-            <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🔗</div>
-            <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>Back to Ecosystem</div>
-            <div style={{ fontSize: "0.72rem", color: "#6366f1" }}>Explore the full toolkit</div>
+          <Link to="/ecosystem" className={styles.glowPill} style={{ "--pill-color": "#6366f1", display: "inline-block" } as React.CSSProperties}>
+            🔗 Back to Ecosystem
           </Link>
-          <Link to="/" className={styles.glowCard} style={{ "--glow-color": "#f59e0b", display: "block" } as React.CSSProperties}>
-            <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🌳</div>
-            <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>Back to FrootAI</div>
-            <div style={{ fontSize: "0.72rem", color: "#f59e0b" }}>Home page</div>
+          <Link to="/" className={styles.glowPill} style={{ "--pill-color": "#f59e0b", display: "inline-block" } as React.CSSProperties}>
+            🌳 Back to FrootAI
           </Link>
         </div>
       </div>

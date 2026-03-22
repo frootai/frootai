@@ -80,6 +80,9 @@ export default function VSCodeExtensionPage(): JSX.Element {
         </div>
 
         <div style={{ textAlign: "center" }}>
+          <Link to="/setup-guide#vscode-section" className={styles.glowPill} style={{ "--pill-color": "#6366f1", display: "inline-block", marginRight: "12px" } as React.CSSProperties}>
+            📖 Full Setup Guide
+          </Link>
           <Link to="/ecosystem" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block", marginRight: "12px" } as React.CSSProperties}>
             🔗 Back to Ecosystem
           </Link>
