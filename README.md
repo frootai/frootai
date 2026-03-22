@@ -116,10 +116,41 @@ graph TB
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit from sidebar |
 | **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 6 tools for architecture answers |
-| **Solution Play DevKit** | Your co-coder | agent.md + instructions tune the AI for THIS solution |
-| **Solution Play TuneKit** | Platform team | Pre-tuned AI configs + evaluation pipeline |
-| **Big MCP** (frootai-mcp) | Any agent | "What is temperature?" "How to design RAG?" |
-| **Solution MCP** (per play) | Solution agent | "Is my RAG config optimal?" "Validate chunk size" |
+| **DevKit (.github/)** | Your co-coder | 7 primitives: instructions, prompts, agents, skills, hooks, workflows |
+| **TuneKit (config/)** | Platform team | Pre-tuned AI configs + evaluation pipeline |
+
+### .github Agentic OS (per Solution Play)
+
+Every solution play ships with the full GitHub Copilot agentic OS — 4 layers, 7 primitives, 19 files:
+
+```
+.github/
+├── copilot-instructions.md          # Layer 1: Always-On Context
+├── instructions/                     # Layer 1: Modular standards
+│   ├── azure-coding.instructions.md
+│   ├── <play>-patterns.instructions.md
+│   └── security.instructions.md
+├── prompts/                          # Layer 2: Slash commands
+│   ├── deploy.prompt.md   (/deploy)
+│   ├── test.prompt.md     (/test)
+│   ├── review.prompt.md   (/review)
+│   └── evaluate.prompt.md (/evaluate)
+├── agents/                           # Layer 2: Chained agents
+│   ├── builder.agent.md   (builds)
+│   ├── reviewer.agent.md  (reviews)
+│   └── tuner.agent.md     (tunes)
+├── skills/                           # Layer 2: Self-contained logic
+│   ├── deploy-azure/SKILL.md + deploy.sh
+│   ├── evaluate/SKILL.md
+│   └── tune/SKILL.md + tune-config.sh
+├── hooks/                            # Layer 3: Enforcement
+│   └── guardrails.json   (preToolUse policy gates)
+└── workflows/                        # Layer 3: AI-driven CI
+    ├── ai-review.md
+    └── ai-deploy.md
+```
+
+**19 files × 20 plays = 380 agentic OS files shipped.**
 
 ---
 
@@ -171,7 +202,9 @@ Pre-tuned, deployable AI solutions — infra + AI config + agent instructions + 
 | 01 | [Enterprise RAG Q&A](./solution-plays/01-enterprise-rag/) | AI Search + OpenAI + Container App (pre-tuned) | ✅ Ready |
 | 02 | [AI Landing Zone](./solution-plays/02-ai-landing-zone/) | VNet + PE + RBAC + GPU + AI Services | ✅ Ready |
 | 03 | [Deterministic Agent](./solution-plays/03-deterministic-agent/) | Reliable agent with temp=0, guardrails, eval | ✅ Ready |
-| 04–20 | More coming soon | Call center, IT tickets, multi-agent, and more | 🔜 Coming |
+| 04–20 | [17 more plays](./solution-plays/) | Voice AI, IT tickets, multi-agent, fine-tuning, edge AI... | 🛠️ Skeleton |
+
+**Every play ships with:** .github Agentic OS (19 files) + DevKit + TuneKit
 
 [📖 All Solution Plays →](./solution-plays/)
 

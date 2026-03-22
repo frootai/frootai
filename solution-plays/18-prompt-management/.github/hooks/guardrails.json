@@ -1,0 +1,51 @@
+{
+  "$schema": "https://github.com/github/copilot/hooks-schema",
+  "description": "FrootAI Enterprise RAG — Guardrail hooks for policy enforcement",
+  "hooks": [
+    {
+      "event": "preToolUse",
+      "description": "Block tool execution if it would write secrets to tracked files",
+      "match": {
+        "toolName": "write_file",
+        "pathPattern": "**/*.{env,json,yaml,yml,bicep}"
+      },
+      "action": "deny_if_contains",
+      "patterns": [
+        "(?i)(api[_-]?key|secret|password|connection[_-]?string)\\s*[:=]\\s*['\"][^'\"]{8,}",
+        "(?i)sk-[a-zA-Z0-9]{20,}",
+        "(?i)DefaultEndpointsProtocol=https"
+      ],
+      "message": "🔴 BLOCKED: Detected potential secret in code. Use Azure Key Vault references or managed identity instead."
+    },
+    {
+      "event": "preToolUse",
+      "description": "Warn if modifying guardrails.json to lower safety thresholds",
+      "match": {
+        "toolName": "write_file",
+        "pathPattern": "**/config/guardrails.json"
+      },
+      "action": "warn",
+      "message": "⚠️ WARNING: You are modifying guardrails configuration. Ensure PII, toxicity, and off-topic filters remain active."
+    },
+    {
+      "event": "postToolUse",
+      "description": "Log all file modifications for audit trail",
+      "match": {
+        "toolName": "write_file"
+      },
+      "action": "log",
+      "logFile": ".github/audit.log",
+      "format": "[{timestamp}] {toolName}: {filePath} modified by {agent}"
+    },
+    {
+      "event": "errorOccurred",
+      "description": "On Azure deployment failure, suggest troubleshooting steps",
+      "match": {
+        "toolName": "run_command",
+        "commandPattern": "az deployment*"
+      },
+      "action": "suggest",
+      "message": "💡 Deployment failed. Common fixes:\n1. Check quota: az vm list-usage --location eastus2\n2. Check RBAC: az role assignment list --resource-group rg-enterprise-rag\n3. Check network: verify private endpoint DNS resolution"
+    }
+  ]
+}

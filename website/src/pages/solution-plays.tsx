@@ -130,35 +130,47 @@ export default function SolutionPlaysPage(): JSX.Element {
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🎯 Solution Plays</h1>
           <p style={{ fontSize: "0.92rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "660px", margin: "0 auto 16px" }}>
-            Each play ships with <strong>🛠️ DevKit</strong> (empower your coding agent before you write a single line) and <strong>🎛️ TuneKit</strong> (fine-tune AI workloads for production). LEGO blocks that compose into complete solutions.
+            Each play ships with the full <strong>.github Agentic OS</strong> (19 files, 4 layers), <strong>🛠️ DevKit</strong> (empower your coding agent), and <strong>🎛️ TuneKit</strong> (fine-tune AI for production). LEGO blocks that compose into complete solutions.
           </p>
         </div>
 
-        {/* DevKit + TuneKit Explainer */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px", marginBottom: "32px", padding: "6px 0" }}>
-          <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(6, 182, 212, 0.25)", background: "rgba(6, 182, 212, 0.03)", textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", marginBottom: "6px" }}>🛠️</div>
-            <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "12px" }}>DevKit — Developer Velocity</h3>
-            <div style={{ textAlign: "left", fontSize: "0.82rem", lineHeight: 1.8 }}>
-              <div><strong style={{ color: "#06b6d4" }}>agent.md</strong> — co-coder becomes solution-aware</div>
-              <div><strong style={{ color: "#06b6d4" }}>instructions.md</strong> — prompts, few-shot, guardrails</div>
-              <div><strong style={{ color: "#06b6d4" }}>MCP server</strong> — query patterns while coding</div>
-              <div><strong style={{ color: "#06b6d4" }}>plugins</strong> — reusable SK/Agent functions</div>
-              <div><strong style={{ color: "#06b6d4" }}>copilot-instructions</strong> — IDE tuned for THIS solution</div>
+        {/* .github Agentic OS + DevKit + TuneKit Explainer */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px", marginBottom: "32px", padding: "6px 0" }}>
+          {/* .github Agentic OS */}
+          <div style={{ padding: "20px", borderRadius: "16px", border: "2px solid rgba(16, 185, 129, 0.25)", background: "rgba(16, 185, 129, 0.03)", textAlign: "center" }}>
+            <div style={{ fontSize: "1.8rem", marginBottom: "6px" }}>🧠</div>
+            <h3 style={{ fontSize: "0.95rem", fontWeight: 800, marginBottom: "10px" }}>.github Agentic OS</h3>
+            <div style={{ textAlign: "left", fontSize: "0.78rem", lineHeight: 1.7 }}>
+              <div><strong style={{ color: "#10b981" }}>Layer 1</strong> — Instructions (always-on context)</div>
+              <div><strong style={{ color: "#10b981" }}>Layer 2</strong> — Prompts, Agents, Skills</div>
+              <div><strong style={{ color: "#10b981" }}>Layer 3</strong> — Hooks + Workflows (CI/CD)</div>
+              <div><strong style={{ color: "#10b981" }}>Layer 4</strong> — Plugin packaging</div>
             </div>
-            <p style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginTop: "12px", marginBottom: 0, fontStyle: "italic" }}>Your coding agent understands the solution <em>before</em> you start building.</p>
+            <p style={{ fontSize: "0.68rem", color: "var(--ifm-color-emphasis-400)", marginTop: "10px", marginBottom: 0, fontStyle: "italic" }}>19 files per play · 7 primitives · 4 layers</p>
           </div>
-          <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(124, 58, 237, 0.25)", background: "rgba(124, 58, 237, 0.03)", textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", marginBottom: "6px" }}>🎛️</div>
-            <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "12px" }}>TuneKit — AI Fine-Tuning</h3>
-            <div style={{ textAlign: "left", fontSize: "0.82rem", lineHeight: 1.8 }}>
-              <div><strong style={{ color: "#7c3aed" }}>config/openai.json</strong> — temperature, top-k, schema</div>
-              <div><strong style={{ color: "#7c3aed" }}>config/guardrails</strong> — safety, PII, abstention</div>
-              <div><strong style={{ color: "#7c3aed" }}>infra/main.bicep</strong> — one-click Azure deploy</div>
-              <div><strong style={{ color: "#7c3aed" }}>evaluation/</strong> — test set + automated scoring</div>
-              <div><strong style={{ color: "#7c3aed" }}>Pre-tuned</strong> — review knobs, deploy, validate</div>
+          {/* DevKit */}
+          <div style={{ padding: "20px", borderRadius: "16px", border: "2px solid rgba(6, 182, 212, 0.25)", background: "rgba(6, 182, 212, 0.03)", textAlign: "center" }}>
+            <div style={{ fontSize: "1.8rem", marginBottom: "6px" }}>🛠️</div>
+            <h3 style={{ fontSize: "0.95rem", fontWeight: 800, marginBottom: "10px" }}>DevKit — Velocity</h3>
+            <div style={{ textAlign: "left", fontSize: "0.78rem", lineHeight: 1.7 }}>
+              <div><strong style={{ color: "#06b6d4" }}>agent.md</strong> — solution-aware co-coder</div>
+              <div><strong style={{ color: "#06b6d4" }}>instructions.md</strong> — prompts, guardrails</div>
+              <div><strong style={{ color: "#06b6d4" }}>MCP server</strong> — query while coding</div>
+              <div><strong style={{ color: "#06b6d4" }}>plugins</strong> — reusable functions</div>
             </div>
-            <p style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginTop: "12px", marginBottom: 0, fontStyle: "italic" }}>Ship AI to production with confidence — every knob pre-calibrated.</p>
+            <p style={{ fontSize: "0.68rem", color: "var(--ifm-color-emphasis-400)", marginTop: "10px", marginBottom: 0, fontStyle: "italic" }}>Your agent knows the solution before you code.</p>
+          </div>
+          {/* TuneKit */}
+          <div style={{ padding: "20px", borderRadius: "16px", border: "2px solid rgba(124, 58, 237, 0.25)", background: "rgba(124, 58, 237, 0.03)", textAlign: "center" }}>
+            <div style={{ fontSize: "1.8rem", marginBottom: "6px" }}>🎛️</div>
+            <h3 style={{ fontSize: "0.95rem", fontWeight: 800, marginBottom: "10px" }}>TuneKit — Ship It</h3>
+            <div style={{ textAlign: "left", fontSize: "0.78rem", lineHeight: 1.7 }}>
+              <div><strong style={{ color: "#7c3aed" }}>config/*.json</strong> — pre-tuned AI knobs</div>
+              <div><strong style={{ color: "#7c3aed" }}>infra/main.bicep</strong> — one-click deploy</div>
+              <div><strong style={{ color: "#7c3aed" }}>evaluation/</strong> — test + score</div>
+              <div><strong style={{ color: "#7c3aed" }}>guardrails</strong> — safety, PII, abstention</div>
+            </div>
+            <p style={{ fontSize: "0.68rem", color: "var(--ifm-color-emphasis-400)", marginTop: "10px", marginBottom: 0, fontStyle: "italic" }}>Every knob pre-calibrated for production.</p>
           </div>
         </div>
 
