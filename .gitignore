@@ -9,3 +9,6 @@ mcp-server/node_modules/
 
 # Internal development plans — NOT pushed to remote
 .internal/
+
+__pycache__/
+*.pyc
