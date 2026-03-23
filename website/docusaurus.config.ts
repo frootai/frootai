@@ -71,21 +71,20 @@ const config: Config = {
       items: [
         {
           type: "dropdown",
-          label: "FAI Solutions",
+          label: "FAI Platform",
           position: "left",
           items: [
-            { to: "/ecosystem", label: "🔗 Ecosystem Overview" },
             { to: "/configurator", label: "⚙️ Solution Configurator" },
             { to: "/solution-plays", label: "🎯 Solution Plays (20)" },
-            { to: "/user-guide", label: "📖 User Guides" },
             { to: "/packages", label: "📦 Packages" },
           ],
         },
         {
           type: "dropdown",
-          label: "FAI Platform",
+          label: "FAI Solutions",
           position: "left",
           items: [
+            { to: "/ecosystem", label: "🔗 Ecosystem Overview" },
             { to: "/vscode-extension", label: "🖥️ VS Code Extension" },
             { to: "/mcp-tooling", label: "🔌 MCP Server (16 tools)" },
             { to: "/setup-guide", label: "📋 Setup Guide" },
@@ -117,7 +116,7 @@ const config: Config = {
           label: "FAI Developer Hub",
           position: "left",
           items: [
-            { to: "/dev-hub", label: "🛠️ Developer Hub" },
+            { to: "/dev-hub", label: "🛠️ Developer Center" },
             { to: "/feature-spec", label: "📋 Feature Spec (A-Z)" },
             { to: "/docs/admin-guide", label: "📋 Admin Guide" },
             { to: "/docs/user-guide-complete", label: "📖 User Guide" },
