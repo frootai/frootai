@@ -118,6 +118,26 @@ code --install-extension pavleenbali.frootai
 - **GitHub**: https://github.com/gitpavleenbali/frootai
 - **MCP Server (npm)**: https://www.npmjs.com/package/frootai-mcp
 - **Setup Guide**: https://gitpavleenbali.github.io/frootai/setup-guide
+- **Example User Guide**: https://gitpavleenbali.github.io/frootai/user-guide-05
+
+---
+
+## 🎯 Example: Deploy IT Ticket Resolution in 5 Minutes
+
+Here's how to use FrootAI to build Solution Play 05 (IT Ticket Resolution):
+
+**1.** Open FrootAI sidebar → **Left-click** `🎫 05 — IT Ticket Resolution`
+**2.** Select **🛠️ Init DevKit** → 19 files copied (.github Agentic OS + agent.md + MCP config)
+**3.** Select **⚙️ Init TuneKit** → config/*.json + infra/main.bicep + evaluation/ copied
+**4.** Open **Copilot Chat** → enable **FrootAI tools** (🔧 icon)
+**5.** Ask: *"Build me an IT ticket classification system using Logic Apps + OpenAI"*
+**6.** Copilot generates solution-aware code (reads agent.md, follows instructions, uses config values)
+**7.** Type **/review** → security + quality checklist
+**8.** Type **/deploy** → Azure deployment walkthrough
+
+**Result:** Production-ready IT ticket resolution — classified, routed, deployed. No AI specialist needed.
+
+📖 [Full User Guide for Play 05 →](https://gitpavleenbali.github.io/frootai/user-guide-05)
 
 ---
 

@@ -580,12 +580,15 @@ function activate(context) {
       }
 
       const playDir = selectedPlay.dir;
+      // Generate play-specific instruction filename  
+      const playPatternFile = (playDir.replace(/^\d+-/, "")) + "-patterns.instructions.md";
 
       // Define all files to download
       const filesToDownload = [
         ".github/copilot-instructions.md",
         ".github/instructions/azure-coding.instructions.md",
         ".github/instructions/security.instructions.md",
+        `.github/instructions/${playPatternFile}`,
         ".github/prompts/deploy.prompt.md",
         ".github/prompts/test.prompt.md",
         ".github/prompts/review.prompt.md",
