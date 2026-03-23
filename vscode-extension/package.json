@@ -2,7 +2,7 @@
   "name": "frootai",
   "displayName": "FrootAI — From the Roots to the Fruits",
   "description": "The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem. Standalone engine: 18 modules, 200+ terms, 20 solution plays, 13 MCP tools — works from any workspace.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publisher": "pavleenbali",
   "engines": {
     "vscode": "^1.85.0"

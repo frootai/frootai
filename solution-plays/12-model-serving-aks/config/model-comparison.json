@@ -1,0 +1,58 @@
+{
+  "_description": "Model comparison guide — which model for which task, cost vs quality tradeoffs",
+  
+  "recommended_model": {
+    "name": "gpt-4o",
+    "reason": "Best balance of quality, speed, and cost for RAG Q&A",
+    "cost_per_1m_input_tokens": 2.50,
+    "cost_per_1m_output_tokens": 10.00,
+    "max_context": 128000,
+    "latency": "fast"
+  },
+  
+  "alternatives": [
+    {
+      "name": "gpt-4o-mini",
+      "reason": "50% cheaper, good for simple classification/routing",
+      "cost_per_1m_input_tokens": 0.15,
+      "cost_per_1m_output_tokens": 0.60,
+      "max_context": 128000,
+      "when_to_use": "High volume, simpler tasks, cost-sensitive",
+      "when_not_to_use": "Complex reasoning, multi-step analysis"
+    },
+    {
+      "name": "gpt-4.1",
+      "reason": "Highest quality for complex reasoning tasks",
+      "cost_per_1m_input_tokens": 2.00,
+      "cost_per_1m_output_tokens": 8.00,
+      "max_context": 1048576,
+      "when_to_use": "Complex coding, long documents, deep analysis",
+      "when_not_to_use": "Simple Q&A (overkill and slower)"
+    },
+    {
+      "name": "o4-mini",
+      "reason": "Reasoning model — thinks before answering",
+      "cost_per_1m_input_tokens": 1.10,
+      "cost_per_1m_output_tokens": 4.40,
+      "max_context": 200000,
+      "when_to_use": "Complex multi-step reasoning, math, logic",
+      "when_not_to_use": "Streaming, real-time chat, simple retrieval"
+    }
+  ],
+  
+  "embedding_model": {
+    "name": "text-embedding-3-large",
+    "dimensions": 3072,
+    "cost_per_1m_tokens": 0.13,
+    "use_for": "Vector search in Azure AI Search"
+  },
+  
+  "decision_guide": {
+    "simple_classification": "gpt-4o-mini (cheapest, fast)",
+    "rag_qa": "gpt-4o (balanced)",
+    "complex_reasoning": "gpt-4.1 or o4-mini",
+    "code_generation": "gpt-4.1",
+    "real_time_chat": "gpt-4o-mini or gpt-4o",
+    "batch_processing": "gpt-4o-mini (cost)"
+  }
+}

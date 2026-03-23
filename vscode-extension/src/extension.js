@@ -606,6 +606,9 @@ function activate(context) {
         "instructions.md",
         ".vscode/mcp.json",
         "plugin.json",
+        // Infrastructure (part of DevKit — developer deploys infra)
+        "infra/main.bicep",
+        "infra/parameters.json",
       ];
 
       // Try local repo first
@@ -757,8 +760,8 @@ function activate(context) {
         "config/guardrails.json",
         "config/search.json",
         "config/chunking.json",
-        "infra/main.bicep",
-        "infra/parameters.json",
+        "config/agents.json",
+        "config/model-comparison.json",
         "evaluation/test-set.jsonl",
         "evaluation/eval.py",
       ];

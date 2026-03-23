@@ -1,0 +1,50 @@
+{
+  "_description": "Agent behavior tuning — customize how AI agents act in this solution",
+  
+  "builder_agent": {
+    "persona": "Solution builder — implements features following architecture patterns",
+    "temperature": 0.2,
+    "model": "gpt-4o",
+    "max_tokens": 4000,
+    "tools_enabled": true,
+    "mcp_servers": ["frootai"],
+    "handoff_to": "reviewer",
+    "rules": [
+      "Always use config/*.json for parameters",
+      "Always use Managed Identity for Azure auth",
+      "Include error handling with App Insights logging",
+      "Follow .github/instructions/*.instructions.md"
+    ]
+  },
+  
+  "reviewer_agent": {
+    "persona": "Code reviewer — checks security, quality, Azure best practices",
+    "temperature": 0.1,
+    "model": "gpt-4o",
+    "max_tokens": 3000,
+    "severity_levels": ["critical", "warning", "suggestion"],
+    "handoff_to": "tuner",
+    "checks": [
+      "No hardcoded secrets",
+      "Managed Identity for auth",
+      "Error handling with retry",
+      "Config from files not hardcoded",
+      "Temperature <= 0.3 for factual",
+      "Private endpoints on data services"
+    ]
+  },
+  
+  "tuner_agent": {
+    "persona": "Production validator — checks TuneKit configs for readiness",
+    "temperature": 0.0,
+    "model": "gpt-4o",
+    "max_tokens": 2000,
+    "handoff_to": null,
+    "validation_rules": {
+      "temperature_max": 0.3,
+      "guardrails_required": true,
+      "evaluation_required": true,
+      "bicep_tags_required": ["environment", "project", "owner"]
+    }
+  }
+}
