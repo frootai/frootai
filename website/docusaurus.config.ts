@@ -113,6 +113,20 @@ const config: Config = {
           ],
         },
         {
+          type: "dropdown",
+          label: "FAI Developer Hub",
+          position: "left",
+          items: [
+            { to: "/dev-hub", label: "🛠️ Developer Hub" },
+            { to: "/docs/admin-guide", label: "📋 Admin Guide" },
+            { to: "/docs/user-guide-complete", label: "📖 User Guide" },
+            { to: "/docs/contributor-guide", label: "🤝 Contributor Guide" },
+            { to: "/docs/api-reference", label: "📡 API Reference" },
+            { to: "/docs/architecture-overview", label: "🏗️ Architecture" },
+            { to: "/dev-hub-changelog", label: "📰 Changelog & Releases" },
+          ],
+        },
+        {
           to: "/chatbot",
           label: "FAI Assistant",
           position: "right",

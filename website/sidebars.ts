@@ -63,6 +63,17 @@ const sidebars: SidebarsConfig = {
             "Quiz-Assessment",
           ],
         },
+        {
+          type: "category",
+          label: "🛠️ Developer Hub",
+          items: [
+            "admin-guide",
+            "user-guide-complete",
+            "contributor-guide",
+            "api-reference",
+            "architecture-overview",
+          ],
+        },
       ],
     },
   ],
