@@ -103,18 +103,19 @@ const config: Config = {
         },
         {
           type: "dropdown",
-          label: "FAI Learning Hub",
+          label: "FAI Learning Center",
           position: "left",
           items: [
-            { type: "docSidebar" as const, sidebarId: "frootSidebar", label: "📚 Knowledge Modules (18)" },
-            { to: "/docs/F3-AI-Glossary-AZ", label: "📖 AI Glossary (200+ terms)" },
+            { to: "/learning-hub", label: "📚 FAI Learning Center" },
+            { type: "docSidebar" as const, sidebarId: "frootSidebar", label: "📖 Knowledge Modules (18)" },
+            { to: "/docs/F3-AI-Glossary-AZ", label: "🔤 AI Glossary (200+ terms)" },
             { href: "https://github.com/gitpavleenbali/frootai/tree/main/workshops", label: "🎓 Workshop Materials" },
             { to: "/docs/Quiz-Assessment", label: "📝 Quiz & Assessment" },
           ],
         },
         {
           type: "dropdown",
-          label: "FAI Developer Hub",
+          label: "FAI Developer Center",
           position: "left",
           items: [
             { to: "/dev-hub", label: "🛠️ Developer Center" },
