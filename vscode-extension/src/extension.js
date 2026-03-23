@@ -199,10 +199,10 @@ function markdownToHtml(markdown, title) {
       background: #1a1a2e; max-width: 860px; margin: 0 auto;
       font-size: 13px;
     }
-    h1 { color: #10b981; font-size: 1.5rem; border-bottom: 2px solid #10b98133; padding-bottom: 6px; margin-top: 0; }
-    h2 { color: #06b6d4; font-size: 1.15rem; margin-top: 1.8rem; }
-    h3 { color: #6366f1; font-size: 0.95rem; }
-    h4 { color: #f59e0b; font-size: 0.88rem; }
+    h1 { color: #10b981; font-size: 1.3rem; border-bottom: 2px solid #10b98133; padding-bottom: 6px; margin-top: 0; }
+    h2 { color: #06b6d4; font-size: 1.05rem; margin-top: 1.5rem; }
+    h3 { color: #6366f1; font-size: 0.92rem; }
+    h4 { color: #f59e0b; font-size: 0.85rem; }
     p { font-size: 0.88rem; margin: 6px 0; }
     a { color: #10b981; text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -386,13 +386,13 @@ function activate(context) {
           vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
         }
       } else if (action.value === "devkit") {
-        vscode.commands.executeCommand("frootai.initDevKit");
+        vscode.commands.executeCommand("frootai.initDevKit", play);
       } else if (action.value === "tunekit") {
-        vscode.commands.executeCommand("frootai.initTuneKit");
+        vscode.commands.executeCommand("frootai.initTuneKit", play);
       } else if (action.value === "hooks") {
-        vscode.commands.executeCommand("frootai.initHooks");
+        vscode.commands.executeCommand("frootai.initHooks", play);
       } else if (action.value === "prompts") {
-        vscode.commands.executeCommand("frootai.initPrompts");
+        vscode.commands.executeCommand("frootai.initPrompts", play);
       } else if (action.value === "github") {
         vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
       }
@@ -564,18 +564,22 @@ function activate(context) {
 
   // ── Command: Init DevKit (GitHub-powered: downloads on-demand) ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("frootai.initDevKit", async () => {
+    vscode.commands.registerCommand("frootai.initDevKit", async (preSelectedPlay) => {
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       if (!wsFolder) {
         vscode.window.showWarningMessage("Open a folder first, then run Init DevKit.");
         return;
       }
 
-      const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
-      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Which solution play's DevKit?" });
-      if (!pick) return;
+      let selectedPlay = preSelectedPlay;
+      if (!selectedPlay) {
+        const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+        const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Which solution play's DevKit?" });
+        if (!pick) return;
+        selectedPlay = pick.value;
+      }
 
-      const playDir = pick.value.dir;
+      const playDir = selectedPlay.dir;
 
       // Define all files to download
       const filesToDownload = [
@@ -629,14 +633,14 @@ function activate(context) {
               }
             }
           }
-          vscode.window.showInformationMessage(`✅ DevKit initialized for ${pick.value.name}! ${copied} files from local repo.`);
+          vscode.window.showInformationMessage(`✅ DevKit initialized for ${selectedPlay.name}! ${copied} files from local repo.`);
           return;
         }
       }
 
       // STANDALONE: Download from GitHub
       await vscode.window.withProgress(
-        { location: vscode.ProgressLocation.Notification, title: `Downloading DevKit for ${pick.value.name}...`, cancellable: false },
+        { location: vscode.ProgressLocation.Notification, title: `Downloading DevKit for ${selectedPlay.name}...`, cancellable: false },
         async (progress) => {
           let downloaded = 0;
           let failed = 0;
@@ -654,7 +658,7 @@ function activate(context) {
             }
           }
           vscode.window.showInformationMessage(
-            `✅ DevKit downloaded for ${pick.value.name}! ${downloaded} files from GitHub.` +
+            `✅ DevKit downloaded for ${selectedPlay.name}! ${downloaded} files from GitHub.` +
             (failed > 0 ? ` (${failed} files not available)` : "")
           );
         }
@@ -664,16 +668,19 @@ function activate(context) {
 
   // ── Command: Init Hooks (standalone: downloads from GitHub) ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("frootai.initHooks", async () => {
+    vscode.commands.registerCommand("frootai.initHooks", async (preSelectedPlay) => {
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       if (!wsFolder) { vscode.window.showWarningMessage("Open a folder first."); return; }
 
-      const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
-      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize hooks from which play?" });
-      if (!pick) return;
+      let selectedPlay = preSelectedPlay;
+      if (!selectedPlay) {
+        const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+        const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize hooks from which play?" });
+        if (!pick) return;
+        selectedPlay = pick.value;
+      }
 
-      // Try local, then GitHub
-      const localPath = root ? path.join(root, "solution-plays", pick.value.dir, ".github", "hooks", "guardrails.json") : null;
+      const localPath = root ? path.join(root, "solution-plays", selectedPlay.dir, ".github", "hooks", "guardrails.json") : null;
       const dstDir = path.join(wsFolder, ".github", "hooks");
       if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir, { recursive: true });
 
@@ -681,7 +688,7 @@ function activate(context) {
         fs.copyFileSync(localPath, path.join(dstDir, "guardrails.json"));
       } else {
         try {
-          const content = await downloadFromGitHub(`solution-plays/${pick.value.dir}/.github/hooks/guardrails.json`);
+          const content = await downloadFromGitHub(`solution-plays/${selectedPlay.dir}/.github/hooks/guardrails.json`);
           fs.writeFileSync(path.join(dstDir, "guardrails.json"), content, "utf-8");
         } catch {
           vscode.window.showWarningMessage("Could not download hooks. Check network connection.");
@@ -694,13 +701,17 @@ function activate(context) {
 
   // ── Command: Init Prompts (standalone: downloads from GitHub) ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("frootai.initPrompts", async () => {
+    vscode.commands.registerCommand("frootai.initPrompts", async (preSelectedPlay) => {
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       if (!wsFolder) { vscode.window.showWarningMessage("Open a folder first."); return; }
 
-      const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
-      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize prompts from which play?" });
-      if (!pick) return;
+      let selectedPlay = preSelectedPlay;
+      if (!selectedPlay) {
+        const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+        const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize prompts from which play?" });
+        if (!pick) return;
+        selectedPlay = pick.value;
+      }
 
       const promptFiles = ["deploy.prompt.md", "test.prompt.md", "review.prompt.md", "evaluate.prompt.md"];
       const dstDir = path.join(wsFolder, ".github", "prompts");
@@ -708,13 +719,13 @@ function activate(context) {
 
       let copied = 0;
       for (const f of promptFiles) {
-        const localPath = root ? path.join(root, "solution-plays", pick.value.dir, ".github", "prompts", f) : null;
+        const localPath = root ? path.join(root, "solution-plays", selectedPlay.dir, ".github", "prompts", f) : null;
         if (localPath && fs.existsSync(localPath)) {
           fs.copyFileSync(localPath, path.join(dstDir, f));
           copied++;
         } else {
           try {
-            const content = await downloadFromGitHub(`solution-plays/${pick.value.dir}/.github/prompts/${f}`);
+            const content = await downloadFromGitHub(`solution-plays/${selectedPlay.dir}/.github/prompts/${f}`);
             fs.writeFileSync(path.join(dstDir, f), content, "utf-8");
             copied++;
           } catch { /* skip */ }
@@ -726,13 +737,17 @@ function activate(context) {
 
   // ── Command: Init TuneKit (config + evaluation + infra) ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("frootai.initTuneKit", async () => {
+    vscode.commands.registerCommand("frootai.initTuneKit", async (preSelectedPlay) => {
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       if (!wsFolder) { vscode.window.showWarningMessage("Open a folder first."); return; }
 
-      const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
-      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize TuneKit from which solution play?" });
-      if (!pick) return;
+      let selectedPlay = preSelectedPlay;
+      if (!selectedPlay) {
+        const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+        const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize TuneKit from which solution play?" });
+        if (!pick) return;
+        selectedPlay = pick.value;
+      }
 
       const tuneKitFiles = [
         "config/openai.json",
@@ -747,8 +762,7 @@ function activate(context) {
 
       let copied = 0;
       for (const f of tuneKitFiles) {
-        // Try local first
-        const localPath = root ? path.join(root, "solution-plays", pick.value.dir, f) : null;
+        const localPath = root ? path.join(root, "solution-plays", selectedPlay.dir, f) : null;
         if (localPath && fs.existsSync(localPath)) {
           const dstPath = path.join(wsFolder, f);
           const dir = path.dirname(dstPath);
@@ -756,9 +770,8 @@ function activate(context) {
           fs.copyFileSync(localPath, dstPath);
           copied++;
         } else {
-          // Download from GitHub
           try {
-            const content = await downloadFromGitHub(`solution-plays/${pick.value.dir}/${f}`);
+            const content = await downloadFromGitHub(`solution-plays/${selectedPlay.dir}/${f}`);
             const dstPath = path.join(wsFolder, f);
             const dir = path.dirname(dstPath);
             if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -768,7 +781,7 @@ function activate(context) {
         }
       }
       vscode.window.showInformationMessage(
-        `✅ TuneKit initialized for ${pick.value.name}! ${copied} files copied:\n` +
+        `✅ TuneKit initialized for ${selectedPlay.name}! ${copied} files copied:\n` +
         `• config/*.json (AI parameters)\n• infra/ (Bicep IaC)\n• evaluation/ (test set + scoring)`
       );
     })
