@@ -248,17 +248,27 @@ frootai/
 │   ├── LLM-Landscape.md     F2
 │   ├── ...                   (all 18 modules)
 │   └── T3-Production-Patterns.md  T3
-├── mcp-server/            ← MCP server (npm-publishable)
-│   ├── index.js             Server entry point
-│   ├── knowledge.json       Bundled knowledge (664 KB)
+├── mcp-server/            ← MCP server (npm: frootai-mcp@2.2.0)
+│   ├── index.js             16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem)
+│   ├── knowledge.json       Bundled knowledge (682 KB, 18 modules)
+│   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
 │   └── package.json         npm config
+├── vscode-extension/      ← VS Code extension (v0.9.0)
+│   ├── src/extension.js     13 commands, standalone engine, cached downloads
+│   ├── knowledge.json       Bundled knowledge (682 KB)
+│   └── package.json         Marketplace config
 ├── website/               ← Docusaurus site
 │   ├── docusaurus.config.ts
 │   ├── sidebars.ts
 │   └── src/
-├── .github/workflows/     ← CI/CD pipeline
-│   └── deploy.yml           Auto-deploy to GitHub Pages
+├── .github/workflows/     ← CI/CD pipelines
+│   ├── deploy.yml           Auto-deploy website to GitHub Pages
+│   └── validate-plays.yml   Matrix CI: validates all 20 plays (.github, DevKit, TuneKit, JSON)
+├── marketplace/           ← Marketplace listing metadata
+│   ├── azure-listing.json   Azure Marketplace prep
+│   └── github-listing.json  GitHub Marketplace prep
+├── CONTRIBUTING.md        ← How to contribute (full .github Agentic OS guide)
 └── .vscode/mcp.json       ← VS Code auto-connects MCP
 ```
 
@@ -280,12 +290,15 @@ frootai/
 
 ## Contributing
 
-FrootAI is open source. Contributions welcome:
+FrootAI is open source (MIT). See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide:
 
-1. **Add content** — improve existing modules or propose new ones
-2. **Add MCP tools** — extend the server with new capabilities
-3. **Report issues** — found a mistake? Open an issue
-4. **Star the repo** — help others discover FrootAI
+1. **Add a solution play** — follow the DevKit + TuneKit structure (CI validates automatically)
+2. **Improve existing plays** — deepen agent.md, tune config values, add eval test cases
+3. **Add MCP tools** — extend the 16-tool server with new capabilities
+4. **Improve knowledge** — fix modules, add glossary terms, propose new content
+5. **Star the repo** — help others discover FrootAI
+
+PR template included — CI runs `validate-plays.yml` on every pull request.
 
 ---
 
@@ -295,5 +308,6 @@ MIT — use it, extend it, embed it, ship it.
 
 ---
 
-> **FrootAI** — *The open glue for AI architecture. From root to fruit.*
+> **FrootAI v2.2** — *The open glue for AI architecture. From the roots to the fruits.*
+> 18 modules · 16 MCP tools · 20 solution plays · 200+ AI terms
 > Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)

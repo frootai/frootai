@@ -127,6 +127,26 @@ export default function MCPToolingPage(): JSX.Element {
           ))}
         </div>
 
+        {/* AI Ecosystem Tools (NEW in v2.2) */}
+        <h2 style={{ marginTop: "32px", fontSize: "1.2rem", fontWeight: 700 }}>🧠 AI Ecosystem Tools <span style={{ fontSize: "0.7rem", color: "#00C853", fontWeight: 400, marginLeft: "8px" }}>NEW in v2.2</span></h2>
+        <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "12px" }}>
+          Real-time AI decision tools — model catalog, cost estimation, and comparison engine.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "16px" }}>
+          {[
+            { name: "get_model_catalog", desc: "📋 Azure AI model catalog — pricing, capabilities, context windows, recommendations", icon: "📋" },
+            { name: "get_azure_pricing", desc: "💰 Monthly cost estimates for RAG, agent, batch, realtime scenarios (dev/staging/prod)", icon: "💰" },
+            { name: "compare_models", desc: "🔄 Side-by-side model comparison — recommend best model for your use case + priority", icon: "🔄" },
+          ].map((t) => (
+            <div key={t.name} style={{ padding: "16px", borderRadius: "12px", border: "1px solid rgba(0, 200, 83, 0.25)", background: "rgba(0, 200, 83, 0.03)", textAlign: "center" }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>{t.icon}</div>
+              <div style={{ fontSize: "0.8rem", fontFamily: "var(--ifm-font-family-monospace)", fontWeight: 600, color: "#00C853" }}>{t.name}</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", marginTop: "4px" }}>{t.desc}</div>
+              <div style={{ fontSize: "0.62rem", color: "var(--ifm-color-emphasis-400)", marginTop: "2px", fontStyle: "italic" }}>Ask: "Which model should I use for RAG?"</div>
+            </div>
+          ))}
+        </div>
+
         {/* Nav buttons */}
         <div style={{ textAlign: "center", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
           <Link to="/setup-guide" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block" } as React.CSSProperties}>

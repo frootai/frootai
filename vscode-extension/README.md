@@ -30,7 +30,8 @@ Each step prompts you to continue to the next. The full `builder → reviewer �
 
 ### MCP Tools — Right-click any tool:
 - **📦 Install MCP Server** → Choose: Install globally (npm) / Run directly (npx) / Add .vscode/mcp.json
-- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (13 tools ready)
+- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (16 tools ready)
+- **ℹ️ View Tool Documentation** → Rich webview panel with tool docs, input/output, examples
 
 ---
 
@@ -77,8 +78,8 @@ When you run **Init TuneKit**, FrootAI copies AI fine-tuning configuration (NO i
 | Panel | What's Inside |
 |-------|-------------|
 | **🎯 Solution Plays (20)** | Click → action menu · Right-click → Init DevKit/TuneKit |
-| **🔌 MCP Tools (13)** | Left-click → action menu · Right-click → Install/Start/Configure |
-| **Φ Knowledge Hub (18)** | Click → read module in rich webview panel |
+| **🔌 MCP Tools (16)** | Grouped: 📦 Static (6) + ⛅ Live (4) + 🔗 Chain (3) + 🧠 AI (3) · Click → docs/actions |
+| **Φ Knowledge Hub (18)** | Color-coded layers (yellow/green/blue/purple) + module descriptions |
 | **📖 AI Glossary (200+)** | Click → read term definition in webview |
 
 ---
@@ -86,21 +87,24 @@ When you run **Init TuneKit**, FrootAI copies AI fine-tuning configuration (NO i
 ## 🔌 MCP Server Integration
 
 The extension works alongside the FrootAI MCP Server (`npx frootai-mcp`):
-- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 13 tools)
+- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 16 tools)
 - **VS Code Extension** = for **you** (browse, search, scaffold, learn)
+- **Cached downloads** = DevKit Init caches files locally for 24h — works offline after first download
 
 Install MCP: Right-click any tool in MCP panel → **Install MCP Server** → choose method.
 
 ---
 
-## 🔍 All 12 Commands (Ctrl+Shift+P)
+## 🔍 All 13 Commands (Ctrl+Shift+P)
 
 | Command | What It Does |
 |---------|-------------|
-| **Init DevKit** | .github Agentic OS (19 files) |
-| **Init TuneKit** | config + infra + evaluation |
+| **Init DevKit** | .github Agentic OS (19 files) + infra |
+| **Init TuneKit** | 8 AI config files (agents.json, model-comparison.json...) |
+| **Auto-Chain Agents** | Build → Review → Tune guided workflow |
 | **Install MCP Server** | npm/npx/config setup |
-| **Start MCP Server** | Launch in terminal |
+| **Start MCP Server** | Launch 16-tool server in terminal |
+| **Configure MCP** | Add .vscode/mcp.json to workspace |
 | Init Hooks | guardrails.json |
 | Init Prompts | 4 slash commands |
 | Look Up AI Term | 200+ glossary (inline webview) |
@@ -108,7 +112,6 @@ Install MCP: Right-click any tool in MCP panel → **Install MCP Server** → ch
 | Open Solution Play | Rich webview panel |
 | Show Architecture Pattern | 7 decision guides |
 | Open Setup Guide | Website |
-| Browse Solution Plays | Website |
 
 ---
 
@@ -155,5 +158,18 @@ Here's how to use FrootAI to build Solution Play 05 (IT Ticket Resolution):
 
 ---
 
-**FrootAI** — The open glue for GenAI. From the roots to the fruits.
+## 📰 What's New in v0.9.0
+
+| Feature | Description |
+|---------|-------------|
+| **Cached downloads** | DevKit Init caches files in VS Code globalStorage (24h TTL) — offline after first download |
+| **Layer colors** | FROOT Modules panel shows color-coded layer icons (yellow/green/blue/purple) |
+| **Module descriptions** | Each module shows a one-line description in sidebar (e.g., "R2: Retrieval-Augmented Generation patterns") |
+| **MCP tool docs webview** | Click any MCP tool → "View Tool Documentation" → rich HTML panel with input/output, examples |
+| **Tool grouping** | MCP Tools panel now groups: 📦 Static (6) + ⛅ Live (4) + 🔗 Chain (3) + 🧠 AI Ecosystem (3) |
+| **16 MCP tools** | 3 new AI ecosystem tools: `get_model_catalog`, `get_azure_pricing`, `compare_models` |
+
+---
+
+**FrootAI v0.9.0** — The open glue for GenAI. From the roots to the fruits.
 Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)
