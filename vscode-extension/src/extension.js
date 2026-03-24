@@ -530,7 +530,7 @@ function activate(context) {
           vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
         }
       } else if (action.value === "userguide") {
-        vscode.env.openExternal(vscode.Uri.parse(`https://frootai.devuser-guide?play=${play.id}`));
+        vscode.env.openExternal(vscode.Uri.parse(`https://frootai.dev/user-guide?play=${play.id}`));
       } else if (action.value === "devkit") {
         vscode.commands.executeCommand("frootai.initDevKit", play);
       } else if (action.value === "tunekit") {
@@ -566,14 +566,14 @@ function activate(context) {
         }
       }
       // Fallback: website
-      vscode.env.openExternal(vscode.Uri.parse(`https://frootai.devdocs/${mod.file.replace('.md', '')}`));
+      vscode.env.openExternal(vscode.Uri.parse(`https://frootai.dev/docs/${mod.file.replace('.md', '')}`));
     })
   );
 
   // ── Command: Browse Solution Plays (website) ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.browseSolutionPlays", () => {
-      vscode.env.openExternal(vscode.Uri.parse("https://frootai.devsolution-plays"));
+      vscode.env.openExternal(vscode.Uri.parse("https://frootai.dev/solution-plays"));
     })
   );
 
@@ -680,7 +680,7 @@ function activate(context) {
   // ── Command: Open Setup Guide ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.openSetupGuide", () => {
-      vscode.env.openExternal(vscode.Uri.parse("https://frootai.devsetup-guide"));
+      vscode.env.openExternal(vscode.Uri.parse("https://frootai.dev/setup-guide"));
     })
   );
 
@@ -703,7 +703,7 @@ function activate(context) {
       if (KNOWLEDGE?.modules?.T3) {
         createModuleWebview(context, "T3-pattern", `🏗️ ${pick.label}`, KNOWLEDGE.modules.T3.content);
       } else {
-        vscode.env.openExternal(vscode.Uri.parse("https://frootai.devdocs/T3-Production-Patterns"));
+        vscode.env.openExternal(vscode.Uri.parse("https://frootai.dev/docs/T3-Production-Patterns"));
       }
     })
   );

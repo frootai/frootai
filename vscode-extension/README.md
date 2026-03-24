@@ -1,6 +1,6 @@
-# FrootAI  From the Roots to the Fruits
+# FrootAI — From the Roots to the Fruits
 
-> **The open glue for GenAI.** 18 modules, 200+ terms, 20 solution plays, 22 MCP tools  works standalone from any workspace.
+> **The open glue for GenAI.** 18 modules, 200+ terms, 20 solution plays, 22 MCP tools — works standalone from any workspace.
 
 [![Marketplace](https://img.shields.io/visual-studio-marketplace/v/pavleenbali.frootai)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) [![Installs](https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 
@@ -8,11 +8,15 @@
 
 ## Install
 
-```
-Ctrl+Shift+X > Search "FrootAI" > Install
+```bash
+# From VS Code
+Ctrl+Shift+X → Search "FrootAI" → Install
 ```
 
-Or from terminal: `code --install-extension pavleenbali.frootai`
+```bash
+# Or from terminal
+code --install-extension pavleenbali.frootai
+```
 
 ---
 
@@ -116,4 +120,4 @@ The extension works alongside `npx frootai-mcp` (22 tools):
 
 ---
 
-**FrootAI v1.0.4**  22 MCP tools, 16 commands, 20 solution plays, 18 modules, 200+ terms. From the roots to the fruits.
+**FrootAI v1.0.5** — 22 MCP tools, 16 commands, 20 solution plays, 18 modules, 200+ terms. From the roots to the fruits.
