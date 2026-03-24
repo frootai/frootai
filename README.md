@@ -1,4 +1,4 @@
-# 🌳 FrootAI — From the Roots to the Fruits.
+# 🌳 FrootAI™ — From the Roots to the Fruits.
 
 > The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem.
 > A power kit for infrastructure, platform, and application teams to master and bridge the gap between AI Infra, AI Platform, and the AI Application/Agentic Ecosystem.
@@ -326,10 +326,10 @@ PR template included — CI runs `validate-plays.yml` on every pull request.
 
 MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
 
-"FrootAI" name and logo are created by Pavleen Bali.
+"FrootAI" name and logo are trademarks™ of Pavleen Bali.
 
 ---
 
-> **FrootAI v2.2** — *The open glue for AI architecture. From the roots to the fruits.*
+> **FrootAI™ v2.2** — *The open glue for AI architecture. From the roots to the fruits.*
 > 18 modules · 16 MCP tools · 20 solution plays · 200+ AI terms
 > Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)
