@@ -56,7 +56,17 @@ export default function ChatbotPage(): JSX.Element {
     { role: "assistant", text: "Hi, I'm **FAI**. Ready to make your journey **frootful**? 🌱\n\n> 🖐️ **New here?** Try [Hi FAI](/hi-fai) — our 5-minute quickstart guide." }
   ]);
   const endRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [history]);
+  const chatRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = chatRef.current;
+    if (el) {
+      // Only auto-scroll if user is near the bottom (within 150px)
+      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
+      if (isNearBottom) {
+        el.scrollTop = el.scrollHeight;
+      }
+    }
+  }, [history]);
 
   // Fix relative links by prepending base path
   const fixHref = (href: string) => {
@@ -165,7 +175,7 @@ export default function ChatbotPage(): JSX.Element {
   const followUps = lastAssistant ? getFollowUps(lastAssistant.text) : [];
 
   return (
-    <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 16 MCP tools, 18 knowledge modules.">
+    <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 22 MCP tools, 18 knowledge modules.">
       {/* Bouncing dots + streaming cursor animations */}
       <style>{`
         @keyframes bounceDot {
@@ -207,7 +217,7 @@ export default function ChatbotPage(): JSX.Element {
         <div style={{ border: "1px solid rgba(245,158,11,0.15)", borderRadius: "24px", background: "rgba(20,20,40,0.45)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", display: "flex", flexDirection: "column", minHeight: "520px", boxShadow: "0 8px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)" }}>
 
           {/* Messages */}
-          <div style={{ flex: 1, padding: "24px", overflowY: "auto", maxHeight: "600px" }}>
+          <div ref={chatRef} style={{ flex: 1, padding: "24px", overflowY: "auto", maxHeight: "600px", scrollBehavior: "auto" }}>
             {history.map((m, i) => (
               <div key={i} style={{ marginBottom: "16px", display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-start", gap: "10px" }}>
                 {m.role === "assistant" && (
