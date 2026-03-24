@@ -22,7 +22,7 @@ const quickStart = [
 
 const versions = [
   { label: "VS Code Extension", version: "v0.9.2", color: "#6366f1" },
-  { label: "MCP Server (npm)", version: "v2.2.0", color: "#10b981" },
+  { label: "MCP Server (npm)", version: "v3.0.0", color: "#10b981" },
   { label: "Website", version: "13 pages", color: "#f59e0b" },
 ];
 

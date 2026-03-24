@@ -86,7 +86,7 @@ const config: Config = {
           items: [
             { to: "/ecosystem", label: "🔗 Ecosystem Overview" },
             { to: "/vscode-extension", label: "🖥️ VS Code Extension" },
-            { to: "/mcp-tooling", label: "🔌 MCP Server (16 tools)" },
+            { to: "/mcp-tooling", label: "🔌 MCP Server (22 tools)" },
             { to: "/setup-guide", label: "📋 Setup Guide" },
           ],
         },

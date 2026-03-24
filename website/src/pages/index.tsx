@@ -116,7 +116,7 @@ export default function FrootAIPage(): JSX.Element {
               { to: "/configurator", icon: "⚙️", title: "Solution Configurator", sub: "3 questions → your play", color: "#f59e0b" },
               { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "20 plays · DevKit + TuneKit", color: "#7c3aed" },
               { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "13 commands · Standalone", color: "#6366f1" },
-              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "16 tools for your agent", color: "#10b981" },
+              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "22 tools for your agent", color: "#10b981" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
@@ -143,7 +143,7 @@ export default function FrootAIPage(): JSX.Element {
           {[
             { num: "18+", label: "Modules", color: "#10b981" },
             { num: "20", label: "Solution Plays", color: "#06b6d4" },
-            { num: "16", label: "MCP Tools", color: "#6366f1" },
+            { num: "22", label: "MCP Tools", color: "#6366f1" },
             { num: "200+", label: "AI Terms", color: "#7c3aed" },
           ].map((s) => (
             <div key={s.label} style={{ textAlign: "center" }}>

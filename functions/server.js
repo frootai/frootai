@@ -37,7 +37,7 @@ Unlike generic Azure templates, FrootAI provides:
 2. **TuneKit** — AI config files to fine-tune behavior without changing code
 3. **Real Bicep** — production-ready infrastructure templates per play
 4. **Real eval.py** — automated quality scoring with play-specific metrics
-5. **MCP Server** — 16 tools your AI agent can call for live knowledge
+5. **MCP Server** — 22 tools your AI agent can call for live knowledge
 6. **Auto-Chain Agents** — builder → reviewer → tuner workflow
 
 Each play ships: **DevKit** (19 .github Agentic OS files) + **TuneKit** (AI config) + **Bicep** infra + **eval.py**
@@ -87,7 +87,7 @@ Get it: VS Code Extension → click play → "Init DevKit"
 \`config/openai.json\` (temperature, model, max_tokens) · \`config/guardrails.json\` (blocked topics, PII filter) · \`config/agents.json\` (agent behavior) · \`config/model-comparison.json\` (cost vs quality) · \`evaluation/eval.py\` (automated scoring) · \`evaluation/test-set.jsonl\` (test cases)
 Get it: VS Code Extension → click play → "Init TuneKit"
 
-## MCP SERVER — 16 tools (frootai-mcp@2.2.0)
+## MCP SERVER — 22 tools (frootai-mcp@3.0.0)
 Install: \`npx frootai-mcp\` | Setup: add to .vscode/mcp.json
 **Static(6)**: list_modules, get_module, lookup_term, search_knowledge, get_architecture_pattern, get_froot_overview
 **Live(4)**: fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os
@@ -99,7 +99,7 @@ Full guide: [/setup-guide](/setup-guide)
 Install: \`code --install-extension pavleenbali.frootai\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools
-4 sidebar panels: Plays(20), MCP(16), Knowledge(18), Glossary(200+). Standalone — no clone needed.
+4 sidebar panels: Plays(20), MCP(22), Knowledge(18), Glossary(200+). Standalone — no clone needed.
 
 ## 18 KNOWLEDGE MODULES (FROOT Framework)
 **F** — Foundations: GenAI Foundations, LLM Landscape, AI Glossary A-Z (200+ terms), .github Agentic OS

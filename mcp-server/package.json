@@ -1,7 +1,7 @@
 {
   "name": "frootai-mcp",
-  "version": "2.2.0",
-  "description": "FrootAI MCP Server v2 — AI architecture knowledge as an agent skill. 18 modules, 200+ terms, 13 tools (6 static + 4 live).",
+  "version": "3.0.0",
+  "description": "FrootAI™ MCP Server v3 — AI architecture knowledge + compute tools. 22 tools: 6 static + 4 live + 3 chain + 3 ecosystem + 6 compute (smart search, cost estimator, config validator, play comparator, architecture diagrams, embedding explorer). 18 modules, 200+ terms, 20 solution plays.",
   "main": "index.js",
   "type": "module",
   "bin": {

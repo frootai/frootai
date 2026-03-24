@@ -20,7 +20,7 @@ graph TB
     end
 
     subgraph Platform["🌱 FrootAI Platform"]
-        MCP["MCP Server<br/>16 tools · stdio"]
+        MCP["MCP Server<br/>22 tools · stdio"]
         Web["Website<br/>Docusaurus · 13 pages"]
         Docs["Knowledge Hub<br/>18 modules"]
         Plays["Solution Plays<br/>20 plays"]
@@ -80,7 +80,7 @@ graph LR
 | Layer | Name | Contents |
 |---|---|---|
 | **1. Knowledge** | FROOT Framework | 18 modules across 5 layers (F·R·O·O·T) |
-| **2. Tooling** | Developer Kit | MCP Server (16 tools) + VS Code Extension (13 commands) |
+| **2. Tooling** | Developer Kit | MCP Server (22 tools) + VS Code Extension (13 commands) |
 | **3. Scaffolding** | Agentic OS | `.github/` files — agent rules, prompts, CI, templates |
 | **4. Configuration** | TuneKit | `config/` — models, guardrails, routing, search, chunking |
 | **5. Evaluation** | Quality Gates | `evaluation/` — golden sets, scoring scripts, benchmarks |

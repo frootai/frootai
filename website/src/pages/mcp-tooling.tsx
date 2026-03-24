@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function MCPToolingPage(): JSX.Element {
   return (
-    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem), 18 modules, 200+ terms. npx frootai-mcp.">
+    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new), 18 modules, 200+ terms. npx frootai-mcp.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🔌 FrootAI MCP Server</h1>
@@ -127,8 +127,8 @@ export default function MCPToolingPage(): JSX.Element {
           ))}
         </div>
 
-        {/* AI Ecosystem Tools (NEW in v2.2) */}
-        <h2 style={{ marginTop: "32px", fontSize: "1.2rem", fontWeight: 700 }}>🧠 AI Ecosystem Tools <span style={{ fontSize: "0.7rem", color: "#00C853", fontWeight: 400, marginLeft: "8px" }}>NEW in v2.2</span></h2>
+        {/* AI Ecosystem Tools (NEW in v3.0) */}
+        <h2 style={{ marginTop: "32px", fontSize: "1.2rem", fontWeight: 700 }}>🧠 AI Ecosystem Tools <span style={{ fontSize: "0.7rem", color: "#00C853", fontWeight: 400, marginLeft: "8px" }}>NEW in v3.0</span></h2>
         <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "12px" }}>
           Real-time AI decision tools — model catalog, cost estimation, and comparison engine.
         </p>

@@ -19,7 +19,7 @@
 |---|------|----------|
 | 🎯 | **Solution Plays** — pre-tuned, deployable AI solutions (RAG, agents, landing zones) | Infra & platform engineers |
 | 📖 | **18 knowledge modules** covering AI architecture end-to-end | Cloud Architects, CSAs |
-| 🔌 | **MCP Server** — 16 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem), add to any AI agent as a callable skill set | Agent builders, developers |
+| 🔌 | **MCP Server** — 22 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem + 6 compute), add to any AI agent as a callable skill set | Agent builders, developers |
 | 🔗 | **The open glue** — removes silos between infra, platform, and app teams | Everyone |
 
 ---
@@ -116,7 +116,7 @@ graph TB
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit/TuneKit, auto-chain agents |
-| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem) |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) |
 | **DevKit (.github/ + infra/)** | Developer | .github Agentic OS + Bicep infrastructure + co-coder context |
 | **TuneKit (config/ + eval/)** | Platform team | AI parameter tuning: temperature, models, guardrails, evaluation |
 
@@ -180,7 +180,7 @@ graph TB
 
 ---
 
-## MCP Server — 16 tools (v2.2)
+## MCP Server — 22 tools (v3)
 
 ### Static Tools (bundled knowledge)
 
@@ -250,7 +250,7 @@ frootai/
 │   ├── ...                   (all 18 modules)
 │   └── T3-Production-Patterns.md  T3
 ├── mcp-server/            ← MCP server (npm: frootai-mcp@2.2.0)
-│   ├── index.js             16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem)
+│   ├── index.js             22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)
 │   ├── knowledge.json       Bundled knowledge (682 KB, 18 modules)
 │   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
@@ -330,6 +330,6 @@ MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
 
 ---
 
-> **FrootAI™ v2.2** — *The open glue for AI architecture. From the roots to the fruits.*
-> 18 modules · 16 MCP tools · 20 solution plays · 200+ AI terms
+> **FrootAI™ v3** — *The open glue for AI architecture. From the roots to the fruits.*
+> 18 modules · 22 MCP tools · 20 solution plays · 200+ AI terms
 > Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)

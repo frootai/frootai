@@ -52,7 +52,7 @@ export default function VSCodeExtensionPage(): JSX.Element {
             { cmd: "FrootAI: Initialize DevKit", desc: "Full .github Agentic OS (19 files) + agent.md + MCP + plugin.json", hot: true },
             { cmd: "FrootAI: Initialize TuneKit", desc: "config/*.json + infra/main.bicep + evaluation/ — AI tuning for production", hot: true },
             { cmd: "FrootAI: Install MCP Server", desc: "Install globally, run via npx, or add .vscode/mcp.json config", hot: true },
-            { cmd: "FrootAI: Start MCP Server", desc: "Launch frootai-mcp in terminal (16 tools: 6 static + 4 live)", hot: true },
+            { cmd: "FrootAI: Start MCP Server", desc: "Launch frootai-mcp in terminal (22 tools: 6 static + 4 live + 6 new)", hot: true },
             { cmd: "FrootAI: Initialize Hooks", desc: "Copy guardrails.json (preToolUse policy gates) to your project", hot: false },
             { cmd: "FrootAI: Initialize Prompts", desc: "Copy 4 slash commands (/deploy, /test, /review, /evaluate)", hot: false },
             { cmd: "FrootAI: Look Up AI Term", desc: "200+ terms — inline popup with rich definition", hot: false },

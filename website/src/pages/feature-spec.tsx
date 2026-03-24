@@ -105,7 +105,7 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
             <span style={{ padding: "4px 14px", borderRadius: "20px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", fontSize: "0.75rem", color: "#10b981", fontWeight: 600 }}>
-              Version 2.2.0
+              Version 3.0.0
             </span>
             <span style={{ padding: "4px 14px", borderRadius: "20px", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.3)", fontSize: "0.75rem", color: "#6366f1", fontWeight: 600 }}>
               March 2026
@@ -148,7 +148,7 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <FeatureTable rows={[
             { feature: "Website", desc: "15-page Docusaurus site (dark theme, responsive, SEO-optimized)", status: "✅ Shipped", link: "/", linkLabel: "Home →" },
-            { feature: "npm Package", desc: "frootai-mcp@2.2.0 — 16 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
+            { feature: "npm Package", desc: "frootai-mcp@3.0.0 — 22 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
             { feature: "VS Code Extension", desc: "pavleenbali.frootai@0.9.2 — 13 commands, standalone engine, sidebar navigation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "GitHub Repo", desc: "Public repository, MIT license, CI/CD pipeline, 380+ files", status: "✅ Shipped", link: "https://github.com/gitpavleenbali/frootai", linkLabel: "GitHub →" },
             { feature: "Azure Integration", desc: "AI Foundry-connected, Managed Identity, Bicep IaC, private endpoints", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Admin Guide →" },
@@ -275,9 +275,9 @@ export default function FeatureSpecPage(): JSX.Element {
         {/*  5. MCP SERVER (16 Tools)                                   */}
         {/* ═══════════════════════════════════════════════════════════ */}
         <section id="mcp-server" style={sectionStyle}>
-          <h2 style={h2Style}>5. MCP Server (16 Tools)</h2>
+          <h2 style={h2Style}>5. MCP Server (22 Tools)</h2>
           <p style={descStyle}>
-            The FrootAI MCP Server (<code>frootai-mcp@2.2.0</code>) gives your AI agent direct access to curated knowledge, architecture patterns, model catalog, and pricing data. Works with Copilot, Claude, Cursor, Gemini, and any MCP-compatible client.
+            The FrootAI MCP Server (<code>frootai-mcp@3.0.0</code>) gives your AI agent direct access to curated knowledge, architecture patterns, model catalog, and pricing data. Works with Copilot, Claude, Cursor, Gemini, and any MCP-compatible client.
           </p>
 
           {/* Static Tools */}
@@ -309,7 +309,7 @@ export default function FeatureSpecPage(): JSX.Element {
           ]} />
 
           {/* AI Ecosystem Tools */}
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#00C853", marginBottom: "12px", marginTop: "24px" }}>🧠 AI Ecosystem Tools (3) — NEW in v2.2</h3>
+          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#00C853", marginBottom: "12px", marginTop: "24px" }}>🧠 AI Ecosystem Tools (3) — NEW in v3.0</h3>
           <FeatureTable rows={[
             { feature: "get_model_catalog", desc: "Azure AI model catalog — pricing, capabilities, context windows, recommendations", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
             { feature: "get_azure_pricing", desc: "Monthly cost estimates for RAG, agent, batch, realtime scenarios (dev/staging/prod)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
@@ -531,7 +531,7 @@ export default function FeatureSpecPage(): JSX.Element {
             { feature: "Admin Guide", desc: "Platform setup, MCP configuration, security hardening, troubleshooting", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Read →" },
             { feature: "User Guide", desc: "End-to-end usage — 13 commands, 16 tools, DevKit/TuneKit deep dive, FAQ", status: "✅ Shipped", link: "/docs/user-guide-complete", linkLabel: "Read →" },
             { feature: "Contributor Guide", desc: "Dev setup, repo structure, PR process, code style, testing requirements", status: "✅ Shipped", link: "/docs/contributor-guide", linkLabel: "Read →" },
-            { feature: "API Reference", desc: "All 16 MCP tools with schemas, 13 VS Code commands, config file schemas", status: "✅ Shipped", link: "/docs/api-reference", linkLabel: "Read →" },
+            { feature: "API Reference", desc: "All 22 MCP tools with schemas, 13 VS Code commands, config file schemas", status: "✅ Shipped", link: "/docs/api-reference", linkLabel: "Read →" },
             { feature: "Architecture Overview", desc: "System diagram, 6 architectural layers, data flow, deployment topology", status: "✅ Shipped", link: "/docs/architecture-overview", linkLabel: "Read →" },
             { feature: "Changelog", desc: "Full release history — v2.2.0, v0.9.2, v0.9.0, v2.1.1, v1.0.0", status: "✅ Shipped", link: "/dev-hub-changelog", linkLabel: "Read →" },
             { feature: "Quick Start", desc: "3-step getting started: Install Extension → Init DevKit → Deploy", status: "✅ Shipped", link: "/dev-hub", linkLabel: "Dev Hub →" },
@@ -587,7 +587,7 @@ export default function FeatureSpecPage(): JSX.Element {
           border: "1px solid var(--ifm-color-emphasis-200)", background: "var(--ifm-background-surface-color)",
         }}>
           <p style={{ fontSize: "0.78rem", color: "var(--ifm-color-emphasis-400)", marginBottom: "16px" }}>
-            Last updated: March 23, 2026 &nbsp;|&nbsp; Version 2.2.0 &nbsp;|&nbsp; FrootAI — Complete Feature Specification
+            Last updated: March 24, 2026 &nbsp;|&nbsp; Version 3.0.0 &nbsp;|&nbsp; FrootAI — Complete Feature Specification
           </p>
           <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
             {[

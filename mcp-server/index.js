@@ -699,7 +699,7 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 ---
 **The Open Glue**: FrootAI removes silos between infrastructure, platform, and application teams.
 **Website**: https://frootai.dev
-**MCP v2**: 10 tools (6 static + 4 live) · 200+ terms · 7 architecture patterns · 20 solution plays`;
+**MCP v3**: 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) · 200+ terms · 7 architecture patterns · 20 solution plays`;
 
     return {
       content: [{ type: "text", text: overview }],
@@ -708,7 +708,7 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 );
 
 // ════════════════════════════════════════════════════════════════════
-// LIVE TOOLS (v2) — Network-enabled, graceful degradation
+// LIVE TOOLS (v3) — Network-enabled, graceful degradation
 // ════════════════════════════════════════════════════════════════════
 
 /**
@@ -1170,7 +1170,7 @@ If any checks fail:
   }
 );
 
-// ── C4: AI Ecosystem Live Tools (v2.2) ─────────────────────────────
+// ── C4: AI Ecosystem Live Tools (v3) ─────────────────────────────
 
 server.tool(
   "get_model_catalog",
@@ -1610,7 +1610,7 @@ server.resource(
       {
         uri: "frootai://overview",
         mimeType: "text/plain",
-        text: `FrootAI v2 — From Root to Fruit
+        text: `FrootAI v3 — From Root to Fruit
 The open glue that binds infrastructure, platform, and application.
 
 🌱 F — Foundations: GenAI Foundations, LLM Landscape, AI Glossary A-Z, .github Agentic OS
@@ -1619,7 +1619,7 @@ The open glue that binds infrastructure, platform, and application.
 🏗️ O — Operations: Azure AI Platform, Infrastructure, Copilot
 🍎 T — Transformation: Fine-Tuning, Responsible AI, Production Patterns
 
-18 modules | 200+ AI terms | 16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem) | 20 solution plays
+18 modules | 200+ AI terms | 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) | 20 solution plays
 https://frootai.dev`,
       },
     ],

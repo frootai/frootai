@@ -30,7 +30,7 @@ Each step prompts you to continue to the next. The full `builder → reviewer �
 
 ### MCP Tools — Right-click any tool:
 - **📦 Install MCP Server** → Choose: Install globally (npm) / Run directly (npx) / Add .vscode/mcp.json
-- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (16 tools ready)
+- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (22 tools ready)
 - **ℹ️ View Tool Documentation** → Rich webview panel with tool docs, input/output, examples
 
 ---
@@ -87,7 +87,7 @@ When you run **Init TuneKit**, FrootAI copies AI fine-tuning configuration (NO i
 ## 🔌 MCP Server Integration
 
 The extension works alongside the FrootAI MCP Server (`npx frootai-mcp`):
-- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 16 tools)
+- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 22 tools)
 - **VS Code Extension** = for **you** (browse, search, scaffold, learn)
 - **Cached downloads** = DevKit Init caches files locally for 24h — works offline after first download
 
@@ -167,7 +167,7 @@ Here's how to use FrootAI to build Solution Play 05 (IT Ticket Resolution):
 | **Module descriptions** | Each module shows a one-line description in sidebar (e.g., "R2: Retrieval-Augmented Generation patterns") |
 | **MCP tool docs webview** | Click any MCP tool → "View Tool Documentation" → rich HTML panel with input/output, examples |
 | **Tool grouping** | MCP Tools panel now groups: 📦 Static (6) + ⛅ Live (4) + 🔗 Chain (3) + 🧠 AI Ecosystem (3) |
-| **16 MCP tools** | 3 new AI ecosystem tools: `get_model_catalog`, `get_azure_pricing`, `compare_models` |
+| **22 MCP tools** | 6 compute tools: `smart_search`, `cost_estimator`, `config_validator`, `play_comparator`, `architecture_diagrams`, `embedding_explorer` |
 
 ---
 
