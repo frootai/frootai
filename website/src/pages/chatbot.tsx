@@ -26,7 +26,7 @@ function getFollowUps(lastReply: string): string[] {
   if (r.includes("play 03") || r.includes("deterministic")) return ["How do guardrails work in Play 03?", "Can I combine Play 03 with Play 07?", "What is temperature=0?"];
   if (r.includes("play 07") || r.includes("multi-agent")) return ["How does agent handoff work?", "What's the Cosmos DB schema for state?", "Play 07 cost estimate"];
   if (r.includes("play 14") || r.includes("gateway") || r.includes("finops")) return ["How does semantic caching work?", "What's the token metering setup?", "Compare APIM vs custom proxy"];
-  if (r.includes("mcp") || r.includes("npx frootai")) return ["List all 16 MCP tools", "How do agent chain tools work?", "What's the model catalog tool?"];
+  if (r.includes("mcp") || r.includes("npx frootai")) return ["List all 22 MCP tools", "How do agent chain tools work?", "What's the model catalog tool?"];
   if (r.includes("devkit") || r.includes("agentic os")) return ["What files are in L1 Always-On?", "How do prompts differ from agents?", "What are skills?"];
   if (r.includes("vs code") || r.includes("extension")) return ["How does Init DevKit work?", "What are the 4 sidebar panels?", "How to auto-chain agents?"];
   if (r.includes("cost") || r.includes("pricing")) return ["Which model is cheapest for classification?", "How to reduce costs with caching?", "Play 14 AI Gateway details"];

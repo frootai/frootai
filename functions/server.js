@@ -87,7 +87,7 @@ Get it: VS Code Extension → click play → "Init DevKit"
 \`config/openai.json\` (temperature, model, max_tokens) · \`config/guardrails.json\` (blocked topics, PII filter) · \`config/agents.json\` (agent behavior) · \`config/model-comparison.json\` (cost vs quality) · \`evaluation/eval.py\` (automated scoring) · \`evaluation/test-set.jsonl\` (test cases)
 Get it: VS Code Extension → click play → "Init TuneKit"
 
-## MCP SERVER — 22 tools (frootai-mcp@3.0.0)
+## MCP SERVER — 22 tools (frootai-mcp@3.0.1)
 Install: \`npx frootai-mcp\` | Setup: add to .vscode/mcp.json
 **Static(6)**: list_modules, get_module, lookup_term, search_knowledge, get_architecture_pattern, get_froot_overview
 **Live(4)**: fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os
@@ -95,7 +95,7 @@ Install: \`npx frootai-mcp\` | Setup: add to .vscode/mcp.json
 **Ecosystem(3)**: get_model_catalog, get_azure_pricing, compare_models
 Full guide: [/setup-guide](/setup-guide)
 
-## VS CODE EXTENSION — v0.9.2, 13 commands
+## VS CODE EXTENSION — v1.0.0, 16 commands
 Install: \`code --install-extension pavleenbali.frootai\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools

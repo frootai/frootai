@@ -115,7 +115,7 @@ export default function FrootAIPage(): JSX.Element {
             {[
               { to: "/configurator", icon: "⚙️", title: "Solution Configurator", sub: "3 questions → your play", color: "#f59e0b" },
               { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "20 plays · DevKit + TuneKit", color: "#7c3aed" },
-              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "13 commands · Standalone", color: "#6366f1" },
+              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "16 commands · Standalone", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "22 tools for your agent", color: "#10b981" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },

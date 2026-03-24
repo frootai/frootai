@@ -249,14 +249,14 @@ frootai/
 │   ├── LLM-Landscape.md     F2
 │   ├── ...                   (all 18 modules)
 │   └── T3-Production-Patterns.md  T3
-├── mcp-server/            ← MCP server (npm: frootai-mcp@2.2.0)
+├── mcp-server/            ← MCP server (npm: frootai-mcp@3.0.1)
 │   ├── index.js             22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)
 │   ├── knowledge.json       Bundled knowledge (682 KB, 18 modules)
 │   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
 │   └── package.json         npm config
-├── vscode-extension/      ← VS Code extension (v0.9.2)
-│   ├── src/extension.js     13 commands, standalone engine, cached downloads
+├── vscode-extension/      ← VS Code extension (v1.0.0)
+│   ├── src/extension.js     16 commands, standalone engine, cached downloads
 │   ├── knowledge.json       Bundled knowledge (682 KB)
 │   └── package.json         Marketplace config
 ├── website/               ← Docusaurus site (17 pages)
@@ -314,7 +314,7 @@ FrootAI is open source (MIT). See [CONTRIBUTING.md](./CONTRIBUTING.md) for the f
 
 1. **Add a solution play** — follow the DevKit + TuneKit structure (CI validates automatically)
 2. **Improve existing plays** — deepen agent.md, tune config values, add eval test cases
-3. **Add MCP tools** — extend the 16-tool server with new capabilities
+3. **Add MCP tools** — extend the 22-tool server with new capabilities
 4. **Improve knowledge** — fix modules, add glossary terms, propose new content
 5. **Star the repo** — help others discover FrootAI
 

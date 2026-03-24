@@ -13,8 +13,8 @@ const stats = [
 ];
 
 const components = [
-  { name: "MCP Server", version: "v3.0.0", pkg: "frootai-mcp", status: "✅ Live", link: "https://www.npmjs.com/package/frootai-mcp" },
-  { name: "VS Code Extension", version: "v0.9.0", pkg: "pavleenbali.frootai", status: "✅ Live", link: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
+  { name: "MCP Server", version: "v3.0.1", pkg: "frootai-mcp", status: "✅ Live", link: "https://www.npmjs.com/package/frootai-mcp" },
+  { name: "VS Code Extension", version: "v1.0.0", pkg: "pavleenbali.frootai", status: "✅ Live", link: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
   { name: "Knowledge Base", version: "18 modules", pkg: "knowledge.json", status: "✅ Bundled", link: "/docs" },
   { name: "Website", version: "Docusaurus 3", pkg: "13 pages", status: "✅ Live", link: "/" },
   { name: "Solution Plays", version: "20 plays", pkg: "DevKit + TuneKit", status: "✅ Shipping", link: "/solution-plays" },

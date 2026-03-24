@@ -289,7 +289,7 @@ npm install`}
             {[
               { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays. Click to open README or folder." },
               { icon: "📖", title: "FROOT Modules", desc: "18 modules grouped by FROOT layer." },
-              { icon: "🔌", title: "MCP Tools", desc: "See all 13 MCP tools at a glance." },
+              { icon: "🔌", title: "MCP Tools", desc: "See all 22 MCP tools at a glance." },
             ].map(p => (
               <div key={p.title} style={{ padding: "12px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
                 <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>{p.icon}</div>

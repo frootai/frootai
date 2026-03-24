@@ -95,7 +95,7 @@ Install MCP: Right-click any tool in MCP panel → **Install MCP Server** → ch
 
 ---
 
-## 🔍 All 13 Commands (Ctrl+Shift+P)
+## 🔍 All 16 Commands (Ctrl+Shift+P)
 
 | Command | What It Does |
 |---------|-------------|
@@ -158,7 +158,7 @@ Here's how to use FrootAI to build Solution Play 05 (IT Ticket Resolution):
 
 ---
 
-## 📰 What's New in v0.9.0
+## 📰 What's New in v1.0.0
 
 | Feature | Description |
 |---------|-------------|
@@ -171,5 +171,5 @@ Here's how to use FrootAI to build Solution Play 05 (IT Ticket Resolution):
 
 ---
 
-**FrootAI v0.9.0** — The open glue for GenAI. From the roots to the fruits.
+**FrootAI v1.0.0** — The open glue for GenAI. From the roots to the fruits.
 Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)

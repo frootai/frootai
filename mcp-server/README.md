@@ -1,6 +1,6 @@
 # frootai-mcp
 
-> **AI architecture knowledge + agent chain as an MCP skill.** 16 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem), 18 modules, 200+ terms. Hybrid: works offline + fetches live Azure docs. Auto-chain: Build → Review → Tune in chat.
+> **AI architecture knowledge + agent chain as an MCP skill.** 22 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem + 6 compute), 18 modules, 200+ terms. Hybrid: works offline + fetches live Azure docs. Auto-chain: Build → Review → Tune in chat.
 
 ## Install & Run
 
