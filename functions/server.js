@@ -253,7 +253,14 @@ const server = http.createServer(async (req, res) => {
         else { res.writeHead(500); res.end("No auth"); return; }
 
         // SSE streaming
-        res.writeHead(200, { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Connection": "keep-alive" });
+        res.writeHead(200, {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          "Connection": "keep-alive",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+        });
 
         const reqBody = JSON.stringify({ messages, temperature: 0.4, max_tokens: 1000, top_p: 0.9, stream: true });
         const url = new URL(`/openai/deployments/${AZURE_OPENAI_DEPLOYMENT}/chat/completions?api-version=${AZURE_OPENAI_API_VERSION}`, AZURE_OPENAI_ENDPOINT);
