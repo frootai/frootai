@@ -88,6 +88,24 @@ article p {
 /*  NAVBAR — Glassmorphism like Anthropic                              */
 /* ================================================================== */
 
+/* Search bar: compact, doesn't push nav items */
+.navbar .DocSearch-Button,
+.navbar [class*="searchBar"] {
+  max-width: 180px;
+  padding: 0 8px;
+}
+.navbar [class*="searchBar"] input {
+  width: 140px;
+  font-size: 0.82rem;
+}
+@media (max-width: 996px) {
+  .navbar .DocSearch-Button,
+  .navbar [class*="searchBar"] {
+    max-width: 36px;
+    overflow: hidden;
+  }
+}
+
 .navbar {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);

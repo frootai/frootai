@@ -27,7 +27,20 @@ const config: Config = {
     format: "detect",
   },
 
-  themes: ["@docusaurus/theme-mermaid", "@easyops-cn/docusaurus-search-local"],
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        docsRouteBasePath: "/docs",
+        indexBlog: false,
+        searchBarShortcutHint: true,
+        searchBarPosition: "right",
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -177,38 +190,35 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Explore",
+          title: "Platform",
           items: [
-            { label: "AI Knowledge Hub", to: "/docs/" },
-            { label: "Ecosystem", to: "/ecosystem" },
             { label: "Solution Plays", to: "/solution-plays" },
-            { label: "Packages", to: "/packages" },
+            { label: "Ecosystem", to: "/ecosystem" },
             { label: "Setup Guide", to: "/setup-guide" },
-            { label: "AI Assistant", to: "/chatbot" },
-            { label: "Configurator", to: "/configurator" },
+            { label: "FAI Agent", to: "/chatbot" },
           ],
         },
         {
-          title: "Ecosystem",
+          title: "Learn",
           items: [
-            { label: "Partner Integrations", to: "/partners" },
-            { label: "Plugin Marketplace", to: "/marketplace" },
-            { label: "Enterprise & Certification", to: "/enterprise" },
+            { label: "Knowledge Hub", to: "/docs/" },
+            { label: "Packages", to: "/packages" },
             { label: "Workshops", href: "https://github.com/gitpavleenbali/frootai/tree/main/workshops" },
           ],
         },
         {
           title: "Install",
           items: [
-            { label: "FrootAI MCP (npm)", href: "https://www.npmjs.com/package/frootai-mcp" },
+            { label: "MCP Server (npm)", href: "https://www.npmjs.com/package/frootai-mcp" },
             { label: "VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
+            { label: "GitHub", href: "https://github.com/gitpavleenbali/frootai" },
           ],
         },
         {
           title: "Connect",
           items: [
             { label: "LinkedIn", href: "https://linkedin.com/in/pavleenbali" },
-            { label: "GitHub", href: "https://github.com/gitpavleenbali" },
+            { label: "Website", href: "https://frootai.dev" },
             { label: "Newsletter", href: "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7001119707667832832" },
           ],
         },
