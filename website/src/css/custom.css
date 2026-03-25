@@ -89,75 +89,155 @@ article p {
 /* ================================================================== */
 
 /* ================================================================== */
-/*  SEARCH — Purple glow pill with 🔍 emoji, between FAI Agent & GitHub */
+/*  SEARCH — Purple glow pill: functional, compact, click opens search */
 /* ================================================================== */
 
-/* The search container: make it a compact glow pill */
-.navbar [class*="searchBar"] {
+/* Outer wrapper + all possible plugin containers: purple glow pill */
+.navbar__search,
+.navbar .navbar__search,
+nav .navbar__search,
+.navbar__items .navbar__search,
+div[class*="searchBar"],
+.navbar div[class*="searchBar"] {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(167, 139, 250, 0.08)) !important;
   border: 1px solid rgba(124, 58, 237, 0.4) !important;
   border-radius: 10px !important;
-  padding: 5px 14px !important;
-  transition: all 0.3s ease !important;
-  cursor: pointer !important;
-  position: relative !important;
-  display: flex !important;
-  align-items: center !important;
   height: 34px !important;
+  width: 34px !important;
   min-width: 34px !important;
   max-width: 34px !important;
-  overflow: hidden !important;
-  margin: 0 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 6px !important;
+  transition: all 0.3s ease !important;
+  overflow: visible !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
 }
-.navbar [class*="searchBar"]:hover {
+.navbar__search:hover,
+.navbar div[class*="searchBar"]:hover {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(167, 139, 250, 0.15)) !important;
   border-color: rgba(124, 58, 237, 0.6) !important;
-  box-shadow: 0 0 16px rgba(124, 58, 237, 0.3), 0 0 32px rgba(124, 58, 237, 0.1) !important;
-  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.3) !important;
+  transform: translateY(-1px) !important;
 }
-/* Add 🔍 lens emoji via ::before */
-.navbar [class*="searchBar"]::before {
+
+/* Hide ALL plugin sub-elements: spinner, icons, buttons */
+.navbar__search [class*="loadingRing"],
+.navbar__search svg,
+.navbar__search [class*="searchIcon"],
+.navbar div[class*="searchBar"] [class*="loadingRing"],
+.navbar div[class*="searchBar"] svg {
+  display: none !important;
+}
+
+/* The inner search container */
+.navbar__search [class*="searchBarContainer"],
+.navbar div[class*="searchBar"] [class*="searchBarContainer"] {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* The actual input: invisible until focused */
+.navbar__search input,
+.navbar__search input[type="search"],
+.navbar div[class*="searchBar"] input {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  color: transparent !important;
+  font-size: 1px !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.navbar__search input::placeholder,
+.navbar div[class*="searchBar"] input::placeholder {
+  color: transparent !important;
+}
+/* Remove webkit search cancel button */
+.navbar__search input::-webkit-search-cancel-button,
+.navbar div[class*="searchBar"] input::-webkit-search-cancel-button {
+  display: none !important;
+}
+
+/* 🔍 emoji: always centered in the pill */
+.navbar__search::after,
+.navbar div[class*="searchBar"]::after {
   content: "🔍" !important;
   font-size: 14px !important;
+  pointer-events: none !important;
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-}
-/* Hide ALL search plugin internals — input, icons, hints, buttons */
-.navbar [class*="searchBar"] input,
-.navbar [class*="searchBar"] button,
-.navbar [class*="searchBar"] svg,
-.navbar [class*="searchBar"] [class*="searchHint"],
-.navbar [class*="searchBar"] [class*="searchIcon"],
-.navbar [class*="searchBar"] [class*="Placeholder"],
-.navbar [class*="searchBar"] span {
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  position: absolute !important;
-}
-/* But keep input clickable for focus trigger */
-.navbar [class*="searchBar"] input {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  opacity: 0 !important;
-  cursor: pointer !important;
-  z-index: 3 !important;
+  z-index: 1 !important;
+  transition: all 0.2s ease !important;
 }
 
-/* Mobile: keep search + Hi FAI + FAI Agent visible outside hamburger */
+/* ── EXPANDED STATE (when typing) ── */
+.navbar__search:focus-within,
+.navbar div[class*="searchBar"]:focus-within {
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
+  background: rgba(15, 15, 30, 0.95) !important;
+  border-color: rgba(124, 58, 237, 0.7) !important;
+  box-shadow: 0 0 24px rgba(124, 58, 237, 0.4) !important;
+  padding: 0 8px 0 32px !important;
+}
+/* Move emoji to left when expanded */
+.navbar__search:focus-within::after,
+.navbar div[class*="searchBar"]:focus-within::after {
+  left: 12px !important;
+  transform: translateY(-50%) !important;
+}
+/* Show typed text */
+.navbar__search:focus-within input,
+.navbar__search:focus-within input[type="search"],
+.navbar div[class*="searchBar"]:focus-within input {
+  color: #e0e0e0 !important;
+  font-size: 0.85rem !important;
+  cursor: text !important;
+}
+.navbar__search:focus-within input::placeholder,
+.navbar div[class*="searchBar"]:focus-within input::placeholder {
+  color: rgba(167, 139, 250, 0.4) !important;
+}
+
+/* Search results dropdown: dark glassmorphism */
+[class*="suggestions_"],
+[class*="suggestion_"],
+[class*="hitTree"],
+[class*="hitFooter"],
+[class*="searchResult"],
+[class*="searchBarContainer"] ul {
+  background: rgba(12, 12, 22, 0.98) !important;
+  border: 1px solid rgba(124, 58, 237, 0.15) !important;
+  border-radius: 10px !important;
+  backdrop-filter: blur(12px) !important;
+}
+[class*="suggestion_"]:hover,
+[class*="suggestion_"][class*="cursor"] {
+  background: rgba(124, 58, 237, 0.15) !important;
+}
+
+/* Mobile: keep search visible outside hamburger */
 @media (max-width: 996px) {
-  .navbar [class*="searchBar"] {
+  .navbar__search,
+  .navbar div[class*="searchBar"] {
     order: -1 !important;
-    margin-right: 4px !important;
   }
 }
 
@@ -193,11 +273,11 @@ article p {
   padding: 0 0.8rem !important;
 }
 .footer__copyright {
-  font-size: 0.68rem !important;
-  color: rgba(255,255,255,0.2) !important;
+  font-size: 0.72rem !important;
+  color: rgba(255,255,255,0.3) !important;
   margin-top: 2rem !important;
   padding-top: 1rem !important;
-  border-top: 1px solid rgba(255,255,255,0.04) !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
 }
 
 .navbar {
