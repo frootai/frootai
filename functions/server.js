@@ -476,3 +476,5 @@ function getManagedIdentityToken() {
     req.end();
   });
 }
+
+// Deploy test: 2026-03-26 00:18
