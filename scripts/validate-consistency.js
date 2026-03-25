@@ -8,10 +8,10 @@
  * Run before every release to catch drift.
  */
 
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+const { readFileSync, existsSync } = require('fs');
+const { join } = require('path');
 
-const ROOT = join(import.meta.dirname, '..');
+const ROOT = join(__dirname, '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 const readJSON = (rel) => JSON.parse(read(rel));
 

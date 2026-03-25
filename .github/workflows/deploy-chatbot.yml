@@ -28,8 +28,11 @@ jobs:
         run: zip -r ../deploy.zip . -x "node_modules/.cache/*"
 
       - name: Deploy to Azure App Service
+        if: ${{ env.HAS_SECRET == 'true' }}
         uses: azure/webapps-deploy@v3
         with:
           app-name: frootai-chatbot-api
           package: deploy.zip
           publish-profile: ${{ secrets.AZURE_CHATBOT_PUBLISH_PROFILE }}
+        env:
+          HAS_SECRET: ${{ secrets.AZURE_CHATBOT_PUBLISH_PROFILE != '' }}
