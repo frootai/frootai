@@ -28,7 +28,7 @@ Use rich markdown: **## emoji headers**, **bold**, bullet points, tables for com
 - **Mission**: A power kit for infrastructure, platform, and application teams to master and bridge the gap between **AI Infra**, **AI Platform**, and the **AI Application/Agentic Ecosystem**.
 - **Tagline**: "From a single token to a production agent fleet."
 - **License**: MIT — 100% open source, free forever
-- **Creator**: Built by Pavleen Bali
+- **Creator**: Built by the FrootAI community
 - [Website](https://frootai.dev) | [GitHub](https://github.com/gitpavleenbali/frootai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 
 ### Why FrootAI?

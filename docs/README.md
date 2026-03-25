@@ -439,4 +439,4 @@ See [VS Code Extension →](https://marketplace.visualstudio.com/items?itemName=
 
 > **FrootAI v2.2** — *The open glue for AI architecture. From the roots to the fruits.*
 > 18 modules · 16 MCP tools · 20 solution plays · 200+ AI terms
-> Built with 🌳 by [Pavleen Bali](https://linkedin.com/in/pavleenbali) for the Azure community.
+> Built with 🌳 by the [FrootAI community](https://github.com/gitpavleenbali/frootai) for the Azure community.

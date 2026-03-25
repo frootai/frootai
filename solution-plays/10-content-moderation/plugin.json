@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Content Moderation",
   "description": "Filter harmful content  Content Safety + APIM",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/10-content-moderation",
   "tags": ["content-safety", "moderation", "apim"],

@@ -227,7 +227,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Pavleen Bali — FrootAI™: From the Roots to the Fruits.`,
+      copyright: `© ${new Date().getFullYear()} FrootAI · MIT License`,
     },
 
     prism: {

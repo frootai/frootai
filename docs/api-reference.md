@@ -383,7 +383,7 @@ The root `plugin.json` describes the FrootAI plugin for marketplace and registry
   "name": "frootai",
   "version": "2.2.0",
   "description": "BIY AI Kit — From the Roots to the Fruits",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai",
   "components": {

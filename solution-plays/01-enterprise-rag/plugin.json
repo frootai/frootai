@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Enterprise RAG Q&A",
   "description": "Production RAG pipeline  AI Search + OpenAI + Container Apps",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/01-enterprise-rag",
   "tags": ["rag", "search", "openai", "container-apps"],

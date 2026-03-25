@@ -6,8 +6,8 @@
   "description": "AI architecture knowledge engine — 16 tools, 18 modules, 200+ terms. The open glue for infrastructure, platform, and application teams building AI solutions on Azure.",
   "longDescription": "FrootAI MCP Server provides curated AI architecture knowledge as callable agent tools. Instead of burning tokens searching the internet, agents call FrootAI to get precise definitions, architecture patterns, model comparisons, cost estimates, and guided build→review→tune workflows. Covers the full AI stack: tokens → models → RAG → agents → production operations.",
   "author": {
-    "name": "Pavleen Bali",
-    "url": "https://linkedin.com/in/pavleenbali",
+    "name": "FrootAI Contributors",
+    "url": "https://frootai.dev",
     "github": "gitpavleenbali"
   },
   "license": "MIT",

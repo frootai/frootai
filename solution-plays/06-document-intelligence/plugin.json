@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Document Intelligence",
   "description": "Extract, classify, structure document data  Doc Intelligence + OpenAI",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/06-document-intelligence",
   "tags": ["documents", "extraction", "doc-intelligence"],

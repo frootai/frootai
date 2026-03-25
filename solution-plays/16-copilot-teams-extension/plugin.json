@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Copilot Teams Extension",
   "description": "M365 Copilot extension with Graph API and declarative agents",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/16-copilot-teams-extension",
   "tags": ["m365", "teams", "graph-api", "declarative-agent"],

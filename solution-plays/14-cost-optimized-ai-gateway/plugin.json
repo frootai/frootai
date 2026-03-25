@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Cost-Optimized AI Gateway",
   "description": "APIM-based AI gateway with caching, load balancing, token budgets",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/14-cost-optimized-ai-gateway",
   "tags": ["apim", "gateway", "caching", "cost"],

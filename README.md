@@ -329,10 +329,10 @@ PR template included — CI runs `validate-plays.yml` on every pull request.
 
 MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
 
-"FrootAI" name and logo are trademarks™ of Pavleen Bali.
+"FrootAI" name and logo are trademarks of FrootAI.
 
 ---
 
-> **FrootAI™ v3** — *The open glue for AI architecture. From the roots to the fruits.*
+> **FrootAI v3** — *The open glue for AI architecture. From the roots to the fruits.*
 > 18 modules · 22 MCP tools · 20 solution plays · 200+ AI terms
-> Built by [Pavleen Bali](https://linkedin.com/in/pavleenbali)
+> Built by the [FrootAI community](https://github.com/gitpavleenbali/frootai)

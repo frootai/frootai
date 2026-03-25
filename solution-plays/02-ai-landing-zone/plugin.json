@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "AI Landing Zone",
   "description": "Foundational Azure infra  VNet, private endpoints, RBAC, GPU quotas",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/02-ai-landing-zone",
   "tags": ["infra", "landing-zone", "vnet", "rbac"],

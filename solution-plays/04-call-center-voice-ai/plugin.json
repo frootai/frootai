@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Call Center Voice AI",
   "description": "Voice-enabled customer service  Communication Services + Speech + OpenAI",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/04-call-center-voice-ai",
   "tags": ["voice", "speech", "communication-services"],

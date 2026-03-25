@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Deterministic Agent",
   "description": "Reliable agent  temp=0, structured JSON, guardrails, evaluation",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/03-deterministic-agent",
   "tags": ["agents", "deterministic", "guardrails", "evaluation"],

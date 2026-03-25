@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "AI Observability",
   "description": "Monitor AI workloads  App Insights, KQL, quality alerts, workbooks",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/17-ai-observability",
   "tags": ["monitoring", "kql", "app-insights", "observability"],

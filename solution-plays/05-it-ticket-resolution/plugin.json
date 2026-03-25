@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "IT Ticket Resolution",
   "description": "Auto-classify, route, resolve IT tickets  Logic Apps + AI",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/05-it-ticket-resolution",
   "tags": ["itsm", "classification", "logic-apps"],

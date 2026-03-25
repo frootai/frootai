@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Multi-Modal DocProc",
   "description": "Process documents with GPT-4o multi-modal  text + images",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/15-multi-modal-docproc",
   "tags": ["multi-modal", "gpt4o", "vision", "documents"],

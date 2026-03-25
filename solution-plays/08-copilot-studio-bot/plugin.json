@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Copilot Studio Bot",
   "description": "Low-code enterprise bot  Copilot Studio + Dataverse",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/08-copilot-studio-bot",
   "tags": ["copilot-studio", "low-code", "dataverse"],

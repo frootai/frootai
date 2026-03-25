@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Model Serving AKS",
   "description": "Deploy and serve LLMs on AKS with vLLM and GPU",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/12-model-serving-aks",
   "tags": ["aks", "vllm", "gpu", "model-serving"],

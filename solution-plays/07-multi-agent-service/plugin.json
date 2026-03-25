@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "name": "Multi-Agent Service",
   "description": "Supervisor agent routes to specialists  Agent Framework + Dapr",
-  "author": "Pavleen Bali",
+  "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/07-multi-agent-service",
   "tags": ["multi-agent", "dapr", "agent-framework"],
