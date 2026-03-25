@@ -1,0 +1,35 @@
+name: Deploy FAI Agent Chatbot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/**'
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: functions
+        run: npm ci --production
+
+      - name: Create deployment package
+        working-directory: functions
+        run: zip -r ../deploy.zip . -x "node_modules/.cache/*"
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: frootai-chatbot-api
+          package: deploy.zip
+          publish-profile: ${{ secrets.AZURE_CHATBOT_PUBLISH_PROFILE }}

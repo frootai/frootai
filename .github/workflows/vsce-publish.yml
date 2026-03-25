@@ -1,0 +1,41 @@
+name: Publish VS Code Extension
+
+on:
+  push:
+    tags:
+      - 'ext-v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Verify package version matches tag
+        working-directory: vscode-extension
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#ext-v}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "ERROR: package.json version ($PKG_VERSION) does not match tag ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "Publishing frootai extension v$PKG_VERSION"
+
+      - name: Package and Publish
+        working-directory: vscode-extension
+        run: |
+          vsce package
+          vsce publish
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
