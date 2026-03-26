@@ -120,4 +120,6 @@ The extension works alongside `npx frootai-mcp` (22 tools):
 
 ---
 
-**FrootAI v1.0.5** — 22 MCP tools, 16 commands, 20 solution plays, 18 modules, 200+ terms. From the roots to the fruits.
+**FrootAI** — 22 MCP tools · 16 commands · 20 solution plays · 18 modules · 200+ terms. From the roots to the fruits.
+
+© 2026 FrootAI · MIT License
