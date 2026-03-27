@@ -314,14 +314,48 @@ build/
 .DS_Store
 `);
 
+  // Spec file (if --spec flag or always include as template)
+  const specTemplate = {
+    name: projectName,
+    version: '0.1.0',
+    play: playId,
+    description: `${projectName} — built with FrootAI Solution Play ${playId}`,
+    scale,
+    architecture: {
+      pattern: playId.includes('rag') ? 'rag' : playId.includes('agent') ? 'agent' : 'custom',
+      data_flow: 'User → API → AI Search → OpenAI → Response',
+    },
+    config: { openai: `config/openai.json`, search: `config/search.json`, guardrails: `config/guardrails.json` },
+    evaluation: { config: `evaluation/eval-config.json` },
+    waf_alignment: {
+      reliability: 'Retry + circuit breaker on all AI calls',
+      security: 'Managed Identity + Key Vault + Content Safety',
+      cost_optimization: scale === 'prod' ? 'Model routing (GPT-4o + GPT-4o-mini)' : 'GPT-4o-mini for dev',
+      operational_excellence: 'CI/CD + consistency validation',
+      performance_efficiency: 'Response caching + streaming',
+      responsible_ai: 'Content safety filters + groundedness checks',
+    },
+  };
+  mkdirSync(join(projectDir, 'spec'), { recursive: true });
+  writeIfNotExists(join(projectDir, 'spec/project-spec.json'), JSON.stringify(specTemplate, null, 2));
+
+  // WAF instruction stubs
+  mkdirSync(join(projectDir, '.github/instructions'), { recursive: true });
+  writeIfNotExists(join(projectDir, '.github/instructions/waf-security.instructions.md'),
+    `---\napplyTo: "**/*.{ts,js,py,bicep,json}"\n---\n# Security\n\n- Use Managed Identity for all Azure service auth\n- Store secrets in Azure Key Vault\n- Enable content safety on all AI endpoints\n- Validate and sanitize all user inputs\n`);
+  writeIfNotExists(join(projectDir, '.github/instructions/waf-reliability.instructions.md'),
+    `---\napplyTo: "**/*.{ts,js,py,bicep,json}"\n---\n# Reliability\n\n- Retry all external API calls (3 retries, exponential backoff)\n- Expose /health endpoint on every service\n- Gracefully degrade when AI endpoints are unavailable\n`);
+
   console.log(`${c.green}  ✅ Project scaffolded!${c.reset}\n`);
   console.log(`${c.bold}  Created:${c.reset}`);
   console.log(`${c.dim}  ${projectName}/`);
   console.log(`  ├── .vscode/mcp.json          ← MCP server config (auto-connects)`);
   console.log(`  ├── .github/agents/           ← Builder, Reviewer, Tuner agents`);
+  console.log(`  ├── .github/instructions/     ← WAF security + reliability`);
   console.log(`  ├── .github/copilot-instructions.md`);
   console.log(`  ├── config/                   ← OpenAI, Search, Guardrails configs`);
   console.log(`  ├── evaluation/               ← Eval config + thresholds`);
+  console.log(`  ├── spec/project-spec.json    ← Architecture spec (SpecKit)`);
   console.log(`  ├── infra/                    ← Infrastructure templates`);
   console.log(`  └── README.md${c.reset}\n`);
 

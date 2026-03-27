@@ -1,0 +1,79 @@
+name: Sync README Validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/README.md'
+      - 'mcp-server/package.json'
+      - 'mcp-server/index.js'
+      - 'vscode-extension/package.json'
+  push:
+    branches: [main]
+    paths:
+      - '**/README.md'
+
+jobs:
+  validate-readmes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check README consistency across 5 key files
+        run: |
+          node -e "
+          const fs = require('fs');
+
+          const mcpPkg = JSON.parse(fs.readFileSync('mcp-server/package.json', 'utf8'));
+          const mcpVersion = mcpPkg.version;
+          const mcpIndex = fs.readFileSync('mcp-server/index.js', 'utf8');
+          const toolCount = (mcpIndex.match(/server\\.tool\\(/g) || []).length;
+
+          const readmes = [
+            'README.md',
+            'mcp-server/README.md',
+            'vscode-extension/README.md',
+            'docs/README.md',
+            'solution-plays/README.md'
+          ];
+
+          let errors = 0;
+
+          for (const readme of readmes) {
+            if (!fs.existsSync(readme)) continue;
+            const content = fs.readFileSync(readme, 'utf8');
+
+            // Check for stale version references
+            const versionRefs = content.match(/frootai-mcp@(\d+\.\d+\.\d+)/g) || [];
+            for (const ref of versionRefs) {
+              const v = ref.split('@')[1];
+              if (v !== mcpVersion) {
+                console.error('::error file=' + readme + '::Stale version: ' + ref + ' (should be @' + mcpVersion + ')');
+                errors++;
+              }
+            }
+
+            // Check for wrong tool counts (only numbers > 10 to avoid false positives)
+            const toolRefs = content.match(/(\d+)\s+tools/g) || [];
+            for (const ref of toolRefs) {
+              const n = parseInt(ref);
+              if (n > 10 && n !== toolCount) {
+                console.error('::error file=' + readme + '::Wrong tool count: ' + ref + ' (should be ' + toolCount + ' tools)');
+                errors++;
+              }
+            }
+          }
+
+          if (errors > 0) {
+            console.error('');
+            console.error(errors + ' README inconsistencies found.');
+            console.error('Fix: node scripts/sync-content.js');
+            process.exit(1);
+          }
+
+          console.log('✅ All ' + readmes.filter(r => fs.existsSync(r)).length + ' READMEs are consistent (' + toolCount + ' tools, v' + mcpVersion + ')');
+          "

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://frootai.dev/schemas/spec.json",
+  "name": "",
+  "version": "0.1.0",
+  "play": "",
+  "description": "",
+  "scale": "dev",
+  "team": {
+    "owner": "",
+    "reviewers": []
+  },
+  "architecture": {
+    "pattern": "rag",
+    "components": [
+      {
+        "name": "ai-search",
+        "service": "Azure AI Search",
+        "sku": "free",
+        "purpose": "Document retrieval and semantic search"
+      },
+      {
+        "name": "openai",
+        "service": "Azure OpenAI",
+        "model": "gpt-4o-mini",
+        "purpose": "Response generation"
+      },
+      {
+        "name": "app-service",
+        "service": "Azure App Service",
+        "sku": "B1",
+        "purpose": "API hosting"
+      }
+    ],
+    "data_flow": "User → API → AI Search → OpenAI → Response"
+  },
+  "config": {
+    "openai": {
+      "model": "gpt-4o-mini",
+      "temperature": 0.1,
+      "max_tokens": 4096
+    },
+    "search": {
+      "top_k": 5,
+      "semantic_config": "default",
+      "min_score": 0.75
+    },
+    "guardrails": {
+      "max_tokens_per_request": 4096,
+      "blocked_categories": ["hate", "violence", "self-harm", "sexual"],
+      "pii_detection": true,
+      "grounding_check": true
+    }
+  },
+  "evaluation": {
+    "metrics": ["groundedness", "relevance", "coherence", "fluency"],
+    "thresholds": {
+      "groundedness": 4.0,
+      "relevance": 4.0,
+      "coherence": 4.0,
+      "fluency": 4.0
+    }
+  },
+  "waf_alignment": {
+    "reliability": "Retry + circuit breaker on all AI calls",
+    "security": "Managed Identity + Key Vault + Content Safety",
+    "cost_optimization": "GPT-4o-mini for dev, model routing for prod",
+    "operational_excellence": "CI/CD + consistency validation + uptime monitors",
+    "performance_efficiency": "Response caching + streaming + async",
+    "responsible_ai": "Content safety filters + groundedness checks"
+  }
+}

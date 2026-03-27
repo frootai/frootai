@@ -38,6 +38,28 @@ jobs:
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
 
+      - name: Lighthouse CI audit
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://localhost:8080/
+            http://localhost:8080/setup-guide
+            http://localhost:8080/cli
+          uploadArtifacts: true
+          configPath: ./website/.lighthouserc.json
+          temporaryPublicStorage: true
+        continue-on-error: true
+
+      - name: Verify search index
+        working-directory: website
+        run: |
+          if [ -f build/search-index.json ]; then
+            ENTRIES=$(node -e "console.log(JSON.parse(require('fs').readFileSync('build/search-index.json','utf8')).length)")
+            echo "✅ Search index: $ENTRIES entries"
+          else
+            echo "ℹ️  No search-index.json (search plugin may bundle differently)"
+          fi
+
       - name: Verify MCP server
         working-directory: mcp-server
         run: |
