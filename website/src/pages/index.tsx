@@ -84,6 +84,7 @@ export default function FrootAIPage(): JSX.Element {
           <h1 className={styles.heroTitle}>FrootAI</h1>
 
           <p className={styles.heroLabel}>From the Roots to the Fruits</p>
+          <p className={styles.heroSubLabel}>It's simply Frootful.</p>
 
           <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-400)", margin: "0 auto 8px", letterSpacing: "0.03em" }}>
             Infra ⇄ Platform ⇄ Apps

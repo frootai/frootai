@@ -3,7 +3,7 @@
 /* ================================================================== */
 
 .hero {
-  padding: 80px 24px 60px;
+  padding: 10px 24px 60px;
   text-align: center;
   background: radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.10) 0%, rgba(99, 102, 241, 0.06) 40%, transparent 70%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -39,7 +39,7 @@
   width: 380px;
   height: 380px;
   object-fit: contain;
-  margin-bottom: 12px;
+  margin-bottom: -110px;
   filter: drop-shadow(0 6px 28px rgba(16, 185, 129, 0.35));
   animation: logoFloat 4s ease-in-out infinite;
 }
@@ -55,7 +55,17 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: #10b981;
+  margin-bottom: 4px;
+}
+
+.heroSubLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  color: #f5c542;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .heroTitle {
