@@ -1,0 +1,55 @@
+{
+  "name": "05-it-ticket-resolution",
+  "version": "1.0.0",
+  "framework": "frootai",
+  "kits": {
+    "devkit": {
+      "path": ".github/",
+      "files": 19,
+      "includes": [
+        "agents",
+        "instructions",
+        "prompts",
+        "skills",
+        "hooks",
+        "workflows"
+      ]
+    },
+    "tunekit": {
+      "path": "config/",
+      "files": [
+        "openai.json",
+        "guardrails.json",
+        "agents.json",
+        "model-comparison.json"
+      ]
+    },
+    "speckit": {
+      "path": "spec/",
+      "files": [
+        "play-spec.json"
+      ]
+    },
+    "infrakit": {
+      "path": "infra/",
+      "files": [
+        "main.bicep",
+        "parameters.json"
+      ]
+    },
+    "evalkit": {
+      "path": "evaluation/",
+      "files": [
+        "eval-config.json"
+      ]
+    }
+  },
+  "mcp": {
+    "server": "frootai-mcp",
+    "config": ".vscode/mcp.json"
+  },
+  "dependencies": {
+    "frootai-mcp": ">=3.2.0"
+  },
+  "install": "npx frootai init --play 05"
+}

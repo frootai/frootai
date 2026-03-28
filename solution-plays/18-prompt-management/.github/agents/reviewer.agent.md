@@ -28,6 +28,8 @@ You review code changes for security, RAG quality, Azure best practices, and pro
 6. Hand off to **tuner agent** for TuneKit verification
 
 ## Rules
+- Review against spec/success-criteria.md before approving
+- Check WAF alignment: reliability, security, cost, performance, operations, responsible AI
 - Never approve code with hardcoded secrets (🔴 always)
 - Never approve code without error handling on Azure calls
 - Check that evaluation/test-set.jsonl covers the new functionality

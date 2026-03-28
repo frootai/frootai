@@ -314,7 +314,7 @@ LAYER 4 — DISTRIBUTION
 | 6.4 | Content depth pass: rich agent.md per play (not skeleton) | ✅ Done | 20/20 plays have production openai.json + guardrails.json |
 | 6.5 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | 📋 | Medium |
 | 6.6 | Per-play CI pipelines (automated testing per solution play) | 📋 | Medium |
-| 6.7 | Community contribution guidelines + PR template | 📋 | Medium |
+| 6.7 | Community contribution guidelines + PR template | ✅ Done | Medium |
 | 6.8 | Azure Marketplace listing | 📋 | Medium |
 | 6.9 | GitHub Marketplace listing | 📋 | Medium |
 | 6.10 | A2A (Agent-to-Agent) protocol support | 📋 | Low |
@@ -1072,7 +1072,7 @@ Your @builder, @reviewer, and @tuner agents are ready.
 | 14A.1 | Define SpecKit template (spec/ folder) | ✅ Done | architecture.md, requirements.md, success-criteria.md, decisions.md |
 | 14A.2 | Create SpecKit for Play 01 (Enterprise RAG) | ✅ Done | Reference implementation — rich architecture spec with Mermaid, requirements, ADRs |
 | 14A.3 | Template SpecKit to all 20 plays | ✅ Done | Customize per play — each play gets its own architecture spec |
-| 14A.4 | Wire agents to read spec/ | 📋 | builder.agent.md: "Read spec/architecture.md before implementing". reviewer: "Review against spec/success-criteria.md" |
+| 14A.4 | Wire agents to read spec/ | ✅ Done | builder.agent.md: "Read spec/architecture.md before implementing". reviewer: "Review against spec/success-criteria.md" |
 | 14A.5 | Add `frootai init --spec` to CLI (Phase 13A) | ✅ Done | Generates spec/ from natural language description using MCP tools |
 | 14A.6 | VS Code Extension: Init SpecKit command | ✅ Done | Command palette → "FrootAI: Initialize SpecKit" → generates spec/ folder |
 
@@ -1082,7 +1082,7 @@ Your @builder, @reviewer, and @tuner agents are ready.
 |---|------|--------|---------|
 | 14B.1 | Define FROOT Package = SpecKit + DevKit + TuneKit | ✅ Done | Single download, everything pre-connected. `npx frootai init --play 01` gives the full package. |
 | 14B.2 | Update website /packages page | ✅ Done | Show each FROOT Package as an assembled solution, not just knowledge modules. |
-| 14B.3 | Package manifest (froot.json) per play | 📋 | Declares: which kits are included, dependency versions, compatible Azure services, estimated cost. |
+| 14B.3 | Package manifest (froot.json) per play | ✅ Done | Declares: which kits are included, dependency versions, compatible Azure services, estimated cost. |
 | 14B.4 | One-command full scaffold | 📋 | `npx frootai init` → SpecKit + DevKit + TuneKit + MCP connected → ready to build in 60 seconds. |
 | 14B.5 | Self-guided tutorial mode | 📋 | After scaffold: "Open Copilot Chat and say: Build the ingestion pipeline" — step-by-step guided experience. |
 
@@ -1160,16 +1160,16 @@ Your @builder, @reviewer, and @tuner agents are ready.
 |---|------|--------|---------|
 | 15B.1 | WAF scorecard per play | ✅ Done | `evaluation/waf-scorecard.json`: scores each pillar 1-5 based on config analysis. |
 | 15B.2 | `frootai validate --waf` CLI command | ✅ Done | Runs WAF compliance check: "Your Play 01 scores 4/5 on Security (missing Content Safety API call)." |
-| 15B.3 | @tuner agent reads WAF scorecard | 📋 | Tuner agent's checklist includes WAF pillar verification. Auto-recommends fixes. |
-| 15B.4 | WAF badges on website play cards | 📋 | Each play shows: 🟢 Reliability | 🟢 Security | 🟡 Cost (needs optimization) |
+| 15B.3 | @tuner agent reads WAF scorecard | ✅ Done | Tuner agent's checklist includes WAF pillar verification. Auto-recommends fixes. |
+| 15B.4 | WAF badges on website play cards | ✅ Done | Each play shows: 🟢 Reliability | 🟢 Security | 🟡 Cost (needs optimization) |
 
 ### Phase 15C: WAF-Aligned Specs (SpecKit Enhancement)
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
-| 15C.1 | SpecKit template includes WAF section | 📋 | spec/requirements.md has a "Well-Architected Alignment" section per pillar. |
-| 15C.2 | @builder reads WAF requirements before implementing | 📋 | Builder agent instruction: "Check spec/requirements.md WAF section before coding." |
-| 15C.3 | @reviewer reviews against WAF checklist | 📋 | Reviewer agent instruction: "Review against all 7 FROOTFUL pillars." |
+| 15C.1 | SpecKit template includes WAF section | ✅ Done | spec/requirements.md has a "Well-Architected Alignment" section per pillar. |
+| 15C.2 | @builder reads WAF requirements before implementing | ✅ Done | Builder agent instruction: "Check spec/requirements.md WAF section before coding." |
+| 15C.3 | @reviewer reviews against WAF checklist | ✅ Done | Reviewer agent instruction: "Review against all 7 FROOTFUL pillars." |
 
 ### The FROOTFUL Quality Promise
 
@@ -1403,14 +1403,14 @@ LATER: Telemetry (when demand) → A2A (when spec matures) → Enterprise SSO (w
 
 | # | Item | Source | Effort |
 |---|------|--------|--------|
-| P10 | Wire agents to read spec/ (builder reads architecture.md) | Phase 14A.4 | 2 hours |
-| P11 | @tuner agent reads WAF scorecard | Phase 15B.3 | 1 hour |
-| P12 | WAF badges on website play cards | Phase 15B.4 | 3 hours |
-| P13 | SpecKit template includes WAF section per pillar | Phase 15C.1 | 2 hours |
-| P14 | @builder reads WAF requirements before implementing | Phase 15C.2 | 1 hour |
-| P15 | @reviewer reviews against WAF checklist | Phase 15C.3 | 1 hour |
-| P16 | Package manifest (froot.json) per play | Phase 14B.3 | 3 hours |
-| P17 | Community contribution guidelines + PR template | Phase 6.7 | 2 hours |
+| P10 | ~~Wire agents to read spec/~~ | Phase 14A.4 | ✅ Done |
+| P11 | ~~@tuner agent reads WAF scorecard~~ | Phase 15B.3 | ✅ Done |
+| P12 | ~~WAF badges on website play cards~~ | Phase 15B.4 | ✅ Already existed |
+| P13 | ~~SpecKit template includes WAF section~~ | Phase 15C.1 | ✅ Already existed |
+| P14 | ~~@builder reads WAF requirements~~ | Phase 15C.2 | ✅ Done |
+| P15 | ~~@reviewer reviews against WAF checklist~~ | Phase 15C.3 | ✅ Done |
+| P16 | ~~Package manifest (froot.json) per play~~ | Phase 14B.3 | ✅ Done (20 plays) |
+| P17 | ~~Community contribution guidelines + PR template~~ | Phase 6.7 | ✅ Already existed |
 
 ### Priority 4: Platform Features (Next Month)
 
