@@ -30,6 +30,10 @@ export default function MCPToolingPage(): JSX.Element {
               npmjs.com/package/frootai-mcp →
             </Link>
           </div>
+          <div style={{ flex: "1 1 220px", maxWidth: "320px", padding: "16px 20px", borderRadius: "14px", border: "2px solid rgba(59, 130, 246, 0.3)", background: "rgba(59, 130, 246, 0.04)", textAlign: "center" }}>
+            <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#3b82f6", marginBottom: "6px" }}>Python</div>
+            <code style={{ fontSize: "0.9rem", padding: "6px 16px", borderRadius: "8px", background: "rgba(59, 130, 246, 0.1)" }}>pip install frootai-mcp</code>
+          </div>
         </div>
 
         {/* Without vs With */}

@@ -104,9 +104,41 @@ Or search **"FrootAI"** in VS Code Extensions (Ctrl+Shift+X).
 **Marketplace**: [marketplace.visualstudio.com → pavleenbali.frootai](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 
 **What you get:**
-- Sidebar with Solution Plays, FROOT Modules, MCP Tools
-- Commands: Look Up Term, Search Knowledge, Init DevKit, Architecture Patterns
-- Status bar integration
+- Sidebar: Solution Plays (20, layer-colored) + MCP Tools (23, collapsible groups)
+- 19 commands: Init DevKit/TuneKit/SpecKit, Cost Estimate, Validate Config, Install Plugin
+- Layer color badges (F=yellow, R=green, O=blue, T=purple)
+
+### Use in GitHub Actions (CI/CD)
+
+```yaml
+- uses: gitpavleenbali/frootai@main
+  with:
+    command: validate
+    waf: true
+```
+
+### Bicep Module Registry
+
+```bicep
+// Reusable Azure AI Landing Zone module
+module aiLZ 'bicep-registry/ai-landing-zone.bicep' = {
+  params: { projectName: 'myproject', environment: 'dev' }
+}
+```
+
+2 modules available: `ai-landing-zone.bicep`, `enterprise-rag.bicep`
+
+### Agent-to-Agent Protocol
+
+FrootAI supports A2A agent discovery: `https://frootai.dev/.well-known/agent.json`
+
+### Foundry Agent Hosting
+
+```bash
+cd foundry-agent
+pip install azure-ai-projects azure-identity
+python agent.py create  # Creates agent on Azure AI Foundry
+```
 
 ---
 

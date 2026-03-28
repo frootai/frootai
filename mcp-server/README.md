@@ -149,6 +149,7 @@ Just talk: *"Build me an IT ticket API"* → *"Review this"* → *"Validate my c
 | `compare_plays` | Side-by-side comparison of solution plays |
 | `generate_architecture_diagram` | Mermaid architecture diagrams for any play |
 | `embedding_playground` | Cosine similarity between texts (educational) |
+| `run_evaluation` | Quality evaluation — scores vs thresholds with recommendations |
 
 </details>
 

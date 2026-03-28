@@ -152,6 +152,8 @@ const MCP_TOOLS = [
     docs: "Generates Mermaid.js architecture diagrams for any solution play. Includes Azure services, data flows, and integration points. Renders in VS Code preview.\n\n**Input:** `playNumber` (number), `style` (string: 'flowchart'|'sequence'|'c4')\n**Output:** Mermaid diagram code\n**Example:** `generate_architecture_diagram({playNumber: 5})` → IT Ticket Resolution flowchart" },
   { name: "embedding_playground", desc: "🧮 Compute — Experiment with embeddings", type: "compute",
     docs: "Interactive playground for text embeddings. Compute similarity between texts, visualize embedding dimensions, and understand how vector search works under the hood.\n\n**Input:** `texts` (string[]) — texts to embed and compare\n**Output:** Similarity matrix + dimension analysis\n**Example:** `embedding_playground({texts: ['RAG pipeline', 'search system']})` → similarity: 0.87" },
+  { name: "run_evaluation", desc: "🧮 Compute — Quality evaluation with thresholds", type: "compute",
+    docs: "Run quality evaluation against configurable thresholds. Input actual scores from your evaluation, get pass/fail per metric with recommendations.\n\n**Input:** `scores` (object: {groundedness: 4.5, relevance: 3.8}), optional `thresholds`, optional `play` number\n**Output:** Pass/fail table + improvement recommendations\n**Example:** `run_evaluation({scores: {groundedness: 4.5, relevance: 3.2}, play: '01'})` → 1/2 passed, relevance needs improvement" },
 ];
 
 // ─── Webview Panel: Render Modules as Rich HTML ────────────────────
