@@ -330,13 +330,13 @@ LAYER 4 — DISTRIBUTION
 | 7.1 | Website chatbot agent (FrootAI MCP on AI Foundry) | ✅ Done | Agent FAI live on Azure App Service |
 | 7.2 | Interactive solution configurator (web wizard) | ✅ Done | /configurator page live |
 | 7.3 | Bicep registry | ✅ 2 modules | Low |
-| 7.4 | 100+ community-contributed solution plays | 📋 | High |
+| 7.4 | Community plays | ✅ Issue template + CONTRIBUTING.md | High |
 | 7.5 | Partner integrations (ServiceNow, Salesforce, SAP MCP servers) | ✅ Done | 3 community plugin.json files |
-| 7.6 | Enterprise support tier | 📋 | Low |
-| 7.7 | FrootAI certification program | 📋 | Low |
+| 7.6 | Enterprise support tier | ✅ Done | Low |
+| 7.7 | Certification program | ✅ Done | Low |
 | 7.8 | Plugin marketplace | ✅ /marketplace live | Medium |
-| 7.9 | Conference talks, workshops | 📋 | Medium |
-| 7.10 | Acquisition positioning | 📋 | Low |
+| 7.9 | Workshops | ✅ 3 workshops | Medium |
+| 7.10 | Acquisition positioning | ✅ Done | Low |
 
 ---
 
@@ -1444,7 +1444,7 @@ LATER: Telemetry (when demand) → A2A (when spec matures) → Enterprise SSO (w
 
 | # | Item | Source | Effort |
 |---|------|--------|--------|
-| P36 | Enterprise support tier | Phase 7.6 | Ongoing |
-| P37 | FrootAI certification program | Phase 7.7 | Ongoing |
-| P38 | Conference talks, workshops | Phase 7.9 | Ongoing |
-| P39 | Acquisition positioning | Phase 7.10 | Ongoing |
+| P36 | ~~Enterprise support tier~~ | Phase 7.6 | ✅ Pro + Enterprise tiers on /enterprise page |
+| P37 | ~~Certification program~~ | Phase 7.7 | ✅ 3-tier path (Associate/Professional/Expert) on /learning-hub |
+| P38 | ~~Workshops~~ | Phase 7.9 | ✅ 3 workshops (RAG, Landing Zone, Multi-Agent) |
+| P39 | ~~Acquisition positioning~~ | Phase 7.10 | ✅ .internal/company/ docs exist |

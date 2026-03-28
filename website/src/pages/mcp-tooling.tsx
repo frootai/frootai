@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function MCPToolingPage(): JSX.Element {
   return (
-    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new), 16 modules, 200+ terms. npx frootai-mcp.">
+    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 23 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new), 16 modules, 200+ terms. npx frootai-mcp.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🔌 FrootAI MCP Server</h1>

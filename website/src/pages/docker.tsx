@@ -33,13 +33,13 @@ const configs = [
 
 export default function DockerPage(): JSX.Element {
   return (
-    <Layout title="Docker — FrootAI MCP Server" description="Run FrootAI MCP Server as a Docker container. Multi-arch (amd64 + arm64), 22 tools, zero install.">
+    <Layout title="Docker — FrootAI MCP Server" description="Run FrootAI MCP Server as a Docker container. Multi-arch (amd64 + arm64), 23 tools, zero install.">
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "40px 24px 80px" }}>
 
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🐳 Docker — FrootAI MCP Server</h1>
           <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "600px", margin: "0 auto" }}>
-            Run FrootAI anywhere. Multi-arch container with all 22 MCP tools. Zero install.
+            Run FrootAI anywhere. Multi-arch container with all 23 MCP tools. Zero install.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ docker run -i --rm ghcr.io/gitpavleenbali/frootai-mcp:3.1.2`}
               { label: "Registry", value: "ghcr.io" },
               { label: "Image", value: "gitpavleenbali/frootai-mcp" },
               { label: "Architectures", value: "amd64 + arm64" },
-              { label: "Tools", value: "22 MCP tools" },
+              { label: "Tools", value: "23 MCP tools" },
               { label: "Knowledge", value: "682KB, 16 modules" },
               { label: "Size", value: "~45MB compressed" },
             ].map((item) => (

@@ -88,7 +88,7 @@ frootai-mcp`}
 {`docker run -i ghcr.io/gitpavleenbali/frootai-mcp`}
         </div>
         <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)" }}>
-          Published on <a href="https://github.com/gitpavleenbali/frootai/pkgs/container/frootai-mcp" target="_blank">GitHub Container Registry</a> — same 22 tools, runs anywhere Docker runs.
+          Published on <a href="https://github.com/gitpavleenbali/frootai/pkgs/container/frootai-mcp" target="_blank">GitHub Container Registry</a> — same 23 tools, runs anywhere Docker runs.
         </p>
 
         <h3 style={h3Style}>Option C: From GitHub (for development)</h3>
@@ -306,7 +306,7 @@ npm install`}
             {[
               { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays. Click to open README or folder." },
               { icon: "📖", title: "FROOT Modules", desc: "16 modules grouped by FROOT layer." },
-              { icon: "🔌", title: "MCP Tools", desc: "See all 22 MCP tools at a glance." },
+              { icon: "🔌", title: "MCP Tools", desc: "See all 23 MCP tools at a glance." },
             ].map(p => (
               <div key={p.title} style={{ padding: "12px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
                 <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>{p.icon}</div>
@@ -438,7 +438,7 @@ npx frootai doctor`}</pre>
         <div id="docker-section" style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(6,182,212,0.2)", background: "rgba(6,182,212,0.02)", marginBottom: "48px" }}>
           <h2 style={{ ...h2Style, marginTop: 0, color: "#06b6d4" }}>🐳 Part 4: Docker Setup</h2>
           <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "20px" }}>
-            Run FrootAI anywhere — no Node.js required. Multi-arch (amd64 + arm64). Same 22 tools, 682KB knowledge.
+            Run FrootAI anywhere — no Node.js required. Multi-arch (amd64 + arm64). Same 23 tools, 682KB knowledge.
           </p>
           <div style={cardStyle}>
             <h3 style={{ ...h3Style, marginTop: 0 }}>Quick Start</h3>

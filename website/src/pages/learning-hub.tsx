@@ -37,9 +37,23 @@ export default function LearningHubPage(): JSX.Element {
             COMING SOON
           </div>
           <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "8px" }}>FrootAI Certified Professional</h3>
-          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "500px", margin: "0 auto" }}>
-            Study → Lab → Exam → Badge. Validate your AI architecture skills. We are building the certification program and will launch it when the community is ready.
+          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "500px", margin: "0 auto", marginBottom: "20px" }}>
+            Study → Lab → Exam → Badge. Validate your AI architecture skills across the FROOT framework.
           </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px", maxWidth: "700px", margin: "0 auto" }}>
+            {[
+              { level: "Associate", color: "#10b981", modules: "F1-F4", focus: "AI Foundations + Model Selection", prereq: "None" },
+              { level: "Professional", color: "#6366f1", modules: "R1-R3 + O1-O3", focus: "RAG + Agents + Orchestration", prereq: "Associate" },
+              { level: "Expert", color: "#7c3aed", modules: "O4-O6 + T1-T3", focus: "Infrastructure + Production + Fine-Tuning", prereq: "Professional" },
+            ].map((cert) => (
+              <div key={cert.level} style={{ padding: "16px", borderRadius: "12px", border: `2px solid ${cert.color}33`, textAlign: "center" }}>
+                <div style={{ fontSize: "0.68rem", fontWeight: 700, color: cert.color, textTransform: "uppercase", letterSpacing: "0.05em" }}>{cert.level}</div>
+                <div style={{ fontSize: "0.78rem", fontWeight: 600, margin: "6px 0" }}>{cert.focus}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--ifm-color-emphasis-400)" }}>Modules: {cert.modules}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--ifm-color-emphasis-400)" }}>Prereq: {cert.prereq}</div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section style={{ textAlign: "center", padding: "40px 24px", borderRadius: "16px", border: "2px solid rgba(245, 158, 11, 0.2)", background: "rgba(245, 158, 11, 0.03)" }}>

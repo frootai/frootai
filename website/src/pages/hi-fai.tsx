@@ -71,7 +71,7 @@ const steps = [
     content: (
       <div>
         <p style={{ fontSize: "0.85rem", lineHeight: 1.8, marginBottom: "10px" }}>
-          The MCP Server gives your AI agent 22 tools for live FrootAI knowledge — architecture patterns, model pricing, Azure docs, and more.
+          The MCP Server gives your AI agent 23 tools for live FrootAI knowledge — architecture patterns, model pricing, Azure docs, and more.
         </p>
         <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: "10px", padding: "14px 16px", border: "1px solid rgba(16,185,129,0.15)", marginBottom: "10px" }}>
           <div style={{ fontSize: "0.68rem", textTransform: "uppercase", color: "#10b981", fontWeight: 700, marginBottom: "6px" }}>Add to .vscode/mcp.json</div>

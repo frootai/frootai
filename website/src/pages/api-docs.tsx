@@ -155,7 +155,7 @@ export default function APIReferencePage(): JSX.Element {
         <h2 style={h2Style}>📎 Related</h2>
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
           <Link to="/cli" style={{ padding: "10px 20px", borderRadius: "10px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>⚡ CLI</Link>
-          <Link to="/mcp-tooling" style={{ padding: "10px 20px", borderRadius: "10px", border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>🔌 22 MCP Tools</Link>
+          <Link to="/mcp-tooling" style={{ padding: "10px 20px", borderRadius: "10px", border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>🔌 23 MCP tools</Link>
           <Link to="/setup-guide" style={{ padding: "10px 20px", borderRadius: "10px", border: "1px solid rgba(249,115,22,0.3)", background: "rgba(249,115,22,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>📦 Setup Guide</Link>
         </div>
       </div>

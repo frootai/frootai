@@ -30,7 +30,7 @@ export default function EnterprisePage(): JSX.Element {
             <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#10b981", marginBottom: "16px" }}>$0 - Forever</div>
             <ul style={{ fontSize: "0.82rem", lineHeight: 1.9, paddingLeft: "18px", columns: 2, columnGap: "32px" }}>
               <li>20 Solution Plays (open-source)</li>
-              <li>MCP Server (npm) - 22 tools</li>
+              <li>MCP Server (npm) - 23 tools</li>
               <li>VS Code Extension - 19 commands</li>
               <li>.github Agentic OS templates</li>
               <li>16 Knowledge Modules</li>
@@ -44,6 +44,34 @@ export default function EnterprisePage(): JSX.Element {
               <Link to="/setup-guide" className={styles.glowPill} style={{ "--pill-color": "#10b981", display: "inline-block" } as React.CSSProperties}>
                 Get Started Free
               </Link>
+            </div>
+          </div>
+
+          {/* Enterprise Support Tiers */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px", marginTop: "24px" }}>
+            <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.03)" }}>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Professional</div>
+              <div style={{ fontSize: "1.3rem", fontWeight: 800, color: "#6366f1", marginBottom: "12px" }}>Contact Us</div>
+              <ul style={{ fontSize: "0.78rem", lineHeight: 1.8, paddingLeft: "16px" }}>
+                <li>Priority email support (24h SLA)</li>
+                <li>Custom solution play development</li>
+                <li>Private MCP server deployment</li>
+                <li>Architecture review sessions</li>
+                <li>WAF alignment audit</li>
+              </ul>
+            </div>
+            <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(124,58,237,0.3)", background: "rgba(124,58,237,0.03)" }}>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7c3aed", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Enterprise</div>
+              <div style={{ fontSize: "1.3rem", fontWeight: 800, color: "#7c3aed", marginBottom: "12px" }}>Custom</div>
+              <ul style={{ fontSize: "0.78rem", lineHeight: 1.8, paddingLeft: "16px" }}>
+                <li>Dedicated support engineer (4h SLA)</li>
+                <li>On-premise / air-gapped deployment</li>
+                <li>Custom knowledge module development</li>
+                <li>Foundry agent hosting + management</li>
+                <li>SSO / Entra ID integration</li>
+                <li>Compliance (SOC2, ISO 27001) guidance</li>
+                <li>Workshop delivery + certification</li>
+              </ul>
             </div>
           </div>
         </section>

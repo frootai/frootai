@@ -71,7 +71,7 @@ export default function EcosystemPage(): JSX.Element {
               <h3 style={{ fontSize: "1.05rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>MCP Server (npm)</h3>
               <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#10b981", textAlign: "center", marginBottom: "12px" }}>For your AI agent</p>
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
-                <li>22 tools called automatically by Copilot/Claude/Cursor</li>
+                <li>23 tools called automatically by Copilot/Claude/Cursor</li>
                 <li><code>lookup_term</code> → 200+ precise definitions</li>
                 <li><code>search_knowledge</code> → answers across 16 modules</li>
                 <li><code>get_architecture_pattern</code> → 7 decision guides</li>
@@ -90,7 +90,7 @@ export default function EcosystemPage(): JSX.Element {
               <h3 style={{ fontSize: "1.05rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>VS Code Extension</h3>
               <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6366f1", textAlign: "center", marginBottom: "12px" }}>For you (the human)</p>
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
-                <li>Sidebar: 20 solution plays, 16 modules, 22 MCP tools</li>
+                <li>Sidebar: 20 solution plays, 16 modules, 23 MCP tools</li>
                 <li>Search 200+ AI terms instantly</li>
                 <li>Init DevKit → copies .github Agentic OS (19 files) to your project</li>
                 <li>19 commands via Ctrl+Shift+P</li>
@@ -110,7 +110,7 @@ export default function EcosystemPage(): JSX.Element {
               <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#06b6d4", textAlign: "center", marginBottom: "12px" }}>Run anywhere — zero install</p>
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
                 <li>Multi-arch: amd64 + arm64 (Apple Silicon ready)</li>
-                <li>Same 22 MCP tools, 682KB knowledge</li>
+                <li>Same 23 MCP tools, 682KB knowledge</li>
                 <li>Kubernetes-ready sidecar deployment</li>
                 <li>Pinnable versions for reproducibility</li>
               </ul>

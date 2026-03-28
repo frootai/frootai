@@ -30,7 +30,7 @@ export default function CommunityPage(): JSX.Element {
             <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#10b981", marginBottom: "16px" }}>$0 — Forever</div>
             <ul style={{ fontSize: "0.82rem", lineHeight: 1.9, paddingLeft: "18px", columns: 2, columnGap: "32px" }}>
               <li>20 Solution Plays (open-source)</li>
-              <li>MCP Server (npm) — 22 tools</li>
+              <li>MCP Server (npm) — 23 tools</li>
               <li>VS Code Extension — 19 commands</li>
               <li>.github Agentic OS templates</li>
               <li>16 Knowledge Modules</li>

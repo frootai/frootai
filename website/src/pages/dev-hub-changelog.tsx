@@ -52,7 +52,7 @@ const releases: Release[] = [
       "FROOT Packages: config/froot-packages.json with 5 modular kits",
       "WAF scorecard: 6 pillars, 17 checks, npx frootai validate --waf",
       "6 WAF instruction files (.github/instructions/waf-*.instructions.md)",
-      "User guide: +5 sections (SpecKit, CLI, Docker, REST API, WAF scorecard), 16→22 tools",
+      "User guide: +5 sections (SpecKit, CLI, Docker, REST API, WAF scorecard), 16→23 tools",
       "Agent FAI renamed from FAI Agent across entire codebase",
       "Consistency enforcement: validate-consistency.js (11 checks), sync-content.js, husky pre-commit",
       "Semantic release: release.js, release.yml, CHANGELOG generation",
@@ -67,7 +67,7 @@ const releases: Release[] = [
     color: "#7c3aed",
     changes: [
       "MCP: 6 new compute tools (semantic search, cost estimate, config validate, model compare, pricing, architecture patterns)",
-      "MCP: 16 → 22 tools total (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)",
+      "MCP: 16 → 23 tools total (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)",
       "Docker: ghcr.io/gitpavleenbali/frootai-mcp multi-arch (amd64 + arm64)",
       "VS Code: v1.0.0 → v1.1.1, 17 commands, 4 sidebar panels, standalone engine",
       "VS Code: Init SpecKit command, MCP dropdown reorder, auto-create mcp.json",

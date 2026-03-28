@@ -28,7 +28,7 @@ const tocItems = [
   { id: "solution-plays", label: "2. Solution Plays (20)" },
   { id: "devkit", label: "3. DevKit (.github Agentic OS)" },
   { id: "tunekit", label: "4. TuneKit (AI Configuration)" },
-  { id: "mcp-server", label: "5. MCP Server (22 Tools)" },
+  { id: "mcp-server", label: "5. MCP Server (23 tools)" },
   { id: "vscode-extension", label: "6. VS Code Extension (19 commands)" },
   { id: "knowledge-platform", label: "7. Knowledge Platform (16 Modules)" },
   { id: "ai-assistant", label: "8. AI Assistant & Solution Configurator" },
@@ -148,7 +148,7 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <FeatureTable rows={[
             { feature: "Website", desc: "15-page Docusaurus site (dark theme, responsive, SEO-optimized)", status: "✅ Shipped", link: "/", linkLabel: "Home →" },
-            { feature: "npm Package", desc: "frootai-mcp@3.2.0 — 22 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
+            { feature: "npm Package", desc: "frootai-mcp@3.2.0 — 23 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
             { feature: "VS Code Extension", desc: "pavleenbali.frootai@1.3.1 — 19 commands, standalone engine, sidebar navigation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "GitHub Repo", desc: "Public repository, MIT license, CI/CD pipeline, 380+ files", status: "✅ Shipped", link: "https://github.com/gitpavleenbali/frootai", linkLabel: "GitHub →" },
             { feature: "Azure Integration", desc: "AI Foundry-connected, Managed Identity, Bicep IaC, private endpoints", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Admin Guide →" },
@@ -272,10 +272,10 @@ export default function FeatureSpecPage(): JSX.Element {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/*  5. MCP SERVER (22 Tools)                                   */}
+        {/*  5. MCP SERVER (23 tools)                                   */}
         {/* ═══════════════════════════════════════════════════════════ */}
         <section id="mcp-server" style={sectionStyle}>
-          <h2 style={h2Style}>5. MCP Server (22 Tools)</h2>
+          <h2 style={h2Style}>5. MCP Server (23 tools)</h2>
           <p style={descStyle}>
             The FrootAI MCP Server (<code>frootai-mcp@3.2.0</code>) gives your AI agent direct access to curated knowledge, architecture patterns, model catalog, and pricing data. Works with Copilot, Claude, Cursor, Gemini, and any MCP-compatible client.
           </p>
@@ -329,7 +329,7 @@ export default function FeatureSpecPage(): JSX.Element {
             { feature: "FrootAI: Initialize DevKit", desc: "Full .github Agentic OS (19 files) + agent.md + MCP config + plugin.json", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "FrootAI: Initialize TuneKit", desc: "config/*.json + infra/main.bicep + evaluation/ — AI tuning for production", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "FrootAI: Install MCP Server", desc: "Install globally, run via npx, or add .vscode/mcp.json config", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
-            { feature: "FrootAI: Start MCP Server", desc: "Launch frootai-mcp in terminal (22 tools: 6 static + 4 live + 3 chain + 3 AI + 6 compute)", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
+            { feature: "FrootAI: Start MCP Server", desc: "Launch frootai-mcp in terminal (23 tools: 6 static + 4 live + 3 chain + 3 AI + 6 compute)", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "FrootAI: Initialize Hooks", desc: "Copy guardrails.json (preToolUse policy gates) to your project", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "FrootAI: Initialize Prompts", desc: "Copy 4 slash commands (/deploy, /test, /review, /evaluate)", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "FrootAI: Look Up AI Term", desc: "200+ terms — inline popup with rich definition from curated glossary", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
@@ -341,7 +341,7 @@ export default function FeatureSpecPage(): JSX.Element {
             { feature: "FrootAI: Open User Guide", desc: "Opens the user guide documentation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
           ]} />
           <div style={{ padding: "16px 20px", borderRadius: "12px", border: "1px solid rgba(99,102,241,0.2)", background: "rgba(99,102,241,0.03)", fontSize: "0.82rem", lineHeight: 1.7, marginTop: "12px" }}>
-            <strong style={{ color: "#6366f1" }}>Sidebar Features:</strong> 20 solution plays in TreeView, 16 FROOT modules grouped by layer, 22 MCP tools at a glance. Cached downloads — works offline after first use.
+            <strong style={{ color: "#6366f1" }}>Sidebar Features:</strong> 20 solution plays in TreeView, 16 FROOT modules grouped by layer, 23 MCP tools at a glance. Cached downloads — works offline after first use.
           </div>
         </section>
 
@@ -529,9 +529,9 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <FeatureTable rows={[
             { feature: "Admin Guide", desc: "Platform setup, MCP configuration, security hardening, troubleshooting", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Read →" },
-            { feature: "User Guide", desc: "End-to-end usage — 19 commands, 22 tools, DevKit/TuneKit deep dive, FAQ", status: "✅ Shipped", link: "/docs/user-guide-complete", linkLabel: "Read →" },
+            { feature: "User Guide", desc: "End-to-end usage — 19 commands, 23 tools, DevKit/TuneKit deep dive, FAQ", status: "✅ Shipped", link: "/docs/user-guide-complete", linkLabel: "Read →" },
             { feature: "Contributor Guide", desc: "Dev setup, repo structure, PR process, code style, testing requirements", status: "✅ Shipped", link: "/docs/contributor-guide", linkLabel: "Read →" },
-            { feature: "API Reference", desc: "All 22 MCP tools with schemas, 16 VS Code commands, config file schemas", status: "✅ Shipped", link: "/docs/api-reference", linkLabel: "Read →" },
+            { feature: "API Reference", desc: "All 23 MCP tools with schemas, 16 VS Code commands, config file schemas", status: "✅ Shipped", link: "/docs/api-reference", linkLabel: "Read →" },
             { feature: "Architecture Overview", desc: "System diagram, 6 architectural layers, data flow, deployment topology", status: "✅ Shipped", link: "/docs/architecture-overview", linkLabel: "Read →" },
             { feature: "Changelog", desc: "Full release history — v2.2.0, v0.9.2, v0.9.0, v2.1.1, v1.0.0", status: "✅ Shipped", link: "/dev-hub-changelog", linkLabel: "Read →" },
             { feature: "Quick Start", desc: "3-step getting started: Install Extension → Init DevKit → Deploy", status: "✅ Shipped", link: "/dev-hub", linkLabel: "Dev Hub →" },
@@ -570,7 +570,7 @@ export default function FeatureSpecPage(): JSX.Element {
             { feature: "Solution Play Scaffold", desc: "One-command project scaffolding: npx frootai scaffold <play> — creates 5 FROOT kits + froot.json", status: "✅ Shipped", link: "/cli", linkLabel: "CLI Docs →" },
             { feature: "Cost Estimator", desc: "CLI cost command + REST API /api/cost — estimate Azure AI costs per play and scale", status: "✅ Shipped", link: "/api-docs", linkLabel: "API Docs →" },
             { feature: "WAF Alignment Scorecard", desc: "npx frootai validate --waf — 6 pillar, 17 check WAF scorecard per project", status: "✅ Shipped", link: "/cli", linkLabel: "CLI Docs →" },
-            { feature: "Docker Multi-Arch", desc: "ghcr.io/gitpavleenbali/frootai-mcp — amd64 + arm64, same 22 tools, Kubernetes-ready", status: "✅ Shipped", link: "/docker", linkLabel: "Docker →" },
+            { feature: "Docker Multi-Arch", desc: "ghcr.io/gitpavleenbali/frootai-mcp — amd64 + arm64, same 23 tools, Kubernetes-ready", status: "✅ Shipped", link: "/docker", linkLabel: "Docker →" },
             { feature: "REST API", desc: "5 HTTP endpoints: chat, search, cost, health, OpenAPI spec — 60 req/min rate limit", status: "✅ Shipped", link: "/api-docs", linkLabel: "API Docs →" },
             { feature: "One-Click Plugin Install", desc: "Install community plugins directly from Marketplace into your workspace", status: "🔜 Coming Soon", link: "/marketplace", linkLabel: "Marketplace →" },
             { feature: "Agent Evaluation Dashboard", desc: "Visual dashboard for eval scores, trends, and quality gate status", status: "🔜 Coming Soon", link: "/docs/architecture-overview", linkLabel: "Architecture →" },

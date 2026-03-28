@@ -86,7 +86,7 @@ docker run -i ghcr.io/gitpavleenbali/frootai-mcp
 
 ---
 
-## 22 Tools at a Glance
+## 23 tools at a Glance
 
 <details open>
 <summary><b>Static (6)</b> — Bundled knowledge, works offline</summary>
