@@ -1,6 +1,6 @@
 # FrootAI MCP Server — Python
 
-> 🐍 Python implementation of the FrootAI MCP Server. Same 22 tools, 16 modules, 200+ terms.
+> 🐍 Python implementation of the FrootAI MCP Server. Same 23 tools, 16 modules, 200+ terms.
 
 ## Install
 

@@ -1,6 +1,6 @@
 # FrootAI — From the Roots to the Fruits
 
-> **The open glue for GenAI.** 18 modules, 200+ terms, 20 solution plays, 22 MCP tools — works standalone from any workspace.
+> **The open glue for GenAI.** 16 modules, 200+ terms, 20 solution plays, 23 MCP tools — works standalone from any workspace.
 
 [![Marketplace](https://img.shields.io/visual-studio-marketplace/v/pavleenbali.frootai)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) [![Installs](https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 
@@ -31,7 +31,7 @@ code --install-extension pavleenbali.frootai
 
 ---
 
-## 16 Commands (Ctrl+Shift+P)
+## 19 commands (Ctrl+Shift+P)
 
 | Command | What it does |
 |---------|-------------|
@@ -47,7 +47,7 @@ code --install-extension pavleenbali.frootai
 | **Configure MCP** | Add .vscode/mcp.json to workspace |
 | **Browse Solution Plays** | Quick pick from 20 plays |
 | **Look Up AI Term** | 200+ glossary search |
-| **Search Knowledge Base** | Full-text search 18 modules |
+| **Search Knowledge Base** | Full-text search 16 modules |
 | **Open Solution Play** | Rich webview with diagrams |
 | **Show Architecture Pattern** | 7 decision guides |
 | **Open Setup Guide** | frootai.dev setup page |
@@ -91,9 +91,9 @@ AI configuration only (no infra  that is in DevKit):
 
 ## MCP Server Integration
 
-The extension works alongside `npx frootai-mcp` (22 tools):
+The extension works alongside `npx frootai-mcp` (23 tools):
 
-- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call 22 tools)
+- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call 23 tools)
 - **VS Code Extension** = for **you** (browse, search, scaffold, estimate costs)
 - **Cached downloads** = DevKit Init caches files locally for 24h
 
@@ -120,6 +120,6 @@ The extension works alongside `npx frootai-mcp` (22 tools):
 
 ---
 
-**FrootAI** — 22 MCP tools · 16 commands · 20 solution plays · 18 modules · 200+ terms. From the roots to the fruits.
+**FrootAI** — 23 MCP tools · 19 commands · 20 solution plays · 16 modules · 200+ terms. From the roots to the fruits.
 
 © 2026 FrootAI · MIT License

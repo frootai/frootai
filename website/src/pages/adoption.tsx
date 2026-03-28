@@ -14,7 +14,7 @@ const stats = [
 
 const components = [
   { name: "MCP Server", version: "v3.2.0", pkg: "frootai-mcp", status: "✅ Live", link: "https://www.npmjs.com/package/frootai-mcp" },
-  { name: "VS Code Extension", version: "v1.3.1", pkg: "pavleenbali.frootai", status: "✅ Live", link: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
+  { name: "VS Code Extension", version: "v1.4.0", pkg: "pavleenbali.frootai", status: "✅ Live", link: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
   { name: "Knowledge Base", version: "16 modules", pkg: "knowledge.json", status: "✅ Bundled", link: "/docs" },
   { name: "Website", version: "Docusaurus 3", pkg: "13 pages", status: "✅ Live", link: "/" },
   { name: "Solution Plays", version: "20 plays", pkg: "DevKit + TuneKit", status: "✅ Shipping", link: "/solution-plays" },
