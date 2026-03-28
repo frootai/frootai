@@ -1,7 +1,7 @@
 # frootai-mcp
 
 > **The AI architecture knowledge engine for your coding agent.**
-> 22 tools. 16 modules. 682KB of curated knowledge. Zero hallucination.
+> 23 tools. 16 modules. 682KB of curated knowledge. Zero hallucination.
 
 [![npm](https://img.shields.io/npm/v/frootai-mcp)](https://www.npmjs.com/package/frootai-mcp) [![license](https://img.shields.io/npm/l/frootai-mcp)](LICENSE)
 

@@ -1,7 +1,7 @@
 {
   "name": "frootai",
   "displayName": "FrootAI — AI Architecture Toolkit",
-  "description": "20 solution plays + 22 MCP tools for building production AI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click. Works standalone from any workspace.",
+  "description": "20 solution plays + 23 MCP tools for building production AI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click. Works standalone from any workspace.",
   "version": "1.4.0",
   "publisher": "pavleenbali",
   "engines": {

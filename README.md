@@ -22,7 +22,7 @@
 |---|------|----------|
 | 🎯 | **Solution Plays** — pre-tuned, deployable AI solutions (RAG, agents, landing zones) | Infra & platform engineers |
 | 📖 | **16 knowledge modules** covering AI architecture end-to-end | Cloud Architects, CSAs |
-| 🔌 | **MCP Server** — 22 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem + 6 compute), add to any AI agent as a callable skill set | Agent builders, developers |
+| 🔌 | **MCP Server** — 23 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem + 6 compute), add to any AI agent as a callable skill set | Agent builders, developers |
 | 🔗 | **The open glue** — removes silos between infra, platform, and app teams | Everyone |
 
 ---
@@ -74,7 +74,7 @@ npx frootai doctor                        # Health check
 # Python SDK — offline knowledge access, 20 plays, cost estimation
 pip install frootai
 
-# Python MCP Server — same 22 tools, pure Python
+# Python MCP Server — same 23 tools, pure Python
 pip install frootai-mcp
 ```
 
@@ -156,7 +156,7 @@ graph TB
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit/TuneKit/SpecKit, auto-chain agents |
-| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 23 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) |
 | **CLI** | You (terminal) | `npx frootai init/search/cost/validate/doctor` — scaffolding, search, cost estimates |
 | **DevKit (.github/ + infra/)** | Developer | .github Agentic OS + Bicep infrastructure + co-coder context |
 | **TuneKit (config/ + eval/)** | Platform team | AI parameter tuning: temperature, models, guardrails, evaluation |
@@ -223,7 +223,7 @@ graph TB
 
 ---
 
-## MCP Server — 22 tools (v3)
+## MCP Server — 23 tools (v3)
 
 ### Static Tools (bundled knowledge)
 
@@ -293,7 +293,7 @@ frootai/
 │   ├── ...                   (all 16 modules)
 │   └── T3-Production-Patterns.md  T3
 ├── mcp-server/            ← MCP server (npm: frootai-mcp@3.2.0)
-│   ├── index.js             22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)
+│   ├── index.js             23 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)
 │   ├── knowledge.json       Bundled knowledge (682 KB, 18 modules)
 │   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
@@ -380,5 +380,5 @@ MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
 ---
 
 > **FrootAI v3** — *The open glue for AI architecture. From the roots to the fruits.*
-> 16 modules · 22 MCP tools · 20 solution plays · 200+ AI terms
+> 16 modules · 23 MCP tools · 20 solution plays · 200+ AI terms
 > Built by the [FrootAI community](https://github.com/gitpavleenbali/frootai)
