@@ -31,9 +31,9 @@ export default function CommunityPage(): JSX.Element {
             <ul style={{ fontSize: "0.82rem", lineHeight: 1.9, paddingLeft: "18px", columns: 2, columnGap: "32px" }}>
               <li>20 Solution Plays (open-source)</li>
               <li>MCP Server (npm) — 22 tools</li>
-              <li>VS Code Extension — 16 commands</li>
+              <li>VS Code Extension — 19 commands</li>
               <li>.github Agentic OS templates</li>
-              <li>18 Knowledge Modules</li>
+              <li>16 Knowledge Modules</li>
               <li>200+ AI Glossary Terms</li>
               <li>Solution Configurator</li>
               <li>Agent FAI</li>

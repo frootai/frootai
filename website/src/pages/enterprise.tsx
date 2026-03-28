@@ -31,9 +31,9 @@ export default function EnterprisePage(): JSX.Element {
             <ul style={{ fontSize: "0.82rem", lineHeight: 1.9, paddingLeft: "18px", columns: 2, columnGap: "32px" }}>
               <li>20 Solution Plays (open-source)</li>
               <li>MCP Server (npm) - 22 tools</li>
-              <li>VS Code Extension - 16 commands</li>
+              <li>VS Code Extension - 19 commands</li>
               <li>.github Agentic OS templates</li>
-              <li>18 Knowledge Modules</li>
+              <li>16 Knowledge Modules</li>
               <li>200+ AI Glossary Terms</li>
               <li>Solution Configurator</li>
               <li>AI Assistant</li>
@@ -78,7 +78,7 @@ export default function EnterprisePage(): JSX.Element {
         <section style={{ marginBottom: "40px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
             {[
-              { to: "/docs/", title: "18 Knowledge Modules", sub: "From tokens to production agents", color: "#f59e0b" },
+              { to: "/docs/", title: "16 Knowledge Modules", sub: "From tokens to production agents", color: "#f59e0b" },
               { to: "/docs/F3-AI-Glossary-AZ", title: "200+ AI Terms", sub: "Comprehensive glossary A-Z", color: "#10b981" },
               { to: "https://github.com/gitpavleenbali/frootai/tree/main/workshops", title: "Workshop Materials", sub: "4 hands-on workshops", color: "#6366f1" },
               { to: "/docs/Quiz-Assessment", title: "Quiz and Assessment", sub: "25 questions to test yourself", color: "#06b6d4" },

@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function MCPToolingPage(): JSX.Element {
   return (
-    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new), 18 modules, 200+ terms. npx frootai-mcp.">
+    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new), 16 modules, 200+ terms. npx frootai-mcp.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🔌 FrootAI MCP Server</h1>
@@ -81,7 +81,7 @@ export default function MCPToolingPage(): JSX.Element {
         <p style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>6 static (bundled) + 4 live (network) + 3 agent chain (Build → Review → Tune)</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "16px" }}>
           {[
-            { name: "list_modules", desc: "Browse 18 modules by FROOT layer", icon: "📋", kind: "static" },
+            { name: "list_modules", desc: "Browse 16 modules by FROOT layer", icon: "📋", kind: "static" },
             { name: "get_module", desc: "Read any module content (F1–T3)", icon: "📖", kind: "static" },
             { name: "lookup_term", desc: "200+ AI/ML term definitions", icon: "🔍", kind: "static" },
             { name: "search_knowledge", desc: "Full-text search all modules", icon: "🔎", kind: "static" },

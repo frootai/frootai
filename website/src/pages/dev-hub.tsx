@@ -9,7 +9,7 @@ const quickLinks = [
   { icon: "🛠️", title: "Admin Guide", sub: "Install, configure, maintain", to: "/docs/admin-guide", color: "#f59e0b" },
   { icon: "📖", title: "User Guide", sub: "End-to-end usage walkthrough", to: "/docs/user-guide-complete", color: "#10b981" },
   { icon: "🤝", title: "Contributor Guide", sub: "Add plays, improve tools", to: "/docs/contributor-guide", color: "#06b6d4" },
-  { icon: "📡", title: "API Reference", sub: "22 MCP tools, 16 commands", to: "/docs/api-reference", color: "#6366f1" },
+  { icon: "📡", title: "API Reference", sub: "22 MCP tools, 19 commands", to: "/docs/api-reference", color: "#6366f1" },
   { icon: "📋", title: "Changelog", sub: "Version history & releases", to: "/dev-hub-changelog", color: "#7c3aed" },
   { icon: "🏗️", title: "Architecture", sub: "System design & data flow", to: "/docs/architecture-overview", color: "#ec4899" },
 ];
@@ -21,8 +21,8 @@ const quickStart = [
 ];
 
 const versions = [
-  { label: "VS Code Extension", version: "v1.0.0", color: "#6366f1" },
-  { label: "MCP Server (npm)", version: "v3.0.1", color: "#10b981" },
+  { label: "VS Code Extension", version: "v1.3.1", color: "#6366f1" },
+  { label: "MCP Server (npm)", version: "v3.2.0", color: "#10b981" },
   { label: "Website", version: "13 pages", color: "#f59e0b" },
 ];
 

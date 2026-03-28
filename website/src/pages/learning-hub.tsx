@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function LearningHubPage(): JSX.Element {
   return (
-    <Layout title="FAI Learning Hub — FrootAI" description="Learn AI architecture from the roots up. 18 modules, 200+ terms, workshops, quiz, certification.">
+    <Layout title="FAI Learning Hub — FrootAI" description="Learn AI architecture from the roots up. 16 modules, 200+ terms, workshops, quiz, certification.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
 
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -18,7 +18,7 @@ export default function LearningHubPage(): JSX.Element {
         <section style={{ marginBottom: "40px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
             {[
-              { to: "/docs/", icon: "📚", title: "18 Knowledge Modules", sub: "From tokens to production agents", color: "#f59e0b" },
+              { to: "/docs/", icon: "📚", title: "16 Knowledge Modules", sub: "From tokens to production agents", color: "#f59e0b" },
               { to: "/docs/F3-AI-Glossary-AZ", icon: "📖", title: "200+ AI Terms", sub: "Comprehensive glossary A-Z", color: "#10b981" },
               { to: "https://github.com/gitpavleenbali/frootai/tree/main/workshops", icon: "🎓", title: "Workshop Materials", sub: "4 hands-on workshops", color: "#6366f1" },
               { to: "/docs/Quiz-Assessment", icon: "📝", title: "Quiz & Assessment", sub: "25 questions to test yourself", color: "#06b6d4" },

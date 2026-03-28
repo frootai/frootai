@@ -73,7 +73,7 @@ export default function EcosystemPage(): JSX.Element {
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
                 <li>22 tools called automatically by Copilot/Claude/Cursor</li>
                 <li><code>lookup_term</code> → 200+ precise definitions</li>
-                <li><code>search_knowledge</code> → answers across 18 modules</li>
+                <li><code>search_knowledge</code> → answers across 16 modules</li>
                 <li><code>get_architecture_pattern</code> → 7 decision guides</li>
                 <li>90% less token burn vs internet search</li>
               </ul>
@@ -90,10 +90,10 @@ export default function EcosystemPage(): JSX.Element {
               <h3 style={{ fontSize: "1.05rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>VS Code Extension</h3>
               <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6366f1", textAlign: "center", marginBottom: "12px" }}>For you (the human)</p>
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
-                <li>Sidebar: 20 solution plays, 18 modules, 22 MCP tools</li>
+                <li>Sidebar: 20 solution plays, 16 modules, 22 MCP tools</li>
                 <li>Search 200+ AI terms instantly</li>
                 <li>Init DevKit → copies .github Agentic OS (19 files) to your project</li>
-                <li>16 commands via Ctrl+Shift+P</li>
+                <li>19 commands via Ctrl+Shift+P</li>
                 <li>Cached downloads — works offline after first use</li>
               </ul>
               <div style={{ textAlign: "center", marginTop: "16px" }}>

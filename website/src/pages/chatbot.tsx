@@ -219,7 +219,7 @@ export default function ChatbotPage(): JSX.Element {
   const followUps = lastAssistant ? getFollowUps(lastAssistant.text) : [];
 
   return (
-    <Layout title="Agent FAI - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 22 MCP tools, 18 knowledge modules.">
+    <Layout title="Agent FAI - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 22 MCP tools, 16 knowledge modules.">
       {/* Bouncing dots + streaming cursor animations */}
       <style>{`
         @keyframes bounceDot {

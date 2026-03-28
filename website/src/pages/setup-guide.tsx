@@ -103,7 +103,7 @@ cd frootai/mcp-server
 npm install`}
         </div>
         <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)" }}>
-          That's it — the MCP server is ready. The <code>knowledge.json</code> (664 KB) contains all 18 modules bundled. No additional setup needed.
+          That's it — the MCP server is ready. The <code>knowledge.json</code> (664 KB) contains all 16 modules bundled. No additional setup needed.
         </p>
 
         {/* ── Step 2: Configure ── */}
@@ -211,7 +211,7 @@ npm install`}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "12px" }}>
           {[
             { q: '"What is temperature in LLMs?"', tool: "lookup_term", result: "Returns precise glossary definition" },
-            { q: '"List all FrootAI modules"', tool: "list_modules", result: "Shows 5 FROOT layers with 18 modules" },
+            { q: '"List all FrootAI modules"', tool: "list_modules", result: "Shows 5 FROOT layers with 16 modules" },
             { q: '"How do I design a RAG pipeline?"', tool: "get_architecture_pattern", result: "Returns complete RAG design guide" },
             { q: '"Search for hallucination reduction"', tool: "search_knowledge", result: "Returns top sections across modules" },
           ].map((item) => (
@@ -236,7 +236,7 @@ npm install`}
           </thead>
           <tbody>
             {[
-              { name: "list_modules", params: "none", returns: "All 18 modules organized by FROOT layer" },
+              { name: "list_modules", params: "none", returns: "All 16 modules organized by FROOT layer" },
               { name: "get_module", params: "module_id (F1–T3), section? (optional)", returns: "Full module content or specific section" },
               { name: "lookup_term", params: "term (string)", returns: "Glossary definition from 200+ terms" },
               { name: "search_knowledge", params: "query (string), max_results? (1–10)", returns: "Ranked matching sections across modules" },
@@ -305,7 +305,7 @@ npm install`}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "10px", marginBottom: "20px" }}>
             {[
               { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays. Click to open README or folder." },
-              { icon: "📖", title: "FROOT Modules", desc: "18 modules grouped by FROOT layer." },
+              { icon: "📖", title: "FROOT Modules", desc: "16 modules grouped by FROOT layer." },
               { icon: "🔌", title: "MCP Tools", desc: "See all 22 MCP tools at a glance." },
             ].map(p => (
               <div key={p.title} style={{ padding: "12px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
@@ -412,7 +412,7 @@ npx frootai doctor`}</pre>
                 {[
                   ["init", "Interactive project scaffolding (auto-detects existing projects)"],
                   ["scaffold <play>", "One-command play setup with all 5 FROOT kits"],
-                  ["search <query>", "Search 18 knowledge modules"],
+                  ["search <query>", "Search 16 knowledge modules"],
                   ["cost <play>", "Estimate Azure AI costs (--scale dev|prod)"],
                   ["validate", "Check project structure + configs"],
                   ["validate --waf", "WAF alignment scorecard (6 pillars, 17 checks)"],

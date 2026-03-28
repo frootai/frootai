@@ -119,7 +119,7 @@ $ npx frootai scaffold play-01
         {/* --- search --- */}
         <div style={cardStyle}>
           <h3 style={h3Style}>🔍 <code>frootai search &lt;query&gt;</code></h3>
-          <p style={{ fontSize: "0.88rem" }}>Search the FrootAI knowledge base (18 FROOT modules) from the terminal.</p>
+          <p style={{ fontSize: "0.88rem" }}>Search the FrootAI knowledge base (16 FROOT modules) from the terminal.</p>
           <pre style={codeStyle}>{`$ npx frootai search "RAG architecture"
 
   Searching: "RAG architecture"

@@ -311,7 +311,7 @@ export default function HiFaiPage(): JSX.Element {
           </h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
             {[
-              { to: "/learning-hub", icon: "📚", title: "FAI Learning Hub", sub: "18 modules · Glossary · Workshops", color: "#f97316" },
+              { to: "/learning-hub", icon: "📚", title: "FAI Learning Hub", sub: "16 modules · Glossary · Workshops", color: "#f97316" },
               { to: "/dev-hub", icon: "🛠️", title: "FAI Developer Hub", sub: "API ref · Changelog · Architecture", color: "#0ea5e9" },
               { to: "/solution-plays", icon: "🎯", title: "All 20 Solution Plays", sub: "Browse plays with user guides", color: "#7c3aed" },
               { to: "/setup-guide", icon: "📖", title: "Complete Setup Guide", sub: "VS Code + MCP + DevKit details", color: "#10b981" },

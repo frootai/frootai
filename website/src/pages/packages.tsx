@@ -232,7 +232,7 @@ const allPackages = [
   },
   {
     id: "MCP4", name: "search_knowledge", category: "MCP Tools",
-    desc: "Full-text search across all 18 modules. Returns ranked sections matching your query with module references",
+    desc: "Full-text search across all 16 modules. Returns ranked sections matching your query with module references",
     file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026",
     tags: ["mcp", "tool", "search", "knowledge"],
     docsLink: "/docs/O3-MCP-Tools-Functions",

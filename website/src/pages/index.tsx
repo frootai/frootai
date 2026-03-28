@@ -116,12 +116,12 @@ export default function FrootAIPage(): JSX.Element {
             {[
               { to: "/configurator", icon: "⚙️", title: "Solution Configurator", sub: "3 questions → your play", color: "#f59e0b" },
               { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "20 plays · DevKit + TuneKit", color: "#7c3aed" },
-              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "16 commands · Standalone", color: "#6366f1" },
+              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "19 commands · Standalone", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "22 tools for your agent", color: "#10b981" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
-              { to: "/learning-hub", icon: "📚", title: "FAI Learning Hub", sub: "18 modules · Glossary · Workshops", color: "#f97316" },
+              { to: "/learning-hub", icon: "📚", title: "FAI Learning Hub", sub: "16 modules · Glossary · Workshops", color: "#f97316" },
               { to: "/dev-hub", icon: "🛠️", title: "FAI Developer Hub", sub: "API ref · Changelog · Guides", color: "#0ea5e9" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
@@ -157,7 +157,7 @@ export default function FrootAIPage(): JSX.Element {
         {/* ═══ 4. FROOT Framework ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The FROOT Framework</h2>
-          <p className={styles.sectionSub}>AI Knowledge Hub — 5 layers, 18 modules. Click to expand, then click modules to learn.</p>
+          <p className={styles.sectionSub}>AI Knowledge Hub — 5 layers, 16 modules. Click to expand, then click modules to learn.</p>
           {layers.map((l) => <ExpandableLayer key={l.id} layer={l} />)}
         </section>
 

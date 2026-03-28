@@ -29,8 +29,8 @@ const tocItems = [
   { id: "devkit", label: "3. DevKit (.github Agentic OS)" },
   { id: "tunekit", label: "4. TuneKit (AI Configuration)" },
   { id: "mcp-server", label: "5. MCP Server (22 Tools)" },
-  { id: "vscode-extension", label: "6. VS Code Extension (16 Commands)" },
-  { id: "knowledge-platform", label: "7. Knowledge Platform (18 Modules)" },
+  { id: "vscode-extension", label: "6. VS Code Extension (19 commands)" },
+  { id: "knowledge-platform", label: "7. Knowledge Platform (16 Modules)" },
   { id: "ai-assistant", label: "8. AI Assistant & Solution Configurator" },
   { id: "partner-integrations", label: "9. Partner Integrations" },
   { id: "plugin-marketplace", label: "10. Plugin Marketplace" },
@@ -148,11 +148,11 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <FeatureTable rows={[
             { feature: "Website", desc: "15-page Docusaurus site (dark theme, responsive, SEO-optimized)", status: "✅ Shipped", link: "/", linkLabel: "Home →" },
-            { feature: "npm Package", desc: "frootai-mcp@3.0.0 — 22 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
-            { feature: "VS Code Extension", desc: "pavleenbali.frootai@1.0.0 — 16 commands, standalone engine, sidebar navigation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
+            { feature: "npm Package", desc: "frootai-mcp@3.2.0 — 22 MCP tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 new)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP Tooling →" },
+            { feature: "VS Code Extension", desc: "pavleenbali.frootai@1.3.1 — 19 commands, standalone engine, sidebar navigation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
             { feature: "GitHub Repo", desc: "Public repository, MIT license, CI/CD pipeline, 380+ files", status: "✅ Shipped", link: "https://github.com/gitpavleenbali/frootai", linkLabel: "GitHub →" },
             { feature: "Azure Integration", desc: "AI Foundry-connected, Managed Identity, Bicep IaC, private endpoints", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Admin Guide →" },
-            { feature: "Knowledge Base", desc: "664KB curated content — 18 modules across 5 FROOT layers", status: "✅ Shipped", link: "/packages", linkLabel: "Packages →" },
+            { feature: "Knowledge Base", desc: "664KB curated content — 16 modules across 5 FROOT layers", status: "✅ Shipped", link: "/packages", linkLabel: "Packages →" },
             { feature: "Solution Framework", desc: "20 pre-tuned solution plays with DevKit + TuneKit + Evaluation", status: "✅ Shipped", link: "/solution-plays", linkLabel: "Plays →" },
             { feature: "AI Assistant", desc: "Chatbot for play recommendation + cost estimation (preview)", status: "🔄 Preview", link: "/chatbot", linkLabel: "Chatbot →" },
             { feature: "Plugin Marketplace", desc: "Decentralized marketplace for community agents, skills, prompts", status: "🔄 Preview", link: "/marketplace", linkLabel: "Marketplace →" },
@@ -277,16 +277,16 @@ export default function FeatureSpecPage(): JSX.Element {
         <section id="mcp-server" style={sectionStyle}>
           <h2 style={h2Style}>5. MCP Server (22 Tools)</h2>
           <p style={descStyle}>
-            The FrootAI MCP Server (<code>frootai-mcp@3.0.1</code>) gives your AI agent direct access to curated knowledge, architecture patterns, model catalog, and pricing data. Works with Copilot, Claude, Cursor, Gemini, and any MCP-compatible client.
+            The FrootAI MCP Server (<code>frootai-mcp@3.2.0</code>) gives your AI agent direct access to curated knowledge, architecture patterns, model catalog, and pricing data. Works with Copilot, Claude, Cursor, Gemini, and any MCP-compatible client.
           </p>
 
           {/* Static Tools */}
           <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#10b981", marginBottom: "12px" }}>📦 Static Tools (6) — Bundled, works offline</h3>
           <FeatureTable rows={[
-            { feature: "list_modules", desc: "Browse all 18 FROOT modules organized by layer (F/R/O/O/T)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
+            { feature: "list_modules", desc: "Browse all 16 FROOT modules organized by layer (F/R/O/O/T)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
             { feature: "get_module", desc: "Read any module by ID (F1–T3) with optional section filtering", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
             { feature: "lookup_term", desc: "200+ AI/ML term definitions — precise, curated glossary", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
-            { feature: "search_knowledge", desc: "Full-text search across all 18 modules — ranked results", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
+            { feature: "search_knowledge", desc: "Full-text search across all 16 modules — ranked results", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
             { feature: "get_architecture_pattern", desc: "7 pre-built decision guides (RAG, agents, hosting, cost, etc.)", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
             { feature: "get_froot_overview", desc: "Complete FROOT framework summary — layers, philosophy, structure", status: "✅ Shipped", link: "/mcp-tooling", linkLabel: "MCP →" },
           ]} />
@@ -318,12 +318,12 @@ export default function FeatureSpecPage(): JSX.Element {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/*  6. VS CODE EXTENSION (16 Commands)                         */}
+        {/*  6. VS CODE EXTENSION (19 commands)                         */}
         {/* ═══════════════════════════════════════════════════════════ */}
         <section id="vscode-extension" style={sectionStyle}>
-          <h2 style={h2Style}>6. VS Code Extension (16 Commands)</h2>
+          <h2 style={h2Style}>6. VS Code Extension (19 commands)</h2>
           <p style={descStyle}>
-            The FrootAI VS Code Extension (<code>pavleenbali.frootai@1.0.0</code>) puts solution plays, AI modules, and MCP tools directly in your editor sidebar. 16 commands accessible via Ctrl+Shift+P.
+            The FrootAI VS Code Extension (<code>pavleenbali.frootai@1.3.1</code>) puts solution plays, AI modules, and MCP tools directly in your editor sidebar. 19 commands accessible via Ctrl+Shift+P.
           </p>
           <FeatureTable rows={[
             { feature: "FrootAI: Initialize DevKit", desc: "Full .github Agentic OS (19 files) + agent.md + MCP config + plugin.json", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
@@ -341,15 +341,15 @@ export default function FeatureSpecPage(): JSX.Element {
             { feature: "FrootAI: Open User Guide", desc: "Opens the user guide documentation", status: "✅ Shipped", link: "/vscode-extension", linkLabel: "Extension →" },
           ]} />
           <div style={{ padding: "16px 20px", borderRadius: "12px", border: "1px solid rgba(99,102,241,0.2)", background: "rgba(99,102,241,0.03)", fontSize: "0.82rem", lineHeight: 1.7, marginTop: "12px" }}>
-            <strong style={{ color: "#6366f1" }}>Sidebar Features:</strong> 20 solution plays in TreeView, 18 FROOT modules grouped by layer, 22 MCP tools at a glance. Cached downloads — works offline after first use.
+            <strong style={{ color: "#6366f1" }}>Sidebar Features:</strong> 20 solution plays in TreeView, 16 FROOT modules grouped by layer, 22 MCP tools at a glance. Cached downloads — works offline after first use.
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/*  7. KNOWLEDGE PLATFORM (18 Modules)                         */}
+        {/*  7. KNOWLEDGE PLATFORM (16 Modules)                         */}
         {/* ═══════════════════════════════════════════════════════════ */}
         <section id="knowledge-platform" style={sectionStyle}>
-          <h2 style={h2Style}>7. Knowledge Platform (18 Modules)</h2>
+          <h2 style={h2Style}>7. Knowledge Platform (16 Modules)</h2>
           <p style={descStyle}>
             664KB of curated AI/ML knowledge organized by the FROOT taxonomy — Foundations, Reasoning, Orchestration, Operations, Transformation. Each module is a complete reference accessible via MCP, VS Code, or the website.
           </p>
@@ -529,7 +529,7 @@ export default function FeatureSpecPage(): JSX.Element {
           </p>
           <FeatureTable rows={[
             { feature: "Admin Guide", desc: "Platform setup, MCP configuration, security hardening, troubleshooting", status: "✅ Shipped", link: "/docs/admin-guide", linkLabel: "Read →" },
-            { feature: "User Guide", desc: "End-to-end usage — 16 commands, 22 tools, DevKit/TuneKit deep dive, FAQ", status: "✅ Shipped", link: "/docs/user-guide-complete", linkLabel: "Read →" },
+            { feature: "User Guide", desc: "End-to-end usage — 19 commands, 22 tools, DevKit/TuneKit deep dive, FAQ", status: "✅ Shipped", link: "/docs/user-guide-complete", linkLabel: "Read →" },
             { feature: "Contributor Guide", desc: "Dev setup, repo structure, PR process, code style, testing requirements", status: "✅ Shipped", link: "/docs/contributor-guide", linkLabel: "Read →" },
             { feature: "API Reference", desc: "All 22 MCP tools with schemas, 16 VS Code commands, config file schemas", status: "✅ Shipped", link: "/docs/api-reference", linkLabel: "Read →" },
             { feature: "Architecture Overview", desc: "System diagram, 6 architectural layers, data flow, deployment topology", status: "✅ Shipped", link: "/docs/architecture-overview", linkLabel: "Read →" },

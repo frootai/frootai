@@ -34,7 +34,7 @@ export default function VSCodeExtensionPage(): JSX.Element {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
             { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays in the sidebar. Click to open README or folder." },
-            { icon: "📖", title: "FROOT Modules", desc: "18 modules grouped by layer. Click to open and read." },
+            { icon: "📖", title: "FROOT Modules", desc: "16 modules grouped by layer. Click to open and read." },
             { icon: "🔌", title: "MCP Tools", desc: "See all 22 MCP tools at a glance. Know what your agent can do." },
           ].map((f) => (
             <div key={f.title} style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>

@@ -144,7 +144,7 @@ const releases: Release[] = [
     ],
   },
   {
-    version: "v1.0.0",
+    version: "v1.3.1",
     date: "March 20–21, 2026",
     title: "Genesis",
     color: "#f59e0b",
