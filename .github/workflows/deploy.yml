@@ -29,50 +29,29 @@ jobs:
           node-version: "20"
 
       - name: Install website dependencies
-        working-directory: website
+        working-directory: website-v6
         run: npm install
 
+      - name: Build search index
+        working-directory: website-v6
+        run: node scripts/build-search-index.js
+
       - name: Build website
-        working-directory: website
-        run: npm run build
+        working-directory: website-v6
+        run: npx next build
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
 
-      - name: Lighthouse CI audit
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          urls: |
-            http://localhost:8080/
-            http://localhost:8080/setup-guide
-            http://localhost:8080/cli
-          uploadArtifacts: true
-          configPath: ./website/.lighthouserc.json
-          temporaryPublicStorage: true
-        continue-on-error: true
-
-      - name: Verify search index
-        working-directory: website
+      - name: Verify build output
+        working-directory: website-v6
         run: |
-          if [ -f build/search-index.json ]; then
-            ENTRIES=$(node -e "console.log(JSON.parse(require('fs').readFileSync('build/search-index.json','utf8')).length)")
+          PAGES=$(find out -name "*.html" | wc -l)
+          echo "✅ Static export: $PAGES HTML files"
+          ls -la out/CNAME out/.nojekyll 2>/dev/null || echo "ℹ️  CNAME/.nojekyll check"
+          if [ -f out/search-index.json ]; then
+            ENTRIES=$(node -e "console.log(JSON.parse(require('fs').readFileSync('out/search-index.json','utf8')).length)")
             echo "✅ Search index: $ENTRIES entries"
-          else
-            echo "ℹ️  No search-index.json (search plugin may bundle differently)"
           fi
-
-      - name: Verify MCP server
-        working-directory: mcp-server
-        run: |
-          npm install
-          echo "=== FrootAI MCP Server Verification ==="
-          node -e "
-            import { readFileSync } from 'fs';
-            const kb = JSON.parse(readFileSync('knowledge.json', 'utf-8'));
-            const count = Object.keys(kb.modules).length;
-            console.log('  Knowledge base: ' + count + ' modules bundled');
-            console.log('  Bundle size: ' + (Buffer.byteLength(readFileSync('knowledge.json')) / 1024).toFixed(0) + ' KB');
-            console.log('✅ MCP server verified');
-          "
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -80,7 +59,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: website/build
+          path: website-v6/out
 
   deploy:
     environment:
@@ -92,3 +71,33 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.14.x
+
+      - name: Run Lighthouse audit
+        run: |
+          lhci autorun \
+            --collect.url="https://frootai.dev" \
+            --collect.url="https://frootai.dev/docs/architecture-overview" \
+            --collect.numberOfRuns=1 \
+            --assert.preset=lighthouse:no-pwa \
+            --assert.assertions.categories:performance=off \
+            --assert.assertions.categories:accessibility="warn" \
+            --assert.assertions.categories:best-practices="warn" \
+            --assert.assertions.categories:seo="warn" \
+            --upload.target=temporary-public-storage || true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ""

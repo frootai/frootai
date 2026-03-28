@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     description: "22 MCP tools, 20 solution plays, 18 knowledge modules.",
     images: ["/img/frootai-og.png"],
   },
-  icons: { icon: "/img/favicon.ico" },
+  icons: { icon: [{ url: "/img/frootai-mark.svg", type: "image/svg+xml", sizes: "any" }], apple: { url: "/img/frootai-logo.png", sizes: "180x180" } },
   robots: { index: true, follow: true },
 };
 
@@ -38,8 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col antialiased">
+        <AnnouncementBar />
         <Navbar />
-        <main className="flex-1 pt-16">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

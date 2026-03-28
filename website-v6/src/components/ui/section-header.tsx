@@ -4,7 +4,7 @@ interface SectionHeaderProps {
   badge?: string;
   badgeColor?: string;
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   className?: string;
 }
 

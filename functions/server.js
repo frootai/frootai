@@ -95,11 +95,11 @@ Install: \`npx frootai-mcp@latest\` | Docker: \`docker run -i ghcr.io/gitpavleen
 **Ecosystem(3)**: get_model_catalog, get_azure_pricing, compare_models
 Full guide: [/setup-guide](/setup-guide)
 
-## VS CODE EXTENSION — v1.3.1, 19 commands
+## VS CODE EXTENSION — v1.4.0, 19 commands
 Install: \`code --install-extension pavleenbali.frootai\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/SpecKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools
-4 sidebar panels: Plays(20), MCP(22), Knowledge(18), Glossary(200+). Standalone — no clone needed.
+4 sidebar panels: Plays(20), MCP(23), Knowledge(18), Glossary(200+). Standalone — no clone needed.
 
 ## SPECKIT — Architecture specification + WAF alignment
 \`spec/play-spec.json\` — defines architecture, components, config, evaluation thresholds, and WAF alignment for each play.

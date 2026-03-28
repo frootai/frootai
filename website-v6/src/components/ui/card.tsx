@@ -10,7 +10,8 @@ export function Card({ className, glow, children, style, ...props }: CardProps) 
       className={cn(
         "rounded-2xl border border-border bg-bg-surface p-5",
         "transition-all duration-300",
-        "hover:border-indigo/25 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3),0_0_0_1px_rgba(99,102,241,0.08)]",
+        "hover:border-indigo/20 hover:bg-bg-elevated",
+        "hover:shadow-[0_0_16px_rgba(99,102,241,0.08),0_4px_20px_rgba(0,0,0,0.2)]",
         "hover:-translate-y-0.5",
         className
       )}

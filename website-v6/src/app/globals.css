@@ -9,8 +9,8 @@
   /* Surface layers (deep → elevated) */
   --bg: #050508;
   --bg-surface: #0a0a12;
-  --bg-elevated: #111119;
-  --bg-hover: #191924;
+  --bg-elevated: #151520;
+  --bg-hover: #1e1e32;
 
   /* Foreground layers */
   --fg: #ededf0;
@@ -122,10 +122,125 @@ body {
   animation: blink 0.8s step-end infinite;
 }
 
+/* ── Search dropdown animation ── */
+@keyframes searchDropIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ── Glass effect ── */
 .glass {
   background: rgba(10, 10, 18, 0.65);
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ── Marquee (logo scrolling) ── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ── Glow card — subtle hover with gentle lift ── */
+.glow-card {
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background: var(--bg-surface);
+  text-decoration: none !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.glow-card:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  background: rgba(17, 17, 25, 0.9);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.08), 0 4px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+  text-decoration: none !important;
+}
+
+/* ── Glow chip — inline module links inside expandable layers (no lift) ── */
+.glow-chip {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  text-decoration: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.glow-chip:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+  text-decoration: none !important;
+}
+
+/* ── Pill link (CSS-level, uses --pill custom property) ── */
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--pill, var(--emerald)) 25%, transparent);
+  color: var(--pill, var(--emerald));
+  background: color-mix(in srgb, var(--pill, var(--emerald)) 4%, transparent);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.pill-link:hover {
+  background: color-mix(in srgb, var(--pill, var(--emerald)) 12%, transparent);
+  border-color: color-mix(in srgb, var(--pill, var(--emerald)) 45%, transparent);
+  transform: translateY(-1px);
+}
+
+/* ── Nav item hover — subtle glow on menu triggers + dropdown links ── */
+.nav-item-hover {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-item-hover:hover {
+  color: #fff;
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.1), inset 0 0 0 1px rgba(99, 102, 241, 0.08);
+}
+.nav-item-hover:hover .nav-icon {
+  color: #a5b4fc;
+}
+
+/* ── Nav right-side link — accent glow matching the link color ── */
+.nav-accent-emerald:hover {
+  color: #fff !important;
+  background: rgba(16, 185, 129, 0.10);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.12);
+}
+.nav-accent-amber:hover {
+  color: #fff !important;
+  background: rgba(245, 158, 11, 0.10);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.12);
+}
+.nav-accent-indigo:hover {
+  color: #fff !important;
+  background: rgba(99, 102, 241, 0.10);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.12);
+}
+
+/* ── Footer link hover — subtle emerald underline glow ── */
+.footer-link {
+  position: relative;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.footer-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
 }

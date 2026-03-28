@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 const columns = [
   { title: "Explore", links: [
@@ -36,12 +36,12 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2 font-bold text-[15px]">
-              <Sparkles className="h-4 w-4 text-emerald" />
+            <Link href="/" className="inline-flex items-center gap-1.5 font-bold text-[15px]">
+              <Image src="/img/frootai-logo.png" alt="FrootAI" width={32} height={32} className="rounded-sm" />
               <span>Froot<span className="text-emerald">AI</span></span>
             </Link>
-            <p className="mt-3 text-[12px] text-fg-dim leading-relaxed max-w-[200px]">
-              From the Roots to the Fruits. The open glue for AI architecture.
+            <p className="mt-3 text-[12px] text-fg-muted leading-relaxed max-w-[200px]">
+              From the Roots to the Fruits.<br />It&apos;s simply <span className="text-emerald font-medium">Frootful</span>.
             </p>
           </div>
 
@@ -54,9 +54,9 @@ export function Footer() {
                   <li key={link.label}>
                     {"ext" in link && link.ext ? (
                       <a href={link.href} target="_blank" rel="noopener noreferrer"
-                        className="text-[13px] text-fg-muted hover:text-fg transition-colors">{link.label}</a>
+                        className="footer-link text-[13px] text-fg-muted transition-colors">{link.label}</a>
                     ) : (
-                      <Link href={link.href} className="text-[13px] text-fg-muted hover:text-fg transition-colors">{link.label}</Link>
+                      <Link href={link.href} className="footer-link text-[13px] text-fg-muted transition-colors">{link.label}</Link>
                     )}
                   </li>
                 ))}
@@ -66,11 +66,11 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[11px] text-fg-dim">&copy; {new Date().getFullYear()} FrootAI &middot; MIT License</p>
+          <p className="text-[11px] text-fg-muted">&copy; {new Date().getFullYear()} FrootAI &middot; MIT License</p>
           <div className="flex gap-4">
-            <Link href="/community" className="text-[11px] text-fg-dim hover:text-fg transition-colors">Community</Link>
+            <Link href="/community" className="footer-link text-[11px] text-fg-muted transition-colors">Community</Link>
             <a href="https://github.com/gitpavleenbali/frootai" target="_blank" rel="noopener noreferrer"
-              className="text-[11px] text-fg-dim hover:text-fg transition-colors">GitHub</a>
+              className="footer-link text-[11px] text-fg-muted transition-colors">GitHub</a>
           </div>
         </div>
       </div>
