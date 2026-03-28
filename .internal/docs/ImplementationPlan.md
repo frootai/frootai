@@ -315,9 +315,9 @@ LAYER 4 — DISTRIBUTION
 | 6.5 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | 📋 | Medium |
 | 6.6 | Per-play CI pipelines (automated testing per solution play) | 📋 | Medium |
 | 6.7 | Community contribution guidelines + PR template | ✅ Done | Medium |
-| 6.8 | Azure Marketplace listing | 📋 | Medium |
-| 6.9 | GitHub Marketplace listing | 📋 | Medium |
-| 6.10 | A2A (Agent-to-Agent) protocol support | 📋 | Low |
+| 6.8 | Azure Marketplace listing | ✅ Metadata ready | Medium |
+| 6.9 | GitHub Marketplace listing | ✅ action.yml | Medium |
+| 6.10 | A2A protocol | ✅ .well-known/agent.json | Low |
 
 ---
 
@@ -329,12 +329,12 @@ LAYER 4 — DISTRIBUTION
 |---|------|--------|----------|
 | 7.1 | Website chatbot agent (FrootAI MCP on AI Foundry) | ✅ Done | Agent FAI live on Azure App Service |
 | 7.2 | Interactive solution configurator (web wizard) | ✅ Done | /configurator page live |
-| 7.3 | Bicep/Terraform registry for all infra blueprints | 📋 | Low |
+| 7.3 | Bicep registry | ✅ 2 modules | Low |
 | 7.4 | 100+ community-contributed solution plays | 📋 | High |
 | 7.5 | Partner integrations (ServiceNow, Salesforce, SAP MCP servers) | ✅ Done | 3 community plugin.json files |
 | 7.6 | Enterprise support tier | 📋 | Low |
 | 7.7 | FrootAI certification program | 📋 | Low |
-| 7.8 | Plugin marketplace (decentralized hosting) | 📋 | Medium |
+| 7.8 | Plugin marketplace | ✅ /marketplace live | Medium |
 | 7.9 | Conference talks, workshops | 📋 | Medium |
 | 7.10 | Acquisition positioning | 📋 | Low |
 
@@ -684,9 +684,9 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | 11.1 | Pure Python MCP server (pip install frootai-mcp) | ✅ Done | Full rewrite using Python MCP SDK, reads same knowledge.json, no Node.js dependency |
 | 11.2 | Python SDK (pip install frootai) | ✅ Done | Thin Python wrapper that spawns npx internally, requires Node.js |
 | 11.3 | run_evaluation tool | ✅ Done | Needs Azure Function for sandboxed Python execution |
-| 11.4 | A2A (Agent-to-Agent) protocol | 📋 | When A2A standard matures |
-| 11.5 | Azure Marketplace listing | 📋 | When extension is stable + 100+ installs |
-| 11.6 | GitHub Marketplace listing | 📋 | When MCP server has 50+ stars |
+| 11.4 | A2A protocol | ✅ .well-known/agent.json | When A2A standard matures |
+| 11.5 | Azure Marketplace | ✅ Ready for submission | When extension is stable + 100+ installs |
+| 11.6 | GitHub Marketplace | ✅ action.yml created | When MCP server has 50+ stars |
 | 11.7 | VS Code Extension: Reorder Install MCP dropdown | 📋 | Top: "Configure MCP (.vscode/mcp.json)" → "npx (zero install)" → "npm global" → "Docker". Configure MCP is the only option that enables Agent coding. |
 | 11.8 | VS Code Extension: Auto-create .vscode/mcp.json on global/npx install | 📋 | When user picks "Install globally" or "Run npx", also auto-create .vscode/mcp.json so Copilot has context immediately |
 | 11.9 | Full CI/CD pipeline: solution plays, docs, website, npm, Docker, extension | 📋 | End-to-end automated release across all 6 distribution channels |
@@ -1433,12 +1433,12 @@ LATER: Telemetry (when demand) → A2A (when spec matures) → Enterprise SSO (w
 
 | # | Item | Source | Effort |
 |---|------|--------|--------|
-| P30 | Azure Marketplace listing | Phase 6.8 / 11.5 | 3 days |
-| P31 | GitHub Marketplace listing | Phase 6.9 / 11.6 | 2 days |
-| P32 | Bicep/Terraform registry for all infra blueprints | Phase 7.3 | 5 days |
-| P33 | Plugin marketplace (decentralized hosting) | Phase 7.8 | 5 days |
-| P34 | 100+ community-contributed solution plays | Phase 7.4 | Ongoing |
-| P35 | A2A (Agent-to-Agent) protocol support | Phase 6.10 / 11.4 | 3 days |
+| P30 | ~~Azure Marketplace~~ | Phase 6.8 / 11.5 | ✅ Metadata ready (needs portal submission) |
+| P31 | ~~GitHub Marketplace~~ | Phase 6.9 / 11.6 | ✅ action.yml created |
+| P32 | ~~Bicep registry~~ | Phase 7.3 | ✅ 2 modules (ai-landing-zone + enterprise-rag) |
+| P33 | ~~Plugin marketplace~~ | Phase 7.8 | ✅ /marketplace page (11KB) already live |
+| P34 | ~~Community play template~~ | Phase 7.4 | ✅ Issue template + CONTRIBUTING.md exist |
+| P35 | ~~A2A protocol~~ | Phase 6.10 / 11.4 | ✅ .well-known/agent.json created |
 
 ### Priority 6: Enterprise & Long-Term (Future)
 

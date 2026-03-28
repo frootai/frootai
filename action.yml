@@ -1,0 +1,61 @@
+name: 'FrootAI MCP Server'
+description: 'Add AI architecture knowledge to your GitHub Actions workflow. 23 MCP tools, 20 solution plays, cost estimation, WAF validation.'
+author: 'Pavleen Bali'
+
+branding:
+  icon: 'cpu'
+  color: 'green'
+
+inputs:
+  command:
+    description: 'FrootAI CLI command to run (validate, cost, search, doctor)'
+    required: true
+    default: 'validate'
+  play:
+    description: 'Solution play ID for cost estimation (e.g. 01-enterprise-rag)'
+    required: false
+  scale:
+    description: 'Scale tier for cost estimation (dev or prod)'
+    required: false
+    default: 'dev'
+  waf:
+    description: 'Run WAF alignment check (true/false)'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Run FrootAI
+      shell: bash
+      run: |
+        npx frootai-mcp@latest &
+        sleep 2
+        
+        case "${{ inputs.command }}" in
+          validate)
+            if [ "${{ inputs.waf }}" = "true" ]; then
+              npx frootai validate --waf
+            else
+              npx frootai validate
+            fi
+            ;;
+          cost)
+            npx frootai cost ${{ inputs.play }} --scale ${{ inputs.scale }}
+            ;;
+          search)
+            npx frootai search "${{ inputs.play }}"
+            ;;
+          doctor)
+            npx frootai doctor
+            ;;
+          *)
+            echo "Unknown command: ${{ inputs.command }}"
+            exit 1
+            ;;
+        esac

@@ -1,0 +1,51 @@
+{
+  "name": "FrootAI",
+  "description": "AI architecture toolkit — 23 MCP tools, 20 solution plays, cost estimation, WAF validation. The open glue binding Infrastructure, Platform & Application teams.",
+  "url": "https://frootai.dev",
+  "version": "3.2.0",
+  "provider": {
+    "organization": "FrootAI",
+    "url": "https://frootai.dev"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "skills": [
+    {
+      "id": "search_knowledge",
+      "name": "Search AI Architecture Knowledge",
+      "description": "Full-text search across 16 FROOT modules (682KB) covering GenAI, RAG, Agents, Semantic Kernel, Infrastructure, Production Patterns"
+    },
+    {
+      "id": "estimate_cost",
+      "name": "Azure Cost Estimation",
+      "description": "Estimate monthly Azure costs for any of 20 solution plays at dev or prod scale"
+    },
+    {
+      "id": "validate_config",
+      "name": "Config Validation",
+      "description": "Validate AI config files (openai.json, guardrails.json) against best practices"
+    },
+    {
+      "id": "run_evaluation",
+      "name": "Quality Evaluation",
+      "description": "Check AI quality scores against thresholds with pass/fail and recommendations"
+    },
+    {
+      "id": "generate_architecture_diagram",
+      "name": "Architecture Diagram",
+      "description": "Generate Mermaid architecture diagrams for any of 20 solution plays"
+    },
+    {
+      "id": "semantic_search_plays",
+      "name": "Semantic Play Matching",
+      "description": "Describe your scenario in natural language, get matched to the best solution play"
+    }
+  ],
+  "authentication": {
+    "schemes": ["none"]
+  },
+  "defaultInputModes": ["text"],
+  "defaultOutputModes": ["text"]
+}
