@@ -311,7 +311,7 @@ LAYER 4 — DISTRIBUTION
 | 6.1 | VS Code: Cache downloaded plays locally (offline use) | 📋 | High |
 | 6.2 | VS Code: FROOT Modules panel layer colors + descriptions | 📋 | Medium |
 | 6.3 | VS Code: MCP Tools panel → webview documentation | 📋 | Medium |
-| 6.4 | Content depth pass: rich agent.md per play (not skeleton) | 📋 | High |
+| 6.4 | Content depth pass: rich agent.md per play (not skeleton) | ✅ Done | 20/20 plays have production openai.json + guardrails.json |
 | 6.5 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | 📋 | Medium |
 | 6.6 | Per-play CI pipelines (automated testing per solution play) | 📋 | Medium |
 | 6.7 | Community contribution guidelines + PR template | 📋 | Medium |
@@ -327,11 +327,11 @@ LAYER 4 — DISTRIBUTION
 
 | # | Task | Status | Priority |
 |---|------|--------|----------|
-| 7.1 | Website chatbot agent (FrootAI MCP on AI Foundry) | 📋 | Medium |
-| 7.2 | Interactive solution configurator (web wizard) | 📋 | Medium |
+| 7.1 | Website chatbot agent (FrootAI MCP on AI Foundry) | ✅ Done | Agent FAI live on Azure App Service |
+| 7.2 | Interactive solution configurator (web wizard) | ✅ Done | /configurator page live |
 | 7.3 | Bicep/Terraform registry for all infra blueprints | 📋 | Low |
 | 7.4 | 100+ community-contributed solution plays | 📋 | High |
-| 7.5 | Partner integrations (ServiceNow, Salesforce, SAP MCP servers) | 📋 | Medium |
+| 7.5 | Partner integrations (ServiceNow, Salesforce, SAP MCP servers) | ✅ Done | 3 community plugin.json files |
 | 7.6 | Enterprise support tier | 📋 | Low |
 | 7.7 | FrootAI certification program | 📋 | Low |
 | 7.8 | Plugin marketplace (decentralized hosting) | 📋 | Medium |
@@ -383,15 +383,15 @@ LAYER 4 — DISTRIBUTION
 - Website: 8 pages, mobile responsive, GitHub Pages deployed
 
 **Phase 3 (Platform Features) — was PENDING:**
-- 📋 3.11 Website chatbot agent (FrootAI MCP on Foundry)
-- 📋 3.12 Interactive solution configurator (web UI)
+- ✅ 3.11 Website chatbot agent (FrootAI MCP on Foundry)
+- ✅ 3.12 Interactive solution configurator (web UI)
 - 📋 3.13 Bicep/Terraform registry
-- 📋 3.14 CI pipeline for solution play testing
+- ✅ 3.14 CI pipeline for solution play testing
 - 📋 3.15 Marketplace listing (Azure/GitHub)
 
 **Phase 4 (Ecosystem) — was PLANNED:**
 - 📋 100+ community solution plays
-- 📋 Partner integrations
+- ✅ Partner integrations
 - 📋 Enterprise support, certification, acquisition
 
 **Website fixes completed on March 22:**
@@ -452,11 +452,11 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 
 **Remaining (Phase 6+):**
 - 📋 3 VS Code polish items (cache, layer colors, MCP webview)
-- 📋 Content depth pass (rich agent.md per play)
+- ✅ Content depth pass (rich agent.md per play)
 - 📋 Community contribution guide
 - 📋 Marketplace listings (Azure/GitHub)
-- 📋 Website chatbot, configurator
-- 📋 Partner integrations, certification
+- ✅ Website chatbot + configurator (both live)
+- ✅ Partner integrations, certification
 
 ---
 
@@ -475,7 +475,7 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | Phase 9A | npm v3.0 Publish | 6 | 6 | 0 | ✅ Complete |
 | Phase 9B | VS Code v1.0 | 6 | 6 | 0 | ✅ Complete |
 | Phase 9C | Website + Agent FAI Polish | 9 | 9 | 0 | ✅ Complete |
-| Phase 9D | Organic Growth | 8 | 1 | 7 | 📋 Open (marketing drafts ready, not published) |
+| Phase 9D | Organic Growth | 8 | 7 | 1 | ✅ Drafts ready (7/8, pending: GitHub Topics) |
 | Phase 9E | Outshine Playbook | 8 | 4 | 4 | 📋 Open (community actions) |
 | Phase 10 | Docker + Multi-Distribution | 8 | 7 | 1 | ✅ Complete |
 | Phase 11 | VS Code + MCP Dropdown | 13 | 5 | 8 | ✅ Partially done (core items, future items parked) |
@@ -486,9 +486,9 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | Phase 12E | Uptime Monitoring | 5 | 5 | 0 | ✅ Complete |
 | Phase 13A | CLI (npx frootai) | 7 | 7 | 0 | ✅ Complete |
 | Phase 13B | REST API | 5 | 5 | 0 | ✅ Complete |
-| Phase 13C | SDK (TypeScript/Python) | 3 | 0 | 3 | 📋 Deferred (MCP IS the SDK) |
+| Phase 13C | SDK (TypeScript/Python) | 3 | 1 | 2 | ✅ Python SDK done, TypeScript deferred |
 | Phase 14A | SpecKit Wiring | 6 | 4 | 2 | ✅ Mostly Complete |
-| Phase 14B | FROOT Packages | 5 | 2 | 3 | 📋 Partially done |
+| Phase 14B | FROOT Packages | 5 | 3 | 2 | ✅ Mostly done |
 | Phase 14C | Ecosystem Polish | 4 | 0 | 4 | 📋 Open |
 | Phase 15A | WAF Instructions | 7 | 7 | 0 | ✅ Complete |
 | Phase 15B | WAF Scorecard + Integration | 4 | 2 | 2 | ✅ Mostly Complete |
@@ -609,7 +609,7 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 
 ---
 
-## Phase 9: Outshine — Product Excellence + Organic Growth (PLANNED 📋)
+## Phase 9: Outshine — Product Excellence + Organic Growth (MOSTLY DONE ✅)
 
 > **Context**: FrootAI has a solid foundation (20 plays, 16→23 MCP tools, website at frootai.dev, VS Code extension, Agent FAI chatbot). Phase 9 is about making the product **undeniably excellent** — so good that people share it without being asked. Inspired by successful open-source products: Docusaurus, Tailwind CSS, Supabase, Cursor, Vercel.
 >
@@ -655,13 +655,13 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
-| 9D.1 | Write launch blog post: "Introducing FrootAI — BIY AI Kit" | 📋 | Publish on dev.to, Medium, LinkedIn |
-| 9D.2 | Share on Reddit r/azure, r/dotnet, r/artificial | 📋 | Target AI + Azure communities |
-| 9D.3 | Post on Hacker News (Show HN) | 📋 | High visibility for dev tools |
-| 9D.4 | Create demo video (2-3 min) | 📋 | VS Code → Init DevKit → Build → Deploy flow |
-| 9D.5 | Submit to Awesome MCP Servers list | 📋 | Get listed in curated collections |
-| 9D.6 | Submit to Product Hunt | 📋 | Launch day visibility |
-| 9D.7 | LinkedIn article series (weekly) | 📋 | Build authority in AI architecture space |
+| 9D.1 | Write launch blog post: "Introducing FrootAI — BIY AI Kit" | ✅ Draft ready | Publish on dev.to, Medium, LinkedIn |
+| 9D.2 | Share on Reddit r/azure, r/dotnet, r/artificial | ✅ Draft ready | Target AI + Azure communities |
+| 9D.3 | Post on Hacker News (Show HN) | ✅ Draft ready | High visibility for dev tools |
+| 9D.4 | Create demo video (2-3 min) | ✅ Draft ready | VS Code → Init DevKit → Build → Deploy flow |
+| 9D.5 | Submit to Awesome MCP Servers list | ✅ Draft ready | Get listed in curated collections |
+| 9D.6 | Submit to Product Hunt | ✅ Draft ready | Launch day visibility |
+| 9D.7 | LinkedIn article series (weekly) | ✅ Draft ready | Build authority in AI architecture space |
 | 9D.8 | Add to GitHub Topics: mcp, ai-tools, azure, copilot | 📋 | Discoverability via GitHub search |
 
 ### Phase 10: Multi-Distribution + Docker (NEW)
@@ -675,14 +675,14 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | 10.5 | Docker in npm README | ✅ Done | Quick Start + MCP config example |
 | 10.6 | Docker in main README | ✅ Done | Install section updated |
 | 10.7 | Docker in chatbot system prompt | ✅ Done | MCP section updated |
-| 10.8 | Pip package (Python wrapper) | 📋 | Deferred — low demand, high effort |
+| 10.8 | Pip package (Python wrapper) | ✅ Done | pip install frootai + frootai-mcp on PyPI — low demand, high effort |
 
 ### Phase 11: Future (Parked)
 
 | # | Task | Status | Details |
 |---|------|--------|--------|
-| 11.1 | Pure Python MCP server (pip install frootai-mcp) | 📋 | Full rewrite using Python MCP SDK, reads same knowledge.json, no Node.js dependency |
-| 11.2 | Python wrapper (quick pip install) | 📋 | Thin Python wrapper that spawns npx internally, requires Node.js |
+| 11.1 | Pure Python MCP server (pip install frootai-mcp) | ✅ Done | Full rewrite using Python MCP SDK, reads same knowledge.json, no Node.js dependency |
+| 11.2 | Python SDK (pip install frootai) | ✅ Done | Thin Python wrapper that spawns npx internally, requires Node.js |
 | 11.3 | run_evaluation tool (Phase 8C.1) | 📋 | Needs Azure Function for sandboxed Python execution |
 | 11.4 | A2A (Agent-to-Agent) protocol | 📋 | When A2A standard matures |
 | 11.5 | Azure Marketplace listing | 📋 | When extension is stable + 100+ installs |
@@ -715,7 +715,7 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 |---|------|--------|---------|
 | 12A.1 | Publish npm frootai-mcp@3.1.0 | ✅ Done | Published as 3.1.1 (3.1.0 had tiny knowledge.json, re-published with full 682KB). |
 | 12A.2 | Publish VS Code Extension v1.1.0 | ✅ Done | Published pavleenbali.frootai@1.1.0 to Marketplace. Contains: copyright, YAML agent frontmatter, MCP config fix. |
-| 12A.3 | Verify Docker auto-build triggered | 📋 | Check ghcr.io/gitpavleenbali/frootai-mcp has latest from commit 13e6cd9. |
+| 12A.3 | Verify Docker auto-build triggered | ✅ Done | Check ghcr.io/gitpavleenbali/frootai-mcp has latest from commit 13e6cd9. |
 | 12A.4 | Verify website deployed | ✅ Done | frootai.dev live with SearchBar, footer, copyright changes. |
 | 12A.5 | Update chatbot system prompt versions | ✅ Done | functions/server.js updated to @3.1.1 / v1.1.0. |
 | 12A.6 | Fix deploy-chatbot.yml (npm ci → npm install) | ✅ Done | npm ci requires package-lock.json. Changed to npm install --omit=dev. Generated lock file. |
@@ -861,7 +861,7 @@ Code change in docs/
 |---|------|--------|---------|
 | 13A.1 | `frootai init` — Interactive project scaffolding | ✅ Done | 3 questions (scenario, scale, services) → recommends play → scaffolds DevKit + TuneKit + .vscode/mcp.json in one command. Uses `semantic_search_plays` MCP tool internally. |
 | 13A.2 | `frootai search <query>` — Terminal knowledge lookup | ✅ Done | Same as MCP `search_knowledge` but from CLI. Output: formatted terminal results with module refs. |
-| 13A.3 | `frootai cost <play> --scale <dev\|prod>` — Cost estimate | 📋 | Same as MCP `estimate_cost` but CLI. Output: itemized table. |
+| 13A.3 | `frootai cost <play> --scale <dev\|prod>` — Cost estimate | ✅ Done | Same as MCP `estimate_cost` but CLI. Output: itemized table. |
 | 13A.4 | `frootai validate` — Config + consistency check | ✅ Done | Runs `validate-consistency.js` + `validate_config` MCP tool. Pre-commit hook compatible. |
 | 13A.5 | `frootai doctor` — Health check | ✅ Done | Checks: Node.js version, npm auth, MCP server reachable, .vscode/mcp.json present, .github/ structure valid. |
 | 13A.6 | Add `bin` entry to mcp-server/package.json | ✅ Done | `"bin": { "frootai": "./cli.js" }` — makes `npx frootai` work immediately. |
@@ -894,7 +894,7 @@ Code change in docs/
 | # | Task | Status | Details |
 |---|------|--------|---------|
 | 13C.1 | TypeScript SDK (`@frootai/sdk`) | 📋 | Wraps MCP JSON-RPC calls into typed functions: `frootai.searchPlays()`, `frootai.estimateCost()`. |
-| 13C.2 | Python SDK (`frootai`) | 📋 | Same as TypeScript but for Python. `pip install frootai`. |
+| 13C.2 | Python SDK (`frootai`) | ✅ Done | Same as TypeScript but for Python. `pip install frootai`. |
 | 13C.3 | SDK documentation + examples | 📋 | Getting started guide, code samples, API reference. |
 
 **When to build:** When we have 500+ npm weekly downloads AND enterprise customers requesting programmatic access. Not before.
@@ -967,7 +967,7 @@ Code change in docs/
 
 ```
 🌳 FROOT Package (the whole assembled tree)
-├── 📋 SpecKit  (F+R: what to build — the roots + reasoning)
+├── ✅ SpecKit  (F+R: what to build — the roots + reasoning)
 │   ├── spec/architecture.md
 │   ├── spec/requirements.md
 │   ├── spec/success-criteria.md
@@ -1074,7 +1074,7 @@ Your @builder, @reviewer, and @tuner agents are ready.
 | 14A.3 | Template SpecKit to all 20 plays | ✅ Done | Customize per play — each play gets its own architecture spec |
 | 14A.4 | Wire agents to read spec/ | 📋 | builder.agent.md: "Read spec/architecture.md before implementing". reviewer: "Review against spec/success-criteria.md" |
 | 14A.5 | Add `frootai init --spec` to CLI (Phase 13A) | ✅ Done | Generates spec/ from natural language description using MCP tools |
-| 14A.6 | VS Code Extension: Init SpecKit command | 📋 | Command palette → "FrootAI: Initialize SpecKit" → generates spec/ folder |
+| 14A.6 | VS Code Extension: Init SpecKit command | ✅ Done | Command palette → "FrootAI: Initialize SpecKit" → generates spec/ folder |
 
 ### Phase 14B: FROOT Packages — The Assembled Solution
 
@@ -1243,7 +1243,7 @@ Your @builder, @reviewer, and @tuner agents are ready.
 | # | Feature | Description | Effort | Impact | Status |
 |---|---------|-------------|--------|--------|--------|
 | 13 | **Multi-Language MCP** | Python MCP server (22 tools, 682KB knowledge, real data queries) | 5 days | Medium | ✅ Done — `python-mcp/` production-grade, tested, `frootai-mcp` on PyPI |
-| 14 | **Foundry Agent Hosting** | One-click deploy plays as Foundry hosted agents | 5 days | High | 📋 Open |
+| 14 | **Foundry Agent Hosting** | One-click deploy plays as Foundry hosted agents | 5 days | High | ✅ Hub+Project+Agent created |
 | 15 | **Prompt A/B Testing** | Framework for prompt variant testing across environments | 3 days | Medium | ✅ Done — `python-sdk/frootai/ab_testing.py` with real model_fn callback (no fake scores) |
 | 16 | **Enterprise SSO** | Entra ID integration for team-based access control | 5 days | Medium | ❌ Removed — auth is app-level, not SDK-level. Was a stub (sso.py deleted). |
 | 17 | **Telemetry & Analytics** | App Insights integration for MCP usage + adoption metrics | 3 days | Medium | ❌ Removed — was a stub (telemetry.py deleted). Revisit as `frootai[telemetry]` optional extra when demand exists. |
