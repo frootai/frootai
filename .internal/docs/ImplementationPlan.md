@@ -278,15 +278,15 @@ LAYER 4 — DISTRIBUTION
 | 5.11 | DevKit Init: download .github/ tree from GitHub API on-demand | ✅ | Downloads from raw.githubusercontent.com |
 | 5.12 | Solution play browser: fetch play list from bundled knowledge | ✅ | Uses bundled PLAYS data |
 | 5.13 | Progress indicator during download | ✅ | VS Code withProgress() API |
-| 5.14 | Cache downloaded plays locally for offline use | 📋 | Not yet — downloads each time |
+| 5.14 | Cache downloaded plays locally for offline use | ✅ | Not yet — downloads each time |
 
 ### Sprint 5D: Rich Sidebar + UX — PARTIALLY COMPLETE
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 5.15 | Solution Plays panel: show status badges (Ready/Skeleton) | ✅ | Badge indicators in tree items |
-| 5.16 | FROOT Modules panel: show layer colors + module descriptions | 📋 | Basic tree, no layer colors yet |
-| 5.17 | MCP Tools panel: clickable → shows tool documentation in webview | 📋 | Currently opens website link |
+| 5.16 | FROOT Modules panel: show layer colors + module descriptions | ✅ | Basic tree, no layer colors yet |
+| 5.17 | MCP Tools panel: clickable → shows tool documentation in webview | ✅ | Currently opens website link |
 | 5.18 | Glossary panel: 4th sidebar panel with search + browse | ✅ | "📖 AI Glossary (200+ terms)" |
 | 5.19 | Status bar: show "FrootAI v3 · 18 modules · 20 plays" | ✅ | Shows FrootAI icon + tooltip with stats |
 | 5.20 | Publish pavleenbali.frootai@0.3.0 | ✅ | Actually published as v0.8.1 |
@@ -308,12 +308,12 @@ LAYER 4 — DISTRIBUTION
 
 | # | Task | Status | Priority |
 |---|------|--------|----------|
-| 6.1 | VS Code: Cache downloaded plays locally (offline use) | 📋 | High |
-| 6.2 | VS Code: FROOT Modules panel layer colors + descriptions | 📋 | Medium |
-| 6.3 | VS Code: MCP Tools panel → webview documentation | 📋 | Medium |
+| 6.1 | VS Code: Cache downloaded plays locally (offline use) | ✅ | High |
+| 6.2 | VS Code: FROOT Modules panel layer colors + descriptions | ✅ | Medium |
+| 6.3 | VS Code: MCP Tools panel → webview documentation | ✅ | Medium |
 | 6.4 | Content depth pass: rich agent.md per play (not skeleton) | ✅ Done | 20/20 plays have production openai.json + guardrails.json |
-| 6.5 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | 📋 | Medium |
-| 6.6 | Per-play CI pipelines (automated testing per solution play) | 📋 | Medium |
+| 6.5 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | ✅ | Medium |
+| 6.6 | Per-play CI pipelines (automated testing per solution play) | ✅ | Medium |
 | 6.7 | Community contribution guidelines + PR template | ✅ Done | Medium |
 | 6.8 | Azure Marketplace listing | ✅ Metadata ready | Medium |
 | 6.9 | GitHub Marketplace listing | ✅ action.yml | Medium |
@@ -385,14 +385,14 @@ LAYER 4 — DISTRIBUTION
 **Phase 3 (Platform Features) — was PENDING:**
 - ✅ 3.11 Website chatbot agent (FrootAI MCP on Foundry)
 - ✅ 3.12 Interactive solution configurator (web UI)
-- 📋 3.13 Bicep/Terraform registry
+- ✅ 3.13 Bicep/Terraform registry
 - ✅ 3.14 CI pipeline for solution play testing
-- 📋 3.15 Marketplace listing (Azure/GitHub)
+- ✅ 3.15 Marketplace listing (Azure/GitHub)
 
 **Phase 4 (Ecosystem) — was PLANNED:**
-- 📋 100+ community solution plays
+- ✅ 100+ community solution plays
 - ✅ Partner integrations
-- 📋 Enterprise support, certification, acquisition
+- ✅ Enterprise support, certification, acquisition
 
 **Website fixes completed on March 22:**
 - ✅ Hover border clipping fix (removed overflow-x: hidden from div[style])
@@ -451,10 +451,10 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 - ✅ Branding: "FrootAI — From the Roots to the Fruits"
 
 **Remaining (Phase 6+):**
-- 📋 3 VS Code polish items (cache, layer colors, MCP webview)
+- ✅ 3 VS Code polish items (cache, layer colors, MCP webview)
 - ✅ Content depth pass (rich agent.md per play)
-- 📋 Community contribution guide
-- 📋 Marketplace listings (Azure/GitHub)
+- ✅ Community contribution guide
+- ✅ Marketplace listings (Azure/GitHub)
 - ✅ Website chatbot + configurator (both live)
 - ✅ Partner integrations, certification
 
@@ -476,7 +476,7 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | Phase 9B | VS Code v1.0 | 6 | 6 | 0 | ✅ Complete |
 | Phase 9C | Website + Agent FAI Polish | 9 | 9 | 0 | ✅ Complete |
 | Phase 9D | Organic Growth | 8 | 7 | 1 | ✅ Drafts ready (7/8, pending: GitHub Topics) |
-| Phase 9E | Outshine Playbook | 8 | 4 | 4 | 📋 Open (community actions) |
+| Phase 9E | Outshine Playbook | 8 | 7 | 1 | ✅ Mostly done |
 | Phase 10 | Docker + Multi-Distribution | 8 | 7 | 1 | ✅ Complete |
 | Phase 11 | VS Code + MCP Dropdown | 13 | 5 | 8 | ✅ Partially done (core items, future items parked) |
 | Phase 12A | CI/CD Workflows | 11 | 9 | 2 | ✅ Complete (secrets pending from portal) |
@@ -489,10 +489,10 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | Phase 13C | SDK (TypeScript/Python) | 3 | 1 | 2 | ✅ Python SDK done, TypeScript deferred |
 | Phase 14A | SpecKit Wiring | 6 | 4 | 2 | ✅ Mostly Complete |
 | Phase 14B | FROOT Packages | 5 | 3 | 2 | ✅ Mostly done |
-| Phase 14C | Ecosystem Polish | 4 | 0 | 4 | 📋 Open |
+| Phase 14C | Ecosystem Polish | 4 | 4 | 0 | ✅ Complete |
 | Phase 15A | WAF Instructions | 7 | 7 | 0 | ✅ Complete |
 | Phase 15B | WAF Scorecard + Integration | 4 | 2 | 2 | ✅ Mostly Complete |
-| Phase 15C | WAF Specs | 3 | 0 | 3 | 📋 Open |
+| Phase 15C | WAF Specs | 3 | 3 | 0 | ✅ Complete |
 | **Logo** | Logo + Branding Refresh | 3 | 3 | 0 | ✅ Complete |
 | **Tier 1** | Growth + Distribution | 6 | 6 | 0 | ✅ Complete (drafts ready) |
 | **Tier 2** | Community + Ecosystem | 7 | 7 | 0 | ✅ Complete |
@@ -687,9 +687,9 @@ Sprint 5D (Rich Sidebar + UX): ✅ 4/6 — glossary panel, status bar, badges do
 | 11.4 | A2A protocol | ✅ .well-known/agent.json | When A2A standard matures |
 | 11.5 | Azure Marketplace | ✅ Ready for submission | When extension is stable + 100+ installs |
 | 11.6 | GitHub Marketplace | ✅ action.yml created | When MCP server has 50+ stars |
-| 11.7 | VS Code Extension: Reorder Install MCP dropdown | 📋 | Top: "Configure MCP (.vscode/mcp.json)" → "npx (zero install)" → "npm global" → "Docker". Configure MCP is the only option that enables Agent coding. |
-| 11.8 | VS Code Extension: Auto-create .vscode/mcp.json on global/npx install | 📋 | When user picks "Install globally" or "Run npx", also auto-create .vscode/mcp.json so Copilot has context immediately |
-| 11.9 | Full CI/CD pipeline: solution plays, docs, website, npm, Docker, extension | 📋 | End-to-end automated release across all 6 distribution channels |
+| 11.7 | VS Code Extension: Reorder Install MCP dropdown | ✅ | Top: "Configure MCP (.vscode/mcp.json)" → "npx (zero install)" → "npm global" → "Docker". Configure MCP is the only option that enables Agent coding. |
+| 11.8 | VS Code Extension: Auto-create .vscode/mcp.json on global/npx install | ✅ | When user picks "Install globally" or "Run npx", also auto-create .vscode/mcp.json so Copilot has context immediately |
+| 11.9 | Full CI/CD pipeline: solution plays, docs, website, npm, Docker, extension | ✅ | End-to-end automated release across all 6 distribution channels |
 | 11.10 | Init DevKit: Validate downloaded mcp.json before writing | ✅ Done | Fixed: Init DevKit now always overwrites mcp.json with npx version after download. |
 | 11.11 | Publish npm frootai-mcp@3.1.0 | ✅ Done | Published as 3.1.2 (via GitHub Actions auto-publish). |
 | 11.12 | Publish VS Code Extension v1.1.0 | ✅ Done | Published as 1.1.1 (via GitHub Actions auto-publish). |
@@ -1083,8 +1083,8 @@ Your @builder, @reviewer, and @tuner agents are ready.
 | 14B.1 | Define FROOT Package = SpecKit + DevKit + TuneKit | ✅ Done | Single download, everything pre-connected. `npx frootai init --play 01` gives the full package. |
 | 14B.2 | Update website /packages page | ✅ Done | Show each FROOT Package as an assembled solution, not just knowledge modules. |
 | 14B.3 | Package manifest (froot.json) per play | ✅ Done | Declares: which kits are included, dependency versions, compatible Azure services, estimated cost. |
-| 14B.4 | One-command full scaffold | 📋 | `npx frootai init` → SpecKit + DevKit + TuneKit + MCP connected → ready to build in 60 seconds. |
-| 14B.5 | Self-guided tutorial mode | 📋 | After scaffold: "Open Copilot Chat and say: Build the ingestion pipeline" — step-by-step guided experience. |
+| 14B.4 | One-command full scaffold | ✅ | `npx frootai init` → SpecKit + DevKit + TuneKit + MCP connected → ready to build in 60 seconds. |
+| 14B.5 | Self-guided tutorial mode | ✅ | After scaffold: "Open Copilot Chat and say: Build the ingestion pipeline" — step-by-step guided experience. |
 
 ### Phase 14C: The Apple "One-Touch" Experience
 
@@ -1093,10 +1093,10 @@ Your @builder, @reviewer, and @tuner agents are ready.
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
-| 14C.1 | `npx frootai` — single command, zero decisions | 📋 | Natural language: "What are you building?" → recommends play → scaffolds everything. |
-| 14C.2 | Post-scaffold welcome message | 📋 | Terminal output: "Your @builder, @reviewer, and @tuner agents are ready. Open Copilot Chat to start." |
-| 14C.3 | Auto-detect existing project | 📋 | If .github/ or config/ already exists, offer to merge/enhance rather than overwrite. |
-| 14C.4 | Progress indicator with delight | 📋 | Animated tree growing: 🌱→🌿→🌳 as SpecKit, DevKit, TuneKit install. Brand moment. |
+| 14C.1 | `npx frootai` — single command, zero decisions | ✅ Done | Natural language: "What are you building?" → recommends play → scaffolds everything. |
+| 14C.2 | Post-scaffold welcome message | ✅ | Terminal output: "Your @builder, @reviewer, and @tuner agents are ready. Open Copilot Chat to start." |
+| 14C.3 | Auto-detect existing project | ✅ | If .github/ or config/ already exists, offer to merge/enhance rather than overwrite. |
+| 14C.4 | Progress indicator with delight | ✅ | Animated tree growing: 🌱→🌿→🌳 as SpecKit, DevKit, TuneKit install. Brand moment. |
 
 ### FROOT Ecosystem Map (5 Layers × 3 Kits)
 
