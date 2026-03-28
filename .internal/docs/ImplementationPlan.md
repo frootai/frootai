@@ -1370,3 +1370,81 @@ LATER: Telemetry (when demand) → A2A (when spec matures) → Enterprise SSO (w
 | **Phase B: Depth (Next 2 Weeks)** | Product quality | pytest suite for Python SDK. LLM-as-judge evaluation. Live Azure Pricing API. Rich README per play. |
 | **Phase C: Enterprise (Next Month)** | Enterprise features | Foundry hosted agent live. Telemetry (OpenTelemetry). A/B testing with Azure OpenAI integration. |
 | **Phase D: Community (Ongoing)** | Ecosystem growth | Community plugin real integrations. 100+ GitHub stars. Partner workshops. Conference talks. |
+
+
+---
+
+## PENDING — Future Sprints (All 📋 Items Consolidated)
+
+> All genuinely pending items from across the plan, organized by priority.
+> These items were scattered throughout Phases 5-15. Now consolidated here for easy sprint planning.
+> **Total: 55 items remaining.**
+
+### Priority 1: Quick Wins (Can Do This Week)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P1 | Add GitHub Secrets (NPM_TOKEN, VSCE_PAT, PYPI_TOKEN) | Phase 12A.7 | 10 min |
+| P2 | Re-run failed GitHub Actions (#1, #2, #3) | Phase 12A.11 | 5 min |
+| P3 | Add to GitHub Topics: mcp, ai-tools, azure, copilot | Phase 9D.8 | 5 min |
+
+### Priority 2: VS Code Extension Polish (Next Sprint)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P4 | Cache downloaded plays locally for offline use | Phase 5.14 / 6.1 | 2 hours |
+| P5 | FROOT Modules panel: show layer colors + descriptions | Phase 5.16 / 6.2 | 2 hours |
+| P6 | MCP Tools panel: clickable → shows tool docs in webview | Phase 5.17 / 6.3 | 3 hours |
+| P7 | VS Code: Reorder Install MCP dropdown | Phase 11.7 | 30 min |
+| P8 | VS Code: Auto-create .vscode/mcp.json on npx install | Phase 11.8 | 1 hour |
+| P9 | MCP Server auto-restart / health check | Phase 11.13 | 2 hours |
+
+### Priority 3: Product Depth (This Month)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P10 | Wire agents to read spec/ (builder reads architecture.md) | Phase 14A.4 | 2 hours |
+| P11 | @tuner agent reads WAF scorecard | Phase 15B.3 | 1 hour |
+| P12 | WAF badges on website play cards | Phase 15B.4 | 3 hours |
+| P13 | SpecKit template includes WAF section per pillar | Phase 15C.1 | 2 hours |
+| P14 | @builder reads WAF requirements before implementing | Phase 15C.2 | 1 hour |
+| P15 | @reviewer reviews against WAF checklist | Phase 15C.3 | 1 hour |
+| P16 | Package manifest (froot.json) per play | Phase 14B.3 | 3 hours |
+| P17 | Community contribution guidelines + PR template | Phase 6.7 | 2 hours |
+
+### Priority 4: Platform Features (Next Month)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P18 | MCP Server v2.2: Real AI ecosystem live tools (model catalog, pricing) | Phase 6.5 | 3 days |
+| P19 | Per-play CI pipelines (automated testing per play) | Phase 6.6 | 3 days |
+| P20 | Full CI/CD pipeline: all 6 distribution channels | Phase 11.9 | 5 days |
+| P21 | run_evaluation tool (sandboxed Python execution) | Phase 11.3 | 5 days |
+| P22 | One-command full scaffold (npx frootai init → everything) | Phase 14B.4 | 2 days |
+| P23 | Self-guided tutorial mode after scaffold | Phase 14B.5 | 2 days |
+| P24 | Post-scaffold welcome message | Phase 14C.2 | 1 hour |
+| P25 | Auto-detect existing project (merge vs overwrite) | Phase 14C.3 | 3 hours |
+| P26 | Progress indicator with delight (tree animation) | Phase 14C.4 | 2 hours |
+| P27 | Natural language init ("What are you building?") | Phase 14C.1 | 3 days |
+| P28 | TypeScript SDK (@frootai/sdk) | Phase 13C.1 | 5 days |
+| P29 | SDK documentation + examples | Phase 13C.3 | 2 days |
+
+### Priority 5: Ecosystem & Growth (Next Quarter)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P30 | Azure Marketplace listing | Phase 6.8 / 11.5 | 3 days |
+| P31 | GitHub Marketplace listing | Phase 6.9 / 11.6 | 2 days |
+| P32 | Bicep/Terraform registry for all infra blueprints | Phase 7.3 | 5 days |
+| P33 | Plugin marketplace (decentralized hosting) | Phase 7.8 | 5 days |
+| P34 | 100+ community-contributed solution plays | Phase 7.4 | Ongoing |
+| P35 | A2A (Agent-to-Agent) protocol support | Phase 6.10 / 11.4 | 3 days |
+
+### Priority 6: Enterprise & Long-Term (Future)
+
+| # | Item | Source | Effort |
+|---|------|--------|--------|
+| P36 | Enterprise support tier | Phase 7.6 | Ongoing |
+| P37 | FrootAI certification program | Phase 7.7 | Ongoing |
+| P38 | Conference talks, workshops | Phase 7.9 | Ongoing |
+| P39 | Acquisition positioning | Phase 7.10 | Ongoing |
