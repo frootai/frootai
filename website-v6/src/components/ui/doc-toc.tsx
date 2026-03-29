@@ -38,21 +38,29 @@ export function DocTableOfContents() {
 
       // Keep active TOC item centered in the sidebar
       let lastActive = "";
+      let scrollTimer: ReturnType<typeof setTimeout> | null = null;
       const centerActive = () => {
-        const container = document.querySelector(".js-toc-scroll") as HTMLElement;
-        const active = document.querySelector(".js-toc .toc-active") as HTMLElement;
-        if (!container || !active) return;
-        if (active.textContent === lastActive) return;
-        lastActive = active.textContent || "";
-        const containerH = container.clientHeight;
-        const activeTop = active.offsetTop;
-        const activeH = active.offsetHeight;
-        const target = activeTop - containerH / 2 + activeH / 2;
-        container.scrollTo({ top: target, behavior: "smooth" });
+        if (scrollTimer) clearTimeout(scrollTimer);
+        // Delay to let tocbot finish DOM updates
+        scrollTimer = setTimeout(() => {
+          const container = document.querySelector(".js-toc-scroll") as HTMLElement;
+          const active = container?.querySelector(".toc-active") as HTMLElement;
+          if (!container || !active) return;
+          const id = active.getAttribute("href") || "";
+          if (id === lastActive) return;
+          lastActive = id;
+          // Calculate position to center active item
+          const containerH = container.clientHeight;
+          const activePos = active.offsetTop - container.offsetTop;
+          const target = activePos - containerH / 2 + active.offsetHeight / 2;
+          container.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+        }, 50);
       };
-      const onScroll = () => requestAnimationFrame(centerActive);
-      window.addEventListener("scroll", onScroll, { passive: true });
-      (window as any).__tocCleanup = () => window.removeEventListener("scroll", onScroll);
+      window.addEventListener("scroll", centerActive, { passive: true });
+      (window as any).__tocCleanup = () => {
+        window.removeEventListener("scroll", centerActive);
+        if (scrollTimer) clearTimeout(scrollTimer);
+      };
     };
 
     // Wait for article headings to render
@@ -102,7 +110,7 @@ export function DocTableOfContents() {
             <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald mb-2">On this page</p>
             <div className="h-px bg-gradient-to-r from-emerald/20 via-border to-transparent" />
           </div>
-          <div className="js-toc js-toc-scroll overflow-y-auto overscroll-contain p-2 pt-1 flex-1" />
+          <div className="js-toc js-toc-scroll overflow-y-auto overscroll-contain p-2 pt-1 flex-1 relative" />
         </div>
       </aside>
 
