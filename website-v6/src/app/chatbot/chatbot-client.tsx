@@ -216,7 +216,12 @@ export function ChatbotClient() {
       {/* Ambient glow */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse,rgba(245,158,11,0.06),transparent_70%)]" />
 
-      {/* ═══ HERO HEADER — hidden on mobile so chat is immediately visible ═══ */}
+      {/* ═══ MOBILE COMPACT TITLE ═══ */}
+      <div className="sm:hidden text-center mb-3 relative z-10">
+        <h1 className="text-2xl font-extrabold tracking-tight text-gradient-gold">✨ Agent FAI</h1>
+      </div>
+
+      {/* ═══ DESKTOP HERO HEADER ═══ */}
       <div className="text-center mb-4 sm:mb-6 relative z-10 hidden sm:block">
         <div className="inline-block px-3.5 py-1 rounded-full border border-amber/25 bg-amber/8 text-[11px] text-amber font-bold uppercase tracking-wider mb-3">
           Powered by Azure OpenAI GPT-4.1
@@ -234,10 +239,10 @@ export function ChatbotClient() {
       </div>
 
       {/* ═══ CHAT CONTAINER (glassmorphism) ═══ */}
-      <div className="glass rounded-3xl overflow-hidden shadow-2xl shadow-black/30 flex flex-col min-h-[520px] border border-amber/10">
+      <div className="glass rounded-3xl overflow-hidden shadow-2xl shadow-black/30 flex flex-col min-h-[420px] sm:min-h-[520px] border border-amber/10 isolate">
 
-        {/* Messages area */}
-        <div ref={chatRef} className="flex-1 px-5 py-5 overflow-y-auto max-h-[600px] space-y-4" style={{ scrollBehavior: "auto" }}>
+        {/* Messages area — scroll-isolated */}
+        <div ref={chatRef} className="flex-1 px-5 py-5 overflow-y-auto max-h-[60vh] sm:max-h-[600px] space-y-4 overscroll-contain" style={{ scrollBehavior: "auto" }}>
           {history.map((m, i) => (
             <div key={i} className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
               {/* Assistant avatar */}

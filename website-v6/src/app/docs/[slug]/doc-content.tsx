@@ -38,13 +38,16 @@ function preprocessContent(raw: string): string {
   // Strip YAML frontmatter
   content = content.replace(/^---[\s\S]*?---\n*/m, "");
 
-  // Convert Docusaurus admonitions: :::type Title\ncontent\n:::
+  // Convert Docusaurus admonitions to blockquote-based markers
+  // :::type Title\ncontent\n::: → > [!type] Title\n> content
+  // This keeps everything in pure markdown so remark-gfm tables aren't broken
   content = content.replace(
     /^:::(\w+)\s*(.*)\n([\s\S]*?)\n^:::\s*$/gm,
     (_match, type, title, body) => {
-      const escapedTitle = (title || "").trim().replace(/"/g, "&quot;");
-      const trimmedBody = body.trim();
-      return `<div data-admonition="${type}" data-title="${escapedTitle}">\n\n${trimmedBody}\n\n</div>`;
+      const titleText = (title || "").trim();
+      const prefix = `> **[${type.toUpperCase()}]${titleText ? ` ${titleText}` : ""}**\n`;
+      const bodyLines = body.trim().split("\n").map((l: string) => `> ${l}`).join("\n");
+      return `${prefix}>\n${bodyLines}`;
     }
   );
 
@@ -72,8 +75,39 @@ const components: Record<string, React.FC<any>> = {
   ul: ({ children }: any) => <ul className="my-3 pl-5 space-y-1 list-disc">{children}</ul>,
   ol: ({ children }: any) => <ol className="my-3 pl-5 space-y-1 list-decimal">{children}</ol>,
   li: ({ children }: any) => <li className="text-[14px] leading-relaxed text-fg-muted">{children}</li>,
-  blockquote: ({ children }: any) => <blockquote className="my-4 border-l-3 border-amber pl-4 text-fg-muted italic bg-amber/[0.03] rounded-r-lg py-2 pr-3">{children}</blockquote>,
-  code: ({ children, className }: any) => {
+  blockquote: ({ children }: any) => {
+    // Detect admonition blockquotes: first child is a <p> with <strong>[TYPE] Title</strong>
+    const firstChild = Array.isArray(children) ? children.find((c: any) => c?.type === "p" || c?.props?.children) : null;
+    const firstText = firstChild?.props?.children;
+    // Check for [TYPE] pattern in the strong element
+    let admonType = "";
+    let admonTitle = "";
+    if (firstText) {
+      const strongEl = Array.isArray(firstText) ? firstText.find((c: any) => c?.type === "strong" || c?.props?.children) : firstText;
+      const strongText = typeof strongEl?.props?.children === "string" ? strongEl.props.children : "";
+      const match = strongText.match(/^\[(\w+)\]\s*(.*)/);
+      if (match) {
+        admonType = match[1].toLowerCase();
+        admonTitle = match[2] || admonType.charAt(0).toUpperCase() + admonType.slice(1);
+      }
+    }
+    if (admonType && ADMONITION_STYLES[admonType]) {
+      const style = ADMONITION_STYLES[admonType];
+      // Remove the first paragraph (the [TYPE] Title marker)
+      const rest = Array.isArray(children) ? children.filter((_: any, i: number) => i !== children.indexOf(firstChild)) : children;
+      return (
+        <div className={`my-4 rounded-xl border-l-4 ${style.border} ${style.bg} px-4 py-3`}>
+          <div className={`flex items-center gap-2 font-bold text-[13px] ${style.titleColor} mb-1`}>
+            {style.icon}
+            {admonTitle}
+          </div>
+          <div className="text-[13px] leading-[1.7] text-fg-muted [&>p]:my-1">{rest}</div>
+        </div>
+      );
+    }
+    return <blockquote className="my-4 border-l-3 border-amber pl-4 text-fg-muted italic bg-amber/[0.03] rounded-r-lg py-2 pr-3">{children}</blockquote>;
+  },
+  code: ({ children, className, node }: any) => {
     const lang = className?.replace("language-", "") || "";
     const text = typeof children === "string" ? children : String(children || "");
 
@@ -82,25 +116,22 @@ const components: Record<string, React.FC<any>> = {
       return <MermaidDiagram chart={text} />;
     }
 
-    const isBlock = className?.includes("language-");
-    return isBlock ? (
-      <pre className="my-4 rounded-xl border border-border bg-[#0a0a14] p-4 overflow-x-auto text-[12.5px] leading-[1.7] font-mono max-h-[500px] overflow-y-auto">
-        {lang && <span className="block text-[10px] text-fg-dim uppercase tracking-wider mb-2 pb-1 border-b border-border-subtle">{lang}</span>}
-        <code>{children}</code>
-      </pre>
-    ) : (
+    // Block code: has a language class OR parent is <pre>
+    const isBlock = className?.includes("language-") || node?.position;
+    if (isBlock && (lang || text.includes("\n"))) {
+      return (
+        <pre className="my-4 rounded-xl border border-border bg-[#0a0a14] p-4 overflow-x-auto text-[12.5px] leading-[1.7] font-mono max-h-[500px] overflow-y-auto overscroll-contain">
+          {lang && <span className="block text-[10px] text-fg-dim uppercase tracking-wider mb-2 pb-1 border-b border-border-subtle">{lang}</span>}
+          <code>{children}</code>
+        </pre>
+      );
+    }
+
+    return (
       <code className="rounded bg-indigo/10 px-1.5 py-0.5 text-[13px] text-indigo font-mono">{children}</code>
     );
   },
   pre: ({ children }: any) => <>{children}</>,
-  // Admonition divs — rendered from preprocessed :::type blocks
-  div: ({ children, ...props }: any) => {
-    const admonitionType = props["data-admonition"];
-    if (admonitionType) {
-      return <Admonition type={admonitionType} title={props["data-title"] || ""}>{children}</Admonition>;
-    }
-    return <div {...props}>{children}</div>;
-  },
   // Details/Summary for expandable sections
   details: ({ children }: any) => (
     <details className="my-4 rounded-xl border border-border bg-bg-surface/50 overflow-hidden">
