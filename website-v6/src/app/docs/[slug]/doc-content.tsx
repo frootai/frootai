@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import { MermaidDiagram } from "@/components/ui/mermaid-diagram";
 import { AlertTriangle, Info, Lightbulb, MessageCircleWarning, Flame } from "lucide-react";
 
@@ -51,6 +50,16 @@ function preprocessContent(raw: string): string {
     }
   );
 
+  // Convert <details><summary>...</summary>...</details> to a markdown-friendly format
+  // Replace with a blockquote marker that our component can detect
+  content = content.replace(
+    /<details>\s*<summary>(.*?)<\/summary>([\s\S]*?)<\/details>/gi,
+    (_match, summary, body) => {
+      const trimmedBody = body.trim();
+      return `> **[DETAILS] ${summary.trim()}**\n>\n${trimmedBody.split('\n').map((l: string) => `> ${l}`).join('\n')}`;
+    }
+  );
+
   return content;
 }
 
@@ -90,6 +99,15 @@ const components: Record<string, React.FC<any>> = {
         admonType = match[1].toLowerCase();
         admonTitle = match[2] || admonType.charAt(0).toUpperCase() + admonType.slice(1);
       }
+    }
+    if (admonType && admonType === "details") {
+      const rest = Array.isArray(children) ? children.filter((_: any, i: number) => i !== children.indexOf(firstChild)) : children;
+      return (
+        <details className="my-4 rounded-xl border border-border bg-bg-surface/50 overflow-hidden">
+          <summary className="px-4 py-3 text-[13px] font-semibold text-fg cursor-pointer hover:bg-bg-hover transition-colors select-none">{admonTitle}</summary>
+          <div className="px-4 pb-3 text-[13px] leading-[1.7] text-fg-muted [&>p]:my-1">{rest}</div>
+        </details>
+      );
     }
     if (admonType && ADMONITION_STYLES[admonType]) {
       const style = ADMONITION_STYLES[admonType];
@@ -132,17 +150,6 @@ const components: Record<string, React.FC<any>> = {
     );
   },
   pre: ({ children }: any) => <>{children}</>,
-  // Details/Summary for expandable sections
-  details: ({ children }: any) => (
-    <details className="my-4 rounded-xl border border-border bg-bg-surface/50 overflow-hidden">
-      {children}
-    </details>
-  ),
-  summary: ({ children }: any) => (
-    <summary className="px-4 py-3 text-[13px] font-semibold text-fg cursor-pointer hover:bg-bg-hover transition-colors select-none">
-      {children}
-    </summary>
-  ),
   table: ({ children }: any) => (
     <div className="my-4 overflow-x-auto rounded-xl border border-border">
       <table className="w-full text-[13px] leading-relaxed border-collapse">{children}</table>
@@ -160,7 +167,7 @@ export function DocContent({ content }: { content: string }) {
   const processed = useMemo(() => preprocessContent(content), [content]);
   return (
     <article className="max-w-none">
-      <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
+      <Markdown remarkPlugins={[remarkGfm]} components={components}>
         {processed}
       </Markdown>
     </article>
