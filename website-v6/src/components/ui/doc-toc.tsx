@@ -35,6 +35,24 @@ export function DocTableOfContents() {
       });
 
       setReady(true);
+
+      // Keep active TOC item centered in the sidebar
+      let lastActive = "";
+      const centerActive = () => {
+        const container = document.querySelector(".js-toc-scroll") as HTMLElement;
+        const active = document.querySelector(".js-toc .toc-active") as HTMLElement;
+        if (!container || !active) return;
+        if (active.textContent === lastActive) return;
+        lastActive = active.textContent || "";
+        const containerH = container.clientHeight;
+        const activeTop = active.offsetTop;
+        const activeH = active.offsetHeight;
+        const target = activeTop - containerH / 2 + activeH / 2;
+        container.scrollTo({ top: target, behavior: "smooth" });
+      };
+      const onScroll = () => requestAnimationFrame(centerActive);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      (window as any).__tocCleanup = () => window.removeEventListener("scroll", onScroll);
     };
 
     // Wait for article headings to render
@@ -43,6 +61,7 @@ export function DocTableOfContents() {
     return () => {
       clearTimeout(timer);
       tocbotInstance?.destroy();
+      (window as any).__tocCleanup?.();
     };
   }, []);
 
