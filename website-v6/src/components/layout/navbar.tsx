@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Sparkles, Settings, Target, Package, Link2, Monitor, Plug, Zap, Container, ClipboardList, Handshake, Store, Leaf, BarChart3, BookOpen, FileText, Languages, ClipboardCheck, Wrench, ListChecks, Radio, Activity, Newspaper, Hand, type LucideIcon } from "lucide-react";
-import { SearchFAI } from "@/components/layout/search-fai";
+import { Menu, X, ChevronDown, Sparkles, Settings, Target, Package, Link2, Monitor, Plug, Zap, Container, ClipboardList, Handshake, Store, Leaf, BarChart3, BookOpen, FileText, Languages, ClipboardCheck, Wrench, ListChecks, Radio, Activity, Newspaper, Hand, Search, type LucideIcon } from "lucide-react";
+import { SearchFAI, SearchFAIPanel } from "@/components/layout/search-fai";
 
 const menus = [
   { label: "FAI Platform", items: [
@@ -78,6 +78,17 @@ function DesktopDropdown({ label, items }: { label: string; items: { href: strin
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border-subtle bg-bg/80 backdrop-blur-2xl">
@@ -108,10 +119,21 @@ export function Navbar() {
           </a>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="lg:hidden p-2 text-fg-muted hover:text-fg cursor-pointer" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Mobile quick-access icons + hamburger */}
+        <div className="lg:hidden flex items-center gap-0.5">
+          <Link href="/hi-fai" className="nav-accent-emerald p-2 rounded-lg text-emerald transition-all duration-200" aria-label="Hi FAI">
+            <Hand className="h-5 w-5" />
+          </Link>
+          <Link href="/chatbot" className="nav-accent-amber p-2 rounded-lg text-amber transition-all duration-200" aria-label="Agent FAI">
+            <Sparkles className="h-5 w-5" />
+          </Link>
+          <button className="nav-accent-indigo p-2 rounded-lg text-indigo transition-all duration-200 cursor-pointer" onClick={() => { setMobileOpen(false); setMobileSearchOpen(true); }} aria-label="Search">
+            <Search className="h-5 w-5" />
+          </button>
+          <button className="p-2 text-fg-muted hover:text-fg cursor-pointer" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -119,11 +141,11 @@ export function Navbar() {
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: "calc(100dvh - 4rem)" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-border-subtle bg-bg/95 backdrop-blur-2xl overflow-hidden"
+            className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 border-t border-border-subtle bg-bg/95 backdrop-blur-2xl overflow-hidden"
           >
-            <div className="max-h-[75vh] overflow-y-auto p-4 space-y-4">
+            <div className="h-full overflow-y-auto p-4 space-y-4 pb-24">
               {menus.map((m) => (
                 <div key={m.label}>
                   <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-fg-dim mb-1.5 px-1">{m.label}</p>
@@ -143,8 +165,25 @@ export function Navbar() {
                   className="nav-accent-emerald flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-emerald transition-all duration-200"><Hand className="h-4 w-4" /> Hi FAI</Link>
                 <Link href="/chatbot" onClick={() => setMobileOpen(false)}
                   className="nav-accent-amber flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-amber transition-all duration-200"><Sparkles className="h-4 w-4" /> Agent FAI</Link>
+                <button onClick={() => { setMobileOpen(false); setMobileSearchOpen(true); }}
+                  className="nav-accent-indigo flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-indigo transition-all duration-200 w-full text-left cursor-pointer"><Search className="h-4 w-4" /> Search FAI</button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile search overlay — directly shows the search panel */}
+      <AnimatePresence>
+        {mobileSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 z-[100] flex items-start justify-center pt-20"
+          >
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileSearchOpen(false)} />
+            <SearchFAIPanel onClose={() => setMobileSearchOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>

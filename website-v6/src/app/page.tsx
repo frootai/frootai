@@ -133,13 +133,13 @@ export default function Home() {
   return (
     <>
       {/* ═══ 1. HERO ═══ */}
-      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden pt-4 pb-4">
+      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden pt-4 sm:pt-4 pb-4">
         <div className="pointer-events-none absolute inset-0 opacity-[0.03]"
           style={{ backgroundImage: "radial-gradient(var(--fg) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
         <div className="relative z-10 mx-auto max-w-3xl px-4 text-center">
           <FadeIn>
-            <div className="animate-float mx-auto mb-4">
+            <div className="animate-float mx-auto mb-4 mt-8 sm:mt-0">
               <img src="/img/frootai-mark.svg" alt="FrootAI" width={160} height={160} className="mx-auto" />
             </div>
           </FadeIn>
@@ -168,14 +168,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══ DIVIDER ═══ */}
-      <div className="relative py-2">
-        <div className="mx-auto max-w-4xl px-8">
-          <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-        </div>
-      </div>
-
       <div className="mx-auto max-w-6xl px-4 lg:px-6 pb-24 space-y-10">
+        {/* ═══ DIVIDER ═══ */}
+        <div className="mx-auto max-w-4xl px-8"><div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" /></div>
+
         {/* ═══ 2. ECOSYSTEM GRID ═══ */}
         <section>
           <FadeIn><h2 className="text-2xl font-bold text-center tracking-tight mb-1">FAI Ecosystem</h2>
@@ -192,18 +188,6 @@ export default function Home() {
             ))}
           </StaggerChildren>
         </section>
-
-        {/* ═══ 3. STATS BAR ═══ */}
-        <FadeIn>
-          <div className="flex justify-center gap-10 sm:gap-16 flex-wrap">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-3xl font-extrabold tabular-nums" style={{ color: s.color }}>{s.num}</div>
-                <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-fg-dim">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
 
         {/* ═══ 4. FROOT FRAMEWORK ═══ */}
         <div className="mx-auto max-w-4xl px-8"><div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" /></div>

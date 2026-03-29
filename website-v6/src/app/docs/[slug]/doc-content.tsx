@@ -2,6 +2,7 @@
 
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { MermaidDiagram } from "@/components/ui/mermaid-diagram";
 
 // Generate anchor ID from heading text (matches search index toHash)
 function toId(children: React.ReactNode): string {
@@ -26,6 +27,14 @@ const components: Record<string, React.FC<any>> = {
   li: ({ children }: any) => <li className="text-[14px] leading-relaxed text-fg-muted">{children}</li>,
   blockquote: ({ children }: any) => <blockquote className="my-4 border-l-3 border-amber pl-4 text-fg-muted italic bg-amber/[0.03] rounded-r-lg py-2 pr-3">{children}</blockquote>,
   code: ({ children, className }: any) => {
+    const lang = className?.replace("language-", "") || "";
+    const text = typeof children === "string" ? children : String(children || "");
+
+    // Mermaid diagrams
+    if (lang === "mermaid") {
+      return <MermaidDiagram chart={text} />;
+    }
+
     const isBlock = className?.includes("language-");
     return isBlock ? (
       <pre className="my-4 rounded-xl border border-border bg-bg/80 p-4 overflow-x-auto text-[13px] leading-relaxed"><code>{children}</code></pre>

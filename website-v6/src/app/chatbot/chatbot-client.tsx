@@ -212,7 +212,7 @@ export function ChatbotClient() {
   const followUps = lastAssistant ? getFollowUps(lastAssistant.text) : [];
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 relative">
+    <div className="mx-auto max-w-3xl px-4 py-12 relative overflow-x-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse,rgba(245,158,11,0.06),transparent_70%)]" />
 
@@ -301,7 +301,7 @@ export function ChatbotClient() {
               t.style.height = "auto";
               t.style.height = Math.min(t.scrollHeight, 160) + "px";
             }}
-            placeholder="Ask anything... (Shift+Enter for new line)"
+            placeholder="Ask anything..."
             rows={1}
             disabled={loading}
             className="flex-1 rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3 text-[14px] text-fg outline-none transition-colors duration-200 focus:border-amber/30 focus:bg-white/[0.06] resize-none overflow-hidden min-h-[48px] max-h-[160px] leading-relaxed placeholder:text-fg-dim font-sans"

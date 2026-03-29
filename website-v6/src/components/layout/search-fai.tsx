@@ -72,6 +72,19 @@ function doSearch(query: string, index: IndexEntry[]): SearchResult[] {
 
 export function SearchFAI() {
   const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}
+        className="nav-accent-indigo px-3 py-1.5 rounded-lg text-[13px] font-medium text-indigo whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5">
+        <Search className="h-3.5 w-3.5" /> Search FAI
+      </button>
+      {open && <SearchFAIPanel onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
+export function SearchFAIPanel({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [index, setIndex] = useState<IndexEntry[]>([]);
@@ -79,33 +92,18 @@ export function SearchFAI() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Load index on first open
-  const loadIndex = useCallback(async () => {
-    if (index.length > 0) return index;
-    setLoading(true);
-    try {
-      const res = await fetch("/search-index.json");
-      const data: IndexEntry[] = await res.json();
-      setIndex(data);
+  // Load index on mount
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/search-index.json");
+        const data: IndexEntry[] = await res.json();
+        setIndex(data);
+      } catch { /* ignore */ }
       setLoading(false);
-      return data;
-    } catch {
-      setLoading(false);
-      return [];
-    }
-  }, [index]);
-
-  const handleOpen = useCallback(async () => {
-    setOpen(true);
-    const idx = await loadIndex();
-    setTimeout(() => inputRef.current?.focus(), 100);
-    return idx;
-  }, [loadIndex]);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-    setQuery("");
-    setResults([]);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    })();
   }, []);
 
   const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,87 +114,70 @@ export function SearchFAI() {
     }
   }, [index]);
 
-  // Close on Escape or outside click
+  // Close on Escape
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
-    const onClick = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) handleClose();
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onClick);
-    return () => { document.removeEventListener("keydown", onKey); document.removeEventListener("mousedown", onClick); };
-  }, [open, handleClose]);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
-    <>
-      <button onClick={handleOpen}
-        className="nav-accent-indigo px-3 py-1.5 rounded-lg text-[13px] font-medium text-indigo whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5">
-        <Search className="h-3.5 w-3.5" /> Search FAI
-      </button>
+    <div ref={panelRef}
+      className="relative w-full max-w-lg mx-4 rounded-2xl border border-indigo/20 bg-[#0b0b14]/98 backdrop-blur-2xl shadow-2xl shadow-black/50 overflow-hidden"
+      style={{ animation: "searchDropIn 0.15s ease-out" }}>
 
-      {open && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
-          <div ref={panelRef}
-            className="relative w-full max-w-lg mx-4 rounded-2xl border border-indigo/20 bg-[#0b0b14]/98 backdrop-blur-2xl shadow-2xl shadow-black/50 overflow-hidden"
-            style={{ animation: "searchDropIn 0.15s ease-out" }}>
+      {/* Input */}
+      <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border-subtle">
+        <Search className="h-4 w-4 text-indigo shrink-0" />
+        <input ref={inputRef} type="text" value={query} onChange={handleInput}
+          placeholder="Search FrootAI..."
+          className="flex-1 bg-transparent text-sm text-fg outline-none placeholder:text-fg-dim" />
+        <button onClick={onClose} className="text-fg-dim hover:text-fg cursor-pointer"><X className="h-4 w-4" /></button>
+      </div>
 
-            {/* Input */}
-            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border-subtle">
-              <Search className="h-4 w-4 text-indigo shrink-0" />
-              <input ref={inputRef} type="text" value={query} onChange={handleInput}
-                placeholder="Search FrootAI..."
-                className="flex-1 bg-transparent text-sm text-fg outline-none placeholder:text-fg-dim" />
-              <button onClick={handleClose} className="text-fg-dim hover:text-fg cursor-pointer"><X className="h-4 w-4" /></button>
-            </div>
+      {/* Content */}
+      <div className="max-h-[380px] overflow-y-auto">
+        {loading && (
+          <div className="px-4 py-8 text-center text-[13px] text-fg-dim">Loading search index...</div>
+        )}
 
-            {/* Content */}
-            <div className="max-h-[380px] overflow-y-auto">
-              {loading && (
-                <div className="px-4 py-8 text-center text-[13px] text-fg-dim">Loading search index...</div>
-              )}
-
-              {!loading && query.length === 0 && (
-                <div className="px-4 py-3">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-fg-dim mb-2">Try searching for</p>
-                  {SUGGESTIONS.map((s) => (
-                    <Link key={s.label} href={s.href} onClick={handleClose}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-fg-muted hover:text-fg hover:bg-bg-hover transition-colors">
-                      <span className="h-2 w-2 rounded-full bg-amber shrink-0" />
-                      {s.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              {!loading && query.length > 0 && results.length === 0 && (
-                <div className="px-4 py-8 text-center text-[13px] text-fg-dim">No results for &ldquo;{query}&rdquo;</div>
-              )}
-
-              {results.length > 0 && (
-                <div className="px-2 py-2">
-                  {results.map((r, i) => (
-                    <Link key={`${r.url}-${i}`} href={r.url} onClick={handleClose}
-                      className="nav-item-hover block px-3 py-2.5 rounded-lg transition-all duration-200 group">
-                      <div className="flex items-center gap-2">
-                        <Search className="nav-icon h-3 w-3 text-indigo shrink-0 opacity-60 transition-colors duration-200" />
-                        <span className="text-[13px] font-medium text-fg group-hover:text-white transition-colors">{r.title}</span>
-                      </div>
-                      {r.parent && (
-                        <span className="ml-5 text-[11px] text-fg-muted">{r.parent}</span>
-                      )}
-                      {r.excerpt && (
-                        <p className="ml-5 mt-0.5 text-[11px] text-fg-muted leading-relaxed line-clamp-2">{r.excerpt}</p>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+        {!loading && query.length === 0 && (
+          <div className="px-4 py-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-fg-dim mb-2">Try searching for</p>
+            {SUGGESTIONS.map((s) => (
+              <Link key={s.label} href={s.href} onClick={onClose}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-fg-muted hover:text-fg hover:bg-bg-hover transition-colors">
+                <span className="h-2 w-2 rounded-full bg-amber shrink-0" />
+                {s.label}
+              </Link>
+            ))}
           </div>
-        </div>
-      )}
-    </>
+        )}
+
+        {!loading && query.length > 0 && results.length === 0 && (
+          <div className="px-4 py-8 text-center text-[13px] text-fg-dim">No results for &ldquo;{query}&rdquo;</div>
+        )}
+
+        {results.length > 0 && (
+          <div className="px-2 py-2">
+            {results.map((r, i) => (
+              <Link key={`${r.url}-${i}`} href={r.url} onClick={onClose}
+                className="nav-item-hover block px-3 py-2.5 rounded-lg transition-all duration-200 group">
+                <div className="flex items-center gap-2">
+                  <Search className="nav-icon h-3 w-3 text-indigo shrink-0 opacity-60 transition-colors duration-200" />
+                  <span className="text-[13px] font-medium text-fg group-hover:text-white transition-colors">{r.title}</span>
+                </div>
+                {r.parent && (
+                  <span className="ml-5 text-[11px] text-fg-muted">{r.parent}</span>
+                )}
+                {r.excerpt && (
+                  <p className="ml-5 mt-0.5 text-[11px] text-fg-muted leading-relaxed line-clamp-2">{r.excerpt}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
