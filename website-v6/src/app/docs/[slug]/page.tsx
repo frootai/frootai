@@ -41,28 +41,23 @@ export default async function DocSlugPage({ params }: { params: Promise<{ slug: 
   const title = slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <div className="mx-auto max-w-7xl px-4 lg:px-6 py-12 sm:py-16 overflow-x-hidden">
+    <div className="mx-auto max-w-4xl xl:max-w-5xl px-4 lg:px-6 xl:pr-64 py-12 sm:py-16 overflow-x-hidden">
       <div className="mb-4">
         <Link href="/docs" className="text-[12px] text-amber hover:underline font-medium">← Back to Knowledge Modules</Link>
       </div>
 
-      <div className="flex gap-8 items-start relative">
-        {/* Main content */}
-        <div className="flex-1 min-w-0 max-w-4xl">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-8">{title}</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight mb-8">{title}</h1>
 
-          <DocContent content={content} />
+      <DocContent content={content} />
 
-          <div className="mt-14 flex flex-wrap justify-center gap-2">
-            <GlowPill href="/docs" color="#f97316">All Modules</GlowPill>
-            <GlowPill href={`https://github.com/gitpavleenbali/frootai/blob/main/docs/${slug}.md`} color="#6366f1" external>Edit on GitHub</GlowPill>
-            <GlowPill href="/" color="#10b981">FrootAI</GlowPill>
-          </div>
-        </div>
-
-        {/* TOC sidebar (desktop: sticky right, mobile: floating button) */}
-        <DocTableOfContents />
+      <div className="mt-14 flex flex-wrap justify-center gap-2">
+        <GlowPill href="/docs" color="#f97316">All Modules</GlowPill>
+        <GlowPill href={`https://github.com/gitpavleenbali/frootai/blob/main/docs/${slug}.md`} color="#6366f1" external>Edit on GitHub</GlowPill>
+        <GlowPill href="/" color="#10b981">FrootAI</GlowPill>
       </div>
+
+      {/* TOC: fixed on desktop, floating button on mobile */}
+      <DocTableOfContents />
     </div>
   );
 }
