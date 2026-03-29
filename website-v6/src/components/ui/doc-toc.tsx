@@ -35,32 +35,7 @@ export function DocTableOfContents() {
       });
 
       setReady(true);
-
-      // Keep active TOC item centered in the sidebar
-      let lastActive = "";
-      let scrollTimer: ReturnType<typeof setTimeout> | null = null;
-      const centerActive = () => {
-        if (scrollTimer) clearTimeout(scrollTimer);
-        // Delay to let tocbot finish DOM updates
-        scrollTimer = setTimeout(() => {
-          const container = document.querySelector(".js-toc-scroll") as HTMLElement;
-          const active = container?.querySelector(".toc-active") as HTMLElement;
-          if (!container || !active) return;
-          const id = active.getAttribute("href") || "";
-          if (id === lastActive) return;
-          lastActive = id;
-          // Calculate position to center active item
-          const containerH = container.clientHeight;
-          const activePos = active.offsetTop - container.offsetTop;
-          const target = activePos - containerH / 2 + active.offsetHeight / 2;
-          container.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
-        }, 50);
-      };
-      window.addEventListener("scroll", centerActive, { passive: true });
-      (window as any).__tocCleanup = () => {
-        window.removeEventListener("scroll", centerActive);
-        if (scrollTimer) clearTimeout(scrollTimer);
-      };
+    };
     };
 
     // Wait for article headings to render
@@ -69,7 +44,6 @@ export function DocTableOfContents() {
     return () => {
       clearTimeout(timer);
       tocbotInstance?.destroy();
-      (window as any).__tocCleanup?.();
     };
   }, []);
 
@@ -106,11 +80,11 @@ export function DocTableOfContents() {
       {/* Desktop: fixed sidebar */}
       <aside className="hidden xl:block fixed top-28 right-[max(0.5rem,calc((100vw-82rem)/2))] w-64 z-30 max-h-[calc(100vh-8rem)]">
         <div className="rounded-xl border border-border-subtle/50 bg-bg-surface/60 backdrop-blur-xl flex flex-col max-h-[calc(100vh-8rem)]">
-          <div className="px-3 pt-3 pb-1 shrink-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald mb-2">On this page</p>
+          <div className="px-3 pt-4 pb-2 shrink-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald mb-3">On this page</p>
             <div className="h-px bg-gradient-to-r from-emerald/20 via-border to-transparent" />
           </div>
-          <div className="js-toc js-toc-scroll overflow-y-auto overscroll-contain p-2 pt-1 flex-1 relative" />
+          <div className="js-toc js-toc-scroll overflow-y-auto overscroll-contain p-2 pt-4 flex-1 relative" />
         </div>
       </aside>
 
