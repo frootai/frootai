@@ -42,6 +42,10 @@ function preprocessContent(raw: string): string {
     }
   }
 
+  // Strip manually-written "## Table of Contents" sections from markdown
+  // These exist in 6 docs and duplicate the auto-generated sidebar TOC
+  content = content.replace(/^## Table of Contents\n[\s\S]*?(?=\n## |\n---)/gm, "");
+
   // Convert Docusaurus admonitions to blockquote-based markers
   // :::type Title\ncontent\n::: → > [!type] Title\n> content
   // This keeps everything in pure markdown so remark-gfm tables aren't broken

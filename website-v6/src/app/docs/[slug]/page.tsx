@@ -5,6 +5,7 @@ import Link from "next/link";
 import { GlowPill } from "@/components/ui/glow-pill";
 import { DocContent } from "./doc-content";
 import { DocTableOfContents } from "@/components/ui/doc-toc";
+import { InPageToc } from "@/components/ui/in-page-toc";
 
 const docsDir = path.join(process.cwd(), "..", "docs");
 
@@ -46,7 +47,9 @@ export default async function DocSlugPage({ params }: { params: Promise<{ slug: 
         <Link href="/docs" className="text-[12px] text-amber hover:underline font-medium">← Back to Knowledge Modules</Link>
       </div>
 
-      <h1 className="text-3xl font-extrabold tracking-tight mb-8">{title}</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight mb-4">{title}</h1>
+
+      <InPageToc />
 
       <DocContent content={content} />
 
