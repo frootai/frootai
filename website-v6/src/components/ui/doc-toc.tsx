@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { List, X, ChevronRight } from "lucide-react";
 
 interface TocItem {
@@ -13,6 +13,16 @@ export function DocTableOfContents() {
   const [items, setItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const tocScrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll TOC sidebar to keep active item visible
+  useEffect(() => {
+    if (!activeId || !tocScrollRef.current) return;
+    const activeEl = tocScrollRef.current.querySelector(`[data-toc-id="${activeId}"]`);
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, [activeId]);
 
   // Extract headings from the rendered article
   useEffect(() => {
@@ -67,6 +77,7 @@ export function DocTableOfContents() {
           <a
             key={item.id}
             href={`#${item.id}`}
+            data-toc-id={item.id}
             onClick={() => setMobileOpen(false)}
             style={{ paddingLeft: `${indent + 12}px` }}
             className={`
@@ -97,7 +108,7 @@ export function DocTableOfContents() {
             <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald mb-2 px-0">On this page</p>
             <div className="h-px bg-gradient-to-r from-emerald/20 via-border to-transparent" />
           </div>
-          <div className="overflow-y-auto overscroll-contain p-3 pt-2">
+          <div ref={tocScrollRef} className="overflow-y-auto overscroll-contain p-3 pt-2">
             {tocContent}
           </div>
         </div>
