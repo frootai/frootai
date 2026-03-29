@@ -150,7 +150,6 @@ body {
 
 /* ── Glow card — subtle hover with gentle lift ── */
 .glow-card {
-  display: block;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 14px;
   background: var(--bg-surface);
@@ -159,9 +158,9 @@ body {
   cursor: pointer;
 }
 .glow-card:hover {
-  border-color: rgba(99, 102, 241, 0.25);
+  border-color: color-mix(in srgb, var(--glow, #6366f1) 30%, transparent);
   background: rgba(17, 17, 25, 0.9);
-  box-shadow: 0 0 16px rgba(99, 102, 241, 0.08), 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--glow, #6366f1) 12%, transparent), 0 4px 20px rgba(0, 0, 0, 0.25);
   transform: translateY(-2px);
   text-decoration: none !important;
 }

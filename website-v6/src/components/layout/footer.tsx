@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 const columns = [
   { title: "Explore", links: [
@@ -37,7 +36,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-1.5 font-bold text-[15px]">
-              <Image src="/img/frootai-logo.png" alt="FrootAI" width={32} height={32} className="rounded-sm" />
+              <img src="/img/frootai-mark.svg" alt="FrootAI" width={28} height={28} />
               <span>Froot<span className="text-emerald">AI</span></span>
             </Link>
             <p className="mt-3 text-[12px] text-fg-muted leading-relaxed max-w-[200px]">

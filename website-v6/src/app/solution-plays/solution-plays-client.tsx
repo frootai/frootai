@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Search, Mountain, Target, Phone, Ticket, FileText, Bot, MessageCircle, Shield, Settings, Microscope, DoorOpen, Image, Users, BarChart3, FileEdit, Smartphone, AlertTriangle, Brain, Wrench, Sliders, Ruler, type LucideIcon } from "lucide-react";
+import { ChevronRight, Search, Mountain, Target, Phone, Ticket, FileText, Bot, MessageCircle, Shield, Settings, Microscope, DoorOpen, Image, Users, BarChart3, FileEdit, Smartphone, AlertTriangle, Brain, Wrench, Sliders, Ruler, Factory, Package, Box, Layers, type LucideIcon } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
 import { Badge } from "@/components/ui/badge";
@@ -37,10 +37,145 @@ const plays = [
 
 const ghBase = "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/";
 
+/* ═══ ECOSYSTEM PANEL — expandable layers ═══ */
+
+function EcoLayer({ icon, name, tagline, color, borderColor, children, rounded }: {
+  icon: React.ReactNode; name: string; tagline: string; color: string; borderColor: string; children: React.ReactNode; rounded?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`border-2 ${borderColor} ${rounded || ""} transition-all duration-200 overflow-visible`} style={{ background: `${color}08` }}>
+      <button onClick={() => setOpen(!open)} className="w-full px-4 py-3 grid grid-cols-[auto_140px_1fr_auto] items-center gap-3 cursor-pointer">
+        {icon}
+        <h3 className="font-bold text-[12px] text-fg text-left whitespace-nowrap">{name}</h3>
+        <span className="text-[10px] text-fg/55 italic text-left truncate">{tagline}</span>
+        <ChevronRight className={`h-3 w-3 text-fg/40 shrink-0 transition-transform duration-200 ${open ? "rotate-90" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+            <div className="px-4 pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function EcosystemPanel() {
+  return (
+    <div className="mb-10 rounded-2xl border border-emerald/15 bg-gradient-to-b from-emerald/[0.02] to-transparent p-5">
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <img src="/img/frootai-mark.svg" alt="" className="h-5 w-5" />
+        <h2 className="font-extrabold text-[14px] tracking-wide">F<span className="text-emerald">AI</span> Ecosystem</h2>
+        <span className="text-[10px] text-fg/55 italic ml-1">the living system behind every play</span>
+      </div>
+
+      <div className="space-y-0">
+        {/* FROOT Toolkit */}
+        <EcoLayer icon={<Box className="h-4 w-4 text-indigo" />} name="FROOT Toolkit" tagline="Layer 3 — composable kits: build, tune, architect" color="#6366f1" borderColor="border-indigo/20 border-b-0" rounded="rounded-t-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2 mb-3">
+            <div className="rounded-lg border border-cyan/20 bg-cyan/[0.03] p-4 text-center">
+              <div className="text-[8px] font-bold text-cyan mb-1">Box 1</div>
+              <Wrench className="h-4 w-4 mx-auto mb-1.5 text-cyan" />
+              <div className="font-bold text-[11px] text-fg mb-1">DevKit</div>
+              <div className="text-[10px] text-fg/55 leading-relaxed">Your AI co-coder. agent.md gives Copilot solution context, infra/ deploys Bicep, MCP tools extend your agent, plugins add custom functions.</div>
+            </div>
+            <div className="rounded-lg border border-violet/20 bg-violet/[0.03] p-4 text-center">
+              <div className="text-[8px] font-bold text-violet mb-1">Box 2</div>
+              <Sliders className="h-4 w-4 mx-auto mb-1.5 text-violet" />
+              <div className="font-bold text-[11px] text-fg mb-1">TuneKit</div>
+              <div className="text-[10px] text-fg/55 leading-relaxed">AI config without being an AI specialist. config/*.json controls temperature, top-k, models. evaluation/ scores quality. Ship with confidence.</div>
+            </div>
+            <div className="rounded-lg border border-amber/20 bg-amber/[0.03] p-4 text-center">
+              <div className="text-[8px] font-bold text-amber mb-1">Box 3</div>
+              <Ruler className="h-4 w-4 mx-auto mb-1.5 text-amber" />
+              <div className="font-bold text-[11px] text-fg mb-1">SpecKit</div>
+              <div className="text-[10px] text-fg/55 leading-relaxed">Architecture blueprint. play-spec.json defines components, WAF alignment across all 6 pillars, and evaluation thresholds for production.</div>
+            </div>
+          </div>
+          <div className="text-center">
+            <span className="text-[10px] text-fg/50 italic"><Brain className="h-3 w-3 inline mr-0.5 text-indigo/60" />Agentic OS (.github) — instructions · agents · skills · hooks · workflows — woven into every kit</span>
+          </div>
+        </EcoLayer>
+
+        {/* FROOT Packages */}
+        <EcoLayer icon={<Package className="h-4 w-4 text-emerald" />} name="FROOT Packages" tagline="Layer 2 — install once, every kit arrives" color="#10b981" borderColor="border-emerald/20 border-b-0">
+          <div className="text-[10px] text-fg/55 text-center mb-3 leading-relaxed">
+            Every FROOT Package delivers the full Toolkit — DevKit, TuneKit, and SpecKit — through the channel you prefer. Install one package, get all three kits.
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <Link href="/vscode-extension" className="glow-card rounded-lg p-2 text-center" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+              <div className="font-bold text-[10px] text-fg">VS Code</div>
+              <div className="text-[9px] text-fg/45">Extension</div>
+            </Link>
+            <Link href="/mcp-tooling" className="glow-card rounded-lg p-2 text-center" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+              <div className="font-bold text-[10px] text-fg">MCP Server</div>
+              <div className="text-[9px] text-fg/45">npm install</div>
+            </Link>
+            <Link href="/docker" className="glow-card rounded-lg p-2 text-center" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+              <div className="font-bold text-[10px] text-fg">Docker</div>
+              <div className="text-[9px] text-fg/45">Container</div>
+            </Link>
+            <Link href="/cli" className="glow-card rounded-lg p-2 text-center" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+              <div className="font-bold text-[10px] text-fg">CLI</div>
+              <div className="text-[9px] text-fg/45">Terminal</div>
+            </Link>
+            <Link href="/marketplace" className="glow-card rounded-lg p-2 text-center" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+              <div className="font-bold text-[10px] text-fg">Marketplace</div>
+              <div className="text-[9px] text-fg/45">Discover</div>
+            </Link>
+          </div>
+          <div className="text-center mt-2">
+            <Link href="/setup-guide" className="glow-card inline-block rounded-lg px-3 py-1 text-[10px] text-emerald font-semibold" style={{ "--glow": "#10b981" } as React.CSSProperties}>Setup Guide →</Link>
+          </div>
+        </EcoLayer>
+
+        {/* FROOT Factory */}
+        <EcoLayer icon={<Factory className="h-4 w-4 text-amber" />} name="FROOT Factory" tagline="Layer 1 — the production engine" color="#f59e0b" borderColor="border-amber/20" rounded="rounded-b-xl">
+          <div className="text-[10px] text-fg/55 text-center leading-relaxed">
+            Where raw ideas become production AI — assembles Agentic OS primitives into a coherent system. You don&apos;t just get templates. You get the machine that makes them.
+          </div>
+        </EcoLayer>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ FLIP KIT CARD ═══ */
+
+function FlipKit({ icon, name, color, front, back }: { icon: React.ReactNode; name: string; color: string; front: string; back: string }) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <button
+      onClick={() => setFlipped(!flipped)}
+      className="glow-card rounded-xl p-3 text-center cursor-pointer min-h-[100px] flex flex-col items-center justify-center transition-all duration-300"
+      style={{ "--glow": color } as React.CSSProperties}
+    >
+      <AnimatePresence mode="wait">
+        {!flipped ? (
+          <motion.div key="front" initial={{ opacity: 0, rotateY: -90 }} animate={{ opacity: 1, rotateY: 0 }} exit={{ opacity: 0, rotateY: 90 }} transition={{ duration: 0.25 }}>
+            {icon}
+            <div className="font-bold text-[12px] text-fg mt-1.5">{name}</div>
+            <div className="text-[10px] text-fg/50 mt-0.5">{front}</div>
+          </motion.div>
+        ) : (
+          <motion.div key="back" initial={{ opacity: 0, rotateY: 90 }} animate={{ opacity: 1, rotateY: 0 }} exit={{ opacity: 0, rotateY: -90 }} transition={{ duration: 0.25 }}>
+            <div className="text-[11px] text-fg/60 leading-relaxed">{back}</div>
+            <div className="text-[9px] text-fg/30 mt-1.5 italic">tap to flip back</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
+
 /* ═══ PLAY CARD COMPONENT ═══ */
 
 function PlayCard({ play }: { play: typeof plays[0] }) {
   const [expanded, setExpanded] = useState(false);
+  const [kitOpen, setKitOpen] = useState(false);
   const isReady = play.status === "Ready";
 
   return (
@@ -56,59 +191,109 @@ function PlayCard({ play }: { play: typeof plays[0] }) {
             <Badge label={play.status} color={isReady ? "#10b981" : "#f59e0b"} />
             <Badge label={play.cx} color="#6366f1" />
             <Badge label="WAF-Aligned" color="#10b981" />
-            <Badge label="SpecKit" color="#f59e0b" />
           </div>
           <p className="text-[13px] text-fg-muted leading-relaxed mb-3">{play.desc}</p>
-          <div className="text-[12px] text-fg-dim space-y-1">
-            <div><span className="font-semibold text-fg-muted">Infra:</span> {play.infra}</div>
-            <div><span className="font-semibold text-fg-muted">Tuning:</span> {play.tune}</div>
+          <div className="text-[12px] text-fg/50 space-y-1">
+            <div><span className="font-semibold text-fg/70">Infra:</span> {play.infra}</div>
+            <div><span className="font-semibold text-fg/70">Tuning:</span> {play.tune}</div>
           </div>
         </div>
 
         {/* Right: action buttons */}
         <div className="flex sm:flex-col gap-2 flex-wrap sm:flex-nowrap shrink-0">
-          <a href={`${ghBase}${play.github}`} target="_blank" rel="noopener noreferrer"
-            className="rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center bg-gradient-to-r from-indigo to-violet text-white hover:opacity-90 transition-opacity">
-            GitHub
-          </a>
-          <a href={`${ghBase}${play.github}#-devkit--developer-velocity-ecosystem`} target="_blank" rel="noopener noreferrer"
-            className="rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center border border-cyan/30 text-cyan bg-cyan/5 hover:bg-cyan/10 transition-colors">
-            DevKit
-          </a>
-          <a href={`${ghBase}${play.github}#-tunekit--ai-fine-tuning-ecosystem`} target="_blank" rel="noopener noreferrer"
-            className="rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center border border-violet/30 text-violet bg-violet/5 hover:bg-violet/10 transition-colors">
-            TuneKit
-          </a>
-          <a href={`${ghBase}${play.github}#-speckit--architecture-specs`} target="_blank" rel="noopener noreferrer"
-            className="rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center border border-amber/30 text-amber bg-amber/5 hover:bg-amber/10 transition-colors">
-            SpecKit
-          </a>
+          <Link href={`/solution-plays/${play.github}`}
+            className="glow-card rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center bg-gradient-to-r from-emerald to-cyan text-white" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+            View Play
+          </Link>
           <Link href={`/user-guide?play=${play.id}`}
-            className="rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center border border-amber/30 text-amber bg-amber/5 hover:bg-amber/10 transition-colors">
+            className="glow-card rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center bg-gradient-to-r from-indigo to-violet text-white" style={{ "--glow": "#6366f1" } as React.CSSProperties}>
             User Guide
           </Link>
+          <a href={`${ghBase}${play.github}`} target="_blank" rel="noopener noreferrer"
+            className="glow-card rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center bg-gradient-to-r from-amber to-orange text-white" style={{ "--glow": "#f59e0b" } as React.CSSProperties}>
+            GitHub
+          </a>
         </div>
       </div>
 
-      {/* Expandable guide */}
-      <div className="mt-4 pt-3 border-t border-border">
+      {/* Expandable sections */}
+      <div className="mt-4 pt-3 border-t border-border flex flex-wrap gap-3">
+        {/* Quick Highlights */}
         <button onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald cursor-pointer hover:underline">
+          className="glow-card flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-emerald cursor-pointer" style={{ "--glow": "#10b981" } as React.CSSProperties}>
           <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-200 ${expanded ? "rotate-90" : ""}`} />
-          {expanded ? "Hide User Guide" : "Show User Guide"}
+          {expanded ? "Hide Highlights" : "Quick Highlights"}
         </button>
-        <AnimatePresence>
-          {expanded && (
-            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-              <div className="mt-3 rounded-xl bg-bg-elevated p-4 text-[12px] leading-relaxed font-mono text-fg-muted whitespace-pre-wrap">
-                {isReady ? `1. Clone repo → cd solution-plays/${play.github}\n2. Open in VS Code → Copilot is solution-aware (reads agent.md + copilot-instructions)\n3. MCP auto-connects via .vscode/mcp.json\n4. Build: Co-coder fills skeleton using DevKit context\n5. Tune: Review config/*.json → adjust knobs per your data\n6. Deploy: az deployment group create --template-file infra/main.bicep\n7. Evaluate: python evaluation/eval.py → verify quality targets\n8. Ship it.`
-                  : `Skeleton ready. DevKit + TuneKit files present.\nOpen in VS Code → co-coder fills implementation.`}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* FROOT Toolkit */}
+        <button onClick={() => setKitOpen(!kitOpen)}
+          className="glow-card flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-amber cursor-pointer" style={{ "--glow": "#f59e0b" } as React.CSSProperties}>
+          <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-200 ${kitOpen ? "rotate-90" : ""}`} />
+          {kitOpen ? "Close FROOT Toolkit" : "FROOT Toolkit"}
+        </button>
+        <span className="text-[10px] text-fg/40 italic self-center">→ delivered via</span>
+        {/* FROOT Packages */}
+        <Link href="/setup-guide" className="glow-card flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-emerald" style={{ "--glow": "#10b981" } as React.CSSProperties}>
+          <Package className="h-3.5 w-3.5" /> FROOT Packages
+        </Link>
       </div>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+            <div className="mt-3 rounded-xl bg-bg-elevated p-4 text-[12px] leading-relaxed text-fg/60 space-y-2">
+              <div className="font-semibold text-fg text-[13px] mb-1">{play.id} — {play.name}</div>
+              <div><span className="font-bold text-emerald">Infra:</span> {play.infra}</div>
+              <div><span className="font-bold text-cyan">Tuning:</span> {play.tune}</div>
+              <div className="pt-2 border-t border-border mt-2">
+                <span className="font-bold text-fg/70">Ships with:</span> FROOT Factory · FROOT Toolkit (DevKit + TuneKit + SpecKit) · FROOT Packages
+              </div>
+              <div className="text-[11px] text-fg/45 italic">
+                {isReady ? "Ready — clone → open in VS Code → Copilot is solution-aware → build → tune → deploy → evaluate" : "Skeleton ready — DevKit + TuneKit files present. Open in VS Code → co-coder fills implementation."}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {kitOpen && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+            <div className="mt-3 rounded-xl border border-amber/20 bg-amber/[0.02] p-4">
+              <div className="text-[11px] text-fg/50 text-center mb-3">
+                <span className="font-bold text-emerald">FROOT Toolkit</span> — composable kits for <span className="text-fg/70 font-semibold">{play.name}</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <FlipKit
+                  icon={<Wrench className="h-5 w-5 text-cyan" />}
+                  name="DevKit"
+                  color="#06b6d4"
+                  front="agent.md · infra/ · MCP · plugins"
+                  back={`Build ${play.name} with a solution-aware co-coder. Copilot reads agent.md for context-rich scaffolding.`}
+                />
+                <FlipKit
+                  icon={<Sliders className="h-5 w-5 text-violet" />}
+                  name="TuneKit"
+                  color="#8b5cf6"
+                  front="config/*.json · evaluation/ · models"
+                  back={`Tune ${play.name}: ${play.tune.split('·').slice(0, 2).join(' ·')}. No AI expertise needed.`}
+                />
+                <FlipKit
+                  icon={<Ruler className="h-5 w-5 text-amber" />}
+                  name="SpecKit"
+                  color="#f59e0b"
+                  front="play-spec.json · WAF · components"
+                  back={`Blueprint for ${play.name} — WAF-aligned, 6 pillars, eval thresholds.`}
+                />
+              </div>
+              <div className="mt-3 pt-2 border-t border-amber/10 text-center">
+                <div className="text-[10px] text-fg/50 italic">Install any FROOT Package to get all three kits · Assembled by the FROOT Factory</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -118,53 +303,27 @@ function PlayCard({ play }: { play: typeof plays[0] }) {
 export function SolutionPlaysClient() {
   return (
     <div className="mx-auto max-w-5xl px-4 lg:px-6 py-12 sm:py-16">
-      <SectionHeader
-        title="Solution Plays"
-        subtitle="Each play ships with the full .github Agentic OS (19 files, 4 layers), DevKit (empower your coding agent), TuneKit (fine-tune AI for production), SpecKit (architecture specs + WAF alignment), and plugin.json (Layer 4 distribution manifest)."
-      />
+      {/* ═══ HEADER ═══ */}
+      <FadeIn>
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <Layers className="h-7 w-7 text-emerald" />
+            <h1 className="text-3xl font-extrabold tracking-tight">
+              <span className="text-emerald">FAI</span> Solution Plays
+            </h1>
+          </div>
+          <div className="mx-auto max-w-xl rounded-2xl border border-emerald/20 bg-gradient-to-br from-emerald/[0.04] to-indigo/[0.02] px-6 py-4">
+            <p className="text-[13px] text-fg/60 leading-relaxed italic text-center">
+              &ldquo;From a single kit to a production solution — build AI the way you build with LEGO.&rdquo;
+            </p>
+          </div>
+        </div>
+      </FadeIn>
 
-      {/* 3 Explainer cards */}
-      <StaggerChildren className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <StaggerItem>
-          <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/[0.02] p-5 text-center">
-            <div className="flex justify-center mb-2"><Brain className="h-8 w-8 text-emerald-400" /></div>
-            <h3 className="font-extrabold text-sm mb-3">.github Agentic OS</h3>
-            <div className="text-left text-[12px] leading-relaxed text-fg-muted space-y-1">
-              <div><span className="font-bold text-emerald">Layer 1</span> — Instructions (always-on context)</div>
-              <div><span className="font-bold text-emerald">Layer 2</span> — Prompts, Agents, Skills</div>
-              <div><span className="font-bold text-emerald">Layer 3</span> — Hooks + Workflows (CI/CD)</div>
-              <div><span className="font-bold text-emerald">Layer 4</span> — Plugin packaging</div>
-            </div>
-            <p className="mt-3 text-[11px] text-fg-dim italic">19 files per play · 7 primitives · 4 layers</p>
-          </div>
-        </StaggerItem>
-        <StaggerItem>
-          <div className="rounded-2xl border-2 border-cyan/20 bg-cyan/[0.02] p-5 text-center">
-            <div className="flex justify-center mb-2"><Wrench className="h-8 w-8 text-cyan-400" /></div>
-            <h3 className="font-extrabold text-sm mb-3">DevKit — Build + Deploy</h3>
-            <div className="text-left text-[12px] leading-relaxed text-fg-muted space-y-1">
-              <div><span className="font-bold text-cyan">agent.md</span> — solution-aware co-coder</div>
-              <div><span className="font-bold text-cyan">instructions</span> — prompts, guardrails</div>
-              <div><span className="font-bold text-cyan">infra/</span> — Bicep IaC templates</div>
-              <div><span className="font-bold text-cyan">MCP + plugins</span> — tools + functions</div>
-            </div>
-            <p className="mt-3 text-[11px] text-fg-dim italic">Code + infrastructure in one kit.</p>
-          </div>
-        </StaggerItem>
-        <StaggerItem>
-          <div className="rounded-2xl border-2 border-violet/20 bg-violet/[0.02] p-5 text-center">
-            <div className="flex justify-center mb-2"><Sliders className="h-8 w-8 text-violet-400" /></div>
-            <h3 className="font-extrabold text-sm mb-3">TuneKit — AI Fine-Tuning</h3>
-            <div className="text-left text-[12px] leading-relaxed text-fg-muted space-y-1">
-              <div><span className="font-bold text-violet">config/*.json</span> — temp, top-k, models</div>
-              <div><span className="font-bold text-violet">agents.json</span> — agent behavior tuning</div>
-              <div><span className="font-bold text-violet">model-comparison</span> — cost vs quality</div>
-              <div><span className="font-bold text-violet">evaluation/</span> — test + score + ship</div>
-            </div>
-            <p className="mt-3 text-[11px] text-fg-dim italic">Tune AI without being an AI specialist.</p>
-          </div>
-        </StaggerItem>
-      </StaggerChildren>
+      {/* ═══ FAI ECOSYSTEM ═══ */}
+      <FadeIn delay={0.1}>
+        <EcosystemPanel />
+      </FadeIn>
 
       {/* 20 Play cards */}
       <div className="space-y-4">
@@ -173,6 +332,14 @@ export function SolutionPlaysClient() {
             <PlayCard play={play} />
           </FadeIn>
         ))}
+      </div>
+
+      {/* Closing statement */}
+      <div className="mt-12 text-center">
+        <p className="text-[10px] text-fg/50">Powered by the <span className="font-bold text-emerald/70">FAI Ecosystem</span></p>
+        <p className="text-[10px] text-fg/40 mt-1 leading-relaxed max-w-md mx-auto">
+          These plays are examples — not limits. The same Toolkit, Packages, and Factory that built them are yours to remix, extend, or use to create entirely new solutions.
+        </p>
       </div>
 
       {/* Bottom nav */}

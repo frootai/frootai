@@ -9,12 +9,12 @@ import { SearchFAI } from "@/components/layout/search-fai";
 
 const menus = [
   { label: "FAI Platform", items: [
-    { href: "/configurator", label: "Solution Configurator", Icon: Settings },
-    { href: "/solution-plays", label: "Solution Plays (20)", Icon: Target },
-    { href: "/packages", label: "Packages", Icon: Package },
+    { href: "/ecosystem", label: "FAI Ecosystem", Icon: Link2 },
+    { href: "/configurator", label: "FAI Solution Configurator", Icon: Settings },
+    { href: "/solution-plays", label: "FAI Solution Plays", Icon: Target },
+    { href: "/packages", label: "FAI Packages", Icon: Package },
   ]},
   { label: "FAI Solutions", items: [
-    { href: "/ecosystem", label: "Ecosystem Overview", Icon: Link2 },
     { href: "/vscode-extension", label: "VS Code Extension", Icon: Monitor },
     { href: "/mcp-tooling", label: "MCP Server (22 tools)", Icon: Plug },
     { href: "/cli", label: "CLI (npx frootai)", Icon: Zap },
@@ -27,7 +27,7 @@ const menus = [
     { href: "/community", label: "Open Source Community", Icon: Leaf },
     { href: "/adoption", label: "FrootAI Adoption", Icon: BarChart3 },
   ]},
-  { label: "FAI Learning", items: [
+  { label: "FAI Learning Hub", items: [
     { href: "/learning-hub", label: "FAI Learning Center", Icon: BookOpen },
     { href: "/docs", label: "Knowledge Modules (18)", Icon: FileText },
     { href: "/docs/F3-AI-Glossary-AZ", label: "AI Glossary (200+)", Icon: Languages },

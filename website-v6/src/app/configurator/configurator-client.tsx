@@ -6,30 +6,31 @@ import { motion } from "framer-motion";
 import { FadeIn } from "@/components/motion/fade-in";
 import { GlowPill } from "@/components/ui/glow-pill";
 import { SectionHeader } from "@/components/ui/section-header";
+import { FileText, Search, Bot, Phone, Shield, Cloud, BarChart3, Cpu, Building2, Code2, Database, Lock, Zap, Timer, Crown, type LucideIcon } from "lucide-react";
 
 /* ═══ DATA — from production configurator.tsx ═══ */
 
-const questions = [
+const questions: { q: string; options: { label: string; tags: string[]; Icon?: LucideIcon; color?: string }[] }[] = [
   { q: "What are you building?", options: [
-    { label: "Document processing (OCR, extraction, forms)", tags: ["doc"] },
-    { label: "Search / RAG / Knowledge base", tags: ["rag"] },
-    { label: "AI Agent (autonomous, tool-calling)", tags: ["agent"] },
-    { label: "Voice / Call center / Speech", tags: ["voice"] },
-    { label: "Content moderation / Safety", tags: ["safety"] },
-    { label: "AI Landing Zone / Infrastructure", tags: ["infra"] },
-    { label: "Monitoring / Observability / Analytics", tags: ["ops"] },
-    { label: "Model serving / Fine-tuning / MLOps", tags: ["ml"] },
+    { label: "Document processing (OCR, extraction, forms)", tags: ["doc"], Icon: FileText, color: "#f59e0b" },
+    { label: "Search / RAG / Knowledge base", tags: ["rag"], Icon: Search, color: "#10b981" },
+    { label: "AI Agent (autonomous, tool-calling)", tags: ["agent"], Icon: Bot, color: "#6366f1" },
+    { label: "Voice / Call center / Speech", tags: ["voice"], Icon: Phone, color: "#06b6d4" },
+    { label: "Content moderation / Safety", tags: ["safety"], Icon: Shield, color: "#ec4899" },
+    { label: "AI Landing Zone / Infrastructure", tags: ["infra"], Icon: Cloud, color: "#7c3aed" },
+    { label: "Monitoring / Observability / Analytics", tags: ["ops"], Icon: BarChart3, color: "#0ea5e9" },
+    { label: "Model serving / Fine-tuning / MLOps", tags: ["ml"], Icon: Cpu, color: "#f97316" },
   ]},
   { q: "What's your team's primary role?", options: [
-    { label: "Infrastructure / Platform Engineering", tags: ["infra-team"] },
-    { label: "Application / Full-stack Development", tags: ["dev-team"] },
-    { label: "Data / ML Engineering", tags: ["data-team"] },
-    { label: "Security / Compliance", tags: ["sec-team"] },
+    { label: "Infrastructure / Platform Engineering", tags: ["infra-team"], Icon: Building2, color: "#7c3aed" },
+    { label: "Application / Full-stack Development", tags: ["dev-team"], Icon: Code2, color: "#6366f1" },
+    { label: "Data / ML Engineering", tags: ["data-team"], Icon: Database, color: "#10b981" },
+    { label: "Security / Compliance", tags: ["sec-team"], Icon: Lock, color: "#ec4899" },
   ]},
   { q: "What complexity level fits your timeline?", options: [
-    { label: "Low — ship in a week", tags: ["low"] },
-    { label: "Medium — ship in 2-4 weeks", tags: ["medium"] },
-    { label: "High — enterprise-grade, months", tags: ["high"] },
+    { label: "Low — ship in a week", tags: ["low"], Icon: Zap, color: "#10b981" },
+    { label: "Medium — ship in 2-4 weeks", tags: ["medium"], Icon: Timer, color: "#f59e0b" },
+    { label: "High — enterprise-grade, months", tags: ["high"], Icon: Crown, color: "#7c3aed" },
   ]},
 ];
 
@@ -52,6 +53,16 @@ const playNames: Record<string, string> = {
   "13": "Fine-Tuning Workflow", "14": "AI Gateway", "15": "Multi-Modal DocProc",
   "16": "Copilot Teams Ext", "17": "AI Observability", "18": "Prompt Management",
   "19": "Edge AI Phi-4", "20": "Anomaly Detection",
+};
+
+const playSlugs: Record<string, string> = {
+  "01": "01-enterprise-rag", "02": "02-ai-landing-zone", "03": "03-deterministic-agent",
+  "04": "04-call-center-voice-ai", "05": "05-it-ticket-resolution", "06": "06-document-intelligence",
+  "07": "07-multi-agent-service", "08": "08-copilot-studio-bot", "09": "09-ai-search-portal",
+  "10": "10-content-moderation", "11": "11-ai-landing-zone-advanced", "12": "12-model-serving-aks",
+  "13": "13-fine-tuning-workflow", "14": "14-cost-optimized-ai-gateway", "15": "15-multi-modal-docproc",
+  "16": "16-copilot-teams-extension", "17": "17-ai-observability", "18": "18-prompt-management",
+  "19": "19-edge-ai-phi4", "20": "20-anomaly-detection",
 };
 
 /* ═══ CLIENT ═══ */
@@ -93,10 +104,11 @@ export function ConfiguratorClient() {
               <motion.button
                 key={i}
                 onClick={() => handleAnswer(opt.tags)}
-                className="w-full text-left rounded-xl border border-border bg-bg-surface/50 px-5 py-4 text-sm text-fg transition-all duration-200 cursor-pointer hover:border-emerald/40 hover:bg-emerald/[0.04]"
-                whileHover={{ x: 4 }}
+                className="glow-card group w-full text-left flex items-center gap-3 px-5 py-4 text-sm text-fg cursor-pointer"
+                style={{ "--glow": opt.color || "#10b981" } as React.CSSProperties}
                 whileTap={{ scale: 0.99 }}
               >
+                {opt.Icon && <opt.Icon className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ color: opt.color }} />}
                 {opt.label}
               </motion.button>
             ))}
@@ -113,7 +125,7 @@ export function ConfiguratorClient() {
                 <div className="font-bold text-base mb-3">Play {id} — {playNames[id]}</div>
                 <div className="flex flex-wrap gap-2">
                   <GlowPill href={`/user-guide?play=${id}`} color="#10b981">User Guide</GlowPill>
-                  <GlowPill href="/solution-plays" color="#6366f1">View Play</GlowPill>
+                  <GlowPill href={`/solution-plays/${playSlugs[id]}`} color="#6366f1">View Play</GlowPill>
                   <GlowPill href="/setup-guide" color="#f59e0b">Setup Guide</GlowPill>
                 </div>
               </div>
@@ -134,8 +146,8 @@ export function ConfiguratorClient() {
       {/* Bottom nav */}
       <div className="mt-14 flex flex-wrap justify-center gap-2">
         <GlowPill href="/solution-plays" color="#6366f1">All 20 Plays</GlowPill>
-        <GlowPill href="/chatbot" color="#10b981">Ask AI Assistant</GlowPill>
-        <GlowPill href="/" color="#f59e0b">Back to FrootAI</GlowPill>
+        <GlowPill href="/chatbot" color="#d4a853">Ask Agent FAI</GlowPill>
+        <GlowPill href="/" color="#10b981">Back to FrootAI</GlowPill>
       </div>
     </div>
   );

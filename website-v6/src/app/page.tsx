@@ -224,7 +224,7 @@ export default function Home() {
           <StaggerChildren className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {outcomes.map((o) => (
               <StaggerItem key={o.title}>
-                <div className="rounded-2xl border border-border bg-bg-surface p-5 text-center">
+                <div className="glow-card p-4 text-center h-full" style={{ "--glow": "#6366f1" } as React.CSSProperties}>
                   <o.Icon className="h-6 w-6 mx-auto mb-2 text-indigo" />
                   <div className="font-bold text-[13px]">{o.title}</div>
                   <div className="text-[11px] text-fg-muted mt-0.5">{o.desc}</div>

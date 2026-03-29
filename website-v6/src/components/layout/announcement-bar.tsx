@@ -23,7 +23,7 @@ export function AnnouncementBar() {
             <Sprout className="h-3.5 w-3.5 text-fg-muted shrink-0" />
             <span className="text-center">
               <strong className="text-fg">FrootAI</strong>
-              <span> — Power your Agentic Ecosystem</span>
+              <span> — Ampli</span><span className="font-bold text-white">F</span><span className="font-bold text-emerald">AI</span><span> your Agentic Ecosystem</span>
               {" "}
               <Link
                 href="/setup-guide"
