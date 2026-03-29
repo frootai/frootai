@@ -60,8 +60,8 @@ export function DocTableOfContents() {
           key={item.id}
           href={`#${item.id}`}
           onClick={() => setMobileOpen(false)}
-          className={`block text-[12px] leading-snug py-1.5 px-3 rounded-r-lg transition-all duration-200 border-l-2
-            hover:text-emerald hover:border-emerald hover:bg-emerald/[0.06] hover:shadow-[inset_0_0_12px_rgba(16,185,129,0.08)]
+          className={`block text-[12px] leading-snug py-1.5 px-3 rounded-r-lg transition-all duration-200 border-l-2 cursor-pointer
+            hover:text-white hover:border-white/50 hover:bg-white/[0.04]
             ${item.level === 1 ? "font-bold" : ""}
             ${item.level === 2 ? "font-semibold" : ""}
             ${item.level === 3 ? "ml-3" : ""}
