@@ -32,51 +32,9 @@ export function DocTableOfContents() {
         listItemClass: "toc-list-item",
         isCollapsedClass: "toc-collapsed",
         collapsibleClass: "toc-collapsible",
-        scrollEndCallback: () => {
-          // Auto-scroll the TOC sidebar to center the active item
-          const tocContainer = document.querySelector(".js-toc-scroll");
-          const activeLink = document.querySelector(".js-toc .toc-active");
-          if (tocContainer && activeLink) {
-            const containerRect = tocContainer.getBoundingClientRect();
-            const activeRect = activeLink.getBoundingClientRect();
-            const offset = activeRect.top - containerRect.top - containerRect.height / 3;
-            tocContainer.scrollBy({ top: offset, behavior: "smooth" });
-          }
-        },
       });
 
       setReady(true);
-
-      // Watch for active class changes and auto-scroll TOC sidebar
-      const scrollTocToActive = () => {
-        const tocContainer = document.querySelector(".js-toc-scroll");
-        const activeLink = document.querySelector(".js-toc .toc-active");
-        if (tocContainer && activeLink) {
-          const containerRect = tocContainer.getBoundingClientRect();
-          const activeRect = activeLink.getBoundingClientRect();
-          // Keep active item in the upper third of the TOC panel
-          const offset = activeRect.top - containerRect.top - containerRect.height / 3;
-          if (Math.abs(offset) > 30) {
-            tocContainer.scrollBy({ top: offset, behavior: "smooth" });
-          }
-        }
-      };
-
-      // Throttled scroll listener on the page
-      let ticking = false;
-      const onScroll = () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            scrollTocToActive();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      // Store cleanup ref
-      (window as any).__tocScrollCleanup = () => window.removeEventListener("scroll", onScroll);
     };
 
     // Wait for article headings to render
@@ -85,7 +43,6 @@ export function DocTableOfContents() {
     return () => {
       clearTimeout(timer);
       tocbotInstance?.destroy();
-      (window as any).__tocScrollCleanup?.();
     };
   }, []);
 
