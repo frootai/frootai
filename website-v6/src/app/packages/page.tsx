@@ -1,110 +1,172 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { Sprout, TreePine, Layers, Wind, Apple, Plug, type LucideIcon } from "lucide-react";
+import { Monitor, Package, Zap, Container, Puzzle, Terminal, Download, ArrowRight, Check, Layers, Box, Wrench, Sliders, Ruler, type LucideIcon } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { SectionHeader } from "@/components/ui/section-header";
-import { Badge } from "@/components/ui/badge";
+import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
 import { GlowPill } from "@/components/ui/glow-pill";
 
-/* ═══ DATA ═══ */
-const categories: { name: string; Icon: LucideIcon; count: number; color: string }[] = [
-  { name: "Foundations", Icon: Sprout, count: 4, color: "#f59e0b" },
-  { name: "Reasoning", Icon: TreePine, count: 3, color: "#10b981" },
-  { name: "Orchestration", Icon: Layers, count: 3, color: "#06b6d4" },
-  { name: "Operations", Icon: Wind, count: 3, color: "#6366f1" },
-  { name: "Transformation", Icon: Apple, count: 3, color: "#7c3aed" },
-  { name: "MCP Tools", Icon: Plug, count: 5, color: "#10b981" },
+/* ═══ PACKAGE CHANNELS ═══ */
+const packages: { Icon: LucideIcon; title: string; sub: string; install: string; color: string; href: string; features: string[] }[] = [
+  {
+    Icon: Monitor, title: "VS Code Extension", sub: "Rich sidebar UI with 16 commands",
+    install: "Install from VS Code Marketplace", color: "#6366f1", href: "/vscode-extension",
+    features: ["Sidebar panels for all 20 plays", "Inline knowledge search", "Offline-capable", "Solution Configurator wizard"],
+  },
+  {
+    Icon: Package, title: "MCP Server (npm)", sub: "AI agent tools via Model Context Protocol",
+    install: "npx @anthropic/mcp install frootai-mcp", color: "#10b981", href: "/mcp-tooling",
+    features: ["22 tools for any MCP-compatible agent", "Knowledge search & retrieval", "Architecture pattern advisor", "Works with Claude, GPT, Gemini"],
+  },
+  {
+    Icon: Container, title: "Docker Image", sub: "Multi-arch container, Kubernetes-ready",
+    install: "docker pull ghcr.io/gitpavleenbali/frootai-mcp", color: "#06b6d4", href: "/docker",
+    features: ["Linux/ARM64/AMD64", "Kubernetes & ACA deployments", "Health endpoint included", "Auto-updates via CI/CD"],
+  },
+  {
+    Icon: Terminal, title: "CLI (npx frootai)", sub: "Terminal-first scaffolding & search",
+    install: "npx frootai", color: "#f59e0b", href: "/cli",
+    features: ["8 commands for scaffolding", "Full knowledge search", "Play initialization", "Works offline after first run"],
+  },
+  {
+    Icon: Puzzle, title: "Plugin Marketplace", sub: "Community extensions & integrations",
+    install: "Browse marketplace", color: "#ec4899", href: "/marketplace",
+    features: ["ServiceNow connector", "Salesforce integration", "SAP adapter", "Community-contributed plugins"],
+  },
 ];
 
-const allPackages = [
-  { id: "F1", name: "GenAI Foundations", category: "Foundations", desc: "Transformers, attention, tokenization, inference, parameters, context windows, embeddings", file: "GenAI-Foundations.md", size: "55 KB", updated: "March 2026", docsLink: "/docs/GenAI-Foundations", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/GenAI-Foundations.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/GenAI-Foundations.md" },
-  { id: "F2", name: "LLM Landscape & Model Selection", category: "Foundations", desc: "GPT, Claude, Llama, Gemini, Phi — benchmarks, open vs proprietary", file: "LLM-Landscape.md", size: "47 KB", updated: "March 2026", docsLink: "/docs/LLM-Landscape", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/LLM-Landscape.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/LLM-Landscape.md" },
-  { id: "F3", name: "AI Glossary A–Z", category: "Foundations", desc: "200+ AI/ML terms defined — from ablation to zero-shot", file: "F3-AI-Glossary-AZ.md", size: "31 KB", updated: "March 2026", docsLink: "/docs/F3-AI-Glossary-AZ", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/F3-AI-Glossary-AZ.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/F3-AI-Glossary-AZ.md" },
-  { id: "F4", name: ".github Agentic OS — 7 Primitives", category: "Foundations", desc: "The .github folder as a full agentic OS. 7 primitives, 4 layers", file: "F4-GitHub-Agentic-OS.md", size: "18 KB", updated: "March 2026", docsLink: "/docs/F4-GitHub-Agentic-OS", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/F4-GitHub-Agentic-OS.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/F4-GitHub-Agentic-OS.md" },
-  { id: "R1", name: "Prompt Engineering & Grounding", category: "Reasoning", desc: "System messages, few-shot, chain-of-thought, structured output, guardrails", file: "Prompt-Engineering.md", size: "34 KB", updated: "March 2026", docsLink: "/docs/Prompt-Engineering", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/Prompt-Engineering.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/Prompt-Engineering.md" },
-  { id: "R2", name: "RAG Architecture & Retrieval", category: "Reasoning", desc: "Chunking, embeddings, vector search, Azure AI Search, semantic ranking", file: "RAG-Architecture.md", size: "67 KB", updated: "March 2026", docsLink: "/docs/RAG-Architecture", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/RAG-Architecture.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/RAG-Architecture.md" },
-  { id: "R3", name: "Making AI Deterministic & Reliable", category: "Reasoning", desc: "Hallucination reduction, grounding, temperature tuning, evaluation metrics", file: "R3-Deterministic-AI.md", size: "24 KB", updated: "March 2026", docsLink: "/docs/R3-Deterministic-AI", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/R3-Deterministic-AI.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/R3-Deterministic-AI.md" },
-  { id: "O1", name: "Semantic Kernel & Orchestration", category: "Orchestration", desc: "Plugins, planners, memory, connectors, SK vs LangChain", file: "Semantic-Kernel.md", size: "58 KB", updated: "March 2026", docsLink: "/docs/Semantic-Kernel", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/Semantic-Kernel.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/Semantic-Kernel.md" },
-  { id: "O2", name: "AI Agents & Agent Framework", category: "Orchestration", desc: "Agent concepts, planning, memory, tool use, multi-agent patterns", file: "AI-Agents-Deep-Dive.md", size: "66 KB", updated: "March 2026", docsLink: "/docs/AI-Agents-Deep-Dive", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/AI-Agents-Deep-Dive.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/AI-Agents-Deep-Dive.md" },
-  { id: "O3", name: "MCP, Tools & Function Calling", category: "Orchestration", desc: "Model Context Protocol, tool schemas, function calling, A2A, registries", file: "O3-MCP-Tools-Functions.md", size: "23 KB", updated: "March 2026", docsLink: "/docs/O3-MCP-Tools-Functions", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/O3-MCP-Tools-Functions.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/O3-MCP-Tools-Functions.md" },
-  { id: "O4", name: "Azure AI Platform & Landing Zones", category: "Operations", desc: "AI Foundry, Model Catalog, deployments, endpoints, enterprise patterns", file: "Azure-AI-Foundry.md", size: "48 KB", updated: "March 2026", docsLink: "/docs/Azure-AI-Foundry", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/Azure-AI-Foundry.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/Azure-AI-Foundry.md" },
-  { id: "O5", name: "AI Infrastructure & Hosting", category: "Operations", desc: "GPU compute, Container Apps, AKS, App Service, model serving, scaling", file: "AI-Infrastructure.md", size: "51 KB", updated: "March 2026", docsLink: "/docs/AI-Infrastructure", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/AI-Infrastructure.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/AI-Infrastructure.md" },
-  { id: "O6", name: "Copilot Ecosystem & Low-Code AI", category: "Operations", desc: "M365 Copilot, Copilot Studio, Power Platform AI, GitHub Copilot", file: "Copilot-Ecosystem.md", size: "38 KB", updated: "March 2026", docsLink: "/docs/Copilot-Ecosystem", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/Copilot-Ecosystem.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/Copilot-Ecosystem.md" },
-  { id: "T1", name: "Fine-Tuning & Model Customization", category: "Transformation", desc: "When to fine-tune vs RAG, LoRA, QLoRA, RLHF, DPO, evaluation, MLOps", file: "T1-Fine-Tuning-MLOps.md", size: "20 KB", updated: "March 2026", docsLink: "/docs/T1-Fine-Tuning-MLOps", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/T1-Fine-Tuning-MLOps.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/T1-Fine-Tuning-MLOps.md" },
-  { id: "T2", name: "Responsible AI & Safety", category: "Transformation", desc: "Content safety, red teaming, guardrails, Azure AI Content Safety", file: "Responsible-AI-Safety.md", size: "49 KB", updated: "March 2026", docsLink: "/docs/Responsible-AI-Safety", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/Responsible-AI-Safety.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/Responsible-AI-Safety.md" },
-  { id: "T3", name: "Production Architecture Patterns", category: "Transformation", desc: "Multi-agent hosting, API gateway, latency optimization, cost control", file: "T3-Production-Patterns.md", size: "20 KB", updated: "March 2026", docsLink: "/docs/T3-Production-Patterns", githubLink: "https://github.com/gitpavleenbali/FAIai/blob/main/docs/T3-Production-Patterns.md", rawLink: "https://raw.githubusercontent.com/gitpavleenbali/FAIai/main/docs/T3-Production-Patterns.md" },
-  { id: "MCP1", name: "list_modules", category: "MCP Tools", desc: "Browse all 18 FAI modules organized by layer", file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026", docsLink: "/docs/O3-MCP-Tools-Functions", githubLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server", rawLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server" },
-  { id: "MCP2", name: "get_module", category: "MCP Tools", desc: "Read any module by ID (F1–T3)", file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026", docsLink: "/docs/O3-MCP-Tools-Functions", githubLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server", rawLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server" },
-  { id: "MCP3", name: "lookup_term", category: "MCP Tools", desc: "200+ AI/ML term definitions from curated glossary", file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026", docsLink: "/docs/F3-AI-Glossary-AZ", githubLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server", rawLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server" },
-  { id: "MCP4", name: "search_knowledge", category: "MCP Tools", desc: "Full-text search across all 18 modules", file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026", docsLink: "/docs/O3-MCP-Tools-Functions", githubLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server", rawLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server" },
-  { id: "MCP5", name: "get_architecture_pattern", category: "MCP Tools", desc: "7 pre-built decision guides for AI architecture", file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026", docsLink: "/docs/T3-Production-Patterns", githubLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server", rawLink: "https://github.com/gitpavleenbali/FAIai/tree/main/mcp-server" },
+/* ═══ TOOLKIT KITS ═══ */
+const kits = [
+  { Icon: Wrench, title: "DevKit", sub: "Architecture templates, Bicep modules, deployment scripts", color: "#6366f1", label: "Box 1" },
+  { Icon: Sliders, title: "TuneKit", sub: "Evaluation configs, prompt templates, tuning parameters", color: "#7c3aed", label: "Box 2" },
+  { Icon: Ruler, title: "SpecKit", sub: "Feature specs, architecture decision records, compliance checklists", color: "#06b6d4", label: "Box 3" },
 ];
-
-const catColors: Record<string, string> = { Foundations: "#f59e0b", Reasoning: "#10b981", Orchestration: "#06b6d4", Operations: "#6366f1", Transformation: "#7c3aed", "MCP Tools": "#10b981" };
 
 export default function PackagesPage() {
-  const [filter, setFilter] = useState<string>("All");
-  const filtered = filter === "All" ? allPackages : allPackages.filter(p => p.category === filter);
-
   return (
     <div className="mx-auto max-w-5xl px-4 lg:px-6 py-12 sm:py-16">
-      <SectionHeader title="FAI Packages" subtitle="Downloadable LEGO blocks — knowledge modules and MCP tools organized by FAI layer. Click to explore, read, or download." />
-
-      {/* Category cards */}
+      {/* ═══ HERO ═══ */}
       <FadeIn>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-          {categories.map((c) => (
-            <button key={c.name} onClick={() => setFilter(c.name === filter ? "All" : c.name)}
-              className={`rounded-xl border p-3 text-center cursor-pointer transition-all duration-200 hover:-translate-y-0.5 ${filter === c.name ? "border-indigo/40 bg-indigo/[0.06]" : "border-border bg-bg-surface"}`}>
-              <div className="flex justify-center mb-1"><c.Icon className="h-5 w-5" style={{ color: c.color }} /></div>
-              <div className="font-bold text-[12px]">{c.name}</div>
-              <div className="text-[11px] mt-0.5" style={{ color: c.color }}>{c.count} items</div>
-            </button>
-          ))}
-        </div>
-        {filter !== "All" && (
-          <div className="text-center mb-6">
-            <button onClick={() => setFilter("All")} className="text-[12px] text-fg-dim hover:text-fg cursor-pointer underline">Show all packages</button>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald/25 bg-emerald/[0.04] mb-4">
+            <Package className="h-4 w-4 text-emerald" />
+            <span className="text-[11px] font-bold text-emerald uppercase tracking-wider">Layer 2 — Distribution</span>
           </div>
-        )}
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+            <span className="text-white">FAI</span> <span className="text-emerald">Packages</span>
+          </h1>
+          <p className="text-[14px] text-fg-muted max-w-2xl mx-auto leading-relaxed">
+            Install once, get everything. Every FAI Package delivers the complete <strong className="text-fg">FAI Toolkit</strong> — DevKit, TuneKit, and SpecKit — through the channel you prefer.
+          </p>
+        </div>
       </FadeIn>
 
-      {/* Package list */}
-      <div className="space-y-3">
-        {filtered.map((pkg) => (
-          <FadeIn key={pkg.id}>
-            <div className="rounded-xl border border-border bg-bg-surface p-5 transition-all duration-200 hover:border-indigo/20 hover:shadow-lg hover:shadow-black/10">
-              <div className="flex flex-col sm:flex-row justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <Badge label={pkg.id} color={catColors[pkg.category] || "#6366f1"} />
-                    <h3 className="font-bold text-sm">{pkg.name}</h3>
+      {/* ═══ HOW IT WORKS ═══ */}
+      <FadeIn delay={0.05}>
+        <div className="rounded-2xl border border-border-subtle bg-bg-surface/40 p-6 mb-10">
+          <h2 className="text-lg font-bold text-center mb-4">How FAI Packages Work</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-center">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-emerald/10 border border-emerald/20 flex items-center justify-center">
+                <Download className="h-5 w-5 text-emerald" />
+              </div>
+              <div className="text-left">
+                <div className="text-[12px] font-bold text-fg">1. Pick a Channel</div>
+                <div className="text-[11px] text-fg-muted">VS Code, npm, Docker, CLI</div>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-fg-dim hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-indigo/10 border border-indigo/20 flex items-center justify-center">
+                <Layers className="h-5 w-5 text-indigo" />
+              </div>
+              <div className="text-left">
+                <div className="text-[12px] font-bold text-fg">2. Get Full Toolkit</div>
+                <div className="text-[11px] text-fg-muted">DevKit + TuneKit + SpecKit</div>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-fg-dim hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-violet/10 border border-violet/20 flex items-center justify-center">
+                <Box className="h-5 w-5 text-violet" />
+              </div>
+              <div className="text-left">
+                <div className="text-[12px] font-bold text-fg">3. Build with Plays</div>
+                <div className="text-[11px] text-fg-muted">20 solution accelerators</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* ═══ PACKAGE CARDS ═══ */}
+      <FadeIn delay={0.1}>
+        <h2 className="text-xl font-bold text-center mb-6">Distribution Channels</h2>
+      </FadeIn>
+      <StaggerChildren className="space-y-4 mb-12">
+        {packages.map((pkg) => (
+          <StaggerItem key={pkg.title}>
+            <div className="glow-card rounded-2xl p-5 sm:p-6" style={{ "--glow": pkg.color } as React.CSSProperties}>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${pkg.color}15`, border: `1px solid ${pkg.color}30` }}>
+                    <pkg.Icon className="h-5 w-5" style={{ color: pkg.color }} />
                   </div>
-                  <p className="text-[13px] text-fg-muted leading-relaxed mb-2">{pkg.desc}</p>
-                  <div className="flex flex-wrap gap-3 text-[11px] text-fg-dim">
-                    <span className="font-mono">{pkg.file}</span>
-                    <span>{pkg.size}</span>
-                    <span>Updated: {pkg.updated}</span>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-[15px] text-fg">{pkg.title}</h3>
+                    <p className="text-[12px] text-fg-muted mt-0.5">{pkg.sub}</p>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                      {pkg.features.map((f) => (
+                        <div key={f} className="flex items-center gap-1.5 text-[11px] text-fg-muted">
+                          <Check className="h-3 w-3 shrink-0" style={{ color: pkg.color }} />
+                          {f}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="flex gap-2 items-start shrink-0 flex-wrap sm:flex-nowrap">
-                  <Link href={pkg.docsLink} className="rounded-lg border border-emerald/25 bg-emerald/5 px-3 py-1.5 text-[11px] font-semibold text-emerald hover:bg-emerald/10 transition-colors">Docs</Link>
-                  <a href={pkg.githubLink} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-indigo/25 bg-indigo/5 px-3 py-1.5 text-[11px] font-semibold text-indigo hover:bg-indigo/10 transition-colors">GitHub</a>
-                  <a href={pkg.rawLink} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-amber/25 bg-amber/5 px-3 py-1.5 text-[11px] font-semibold text-amber hover:bg-amber/10 transition-colors">Raw ↓</a>
+                <div className="flex flex-col items-start sm:items-end justify-between gap-2 shrink-0">
+                  <code className="text-[10px] text-fg-dim bg-bg/60 px-2 py-1 rounded font-mono">{pkg.install}</code>
+                  <Link href={pkg.href} className="text-[12px] font-semibold hover:underline" style={{ color: pkg.color }}>
+                    Learn more →
+                  </Link>
                 </div>
               </div>
             </div>
-          </FadeIn>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerChildren>
 
-      <div className="mt-14 flex flex-wrap justify-center gap-2">
-        <GlowPill href="/ecosystem" color="#0ea5e9">Ecosystem</GlowPill>
-        <GlowPill href="/mcp-tooling" color="#10b981">MCP Server</GlowPill>
-        <GlowPill href="/" color="#f59e0b">Back to FAIAI</GlowPill>
-      </div>
+      {/* ═══ WHAT'S INSIDE ═══ */}
+      <FadeIn delay={0.15}>
+        <div className="rounded-2xl border border-indigo/15 bg-gradient-to-br from-indigo/[0.03] to-violet/[0.02] p-6 mb-10">
+          <h2 className="text-lg font-bold text-center mb-1">What Ships Inside Every Package</h2>
+          <p className="text-[12px] text-fg-dim text-center mb-5">The FAI Toolkit — three composable kits that power every solution play</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {kits.map((kit) => (
+              <div key={kit.title} className="glow-card rounded-xl p-4 text-center" style={{ "--glow": kit.color } as React.CSSProperties}>
+                <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: kit.color }}>{kit.label}</div>
+                <kit.Icon className="h-6 w-6 mx-auto mb-2" style={{ color: kit.color }} />
+                <div className="font-bold text-[13px] text-fg">{kit.title}</div>
+                <div className="text-[11px] text-fg-muted mt-1 leading-relaxed">{kit.sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* ═══ CTA ═══ */}
+      <FadeIn delay={0.2}>
+        <div className="text-center">
+          <p className="text-[13px] text-fg-muted mb-4">Ready to get started?</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            <GlowPill href="/setup-guide" color="#10b981">Setup Guide</GlowPill>
+            <GlowPill href="/ecosystem" color="#6366f1">FAI Ecosystem</GlowPill>
+            <GlowPill href="/solution-plays" color="#7c3aed">Solution Plays</GlowPill>
+            <GlowPill href="/" color="#f59e0b">Back to FrootAI</GlowPill>
+          </div>
+        </div>
+      </FadeIn>
     </div>
   );
 }
