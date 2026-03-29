@@ -335,3 +335,53 @@
 | 7 | 2 | User Guide (dynamic) + Docs System (24 slugs) |
 | 8 | 0 | Polish + validation |
 | **Total** | **25 pages + 24 docs = 49 routes** | |
+
+---
+
+## Future Improvements
+
+### UI/UX Enhancements
+- [ ] **Light/Dark theme toggle**  Add theme switcher with system preference detection, persist choice in localStorage, update all CSS variables for light mode
+- [ ] **Syntax highlighting**  Add Prism.js or Shiki for code blocks in docs (Python, TypeScript, JSON, Bash, C#)
+- [ ] **Reading progress bar**  Thin progress indicator at top of doc pages showing scroll position
+- [ ] **Back to top button**  Floating button on long pages to scroll back to top
+- [ ] **Breadcrumb navigation**  Show path (Home > Docs > RAG Architecture) on doc pages
+- [ ] **Page transitions**  Framer Motion page transitions between routes for smoother navigation
+- [ ] **Image zoom**  Click-to-zoom on mermaid diagrams and images in docs
+- [ ] **Copy code button**  One-click copy for all code blocks in documentation
+- [ ] **Table of contents progress**  Visual progress indicator in TOC sidebar showing how far through the doc you are
+
+### Testing & Quality
+- [ ] **Playwright visual regression tests**  Automated screenshot comparison on every PR for desktop, tablet, and mobile viewports
+- [ ] **Playwright E2E tests**  Test navigation, search, mobile menu, chatbot, configurator flows
+- [ ] **axe-core accessibility audit**  Automated WCAG 2.1 AA compliance checks in CI
+- [ ] **Bundle size monitoring**  Track and alert on JS/CSS bundle size increases per PR
+- [ ] **Performance budget**  Set Lighthouse thresholds (Performance > 90, Accessibility > 95, Best Practices > 95, SEO > 95) as CI gates
+- [ ] **Cross-browser testing**  BrowserStack or Playwright multi-browser (Chrome, Firefox, Safari, Edge)
+
+### Mobile & Responsive
+- [ ] **PWA support**  Service worker for offline access, app install prompt, manifest.json
+- [ ] **Responsive image optimization**  next/image with srcSet for different viewport sizes
+- [ ] **Touch gesture support**  Swipe to navigate between docs, pinch-to-zoom on diagrams
+- [ ] **Tablet-specific layouts**  Optimize 2-column layouts for iPad/tablet breakpoints (768-1024px)
+
+### Content & SEO
+- [ ] **Sitemap.xml generation**  Auto-generate sitemap for all routes during build
+- [ ] **Structured data (JSON-LD)**  Add schema.org markup for articles, FAQs, software application
+- [ ] **RSS feed**  Auto-generate RSS for changelog and new docs
+- [ ] **i18n / localization**  Multi-language support starting with English + German
+- [ ] **Doc versioning**  Version-tagged docs for different FrootAI releases
+
+### Infrastructure
+- [ ] **Edge caching**  Configure Cache-Control headers for static assets
+- [ ] **CDN for images**  Move large assets (OG images, diagrams) to CDN
+- [ ] **Analytics**  Privacy-respecting analytics (Plausible or Umami) for page views and search queries
+- [ ] **Error monitoring**  Sentry integration for client-side error tracking
+- [ ] **Preview deployments**  GitHub Actions workflow for PR preview URLs
+
+### FAI Ecosystem Growth
+- [ ] **FAI Marketplace page**  Full plugin directory with search, categories, ratings
+- [ ] **Partner portal**  Dedicated pages for ServiceNow, SAP, Salesforce integrations
+- [ ] **FAI Academy**  Interactive tutorials and guided workshops
+- [ ] **Community showcase**  Gallery of community-built solutions using FAI
+- [ ] **API playground**  Interactive REST API explorer for the FrootAI API
