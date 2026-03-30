@@ -5,7 +5,7 @@
   "description": "Supervisor agent routes to specialists  Agent Framework + Dapr",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/07-multi-agent-service",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/07-multi-agent-service",
   "tags": ["multi-agent", "dapr", "agent-framework"],
   "complexity": "High",
   "status": "Skeleton",

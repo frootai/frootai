@@ -39,7 +39,7 @@ Download the DevKit → open folder in VS Code → your co-coder (Copilot/Cursor
 
 ```bash
 # 1. Download or clone
-git clone https://github.com/frootai/fai.git
+git clone https://github.com/frootai/frootai.git
 cd frootai/solution-plays/01-enterprise-rag
 
 # 2. Open in VS Code
@@ -103,7 +103,7 @@ python evaluation/eval.py --test-set evaluation/test-set.jsonl
 
 ```bash
 # Clone + install
-git clone https://github.com/frootai/fai.git
+git clone https://github.com/frootai/frootai.git
 cd frootai/solution-plays/01-enterprise-rag
 
 # Deploy infra

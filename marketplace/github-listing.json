@@ -3,7 +3,7 @@
   "description": "The open glue for AI Architecture — 20 solution plays, 18 knowledge modules, 16 MCP tools, DevKit (.github Agentic OS) + TuneKit (AI fine-tuning). From the Roots to the Fruits.",
   "categories": ["AI", "Developer Tools", "Infrastructure", "MCP"],
   "keywords": ["AI", "GenAI", "RAG", "MCP", "Azure", "Copilot", "agents", "Bicep", "infrastructure"],
-  "repository": "https://github.com/frootai/fai",
+  "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "badges": [
     {
@@ -18,8 +18,8 @@
     },
     {
       "description": "License",
-      "url": "https://img.shields.io/github/license/frootai/fai?color=00C853",
-      "href": "https://github.com/frootai/fai/blob/main/LICENSE"
+      "url": "https://img.shields.io/github/license/frootai/frootai?color=00C853",
+      "href": "https://github.com/frootai/frootai/blob/main/LICENSE"
     }
   ],
   "artifacts": {

@@ -5,7 +5,7 @@
   "description": "Deploy and serve LLMs on AKS with vLLM and GPU",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/12-model-serving-aks",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/12-model-serving-aks",
   "tags": ["aks", "vllm", "gpu", "model-serving"],
   "complexity": "High",
   "status": "Skeleton",

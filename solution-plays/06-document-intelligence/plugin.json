@@ -5,7 +5,7 @@
   "description": "Extract, classify, structure document data  Doc Intelligence + OpenAI",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/06-document-intelligence",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/06-document-intelligence",
   "tags": ["documents", "extraction", "doc-intelligence"],
   "complexity": "Medium",
   "status": "Skeleton",

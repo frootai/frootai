@@ -1,6 +1,6 @@
 // FrootAI Bicep Registry — AI Landing Zone Module
 // Reusable module for deploying a secure AI Landing Zone on Azure
-// Usage: module aiLandingZone 'br:ghcr.io/frootai/fai/bicep/ai-landing-zone:1.0' = { ... }
+// Usage: module aiLandingZone 'br:ghcr.io/frootai/frootai/bicep/ai-landing-zone:1.0' = { ... }
 
 @description('Resource group location')
 param location string = resourceGroup().location

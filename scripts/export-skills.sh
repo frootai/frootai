@@ -129,7 +129,7 @@ EOF
 
 ## What is this?
 
-This folder contains the \`${mid}\` module from the [FrootAI FROOT Framework](https://github.com/frootai/fai)
+This folder contains the \`${mid}\` module from the [FrootAI FROOT Framework](https://github.com/frootai/frootai)
 exported as a GitHub Copilot skill.
 
 ## How to use

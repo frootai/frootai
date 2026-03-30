@@ -5,7 +5,7 @@
   "description": "Enterprise search  AI Search + semantic ranking + Web App",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/09-ai-search-portal",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/09-ai-search-portal",
   "tags": ["search", "semantic-ranking", "web-app"],
   "complexity": "Medium",
   "status": "Skeleton",

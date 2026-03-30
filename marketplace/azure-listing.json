@@ -24,7 +24,7 @@
   ],
   "links": {
     "website": "https://frootai.dev",
-    "repository": "https://github.com/frootai/fai",
+    "repository": "https://github.com/frootai/frootai",
     "npm": "https://www.npmjs.com/package/frootai-mcp",
     "vscode": "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"
   },

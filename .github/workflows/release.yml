@@ -70,6 +70,6 @@ jobs:
             **Links:**
             - [npm](https://www.npmjs.com/package/frootai-mcp)
             - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
-            - [Docker](https://github.com/frootai/fai/pkgs/container/frootai-mcp)
+            - [Docker](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
             - [Website](https://frootai.dev)
           generate_release_notes: true

@@ -5,7 +5,7 @@
   "description": "Multi-region, policy-driven, enterprise-grade AI landing zone",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/11-ai-landing-zone-advanced",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/11-ai-landing-zone-advanced",
   "tags": ["infra", "multi-region", "policy", "governance"],
   "complexity": "High",
   "status": "Skeleton",

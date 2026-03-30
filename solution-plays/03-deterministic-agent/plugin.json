@@ -5,7 +5,7 @@
   "description": "Reliable agent  temp=0, structured JSON, guardrails, evaluation",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/03-deterministic-agent",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/03-deterministic-agent",
   "tags": ["agents", "deterministic", "guardrails", "evaluation"],
   "complexity": "Medium",
   "status": "Ready",

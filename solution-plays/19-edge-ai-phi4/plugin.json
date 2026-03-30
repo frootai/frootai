@@ -5,7 +5,7 @@
   "description": "Deploy Phi-4 on edge devices with ONNX and local serving",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/19-edge-ai-phi4",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/19-edge-ai-phi4",
   "tags": ["edge", "phi4", "onnx", "iot"],
   "complexity": "High",
   "status": "Skeleton",

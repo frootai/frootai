@@ -205,7 +205,7 @@ The repository uses GitHub Actions for continuous validation:
 
 ### 6.2 Build Status
 
-Monitor at: `https://github.com/frootai/fai/actions`
+Monitor at: `https://github.com/frootai/frootai/actions`
 
 ### 6.3 Website Deploy Health
 
@@ -303,8 +303,8 @@ npx docusaurus build --verbose
 
 ### 8.3 Getting Help
 
-- **GitHub Issues**: [github.com/frootai/fai/issues](https://github.com/frootai/fai/issues)
-- **Discussions**: [github.com/frootai/fai/discussions](https://github.com/frootai/fai/discussions)
+- **GitHub Issues**: [github.com/frootai/frootai/issues](https://github.com/frootai/frootai/issues)
+- **Discussions**: [github.com/frootai/frootai/discussions](https://github.com/frootai/frootai/discussions)
 - **Changelog**: [Developer Hub → Changelog](/dev-hub-changelog)
 
 ---

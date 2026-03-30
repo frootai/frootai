@@ -204,7 +204,7 @@ section('🔗 URL CONSISTENCY');
 const expectedURLs = {
   'frootai.dev': 'https://frootai.dev',
   'npm package': 'https://www.npmjs.com/package/frootai-mcp',
-  'GitHub repo': 'https://github.com/frootai/fai',
+  'GitHub repo': 'https://github.com/frootai/frootai',
   'Docker image': 'ghcr.io/frootai/frootai-mcp',
 };
 
@@ -221,8 +221,8 @@ if (mcpPkg?.homepage !== 'https://frootai.dev') {
   check('npm homepage', mcpPkg?.homepage || 'missing', 'https://frootai.dev', 'mcp-server/package.json');
 }
 
-if (mcpPkg?.repository?.url !== 'https://github.com/frootai/fai') {
-  check('npm repository', mcpPkg?.repository?.url || 'missing', 'https://github.com/frootai/fai', 'mcp-server/package.json');
+if (mcpPkg?.repository?.url !== 'https://github.com/frootai/frootai') {
+  check('npm repository', mcpPkg?.repository?.url || 'missing', 'https://github.com/frootai/frootai', 'mcp-server/package.json');
 }
 
 // ═══════════════════════════════════════════════════

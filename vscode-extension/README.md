@@ -116,7 +116,7 @@ The extension works alongside `npx frootai-mcp` (23 tools):
 |---|---|
 | **Website** | [frootai.dev](https://frootai.dev) |
 | **npm** | [npmjs.com/package/frootai-mcp](https://www.npmjs.com/package/frootai-mcp) |
-| **GitHub** | [github.com/frootai/fai](https://github.com/frootai/fai) |
+| **GitHub** | [github.com/frootai/frootai](https://github.com/frootai/frootai) |
 
 ---
 

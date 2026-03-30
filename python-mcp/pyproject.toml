@@ -26,9 +26,9 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://frootai.dev"
-Repository = "https://github.com/frootai/fai"
+Repository = "https://github.com/frootai/frootai"
 Documentation = "https://frootai.dev/setup-guide"
-"Bug Tracker" = "https://github.com/frootai/fai/issues"
+"Bug Tracker" = "https://github.com/frootai/frootai/issues"
 
 [project.scripts]
 frootai-mcp-py = "frootai_mcp.server:main"

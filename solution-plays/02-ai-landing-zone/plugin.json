@@ -5,7 +5,7 @@
   "description": "Foundational Azure infra  VNet, private endpoints, RBAC, GPU quotas",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/02-ai-landing-zone",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/02-ai-landing-zone",
   "tags": ["infra", "landing-zone", "vnet", "rbac"],
   "complexity": "Foundation",
   "status": "Ready",

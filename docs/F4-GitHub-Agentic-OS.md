@@ -313,7 +313,7 @@ Plugins **bundle** agents + skills + commands into a distributable package. Two 
 
 **plugin.json** declares what's inside. Consumers install the plugin → get all agents, skills, prompts, and hooks preconfigured.
 
-> **FrootAI ships plugin.json in every solution play.** Each of the 20 plays has a full manifest declaring all agentic OS files, DevKit, TuneKit, MCP server bindings, tags, complexity, and status. Browse them at [github.com/frootai/fai/tree/main/solution-plays](https://github.com/frootai/fai/tree/main/solution-plays).
+> **FrootAI ships plugin.json in every solution play.** Each of the 20 plays has a full manifest declaring all agentic OS files, DevKit, TuneKit, MCP server bindings, tags, complexity, and status. Browse them at [github.com/frootai/frootai/tree/main/solution-plays](https://github.com/frootai/frootai/tree/main/solution-plays).
 
 ---
 

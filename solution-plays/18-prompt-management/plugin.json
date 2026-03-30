@@ -5,7 +5,7 @@
   "description": "Version control, A/B test, rollback prompts across environments",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/18-prompt-management",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/18-prompt-management",
   "tags": ["prompts", "versioning", "ab-testing", "prompt-flow"],
   "complexity": "Medium",
   "status": "Skeleton",

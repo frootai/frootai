@@ -5,7 +5,7 @@
   "description": "Process documents with GPT-4o multi-modal  text + images",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/15-multi-modal-docproc",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/15-multi-modal-docproc",
   "tags": ["multi-modal", "gpt4o", "vision", "documents"],
   "complexity": "Medium",
   "status": "Skeleton",

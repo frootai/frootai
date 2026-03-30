@@ -1,5 +1,5 @@
 FROM node:22-alpine
-LABEL org.opencontainers.image.source="https://github.com/frootai/fai"
+LABEL org.opencontainers.image.source="https://github.com/frootai/frootai"
 LABEL org.opencontainers.image.description="FrootAI MCP Server — 22 AI architecture tools"
 LABEL org.opencontainers.image.licenses="MIT"
 

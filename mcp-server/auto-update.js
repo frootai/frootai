@@ -26,7 +26,7 @@ const __dirname = dirname(__filename);
 const KNOWLEDGE_PATH = join(__dirname, "knowledge.json");
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 const GITHUB_RAW_URL =
-  "https://raw.githubusercontent.com/frootai/fai/main/mcp-server/knowledge.json";
+  "https://raw.githubusercontent.com/frootai/frootai/main/mcp-server/knowledge.json";
 const FETCH_TIMEOUT_MS = 10000; // 10 second timeout
 
 /**

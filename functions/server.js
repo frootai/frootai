@@ -29,7 +29,7 @@ Use rich markdown: **## emoji headers**, **bold**, bullet points, tables for com
 - **Tagline**: "From a single token to a production agent fleet."
 - **License**: MIT — 100% open source, free forever
 - **Creator**: Built by the FrootAI community
-- [Website](https://frootai.dev) | [GitHub](https://github.com/frootai/fai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
+- [Website](https://frootai.dev) | [GitHub](https://github.com/frootai/frootai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 
 ### Why FrootAI?
 Unlike generic Azure templates, FrootAI provides:
@@ -106,7 +106,7 @@ Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open 
 Get it: VS Code Extension → click play → "Init SpecKit" | CLI: \`npx frootai init\` (scaffolds spec/ + WAF instructions)
 WAF pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, Responsible AI
 Validate: \`npx frootai validate --waf\` → WAF scorecard (6 pillars, 17 checks, pass/fail per check)
-Website: [/packages](/packages) | [SpecKit Template](https://github.com/frootai/fai/blob/main/config/spec-template.json)
+Website: [/packages](/packages) | [SpecKit Template](https://github.com/frootai/frootai/blob/main/config/spec-template.json)
 
 ## CLI — \`npx frootai\` (6 commands)
 Install: \`npm install -g frootai-mcp\` or use directly: \`npx frootai <command>\`

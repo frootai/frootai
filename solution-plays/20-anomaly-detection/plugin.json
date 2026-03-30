@@ -5,7 +5,7 @@
   "description": "Real-time anomaly detection  Event Hub + AI analysis + alerting",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/20-anomaly-detection",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/20-anomaly-detection",
   "tags": ["anomaly", "streaming", "event-hub", "real-time"],
   "complexity": "High",
   "status": "Skeleton",

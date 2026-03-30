@@ -5,7 +5,7 @@
   "description": "Production RAG pipeline  AI Search + OpenAI + Container Apps",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/01-enterprise-rag",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/01-enterprise-rag",
   "tags": ["rag", "search", "openai", "container-apps"],
   "complexity": "Medium",
   "status": "Ready",

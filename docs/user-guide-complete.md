@@ -480,7 +480,7 @@ A: See the [Contributor Guide](./contributor-guide) for step-by-step instruction
 A: Yes. FrootAI is 100% open source under the MIT license.
 
 **Q: How do I report a bug?**
-A: Open an issue on [GitHub](https://github.com/frootai/fai/issues) using the bug report template.
+A: Open an issue on [GitHub](https://github.com/frootai/frootai/issues) using the bug report template.
 
 **Q: How often is the knowledge base updated?**
 A: Knowledge modules are updated with each release. The changelog tracks all content changes.

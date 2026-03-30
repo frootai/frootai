@@ -17,7 +17,7 @@ This is the map that `sync-content.js` and `validate-consistency.js` use to keep
 | **Module count** | `mcp-server/knowledge.json` → `modules` keys | README.md, mcp-server/package.json description |
 | **Play count** | `solution-plays/` → directory count | README.md, mcp-server/package.json description |
 | **Homepage URL** | `https://frootai.dev` | mcp-server/package.json homepage, README.md |
-| **Repository URL** | `https://github.com/frootai/fai` | mcp-server/package.json repository, README.md |
+| **Repository URL** | `https://github.com/frootai/frootai` | mcp-server/package.json repository, README.md |
 | **Copyright** | `LICENSE`, `NOTICE` | All published packages |
 
 ---

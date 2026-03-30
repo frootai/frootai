@@ -385,7 +385,7 @@ The root `plugin.json` describes the FrootAI plugin for marketplace and registry
   "description": "BIY AI Kit — From the Roots to the Fruits",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai",
+  "repository": "https://github.com/frootai/frootai",
   "components": {
     "mcp-server": { "version": "2.2.0", "tools": 16 },
     "vscode-extension": { "version": "0.9.2", "commands": 13 },

@@ -5,7 +5,7 @@
   "description": "Filter harmful content  Content Safety + APIM",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/10-content-moderation",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/10-content-moderation",
   "tags": ["content-safety", "moderation", "apim"],
   "complexity": "Low",
   "status": "Skeleton",

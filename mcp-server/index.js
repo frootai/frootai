@@ -842,7 +842,7 @@ server.tool(
   },
   async ({ filter }) => {
     // Try live from GitHub API
-    const apiUrl = "https://api.github.com/repos/frootai/fai/contents/solution-plays";
+    const apiUrl = "https://api.github.com/repos/frootai/frootai/contents/solution-plays";
     const body = await safeFetch(apiUrl);
 
     let plays = [];
@@ -858,7 +858,7 @@ server.tool(
 
     if (plays.length > 0) {
       const formatted = plays.map((p, i) =>
-        `${i + 1}. **${p}**\n   🔗 https://github.com/frootai/fai/tree/main/solution-plays/${p}`
+        `${i + 1}. **${p}**\n   🔗 https://github.com/frootai/frootai/tree/main/solution-plays/${p}`
       ).join("\n");
       return {
         content: [{

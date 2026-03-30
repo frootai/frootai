@@ -5,7 +5,7 @@
   "description": "Low-code enterprise bot  Copilot Studio + Dataverse",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/08-copilot-studio-bot",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/08-copilot-studio-bot",
   "tags": ["copilot-studio", "low-code", "dataverse"],
   "complexity": "Low",
   "status": "Skeleton",

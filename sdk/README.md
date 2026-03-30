@@ -292,7 +292,7 @@ MCP tool implementations — one source of truth, multiple delivery mechanisms.
 1. **Try it now:** `npx frootai-mcp` — works in 30 seconds
 2. **Browse the tools:** Add to your MCP config and ask your agent to `list_modules`
 3. **Read the docs:** [frootai.dev](https://frootai.dev)
-4. **Star the repo:** [github.com/frootai/fai](https://github.com/frootai/fai)
+4. **Star the repo:** [github.com/frootai/frootai](https://github.com/frootai/frootai)
 
 ---
 

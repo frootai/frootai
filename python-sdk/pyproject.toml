@@ -26,7 +26,7 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://frootai.dev"
-Repository = "https://github.com/frootai/fai"
+Repository = "https://github.com/frootai/frootai"
 Documentation = "https://frootai.dev/api-docs"
 
 [project.scripts]

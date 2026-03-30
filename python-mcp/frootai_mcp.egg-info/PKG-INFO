@@ -5,9 +5,9 @@ Summary: FrootAI MCP Server — AI architecture knowledge + compute tools. 22 to
 Author-email: Pavleen Bali <pavleenbali@frootai.dev>
 License: MIT
 Project-URL: Homepage, https://frootai.dev
-Project-URL: Repository, https://github.com/frootai/fai
+Project-URL: Repository, https://github.com/frootai/frootai
 Project-URL: Documentation, https://frootai.dev/setup-guide
-Project-URL: Bug Tracker, https://github.com/frootai/fai/issues
+Project-URL: Bug Tracker, https://github.com/frootai/frootai/issues
 Keywords: mcp,ai,architecture,azure,copilot,claude,frootai,agents
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers

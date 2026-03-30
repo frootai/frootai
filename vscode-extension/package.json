@@ -28,11 +28,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/frootai/fai"
+    "url": "https://github.com/frootai/frootai"
   },
   "homepage": "https://frootai.dev",
   "bugs": {
-    "url": "https://github.com/frootai/fai/issues"
+    "url": "https://github.com/frootai/frootai/issues"
   },
   "license": "MIT",
   "activationEvents": [

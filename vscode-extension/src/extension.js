@@ -265,7 +265,7 @@ function markdownToHtml(markdown, title) {
   <p style="font-size:0.72rem;color:#555;">
     <strong>FrootAI</strong> — From the Roots to the Fruits · 
     <a href="https://frootai.dev">Website</a> · 
-    <a href="https://github.com/frootai/fai">GitHub</a>
+    <a href="https://github.com/frootai/frootai">GitHub</a>
   </p>
 </body>
 </html>`;
@@ -313,7 +313,7 @@ function downloadFromGitHub(repoPath) {
   if (cached) return Promise.resolve(cached);
 
   return new Promise((resolve, reject) => {
-    const url = `https://raw.githubusercontent.com/frootai/fai/main/${repoPath}`;
+    const url = `https://raw.githubusercontent.com/frootai/frootai/main/${repoPath}`;
     https.get(url, { headers: { "User-Agent": "FrootAI-VSCode" } }, (res) => {
       if (res.statusCode === 302 || res.statusCode === 301) {
         https.get(res.headers.location, (res2) => {
@@ -539,7 +539,7 @@ function activate(context) {
             createModuleWebview(context, play.dir, `${play.icon} ${play.name}`, content);
           });
         } catch {
-          vscode.env.openExternal(vscode.Uri.parse(`https://github.com/frootai/fai/tree/main/solution-plays/${play.dir}`));
+          vscode.env.openExternal(vscode.Uri.parse(`https://github.com/frootai/frootai/tree/main/solution-plays/${play.dir}`));
         }
       } else if (action.value === "userguide") {
         vscode.env.openExternal(vscode.Uri.parse(`https://frootai.dev/user-guide?play=${play.id}`));
@@ -558,7 +558,7 @@ function activate(context) {
       } else if (action.value === "eval") {
         vscode.commands.executeCommand("frootai.runEvaluation");
       } else if (action.value === "github") {
-        vscode.env.openExternal(vscode.Uri.parse(`https://github.com/frootai/fai/tree/main/solution-plays/${play.dir}`));
+        vscode.env.openExternal(vscode.Uri.parse(`https://github.com/frootai/frootai/tree/main/solution-plays/${play.dir}`));
       }
     })
   );

@@ -5,11 +5,11 @@
 
 [![VS Code Installs](https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai?style=for-the-badge&logo=visualstudiocode&label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 [![npm Downloads](https://img.shields.io/npm/dw/frootai-mcp?style=for-the-badge&logo=npm&label=npm)](https://www.npmjs.com/package/frootai-mcp)
-[![GitHub Stars](https://img.shields.io/github/stars/frootai/fai?style=for-the-badge&logo=github)](https://github.com/frootai/fai)
+[![GitHub Stars](https://img.shields.io/github/stars/frootai/frootai?style=for-the-badge&logo=github)](https://github.com/frootai/frootai)
 [![Website](https://img.shields.io/badge/Website-frootai.dev-10b981?style=for-the-badge&logo=cloudflare)](https://frootai.dev)
-[![Docker](https://img.shields.io/github/actions/workflow/status/frootai/fai/docker-publish.yml?style=for-the-badge&label=Docker&logo=docker)](https://github.com/frootai/fai/actions/workflows/docker-publish.yml)
+[![Docker](https://img.shields.io/github/actions/workflow/status/frootai/frootai/docker-publish.yml?style=for-the-badge&label=Docker&logo=docker)](https://github.com/frootai/frootai/actions/workflows/docker-publish.yml)
 [![npm Version](https://img.shields.io/npm/v/frootai-mcp?style=for-the-badge&logo=npm&label=MCP)](https://www.npmjs.com/package/frootai-mcp)
-[![Uptime](https://img.shields.io/github/actions/workflow/status/frootai/fai/uptime.yml?style=for-the-badge&label=Uptime&logo=statuspage)](https://github.com/frootai/fai/actions/workflows/uptime.yml)
+[![Uptime](https://img.shields.io/github/actions/workflow/status/frootai/frootai/uptime.yml?style=for-the-badge&label=Uptime&logo=statuspage)](https://github.com/frootai/frootai/actions/workflows/uptime.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
 
 ---
@@ -66,7 +66,7 @@ npx frootai validate                      # Check project structure
 npx frootai doctor                        # Health check
 ```
 
-**npm**: [npmjs.com/package/frootai-mcp](https://www.npmjs.com/package/frootai-mcp) · **Docker**: [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/fai/pkgs/container/frootai-mcp)
+**npm**: [npmjs.com/package/frootai-mcp](https://www.npmjs.com/package/frootai-mcp) · **Docker**: [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
 
 ### Python SDK + MCP Server
 
@@ -111,7 +111,7 @@ Or search **"FrootAI"** in VS Code Extensions (Ctrl+Shift+X).
 ### Use in GitHub Actions (CI/CD)
 
 ```yaml
-- uses: frootai/fai@main
+- uses: frootai/frootai@main
   with:
     command: validate
     waf: true
@@ -413,4 +413,4 @@ MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
 
 > **FrootAI v3** — *The open glue for AI architecture. From the roots to the fruits.*
 > 16 modules · 23 MCP tools · 20 solution plays · 200+ AI terms
-> Built by the [FrootAI community](https://github.com/frootai/fai)
+> Built by the [FrootAI community](https://github.com/frootai/frootai)

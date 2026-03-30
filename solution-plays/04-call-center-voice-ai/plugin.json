@@ -5,7 +5,7 @@
   "description": "Voice-enabled customer service  Communication Services + Speech + OpenAI",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/04-call-center-voice-ai",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/04-call-center-voice-ai",
   "tags": ["voice", "speech", "communication-services"],
   "complexity": "High",
   "status": "Skeleton",

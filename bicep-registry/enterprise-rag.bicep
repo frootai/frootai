@@ -1,6 +1,6 @@
 // FrootAI Bicep Registry — Enterprise RAG Module
 // Deploys a complete RAG pipeline: AI Search + OpenAI + Container Apps
-// Usage: module rag 'br:ghcr.io/frootai/fai/bicep/enterprise-rag:1.0' = { ... }
+// Usage: module rag 'br:ghcr.io/frootai/frootai/bicep/enterprise-rag:1.0' = { ... }
 
 @description('Resource group location')
 param location string = resourceGroup().location

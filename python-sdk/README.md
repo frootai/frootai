@@ -174,7 +174,7 @@ frootai --version                # Show version
 - **Website:** [frootai.dev](https://frootai.dev)
 - **npm MCP Server:** [frootai-mcp](https://www.npmjs.com/package/frootai-mcp)
 - **VS Code Extension:** [pavleenbali.frootai](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
-- **GitHub:** [github.com/frootai/fai](https://github.com/frootai/fai)
+- **GitHub:** [github.com/frootai/frootai](https://github.com/frootai/frootai)
 - **Python MCP Server:** [frootai-mcp (PyPI)](https://pypi.org/project/frootai-mcp/)
 
 ## License

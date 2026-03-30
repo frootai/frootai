@@ -365,7 +365,7 @@ graph LR
 | **GitHub Pages** | Static site | Push to `main` (website/) | `frootai.dev` |
 | **npm Registry** | Node.js package | Release tag (`v*`) | `npmjs.com/package/frootai-mcp` |
 | **VS Code Marketplace** | VSIX extension | Release tag (`v*`) | `marketplace.visualstudio.com` |
-| **GitHub Releases** | Release notes + assets | Release tag (`v*`) | `github.com/frootai/fai/releases` |
+| **GitHub Releases** | Release notes + assets | Release tag (`v*`) | `github.com/frootai/frootai/releases` |
 
 ### No Backend Required
 

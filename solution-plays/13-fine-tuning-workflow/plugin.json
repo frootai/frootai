@@ -5,7 +5,7 @@
   "description": "End-to-end fine-tuning  LoRA, data prep, evaluation, MLOps",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/13-fine-tuning-workflow",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/13-fine-tuning-workflow",
   "tags": ["fine-tuning", "lora", "mlops", "evaluation"],
   "complexity": "High",
   "status": "Skeleton",

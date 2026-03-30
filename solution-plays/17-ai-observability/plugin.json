@@ -5,7 +5,7 @@
   "description": "Monitor AI workloads  App Insights, KQL, quality alerts, workbooks",
   "author": "FrootAI Contributors",
   "license": "MIT",
-  "repository": "https://github.com/frootai/fai/tree/main/solution-plays/17-ai-observability",
+  "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/17-ai-observability",
   "tags": ["monitoring", "kql", "app-insights", "observability"],
   "complexity": "Medium",
   "status": "Skeleton",
