@@ -8,17 +8,17 @@
 <p align="center"><em>The open AI architecture ecosystem for Infrastructure, Platform & Application teams.</em></p>
 
 <p align="center">
-  <a href="https://frootai.dev"><img src="https://img.shields.io/badge/Website-frootai.dev-10b981?style=for-the-badge&logo=cloudflare" alt="Website"></a>
-  <a href="https://github.com/frootai/frootai"><img src="https://img.shields.io/github/stars/frootai/frootai?style=for-the-badge&logo=github" alt="Stars"></a>
-  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/dw/frootai-mcp?style=for-the-badge&logo=npm&label=npm" alt="npm"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai?style=for-the-badge&logo=visualstudiocode&label=VS%20Code" alt="VS Code"></a>
+  <a href="https://frootai.dev"><img src="https://img.shields.io/badge/Website-frootai.dev-10b981?style=flat-square&logo=cloudflare" alt="Website"></a>
+  <a href="https://github.com/frootai/frootai"><img src="https://img.shields.io/github/stars/frootai/frootai?style=flat-square&logo=github" alt="Stars"></a>
+  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/dw/frootai-mcp?style=flat-square&logo=npm&label=npm" alt="npm"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai?style=flat-square&logo=visualstudiocode&label=VS%20Code" alt="VS Code"></a>
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/dm/frootai?style=for-the-badge&logo=python&label=PyPI" alt="PyPI"></a>
-  <a href="https://github.com/frootai/frootai/actions/workflows/docker-publish.yml"><img src="https://img.shields.io/github/actions/workflow/status/frootai/frootai/docker-publish.yml?style=for-the-badge&label=Docker&logo=docker" alt="Docker"></a>
-  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=for-the-badge&logo=npm&label=MCP%20v" alt="MCP Version"></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License"></a>
+  <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/dm/frootai?style=flat-square&logo=python&label=PyPI" alt="PyPI"></a>
+  <a href="https://github.com/frootai/frootai/actions/workflows/docker-publish.yml"><img src="https://img.shields.io/github/actions/workflow/status/frootai/frootai/docker-publish.yml?style=flat-square&label=Docker&logo=docker" alt="Docker"></a>
+  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=flat-square&logo=npm&label=MCP%20v" alt="MCP Version"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License"></a>
 </p>
 
 ---
