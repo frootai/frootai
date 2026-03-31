@@ -95,7 +95,7 @@ Install: \`npx frootai-mcp@latest\` | Docker: \`docker run -i ghcr.io/frootai/fr
 **Ecosystem(3)**: get_model_catalog, get_azure_pricing, compare_models
 Full guide: [/setup-guide](/setup-guide)
 
-## VS CODE EXTENSION — v1.5.0, 19 commands
+## VS CODE EXTENSION — v1.5.1, 19 commands
 Install: \`code --install-extension frootai.frootai-vscode\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/SpecKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools
