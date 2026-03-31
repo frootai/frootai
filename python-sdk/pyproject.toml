@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "frootai"
-version = "3.3.0"
+version = "3.4.0"
 description = "FrootAI SDK — The open glue for AI architecture. Offline access to 16 knowledge modules, 20 solution plays, cost estimation, evaluation, and A/B testing."
 readme = "README.md"
 license = {text = "MIT"}
