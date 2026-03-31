@@ -49,7 +49,7 @@ Run `Ctrl+Shift+P` → **FrootAI: Init TuneKit** in VS Code.
 
 ## Quick Start
 
-1. Install: `code --install-extension pavleenbali.frootai`
+1. Install: `code --install-extension psbali.frootai`
 2. Init DevKit → 19 .github files + infra
 3. Init TuneKit → AI configs + evaluation
 4. Open Copilot Chat → ask to build this solution

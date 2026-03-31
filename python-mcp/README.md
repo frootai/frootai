@@ -46,7 +46,7 @@ print(result)
 - Python SDK: [pypi.org/project/frootai](https://pypi.org/project/frootai/)
 - npm (Node.js): `npx frootai-mcp` · [npmjs.com](https://www.npmjs.com/package/frootai-mcp)
 - Docker: `docker run -i ghcr.io/frootai/frootai-mcp` · [GHCR](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
-- VS Code: [pavleenbali.frootai](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
+- VS Code: [psbali.frootai](https://marketplace.visualstudio.com/items?itemName=psbali.frootai)
 - GitHub: [github.com/frootai/frootai](https://github.com/frootai/frootai)
 - Contact: [info@frootai.dev](mailto:info@frootai.dev)
 

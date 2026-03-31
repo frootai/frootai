@@ -106,7 +106,7 @@ Ship FrootAI knowledge in your VS Code-based product or fork.
 ### Install from Marketplace
 
 ```bash
-code --install-extension pavleenbali.frootai
+code --install-extension psbali.frootai
 ```
 
 ### What the Extension Provides
@@ -123,7 +123,7 @@ If you ship a custom VS Code distribution (e.g., GitHub Codespaces, Azure Data S
 ```json
 // Add to your default extensions list
 {
-  "recommendations": ["pavleenbali.frootai"]
+  "recommendations": ["psbali.frootai"]
 }
 ```
 

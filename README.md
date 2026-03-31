@@ -10,7 +10,7 @@
   <a href="https://frootai.dev"><img src="https://img.shields.io/badge/frootai.dev-10b981?style=flat-square&logo=cloudflare&logoColor=white" alt="Website"></a>
   <a href="https://github.com/frootai/frootai"><img src="https://img.shields.io/github/stars/frootai/frootai?style=flat-square&logo=github" alt="Stars"></a>
   <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/dw/frootai-mcp?style=flat-square&logo=npm&label=npm" alt="npm"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai?style=flat-square&logo=visualstudiocode&label=VS%20Code" alt="VS Code"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=psbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/i/psbali.frootai?style=flat-square&logo=visualstudiocode&label=VS%20Code" alt="VS Code"></a>
   <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/dm/frootai?style=flat-square&logo=python&label=PyPI" alt="PyPI"></a>
   <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=flat-square&logo=npm&label=MCP%20v" alt="Version"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/MIT-yellow?style=flat-square&label=License" alt="License"></a>
@@ -29,7 +29,7 @@ An open ecosystem where **Infra**, **Platform**, and **App** teams build AI  *Fr
 |  | **Solution Plays** | 20 | Infra & platform engineers | [Website](https://frootai.dev/solution-plays)  [GitHub](https://github.com/frootai/frootai/tree/main/solution-plays) |
 |  | **MCP Server** | 23 tools | AI agents (Copilot, Claude, Cursor) | [Website](https://frootai.dev/mcp-tooling)  [npm](https://www.npmjs.com/package/frootai-mcp) |
 |  | **Knowledge Modules** | 16 | Cloud architects, CSAs | [Website](https://frootai.dev/docs)  [GitHub](https://github.com/frootai/frootai/tree/main/docs) |
-|  | **VS Code Extension** | 19 cmds | Developers | [Website](https://frootai.dev/vscode-extension)  [Marketplace](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
+|  | **VS Code Extension** | 19 cmds | Developers | [Website](https://frootai.dev/vscode-extension)  [Marketplace](https://marketplace.visualstudio.com/items?itemName=psbali.frootai) |
 |  | **Python SDK** | 0 deps | Data scientists | [PyPI](https://pypi.org/project/frootai/) |
 |  | **CLI** | 6 cmds | Everyone | [Website](https://frootai.dev/cli) |
 
@@ -39,7 +39,7 @@ An open ecosystem where **Infra**, **Platform**, and **App** teams build AI  *Fr
 
 ```bash
 npx frootai-mcp@latest                          # MCP Server  add to any AI agent
-code --install-extension pavleenbali.frootai     # VS Code Extension
+code --install-extension psbali.frootai     # VS Code Extension
 pip install frootai                              # Python SDK
 docker run -i ghcr.io/frootai/frootai-mcp        # Docker  zero install
 npx frootai init                                 # CLI  scaffold a project
@@ -150,7 +150,7 @@ graph LR
 | **PyPI SDK** | `pip install frootai` | 3.3.0 | [PyPI](https://pypi.org/project/frootai/) |
 | **PyPI MCP** | `pip install frootai-mcp` | 3.2.0 | [PyPI](https://pypi.org/project/frootai-mcp/) |
 | **Docker** | `docker run -i ghcr.io/frootai/frootai-mcp` | latest | [Website](https://frootai.dev/docker)  [GHCR](https://github.com/frootai/frootai/pkgs/container/frootai-mcp) |
-| **VS Code** | `code --install-extension pavleenbali.frootai` | 1.4.0 | [Website](https://frootai.dev/vscode-extension)  [Marketplace](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
+| **VS Code** | `code --install-extension psbali.frootai` | 1.4.0 | [Website](https://frootai.dev/vscode-extension)  [Marketplace](https://marketplace.visualstudio.com/items?itemName=psbali.frootai) |
 | **CLI** | `npx frootai <command>` | 3.2.0 | [Website](https://frootai.dev/cli) |
 | **REST API** |  | live | [API Docs](https://frootai.dev/api-docs) |
 | **GitHub** |  | latest | [github.com/frootai/frootai](https://github.com/frootai/frootai) |

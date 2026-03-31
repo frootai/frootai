@@ -8,8 +8,8 @@
   "badges": [
     {
       "description": "VS Code Marketplace",
-      "url": "https://img.shields.io/visual-studio-marketplace/v/pavleenbali.frootai?label=VS%20Code&color=00C853",
-      "href": "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"
+      "url": "https://img.shields.io/visual-studio-marketplace/v/psbali.frootai?label=VS%20Code&color=00C853",
+      "href": "https://marketplace.visualstudio.com/items?itemName=psbali.frootai"
     },
     {
       "description": "npm",
@@ -24,7 +24,7 @@
   ],
   "artifacts": {
     "npm_package": "frootai-mcp@2.2.0",
-    "vscode_extension": "pavleenbali.frootai@0.9.0",
+    "vscode_extension": "psbali.frootai@0.9.0",
     "website": "https://frootai.dev"
   },
   "features": [

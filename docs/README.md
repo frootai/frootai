@@ -433,7 +433,7 @@ Ctrl+Shift+X → Search "FrootAI" → Install
 
 **4 sidebar panels:** Solution Plays (20) · MCP Tools (22) · Knowledge Hub (18 modules) · AI Glossary (200+ terms)
 
-See [VS Code Extension →](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
+See [VS Code Extension →](https://marketplace.visualstudio.com/items?itemName=psbali.frootai)
 
 ---
 
