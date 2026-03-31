@@ -1543,15 +1543,23 @@ function activate(context) {
           async () => {
             try {
               const { execSync } = require("child_process");
-              const cmd = process.platform === "win32"
-                ? `python "${evalPy}" --test-set "${testSet}"`
-                : `python3 "${evalPy}" --test-set "${testSet}"`;
-              evalOutput = execSync(cmd, {
-                cwd: wsRoot,
-                encoding: "utf-8",
-                timeout: 30000,
-                shell: true,
-              });
+              // Use relative paths to avoid spaces-in-path issues on Windows
+              const relEvalPy = path.relative(wsRoot, evalPy);
+              const relTestSet = path.relative(wsRoot, testSet);
+              const pythonCmd = process.platform === "win32" ? "python" : "python3";
+              try {
+                evalOutput = execSync(`${pythonCmd} "${relEvalPy}" --test-set "${relTestSet}"`, {
+                  cwd: wsRoot,
+                  encoding: "utf-8",
+                  timeout: 30000,
+                  shell: true,
+                });
+              } catch (execErr) {
+                // eval.py exits with code 1 when tests fail — that's normal, capture its output
+                if (execErr.stdout) evalOutput = execErr.stdout;
+                else if (execErr.stderr) evalOutput = execErr.stderr;
+                else evalOutput = execErr.message;
+              }
               evalStatus = "completed";
 
               // Parse scores from output (look for lines like "Faithfulness: 0.85")
