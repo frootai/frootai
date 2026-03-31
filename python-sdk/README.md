@@ -177,7 +177,7 @@ frootai --version                # Show version
 
 - **Website:** [frootai.dev](https://frootai.dev)
 - **npm MCP Server:** [frootai-mcp](https://www.npmjs.com/package/frootai-mcp)
-- **VS Code Extension:** [psbali.frootai](https://marketplace.visualstudio.com/items?itemName=psbali.frootai)
+- **VS Code Extension:** [frootai.frootai-vscode](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
 - **Docker:** [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
 - **GitHub:** [github.com/frootai/frootai](https://github.com/frootai/frootai)
 - **Python MCP Server:** [frootai-mcp (PyPI)](https://pypi.org/project/frootai-mcp/)

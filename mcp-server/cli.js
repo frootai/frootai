@@ -360,7 +360,7 @@ npx frootai doctor                        # Health check
 
 ## Links
 
-- [FrootAI](https://frootai.dev) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=psbali.frootai) | [PyPI](https://pypi.org/project/frootai/)
+- [FrootAI](https://frootai.dev) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode) | [PyPI](https://pypi.org/project/frootai/)
 `);
 
   // .gitignore

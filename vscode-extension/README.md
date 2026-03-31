@@ -7,9 +7,9 @@
 <p align="center"><em>20 Solution Plays  23 MCP Tools  16 Knowledge Modules  200+ AI Terms</em></p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=psbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/v/psbali.frootai?style=flat-square&logo=visualstudiocode&label=Version" alt="Version"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=psbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/i/psbali.frootai?style=flat-square&logo=visualstudiocode&label=Installs" alt="Installs"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=psbali.frootai"><img src="https://img.shields.io/visual-studio-marketplace/r/psbali.frootai?style=flat-square&label=Rating" alt="Rating"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"><img src="https://img.shields.io/visual-studio-marketplace/v/frootai.frootai-vscode?style=flat-square&logo=visualstudiocode&label=Version" alt="Version"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"><img src="https://img.shields.io/visual-studio-marketplace/i/frootai.frootai-vscode?style=flat-square&logo=visualstudiocode&label=Installs" alt="Installs"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"><img src="https://img.shields.io/visual-studio-marketplace/r/frootai.frootai-vscode?style=flat-square&label=Rating" alt="Rating"></a>
   <a href="https://github.com/frootai/frootai/blob/main/LICENSE"><img src="https://img.shields.io/badge/MIT-yellow?style=flat-square&label=License" alt="License"></a>
 </p>
 
@@ -43,7 +43,7 @@ Ctrl+Shift+X  Search "FrootAI"  Install
 **Option 2  Terminal:**
 
 ```bash
-code --install-extension psbali.frootai
+code --install-extension frootai.frootai-vscode
 ```
 
 ---

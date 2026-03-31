@@ -45,4 +45,4 @@
 - `config/model-comparison.json`  model selection guide
 - `evaluation/test-set.jsonl + eval.py`  quality scoring
 
-> Use the [FrootAI VS Code Extension](https://marketplace.visualstudio.com/items?itemName=psbali.frootai) to scaffold any play with one click.
+> Use the [FrootAI VS Code Extension](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode) to scaffold any play with one click.

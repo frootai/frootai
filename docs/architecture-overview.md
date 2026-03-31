@@ -345,7 +345,7 @@ graph LR
     subgraph Targets["Deployment Targets"]
         GHP["GitHub Pages<br/>frootai.dev"]
         NPM["npm Registry<br/>npmjs.com/package/frootai-mcp"]
-        VSCM["VS Code Marketplace<br/>psbali.frootai"]
+        VSCM["VS Code Marketplace<br/>frootai.frootai-vscode"]
     end
 
     Code --> CI

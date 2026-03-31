@@ -29,7 +29,7 @@ Use rich markdown: **## emoji headers**, **bold**, bullet points, tables for com
 - **Tagline**: "From a single token to a production agent fleet."
 - **License**: MIT — 100% open source, free forever
 - **Creator**: Built by the FrootAI community
-- [Website](https://frootai.dev) | [GitHub](https://github.com/frootai/frootai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=psbali.frootai)
+- [Website](https://frootai.dev) | [GitHub](https://github.com/frootai/frootai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
 
 ### Why FrootAI?
 Unlike generic Azure templates, FrootAI provides:
@@ -96,7 +96,7 @@ Install: \`npx frootai-mcp@latest\` | Docker: \`docker run -i ghcr.io/frootai/fr
 Full guide: [/setup-guide](/setup-guide)
 
 ## VS CODE EXTENSION — v1.4.0, 19 commands
-Install: \`code --install-extension psbali.frootai\`
+Install: \`code --install-extension frootai.frootai-vscode\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/SpecKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools
 4 sidebar panels: Plays(20), MCP(23), Knowledge(18), Glossary(200+). Standalone — no clone needed.
@@ -144,7 +144,7 @@ Access: [/docs/](/docs/) or FAI Learning Hub navbar
 
 ## GETTING STARTED (recommend this flow)
 1. **Try the Configurator**: [/configurator](/configurator) → 3 questions → recommended play
-2. **Install VS Code Extension**: \`code --install-extension psbali.frootai\`
+2. **Install VS Code Extension**: \`code --install-extension frootai.frootai-vscode\`
 3. **Browse Plays**: [/solution-plays](/solution-plays) → explore all 20 plays
 4. **Init DevKit**: Click play → "Init DevKit" → 19 .github files + infra in workspace
 5. **Init TuneKit**: Click play → "Init TuneKit" → AI config + evaluation

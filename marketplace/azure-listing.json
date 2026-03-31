@@ -26,7 +26,7 @@
     "website": "https://frootai.dev",
     "repository": "https://github.com/frootai/frootai",
     "npm": "https://www.npmjs.com/package/frootai-mcp",
-    "vscode": "https://marketplace.visualstudio.com/items?itemName=psbali.frootai"
+    "vscode": "https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"
   },
   "artifacts": {
     "mcpServer": {
@@ -37,7 +37,7 @@
       "tools": 16
     },
     "vscodeExtension": {
-      "name": "psbali.frootai",
+      "name": "frootai.frootai-vscode",
       "version": "0.9.0",
       "commands": 13,
       "standalone": true

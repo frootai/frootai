@@ -14,7 +14,7 @@ title: User Guide
 ### Step 1: Install the VS Code Extension
 
 ```bash
-code --install-extension psbali.frootai
+code --install-extension frootai.frootai-vscode
 ```
 
 Or search **"FrootAI"** in the VS Code Extensions Marketplace.

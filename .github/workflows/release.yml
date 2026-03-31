@@ -61,7 +61,7 @@ jobs:
             npx frootai-mcp@${{ steps.info.outputs.version }}
 
             # VS Code Extension
-            code --install-extension psbali.frootai
+            code --install-extension frootai.frootai-vscode
 
             # Docker
             docker run -i ghcr.io/frootai/frootai-mcp:${{ steps.info.outputs.version }}
@@ -69,7 +69,7 @@ jobs:
 
             **Links:**
             - [npm](https://www.npmjs.com/package/frootai-mcp)
-            - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=psbali.frootai)
+            - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
             - [Docker](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
             - [Website](https://frootai.dev)
           generate_release_notes: true

@@ -69,7 +69,7 @@ The MCP server runs on **stdio** by default. Clients configure it via their MCP 
 
 ```bash
 # From Marketplace
-code --install-extension psbali.frootai
+code --install-extension frootai.frootai-vscode
 
 # From source (development)
 cd vscode-extension

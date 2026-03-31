@@ -14,7 +14,7 @@ By the end of this workshop, participants will:
 
 - Azure subscription with Contributor access
 - Azure CLI installed (`az --version` >= 2.50)
-- VS Code with FrootAI extension (`code --install-extension psbali.frootai`)
+- VS Code with FrootAI extension (`code --install-extension frootai.frootai-vscode`)
 
 ## Workshop Flow
 

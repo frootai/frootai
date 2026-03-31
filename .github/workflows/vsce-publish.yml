@@ -30,7 +30,7 @@ jobs:
         working-directory: vscode-extension
         run: |
           LOCAL=$(node -p "require('./package.json').version")
-          MARKETPLACE=$(npx @vscode/vsce show psbali.frootai --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).versions[0].version" 2>/dev/null || echo "0.0.0")
+          MARKETPLACE=$(npx @vscode/vsce show frootai.frootai-vscode --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).versions[0].version" 2>/dev/null || echo "0.0.0")
           echo "local=$LOCAL" >> $GITHUB_OUTPUT
           echo "marketplace=$MARKETPLACE" >> $GITHUB_OUTPUT
           if [ "$LOCAL" = "$MARKETPLACE" ]; then

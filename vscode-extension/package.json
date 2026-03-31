@@ -1,9 +1,9 @@
 {
-  "name": "frootai",
+  "name": "frootai-vscode",
   "displayName": "FrootAI — AI Architecture Toolkit",
   "description": "20 solution plays + 23 MCP tools for building production AI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click. Works standalone from any workspace.",
   "version": "1.5.0",
-  "publisher": "psbali",
+  "publisher": "frootai",
   "engines": {
     "vscode": "^1.85.0"
   },
