@@ -245,8 +245,11 @@ Agent FAI is also available as a REST API:
 | **REST API Docs** | [frootai.dev/api-docs](https://frootai.dev/api-docs) |
 | **VS Code Extension** | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
 | **Docker** | [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/frootai/pkgs/container/frootai-mcp) |
+| **Python SDK** | [pypi.org/project/frootai](https://pypi.org/project/frootai/) |
+| **Python MCP** | [pypi.org/project/frootai-mcp](https://pypi.org/project/frootai-mcp/) |
 | **GitHub** | [github.com/frootai/frootai](https://github.com/frootai/frootai) |
 | **Setup Guide** | [frootai.dev/setup-guide](https://frootai.dev/setup-guide) |
+| **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
 
 ---
 

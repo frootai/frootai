@@ -120,7 +120,11 @@ The extension works alongside `npx frootai-mcp` (23 tools):
 |---|---|
 | **Website** | [frootai.dev](https://frootai.dev) |
 | **npm** | [npmjs.com/package/frootai-mcp](https://www.npmjs.com/package/frootai-mcp) |
+| **Python SDK** | [pypi.org/project/frootai](https://pypi.org/project/frootai/) |
+| **Python MCP** | [pypi.org/project/frootai-mcp](https://pypi.org/project/frootai-mcp/) |
+| **Docker** | [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/frootai/pkgs/container/frootai-mcp) |
 | **GitHub** | [github.com/frootai/frootai](https://github.com/frootai/frootai) |
+| **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
 
 ---
 
