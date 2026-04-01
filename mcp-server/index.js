@@ -15,7 +15,7 @@
  *     "mcpServers": {
  *       "frootai": {
  *         "command": "npx",
- *         "args": ["frootai-mcp"]
+ *         "args": ["frootai-mcp@latest"]
  *       }
  *     }
  *   }

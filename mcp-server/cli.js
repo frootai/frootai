@@ -201,7 +201,7 @@ async function cmdInit() {
       frootai: {
         type: 'stdio',
         command: 'npx',
-        args: ['-y', `frootai-mcp@${VERSION}`],
+        args: ['frootai-mcp@latest'],
       },
     },
   }, null, 2));
@@ -817,7 +817,7 @@ async function cmdScaffold(playArg) {
   for (const d of dirs) mkdirSync(d, { recursive: true });
 
   // Core files
-  writeIfNotExists('.vscode/mcp.json', JSON.stringify({ servers: { frootai: { type: 'stdio', command: 'npx', args: ['-y', `frootai-mcp@${VERSION}`] } } }, null, 2));
+  writeIfNotExists('.vscode/mcp.json', JSON.stringify({ servers: { frootai: { type: 'stdio', command: 'npx', args: ['frootai-mcp@latest'] } } }, null, 2));
 
   writeIfNotExists('.github/agents/builder.agent.md', `---\ndescription: "Builder agent — implements features following FrootAI architecture patterns"\ntools:\n  - frootai\n---\n# Builder Agent\n\nYou are a builder agent for a ${playId} solution.\nUse the FrootAI MCP server for architecture patterns, cost estimates, and best practices.\n`);
   writeIfNotExists('.github/agents/reviewer.agent.md', `---\ndescription: "Reviewer agent — reviews code for security, quality, Azure best practices"\ntools:\n  - frootai\n---\n# Reviewer Agent\n\nReview all code changes against:\n- Security (OWASP Top 10)\n- Azure best practices (Well-Architected Framework)\n- Config compliance (config/*.json)\n`);

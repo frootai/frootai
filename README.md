@@ -3,8 +3,9 @@
 </p>
 
 <h1 align="center">FrootAI</h1>
-<p align="center"><strong>From the Roots to the Fruits</strong></p>
-<p align="center"><em>Open AI architecture ecosystem for Infra, Platform & App teams.</em></p>
+<p align="center"><strong>From the Roots to the Fruits. It's simply Frootful.</strong></p>
+<p align="center"><em>An open ecosystem where Infra, Platform, and App teams build AI — Frootfully.</em></p>
+<p align="center"><em>An open glue for the GenAI ecosystem, enabling deterministic and reliable AI solutions.</em></p>
 
 <p align="center">
   <a href="https://frootai.dev"><img src="https://img.shields.io/badge/frootai.dev-10b981?style=flat-square&logo=cloudflare&logoColor=white" alt="Website"></a>
@@ -18,20 +19,34 @@
 
 ---
 
-### What is FrootAI?
+### The Philosophy Behind FrootAI — The Essence of the FAI Engine
 
-**FROOT** = **F**oundations  **R**easoning  **O**rchestration  **O**perations  **T**ransformation
+FrootAI is an intelligent way of packaging skills, knowledge, and the essential components of the GenAI ecosystem — all **synced**, not standalone. Infrastructure, platform, and application layers are woven together so that every piece understands and builds on the others. That's what *"from the roots to the fruits"* means: a fully connected ecosystem where Infra, Platform, and App teams build AI — *Frootfully*.
 
-An open ecosystem where **Infra**, **Platform**, and **App** teams build AI  *Frootfully*.
+<details>
+<summary><strong>The FROOT Framework</strong></summary>
+<br>
 
-| | What | # | For Whom | Links |
-|:--:|------|:-:|----------|-------|
-|  | **Solution Plays** | 20 | Infra & platform engineers | [Website](https://frootai.dev/solution-plays)  [GitHub](https://github.com/frootai/frootai/tree/main/solution-plays) |
-|  | **MCP Server** | 23 tools | AI agents (Copilot, Claude, Cursor) | [Website](https://frootai.dev/mcp-tooling)  [npm](https://www.npmjs.com/package/frootai-mcp) |
-|  | **Knowledge Modules** | 16 | Cloud architects, CSAs | [Website](https://frootai.dev/docs)  [GitHub](https://github.com/frootai/frootai/tree/main/docs) |
-|  | **VS Code Extension** | 19 cmds | Developers | [Website](https://frootai.dev/vscode-extension)  [Marketplace](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode) |
-|  | **Python SDK** | 0 deps | Data scientists | [PyPI](https://pypi.org/project/frootai/) |
-|  | **CLI** | 6 cmds | Everyone | [Website](https://frootai.dev/cli) |
+**FROOT** = **F**oundations · **R**easoning · **O**rchestration · **O**perations · **T**ransformation
+
+| Layer | What You Learn |
+|:-----:|---------------|
+| **F** | Tokens, models, glossary, Agentic OS |
+| **R** | Prompts, RAG, grounding, deterministic AI |
+| **O** | Semantic Kernel, agents, MCP, tools |
+| **O** | Azure AI Foundry, GPU infra, Copilot ecosystem |
+| **T** | Fine-tuning, responsible AI, production patterns |
+
+</details>
+
+| What | For Whom | Link |
+|------|----------|------|
+| **Solution Plays** | Infra & platform engineers | [Browse Plays](https://frootai.dev/solution-plays) |
+| **MCP Server** | AI agents (Copilot, Claude, Cursor) | [MCP Tooling](https://frootai.dev/mcp-tooling) |
+| **Knowledge Modules** | Cloud architects, CSAs | [Docs](https://frootai.dev/docs) |
+| **VS Code Extension** | Developers | [VS Code Extension](https://frootai.dev/vscode-extension) |
+| **Python SDK** | Data scientists | [Python SDK](https://frootai.dev/python) |
+| **CLI** | Everyone | [CLI Docs](https://frootai.dev/cli) |
 
 ---
 
@@ -118,29 +133,6 @@ Every play ships with: `.github` Agentic OS (19 files)  DevKit  TuneKit  SpecKit
 ---
 
 <details>
-<summary><strong>The FROOT Framework</strong></summary>
-<br>
-
-```mermaid
-graph LR
-  F[" Foundations"] --> R[" Reasoning"] --> O1[" Orchestration"] --> O2[" Operations"] --> T[" Transformation"]
-```
-
-| Layer | Modules | What You Learn |
-|:-----:|---------|---------------|
-|  **F** | F1  F2  F3  F4 | Tokens, models, glossary, Agentic OS |
-|  **R** | R1  R2  R3 | Prompts, RAG, grounding, deterministic AI |
-|  **O** | O1  O2  O3 | Semantic Kernel, agents, MCP, tools |
-|  **O** | O4  O5  O6 | Azure AI Foundry, GPU infra, Copilot ecosystem |
-|  **T** | T1  T2  T3 | Fine-tuning, responsible AI, production patterns |
-
-**16 modules  200+ AI terms  60,000+ words**
-
-</details>
-
----
-
-<details>
 <summary><strong>Distribution Channels</strong></summary>
 <br>
 
@@ -165,16 +157,16 @@ graph LR
 
 ```
 frootai/frootai
- mcp-server/            23 MCP tools + knowledge.json (682KB)
- vscode-extension/      VS Code extension (21 commands)
- python-sdk/            Python SDK  offline, zero deps
- python-mcp/            Python MCP Server  23 tools
+ mcp-server/            MCP tools + knowledge.json
+ vscode-extension/      VS Code extension
+ python-sdk/            Python SDK — offline, zero deps
+ python-mcp/            Python MCP Server
  functions/             REST API + Agent FAI chatbot
- solution-plays/        20 plays with .github Agentic OS
- docs/                  16 FROOT knowledge modules
+ solution-plays/        Deployable plays with .github Agentic OS
+ docs/                  FROOT knowledge modules
  config/                Configurator data + spec templates
  scripts/               Build, sync, validate automation
- workshops/             3 hands-on workshops
+ workshops/             Hands-on workshops
  community-plugins/     ServiceNow, Salesforce, SAP
  bicep-registry/        Azure Bicep modules
  CONTRIBUTING.md
@@ -185,18 +177,21 @@ frootai/frootai
 
 ---
 
-### Platform
+### Links
 
-| | Page | What |
-|:--:|------|------|
-|  | [frootai.dev](https://frootai.dev) | Homepage |
-|  | [/docs](https://frootai.dev/docs) | 16 knowledge modules |
-|  | [/solution-plays](https://frootai.dev/solution-plays) | Browse all 20 plays |
-|  | [/chatbot](https://frootai.dev/chatbot) | Agent FAI |
-|  | [/configurator](https://frootai.dev/configurator) | Play recommendation wizard |
-|  | [/packages](https://frootai.dev/packages) | Distribution channels |
-|  | [/setup-guide](https://frootai.dev/setup-guide) | Installation guide |
-|  | [/learning-hub](https://frootai.dev/learning-hub) | Workshops & certs |
+| Resource | Link |
+|---|---|
+| **Website** | [frootai.dev](https://frootai.dev) |
+| **Docs** | [Knowledge Modules](https://frootai.dev/docs) |
+| **Solution Plays** | [Browse All Plays](https://frootai.dev/solution-plays) |
+| **Agent FAI** | [Chatbot](https://frootai.dev/chatbot) |
+| **Configurator** | [Play Recommendation Wizard](https://frootai.dev/configurator) |
+| **Packages** | [Distribution Channels](https://frootai.dev/packages) |
+| **Setup Guide** | [Installation Guide](https://frootai.dev/setup-guide) |
+| **Learning Hub** | [Workshops & Certs](https://frootai.dev/learning-hub) |
+| **CLI** | [CLI Reference](https://frootai.dev/cli) |
+| **REST API** | [API Docs](https://frootai.dev/api-docs) |
+| **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
 
 ---
 
@@ -209,9 +204,10 @@ Open source under MIT. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 ---
 
 <p align="center">
-  <a href="https://frootai.dev">Website</a>  
-  <a href="https://frootai.dev/chatbot">Agent FAI</a>  
-  <a href="https://frootai.dev/docs">Docs</a>  
-  <a href="https://github.com/frootai/frootai/issues">Issues</a>
+  <a href="https://frootai.dev">Website</a> · 
+  <a href="https://frootai.dev/chatbot">Agent FAI</a> · 
+  <a href="https://frootai.dev/docs">Docs</a> · 
+  <a href="https://frootai.dev/solution-plays">Solution Plays</a>
 </p>
-<p align="center"><em>It's simply Frootful.</em> </p>
+<p align="center"><em>It's simply Frootful.</em></p>
+<p align="center">© 2026 FrootAI — MIT License</p>

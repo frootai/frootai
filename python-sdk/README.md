@@ -2,187 +2,119 @@
   <img src="https://frootai.dev/img/frootai-mark.png" width="100" alt="FrootAI">
 </p>
 
-# FrootAI — Python SDK
+<h1 align="center">FrootAI</h1>
+<p align="center"><sub>Python SDK</sub></p>
+<p align="center"><strong>From the Roots to the Fruits. It's simply Frootful.</strong></p>
+<p align="center"><em>An open ecosystem where Infra, Platform, and App teams build AI — Frootfully.</em></p>
+<p align="center"><em>An open glue for the GenAI ecosystem, enabling deterministic and reliable AI solutions.</em></p>
 
-> Offline-first access to 16 AI architecture knowledge modules, 20 solution plays, cost estimation, evaluation, and A/B testing. Zero external dependencies.
+<p align="center">
+  <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/v/frootai?style=flat-square&logo=python" alt="PyPI"></a>
+  <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/dm/frootai?style=flat-square&label=downloads" alt="downloads"></a>
+  <a href="https://github.com/frootai/frootai/blob/main/LICENSE"><img src="https://img.shields.io/badge/MIT-yellow?style=flat-square&label=license" alt="license"></a>
+</p>
 
-[![PyPI](https://img.shields.io/pypi/v/frootai)](https://pypi.org/project/frootai/)
-[![Python](https://img.shields.io/pypi/pyversions/frootai)](https://pypi.org/project/frootai/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+---
 
-## Install
+### The Philosophy Behind FrootAI — The Essence of the FAI Engine
+
+FrootAI is an intelligent way of packaging skills, knowledge, and the essential components of the GenAI ecosystem — all **synced**, not standalone. Infrastructure, platform, and application layers are woven together so that every piece understands and builds on the others. That's what *"from the roots to the fruits"* means: a fully connected ecosystem where Infra, Platform, and App teams build AI — *Frootfully*.
+
+<details>
+<summary><strong>The FROOT Framework</strong></summary>
+<br>
+
+**FROOT** = **F**oundations · **R**easoning · **O**rchestration · **O**perations · **T**ransformation
+
+| Layer | What You Learn |
+|:-----:|---------------|
+| **F** | Tokens, models, glossary, Agentic OS |
+| **R** | Prompts, RAG, grounding, deterministic AI |
+| **O** | Semantic Kernel, agents, MCP, tools |
+| **O** | Azure AI Foundry, GPU infra, Copilot ecosystem |
+| **T** | Fine-tuning, responsible AI, production patterns |
+
+</details>
+
+### The FAI Ecosystem
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/.github/fai-eco-big.png" width="700" alt="FAI Ecosystem — Factory builds, Packages deliver, Toolkit equips">
+</p>
+
+---
+
+### Install
 
 ```bash
 pip install frootai
 ```
 
-## Quick Start
+### Quick Start
 
 ```python
 from frootai import FrootAI, SolutionPlay, Evaluator
 
-# Search 682KB knowledge base (16 modules across 5 FROOT layers)
 client = FrootAI()
+
+# Search knowledge
 results = client.search("RAG architecture")
-for r in results:
-    print(f"[{r['module_id']}] {r['title']} — {r['relevance']} hits")
 
-# Get a specific module
-module = client.get_module("R2")  # RAG Architecture & Retrieval
-print(f"{module['title']}: {module['content_length']:,} chars")
+# Get a module
+module = client.get_module("R2")  # RAG Architecture
 
-# List all FROOT layers
-for layer in client.list_layers():
-    print(f"{layer['emoji']} {layer['name']} ({len(layer['modules'])} modules)")
+# Browse solution plays
+plays = SolutionPlay.all()
 
 # Estimate Azure costs
 cost = client.estimate_cost("01-enterprise-rag", scale="prod")
-print(f"${cost['monthly_total']}/mo")
 
-# Browse 20 solution plays
-plays = SolutionPlay.all()
-ready = SolutionPlay.ready()  # 3 production-ready
-by_layer = SolutionPlay.by_layer("R")  # Reasoning layer plays
-```
-
-## Features
-
-### Knowledge Search (offline, no API calls)
-
-```python
-client = FrootAI()
-
-# Full-text search across 16 modules (643KB of real content)
-results = client.search("embeddings", max_results=5)
-
-# Get module by ID
-mod = client.get_module("O2")  # AI Agents & Microsoft Agent Framework
-
-# List all modules
-for m in client.list_modules():
-    print(f"{m['emoji']} {m['id']} {m['title']} ({m['content_length'] // 1024}KB)")
-
-# Extract a specific section
-section = client.get_module_section("F1", "Table of Contents")
-```
-
-### Glossary (159+ terms extracted from content)
-
-```python
-# Look up a term
-term = client.lookup_term("temperature")
-
-# Search glossary
-terms = client.search_glossary("embedding", max_results=10)
-```
-
-### Cost Estimation
-
-```python
-# Estimate monthly Azure costs for a solution play
-cost = client.estimate_cost("01-enterprise-rag", scale="dev")
-# {'play': '01-enterprise-rag', 'scale': 'dev', 'monthly_total': 430, 'breakdown': {...}}
-
-cost = client.estimate_cost("01-enterprise-rag", scale="prod")
-# {'monthly_total': 3600, 'breakdown': {'openai-gpt4o': 2500, 'ai-search-standard': 750, ...}}
-```
-
-### Solution Plays (20 pre-tuned architecture blueprints)
-
-```python
-from frootai.plays import SolutionPlay
-
-play = SolutionPlay.get("03")
-print(f"{play.name}: {play.description}")
-print(f"Infrastructure: {play.infra}")
-print(f"Tuning params: {play.tuning}")
-print(f"Related modules: {play.modules}")
-
-# Filter by FROOT layer
-orchestration_plays = SolutionPlay.by_layer("O_ORCH")
-```
-
-### Evaluation (quality gates)
-
-```python
-from frootai import Evaluator
-
+# Run evaluation
 evaluator = Evaluator()
-scores = {"groundedness": 4.5, "relevance": 3.2, "coherence": 4.1, "fluency": 4.8}
-
+scores = {"groundedness": 4.5, "relevance": 3.8}
 results = evaluator.check_thresholds(scores)
-print(evaluator.summary(scores))
-# 3/4 checks passed (relevance 3.2 < threshold 4.0)
 ```
 
-### A/B Testing (prompt experiments)
-
-```python
-from frootai.ab_testing import PromptExperiment, PromptVariant
-
-# You provide the model function — no fake scores
-def my_model(system_prompt, query):
-    return call_your_llm(system_prompt=system_prompt, user_message=query)
-
-def my_scorer(query, response):
-    return {"groundedness": 4.5, "relevance": 4.0}
-
-experiment = PromptExperiment(
-    name="system-prompt-v2",
-    variants=[
-        PromptVariant("control", "You are a helpful assistant."),
-        PromptVariant("expert", "You are an Azure AI expert. Cite sources."),
-    ],
-)
-
-results = experiment.run(["What is RAG?"], model_fn=my_model, scorer_fn=my_scorer)
-print(f"Winner: {experiment.pick_winner(results)}")
-```
-
-## CLI
+### CLI
 
 ```bash
-frootai plays                    # List all 20 solution plays
-frootai plays --ready            # Show production-ready plays only
-frootai plays --layer R          # Filter by FROOT layer
-frootai search "embeddings"      # Search knowledge base
-frootai modules                  # List all 16 modules with sizes
+frootai plays                    # List solution plays
+frootai search "embeddings"      # Search knowledge
+frootai modules                  # List FROOT modules
 frootai glossary temperature     # Look up a term
-frootai cost 01-enterprise-rag   # Estimate Azure costs
-frootai cost 01-enterprise-rag --scale prod
-frootai --version                # Show version
+frootai cost 01-enterprise-rag   # Azure cost estimate
 ```
 
-## What's Inside
+---
 
-- **16 knowledge modules** (643KB) across 5 FROOT layers: Foundations, Reasoning, Orchestration, Operations, Transformation
-- **20 solution plays** with infrastructure, tuning parameters, and module mapping
-- **159+ glossary terms** extracted from module content
-- **Cost estimation** for 10 plays with dev/prod breakdowns
-- **Evaluation framework** with configurable thresholds
-- **A/B testing framework** with real model callbacks (no fake scores)
-- **Zero external dependencies** — pure Python stdlib
+### Features
 
-## FROOT Layers
+- **Knowledge Search**  full-text search across all FROOT modules, offline
+- **Solution Plays**  browse and filter pre-tuned deployable solutions
+- **AI Glossary**  comprehensive AI/ML term definitions
+- **Cost Estimation**  Azure cost estimates per solution play and scale
+- **Evaluation Framework**  quality scoring with configurable thresholds
+- **A/B Testing**  prompt experiments with real model callbacks
+- **Zero Dependencies**  pure Python stdlib, works anywhere
 
-| Layer | Emoji | Name | Modules |
-|-------|-------|------|---------|
-| F | 🌱 | Foundations | F1-F4 (GenAI, LLMs, Glossary, Agentic OS) |
-| R | 🪵 | Reasoning | R1-R3 (Prompts, RAG, Deterministic AI) |
-| O_ORCH | 🌿 | Orchestration | O1-O3 (Semantic Kernel, Agents, MCP) |
-| O_OPS | 🏗️ | Operations | O4-O6 (Platform, Infrastructure, Copilot) |
-| T | 🍎 | Transformation | T1-T3 (Fine-Tuning, Responsible AI, Production) |
+> The FrootAI ecosystem is growing. New modules, plays, and capabilities with every release.
 
-## Links
+---
 
-- **Website:** [frootai.dev](https://frootai.dev)
-- **npm MCP Server:** [frootai-mcp](https://www.npmjs.com/package/frootai-mcp)
-- **VS Code Extension:** [frootai.frootai-vscode](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
-- **Docker:** [ghcr.io/frootai/frootai-mcp](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
-- **GitHub:** [github.com/frootai/frootai](https://github.com/frootai/frootai)
-- **Python MCP Server:** [frootai-mcp (PyPI)](https://pypi.org/project/frootai-mcp/)
-- **Contact:** [info@frootai.dev](mailto:info@frootai.dev)
+### Links
 
-## License
+| Resource | Link |
+|---|---|
+| **Website** | [frootai.dev](https://frootai.dev) |
+| **Setup Guide** | [FAI Packages Setup](https://frootai.dev/setup-guide) |
+| **Python MCP Server** | [PyPI — frootai-mcp](https://pypi.org/project/frootai-mcp/) |
+| **Node MCP Server** | [npm — frootai-mcp](https://www.npmjs.com/package/frootai-mcp) |
+| **VS Code Extension** | [Marketplace](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode) |
+| **Docker Image** | [GitHub Container Registry](https://github.com/frootai/frootai/pkgs/container/frootai-mcp) |
+| **GitHub** | [frootai/frootai](https://github.com/frootai/frootai) |
+| **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
 
-MIT — Pavleen Bali
+---
+
+<p align="center">© 2026 FrootAI — MIT License</p>
+<p align="center"><sub>AI architecture · Python · SDK · Azure · RAG · agents · copilot · evaluation · cost-estimation · offline-first · zero-dependencies · open-source · frootai</sub></p>
