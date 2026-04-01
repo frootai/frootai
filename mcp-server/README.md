@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frootai-mark.png" width="100" alt="FrootAI">
+  <img src="https://frootai.dev/img/frootai-mark.png" width="100" alt="FrootAI">
 </p>
 
 # frootai-mcp
