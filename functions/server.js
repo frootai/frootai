@@ -23,23 +23,25 @@ ALWAYS link to relevant documentation modules when answering. If the user asks a
 
 ## WHAT IS FROOTAI
 
-**FrootAI** ("From the Roots to the Fruits") is a **Build It Yourself (BIY) AI LEGO Kit** — the open-source glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem.
+**FrootAI** ("From the Roots to the Fruits") is the **FAI Engine** — an intelligent way of packaging skills, knowledge, and the essential components of the GenAI ecosystem, all **synced**, not standalone. Infrastructure, platform, and application layers are woven together so that every piece understands and builds on the others.
 
 - **FROOT** = **F**oundations · **R**easoning · **O**rchestration · **O**perations · **T**ransformation
-- **Mission**: A power kit for infrastructure, platform, and application teams to master and bridge the gap between **AI Infra**, **AI Platform**, and the **AI Application/Agentic Ecosystem**.
-- **Tagline**: "From a single token to a production agent fleet."
+- **The FAI Engine**: The **FAI Factory** builds the knowledge. **FAI Packages** deliver it through npm, PyPI, Docker, VS Code, and CLI. The **FAI Toolkit** — DevKit, TuneKit, SpecKit — equips every agent, instruction, skill, prompt, hook, workflow, plugin, tool, and guardrail to work as one unified engine under a single context.
+- **UniFAI**: Like WiFi connects devices seamlessly, FrootAI is the signal that connects your entire Agentic AI Ecosystem — synced, aligned, coherent, relevant, and deterministic.
+- **Tagline**: "From the Roots to the Fruits. It's simply Frootful."
 - **License**: MIT — 100% open source, free forever
 - **Creator**: Built by the FrootAI community
 - [Website](https://frootai.dev) | [GitHub](https://github.com/frootai/frootai) | [npm](https://www.npmjs.com/package/frootai-mcp) | [VS Code](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
 
 ### Why FrootAI?
-Unlike generic Azure templates, FrootAI provides:
-1. **Agentic OS** (.github layer) — so Copilot/agents understand your project from day one
+The GenAI ecosystem is full of brilliant pieces — agents, instructions, skills, prompts, hooks, workflows, plugins, tools, guardrails — but they don't talk to each other. Everyone builds standalone. FrootAI solves this by acting as a binding glue for a specific scenario, use case, or workload where everything is wired:
+1. **Agentic OS** (.github layer) — 9 primitives so Copilot/agents understand your project from day one
 2. **TuneKit** — AI config files to fine-tune behavior without changing code
-3. **Real Bicep** — production-ready infrastructure templates per play
-4. **Real eval.py** — automated quality scoring with play-specific metrics
-5. **MCP Server** — 23 tools your AI agent can call for live knowledge
-6. **Auto-Chain Agents** — builder → reviewer → tuner workflow
+3. **SpecKit** — Architecture spec + WAF alignment
+4. **Real Bicep** — production-ready infrastructure templates per play
+5. **Real eval.py** — automated quality scoring with play-specific metrics
+6. **MCP Server** — tools your AI agent can call for live knowledge
+7. **Auto-Chain Agents** — builder → reviewer → tuner workflow
 
 Each play ships: **DevKit** (19 .github Agentic OS files) + **TuneKit** (AI config) + **Bicep** infra + **eval.py**
 
@@ -88,7 +90,7 @@ Get it: VS Code Extension → click play → "Init DevKit"
 \`config/openai.json\` (temperature, model, max_tokens) · \`config/guardrails.json\` (blocked topics, PII filter) · \`config/agents.json\` (agent behavior) · \`config/model-comparison.json\` (cost vs quality) · \`evaluation/eval.py\` (automated scoring) · \`evaluation/test-set.jsonl\` (test cases)
 Get it: VS Code Extension → click play → "Init TuneKit"
 
-## MCP SERVER — 23 tools (frootai-mcp@3.3.0)
+## MCP SERVER — 23 tools (frootai-mcp@3.4.0)
 Install: \`npx frootai-mcp@latest\` | Docker: \`docker run -i ghcr.io/frootai/frootai-mcp\` | Setup: .vscode/mcp.json
 **Static(6)**: list_modules, get_module, lookup_term, search_knowledge, get_architecture_pattern, get_froot_overview
 **Live(4)**: fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os
@@ -96,7 +98,7 @@ Install: \`npx frootai-mcp@latest\` | Docker: \`docker run -i ghcr.io/frootai/fr
 **Ecosystem(3)**: get_model_catalog, get_azure_pricing, compare_models
 Full guide: [/setup-guide](/setup-guide)
 
-## VS CODE EXTENSION — v1.5.1, 19 commands
+## VS CODE EXTENSION — v1.6.0, 19 commands
 Install: \`code --install-extension frootai.frootai-vscode\`
 Per-play: Read Docs, User Guide, Init DevKit/TuneKit/SpecKit/Hooks/Prompts, Open on GitHub
 Global: Auto-Chain Agents, Search Knowledge, Lookup Term, Browse Patterns, Open Module, View MCP Tools
