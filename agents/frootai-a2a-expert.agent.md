@@ -54,6 +54,53 @@ This agent has deep knowledge of a2a expert patterns:
 - Auto-scale with max instance caps to prevent cost overruns
 - Monitor cost attribution per team and per play
 
+## A2A Protocol Architecture
+
+### Agent-to-Agent Communication
+- Implement Google A2A (Agent-to-Agent) protocol for inter-agent delegation
+- Each agent exposes an Agent Card (JSON-LD) at `/.well-known/agent.json`
+- Agent Card defines: skills, input/output schemas, authentication requirements, endpoint URL
+- Support push (webhook) and pull (polling) notification models
+- Use JSON-RPC 2.0 as the transport protocol over HTTPS
+
+### Task Lifecycle
+- **Submitted**: Agent receives task request with input and optional metadata
+- **Working**: Agent processes the task, may send progress updates via streaming
+- **Input-Needed**: Agent requests additional information from the caller
+- **Completed/Failed**: Final state with output artifacts or error details
+- Tasks can contain sub-tasks for hierarchical decomposition
+
+### Multi-Agent Orchestration Patterns
+- **Delegator pattern**: Supervisor agent delegates sub-tasks to specialist agents
+- **Pipeline pattern**: Chain agents sequentially (A → B → C) with output wiring
+- **Fan-out/Fan-in**: Broadcast task to multiple agents, aggregate results
+- **Negotiation**: Agents bid on tasks based on capability and cost
+- **Consensus**: Multiple agents independently solve, majority-vote on answer
+
+### Integration with FrootAI
+- Map A2A Agent Cards to FAI Protocol agent primitives (.agent.md)
+- Wire A2A endpoints in fai-manifest.json primitives section
+- Use FAI context wiring to share knowledge modules across A2A agents
+- A2A agents can call FrootAI MCP tools via tool_call delegation
+- FAI Engine routes A2A task requests based on skill matching
+
+## Security & Authentication
+
+### Authentication Patterns
+- **Bearer token**: OAuth 2.0 access token in Authorization header
+- **Mutual TLS**: Client certificate validation for enterprise environments
+- **API key**: Simple key-based auth for internal-only agents
+- **Entra ID**: Microsoft identity platform with managed identity for Azure-hosted agents
+
+### Security Best Practices
+- Validate Agent Card authenticity before delegation (certificate pinning or well-known endpoint)
+- Implement task-level authorization: check caller has permission for requested skill
+- Sanitize all task inputs before processing (prevent prompt injection via A2A)
+- Encrypt task artifacts in transit (TLS 1.3) and at rest (AES-256)
+- Rate limit incoming A2A requests per caller identity (100 RPM default)
+- Audit log all cross-agent delegations with caller_id, task_id, skill, timestamp
+- Implement circuit breaker for unreliable downstream agents (5 failures → 30s open)
+
 ## Tool Usage
 | Tool | When to Use | Example |
 |------|------------|---------|
@@ -98,3 +145,80 @@ After each interaction:
 3. Verify security compliance
 4. Update knowledge base if new patterns discovered
 5. Log performance metrics for trend analysis
+
+## Advanced Implementation Guidance
+
+### Architecture Decision Records
+When designing solutions with this agent, document decisions using ADR format:
+- **Context**: What problem are we solving? What constraints exist?
+- **Decision**: Which pattern/service/approach did we choose?
+- **Consequences**: What tradeoffs are we accepting? What risks remain?
+- **WAF Impact**: How does this decision affect each WAF pillar?
+- Store ADRs in `docs/adr/` within the solution play folder
+
+### Multi-Play Composition
+This agent can participate in multi-agent architectures across solution plays:
+- **Supervisor pattern**: A coordinator agent delegates sub-tasks to this specialist
+- **Pipeline pattern**: This agent processes output from upstream agents and passes to downstream
+- **Ensemble pattern**: Multiple agents solve the same problem, results are aggregated
+- **Critique pattern**: This agent reviews another agent's output for quality and correctness
+- Configure composition in fai-manifest.json `primitives.agents` array
+
+### Knowledge Module Integration
+Wire domain knowledge into this agent via FAI Protocol context:
+```json
+{
+  "context": {
+    "knowledge": ["knowledge.json#domain-module"],
+    "waf": ["reliability", "security", "cost-optimization"]
+  }
+}
+```
+The knowledge module provides:
+- Domain glossary: standardized terminology for consistent communication
+- Architecture patterns: proven blueprints for common scenarios
+- Anti-patterns: common mistakes and how to avoid them
+- Reference implementations: links to working code examples
+
+### Evaluation & Quality Gates
+Every output from this agent should be evaluated against quality thresholds:
+
+| Metric | Threshold | Measurement |
+|--------|----------|-------------|
+| Relevance | ≥ 0.8 | LLM judge compares output to expected answer |
+| Groundedness | ≥ 0.85 | Verify claims are supported by provided context |
+| Coherence | ≥ 0.8 | Assess logical flow and consistency of response |
+| Fluency | ≥ 0.9 | Language quality, grammar, readability |
+| Safety | ≥ 0.95 | Content safety check (no harmful, biased, or PII content) |
+| Completeness | ≥ 0.75 | All required aspects of the question addressed |
+
+Run evaluations via: `python evaluation/eval.py --play-id <ID> --agent <name>`
+
+### Operational Runbook
+
+#### Health Check
+1. Verify agent responds to test prompt within 5 seconds
+2. Check dependency connectivity (Azure services, APIs, databases)
+3. Validate configuration in config/*.json matches environment
+4. Review recent error logs in Application Insights
+
+#### Incident Response
+1. **Detect**: Alert fires on error rate > 5% or latency > 10s
+2. **Assess**: Check Application Insights for root cause (dependency, config, capacity)
+3. **Mitigate**: Switch to fallback model, increase capacity, or disable feature flag
+4. **Resolve**: Fix root cause, deploy fix, verify recovery
+5. **Review**: Post-incident review, update runbook, adjust alerts
+
+#### Capacity Planning
+- Monitor daily token usage trends (Application Insights custom metrics)
+- Set budget alerts at 80% and 100% of monthly allocation
+- Review model selection quarterly: newer models may be cheaper and better
+- Plan for 2x peak capacity during product launches or seasonal spikes
+- Use model routing: GPT-4o-mini for simple tasks, GPT-4o for complex ones
+
+### Version History & Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-04-06 | Initial agent creation with core expertise |
+| 1.1.0 | 2026-04-07 | Enhanced with domain-specific architecture patterns |
+| 1.2.0 | 2026-04-07 | Added evaluation gates, operational runbook, FAQ |

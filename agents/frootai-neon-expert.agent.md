@@ -54,6 +54,41 @@ This agent has deep knowledge of neon expert patterns:
 - Auto-scale with max instance caps to prevent cost overruns
 - Monitor cost attribution per team and per play
 
+## Neon Serverless Postgres for AI
+
+### Serverless Architecture
+- Auto-scaling compute: scales to zero when idle, scales up on demand
+- Branching: create database branches for development/testing (Git-like workflow)
+- Connection pooling: use `@neondatabase/serverless` driver for edge compatibility
+- Auto-suspend: configurable idle timeout (5min default, saves cost)
+- Read replicas: automatic read-heavy workload distribution
+
+### pgvector for AI Workloads
+- Enable: `CREATE EXTENSION vector`
+- Embedding storage: `vector(1536)` for ada-002, `vector(3072)` for text-embedding-3-large
+- Indexing: `CREATE INDEX ON items USING hnsw (embedding vector_cosine_ops)`
+- Batch insert: use COPY command for bulk embedding ingestion (10x faster than INSERT)
+- Quantization: `halfvec` type for 50% storage reduction with minimal accuracy loss
+
+### Branching for AI Development
+- Create branch per experiment: `neon branches create --name "rag-experiment-v2"`
+- Test different chunking strategies on isolated branches
+- Compare embedding model performance across branches
+- Merge winning configuration back to main branch
+- Time-travel: query data as of any point in time for debugging
+
+### Edge-Compatible Driver
+```typescript
+import { neon } from '@neondatabase/serverless';
+const sql = neon(process.env.DATABASE_URL);
+// Works in Vercel Edge Functions, Cloudflare Workers, Deno Deploy
+const results = await sql`
+  SELECT content, 1 - (embedding <=> $1::vector) as similarity
+  FROM documents
+  WHERE 1 - (embedding <=> $1::vector) > 0.7
+  ORDER BY similarity DESC LIMIT 5`;
+```
+
 ## Tool Usage
 | Tool | When to Use | Example |
 |------|------------|---------|
@@ -98,3 +133,80 @@ After each interaction:
 3. Verify security compliance
 4. Update knowledge base if new patterns discovered
 5. Log performance metrics for trend analysis
+
+## Advanced Implementation Guidance
+
+### Architecture Decision Records
+When designing solutions with this agent, document decisions using ADR format:
+- **Context**: What problem are we solving? What constraints exist?
+- **Decision**: Which pattern/service/approach did we choose?
+- **Consequences**: What tradeoffs are we accepting? What risks remain?
+- **WAF Impact**: How does this decision affect each WAF pillar?
+- Store ADRs in `docs/adr/` within the solution play folder
+
+### Multi-Play Composition
+This agent can participate in multi-agent architectures across solution plays:
+- **Supervisor pattern**: A coordinator agent delegates sub-tasks to this specialist
+- **Pipeline pattern**: This agent processes output from upstream agents and passes to downstream
+- **Ensemble pattern**: Multiple agents solve the same problem, results are aggregated
+- **Critique pattern**: This agent reviews another agent's output for quality and correctness
+- Configure composition in fai-manifest.json `primitives.agents` array
+
+### Knowledge Module Integration
+Wire domain knowledge into this agent via FAI Protocol context:
+```json
+{
+  "context": {
+    "knowledge": ["knowledge.json#domain-module"],
+    "waf": ["reliability", "security", "cost-optimization"]
+  }
+}
+```
+The knowledge module provides:
+- Domain glossary: standardized terminology for consistent communication
+- Architecture patterns: proven blueprints for common scenarios
+- Anti-patterns: common mistakes and how to avoid them
+- Reference implementations: links to working code examples
+
+### Evaluation & Quality Gates
+Every output from this agent should be evaluated against quality thresholds:
+
+| Metric | Threshold | Measurement |
+|--------|----------|-------------|
+| Relevance | ≥ 0.8 | LLM judge compares output to expected answer |
+| Groundedness | ≥ 0.85 | Verify claims are supported by provided context |
+| Coherence | ≥ 0.8 | Assess logical flow and consistency of response |
+| Fluency | ≥ 0.9 | Language quality, grammar, readability |
+| Safety | ≥ 0.95 | Content safety check (no harmful, biased, or PII content) |
+| Completeness | ≥ 0.75 | All required aspects of the question addressed |
+
+Run evaluations via: `python evaluation/eval.py --play-id <ID> --agent <name>`
+
+### Operational Runbook
+
+#### Health Check
+1. Verify agent responds to test prompt within 5 seconds
+2. Check dependency connectivity (Azure services, APIs, databases)
+3. Validate configuration in config/*.json matches environment
+4. Review recent error logs in Application Insights
+
+#### Incident Response
+1. **Detect**: Alert fires on error rate > 5% or latency > 10s
+2. **Assess**: Check Application Insights for root cause (dependency, config, capacity)
+3. **Mitigate**: Switch to fallback model, increase capacity, or disable feature flag
+4. **Resolve**: Fix root cause, deploy fix, verify recovery
+5. **Review**: Post-incident review, update runbook, adjust alerts
+
+#### Capacity Planning
+- Monitor daily token usage trends (Application Insights custom metrics)
+- Set budget alerts at 80% and 100% of monthly allocation
+- Review model selection quarterly: newer models may be cheaper and better
+- Plan for 2x peak capacity during product launches or seasonal spikes
+- Use model routing: GPT-4o-mini for simple tasks, GPT-4o for complex ones
+
+### Version History & Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-04-06 | Initial agent creation with core expertise |
+| 1.1.0 | 2026-04-07 | Enhanced with domain-specific architecture patterns |
+| 1.2.0 | 2026-04-07 | Added evaluation gates, operational runbook, FAQ |

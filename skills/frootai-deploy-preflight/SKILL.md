@@ -61,3 +61,47 @@ Review planned changes before applying.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RESULT: READY TO DEPLOY
 ```
+
+## Rollback Strategy
+
+If the preflight check passes but deployment fails:
+1. Capture deployment error from Azure Resource Manager
+2. Check deployment operation details: `az deployment group show -g <rg> -n <deployment>`
+3. If partial deployment: `az deployment group cancel -g <rg> -n <deployment>`
+4. Run what-if again with previous parameters to verify rollback
+5. Delete partially-created resources that are not in the target state
+6. Log incident in Application Insights with deployment correlation ID
+
+## Integration with CI/CD
+
+Add the preflight step before any Azure deployment in your pipeline:
+- Run after Bicep linting and before `az deployment group create`
+- Set `--fail-on-warning true` in production pipelines
+- Use `--output json` for machine-readable results in automation
+- Cache quota checks to avoid rate limiting on Azure Resource Manager API
+
+## Configuration
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `--play` | required | Play ID or path to solution play folder |
+| `--env` | staging | Target environment (dev/staging/prod) |
+| `--resource-group` | from azure.yaml | Azure resource group name |
+| `--fail-on-warning` | true | Treat warnings as errors |
+| `--skip-cost` | false | Skip cost estimation (faster) |
+| `--skip-quota` | false | Skip quota checks |
+| `--output` | text | Output format (text/json/markdown) |
+| `--timeout` | 300 | Max seconds for what-if deployment |
+
+## Error Codes
+
+| Code | Meaning | Resolution |
+|------|---------|------------|
+| PF001 | Bicep compilation error | Fix syntax in infra/main.bicep |
+| PF002 | Missing required parameter | Add to infra/parameters.json |
+| PF003 | Insufficient quota | Request quota increase or change region |
+| PF004 | What-if deployment failed | Check ARM error message for details |
+| PF005 | Cost exceeds budget | Right-size resources or increase budget |
+| PF006 | Security check failed | Enable private endpoints and managed identity |
+| PF007 | Region not available | Choose different Azure region |
+| PF008 | API version mismatch | Update Bicep to latest provider versions |

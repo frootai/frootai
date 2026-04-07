@@ -54,6 +54,36 @@ This agent has deep knowledge of supabase expert patterns:
 - Auto-scale with max instance caps to prevent cost overruns
 - Monitor cost attribution per team and per play
 
+## Supabase for AI Applications
+
+### pgvector Integration
+- Use Supabase with pgvector extension for vector similarity search
+- Create embedding columns: `ALTER TABLE documents ADD COLUMN embedding vector(1536)`
+- Index strategy: IVFFlat for <1M rows, HNSW for larger datasets
+- `SELECT * FROM documents ORDER BY embedding <=> $1 LIMIT 10` for cosine similarity
+- RPC functions for hybrid search: combine full-text (tsvector) + vector similarity
+
+### Real-time AI Features
+- **Realtime subscriptions**: Stream database changes to clients via WebSocket
+- **Edge Functions**: Deno-based functions for AI inference at the edge
+- **Storage**: File uploads with automatic embedding generation triggers
+- **Auth**: Row Level Security (RLS) for multi-tenant AI applications
+- **Database webhooks**: Trigger embedding generation on INSERT/UPDATE
+
+### RAG Pipeline on Supabase
+1. Document upload → Supabase Storage (S3-compatible)
+2. Database webhook → Edge Function (chunking + embedding)
+3. Embeddings stored in pgvector column with metadata
+4. Query: embed user query → vector search → rerank → generate
+5. Real-time: stream results back via Supabase Realtime channel
+
+### Production Configuration
+- Connection pooling: PgBouncer with transaction mode (default in Supabase)
+- Read replicas: route vector queries to replica for reduced latency
+- Backup: Point-in-time recovery enabled (30-day retention)
+- Monitoring: pg_stat_statements for query performance analysis
+- RLS policies: ensure users only access their own documents and embeddings
+
 ## Tool Usage
 | Tool | When to Use | Example |
 |------|------------|---------|
@@ -98,3 +128,80 @@ After each interaction:
 3. Verify security compliance
 4. Update knowledge base if new patterns discovered
 5. Log performance metrics for trend analysis
+
+## Advanced Implementation Guidance
+
+### Architecture Decision Records
+When designing solutions with this agent, document decisions using ADR format:
+- **Context**: What problem are we solving? What constraints exist?
+- **Decision**: Which pattern/service/approach did we choose?
+- **Consequences**: What tradeoffs are we accepting? What risks remain?
+- **WAF Impact**: How does this decision affect each WAF pillar?
+- Store ADRs in `docs/adr/` within the solution play folder
+
+### Multi-Play Composition
+This agent can participate in multi-agent architectures across solution plays:
+- **Supervisor pattern**: A coordinator agent delegates sub-tasks to this specialist
+- **Pipeline pattern**: This agent processes output from upstream agents and passes to downstream
+- **Ensemble pattern**: Multiple agents solve the same problem, results are aggregated
+- **Critique pattern**: This agent reviews another agent's output for quality and correctness
+- Configure composition in fai-manifest.json `primitives.agents` array
+
+### Knowledge Module Integration
+Wire domain knowledge into this agent via FAI Protocol context:
+```json
+{
+  "context": {
+    "knowledge": ["knowledge.json#domain-module"],
+    "waf": ["reliability", "security", "cost-optimization"]
+  }
+}
+```
+The knowledge module provides:
+- Domain glossary: standardized terminology for consistent communication
+- Architecture patterns: proven blueprints for common scenarios
+- Anti-patterns: common mistakes and how to avoid them
+- Reference implementations: links to working code examples
+
+### Evaluation & Quality Gates
+Every output from this agent should be evaluated against quality thresholds:
+
+| Metric | Threshold | Measurement |
+|--------|----------|-------------|
+| Relevance | ≥ 0.8 | LLM judge compares output to expected answer |
+| Groundedness | ≥ 0.85 | Verify claims are supported by provided context |
+| Coherence | ≥ 0.8 | Assess logical flow and consistency of response |
+| Fluency | ≥ 0.9 | Language quality, grammar, readability |
+| Safety | ≥ 0.95 | Content safety check (no harmful, biased, or PII content) |
+| Completeness | ≥ 0.75 | All required aspects of the question addressed |
+
+Run evaluations via: `python evaluation/eval.py --play-id <ID> --agent <name>`
+
+### Operational Runbook
+
+#### Health Check
+1. Verify agent responds to test prompt within 5 seconds
+2. Check dependency connectivity (Azure services, APIs, databases)
+3. Validate configuration in config/*.json matches environment
+4. Review recent error logs in Application Insights
+
+#### Incident Response
+1. **Detect**: Alert fires on error rate > 5% or latency > 10s
+2. **Assess**: Check Application Insights for root cause (dependency, config, capacity)
+3. **Mitigate**: Switch to fallback model, increase capacity, or disable feature flag
+4. **Resolve**: Fix root cause, deploy fix, verify recovery
+5. **Review**: Post-incident review, update runbook, adjust alerts
+
+#### Capacity Planning
+- Monitor daily token usage trends (Application Insights custom metrics)
+- Set budget alerts at 80% and 100% of monthly allocation
+- Review model selection quarterly: newer models may be cheaper and better
+- Plan for 2x peak capacity during product launches or seasonal spikes
+- Use model routing: GPT-4o-mini for simple tasks, GPT-4o for complex ones
+
+### Version History & Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-04-06 | Initial agent creation with core expertise |
+| 1.1.0 | 2026-04-07 | Enhanced with domain-specific architecture patterns |
+| 1.2.0 | 2026-04-07 | Added evaluation gates, operational runbook, FAQ |

@@ -54,6 +54,99 @@ This agent has deep knowledge of opentelemetry expert patterns:
 - Auto-scale with max instance caps to prevent cost overruns
 - Monitor cost attribution per team and per play
 
+## OpenTelemetry Architecture Patterns
+
+### Instrumentation Strategy
+- **Auto-instrumentation**: Use OpenTelemetry SDK auto-instrumentation for HTTP, gRPC, database clients
+- **Manual spans**: Create custom spans for business-critical operations (RAG retrieval, LLM calls, embedding generation)
+- **Semantic conventions**: Follow OTel semantic conventions for AI/ML workloads (gen_ai.* namespace)
+- **Propagation**: Use W3C TraceContext propagation across service boundaries
+- **Baggage**: Carry play_id, user_session, and model_version across spans
+
+### OTLP Exporter Configuration
+- Configure OTLP/gRPC exporter for Azure Monitor (Application Insights)
+- Use batch span processor with configurable batch size (512) and delay (5s)
+- Enable compression (gzip) for OTLP exports to reduce bandwidth
+- Set resource attributes: service.name, service.version, deployment.environment
+- Configure retry policy with exponential backoff (initial=1s, max=30s, multiplier=1.5)
+
+### Metrics Collection
+- **Histogram**: Track LLM latency (p50/p95/p99), token processing time, embedding generation time
+- **Counter**: Count requests by model, play_id, status_code, error_type
+- **Gauge**: Monitor active connections, queue depth, cache hit ratio, GPU utilization
+- **Exemplars**: Link traces to metrics for debugging latency spikes
+- Use delta temporality for Azure Monitor compatibility
+
+### Log Correlation
+- Emit structured JSON logs with trace_id and span_id fields
+- Use OpenTelemetry Log Bridge API to correlate logs with traces
+- Configure log severity mapping: DEBUG→Verbose, INFO→Information, ERROR→Error
+- Include custom attributes: play_id, primitive_type, waf_pillar, model_name
+- Set up log sampling: 100% for ERROR/WARN, 10% for INFO in production
+
+## Azure Monitor Integration
+
+### Application Insights Setup
+- Use connection string auth (not instrumentation key — deprecated)
+- Configure live metrics stream for real-time operational monitoring
+- Set up availability tests for health check endpoints
+- Enable distributed tracing correlation across Azure services
+- Configure sampling: adaptive sampling at 5 events/second default
+
+### KQL Query Patterns
+```kusto
+// LLM latency by model and play
+dependencies
+| where name startswith "openai" or name startswith "azure-openai"
+| extend play_id = tostring(customDimensions.play_id)
+| extend model = tostring(customDimensions.model_name)
+| summarize p50=percentile(duration, 50), p95=percentile(duration, 95), p99=percentile(duration, 99), count() by model, play_id, bin(timestamp, 1h)
+| order by timestamp desc
+
+// Token usage and cost attribution
+customMetrics
+| where name == "gen_ai.token.usage"
+| extend direction = tostring(customDimensions.direction)  // input vs output
+| extend model = tostring(customDimensions.model)
+| summarize total_tokens=sum(value) by model, direction, bin(timestamp, 1d)
+```
+
+### Dashboard Configuration
+- Create Azure Workbook with 4 panes: latency overview, error rate, token usage, cost drill-down
+- Set up action groups for P1 alerts: latency > 10s, error rate > 5%, budget exceeded
+- Configure diagnostic settings to export to Log Analytics workspace
+- Use metric alerts with dynamic thresholds for anomaly detection
+- Set up smart detection for performance anomalies and failure anomalies
+
+### Cost Attribution
+- Tag all telemetry with team_id, play_id, environment
+- Use Application Insights daily cap to prevent runaway costs
+- Configure data retention: 90 days for production, 30 days for dev/staging
+- Use sampling to reduce ingestion costs while maintaining statistical significance
+
+## Observability for AI Workloads
+
+### LLM Call Tracing
+- Wrap every LLM API call in a span with attributes: model, temperature, max_tokens, prompt_tokens, completion_tokens
+- Record prompt hash (not content) for correlation without PII exposure
+- Track time-to-first-token (TTFT) for streaming responses
+- Monitor retry attempts and fallback model switches
+- Log rate limit hits and quota exhaustion events
+
+### RAG Pipeline Tracing
+- Create parent span for full RAG pipeline (query → retrieve → rerank → generate)
+- Child spans for: query embedding (model, dimensions), vector search (index, top_k, score_threshold)
+- Child spans for: reranking (model, input_count, output_count), generation (model, context_tokens)
+- Record document IDs and relevance scores in span attributes
+- Track cache hits vs misses for embedding and retrieval stages
+
+### Evaluation Metrics
+- Export eval.py metrics to Application Insights: relevance, groundedness, coherence, fluency, safety
+- Set up alerts when quality metrics drop below thresholds (relevance < 0.7, groundedness < 0.8)
+- Track evaluation pipeline latency and failure rate
+- Compare metrics across model versions for A/B testing decisions
+- Store evaluation results in structured format for trend analysis
+
 ## Tool Usage
 | Tool | When to Use | Example |
 |------|------------|---------|
@@ -98,3 +191,80 @@ After each interaction:
 3. Verify security compliance
 4. Update knowledge base if new patterns discovered
 5. Log performance metrics for trend analysis
+
+## Advanced Implementation Guidance
+
+### Architecture Decision Records
+When designing solutions with this agent, document decisions using ADR format:
+- **Context**: What problem are we solving? What constraints exist?
+- **Decision**: Which pattern/service/approach did we choose?
+- **Consequences**: What tradeoffs are we accepting? What risks remain?
+- **WAF Impact**: How does this decision affect each WAF pillar?
+- Store ADRs in `docs/adr/` within the solution play folder
+
+### Multi-Play Composition
+This agent can participate in multi-agent architectures across solution plays:
+- **Supervisor pattern**: A coordinator agent delegates sub-tasks to this specialist
+- **Pipeline pattern**: This agent processes output from upstream agents and passes to downstream
+- **Ensemble pattern**: Multiple agents solve the same problem, results are aggregated
+- **Critique pattern**: This agent reviews another agent's output for quality and correctness
+- Configure composition in fai-manifest.json `primitives.agents` array
+
+### Knowledge Module Integration
+Wire domain knowledge into this agent via FAI Protocol context:
+```json
+{
+  "context": {
+    "knowledge": ["knowledge.json#domain-module"],
+    "waf": ["reliability", "security", "cost-optimization"]
+  }
+}
+```
+The knowledge module provides:
+- Domain glossary: standardized terminology for consistent communication
+- Architecture patterns: proven blueprints for common scenarios
+- Anti-patterns: common mistakes and how to avoid them
+- Reference implementations: links to working code examples
+
+### Evaluation & Quality Gates
+Every output from this agent should be evaluated against quality thresholds:
+
+| Metric | Threshold | Measurement |
+|--------|----------|-------------|
+| Relevance | ≥ 0.8 | LLM judge compares output to expected answer |
+| Groundedness | ≥ 0.85 | Verify claims are supported by provided context |
+| Coherence | ≥ 0.8 | Assess logical flow and consistency of response |
+| Fluency | ≥ 0.9 | Language quality, grammar, readability |
+| Safety | ≥ 0.95 | Content safety check (no harmful, biased, or PII content) |
+| Completeness | ≥ 0.75 | All required aspects of the question addressed |
+
+Run evaluations via: `python evaluation/eval.py --play-id <ID> --agent <name>`
+
+### Operational Runbook
+
+#### Health Check
+1. Verify agent responds to test prompt within 5 seconds
+2. Check dependency connectivity (Azure services, APIs, databases)
+3. Validate configuration in config/*.json matches environment
+4. Review recent error logs in Application Insights
+
+#### Incident Response
+1. **Detect**: Alert fires on error rate > 5% or latency > 10s
+2. **Assess**: Check Application Insights for root cause (dependency, config, capacity)
+3. **Mitigate**: Switch to fallback model, increase capacity, or disable feature flag
+4. **Resolve**: Fix root cause, deploy fix, verify recovery
+5. **Review**: Post-incident review, update runbook, adjust alerts
+
+#### Capacity Planning
+- Monitor daily token usage trends (Application Insights custom metrics)
+- Set budget alerts at 80% and 100% of monthly allocation
+- Review model selection quarterly: newer models may be cheaper and better
+- Plan for 2x peak capacity during product launches or seasonal spikes
+- Use model routing: GPT-4o-mini for simple tasks, GPT-4o for complex ones
+
+### Version History & Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-04-06 | Initial agent creation with core expertise |
+| 1.1.0 | 2026-04-07 | Enhanced with domain-specific architecture patterns |
+| 1.2.0 | 2026-04-07 | Added evaluation gates, operational runbook, FAQ |
