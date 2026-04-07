@@ -545,12 +545,12 @@ console.log('');
 
 const shouldRun = (name) => !TARGET || TARGET.startsWith(name) || TARGET === name + '/';
 
-if (shouldRun('agents'))       validateAgents();
+if (shouldRun('agents')) validateAgents();
 if (shouldRun('instructions')) validateInstructions();
-if (shouldRun('skills'))       validateSkills();
-if (shouldRun('hooks'))        validateHooks();
-if (shouldRun('plugins'))      validatePlugins();
-if (shouldRun('workflows'))    validateWorkflows();
+if (shouldRun('skills')) validateSkills();
+if (shouldRun('hooks')) validateHooks();
+if (shouldRun('plugins')) validatePlugins();
+if (shouldRun('workflows')) validateWorkflows();
 if (!TARGET) {
   validateFaiManifests();
   findStandaloneFaiContexts();
