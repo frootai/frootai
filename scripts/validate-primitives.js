@@ -401,7 +401,7 @@ function validateFaiManifests() {
     if (!manifest) { fail(manifestPath, 'invalid JSON'); continue; }
 
     // Required: play
-    if (manifest.play && /^[0-9]{2}-[a-z0-9-]+$/.test(manifest.play)) {
+    if (manifest.play && /^[0-9]{2,3}-[a-z0-9-]+$/.test(manifest.play)) {
       pass(`${manifestPath} — play: ${manifest.play}`);
     } else {
       fail(manifestPath, `play must match pattern "NN-kebab-case" (got "${manifest.play}")`);
@@ -470,7 +470,7 @@ function validateFaiContext(relPath, parentLabel) {
   // Validate compatiblePlays pattern
   if (ctx.compatiblePlays && Array.isArray(ctx.compatiblePlays)) {
     for (const p of ctx.compatiblePlays) {
-      if (!/^[0-9]{2}(-[a-z0-9-]+)?$/.test(p)) {
+      if (!/^[0-9]{2,3}(-[a-z0-9-]+)?$/.test(p)) {
         fail(relPath, `invalid play ID "${p}" — must be "NN" or "NN-kebab-case"`);
       }
     }
