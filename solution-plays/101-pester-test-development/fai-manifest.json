@@ -1,0 +1,66 @@
+{
+  "play": "101-pester-test-development",
+  "version": "1.0.0",
+  "description": "The crown jewel — a self-orchestrating super-agent that understands user goals, selects and chains the appropriate FAI solution plays, provisions infrastructure, configures primitives, runs evaluation, and delivers production-ready AI systems. It is the FAI Protocol made autonomous — the agent that builds agents.",
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "O3-MCP-Tools",
+      "T3-Production-Patterns",
+      "O4-Azure-AI",
+      "R2-RAG"
+    ],
+    "waf": [
+      "reliability",
+      "security",
+      "responsible-ai",
+      "cost-optimization",
+      "operational-excellence",
+      "performance-efficiency"
+    ]
+  },
+  "primitives": {
+    "agents": [
+      "builder.agent.md",
+      "reviewer.agent.md",
+      "tuner.agent.md"
+    ],
+    "instructions": [
+      "100-patterns.instructions.md"
+    ],
+    "skills": [
+      "deploy-100/",
+      "evaluate-100/",
+      "tune-100/"
+    ],
+    "hooks": [
+      "../../hooks/frootai-secrets-scanner/",
+      "../../hooks/frootai-tool-guardian/",
+      "../../hooks/frootai-governance-audit/"
+    ]
+  },
+  "infrastructure": {
+    "services": [
+      "Azure OpenAI",
+      "Azure MCP Server",
+      "Azure Container Apps",
+      "Azure Cosmos DB",
+      "Azure AI Search",
+      "Azure Key Vault"
+    ],
+    "template": "infra/main.bicep",
+    "parameters": "infra/parameters.json"
+  },
+  "toolkit": {
+    "devkit": ".github/",
+    "tunekit": "config/",
+    "speckit": "spec/"
+  },
+  "guardrails": {
+    "groundedness": 0.90,
+    "coherence": 0.90,
+    "relevance": 0.90,
+    "safety": 0,
+    "costPerQuery": 0.20
+  }
+}

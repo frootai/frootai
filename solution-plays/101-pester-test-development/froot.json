@@ -1,0 +1,41 @@
+{
+  "name": "101-pester-test-development",
+  "version": "1.0.0",
+  "framework": "frootai",
+  "title": "Pester Test Development",
+  "description": "> The crown jewel — a self-orchestrating super-agent that understands user goals, selects and chains",
+  "complexity": "Medium",
+  "tags": [
+    "reliability",
+    "security",
+    "responsible-ai",
+    "cost-optimization",
+    "operational-excellence",
+    "performance-efficiency"
+  ],
+  "status": "Active",
+  "kits": {
+    "devkit": {
+      "path": ".github/",
+      "includes": [
+        "agents",
+        "instructions",
+        "prompts",
+        "skills"
+      ]
+    },
+    "tunekit": {
+      "path": "config/",
+      "files": [
+        "openai.json",
+        "guardrails.json"
+      ]
+    },
+    "speckit": {
+      "path": "spec/",
+      "files": [
+        "play-spec.json"
+      ]
+    }
+  }
+}

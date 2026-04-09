@@ -1,0 +1,28 @@
+{
+  "_comment": "Search and retrieval configuration for Pester Test Development",
+  "mode": "hybrid",
+  "hybrid_weights": {
+    "keyword": 0.4,
+    "vector": 0.6
+  },
+  "top_k": 5,
+  "relevance_threshold": 0.75,
+  "reranker": {
+    "enabled": true,
+    "model": "semantic",
+    "top_n": 3
+  },
+  "filters": {
+    "enabled": true,
+    "fields": [
+      "category",
+      "date",
+      "source"
+    ]
+  },
+  "answer_generation": {
+    "enabled": true,
+    "max_tokens": 500,
+    "include_citations": true
+  }
+}
