@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "frootai"
-version = "4.3.0"
+version = "5.0.1"
 description = "FrootAI SDK — 100 solution plays, 830+ primitives, 25 MCP tools. Offline access to knowledge modules, solution plays, cost estimation, evaluation, and A/B testing."
 readme = "README.md"
 license = {text = "MIT"}

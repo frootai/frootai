@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "frootai-mcp"
-version = "4.2.0"
+version = "5.0.1"
 description = "FrootAI MCP Server — 25 tools, 100 plays, 830+ primitives. Python implementation of the FAI Engine."
 readme = "README.md"
 license = {text = "MIT"}

@@ -2,8 +2,8 @@ const http = require("http");
 const https = require("https");
 
 // FrootAI Distribution Versions — synced with packages
-const FROOTAI_MCP_VERSION = "@4.1.0";      // frootai-mcp npm package
-const FROOTAI_EXT_VERSION = "v2.2.0";      // VS Code extension
+const FROOTAI_MCP_VERSION = "@5.0.1";      // frootai-mcp npm package
+const FROOTAI_EXT_VERSION = "v5.0.1";      // VS Code extension
 
 // Azure OpenAI Configuration
 const AZURE_OPENAI_ENDPOINT = "https://cs-openai-varcvenlme53e.cognitiveservices.azure.com";
