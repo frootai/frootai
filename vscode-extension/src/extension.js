@@ -6,7 +6,7 @@ const https = require("https");
 // ════════════════════════════════════════════════════════════════════
 // FrootAI VS Code Extension v1.0 — Standalone Engine
 // From the Roots to the Fruits. The Open Glue for GenAI.
-// 25 MCP tools · 18 modules · 200+ terms · 100 solution plays
+// 25 MCP tools · 18 modules · 200+ terms · 101 solution plays
 // Works from ANY workspace — no clone needed.
 // ════════════════════════════════════════════════════════════════════
 
@@ -154,6 +154,7 @@ const SOLUTION_PLAYS = [
   { id: "98", name: "Agent Evaluation Platform", icon: "🏛️", status: "Ready", dir: "98-agent-evaluation-platform", layer: "T" },
   { id: "99", name: "Enterprise AI Governance Hub", icon: "⚡", status: "Ready", dir: "99-enterprise-ai-governance-hub", layer: "T" },
   { id: "100", name: "FAI Meta-Agent", icon: "🌟", status: "Ready", dir: "100-fai-meta-agent", layer: "O" },
+  { id: "101", name: "Pester Test Development", icon: "🧪", status: "Ready", dir: "101-pester-test-development", layer: "T" },
 ];
 
 const FROOT_MODULES = [
@@ -218,7 +219,7 @@ const MCP_TOOLS = [
   },
   {
     name: "get_froot_overview", desc: "Complete FROOT summary", type: "static",
-    docs: "Returns the complete FrootAI platform overview: mission, 6 layers, 100 solution plays list, DevKit/TuneKit model, and getting started guide.\n\n**Input:** none\n**Output:** Platform overview markdown"
+    docs: "Returns the complete FrootAI platform overview: mission, 6 layers, 101 solution plays list, DevKit/TuneKit model, and getting started guide.\n\n**Input:** none\n**Output:** Platform overview markdown"
   },
   {
     name: "fetch_azure_docs", desc: "⛅ Live — Search Azure docs", type: "live",
@@ -230,7 +231,7 @@ const MCP_TOOLS = [
   },
   {
     name: "list_community_plays", desc: "⛅ Live — List plays from GitHub", type: "live",
-    docs: "Fetches the list of solution plays from the FrootAI GitHub repository. Returns play names, statuses, and file counts. Useful for discovering what's available.\n\n**Input:** none\n**Output:** Array of 100 solution plays with metadata"
+    docs: "Fetches the list of solution plays from the FrootAI GitHub repository. Returns play names, statuses, and file counts. Useful for discovering what's available.\n\n**Input:** none\n**Output:** Array of 101 solution plays with metadata"
   },
   {
     name: "get_github_agentic_os", desc: "⛅ Live — .github OS guide", type: "live",
@@ -264,7 +265,7 @@ const MCP_TOOLS = [
   // ── Compute Tools (6) ──
   {
     name: "semantic_search_plays", desc: "🧮 Compute — Semantic search across 20 plays", type: "compute",
-    docs: "Performs keyword + semantic search across all 100 solution plays. Matches against play names, descriptions, services used, and architecture patterns. Returns ranked results with relevance scores.\n\n**Input:** `query` (string) — what to search for\n**Output:** Ranked matches with play ID, name, relevance, and excerpts\n**Example:** `semantic_search_plays({query: 'voice AI'})` → Play 04 (Call Center Voice AI) ranked first"
+    docs: "Performs keyword + semantic search across all 101 solution plays. Matches against play names, descriptions, services used, and architecture patterns. Returns ranked results with relevance scores.\n\n**Input:** `query` (string) — what to search for\n**Output:** Ranked matches with play ID, name, relevance, and excerpts\n**Example:** `semantic_search_plays({query: 'voice AI'})` → Play 04 (Call Center Voice AI) ranked first"
   },
   {
     name: "estimate_cost", desc: "🧮 Compute — Estimate monthly Azure cost", type: "compute",
