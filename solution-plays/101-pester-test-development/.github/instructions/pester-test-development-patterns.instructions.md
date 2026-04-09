@@ -1,235 +1,211 @@
 ---
-description: "Domain-specific coding patterns for Pester Test Development (Play 101)"
-applyTo: "**/*.{py,ts,js}"
+description: "Pester 5.x test development patterns — function extraction, mock strategies, coverage analysis, CI/CD integration, Azure Policy testing"
+applyTo: "**/*.{ps1,psm1,psd1,Tests.ps1}"
+waf: ["reliability", "operational-excellence"]
 ---
 
-# Pester Test Development — Domain Patterns & Best Practices
+# Pester Test Development Patterns
 
-## Architecture Pattern
-This play implements a Pester Test Development architecture with these core components:
+## Pattern 1: Function Extraction from Legacy Scripts
 
-### Request Flow
-1. Client sends request to API endpoint
-2. Input validation and sanitization
-3. Authentication check (Managed Identity / Bearer token)
-4. Core processing pipeline:
-   a. Pre-processing: data extraction, normalization, enrichment
-   b. AI processing: model inference, embedding, search, generation
-   c. Post-processing: output validation, formatting, safety check
-5. Response with structured output and metadata
-6. Async logging: metrics, traces, audit events
+### Problem
+Legacy PowerShell scripts with inline code, no functions, no param blocks. Impossible to unit test.
 
-### Component Responsibilities
-| Component | Responsibility | Key Patterns |
-|-----------|---------------|-------------|
-| API Gateway | Routing, rate limiting, auth | APIM policies, JWT validation |
-| Application | Business logic, orchestration | Async/await, dependency injection |
-| AI Services | Model inference, embeddings | Retry with backoff, circuit breaker |
-| Data Store | Persistence, caching | Connection pooling, read replicas |
-| Monitoring | Observability, alerting | Structured logs, custom metrics |
-
-## Domain-Specific Patterns
-
-### Data Processing Pipeline
-```python
-from dataclasses import dataclass
-from typing import List, Optional
-import asyncio
-
-@dataclass
-class ProcessingResult:
-    """Result from the processing pipeline."""
-    data: dict
-    metadata: dict
-    quality_score: float
-    processing_time_ms: float
-
-class ProcessingPipeline:
-    """Multi-stage processing pipeline for Pester Test Development."""
-    
-    def __init__(self, config: dict):
-        self.config = config
-        self.stages = []
-    
-    def add_stage(self, stage_fn, name: str):
-        self.stages.append({"fn": stage_fn, "name": name})
-    
-    async def execute(self, input_data: dict) -> ProcessingResult:
-        import time
-        start = time.monotonic()
-        current = input_data
-        metadata = {"stages": []}
-        
-        for stage in self.stages:
-            stage_start = time.monotonic()
-            try:
-                current = await stage["fn"](current)
-                metadata["stages"].append({
-                    "name": stage["name"],
-                    "status": "success",
-                    "duration_ms": round((time.monotonic() - stage_start) * 1000, 2)
-                })
-            except Exception as e:
-                metadata["stages"].append({
-                    "name": stage["name"],
-                    "status": "error",
-                    "error": str(e)
-                })
-                raise
-        
-        return ProcessingResult(
-            data=current,
-            metadata=metadata,
-            quality_score=current.get("quality_score", 0.0),
-            processing_time_ms=round((time.monotonic() - start) * 1000, 2)
-        )
+### Solution — AST-Based Analysis
+```powershell
+# Discover functions in a script using AST
+$ast = [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$null, [ref]$null)
+$functions = $ast.FindAll({ $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)
+$commands = $ast.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true)
 ```
 
-### Configuration Management
-```python
-import json
-from pathlib import Path
-from functools import lru_cache
+### Refactoring Steps
+```powershell
+# BEFORE — untestable
+$vms = Get-AzVM
+foreach ($vm in $vms) { Write-Host "Processing $($vm.Name)" }
 
-@lru_cache(maxsize=1)
-def load_play_config() -> dict:
-    """Load all config files for this play."""
-    config_dir = Path(__file__).parent.parent / "config"
-    configs = {}
-    for config_file in config_dir.glob("*.json"):
-        with open(config_file) as f:
-            configs[config_file.stem] = json.load(f)
-    return configs
-
-def get_model_config() -> dict:
-    """Get OpenAI model configuration."""
-    config = load_play_config()
-    return config.get("openai", {"model": "gpt-4o", "temperature": 0.1, "max_tokens": 4096})
-
-def get_guardrails() -> dict:
-    """Get content safety and guardrail thresholds."""
-    config = load_play_config()
-    return config.get("guardrails", {"content_safety_threshold": 4, "groundedness_min": 0.8})
+# AFTER — testable
+function Invoke-VMProcessing {
+    [CmdletBinding()][OutputType([PSCustomObject[]])]
+    param([Parameter(Mandatory)][object[]]$VMs)
+    foreach ($vm in $VMs) {
+        Write-Verbose "Processing $($vm.Name)"
+        [PSCustomObject]@{ Name = $vm.Name; Status = 'Processed' }
+    }
+}
 ```
 
-### Health Check Pattern
-```python
-from fastapi import PowerShell, Response
-from datetime import datetime
+## Pattern 2: Mock Dependency Graph
 
-app = PowerShell()
+### Identify Dependencies at the Right Level
+```
+Level 0: Your function (NEVER mock this)
+Level 1: Direct dependencies (MOCK these)
+Level 2: Indirect dependencies (don't need mocking — L1 is mocked)
+```
 
-@app.get("/health")
-async def health_check():
-    checks = {}
-    overall = True
-    
-    # Check Azure OpenAI
-    try:
-        await openai_client.models.list()
-        checks["azure_openai"] = "healthy"
-    except Exception as e:
-        checks["azure_openai"] = f"unhealthy: {str(e)[:100]}"
-        overall = False
-    
-    # Check data store
-    try:
-        await data_store.ping()
-        checks["data_store"] = "healthy"
-    except Exception as e:
-        checks["data_store"] = f"unhealthy: {str(e)[:100]}"
-        overall = False
-    
-    status_code = 200 if overall else 503
-    return Response(
-        content=json.dumps({
-            "status": "healthy" if overall else "degraded",
-            "timestamp": datetime.utcnow().isoformat(),
-            "checks": checks,
-            "play": "101-pester-test-development"
-        }),
-        status_code=status_code,
-        media_type="application/json"
+### Dependency Types and Mock Strategies
+| Dependency | Examples | Mock Strategy |
+|-----------|----------|---------------|
+| Azure cmdlets | Connect-AzAccount, Get-AzPolicyState | Mock -CommandName with PSCustomObject returns |
+| File system | Get-Content, Set-Content, Test-Path | TestDrive (auto-cleaned PSDrive) |
+| Registry | Get-ItemProperty, Set-ItemProperty | TestRegistry |
+| Network | Invoke-RestMethod, Invoke-WebRequest | Mock with JSON response objects |
+| Active Directory | Get-ADUser, Get-ADGroup | Mock with hashtables |
+| SQL | Invoke-Sqlcmd, Invoke-DbaQuery | Mock with DataTable objects |
+| .NET types | [System.IO.File], HttpClient | Add-Type thin wrapper → mock wrapper |
+| Processes | Start-Process, & operator | Mock with exit codes + output |
+
+## Pattern 3: Azure Policy Lifecycle Testing
+
+```powershell
+Describe 'Azure Policy Lifecycle' -Tag 'Integration' {
+    BeforeAll {
+        Mock Connect-AzAccount { }
+        Mock Get-AzContext { @{ Subscription = @{ Id = '00000000-0000-0000-0000-000000000000' } } }
+    }
+
+    Context 'PolicyDefinition Validation' {
+        BeforeDiscovery {
+            $policyFiles = Get-ChildItem './policies/definitions' -Filter '*.json' -ErrorAction SilentlyContinue
+            $script:testCases = @()
+            if ($policyFiles) { $script:testCases = $policyFiles | ForEach-Object { @{ Name = $_.BaseName; Path = $_.FullName } } }
+        }
+
+        It '<Name> is valid JSON with required properties' -ForEach $testCases {
+            $policy = Get-Content $Path -Raw | ConvertFrom-Json
+            $policy.properties.policyType | Should -Be 'Custom'
+            $policy.properties.displayName | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'PolicyAssignment Scope' {
+        It 'Assigns at management group scope' {
+            Mock New-AzPolicyAssignment { @{ PolicyAssignmentId = '/assignments/test' } }
+            $result = Deploy-PolicyAssignment -Name 'test' -Scope '/providers/Microsoft.Management/managementGroups/mg1'
+            $result | Should -Not -BeNullOrEmpty
+            Should -Invoke New-AzPolicyAssignment -Times 1 -Exactly
+        }
+    }
+
+    Context 'Remediation' {
+        It 'Triggers remediation and waits for completion' {
+            Mock Start-AzPolicyRemediation { @{ ProvisioningState = 'Accepted' } }
+            Mock Get-AzPolicyRemediation { @{ ProvisioningState = 'Succeeded' } }
+            $result = Invoke-PolicyRemediation -PolicyName 'nsg-diagnostics'
+            Should -Invoke Start-AzPolicyRemediation -Times 1
+        }
+    }
+}
+```
+
+## Pattern 4: Test Data Factories
+
+### Problem
+Copy-pasting test data across test files = maintenance burden.
+
+### Solution — Reusable Factory Functions
+```powershell
+# TestHelpers/PolicyTestData.ps1
+function New-TestPolicyDefinition {
+    param(
+        [string]$Name = 'test-policy',
+        [string]$Mode = 'All',
+        [string]$Effect = 'DeployIfNotExists'
     )
+    [PSCustomObject]@{
+        Name = $Name
+        Properties = [PSCustomObject]@{
+            PolicyType = 'Custom'; Mode = $Mode; DisplayName = "Test: $Name"
+            PolicyRule = @{
+                if = @{ field = 'type'; equals = 'Microsoft.Network/networkSecurityGroups' }
+                then = @{ effect = $Effect }
+            }
+        }
+    }
+}
 ```
 
-### Caching Strategy
-```python
-from functools import lru_cache
-import hashlib, json
+## Pattern 5: Coverage Gap Analysis
 
-class ResponseCache:
-    """Cache for AI responses to reduce cost and latency."""
-    
-    def __init__(self, redis_client, ttl_seconds: int = 3600):
-        self.redis = redis_client
-        self.ttl = ttl_seconds
-    
-    def _cache_key(self, request: dict) -> str:
-        normalized = json.dumps(request, sort_keys=True)
-        return f"play:101-pester-test-development:" + hashlib.sha256(normalized.encode()).hexdigest()[:16]
-    
-    async def get(self, request: dict):
-        key = self._cache_key(request)
-        cached = await self.redis.get(key)
-        if cached:
-            return json.loads(cached)
-        return None
-    
-    async def set(self, request: dict, response: dict):
-        key = self._cache_key(request)
-        await self.redis.setex(key, self.ttl, json.dumps(response))
+```powershell
+$config = New-PesterConfiguration
+$config.CodeCoverage.Enabled = $true
+$config.CodeCoverage.Path = './src'
+$config.Run.Path = './tests'
+$config.Run.PassThru = $true
+$result = Invoke-Pester -Configuration $config
+
+# Analyze missed lines
+$missed = $result.CodeCoverage.CommandsMissed
+$grouped = $missed | Group-Object File | Sort-Object Count -Descending
+foreach ($file in $grouped) {
+    Write-Host "UNCOVERED: $($file.Name) — $($file.Count) lines"
+    $file.Group | ForEach-Object { Write-Host "  Line $($_.Line): $($_.Command)" }
+}
 ```
 
-### Structured Output Pattern
-```python
-from pydantic import BaseModel, Field
-from typing import List, Optional
+### Closing Gaps
+- Uncovered if/else → add Context with specific Mock setup
+- Uncovered catch → add It with Mock that throws
+- Uncovered switch case → add -TestCases for each value
+- Uncovered helper → add separate Describe block
 
-class AIResponse(BaseModel):
-    """Structured response from AI processing."""
-    answer: str = Field(..., description="The generated answer")
-    sources: List[str] = Field(default_factory=list, description="Source references")
-    confidence: float = Field(ge=0, le=1, description="Confidence score 0-1")
-    model: str = Field(..., description="Model used for generation")
-    tokens_used: int = Field(ge=0, description="Total tokens consumed")
-    processing_time_ms: float = Field(ge=0, description="Processing time in milliseconds")
-    metadata: Optional[dict] = Field(default=None, description="Additional metadata")
+## Pattern 6: CI/CD Pipeline Integration
 
-    class Config:
-        json_schema_extra = {"example": {"answer": "...", "sources": ["doc1.pdf"], "confidence": 0.92, "model": "gpt-4o", "tokens_used": 1500, "processing_time_ms": 450.5}}
+### Azure DevOps YAML
+```yaml
+- task: PowerShell@2
+  displayName: 'Pester Tests + Coverage'
+  inputs:
+    targetType: inline
+    pwsh: true
+    script: |
+      $config = New-PesterConfiguration
+      $config.Run.Path = './tests'
+      $config.Run.Exit = $true
+      $config.CodeCoverage.Enabled = $true
+      $config.CodeCoverage.Path = './src'
+      $config.CodeCoverage.OutputFormat = 'JaCoCo'
+      $config.CodeCoverage.OutputPath = './coverage.xml'
+      $config.CodeCoverage.CoveragePercentTarget = 90
+      $config.TestResult.Enabled = $true
+      $config.TestResult.OutputPath = './test-results.xml'
+      Invoke-Pester -Configuration $config
+
+- task: PublishTestResults@2
+  inputs: { testResultsFormat: 'NUnit', testResultsFiles: 'test-results.xml' }
+
+- task: PublishCodeCoverageResults@2
+  inputs: { codeCoverageTool: 'JaCoCo', summaryFileLocation: 'coverage.xml' }
 ```
 
-### Error Classification
-```python
-from enum import Enum
-
-class ErrorCategory(Enum):
-    VALIDATION = "validation_error"       # Bad input from user
-    AUTHENTICATION = "auth_error"         # Auth/authz failure
-    RATE_LIMIT = "rate_limit"            # Too many requests
-    SERVICE_ERROR = "service_error"       # Azure service failure
-    CONTENT_SAFETY = "content_blocked"    # Content safety violation
-    TIMEOUT = "timeout_error"            # Processing timeout
-    INTERNAL = "internal_error"          # Unexpected failure
-
-class PlayError(Exception):
-    def __init__(self, category: ErrorCategory, message: str, details: dict = None):
-        self.category = category
-        self.message = message
-        self.details = details or {}
-        super().__init__(message)
-
-    def to_response(self) -> dict:
-        return {"error": {"category": self.category.value, "message": self.message, "details": self.details}}
+### GitHub Actions
+```yaml
+- name: Pester Tests
+  shell: pwsh
+  run: |
+    Install-Module Pester -Force -Scope CurrentUser
+    $config = New-PesterConfiguration
+    $config.Run.Path = './tests'
+    $config.Run.Exit = $true
+    $config.CodeCoverage.Enabled = $true
+    $config.CodeCoverage.CoveragePercentTarget = 90
+    Invoke-Pester -Configuration $config
 ```
 
 ## Anti-Patterns to Avoid
-1. **❌ Hardcoded values:** Never hardcode model names, temperatures, or thresholds
-2. **❌ Synchronous Azure calls:** Always use async clients for I/O operations
-3. **❌ Unbounded retries:** Always set max retry count and backoff ceiling
-4. **❌ Missing timeouts:** Every external call must have a timeout
-5. **❌ PII in logs:** Never log full user prompts or PII — use structured metadata only
-6. **❌ Ignoring errors:** Every exception must be caught, logged, and handled appropriately
-7. **❌ Fat controllers:** Keep API handlers thin — delegate to service classes
-8. **❌ No caching:** Repeated identical queries should be served from cache
+
+| Anti-Pattern | Why Bad | Correct |
+|-------------|---------|---------|
+| Mock the function under test | Tests nothing | Only mock dependencies |
+| Should -Be $true | Pester 5.x syntax issue | Should -BeTrue |
+| No BeforeAll for import | Discovery phase fails | BeforeAll { . $PSScriptRoot/... } |
+| Hardcoded paths | Tests fail on other machines | $PSScriptRoot, TestDrive |
+| No mock verification | Can't confirm code paths | Should -Invoke -Times -Exactly |
+| Monolithic test files | Hard to maintain | One .Tests.ps1 per source file |
+| No -Tag on Describe | Can't run selective tests | -Tag 'Unit', 'Integration' |
+| Test implementation details | Brittle, breaks on refactor | Test behavior, not internals |
+| Copy-paste test data | Maintenance burden | Test data factory functions |
+| No error path testing | Miss exception bugs | Test -ErrorAction Stop scenarios |
