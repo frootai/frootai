@@ -1,0 +1,58 @@
+{
+  "_comment": "Agent behavior configuration for Pester Test Modernization",
+  "builder": {
+    "role": "implementation",
+    "model": "gpt-4o",
+    "temperature": 0.2,
+    "max_tokens": 2000,
+    "tools": [
+      "frootai-mcp",
+      "azure-cli",
+      "bicep"
+    ],
+    "constraints": {
+      "max_file_changes_per_task": 10,
+      "require_tests": true,
+      "require_error_handling": true
+    }
+  },
+  "reviewer": {
+    "role": "quality-gate",
+    "model": "gpt-4o",
+    "temperature": 0.1,
+    "checklist_categories": [
+      "architecture",
+      "security",
+      "waf",
+      "code-quality",
+      "config",
+      "infrastructure"
+    ],
+    "blocking_issues": [
+      "hardcoded-secrets",
+      "no-managed-identity",
+      "no-error-handling",
+      "no-health-check",
+      "pii-in-logs"
+    ]
+  },
+  "tuner": {
+    "role": "production-readiness",
+    "model": "gpt-4o",
+    "temperature": 0.1,
+    "validation_targets": {
+      "temperature_max": 0.3,
+      "content_safety": true,
+      "pii_detection": true,
+      "min_confidence": 0.7,
+      "eval_groundedness": 0.85
+    }
+  },
+  "chain": [
+    "builder",
+    "reviewer",
+    "tuner"
+  ],
+  "max_iterations": 3,
+  "escalation": "human-in-the-loop"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "101-pester-test-modernization",
+  "version": "1.0.0",
+  "description": "> The crown jewel — a self-orchestrating super-agent that understands user goals, selects and chains",
+  "scale": "dev",
+  "architecture": {
+    "pattern": "pester-test-modernization"
+  },
+  "evaluation": {
+    "metrics": [
+      "groundedness",
+      "relevance",
+      "coherence",
+      "safety"
+    ],
+    "thresholds": {
+      "groundedness": 4,
+      "relevance": 4,
+      "safety": 5
+    }
+  },
+  "waf_alignment": {
+    "reliability": "See README",
+    "security": "See README",
+    "responsible-ai": "See README",
+    "cost-optimization": "See README",
+    "operational-excellence": "See README",
+    "performance-efficiency": "See README"
+  }
+}

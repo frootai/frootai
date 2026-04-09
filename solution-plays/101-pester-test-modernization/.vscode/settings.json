@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.agent.md": "markdown",
+    "*.instructions.md": "markdown",
+    "*.prompt.md": "markdown"
+  }
+}

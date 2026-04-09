@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "frootai-mcp@latest"
+      ]
+    }
+  }
+}
