@@ -2,9 +2,6 @@ name: Build & Push Docker Image
 
 on:
   push:
-    paths:
-      - 'mcp-server/**'
-    branches: [main]
     tags:
       - 'v*'
   workflow_dispatch:

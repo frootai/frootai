@@ -2,9 +2,6 @@ name: Publish VS Code Extension
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'vscode-extension/**'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -16,7 +13,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     # On tag push: always run. On branch push: only if vscode-extension changed.
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.modified, 'vscode-extension/')
+    # Always run on tag push or manual dispatch
     steps:
       - uses: actions/checkout@v4
 

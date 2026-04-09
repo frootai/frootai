@@ -2,10 +2,6 @@ name: Publish Python Packages to PyPI
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'python-mcp/**'
-      - 'python-sdk/**'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -17,7 +13,7 @@ jobs:
   publish-mcp:
     runs-on: ubuntu-latest
     # On tag push: always publish. On branch push: only if python-mcp changed.
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.modified, 'python-mcp/')
+    # Always run on tag push or manual dispatch
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,7 +34,7 @@ jobs:
   publish-sdk:
     runs-on: ubuntu-latest
     # On tag push: always publish. On branch push: only if python-sdk changed.
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.modified, 'python-sdk/')
+    # Always run on tag push or manual dispatch
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
