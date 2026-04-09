@@ -1,80 +1,50 @@
 ---
-mode: "agent"
-description: "Review Pester Test Development (Play 101) code and architecture"
-tools: ["terminal", "file"]
+description: "Review prompt for Play 101 — Review Pester test suite code quality"
 ---
 
-# Review Pester Test Development Implementation
+# /review — Play 101: Pester Test Development
 
-You are reviewing the FrootAI Pester Test Development solution play (Play 101).
+## Purpose
+Review the Pester test suite for adherence to best practices, completeness, and quality.
 
-## Review Scope
-Perform a comprehensive review covering architecture, security, quality, and WAF alignment.
+## Review Checklist
 
-## Step 1: Architecture Review
-- [ ] Solution follows the documented architecture in README.md
-- [ ] All Azure resources defined in infra/main.bicep match architecture
-- [ ] Service dependencies are clearly documented
-- [ ] Data flow follows expected patterns (no unexpected external calls)
-- [ ] API contracts are well-defined and documented
+### Test Structure
+- [ ] All exported functions have test files (.Tests.ps1)
+- [ ] BeforeAll uses dot-sourcing (not script-scope import)
+- [ ] Describe/Context/It hierarchy is clean (max 3 levels)
+- [ ] Test names are descriptive (verb-first: Returns, Throws, Creates)
+- [ ] Tags applied: -Tag 'Unit' or -Tag 'Integration'
+- [ ] No duplicate test logic (use -TestCases/-ForEach instead)
 
-## Step 2: Security Review (OWASP LLM Top 10)
-- [ ] No hardcoded API keys, secrets, or connection strings in any file
-- [ ] DefaultAzureCredential used for all Azure service auth
-- [ ] Input validation on all user-facing endpoints
-- [ ] Output sanitization before returning LLM responses to users
-- [ ] Content Safety API integrated for user-facing content
-- [ ] PII detection and handling implemented
-- [ ] Rate limiting configured on API endpoints
-- [ ] Private endpoints configured for Azure services (production)
-- [ ] Key Vault used for all secret storage
-- [ ] RBAC role assignments follow least-privilege principle
+### Mock Quality
+- [ ] All Azure cmdlets mocked (Connect-AzAccount, Get-AzContext, etc.)
+- [ ] All file system operations use TestDrive
+- [ ] Mock return types are realistic (match real cmdlet output)
+- [ ] ParameterFilter used for conditional behavior
+- [ ] Every Mock has Should -Invoke verification
+- [ ] No mock of the function under test
 
-## Step 3: Code Quality Review
-- [ ] Functions have type hints and docstrings
-- [ ] Error handling covers all Azure SDK call failure modes
-- [ ] Retry with exponential backoff on transient failures
-- [ ] Logging uses structured format with correlation IDs
-- [ ] No TODO/FIXME/HACK comments left in production code
-- [ ] Config values loaded from config/*.json (not hardcoded)
-- [ ] Tests exist for business logic (unit) and integrations (integration)
+### Assertion Quality
+- [ ] Should operators used correctly (-Be, -BeExactly, -Throw, -Invoke)
+- [ ] Not using Should -Be $true (use Should -BeTrue)
+- [ ] -Throw includes error message pattern
+- [ ] One assertion per It block (focused tests)
+- [ ] Error paths tested (try/catch coverage)
 
-## Step 4: WAF Compliance Check
-- [ ] **Reliability:** Health checks, retry policies, circuit breaker
-- [ ] **Security:** Managed Identity, Key Vault, Content Safety, RBAC
-- [ ] **Cost:** Model routing configured, caching enabled, SKUs right-sized
-- [ ] **Ops Excellence:** IaC complete, CI/CD defined, monitoring configured
-- [ ] **Performance:** Async patterns, connection pooling, caching
-- [ ] **Responsible AI:** Content safety, groundedness checks, source attribution
+### Coverage
+- [ ] Line coverage ≥90%
+- [ ] Branch coverage ≥80%
+- [ ] Function coverage = 100%
+- [ ] Edge cases: $null, empty, boundary values
 
-## Step 5: Configuration Review
-- [ ] config/openai.json has appropriate model and temperature settings
-- [ ] config/guardrails.json has content safety thresholds defined
-- [ ] config/agents.json defines agent behavior and handoff rules
-- [ ] All JSON files parse without errors
-- [ ] No conflicting configuration between files
+### Security
+- [ ] No credentials in test files
+- [ ] RBAC scope validated in policy tests
+- [ ] Test data sanitized (no production data)
 
-## Step 6: Infrastructure Review
-- [ ] Bicep compiles without errors: `az bicep build -f infra/main.bicep`
-- [ ] All resources have proper tags (project, environment, owner)
-- [ ] Managed Identity configured for service-to-service auth
-- [ ] Diagnostic settings enabled for all resources
-- [ ] Dev/prod environment separation via parameters
-
-## Step 7: Generate Review Report
-```markdown
-## Review Report — Play 101: Pester Test Development
-- Architecture: [PASS/FAIL]
-- Security: [PASS/FAIL] — [N] issues found
-- Code Quality: [PASS/FAIL] — [N] items
-- WAF Compliance: [PASS/FAIL] — [N]/6 pillars met
-- Configuration: [PASS/FAIL]
-- Infrastructure: [PASS/FAIL]
-- **Overall: [APPROVED / NEEDS CHANGES]**
-```
-
-## Verdict
-- **APPROVED:** All checks pass → hand off to @tuner
-- **NEEDS CHANGES:** Issues found → return to @builder with specific fix list
-
-After review, document all findings and recommendations in the review report.
+### CI/CD
+- [ ] Invoke-Pester configuration defined
+- [ ] JaCoCo + NUnit output configured
+- [ ] Coverage gate set (fail at <90%)
+- [ ] Pipeline YAML valid

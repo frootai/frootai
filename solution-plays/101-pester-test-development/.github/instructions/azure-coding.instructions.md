@@ -1,183 +1,169 @@
 ---
-description: "Azure coding patterns and best practices for Pester Test Development"
-applyTo: "**/*.{py,ts,js,bicep,json}"
+description: "Azure PowerShell testing patterns — mocking Az cmdlets, testing Azure Policy lifecycle, DiagnosticLogs validation, remediation testing"
+applyTo: "solution-plays/101-pester-test-development/**/*.{ps1,Tests.ps1}"
+waf: ["reliability", "operational-excellence"]
 ---
 
-# Azure Coding Patterns — Pester Test Development
+# Azure PowerShell Testing Patterns
 
-## Authentication — Managed Identity First
-Always use `DefaultAzureCredential` for Azure service authentication:
+## Mocking Azure Cmdlets in Pester
 
-```python
-from azure.identity import DefaultAzureCredential
-from azure.ai.openai import AzureOpenAI
-
-credential = DefaultAzureCredential()
-client = AzureOpenAI(
-    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_ad_token_provider=get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default"),
-    api_version="2024-12-01-preview"
-)
-```
-
-**Never do this:**
-```python
-# ❌ WRONG: API key in code
-client = AzureOpenAI(api_key="sk-abc123...")
-# ❌ WRONG: API key from env without Managed Identity
-client = AzureOpenAI(api_key=os.environ["OPENAI_API_KEY"])
-```
-
-## Azure SDK Error Handling
-Wrap all Azure SDK calls with retry and proper error handling:
-
-```python
-from azure.core.exceptions import HttpResponseError, ServiceRequestError
-from tenacity import retry, stop_after_attempt, wait_exponential
-
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=30))
-async def call_azure_openai(prompt: str) -> str:
-    try:
-        response = await client.chat.completions.create(
-            model=config["model"],
-            messages=[{"role": "user", "content": prompt}],
-            temperature=config["temperature"],
-            max_tokens=config["max_tokens"]
-        )
-        return response.choices[0].message.content
-    except HttpResponseError as e:
-        if e.status_code == 429:
-            logger.warning(f"Rate limited, retrying... (retry-after: {e.headers.get('Retry-After', 'unknown')})")
-            raise  # Let tenacity handle retry
-        elif e.status_code == 404:
-            logger.error(f"Model deployment not found: {config['model']}")
-            raise ValueError(f"Model {config['model']} not deployed")
-        else:
-            logger.error(f"Azure OpenAI error: {e.status_code} - {e.message}")
-            raise
-    except ServiceRequestError as e:
-        logger.error(f"Network error calling Azure OpenAI: {e}")
-        raise
-```
-
-## Key Vault Integration
-Store and retrieve secrets using Azure Key Vault:
-
-```python
-from azure.keyvault.secrets import SecretClient
-
-credential = DefaultAzureCredential()
-secret_client = SecretClient(vault_url=os.environ["AZURE_KEY_VAULT_URL"], credential=credential)
-
-# Retrieve secrets at startup, cache in memory
-connection_string = secret_client.get_secret("database-connection-string").value
-```
-
-## Application Insights Logging
-Use structured logging with correlation IDs:
-
-```python
-from azure.monitor.opentelemetry import configure_azure_monitor
-from opentelemetry import trace
-
-configure_azure_monitor(connection_string=os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"])
-tracer = trace.get_tracer(__name__)
-
-@tracer.start_as_current_span("process_request")
-async def process_request(request_id: str, data: dict):
-    span = trace.get_current_span()
-    span.set_attribute("request.id", request_id)
-    span.set_attribute("play.id", "101-pester-test-development")
-    # ... processing logic
-    span.set_attribute("tokens.used", token_count)
-    span.set_attribute("model.name", config["model"])
-```
-
-## Bicep Best Practices
-
-### Module Pattern
-```bicep
-// Use modules for reusable resource groups
-module openai 'modules/openai.bicep' = {
-  name: 'openai-deployment'
-  params: {
-    location: location
-    name: '${prefix}-openai'
-    sku: environment == 'prod' ? 'S0' : 'S0'
-    deployments: [
-      { name: 'gpt-4o', model: { name: 'gpt-4o', version: '2024-11-20' }, sku: { name: 'GlobalStandard', capacity: 30 } }
-      { name: 'text-embedding-3-large', model: { name: 'text-embedding-3-large', version: '1' }, sku: { name: 'Standard', capacity: 120 } }
-    ]
-  }
+### Authentication (Always Mock)
+```powershell
+BeforeAll {
+    Mock Connect-AzAccount { }
+    Mock Get-AzContext {
+        [PSCustomObject]@{
+            Account = @{ Id = 'test@contoso.com' }
+            Subscription = @{ Id = '00000000-0000-0000-0000-000000000000'; Name = 'test-sub' }
+            Tenant = @{ Id = '00000000-0000-0000-0000-000000000001' }
+        }
+    }
 }
 ```
 
-### Conditional Resources
-```bicep
-// Deploy monitoring only in production
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = if (environment == 'prod') {
-  name: '${prefix}-logs'
-  location: location
-  properties: { retentionInDays: 90 }
+### Policy Definition Testing
+```powershell
+Mock Get-AzPolicyDefinition {
+    [PSCustomObject]@{
+        Name = 'nsg-diagnostics'
+        ResourceId = '/providers/Microsoft.Authorization/policyDefinitions/nsg-diagnostics'
+        Properties = [PSCustomObject]@{
+            PolicyType = 'Custom'
+            Mode = 'All'
+            DisplayName = 'Configure NSG Diagnostic Logs'
+            PolicyRule = @{
+                if = @{ field = 'type'; equals = 'Microsoft.Network/networkSecurityGroups' }
+                then = @{ effect = 'DeployIfNotExists' }
+            }
+        }
+    }
 }
 ```
 
-### RBAC Role Assignments
-```bicep
-// Assign Cognitive Services User role to the app
-resource openaiRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  scope: openai
-  name: guid(openai.id, app.id, cognitiveServicesUser)
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', cognitiveServicesUser)
-    principalId: app.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
+### Policy Assignment Testing
+```powershell
+Mock New-AzPolicyAssignment {
+    [PSCustomObject]@{
+        PolicyAssignmentId = '/providers/Microsoft.Authorization/policyAssignments/test-assignment'
+        Properties = @{
+            PolicyDefinitionId = '/providers/Microsoft.Authorization/policyDefinitions/nsg-diagnostics'
+            Scope = '/providers/Microsoft.Management/managementGroups/BASF_ManagementRoot'
+        }
+    }
 }
 ```
 
-## Connection Patterns
-- Use connection pooling for HTTP clients (set max connections)
-- Configure timeouts: connect=5s, read=30s, total=60s
-- Use async clients for I/O-bound operations
-- Implement health check endpoints that verify all dependencies
+### Policy Compliance Testing
+```powershell
+Mock Get-AzPolicyState -ParameterFilter { $PolicyDefinitionName -eq 'nsg-diagnostics' } {
+    [PSCustomObject]@{
+        ComplianceState = 'Compliant'
+        ResourceId = '/subscriptions/test/resourceGroups/rg1/providers/Microsoft.Network/networkSecurityGroups/nsg1'
+        PolicyDefinitionName = 'nsg-diagnostics'
+        Timestamp = Get-Date
+    }
+}
+```
 
-## Environment Configuration
-- Use `AZURE_*` environment variables for Azure endpoints
-- Use `config/*.json` files for application parameters
-- Never mix secrets with config — secrets go to Key Vault only
-- Use `parameters.json` for Bicep deployment values
+### Remediation Testing
+```powershell
+Mock Start-AzPolicyRemediation {
+    [PSCustomObject]@{
+        Name = 'remediation-001'
+        ProvisioningState = 'Accepted'
+        PolicyAssignmentId = '/providers/Microsoft.Authorization/policyAssignments/test-assignment'
+    }
+}
 
-## Azure Resource Naming
-Follow the convention: `{project}-{environment}-{resource-type}`
-- Resource Group: `rg-frootai-{env}`
-- OpenAI: `oai-frootai-{env}`
-- Key Vault: `kv-frootai-{env}`
-- App Service: `app-frootai-{env}`
-- Storage: `stfrootai{env}` (no hyphens allowed)
+Mock Get-AzPolicyRemediation {
+    [PSCustomObject]@{
+        Name = 'remediation-001'
+        ProvisioningState = 'Succeeded'
+        DeploymentSummary = @{
+            TotalDeployments = 5
+            SuccessfulDeployments = 5
+            FailedDeployments = 0
+        }
+    }
+}
+```
 
-## Cost Optimization Patterns
-- Use `gpt-4o-mini` for classification/routing, `gpt-4o` for generation
-- Cache frequent queries with Azure Cache for Redis (TTL based on data freshness)
-- Set `max_tokens` to minimum needed — don't use unlimited
-- Use Provisioned Throughput Units (PTU) for predictable high-volume workloads
-- Auto-scale based on queue depth, not just CPU
+### DiagnosticLogs NSG Policy Testing
+```powershell
+Describe 'NSG DiagnosticLogs Policy' -Tag 'Integration' {
+    BeforeAll {
+        Mock Get-AzNetworkSecurityGroup {
+            [PSCustomObject]@{
+                Id = '/subscriptions/test/resourceGroups/rg1/providers/Microsoft.Network/networkSecurityGroups/nsg1'
+                Name = 'nsg1'
+                Location = 'eastus'
+            }
+        }
+        Mock Set-AzDiagnosticSetting { [PSCustomObject]@{ Name = 'service' } }
+        Mock Get-AzDiagnosticSetting { $null }  # No existing settings
+    }
 
-## Testing Azure Integrations
-```python
-# Use environment variables to switch between test and prod
-import pytest
-from unittest.mock import AsyncMock, patch
+    It 'Configures diagnostic settings on new NSG' {
+        Set-NsgDiagnosticPolicy -NsgName 'nsg1' -WorkspaceId '/subscriptions/ee5f8667/.../workspaces/monitoring-chub01'
+        Should -Invoke Set-AzDiagnosticSetting -Times 1 -Exactly
+    }
 
-@pytest.fixture
-def mock_openai_client():
-    client = AsyncMock()
-    client.chat.completions.create.return_value = MockCompletion("test response")
-    return client
+    It 'Sets correct diagnostic categories' {
+        Set-NsgDiagnosticPolicy -NsgName 'nsg1' -WorkspaceId '/subscriptions/ee5f8667/.../workspaces/monitoring-chub01'
+        Should -Invoke Set-AzDiagnosticSetting -ParameterFilter {
+            $Category -contains 'NetworkSecurityGroupEvent' -and
+            $Category -contains 'NetworkSecurityGroupRuleCounter'
+        }
+    }
 
-async def test_process_request(mock_openai_client):
-    with patch("app.client", mock_openai_client):
-        result = await process_request("test-123", {"query": "test"})
-        assert result is not None
-        mock_openai_client.chat.completions.create.assert_called_once()
+    It 'Sends logs to correct Log Analytics workspace' {
+        Set-NsgDiagnosticPolicy -NsgName 'nsg1' -WorkspaceId '/subscriptions/ee5f8667/.../workspaces/monitoring-chub01'
+        Should -Invoke Set-AzDiagnosticSetting -ParameterFilter {
+            $WorkspaceId -like '*/workspaces/monitoring-chub01*'
+        }
+    }
+
+    Context 'When remediation is needed' {
+        BeforeAll {
+            Mock Get-AzDiagnosticSetting { [PSCustomObject]@{ Name = 'wrong-setting' } }  # Wrong config
+            Mock Start-AzPolicyRemediation { [PSCustomObject]@{ ProvisioningState = 'Accepted' } }
+        }
+
+        It 'Triggers remediation for incorrect diagnostic settings' {
+            Invoke-PolicyRemediation -PolicyName 'nsg-diagnostics' -Scope 'BASF_ManagementRoot'
+            Should -Invoke Start-AzPolicyRemediation -Times 1 -Exactly
+        }
+    }
+}
+```
+
+## JSON Policy File Validation
+```powershell
+BeforeDiscovery {
+    $policyFiles = Get-ChildItem -Path './policies/definitions' -Filter '*.json' -ErrorAction SilentlyContinue
+    $testCases = @()
+    if ($policyFiles) {
+        $testCases = $policyFiles | ForEach-Object { @{ Name = $_.BaseName; Path = $_.FullName } }
+    }
+}
+
+Describe 'Policy Definition JSON Validation' -Tag 'Unit' {
+    It '<Name> is valid JSON' -ForEach $testCases {
+        { Get-Content $Path -Raw | ConvertFrom-Json } | Should -Not -Throw
+    }
+
+    It '<Name> has required properties' -ForEach $testCases {
+        $policy = Get-Content $Path -Raw | ConvertFrom-Json
+        $policy.properties.policyType | Should -Be 'Custom'
+        $policy.properties.displayName | Should -Not -BeNullOrEmpty
+        $policy.properties.policyRule | Should -Not -BeNullOrEmpty
+    }
+
+    It '<Name> has valid effect type' -ForEach $testCases {
+        $policy = Get-Content $Path -Raw | ConvertFrom-Json
+        $effect = $policy.properties.policyRule.then.effect
+        $effect | Should -BeIn @('Audit', 'Deny', 'DeployIfNotExists', 'Modify', 'AuditIfNotExists', 'Disabled')
+    }
+}
 ```

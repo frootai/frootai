@@ -57,7 +57,7 @@ python evaluation/eval.py --ci-gate --config config/guardrails.json
 ```
 
 ## Failure Remediation
-- **Low relevance:** Check retrieval pipeline, improve chunking strategy
+- **Low relevance:** Check test generation pipeline, improve chunking strategy
 - **Low groundedness:** Tighten system prompt, require source citations
 - **Low coherence:** Reduce temperature, add structured output format
 - **Low safety:** Enable Content Safety API filtering

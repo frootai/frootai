@@ -1,32 +1,44 @@
 {
-  "content_safety": {
-    "enabled": true,
-    "categories": [
-      "hate",
-      "self_harm",
-      "sexual",
-      "violence"
-    ],
-    "severity_threshold": 2,
-    "action": "block"
-  },
-  "pii_detection": {
-    "enabled": true,
-    "categories": [
-      "email",
-      "phone",
-      "ssn",
-      "credit_card"
-    ],
-    "action": "redact"
-  },
-  "prompt_injection": {
-    "enabled": true,
-    "action": "block"
-  },
-  "business_rules": {
-    "max_response_tokens": 1000,
-    "require_citations": true,
-    "min_confidence_to_answer": 0.7
+  "play": "101-pester-test-development",
+  "version": "1.0.0",
+  "guardrails": {
+    "test_quality": {
+      "pester_version_minimum": "5.5.0",
+      "pester_syntax": "v5",
+      "require_before_all_dot_source": true,
+      "require_describe_tags": true,
+      "max_describe_nesting": 3,
+      "require_mock_verification": true,
+      "allow_should_be_true": false,
+      "allow_hardcoded_paths": false
+    },
+    "coverage": {
+      "line_coverage_minimum": 0.90,
+      "line_coverage_warning": 0.85,
+      "branch_coverage_minimum": 0.80,
+      "branch_coverage_warning": 0.70,
+      "function_coverage_minimum": 1.00,
+      "action_on_failure": "fail_pipeline"
+    },
+    "isolation": {
+      "require_testdrive_for_files": true,
+      "require_testregistry_for_registry": true,
+      "block_real_azure_calls": true,
+      "block_real_network_calls": true,
+      "block_real_ad_calls": true,
+      "require_mock_cleanup": true
+    },
+    "security": {
+      "scan_for_credentials": true,
+      "block_real_subscription_ids": true,
+      "require_synthetic_test_data": true,
+      "max_secret_pattern_matches": 0
+    },
+    "performance": {
+      "max_test_duration_seconds": 5,
+      "max_suite_duration_seconds": 60,
+      "flag_slow_tests": true,
+      "require_parallel_capability": false
+    }
   }
 }

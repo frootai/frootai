@@ -1,58 +1,38 @@
 {
-  "_comment": "Agent behavior configuration for Pester Test Development",
-  "builder": {
-    "role": "implementation",
-    "model": "gpt-4o",
-    "temperature": 0.2,
-    "max_tokens": 2000,
-    "tools": [
-      "frootai-mcp",
-      "azure-cli",
-      "bicep"
-    ],
-    "constraints": {
-      "max_file_changes_per_task": 10,
-      "require_tests": true,
-      "require_error_handling": true
+  "play": "101-pester-test-development",
+  "chain": "builder → reviewer → tuner",
+  "agents": {
+    "builder": {
+      "file": ".github/agents/builder.agent.md",
+      "role": "Test generator — AST analysis, testability assessment, Pester 5.x test generation",
+      "temperature": 0.1,
+      "tools": ["powershell", "pester", "psscriptanalyzer", "git"],
+      "phases": ["discovery", "assessment", "requirement-mapping", "dependency-mapping", "refactoring", "test-generation"]
+    },
+    "reviewer": {
+      "file": ".github/agents/reviewer.agent.md",
+      "role": "Test quality reviewer — mock verification, assertion quality, coverage analysis",
+      "temperature": 0.0,
+      "tools": ["powershell", "pester"],
+      "checks": ["structure", "mocking", "assertions", "coverage", "isolation", "security", "cicd"]
+    },
+    "tuner": {
+      "file": ".github/agents/tuner.agent.md",
+      "role": "Coverage optimizer — close gaps, eliminate flaky tests, CI/CD pipeline configuration",
+      "temperature": 0.1,
+      "tools": ["powershell", "pester", "git"],
+      "targets": {
+        "line_coverage": 90,
+        "branch_coverage": 80,
+        "function_coverage": 100,
+        "test_pass_rate": 100,
+        "max_test_duration_seconds": 5,
+        "flaky_test_rate": 0
+      }
     }
   },
-  "reviewer": {
-    "role": "quality-gate",
-    "model": "gpt-4o",
-    "temperature": 0.1,
-    "checklist_categories": [
-      "architecture",
-      "security",
-      "waf",
-      "code-quality",
-      "config",
-      "infrastructure"
-    ],
-    "blocking_issues": [
-      "hardcoded-secrets",
-      "no-managed-identity",
-      "no-error-handling",
-      "no-health-check",
-      "pii-in-logs"
-    ]
-  },
-  "tuner": {
-    "role": "production-readiness",
-    "model": "gpt-4o",
-    "temperature": 0.1,
-    "validation_targets": {
-      "temperature_max": 0.3,
-      "content_safety": true,
-      "pii_detection": true,
-      "min_confidence": 0.7,
-      "eval_groundedness": 0.85
-    }
-  },
-  "chain": [
-    "builder",
-    "reviewer",
-    "tuner"
-  ],
-  "max_iterations": 3,
-  "escalation": "human-in-the-loop"
+  "escalation": {
+    "trigger": "coverage < 85% OR flaky_test_rate > 1%",
+    "action": "human-in-the-loop"
+  }
 }

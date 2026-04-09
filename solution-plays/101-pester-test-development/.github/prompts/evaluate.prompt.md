@@ -1,79 +1,66 @@
 ---
-mode: "agent"
-description: "Evaluate Pester Test Development (Play 101) quality metrics"
-tools: ["terminal", "file"]
+description: "Evaluate prompt for Play 101 — Evaluate Pester test suite quality metrics"
 ---
 
-# Evaluate Pester Test Development Quality
+# /evaluate — Play 101: Pester Test Development
 
-You are evaluating the FrootAI Pester Test Development solution play (Play 101).
+## Purpose
+Evaluate the quality and completeness of the Pester test suite against the source codebase.
 
-## Prerequisites
-1. Python 3.10+ with azure-ai-evaluation SDK installed
-2. Azure credentials configured (DefaultAzureCredential)
-3. Test dataset available at `evaluation/test-set.jsonl`
-4. Config files loaded from `config/` directory
+## Metrics to Evaluate
 
-## Step 1: Prepare Test Dataset
-Verify the test dataset has sufficient coverage:
-```bash
-python -c "
-import jsonlines
-with jsonlines.open('evaluation/test-set.jsonl') as reader:
-    cases = list(reader)
-    print(f'Test cases: {len(cases)}')
-    print(f'Categories: {set(c.get("category", "default") for c in cases)}')
-"
-```
-Minimum: 10 diverse test cases covering normal, edge, and adversarial scenarios.
-
-## Step 2: Run Evaluation Pipeline
-Execute the evaluation script:
-```bash
-python evaluation/eval.py --config config/guardrails.json --test-set evaluation/test-set.jsonl
+### 1. Test Pass Rate
+```powershell
+$result = Invoke-Pester -Path ./tests -PassThru
+$passRate = $result.PassedCount / $result.TotalCount * 100
+Write-Host "Pass rate: $passRate% ($($result.PassedCount)/$($result.TotalCount))"
+# Target: 100%
 ```
 
-## Step 3: Metric Definitions
-The evaluation measures these quality dimensions:
+### 2. Code Coverage
+```powershell
+$config = New-PesterConfiguration
+$config.CodeCoverage.Enabled = $true
+$config.CodeCoverage.Path = './src'
+$config.Run.Path = './tests'
+$config.Run.PassThru = $true
+$result = Invoke-Pester -Configuration $config
+$covered = $result.CodeCoverage.CommandsExecutedCount
+$total = $result.CodeCoverage.CommandsAnalyzedCount
+$pct = [math]::Round($covered / $total * 100, 1)
+Write-Host "Coverage: $pct% ($covered/$total commands)"
+# Target: ≥90% line coverage
+```
 
-| Metric | Description | Threshold | Weight |
-|--------|-------------|-----------|--------|
-| **Relevance** | Response addresses the user's question | ≥ 0.80 | 25% |
-| **Groundedness** | Response is grounded in provided context | ≥ 0.85 | 30% |
-| **Coherence** | Response is logically consistent | ≥ 0.80 | 15% |
-| **Fluency** | Response is grammatically correct | ≥ 0.85 | 10% |
-| **Safety** | No harmful/inappropriate content | ≥ 0.95 | 15% |
-| **Latency** | Response time p95 | ≤ 3000ms | 5% |
+### 3. Mock Verification
+Check that every Mock has a corresponding Should -Invoke:
+- Count Mock definitions per test file
+- Count Should -Invoke assertions per test file
+- Flag any unverified mocks (Mock without -Invoke)
 
-## Step 4: Interpret Results
-After running evaluation:
-1. Check overall weighted score (must be ≥ 0.80 for production)
-2. Identify any individual metric below threshold
-3. Review worst-performing test cases for patterns
-4. Check safety score — must be 0.95+ (non-negotiable)
+### 4. Test Execution Time
+```powershell
+$result.Tests | Sort-Object Duration -Descending | Select-Object -First 10 |
+    ForEach-Object { Write-Host "$($_.Duration) — $($_.Name)" }
+# Target: No test >5s, total suite <60s
+```
 
-## Step 5: CI Gate Decision
-Based on results, make a go/no-go decision:
-- **PASS (all green):** All metrics above threshold → approve for deployment
-- **WARN (yellow):** One metric within 5% of threshold → deploy with monitoring
-- **FAIL (red):** Any metric below threshold → block deployment, fix issues
-
-## Step 6: Generate Report
-Create an evaluation report for stakeholders:
-```bash
-python evaluation/eval.py --report html --output evaluation/report.html
+### 5. Flaky Test Detection
+Run suite 3 times, compare results:
+```powershell
+$runs = 1..3 | ForEach-Object { Invoke-Pester -Path ./tests -PassThru }
+$flaky = $runs[0].Tests | Where-Object {
+    $name = $_.Name
+    ($runs | ForEach-Object { ($_.Tests | Where-Object Name -eq $name).Result }) | Select-Object -Unique | Measure-Object | Where-Object Count -gt 1
+}
+# Target: 0 flaky tests
 ```
 
 ## Failure Remediation
-If evaluation fails:
-- **Low relevance:** Review retrieval pipeline, improve chunking, add missing knowledge
-- **Low groundedness:** Tighten system prompt, add source citation requirement
-- **Low coherence:** Reduce temperature, add output structure requirements
-- **Low safety:** Enable Content Safety API, add content filtering rules
-- **High latency:** Add caching, optimize retrieval, reduce max_tokens
-
-## Re-evaluation
-After fixes, re-run the full pipeline and compare results:
-```bash
-python evaluation/eval.py --compare evaluation/previous-results.json
-```
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low pass rate | Mock setup incorrect | Verify mock return types match real cmdlet output |
+| Low coverage | Missing edge case tests | Add tests for uncovered branches (if/else, catch) |
+| Slow tests | Heavy mock initialization | Move shared mocks to Describe-level BeforeAll |
+| Flaky tests | Timing or state dependencies | Mock time-dependent calls, ensure test isolation |
+| Unverified mocks | Missing Should -Invoke | Add -Invoke assertion for every Mock definition |

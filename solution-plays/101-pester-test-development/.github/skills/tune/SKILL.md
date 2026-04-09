@@ -29,7 +29,7 @@ Review model-comparison.json and select optimal model for each task:
 |------|------------------|-------------|------------|
 | Classification/Routing | gpt-4o-mini | 0.0 | 100 |
 | Generation/Synthesis | gpt-4o | 0.1-0.3 | 4096 |
-| Embedding | text-embedding-3-large | N/A | N/A |
+| Embedding | PSScriptAnalyzer | N/A | N/A |
 | Safety Check | content-safety-api | N/A | N/A |
 
 ## Step 3: Performance Tuning

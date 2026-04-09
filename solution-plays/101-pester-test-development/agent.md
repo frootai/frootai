@@ -110,8 +110,8 @@ python evaluation/eval.py --ci-gate
 python evaluation/eval.py --report html --output evaluation/report.html
 
 # Testing
-pytest tests/ -v --cov=app
-k6 run tests/load/scenario.js --vus 50 --duration 60s
+Invoke-Pester tests/ -v --cov=app
+Invoke-Pester -Tag Performance tests/load/scenario.js --vus 50 --duration 60s
 ```
 
 ## Guardrails
@@ -189,7 +189,7 @@ This agent has deep knowledge of:
 - Observability: OpenTelemetry, Application Insights, KQL queries
 - Infrastructure as Code: Bicep modules, parameters, conditional resources
 - CI/CD pipelines: GitHub Actions, Azure DevOps, deployment gates
-- Security: OWASP LLM Top 10, prompt injection defense, PII handling
+- Security: mock isolation Top 10, test isolation defense, PII handling
 - Data processing: chunking strategies, embedding models, vector search
 
 ## Decision Framework

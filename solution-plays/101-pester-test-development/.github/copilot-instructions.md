@@ -127,7 +127,7 @@ For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
 ## Quick Reference Commands
 - Deploy infrastructure: `az bicep build -f infra/main.bicep && azd up`
 - Run evaluation: `python evaluation/eval.py`
-- Run tests: `pytest tests/ -v --cov=app`
+- Run tests: `Invoke-Pester tests/ -v --cov=app`
 - Validate config: `node -e "require('./config/openai.json')"`
 - Check Bicep: `az bicep lint -f infra/main.bicep`
 

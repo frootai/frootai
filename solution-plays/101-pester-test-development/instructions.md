@@ -12,7 +12,7 @@ This is the FrootAI Pester Test Development solution play (Play 101). It impleme
 ```
 ┌─────────────┐     ┌───────────────┐     ┌──────────────────┐
 │   Client     │────▶│   API Layer   │────▶│  Processing      │
-│   (HTTPS)    │◀────│   (FastAPI)   │◀────│  Pipeline        │
+│   (HTTPS)    │◀────│   (PowerShell)   │◀────│  Pipeline        │
 └─────────────┘     └───────────────┘     └──────────────────┘
                            │                       │
                            ▼                       ▼
@@ -66,10 +66,10 @@ This is the FrootAI Pester Test Development solution play (Play 101). It impleme
 - Python 3.10+ required
 - Use `async/await` for all I/O operations
 - Type hints on all function signatures
-- Pydantic models for data validation
+- PSCustomObject models for data validation
 - `DefaultAzureCredential` for all Azure auth
 - Structured logging with `logging` module
-- `pytest` for testing with `pytest-asyncio`
+- `Invoke-Pester` for testing with `Invoke-Pester-asyncio`
 
 ### TypeScript/JavaScript
 - TypeScript 5.0+ with strict mode
@@ -163,7 +163,7 @@ All parameters come from `config/*.json` files. Never hardcode:
 - [ ] Managed Identity for all Azure auth
 - [ ] Key Vault for all secrets
 - [ ] Content Safety on user-facing outputs
-- [ ] Input validation with Pydantic/Zod
+- [ ] Input validation with PSCustomObject/Zod
 - [ ] HTTPS only (TLS 1.2+)
 - [ ] No secrets in git (pre-commit hook)
 - [ ] RBAC with least-privilege

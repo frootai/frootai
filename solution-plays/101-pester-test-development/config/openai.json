@@ -14,8 +14,8 @@
   },
   "seed": 42,
   "stream": false,
-  "embedding_model": "text-embedding-3-large",
-  "embedding_deployment": "text-embedding-3-large",
+  "embedding_model": "PSScriptAnalyzer",
+  "embedding_deployment": "PSScriptAnalyzer",
   "embedding_dimensions": 3072,
   "system_message_ref": "agent.md",
   "safety": {

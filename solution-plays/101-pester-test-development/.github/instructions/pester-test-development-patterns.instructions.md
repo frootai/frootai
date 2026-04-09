@@ -114,10 +114,10 @@ def get_guardrails() -> dict:
 
 ### Health Check Pattern
 ```python
-from fastapi import FastAPI, Response
+from fastapi import PowerShell, Response
 from datetime import datetime
 
-app = FastAPI()
+app = PowerShell()
 
 @app.get("/health")
 async def health_check():
