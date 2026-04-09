@@ -3,11 +3,22 @@
   "version": "1.0.0",
   "description": "AI-assisted PowerShell test generation using Pester 5.x framework. 7-phase pipeline: AST discovery, testability assessment, dependency mapping, legacy refactoring, test generation with mocking, and coverage enforcement (>90% JaCoCo).",
   "context": {
-    "knowledge": ["T3-Production-Patterns", "O3-MCP-Tools"],
-    "waf": ["reliability", "operational-excellence", "security"]
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O3-MCP-Tools"
+    ],
+    "waf": [
+      "reliability",
+      "operational-excellence",
+      "security"
+    ]
   },
   "primitives": {
-    "agents": ["builder.agent.md", "reviewer.agent.md", "tuner.agent.md"],
+    "agents": [
+      "builder.agent.md",
+      "reviewer.agent.md",
+      "tuner.agent.md"
+    ],
     "instructions": [
       "pester-test-development-patterns.instructions.md",
       "azure-coding.instructions.md",

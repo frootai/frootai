@@ -2,15 +2,45 @@
   "name": "101-pester-test-development",
   "description": "AI-assisted PowerShell Pester 5.x test generation — AST analysis, mock generation, coverage enforcement, CI/CD integration",
   "version": "1.0.0",
-  "author": { "name": "FrootAI", "url": "https://frootai.dev" },
-  "license": "MIT",
-  "keywords": ["pester", "powershell", "testing", "tdd", "code-coverage", "mocking", "ci-cd", "azure-policy"],
-  "plays": ["101-pester-test-development"],
-  "primitives": {
-    "agents": ["./.github/agents/builder.agent.md", "./.github/agents/reviewer.agent.md", "./.github/agents/tuner.agent.md"],
-    "instructions": ["./.github/instructions/pester-test-development-patterns.instructions.md", "./.github/instructions/azure-coding.instructions.md", "./.github/instructions/security.instructions.md"],
-    "skills": ["./.github/skills/deploy-pester-test-development/", "./.github/skills/evaluate-pester-test-development/", "./.github/skills/tune-pester-test-development/"]
+  "author": {
+    "name": "FrootAI",
+    "url": "https://frootai.dev"
   },
-  "waf": ["reliability", "operational-excellence", "security"],
+  "license": "MIT",
+  "keywords": [
+    "pester",
+    "powershell",
+    "testing",
+    "tdd",
+    "code-coverage",
+    "mocking",
+    "ci-cd",
+    "azure-policy"
+  ],
+  "plays": [
+    "101-pester-test-development"
+  ],
+  "primitives": {
+    "agents": [
+      "./.github/agents/builder.agent.md",
+      "./.github/agents/reviewer.agent.md",
+      "./.github/agents/tuner.agent.md"
+    ],
+    "instructions": [
+      "./.github/instructions/pester-test-development-patterns.instructions.md",
+      "./.github/instructions/azure-coding.instructions.md",
+      "./.github/instructions/security.instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/deploy-pester-test-development/",
+      "./.github/skills/evaluate-pester-test-development/",
+      "./.github/skills/tune-pester-test-development/"
+    ]
+  },
+  "waf": [
+    "reliability",
+    "operational-excellence",
+    "security"
+  ],
   "install": "npx frootai install 101-pester-test-development"
 }
