@@ -1,9 +1,1 @@
-{
-  "servers": {
-    "frootai": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["frootai-mcp@latest"]
-    }
-  }
-}
+{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}

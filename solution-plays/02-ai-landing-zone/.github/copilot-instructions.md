@@ -1,220 +1,149 @@
-You are an AI coding assistant working on the FrootAI Ai Landing Zone solution play (Play 02).
+---
+description: "AI Landing Zone domain knowledge — auto-injected into every Copilot conversation in this workspace"
+applyTo: "**"
+---
 
-## Solution Play Overview
-This solution play implements a production-grade Ai Landing Zone system on Azure, following the FrootAI FAI Protocol and Well-Architected Framework (WAF) principles across all six pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, and Responsible AI.
+# AI Landing Zone — Domain Knowledge
 
-## .github Agentic OS Structure
-This solution uses the full GitHub Copilot agentic OS:
-- **Layer 1 (Always-On):** `instructions/*.instructions.md` — coding standards, domain patterns, security
-- **Layer 2 (On-Demand):** `prompts/*.prompt.md` — /deploy, /test, /review, /evaluate
-- **Layer 2 (Agents):** `agents/*.agent.md` — builder, reviewer, tuner (chained workflow)
-- **Layer 2 (Skills):** `skills/*/SKILL.md` — deploy-azure, evaluate, tune
-- **Layer 3 (Hooks):** `hooks/guardrails.json` — preToolUse policy gates
-- **Layer 3 (Workflows):** `workflows/*.md` — AI-driven CI/CD pipelines
+This workspace implements a production-grade AI Landing Zone on Azure — the foundational infrastructure (networking, identity, monitoring, compute) that AI workloads deploy into. This is an INFRASTRUCTURE play, not an application play.
 
-## Agent Chain
-builder.agent.md → reviewer.agent.md → tuner.agent.md
-The builder implements features, the reviewer validates quality, the tuner optimizes for production.
+## Landing Zone Architecture (What the Model Gets Wrong)
 
-## Architecture Context
-This play follows a modular architecture with clear separation of concerns:
-- **API Layer:** Handles incoming requests, input validation, and response formatting
-- **Processing Layer:** Core business logic, AI model interactions, data transformations
-- **Data Layer:** Storage, retrieval, caching, and state management
-- **Infrastructure Layer:** Azure resources defined in Bicep, networking, identity, monitoring
+### Network Topology — Hub-Spoke with Private Endpoints
+```
+Hub VNet (10.0.0.0/16)
+├── AzureFirewallSubnet (10.0.1.0/24)
+├── GatewaySubnet (10.0.2.0/24)
+└── BastionSubnet (10.0.3.0/24)
 
-## Your Expertise for This Play
-- Azure AI Services configuration and integration patterns
-- Infrastructure-as-Code with Bicep (modules, parameters, conditional resources)
-- Python/TypeScript application development with Azure SDKs
-- Production deployment patterns (blue-green, canary, rollback)
-- Evaluation and monitoring of AI system quality metrics
-- Cost optimization through model routing and caching strategies
+Spoke VNet — AI Workloads (10.1.0.0/16)
+├── PrivateEndpointSubnet (10.1.1.0/24)    ← OpenAI, AI Search, Storage
+├── ComputeSubnet (10.1.2.0/24)            ← AKS, Container Apps
+├── IntegrationSubnet (10.1.3.0/24)        ← API Management, App Gateway
+└── DataSubnet (10.1.4.0/24)               ← SQL, Cosmos DB
+```
 
-## Rules for Code Generation
-1. **Authentication:** Always use `DefaultAzureCredential` / Managed Identity — never hardcode API keys
-2. **Configuration:** Use `config/` JSON files for all parameters — never hardcode values
-3. **Error Handling:** Wrap all Azure SDK calls with retry logic (exponential backoff, max 3 retries)
-4. **Logging:** Use structured logging with correlation IDs, send to Application Insights
-5. **Security:** Validate all inputs, sanitize outputs, use Content Safety for user-facing content
-6. **Testing:** Include unit tests for business logic, integration tests for Azure services
-7. **Documentation:** Add JSDoc/docstring comments on public functions and API endpoints
-8. **Performance:** Use async/await patterns, implement caching where appropriate
-9. **Cost:** Use model routing (cheap model for simple tasks, capable model for complex ones)
-10. **Observability:** Export custom metrics for latency, token usage, error rates, and quality scores
+### Private Endpoints (Non-Negotiable for Enterprise)
+Every AI service MUST use private endpoints. Public access = security violation.
+```bicep
+// ❌ WRONG — public endpoint exposed
+resource openAI 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
+  properties: { publicNetworkAccess: 'Enabled' }  // NEVER in enterprise
+}
 
-## Configuration Files Reference
-| File | Purpose | Key Fields |
-|------|---------|------------|
-| `config/openai.json` | Model parameters | model, temperature, max_tokens, top_p |
-| `config/agents.json` | Agent behavior config | roles, handoff rules, escalation |
-| `config/guardrails.json` | Content safety rules | thresholds, blocked categories, PII handling |
-| `config/model-comparison.json` | Model selection matrix | models, cost, latency, quality scores |
-| `config/chunking.json` | Data processing config | chunk_size, overlap, strategy |
-| `config/search.json` | Retrieval configuration | search_type, top_k, score_threshold |
+// ✅ CORRECT — private endpoint only
+resource openAI 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
+  properties: { publicNetworkAccess: 'Disabled' }
+}
+resource openAIPE 'Microsoft.Network/privateEndpoints@2023-11-01' = {
+  properties: {
+    subnet: { id: privateEndpointSubnet.id }
+    privateLinkServiceConnections: [{ properties: {
+      privateLinkServiceId: openAI.id
+      groupIds: ['account']
+    }}]
+  }
+}
+```
 
-## Infrastructure Reference
-| Resource | File | Purpose |
-|----------|------|---------|
-| Azure resources | `infra/main.bicep` | All Azure services for this play |
-| ARM template | `infra/main.json` | Generated ARM template |
-| Parameters | `infra/parameters.json` | Environment-specific values |
-| MCP plugin | `mcp/index.js` | MCP server integration |
+### Managed Identity + RBAC (Never API Keys)
+```bicep
+// ❌ WRONG — key-based auth
+var apiKey = listKeys(openAI.id, '2024-04-01-preview').key1
 
-## Evaluation & Quality
-- Run `python evaluation/eval.py` to evaluate solution quality
-- Metrics tracked: relevance, groundedness, coherence, fluency, safety
-- CI gate: all metrics must exceed thresholds in `config/guardrails.json`
-- Test cases in `evaluation/test-set.jsonl` (minimum 10 diverse scenarios)
+// ✅ CORRECT — Managed Identity with least-privilege RBAC
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908') // Cognitive Services OpenAI User
+    principalId: appIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+```
 
-## Deployment Workflow
-1. Validate Bicep: `az bicep build -f infra/main.bicep`
-2. Deploy infrastructure: `azd up` or `az deployment group create`
-3. Configure application settings from `config/*.json`
-4. Run smoke tests to verify endpoints
-5. Run evaluation pipeline to verify quality metrics
-6. Monitor Application Insights for errors and performance
+### NSG Rules for AI Subnets
+```bicep
+// Private endpoint subnet: deny all inbound except VNet traffic
+resource nsg 'Microsoft.Network/networkSecurityGroups@2023-11-01' = {
+  properties: {
+    securityRules: [
+      { name: 'DenyInternetInbound', properties: { priority: 100, direction: 'Inbound', access: 'Deny', sourceAddressPrefix: 'Internet', destinationAddressPrefix: '*', protocol: '*', sourcePortRange: '*', destinationPortRange: '*' }}
+      { name: 'AllowVNetInbound', properties: { priority: 200, direction: 'Inbound', access: 'Allow', sourceAddressPrefix: 'VirtualNetwork', destinationAddressPrefix: '*', protocol: '*', sourcePortRange: '*', destinationPortRange: '*' }}
+    ]
+  }
+}
+```
 
-## Agent Workflow
-When implementing features, follow the builder → reviewer → tuner chain:
-1. **Build:** Implement using config/ values and architecture patterns
-2. **Review:** Validate against reviewer.agent.md checklist (security, quality, WAF compliance)
-3. **Tune:** Optimize config values, verify evaluation thresholds, production-ready SKUs
+## Bicep Patterns (Critical — Differs from ARM/Terraform)
 
-## Naming Conventions
-- Files: `lowercase-hyphen.ext` (e.g., `document-processor.py`)
-- Functions: `snake_case` for Python, `camelCase` for TypeScript
-- Classes: `PascalCase` (e.g., `DocumentProcessor`)
-- Azure resources: `{project}-{env}-{resource}` (e.g., `frootai-prod-openai`)
-- Config keys: `snake_case` in JSON files
-- Environment variables: `UPPER_SNAKE_CASE`
+| Correct (Bicep) | Wrong (Common Mistakes) |
+|---------|-------|
+| `param location string = resourceGroup().location` | Hardcoded `'eastus2'` |
+| `resource openAI 'Microsoft.CognitiveServices/accounts@2024-04-01-preview'` | Outdated API version |
+| `existing keyVault = resource ...` | Creating duplicate Key Vault |
+| `output endpoint string = openAI.properties.endpoint` | Hardcoded endpoint URL |
+| Use AVM modules: `br/public:avm/res/...` | Raw resource definitions |
+| `@secure() param adminPassword string` | Password in plain text param |
+| Conditional: `resource x = if (deployMonitoring) { ... }` | Separate template per env |
 
-## Error Handling Patterns
-- Use custom exception classes for domain-specific errors
-- Return structured error responses with error code, message, and correlation ID
-- Log errors with full context (request ID, user action, stack trace)
-- Implement circuit breaker for external service calls
-- Graceful degradation: return cached/default response when services are unavailable
+## Azure Verified Modules (AVM) — Use These, Not Raw Resources
 
-## Testing Strategy
-- **Unit tests:** Business logic, data transformations, validation rules
-- **Integration tests:** Azure SDK interactions with emulators or test resources
-- **E2E tests:** Full request-response cycle through deployed endpoints
-- **Load tests:** Baseline performance with 100 concurrent users
-- **Evaluation tests:** AI quality metrics via eval.py pipeline
+| Resource | AVM Module | Why |
+|----------|-----------|-----|
+| Virtual Network | `br/public:avm/res/network/virtual-network:0.5.0` | Built-in NSG, subnet delegation, diagnostics |
+| Key Vault | `br/public:avm/res/key-vault/vault:0.9.0` | Built-in private endpoint, RBAC, soft delete |
+| OpenAI | `br/public:avm/res/cognitive-services/account:0.7.0` | Built-in managed identity, PE, diagnostics |
+| Log Analytics | `br/public:avm/res/operational-insights/workspace:0.7.0` | Built-in retention, data export |
+| Storage | `br/public:avm/res/storage/storage-account:0.14.0` | Built-in PE, encryption, lifecycle |
 
-## WAF Alignment
-This play aligns with all 6 Well-Architected Framework pillars:
-- **Reliability:** Retry policies, health checks, graceful degradation
-- **Security:** Managed Identity, Key Vault, Content Safety, RBAC
-- **Cost Optimization:** Model routing, caching, right-sized SKUs
-- **Operational Excellence:** IaC, CI/CD, observability, incident runbooks
-- **Performance Efficiency:** Async patterns, connection pooling, CDN
-- **Responsible AI:** Content safety, groundedness checks, bias monitoring
+## Diagnostic Settings (Every Resource Must Have)
+```bicep
+resource diagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'send-to-law'
+  scope: openAI
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [{ categoryGroup: 'allLogs', enabled: true }]
+    metrics: [{ category: 'AllMetrics', enabled: true }]
+  }
+}
+```
 
-For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
+## GPU Quota and Compute SKUs
 
+| Workload | Recommended SKU | GPU | Notes |
+|----------|----------------|-----|-------|
+| Fine-tuning | Standard_NC24ads_A100_v4 | A100 80GB | Check quota: `az vm list-usage` |
+| Inference (high) | Standard_NC16as_T4_v3 | T4 16GB | Cost-effective for medium models |
+| Inference (low) | Standard_D8s_v5 | None (CPU) | For small models, embeddings |
+| AKS node pool | Standard_D16s_v5 | None | System pool — no GPU needed |
 
-## Common Pitfalls
-- Do NOT use synchronous HTTP libraries — use async clients (httpx, aiohttp)
-- Do NOT create new Azure resources without checking config/agents.json first
-- Do NOT ignore evaluation results — all metrics must pass before deployment
-- Do NOT skip the reviewer step — every implementation must be reviewed
-- Do NOT use print statements — use structured logging with correlation IDs
-- Do NOT commit secrets — use Key Vault references and Managed Identity
-- Do NOT deploy without running Bicep lint first
+## Common Mistakes in Landing Zones
 
-## Quick Reference Commands
-- Deploy infrastructure: `az bicep build -f infra/main.bicep && azd up`
-- Run evaluation: `python evaluation/eval.py`
-- Run tests: `pytest tests/ -v --cov=app`
-- Validate config: `node -e "require('./config/openai.json')"`
-- Check Bicep: `az bicep lint -f infra/main.bicep`
+| Mistake | Why Wrong | Fix |
+|---------|----------|-----|
+| Public endpoints on AI services | Data exfiltration risk | Private endpoints + VNet integration |
+| API key authentication | Keys can be leaked | Managed Identity + RBAC roles |
+| No NSG on subnets | Uncontrolled traffic | NSG with deny-all-inbound default |
+| Missing diagnostic settings | No observability | DiagnosticSettings on every resource |
+| Hardcoded locations | Can't deploy multi-region | `param location string = resourceGroup().location` |
+| No Key Vault for secrets | Secrets in code/config | Key Vault with RBAC, PE, soft delete |
+| Over-sized SKUs | Wasted cost | Right-size: start with S1, scale to S3 |
+| No budget alerts | Cost surprises | Azure Budget + Action Group alerts |
+| Single subscription | Blast radius too large | Separate subs for dev/staging/prod |
 
-## FAI Protocol Integration
-This play is wired through the FAI Protocol via `fai-manifest.json`:
-- **Context:** Knowledge modules and WAF pillar alignment defined
-- **Primitives:** Agent, instruction, skill, and hook references
-- **Infrastructure:** Azure resource requirements and deployment config
-- **Guardrails:** Quality thresholds, content safety rules, evaluation gates
-- **Toolkit:** DevKit (build), TuneKit (optimize), SpecKit (document)
+## Available Specialist Agents (optional)
 
-## Cross-Play Compatibility
-This play can be combined with other FrootAI solution plays:
-- Use shared agents from the agents/ directory for cross-play expertise
-- Reference shared instructions from instructions/ for coding standards
-- Import shared skills for common operations (deploy, evaluate, tune)
-- Wire plays together via fai-manifest.json compatible-plays field
+| Agent | Use For |
+|-------|---------|
+| `@builder` | Implement Bicep infrastructure, configure networking, set up RBAC |
+| `@reviewer` | Audit security (PE, NSG, RBAC), compliance, WAF alignment |
+| `@tuner` | Optimize SKUs, reduce cost, configure monitoring thresholds |
 
-## Response Format
-When generating code or documentation:
-- Include inline comments explaining non-obvious logic
-- Add type hints on all function signatures
-- Return structured responses with metadata (latency, tokens, model)
-- Include error handling with meaningful error messages
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
+## Slash Commands
+| Command | Action |
+|---------|--------|
+| `/deploy` | Validate + deploy Bicep infrastructure |
+| `/test` | Run infrastructure tests (what-if, lint) |
+| `/review` | Security + compliance audit |
+| `/evaluate` | Evaluate cost, SKU sizing, quota availability |
