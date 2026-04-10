@@ -1,220 +1,139 @@
-You are an AI coding assistant working on the FrootAI Deterministic Agent solution play (Play 03).
+---
+description: "Deterministic Agent domain knowledge — auto-injected into every Copilot conversation in this workspace"
+applyTo: "**"
+---
 
-## Solution Play Overview
-This solution play implements a production-grade Deterministic Agent system on Azure, following the FrootAI FAI Protocol and Well-Architected Framework (WAF) principles across all six pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, and Responsible AI.
+# Deterministic Agent — Domain Knowledge
 
-## .github Agentic OS Structure
-This solution uses the full GitHub Copilot agentic OS:
-- **Layer 1 (Always-On):** `instructions/*.instructions.md` — coding standards, domain patterns, security
-- **Layer 2 (On-Demand):** `prompts/*.prompt.md` — /deploy, /test, /review, /evaluate
-- **Layer 2 (Agents):** `agents/*.agent.md` — builder, reviewer, tuner (chained workflow)
-- **Layer 2 (Skills):** `skills/*/SKILL.md` — deploy-azure, evaluate, tune
-- **Layer 3 (Hooks):** `hooks/guardrails.json` — preToolUse policy gates
-- **Layer 3 (Workflows):** `workflows/*.md` — AI-driven CI/CD pipelines
+This workspace implements a deterministic AI agent — zero-temperature, reproducible, guardrailed. The agent produces consistent outputs for the same inputs, abstains when uncertain, and never hallucinates.
 
-## Agent Chain
-builder.agent.md → reviewer.agent.md → tuner.agent.md
-The builder implements features, the reviewer validates quality, the tuner optimizes for production.
+## Deterministic Agent Principles (What the Model Gets Wrong)
 
-## Architecture Context
-This play follows a modular architecture with clear separation of concerns:
-- **API Layer:** Handles incoming requests, input validation, and response formatting
-- **Processing Layer:** Core business logic, AI model interactions, data transformations
-- **Data Layer:** Storage, retrieval, caching, and state management
-- **Infrastructure Layer:** Azure resources defined in Bicep, networking, identity, monitoring
+### Temperature Must Be 0 (Not 0.1, Not "Low")
+```python
+# WRONG — 0.1 still produces variation between runs
+response = client.chat.completions.create(model="gpt-4o", temperature=0.1, ...)
 
-## Your Expertise for This Play
-- Azure AI Services configuration and integration patterns
-- Infrastructure-as-Code with Bicep (modules, parameters, conditional resources)
-- Python/TypeScript application development with Azure SDKs
-- Production deployment patterns (blue-green, canary, rollback)
-- Evaluation and monitoring of AI system quality metrics
-- Cost optimization through model routing and caching strategies
+# CORRECT — temperature=0 for true determinism
+response = client.chat.completions.create(model="gpt-4o", temperature=0, seed=42, ...)
+```
 
-## Rules for Code Generation
-1. **Authentication:** Always use `DefaultAzureCredential` / Managed Identity — never hardcode API keys
-2. **Configuration:** Use `config/` JSON files for all parameters — never hardcode values
-3. **Error Handling:** Wrap all Azure SDK calls with retry logic (exponential backoff, max 3 retries)
-4. **Logging:** Use structured logging with correlation IDs, send to Application Insights
-5. **Security:** Validate all inputs, sanitize outputs, use Content Safety for user-facing content
-6. **Testing:** Include unit tests for business logic, integration tests for Azure services
-7. **Documentation:** Add JSDoc/docstring comments on public functions and API endpoints
-8. **Performance:** Use async/await patterns, implement caching where appropriate
-9. **Cost:** Use model routing (cheap model for simple tasks, capable model for complex ones)
-10. **Observability:** Export custom metrics for latency, token usage, error rates, and quality scores
+### Seed Parameter for Reproducibility
+```python
+# Same seed + same input = same output (within model version)
+response = client.chat.completions.create(
+    model="gpt-4o",
+    temperature=0,
+    seed=42,                          # Fixed seed for reproducibility
+    messages=[...],
+)
+fingerprint = response.system_fingerprint  # Log this — changes indicate model update
+```
 
-## Configuration Files Reference
-| File | Purpose | Key Fields |
-|------|---------|------------|
-| `config/openai.json` | Model parameters | model, temperature, max_tokens, top_p |
-| `config/agents.json` | Agent behavior config | roles, handoff rules, escalation |
-| `config/guardrails.json` | Content safety rules | thresholds, blocked categories, PII handling |
-| `config/model-comparison.json` | Model selection matrix | models, cost, latency, quality scores |
-| `config/chunking.json` | Data processing config | chunk_size, overlap, strategy |
-| `config/search.json` | Retrieval configuration | search_type, top_k, score_threshold |
+### Abstention Pattern (Refuse When Uncertain)
+```python
+SYSTEM_PROMPT = """You are a deterministic agent. Rules:
+1. Answer ONLY if you are confident based on the provided context.
+2. If uncertain, respond: {"action": "abstain", "reason": "Insufficient context for confident answer"}
+3. NEVER guess, speculate, or provide uncertain information.
+4. Include confidence score (0.0-1.0) with every response.
+5. If confidence < 0.8, abstain instead of answering."""
 
-## Infrastructure Reference
-| Resource | File | Purpose |
-|----------|------|---------|
-| Azure resources | `infra/main.bicep` | All Azure services for this play |
-| ARM template | `infra/main.json` | Generated ARM template |
-| Parameters | `infra/parameters.json` | Environment-specific values |
-| MCP plugin | `mcp/index.js` | MCP server integration |
+# Response validation
+if response.confidence < 0.8:
+    return {"action": "abstain", "reason": response.reason}
+```
 
-## Evaluation & Quality
-- Run `python evaluation/eval.py` to evaluate solution quality
-- Metrics tracked: relevance, groundedness, coherence, fluency, safety
-- CI gate: all metrics must exceed thresholds in `config/guardrails.json`
-- Test cases in `evaluation/test-set.jsonl` (minimum 10 diverse scenarios)
+### Output Validation (Structured Output Only)
+```python
+from pydantic import BaseModel, Field
 
-## Deployment Workflow
-1. Validate Bicep: `az bicep build -f infra/main.bicep`
-2. Deploy infrastructure: `azd up` or `az deployment group create`
-3. Configure application settings from `config/*.json`
-4. Run smoke tests to verify endpoints
-5. Run evaluation pipeline to verify quality metrics
-6. Monitor Application Insights for errors and performance
+class DeterministicResponse(BaseModel):
+    action: str = Field(..., description="The action taken: answer, abstain, escalate")
+    content: str | None = Field(None, description="Answer content if action=answer")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score")
+    reasoning: str = Field(..., description="Step-by-step reasoning chain")
+    sources: list[str] = Field(default_factory=list, description="Source references")
 
-## Agent Workflow
-When implementing features, follow the builder → reviewer → tuner chain:
-1. **Build:** Implement using config/ values and architecture patterns
-2. **Review:** Validate against reviewer.agent.md checklist (security, quality, WAF compliance)
-3. **Tune:** Optimize config values, verify evaluation thresholds, production-ready SKUs
+# Force structured output — no free-text responses
+response = client.chat.completions.create(
+    model="gpt-4o",
+    temperature=0,
+    response_format={"type": "json_schema", "json_schema": DeterministicResponse.model_json_schema()},
+    messages=[...],
+)
+```
 
-## Naming Conventions
-- Files: `lowercase-hyphen.ext` (e.g., `document-processor.py`)
-- Functions: `snake_case` for Python, `camelCase` for TypeScript
-- Classes: `PascalCase` (e.g., `DocumentProcessor`)
-- Azure resources: `{project}-{env}-{resource}` (e.g., `frootai-prod-openai`)
-- Config keys: `snake_case` in JSON files
-- Environment variables: `UPPER_SNAKE_CASE`
+## Guardrail Patterns
 
-## Error Handling Patterns
-- Use custom exception classes for domain-specific errors
-- Return structured error responses with error code, message, and correlation ID
-- Log errors with full context (request ID, user action, stack trace)
-- Implement circuit breaker for external service calls
-- Graceful degradation: return cached/default response when services are unavailable
+### Input Validation
+```python
+def validate_input(query: str) -> bool:
+    if len(query) > 2000: raise ValueError("Query exceeds 2000 char limit")
+    if not query.strip(): raise ValueError("Empty query")
+    # Content safety check
+    safety_result = content_safety_client.analyze_text(text=query)
+    if any(c.severity >= 4 for c in safety_result.categories_analysis):
+        raise ValueError(f"Content safety violation: {safety_result}")
+    return True
+```
 
-## Testing Strategy
-- **Unit tests:** Business logic, data transformations, validation rules
-- **Integration tests:** Azure SDK interactions with emulators or test resources
-- **E2E tests:** Full request-response cycle through deployed endpoints
-- **Load tests:** Baseline performance with 100 concurrent users
-- **Evaluation tests:** AI quality metrics via eval.py pipeline
+### Output Guardrails
+```python
+def validate_output(response: DeterministicResponse) -> DeterministicResponse:
+    # Check for hallucination markers
+    hallucination_phrases = ["I think", "probably", "might be", "I'm not sure", "it's possible"]
+    if any(p in response.content.lower() for p in hallucination_phrases):
+        return DeterministicResponse(action="abstain", confidence=0.0,
+            reasoning="Response contained uncertainty markers — abstaining")
+    # Verify confidence matches content
+    if response.action == "answer" and response.confidence < 0.8:
+        response.action = "abstain"
+    return response
+```
 
-## WAF Alignment
-This play aligns with all 6 Well-Architected Framework pillars:
-- **Reliability:** Retry policies, health checks, graceful degradation
-- **Security:** Managed Identity, Key Vault, Content Safety, RBAC
-- **Cost Optimization:** Model routing, caching, right-sized SKUs
-- **Operational Excellence:** IaC, CI/CD, observability, incident runbooks
-- **Performance Efficiency:** Async patterns, connection pooling, CDN
-- **Responsible AI:** Content safety, groundedness checks, bias monitoring
+## Testing Deterministic Agents
 
-For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
+| Test Type | What to Verify | How |
+|-----------|---------------|-----|
+| Reproducibility | Same input → same output (10 runs) | Run 10x with seed=42, compare outputs |
+| Abstention | Uncertain queries → abstain response | Test with out-of-scope questions |
+| Confidence calibration | Confidence scores correlate with accuracy | Compare confidence vs ground truth |
+| Guardrail enforcement | Blocked content → rejection | Test with adversarial inputs |
+| Structured output | Every response parses as valid JSON | Validate against Pydantic schema |
+| Latency consistency | Response time variance < 20% | Measure p50/p95/p99 across runs |
 
+## Common Mistakes in Deterministic Agents
 
-## Common Pitfalls
-- Do NOT use synchronous HTTP libraries — use async clients (httpx, aiohttp)
-- Do NOT create new Azure resources without checking config/agents.json first
-- Do NOT ignore evaluation results — all metrics must pass before deployment
-- Do NOT skip the reviewer step — every implementation must be reviewed
-- Do NOT use print statements — use structured logging with correlation IDs
-- Do NOT commit secrets — use Key Vault references and Managed Identity
-- Do NOT deploy without running Bicep lint first
+| Mistake | Why Wrong | Fix |
+|---------|----------|-----|
+| temperature=0.1 | Still produces variation | temperature=0 + seed parameter |
+| Free-text responses | Unparseable, inconsistent format | Structured output (JSON schema) |
+| No abstention logic | Agent guesses when unsure | Add confidence threshold (0.8) |
+| No input validation | Prompt injection risk | Validate + content safety check |
+| Logging full prompts | PII exposure | Log query hash + response metadata only |
+| No fingerprint tracking | Silent model updates break determinism | Log system_fingerprint, alert on changes |
+| No idempotency key | Duplicate requests produce side effects | Hash input → cache response |
 
-## Quick Reference Commands
-- Deploy infrastructure: `az bicep build -f infra/main.bicep && azd up`
-- Run evaluation: `python evaluation/eval.py`
-- Run tests: `pytest tests/ -v --cov=app`
-- Validate config: `node -e "require('./config/openai.json')"`
-- Check Bicep: `az bicep lint -f infra/main.bicep`
+## Config Files (TuneKit)
+| File | What to Tune |
+|------|-------------|
+| `config/openai.json` | model, temperature (MUST be 0), seed, max_tokens |
+| `config/guardrails.json` | confidence_threshold, abstention_rules, safety_levels |
+| `config/agents.json` | agent chain behavior, escalation rules |
 
-## FAI Protocol Integration
-This play is wired through the FAI Protocol via `fai-manifest.json`:
-- **Context:** Knowledge modules and WAF pillar alignment defined
-- **Primitives:** Agent, instruction, skill, and hook references
-- **Infrastructure:** Azure resource requirements and deployment config
-- **Guardrails:** Quality thresholds, content safety rules, evaluation gates
-- **Toolkit:** DevKit (build), TuneKit (optimize), SpecKit (document)
+## Available Specialist Agents (optional)
 
-## Cross-Play Compatibility
-This play can be combined with other FrootAI solution plays:
-- Use shared agents from the agents/ directory for cross-play expertise
-- Reference shared instructions from instructions/ for coding standards
-- Import shared skills for common operations (deploy, evaluate, tune)
-- Wire plays together via fai-manifest.json compatible-plays field
+| Agent | Use For |
+|-------|---------|
+| `@builder` | Implement deterministic agent pipeline, structured outputs, guardrails |
+| `@reviewer` | Audit reproducibility, abstention logic, security, guardrail coverage |
+| `@tuner` | Optimize confidence thresholds, latency, model selection, caching |
 
-## Response Format
-When generating code or documentation:
-- Include inline comments explaining non-obvious logic
-- Add type hints on all function signatures
-- Return structured responses with metadata (latency, tokens, model)
-- Include error handling with meaningful error messages
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
+## Slash Commands
+| Command | Action |
+|---------|--------|
+| `/deploy` | Deploy agent infrastructure |
+| `/test` | Run reproducibility + guardrail tests |
+| `/review` | Audit determinism + security |
+| `/evaluate` | Evaluate confidence calibration + abstention rates |
