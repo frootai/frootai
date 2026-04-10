@@ -1,235 +1,201 @@
 ---
-description: "Domain-specific coding patterns for Enterprise Rag (Play 01)"
+description: "Enterprise RAG domain patterns — chunking strategies, hybrid search, grounding, evaluation pipeline, Azure AI integration"
 applyTo: "**/*.{py,ts,js}"
 ---
 
-# Enterprise Rag — Domain Patterns & Best Practices
+# Enterprise RAG — Domain Patterns
 
-## Architecture Pattern
-This play implements a Enterprise Rag architecture with these core components:
+## Pattern 1: Document Chunking with Semantic Boundaries
 
-### Request Flow
-1. Client sends request to API endpoint
-2. Input validation and sanitization
-3. Authentication check (Managed Identity / Bearer token)
-4. Core processing pipeline:
-   a. Pre-processing: data extraction, normalization, enrichment
-   b. AI processing: model inference, embedding, search, generation
-   c. Post-processing: output validation, formatting, safety check
-5. Response with structured output and metadata
-6. Async logging: metrics, traces, audit events
+### Problem
+Naive character-based splitting breaks sentences, destroys context, and reduces retrieval quality.
 
-### Component Responsibilities
-| Component | Responsibility | Key Patterns |
-|-----------|---------------|-------------|
-| API Gateway | Routing, rate limiting, auth | APIM policies, JWT validation |
-| Application | Business logic, orchestration | Async/await, dependency injection |
-| AI Services | Model inference, embeddings | Retry with backoff, circuit breaker |
-| Data Store | Persistence, caching | Connection pooling, read replicas |
-| Monitoring | Observability, alerting | Structured logs, custom metrics |
-
-## Domain-Specific Patterns
-
-### Data Processing Pipeline
+### Solution — Sentence-Aware Chunking
 ```python
-from dataclasses import dataclass
-from typing import List, Optional
-import asyncio
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-@dataclass
-class ProcessingResult:
-    """Result from the processing pipeline."""
-    data: dict
-    metadata: dict
-    quality_score: float
-    processing_time_ms: float
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1024,
+    chunk_overlap=128,        # 12.5% overlap
+    separators=["\n\n", "\n", ". ", " ", ""],  # Paragraph > sentence > word
+    length_function=len,
+)
+chunks = splitter.split_text(document_text)
 
-class ProcessingPipeline:
-    """Multi-stage processing pipeline for Enterprise Rag."""
-    
-    def __init__(self, config: dict):
-        self.config = config
-        self.stages = []
-    
-    def add_stage(self, stage_fn, name: str):
-        self.stages.append({"fn": stage_fn, "name": name})
-    
-    async def execute(self, input_data: dict) -> ProcessingResult:
-        import time
-        start = time.monotonic()
-        current = input_data
-        metadata = {"stages": []}
-        
-        for stage in self.stages:
-            stage_start = time.monotonic()
-            try:
-                current = await stage["fn"](current)
-                metadata["stages"].append({
-                    "name": stage["name"],
-                    "status": "success",
-                    "duration_ms": round((time.monotonic() - stage_start) * 1000, 2)
-                })
-            except Exception as e:
-                metadata["stages"].append({
-                    "name": stage["name"],
-                    "status": "error",
-                    "error": str(e)
-                })
-                raise
-        
-        return ProcessingResult(
-            data=current,
-            metadata=metadata,
-            quality_score=current.get("quality_score", 0.0),
-            processing_time_ms=round((time.monotonic() - start) * 1000, 2)
-        )
+# Add metadata for retrieval context
+for i, chunk in enumerate(chunks):
+    chunk_doc = {
+        "id": f"{doc_id}_chunk_{i}",
+        "content": chunk,
+        "source": document_name,
+        "page": page_number,
+        "chunk_index": i,
+        "total_chunks": len(chunks),
+    }
 ```
 
-### Configuration Management
+### Key Parameters
+| Parameter | Range | Impact |
+|-----------|-------|--------|
+| chunk_size | 512-1024 tokens | Too small = no context. Too large = noise. |
+| chunk_overlap | 10-15% of chunk_size | Prevents mid-sentence splits |
+| separators | paragraph → sentence → word | Respects document structure |
+
+## Pattern 2: Hybrid Search (BM25 + Vector + Semantic Reranking)
+
+### Problem
+Vector-only search misses exact keyword matches (product codes, error codes, IDs). BM25-only search misses semantic similarity.
+
+### Solution — Triple-Mode Hybrid
 ```python
-import json
-from pathlib import Path
-from functools import lru_cache
+from azure.search.documents import SearchClient
+from azure.search.documents.models import VectorizableTextQuery
 
-@lru_cache(maxsize=1)
-def load_play_config() -> dict:
-    """Load all config files for this play."""
-    config_dir = Path(__file__).parent.parent / "config"
-    configs = {}
-    for config_file in config_dir.glob("*.json"):
-        with open(config_file) as f:
-            configs[config_file.stem] = json.load(f)
-    return configs
-
-def get_model_config() -> dict:
-    """Get OpenAI model configuration."""
-    config = load_play_config()
-    return config.get("openai", {"model": "gpt-4o", "temperature": 0.1, "max_tokens": 4096})
-
-def get_guardrails() -> dict:
-    """Get content safety and guardrail thresholds."""
-    config = load_play_config()
-    return config.get("guardrails", {"content_safety_threshold": 4, "groundedness_min": 0.8})
-```
-
-### Health Check Pattern
-```python
-from fastapi import FastAPI, Response
-from datetime import datetime
-
-app = FastAPI()
-
-@app.get("/health")
-async def health_check():
-    checks = {}
-    overall = True
-    
-    # Check Azure OpenAI
-    try:
-        await openai_client.models.list()
-        checks["azure_openai"] = "healthy"
-    except Exception as e:
-        checks["azure_openai"] = f"unhealthy: {str(e)[:100]}"
-        overall = False
-    
-    # Check data store
-    try:
-        await data_store.ping()
-        checks["data_store"] = "healthy"
-    except Exception as e:
-        checks["data_store"] = f"unhealthy: {str(e)[:100]}"
-        overall = False
-    
-    status_code = 200 if overall else 503
-    return Response(
-        content=json.dumps({
-            "status": "healthy" if overall else "degraded",
-            "timestamp": datetime.utcnow().isoformat(),
-            "checks": checks,
-            "play": "01-enterprise-rag"
-        }),
-        status_code=status_code,
-        media_type="application/json"
+def hybrid_search(query: str, top_k: int = 5) -> list:
+    """Hybrid search: BM25 + vector + semantic reranking."""
+    vector_query = VectorizableTextQuery(
+        text=query,
+        k_nearest_neighbors=50,
+        fields="content_vector",
     )
+    results = search_client.search(
+        search_text=query,                       # BM25 keyword match
+        vector_queries=[vector_query],            # Vector similarity
+        query_type="semantic",                    # Semantic reranking
+        semantic_configuration_name="default",    # Must match deployed config
+        top=top_k,
+        select=["content", "source", "page"],
+    )
+    return [{"content": r["content"], "source": r["source"], "score": r["@search.reranker_score"]} for r in results]
 ```
 
-### Caching Strategy
-```python
-from functools import lru_cache
-import hashlib, json
+## Pattern 3: Grounded Response Generation
 
-class ResponseCache:
-    """Cache for AI responses to reduce cost and latency."""
-    
-    def __init__(self, redis_client, ttl_seconds: int = 3600):
-        self.redis = redis_client
-        self.ttl = ttl_seconds
-    
-    def _cache_key(self, request: dict) -> str:
-        normalized = json.dumps(request, sort_keys=True)
-        return f"play:01-enterprise-rag:" + hashlib.sha256(normalized.encode()).hexdigest()[:16]
-    
-    async def get(self, request: dict):
-        key = self._cache_key(request)
-        cached = await self.redis.get(key)
-        if cached:
-            return json.loads(cached)
-        return None
-    
-    async def set(self, request: dict, response: dict):
-        key = self._cache_key(request)
-        await self.redis.setex(key, self.ttl, json.dumps(response))
+### Problem
+LLM hallucinates facts not in the retrieved context. Enterprise scenarios require source attribution.
+
+### Solution — Grounding System Prompt
+```python
+GROUNDING_PROMPT = """You are an enterprise assistant. Answer ONLY using the provided context.
+
+RULES:
+1. If the context doesn't contain the answer, say: "I don't have enough information to answer this."
+2. NEVER fabricate information not in the context.
+3. Always cite the source: [Source: {document_name}, Page {page}]
+4. If the question is ambiguous, ask for clarification.
+5. Keep answers concise and factual.
+
+CONTEXT:
+{retrieved_chunks}
+
+USER QUESTION: {user_query}"""
+
+async def generate_response(query: str, chunks: list[dict]) -> dict:
+    context = "\n\n---\n\n".join(
+        f"[Source: {c['source']}]\n{c['content']}" for c in chunks
+    )
+    response = await openai_client.chat.completions.create(
+        model=config["model"],
+        temperature=0.1,    # Low temperature for factual answers
+        max_tokens=1000,
+        messages=[
+            {"role": "system", "content": GROUNDING_PROMPT.format(
+                retrieved_chunks=context, user_query=query
+            )},
+            {"role": "user", "content": query},
+        ],
+    )
+    return {
+        "answer": response.choices[0].message.content,
+        "sources": [c["source"] for c in chunks],
+        "model": config["model"],
+        "tokens": response.usage.total_tokens,
+    }
 ```
 
-### Structured Output Pattern
+## Pattern 4: RAG Evaluation Pipeline
+
+### Problem
+Shipping RAG without measuring quality leads to hallucinations and poor user experience.
+
+### Solution — 5-Metric Evaluation
 ```python
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from azure.ai.evaluation import GroundednessEvaluator, RelevanceEvaluator, CoherenceEvaluator
 
-class AIResponse(BaseModel):
-    """Structured response from AI processing."""
-    answer: str = Field(..., description="The generated answer")
-    sources: List[str] = Field(default_factory=list, description="Source references")
-    confidence: float = Field(ge=0, le=1, description="Confidence score 0-1")
-    model: str = Field(..., description="Model used for generation")
-    tokens_used: int = Field(ge=0, description="Total tokens consumed")
-    processing_time_ms: float = Field(ge=0, description="Processing time in milliseconds")
-    metadata: Optional[dict] = Field(default=None, description="Additional metadata")
-
-    class Config:
-        json_schema_extra = {"example": {"answer": "...", "sources": ["doc1.pdf"], "confidence": 0.92, "model": "gpt-4o", "tokens_used": 1500, "processing_time_ms": 450.5}}
+async def evaluate_rag(test_set_path: str) -> dict:
+    """Run RAG evaluation with quality gates."""
+    evaluators = {
+        "groundedness": GroundednessEvaluator(model_config),
+        "relevance": RelevanceEvaluator(model_config),
+        "coherence": CoherenceEvaluator(model_config),
+    }
+    results = {"pass": True, "metrics": {}}
+    
+    test_cases = load_jsonl(test_set_path)
+    for case in test_cases:
+        chunks = hybrid_search(case["query"])
+        response = await generate_response(case["query"], chunks)
+        
+        for name, evaluator in evaluators.items():
+            score = evaluator(
+                query=case["query"],
+                response=response["answer"],
+                context="\n".join(c["content"] for c in chunks),
+            )
+            results["metrics"].setdefault(name, []).append(score)
+    
+    # Quality gates
+    thresholds = {"groundedness": 0.8, "relevance": 0.7, "coherence": 0.8}
+    for metric, scores in results["metrics"].items():
+        avg = sum(scores) / len(scores)
+        results["metrics"][metric] = avg
+        if avg < thresholds.get(metric, 0.7):
+            results["pass"] = False
+    
+    return results
 ```
 
-### Error Classification
+## Pattern 5: Token Budget Management
+
+### Problem
+Context window overflow when combining system prompt + retrieved chunks + user query + response.
+
+### Solution — Budget Allocation
 ```python
-from enum import Enum
+import tiktoken
 
-class ErrorCategory(Enum):
-    VALIDATION = "validation_error"       # Bad input from user
-    AUTHENTICATION = "auth_error"         # Auth/authz failure
-    RATE_LIMIT = "rate_limit"            # Too many requests
-    SERVICE_ERROR = "service_error"       # Azure service failure
-    CONTENT_SAFETY = "content_blocked"    # Content safety violation
-    TIMEOUT = "timeout_error"            # Processing timeout
-    INTERNAL = "internal_error"          # Unexpected failure
-
-class PlayError(Exception):
-    def __init__(self, category: ErrorCategory, message: str, details: dict = None):
-        self.category = category
-        self.message = message
-        self.details = details or {}
-        super().__init__(message)
-
-    def to_response(self) -> dict:
-        return {"error": {"category": self.category.value, "message": self.message, "details": self.details}}
+def budget_tokens(query: str, chunks: list[dict], model: str = "gpt-4o") -> list[dict]:
+    """Trim chunks to fit within token budget."""
+    enc = tiktoken.encoding_for_model(model)
+    TOTAL_BUDGET = 8000
+    SYSTEM_TOKENS = 500
+    QUERY_TOKENS = len(enc.encode(query))
+    RESPONSE_BUDGET = 1000
+    CHUNK_BUDGET = TOTAL_BUDGET - SYSTEM_TOKENS - QUERY_TOKENS - RESPONSE_BUDGET
+    
+    selected = []
+    used = 0
+    for chunk in chunks:
+        chunk_tokens = len(enc.encode(chunk["content"]))
+        if used + chunk_tokens <= CHUNK_BUDGET:
+            selected.append(chunk)
+            used += chunk_tokens
+        else:
+            break
+    return selected
 ```
 
 ## Anti-Patterns to Avoid
-1. **❌ Hardcoded values:** Never hardcode model names, temperatures, or thresholds
-2. **❌ Synchronous Azure calls:** Always use async clients for I/O operations
-3. **❌ Unbounded retries:** Always set max retry count and backoff ceiling
-4. **❌ Missing timeouts:** Every external call must have a timeout
-5. **❌ PII in logs:** Never log full user prompts or PII — use structured metadata only
-6. **❌ Ignoring errors:** Every exception must be caught, logged, and handled appropriately
-7. **❌ Fat controllers:** Keep API handlers thin — delegate to service classes
-8. **❌ No caching:** Repeated identical queries should be served from cache
+
+| Anti-Pattern | Why Bad | Correct Pattern |
+|-------------|---------|-----------------|
+| Vector-only search | Misses exact keyword matches | Hybrid: BM25 + vector + semantic |
+| No reranking | Top-K vector results may be irrelevant | Enable semantic reranking |
+| Large chunks (>2000 tokens) | Irrelevant noise in context | 512-1024 tokens with overlap |
+| No grounding instruction | LLM hallucinates freely | "Answer ONLY from context" |
+| Same temperature everywhere | Factual queries need precision | 0.1 for facts, 0.7 for creative |
+| Query embedding ≠ index embedding | Dimension mismatch → 0 results | Same model for both |
+| Synchronous Azure SDK calls | Blocks thread, slow under load | Use async clients (aiohttp, httpx) |
+| No token budgeting | Context overflow, truncated response | Budget: system + chunks + query + response |
+| print() for logging | No correlation, no structured search | Use structlog with correlation_id |
+| No evaluation pipeline | Ship without quality measurement | Groundedness ≥ 0.8, Relevance ≥ 0.7 |

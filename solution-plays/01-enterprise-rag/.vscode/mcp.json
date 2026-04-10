@@ -1,14 +1,1 @@
-{
-  "servers": {
-    "frootai": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["frootai-mcp@latest"]
-    },
-    "rag-tools": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["${workspaceFolder}/mcp/index.js"]
-    }
-  }
-}
+{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
