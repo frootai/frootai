@@ -44,6 +44,44 @@ When implementing features, follow the builder → reviewer → tuner chain:
 
 For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
 
+## Solution Play Modernization (MUST READ before modifying any solution play)
+
+The golden standard for modernizing solution plays lives at `.internal/improvisation/solution-play-improvisation.md` (1,721 lines, 46 rules). **Before starting ANY solution play work, `read_file .internal/improvisation/solution-play-improvisation.md` — specifically Section 34 (Modernization Execution Checklist) and the golden blueprint rules.**
+
+### Three-Phase Execution (Rule 46 — NEVER skip a phase)
+
+| Phase | Scope | What to Do |
+|-------|-------|-----------|
+| **Phase 1: GitHub** | Core repo (`c:\CodeSpace\frootai`) | Rewrite copilot-instructions.md (<150 lines, knowledge-only). Fix agents (named, proper tools, file discovery). Upgrade skills (150+ lines). Fix hooks (SessionStart only). Fix workflows (.yml). Fix MCP (npx). Restructure to 4-kit (DevKit/TuneKit/SpecKit/Infra). Verify token budget. Scan for Play 100 remnants. Commit + push. |
+| **Phase 2: Distribution** | VS Code, npm, PyPI | Update VS Code extension (SOLUTION_PLAYS, Init DevKit scanner). Update MCP knowledge.json. Update Python SDK. Tag per channel: `ext-vN.N.N`, `mcp-vN.N.N`, `sdk-vN.N.N`. Do in batches (after 5-10 plays), not per-play. |
+| **Phase 3: Website** | `c:\CodeSpace\frootai.dev` | Update play detail pages, user guides, primitives counts, search index. Do in batches after distribution channel updates. |
+
+### Key Principles (from 46 golden rules)
+- **Rule 41**: copilot-instructions.md = knowledge supplement, NOT behavioral override. If removing a line doesn't change model output quality, delete it.
+- **Rule 42**: Hybrid model — generic Copilot does 90%, Play adds domain corrections. Agents are OPTIONAL.
+- **Rule 31**: copilot-instructions.md MUST be <150 lines / <1500 tokens (most expensive file — always loaded).
+- **Rule 33**: NEVER use PreToolUse hooks (spawn process per tool call → 5s delay each).
+- **Rule 45**: Play 101 file structure is the golden template. Match it for every play.
+
+### Play 101 Golden Template Structure
+```
+solution-play-NN/
+├── agent.md                           ← DevKit: root orchestrator (only root file)
+├── .github/                           ← DevKit: Copilot brain
+│   ├── copilot-instructions.md        ←   <150 lines, knowledge ONLY
+│   ├── agents/{builder,reviewer,tuner}.agent.md
+│   ├── instructions/{domain}*.instructions.md
+│   ├── prompts/{test,review,deploy,evaluate}.prompt.md
+│   ├── skills/{action}-{domain}/SKILL.md  (150+ lines each)
+│   ├── hooks/{domain}-guardrails.json     (SessionStart only)
+│   └── workflows/*.yml
+├── .vscode/mcp.json + settings.json   ← DevKit: editor config
+├── config/                            ← TuneKit: customer-tunable AI params
+├── infra/                             ← Infra: AVM Bicep (Azure plays ONLY)
+├── evaluation/                        ← AI plays: eval pipeline
+└── spec/                              ← SpecKit: metadata + docs
+```
+
 ## Primitive Review Checklist (PR Validation)
 When reviewing PRs that add or modify agents, instructions, skills, hooks, or plugins, verify:
 
