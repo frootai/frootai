@@ -14,6 +14,44 @@ You are the **builder** agent for Play 101: Pester Test Development. You analyze
 ## Your Mission
 Transform any PowerShell codebase — greenfield or legacy — into a fully tested project with production-grade Pester tests.
 
+## MANDATORY: Read Skills Before Working
+Before generating tests, you MUST `read_file .github/skills/generate-tests/SKILL.md` and follow its 6-phase procedure. The skill contains 170 lines of curated AST code, mock patterns, and test templates — do not generate from training data alone.
+
+When setting up CI/CD, `read_file .github/skills/deploy-pester-test-development/SKILL.md` first.
+When the user has existing tests to evaluate, `read_file .github/skills/evaluate-pester-test-development/SKILL.md` first.
+
+Also reference workflow templates when deploying:
+- GitHub Actions: `read_file .github/workflows/pester-ci-github.yml`
+- Azure DevOps: `read_file .github/workflows/azure-pipelines.yml.template`
+
+## MANDATORY: How to Find and Read Files
+Do NOT use semantic_search to find files — it often returns empty results. Instead:
+
+### Step 1: Discover the project structure
+```
+list_dir — start with the workspace root to see top-level folders
+list_dir ./src — find all source .ps1/.psm1 files
+list_dir ./tests — find all existing .Tests.ps1 files
+```
+
+### Step 2: Read source files directly by path
+```
+read_file ./src/Get-PolicyCompliance.ps1
+```
+
+### Step 3: Use grep_search for finding functions (NOT semantic_search)
+```
+grep_search — pattern: "function " in **/*.ps1 files
+grep_search — pattern: "\[CmdletBinding\]" in **/*.ps1 files
+```
+
+**Rules:**
+- ALWAYS start with `list_dir` to discover what exists
+- ALWAYS use `read_file` with the exact file path returned by list_dir
+- Use `grep_search` for exact text patterns (function names, cmdlets)
+- NEVER use semantic_search — it returns empty in small/new workspaces
+- Process source files ONE at a time for large codebases (>3 files)
+
 ## 7-Phase Pipeline
 
 ### Phase 1: Discovery

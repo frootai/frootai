@@ -13,19 +13,29 @@
   },
   "json.schemas": [
     {
-      "fileMatch": ["agents/*/fai-context.json", "**/fai-context.json"],
+      "fileMatch": [
+        "agents/*/fai-context.json",
+        "**/fai-context.json"
+      ],
       "url": "./schemas/fai-context.schema.json"
     },
     {
-      "fileMatch": ["solution-plays/*/fai-manifest.json", "**/fai-manifest.json"],
+      "fileMatch": [
+        "solution-plays/*/fai-manifest.json",
+        "**/fai-manifest.json"
+      ],
       "url": "./schemas/fai-manifest.schema.json"
     },
     {
-      "fileMatch": ["plugins/*/plugin.json"],
+      "fileMatch": [
+        "plugins/*/plugin.json"
+      ],
       "url": "./schemas/plugin.schema.json"
     },
     {
-      "fileMatch": ["hooks/*/hooks.json"],
+      "fileMatch": [
+        "hooks/*/hooks.json"
+      ],
       "url": "./schemas/hook.schema.json"
     }
   ],

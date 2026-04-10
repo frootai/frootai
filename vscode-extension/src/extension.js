@@ -1098,6 +1098,17 @@ function activate(context) {
           ".github/prompts/test.prompt.md",
           ".github/prompts/review.prompt.md",
           ".github/prompts/evaluate.prompt.md",
+          // Skills (common across plays)
+          ".github/skills/generate-tests/SKILL.md",
+          ".github/skills/deploy-pester-test-development/SKILL.md",
+          ".github/skills/evaluate-pester-test-development/SKILL.md",
+          ".github/skills/tune-pester-test-development/SKILL.md",
+          // Hooks
+          ".github/hooks/pester-guardrails.json",
+          ".github/hooks/guardrails.json",
+          // Workflows
+          ".github/workflows/pester-ci-github.yml",
+          ".github/workflows/azure-pipelines.yml.template",
         );
       }
 
@@ -2028,10 +2039,21 @@ function findFrootAIRoot() {
   const customPath = config.get("solutionPlaysPath");
   if (customPath) return customPath;
   const folders = vscode.workspace.workspaceFolders;
-  if (!folders) return null;
-  for (const folder of folders) {
-    if (fs.existsSync(path.join(folder.uri.fsPath, "solution-plays", "01-enterprise-rag"))) return folder.uri.fsPath;
-    if (fs.existsSync(path.join(folder.uri.fsPath, "agent.md")) && fs.existsSync(path.join(folder.uri.fsPath, "config"))) return path.join(folder.uri.fsPath, "..", "..");
+  if (folders) {
+    for (const folder of folders) {
+      if (fs.existsSync(path.join(folder.uri.fsPath, "solution-plays", "01-enterprise-rag"))) return folder.uri.fsPath;
+      if (fs.existsSync(path.join(folder.uri.fsPath, "agent.md")) && fs.existsSync(path.join(folder.uri.fsPath, "config"))) return path.join(folder.uri.fsPath, "..", "..");
+    }
+  }
+  // Check common local install paths
+  const commonPaths = [
+    path.join(process.env.USERPROFILE || process.env.HOME || "", "CodeSpace", "frootai"),
+    "c:\\CodeSpace\\frootai",
+    path.join(process.env.USERPROFILE || process.env.HOME || "", "code", "frootai"),
+    path.join(process.env.USERPROFILE || process.env.HOME || "", "repos", "frootai"),
+  ];
+  for (const p of commonPaths) {
+    if (fs.existsSync(path.join(p, "solution-plays", "01-enterprise-rag"))) return p;
   }
   return null;
 }

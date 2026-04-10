@@ -1,16 +1,9 @@
 {
   "hooks": {
-    "PreToolUse": [
-      {
-        "type": "command",
-        "command": "pwsh -NoProfile -Command \"$input = $Input | ConvertFrom-Json; $tool = $input.toolName; $dangerous = @('Remove-Item','Clear-Content','Stop-Process','Remove-AzResourceGroup','Remove-AzPolicyAssignment'); if ($dangerous -contains $tool) { @{hookSpecificOutput=@{hookEventName='PreToolUse';permissionDecision='ask';permissionDecisionReason=\"Destructive operation: $tool — confirm before proceeding\"}} | ConvertTo-Json -Depth 3 }\"",
-        "timeout": 5
-      }
-    ],
     "SessionStart": [
       {
         "type": "command",
-        "command": "pwsh -NoProfile -Command \"@{systemMessage='You are working in a Pester Test Development workspace (Play 101). Remember: use @builder for test generation, @reviewer for quality checks, @tuner for coverage optimization. Process files one at a time for large codebases.'} | ConvertTo-Json\"",
+        "command": "pwsh -NoProfile -Command \"Write-Output ((@{systemMessage='You are in a Pester Test Development workspace (Play 101). Use @builder for test generation, @reviewer for quality checks, @tuner for coverage optimization.'} | ConvertTo-Json -Compress))\"",
         "timeout": 3
       }
     ]

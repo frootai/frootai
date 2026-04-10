@@ -25,9 +25,17 @@ When a user asks for help with Pester tests, you MUST delegate to the right spec
 **Protocol:**
 1. Read the user's request
 2. Classify: is it build, review, or tune?
-3. Call the appropriate subagent via `runSubagent`
-4. If the user wants the full pipeline, chain all three in order
-5. Combine subagent output with your own orchestration context
+3. **Read the matching skill FIRST** — `read_file` the SKILL.md before delegating:
+   - Build → `read_file .github/skills/generate-tests/SKILL.md`
+   - Review → `read_file .github/skills/evaluate-pester-test-development/SKILL.md`
+   - Tune → `read_file .github/skills/tune-pester-test-development/SKILL.md`
+   - Deploy/CI/CD → `read_file .github/skills/deploy-pester-test-development/SKILL.md`
+4. Call the appropriate subagent via `runSubagent`
+5. If the user wants the full pipeline, chain all three in order
+6. For CI/CD requests, also `read_file` the workflow templates:
+   - GitHub Actions: `.github/workflows/pester-ci-github.yml`
+   - Azure DevOps: `.github/workflows/azure-pipelines.yml.template`
+7. Combine subagent output with your own orchestration context
 
 ## Your Unique Value (What Subagents Don't Have)
 

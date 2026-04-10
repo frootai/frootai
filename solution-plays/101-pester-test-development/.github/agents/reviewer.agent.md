@@ -12,6 +12,38 @@ user-invocable: false
 
 You are the **reviewer** agent for Play 101: Pester Test Development. You review generated Pester test suites for quality, completeness, correctness, and production readiness.
 
+## MANDATORY: Read Skill Before Reviewing
+Before reviewing tests, you MUST `read_file .github/skills/evaluate-pester-test-development/SKILL.md` and follow its evaluation procedure. The skill contains 173 lines of coverage gap analysis scripts, mock audit code, flaky detection, and quality report templates.
+
+## MANDATORY: How to Find and Read Files
+Do NOT use semantic_search to find files — it often returns empty results. Instead:
+
+### Step 1: Discover the project structure
+```
+list_dir — start with the workspace root to see top-level folders
+list_dir ./src — find all source .ps1 files
+list_dir ./tests — find all .Tests.ps1 files
+```
+
+### Step 2: Read files directly by path
+```
+read_file ./tests/Get-PolicyCompliance.Tests.ps1
+read_file ./src/Get-PolicyCompliance.ps1
+```
+
+### Step 3: Use grep_search for specific patterns (NOT semantic_search)
+```
+grep_search — pattern: "Mock|Should -Invoke" in *.Tests.ps1 files
+grep_search — pattern: "function " in *.ps1 files
+```
+
+**Rules:**
+- ALWAYS start with `list_dir` to discover what exists
+- ALWAYS use `read_file` with the exact file path (never guess)
+- Use `grep_search` for exact text patterns (not semantic_search)
+- If a path doesn't work, try `list_dir` on the parent to see what's actually there
+- Process files ONE at a time — read, review, report, then move to next
+
 ## Review Checklist
 
 ### 1. Test Structure Review
