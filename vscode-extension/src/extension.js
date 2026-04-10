@@ -1059,12 +1059,12 @@ function activate(context) {
         }
       };
 
-      // Workflows directory (CI/CD templates)
+      // Workflows directory (CI/CD templates — .yml, .yaml, .yml.template)
       const addWorkflowFiles = (playPath) => {
         const workflowsDir = path.join(playPath, ".github", "workflows");
         if (fs.existsSync(workflowsDir)) {
           for (const f of fs.readdirSync(workflowsDir)) {
-            if (f.endsWith(".yml") || f.endsWith(".yaml")) {
+            if (f.endsWith(".yml") || f.endsWith(".yaml") || f.endsWith(".yml.template")) {
               dynamicFiles.push(`.github/workflows/${f}`);
             }
           }

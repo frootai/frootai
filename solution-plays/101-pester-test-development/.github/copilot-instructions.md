@@ -48,7 +48,7 @@ This play ships with specialized resources. Use them — they contain curated do
 | File | Platform | Purpose |
 |------|----------|--------|
 | `.github/workflows/pester-ci-github.yml` | GitHub Actions | Multi-OS Pester CI with coverage gating, artifact upload, PR comments |
-| `.github/workflows/pester-ci-azure-devops.yml` | Azure DevOps | Pipeline with Pester, coverage gate, PublishTestResults, PublishCodeCoverage |
+| `.github/workflows/azure-pipelines.yml.template` | Azure DevOps | Pipeline with Pester, coverage gate, PublishTestResults, PublishCodeCoverage. Customer renames to `azure-pipelines.yml` at repo root. |
 
 **Action:** When customer asks about CI/CD, read and reference these workflow templates.
 
