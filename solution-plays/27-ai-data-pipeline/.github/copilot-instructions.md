@@ -1,220 +1,72 @@
-You are an AI coding assistant working on the FrootAI Ai Data Pipeline solution play (Play 27).
+---
+description: "AI Data Pipeline domain knowledge — auto-injected into every Copilot conversation"
+applyTo: "**"
+---
 
-## Solution Play Overview
-This solution play implements a production-grade Ai Data Pipeline system on Azure, following the FrootAI FAI Protocol and Well-Architected Framework (WAF) principles across all six pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, and Responsible AI.
+# AI Data Pipeline — Domain Knowledge
 
-## .github Agentic OS Structure
-This solution uses the full GitHub Copilot agentic OS:
-- **Layer 1 (Always-On):** `instructions/*.instructions.md` — coding standards, domain patterns, security
-- **Layer 2 (On-Demand):** `prompts/*.prompt.md` — /deploy, /test, /review, /evaluate
-- **Layer 2 (Agents):** `agents/*.agent.md` — builder, reviewer, tuner (chained workflow)
-- **Layer 2 (Skills):** `skills/*/SKILL.md` — deploy-azure, evaluate, tune
-- **Layer 3 (Hooks):** `hooks/guardrails.json` — preToolUse policy gates
-- **Layer 3 (Workflows):** `workflows/*.md` — AI-driven CI/CD pipelines
+This workspace implements an AI-powered data pipeline — ingestion, transformation, enrichment with LLM (classification, extraction, summarization), quality validation, and loading into vector/search stores.
 
-## Agent Chain
-builder.agent.md → reviewer.agent.md → tuner.agent.md
-The builder implements features, the reviewer validates quality, the tuner optimizes for production.
+## Data Pipeline Architecture (What the Model Gets Wrong)
 
-## Architecture Context
-This play follows a modular architecture with clear separation of concerns:
-- **API Layer:** Handles incoming requests, input validation, and response formatting
-- **Processing Layer:** Core business logic, AI model interactions, data transformations
-- **Data Layer:** Storage, retrieval, caching, and state management
-- **Infrastructure Layer:** Azure resources defined in Bicep, networking, identity, monitoring
+### ETL with LLM Enrichment
+```python
+# Pipeline: Ingest → Chunk → Embed → Enrich → Validate → Load
+async def process_document(doc: Document):
+    # 1. Ingest (parse PDF/DOCX/HTML)
+    text = extract_text(doc)
+    
+    # 2. Chunk (semantic boundaries)
+    chunks = chunk_text(text, size=1024, overlap=128)
+    
+    # 3. Embed (batch for efficiency)
+    vectors = await batch_embed(chunks, model="text-embedding-3-large", batch_size=100)
+    
+    # 4. Enrich with LLM (classification, entity extraction)
+    enrichments = await batch_enrich(chunks, tasks=["classify", "extract_entities", "summarize"])
+    
+    # 5. Validate (quality checks)
+    validated = [c for c in enrichments if c.confidence >= 0.8]
+    
+    # 6. Load into search index
+    await search_client.upload_documents(validated)
+```
 
-## Your Expertise for This Play
-- Azure AI Services configuration and integration patterns
-- Infrastructure-as-Code with Bicep (modules, parameters, conditional resources)
-- Python/TypeScript application development with Azure SDKs
-- Production deployment patterns (blue-green, canary, rollback)
-- Evaluation and monitoring of AI system quality metrics
-- Cost optimization through model routing and caching strategies
+### Batch Processing (Not One-at-a-Time)
+```python
+# WRONG — one API call per chunk (slow, expensive)
+for chunk in chunks:
+    embedding = embed(chunk)  # 1000 API calls for 1000 chunks
 
-## Rules for Code Generation
-1. **Authentication:** Always use `DefaultAzureCredential` / Managed Identity — never hardcode API keys
-2. **Configuration:** Use `config/` JSON files for all parameters — never hardcode values
-3. **Error Handling:** Wrap all Azure SDK calls with retry logic (exponential backoff, max 3 retries)
-4. **Logging:** Use structured logging with correlation IDs, send to Application Insights
-5. **Security:** Validate all inputs, sanitize outputs, use Content Safety for user-facing content
-6. **Testing:** Include unit tests for business logic, integration tests for Azure services
-7. **Documentation:** Add JSDoc/docstring comments on public functions and API endpoints
-8. **Performance:** Use async/await patterns, implement caching where appropriate
-9. **Cost:** Use model routing (cheap model for simple tasks, capable model for complex ones)
-10. **Observability:** Export custom metrics for latency, token usage, error rates, and quality scores
+# CORRECT — batch embedding (fast, fewer API calls)
+embeddings = embed_batch(chunks, batch_size=100)  # 10 API calls for 1000 chunks
+```
 
-## Configuration Files Reference
-| File | Purpose | Key Fields |
-|------|---------|------------|
-| `config/openai.json` | Model parameters | model, temperature, max_tokens, top_p |
-| `config/agents.json` | Agent behavior config | roles, handoff rules, escalation |
-| `config/guardrails.json` | Content safety rules | thresholds, blocked categories, PII handling |
-| `config/model-comparison.json` | Model selection matrix | models, cost, latency, quality scores |
-| `config/chunking.json` | Data processing config | chunk_size, overlap, strategy |
-| `config/search.json` | Retrieval configuration | search_type, top_k, score_threshold |
+### Key Pitfalls
+| Mistake | Why Wrong | Fix |
+|---------|----------|-----|
+| One-at-a-time API calls | 100x slower than batching | Batch embed/enrich: 100 items per call |
+| No dead letter queue | Failed docs lost silently | DLQ + retry with exponential backoff |
+| No idempotency | Re-processing creates duplicates | Hash doc content → upsert by hash |
+| LLM enrichment without caching | Same doc enriched on every run | Cache enrichments by content hash |
+| No data quality validation | Bad data in search index | Validate: confidence >= 0.8, required fields present |
+| Synchronous pipeline | Blocks on slow LLM calls | Async + queue-based: Azure Service Bus / Event Grid |
+| No progress tracking | Can't resume after failure | Checkpoint after each batch, resume from checkpoint |
+| Full reindex on every run | Wasteful for incremental updates | Change tracking: only process new/modified docs |
 
-## Infrastructure Reference
-| Resource | File | Purpose |
-|----------|------|---------|
-| Azure resources | `infra/main.bicep` | All Azure services for this play |
-| ARM template | `infra/main.json` | Generated ARM template |
-| Parameters | `infra/parameters.json` | Environment-specific values |
-| MCP plugin | `mcp/index.js` | MCP server integration |
+## Config Files (TuneKit)
+| File | What to Tune |
+|------|-------------|
+| `config/openai.json` | Embedding model, enrichment model, batch size |
+| `config/chunking.json` | Chunk size, overlap, strategy |
+| `config/guardrails.json` | Quality thresholds, retry limits, DLQ settings |
 
-## Evaluation & Quality
-- Run `python evaluation/eval.py` to evaluate solution quality
-- Metrics tracked: relevance, groundedness, coherence, fluency, safety
-- CI gate: all metrics must exceed thresholds in `config/guardrails.json`
-- Test cases in `evaluation/test-set.jsonl` (minimum 10 diverse scenarios)
+## Available Specialist Agents (optional)
+| Agent | Use For |
+|-------|---------|
+| `@builder` | Implement pipeline stages, batch processing, queue integration |
+| `@reviewer` | Audit data quality, idempotency, error handling, scalability |
+| `@tuner` | Optimize batch sizes, parallelism, caching, cost per document |
 
-## Deployment Workflow
-1. Validate Bicep: `az bicep build -f infra/main.bicep`
-2. Deploy infrastructure: `azd up` or `az deployment group create`
-3. Configure application settings from `config/*.json`
-4. Run smoke tests to verify endpoints
-5. Run evaluation pipeline to verify quality metrics
-6. Monitor Application Insights for errors and performance
-
-## Agent Workflow
-When implementing features, follow the builder → reviewer → tuner chain:
-1. **Build:** Implement using config/ values and architecture patterns
-2. **Review:** Validate against reviewer.agent.md checklist (security, quality, WAF compliance)
-3. **Tune:** Optimize config values, verify evaluation thresholds, production-ready SKUs
-
-## Naming Conventions
-- Files: `lowercase-hyphen.ext` (e.g., `document-processor.py`)
-- Functions: `snake_case` for Python, `camelCase` for TypeScript
-- Classes: `PascalCase` (e.g., `DocumentProcessor`)
-- Azure resources: `{project}-{env}-{resource}` (e.g., `frootai-prod-openai`)
-- Config keys: `snake_case` in JSON files
-- Environment variables: `UPPER_SNAKE_CASE`
-
-## Error Handling Patterns
-- Use custom exception classes for domain-specific errors
-- Return structured error responses with error code, message, and correlation ID
-- Log errors with full context (request ID, user action, stack trace)
-- Implement circuit breaker for external service calls
-- Graceful degradation: return cached/default response when services are unavailable
-
-## Testing Strategy
-- **Unit tests:** Business logic, data transformations, validation rules
-- **Integration tests:** Azure SDK interactions with emulators or test resources
-- **E2E tests:** Full request-response cycle through deployed endpoints
-- **Load tests:** Baseline performance with 100 concurrent users
-- **Evaluation tests:** AI quality metrics via eval.py pipeline
-
-## WAF Alignment
-This play aligns with all 6 Well-Architected Framework pillars:
-- **Reliability:** Retry policies, health checks, graceful degradation
-- **Security:** Managed Identity, Key Vault, Content Safety, RBAC
-- **Cost Optimization:** Model routing, caching, right-sized SKUs
-- **Operational Excellence:** IaC, CI/CD, observability, incident runbooks
-- **Performance Efficiency:** Async patterns, connection pooling, CDN
-- **Responsible AI:** Content safety, groundedness checks, bias monitoring
-
-For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
-
-
-## Common Pitfalls
-- Do NOT use synchronous HTTP libraries — use async clients (httpx, aiohttp)
-- Do NOT create new Azure resources without checking config/agents.json first
-- Do NOT ignore evaluation results — all metrics must pass before deployment
-- Do NOT skip the reviewer step — every implementation must be reviewed
-- Do NOT use print statements — use structured logging with correlation IDs
-- Do NOT commit secrets — use Key Vault references and Managed Identity
-- Do NOT deploy without running Bicep lint first
-
-## Quick Reference Commands
-- Deploy infrastructure: `az bicep build -f infra/main.bicep && azd up`
-- Run evaluation: `python evaluation/eval.py`
-- Run tests: `pytest tests/ -v --cov=app`
-- Validate config: `node -e "require('./config/openai.json')"`
-- Check Bicep: `az bicep lint -f infra/main.bicep`
-
-## FAI Protocol Integration
-This play is wired through the FAI Protocol via `fai-manifest.json`:
-- **Context:** Knowledge modules and WAF pillar alignment defined
-- **Primitives:** Agent, instruction, skill, and hook references
-- **Infrastructure:** Azure resource requirements and deployment config
-- **Guardrails:** Quality thresholds, content safety rules, evaluation gates
-- **Toolkit:** DevKit (build), TuneKit (optimize), SpecKit (document)
-
-## Cross-Play Compatibility
-This play can be combined with other FrootAI solution plays:
-- Use shared agents from the agents/ directory for cross-play expertise
-- Reference shared instructions from instructions/ for coding standards
-- Import shared skills for common operations (deploy, evaluate, tune)
-- Wire plays together via fai-manifest.json compatible-plays field
-
-## Response Format
-When generating code or documentation:
-- Include inline comments explaining non-obvious logic
-- Add type hints on all function signatures
-- Return structured responses with metadata (latency, tokens, model)
-- Include error handling with meaningful error messages
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
+## Slash Commands
+`/deploy` — Deploy pipeline | `/test` — Test with sample docs | `/review` — Audit quality | `/evaluate` — Measure throughput + accuracy
