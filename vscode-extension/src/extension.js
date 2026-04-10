@@ -1047,6 +1047,30 @@ function activate(context) {
         }
       };
 
+      // Hooks directory (all .json files)
+      const addHookFiles = (playPath) => {
+        const hooksDir = path.join(playPath, ".github", "hooks");
+        if (fs.existsSync(hooksDir)) {
+          for (const f of fs.readdirSync(hooksDir)) {
+            if (f.endsWith(".json")) {
+              dynamicFiles.push(`.github/hooks/${f}`);
+            }
+          }
+        }
+      };
+
+      // Workflows directory (CI/CD templates)
+      const addWorkflowFiles = (playPath) => {
+        const workflowsDir = path.join(playPath, ".github", "workflows");
+        if (fs.existsSync(workflowsDir)) {
+          for (const f of fs.readdirSync(workflowsDir)) {
+            if (f.endsWith(".yml") || f.endsWith(".yaml")) {
+              dynamicFiles.push(`.github/workflows/${f}`);
+            }
+          }
+        }
+      };
+
       // Build file list from local repo or use core files for GitHub download
       const localPlayDir = root ? path.join(root, "solution-plays", playDir) : null;
       if (localPlayDir && fs.existsSync(localPlayDir)) {
@@ -1059,6 +1083,8 @@ function activate(context) {
           }
         }
         addSkillDirs(localPlayDir, localPlayDir);
+        addHookFiles(localPlayDir);
+        addWorkflowFiles(localPlayDir);
       } else {
         // Fallback: known patterns for GitHub download
         dynamicFiles.push(
