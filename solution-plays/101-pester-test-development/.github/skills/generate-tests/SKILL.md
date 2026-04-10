@@ -168,3 +168,13 @@ If tests fail or coverage is below target:
 - Each subagent gets a fresh context window (prevents crashes)
 - Summarize results between modules to preserve context budget
 - Chain: builder (generate) → reviewer (validate) → tuner (fix gaps)
+
+## Non-Negotiable Rules (From Production Testing)
+
+1. **-Scope Context on ALL Should -Invoke**: When the function under test is called in `BeforeAll`, `Should -Invoke` defaults to `It` scope and reports 0 calls. Always add `-Scope Context`.
+
+2. **AST extraction for scripts with top-level code**: If a .ps1 file has ANY code outside of functions (Write-Host, Read-Host, exit, variable assignments), do NOT dot-source it. Use AST `ParseFile` to extract only function definitions, then `Invoke-Expression` each one.
+
+3. **Replace exit with throw**: `exit` is a PowerShell keyword that cannot be mocked. When extracting functions that contain `exit N`, replace with `throw "Exit code: N"` or `return $N`.
+
+4. **Wrap Group-Object in @()**: `($data | Group-Object X).Count` returns item count when there's a single group. Always use `@($data | Group-Object X).Count` to get group count.

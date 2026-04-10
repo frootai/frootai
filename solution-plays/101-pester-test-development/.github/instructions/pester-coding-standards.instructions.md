@@ -216,3 +216,48 @@ Invoke-Pester -Path ./tests/Get-PolicyCompliance.Tests.ps1 -Output Detailed
 # Lint source code
 Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
 ```
+
+## CRITICAL: Should -Invoke Scope Pitfall
+
+`Should -Invoke` defaults to `It` scope and CANNOT see function calls made in `BeforeAll`. This is the #1 cause of "Expected 1 call but got 0" failures.
+
+```powershell
+# ❌ WRONG — reports 0 invocations (default scope = It)
+Context 'When resource exists' {
+    BeforeAll { $result = Get-ServerHealth -ServerName 'srv01' }
+    It 'Calls Test-Connection' {
+        Should -Invoke Test-Connection -Times 1 -Exactly  # FAILS: 0 calls
+    }
+}
+
+# ✅ CORRECT — -Scope Context sees BeforeAll calls
+Context 'When resource exists' {
+    BeforeAll { $result = Get-ServerHealth -ServerName 'srv01' }
+    It 'Calls Test-Connection' {
+        Should -Invoke Test-Connection -Times 1 -Exactly -Scope Context  # PASSES
+    }
+}
+```
+
+**Rule:** ALWAYS add `-Scope Context` to `Should -Invoke` when the function under test is called in `BeforeAll`.
+
+## CRITICAL: Scripts With Top-Level Code — Use AST Extraction
+
+Scripts with inline `Write-Host`, `Read-Host`, or `exit` at the top level CANNOT be dot-sourced — they execute on import and crash the test runner.
+
+```powershell
+# ❌ WRONG — top-level code executes on import
+BeforeAll { . $PSScriptRoot/../src/LegacyScript.ps1 }  # Runs Write-Host, Read-Host, exit
+
+# ✅ CORRECT — AST extraction loads ONLY function definitions
+BeforeAll {
+    $ast = [System.Management.Automation.Language.Parser]::ParseFile(
+        "$PSScriptRoot/../src/LegacyScript.ps1", [ref]$null, [ref]$null)
+    $functions = $ast.FindAll({
+        $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]
+    }, $true)
+    foreach ($fn in $functions) { Invoke-Expression $fn.Extent.Text }
+}
+```
+
+**Rule:** If a source file has ANY top-level code (not inside a function), use AST extraction instead of dot-sourcing.

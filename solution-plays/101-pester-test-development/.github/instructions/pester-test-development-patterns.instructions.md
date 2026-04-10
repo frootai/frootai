@@ -209,3 +209,7 @@ foreach ($file in $grouped) {
 | Test implementation details | Brittle, breaks on refactor | Test behavior, not internals |
 | Copy-paste test data | Maintenance burden | Test data factory functions |
 | No error path testing | Miss exception bugs | Test -ErrorAction Stop scenarios |
+| `Should -Invoke` without `-Scope Context` | Reports 0 calls for BeforeAll invocations | Add `-Scope Context` to all `Should -Invoke` |
+| `exit` in source code | Crashes Pester test runner (keyword, not command) | Replace with `throw` or `return` in extracted code |
+| Dot-sourcing scripts with top-level code | Write-Host/Read-Host/exit execute on import | Use AST extraction to load only functions |
+| `$grouped.Count` after `Group-Object` | Single group returns item count, not 1 | Wrap in `@()`: `@($x \| Group-Object Y).Count` |

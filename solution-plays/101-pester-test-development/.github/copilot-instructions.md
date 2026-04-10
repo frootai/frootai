@@ -1,123 +1,124 @@
 ---
-description: "Master instructions for Pester Test Development (Play 101) — auto-injected into every Copilot conversation in this workspace"
+description: "Pester 5.x test development knowledge — auto-injected into every Copilot conversation in this workspace"
 ---
 
-# Pester Test Development — Copilot Master Instructions
+# Pester 5.x Test Development — Domain Knowledge
 
-You are an AI assistant specialized in **PowerShell Pester 5.x test development**.
+This workspace is configured for PowerShell Pester test development. The following rules supplement your existing knowledge with Pester 5.x specifics, common pitfalls, and project conventions.
 
-## RULE 1: File Discovery — list_dir + read_file (NEVER semantic_search)
-1. `list_dir` to discover folders/files
-2. `read_file` with exact paths from list_dir
-3. `grep_search` for text patterns (function names, cmdlets)
-4. **NEVER `semantic_search`** — returns empty in small/new workspaces
+## Pester 5.x Syntax (Critical — Differs from Pester 4.x)
 
-## RULE 2: Context Budget — You Have a 300-Line Source Limit
-These instructions consume ~3,000 tokens. Instruction files + skills can add ~8,000 more. You have room for ~300 lines of source code at a time. Exceeding this causes stalling/crashes.
-
-**NEVER do sequential chunk reading:**
-```
-# ❌ CRASHES at ~1000 lines — each read accumulates in context
-read_file X.ps1 1-100, then 100-200, then 200-300 ... 1100-1200 → STALL
-```
-
-**ALWAYS use Index → Target → Process → Output (ITPO):**
-1. **Index**: `grep_search "function " in file.ps1` — get structure without reading code
-2. **Target**: `read_file file.ps1 startLine=45 endLine=119` — ONE function only (max 200 lines)
-3. **Process**: Generate the test file immediately (create_file)
-4. **Output**: One-line summary, move to next function
-
-## RULE 3: Subagent Delegation (Mandatory for Large Codebases)
-| Codebase Size | Strategy |
-|---------------|----------|
-| 1-3 files, < 200 lines each | Process directly |
-| 3+ files OR any file > 500 lines | Use builder subagent per file |
-| File > 1000 lines | Subagent per function group (2-3 functions each) |
-| 10+ files | Index all → delegate one-by-one to subagents |
-
-Max 5 functions before delegating to a fresh subagent. Max 3 read_file calls before summarizing.
-
-## RULE 4: Pre-Flight Assessment (BEFORE Any Test Generation)
-Before writing tests, run this assessment using ONLY grep (zero code reading):
-```
-list_dir ./src                                            # file inventory
-grep_search "function " in **/*.ps1                       # function census
-grep_search "Write-Host|Read-Host|\$global:" in **/*.ps1  # anti-pattern scan
-```
-Then output a **Test Plan** table (file, functions, testability, strategy) and get user approval.
-
-## RULE 5: Generate → Verify Loop (Per Function)
-After generating tests for EACH function:
-1. `create_file` the .Tests.ps1
-2. Run: `pwsh -Command "Invoke-Pester ./tests/X.Tests.ps1 -Output Detailed"`
-3. If PASS → summarize, next function. If FAIL → fix, re-run, confirm pass.
-4. **NEVER move forward with a failing test behind you.**
-
-## RULE 6: Agent Chain — builder → reviewer → tuner
-| Request | Agent | Invoke |
-|---------|-------|--------|
-| Generate/write/create tests | builder | `@builder` or `runSubagent(agentName="builder")` |
-| Review/check/validate tests | reviewer | `@reviewer` or `runSubagent(agentName="reviewer")` |
-| Fix/optimize/tune coverage | tuner | `@tuner` or `runSubagent(agentName="tuner")` |
-| Full pipeline | All three | builder → reviewer → tuner (sequence) |
-
-## RULE 7: MUST Read Skills Before Working
-Skills have 150-220 lines of procedures with runnable code. Read the matching SKILL.md FIRST:
-
-| Task | read_file Path |
-|------|----------------|
-| Generate tests | `.github/skills/generate-tests/SKILL.md` |
-| Deploy to CI/CD | `.github/skills/deploy-pester-test-development/SKILL.md` |
-| Evaluate quality | `.github/skills/evaluate-pester-test-development/SKILL.md` |
-| Tune/fix tests | `.github/skills/tune-pester-test-development/SKILL.md` |
-
-For CI/CD, also read the workflow templates in `.github/workflows/`.
-
-## RULE 8: Pester 5.x Syntax (Non-Negotiable)
-| Correct | Wrong |
+| Correct (Pester 5.x) | Wrong (Pester 4.x / common mistakes) |
 |---------|-------|
 | `BeforeAll { . $PSScriptRoot/../src/Fn.ps1 }` | Script-scope dot-sourcing |
-| `Should -Be` | `Should Be` (v4) |
-| `Should -Invoke -Times 1 -Exactly` | `Assert-MockCalled` (deprecated) |
+| `Should -Be` | `Should Be` (no dash — Pester 4 syntax) |
+| `Should -Invoke X -Times 1 -Exactly -Scope Context` | `Should -Invoke` without `-Scope Context` (misses BeforeAll calls) |
+| `Should -Invoke -Times 1 -Exactly` | `Assert-MockCalled` (deprecated in 5.x) |
 | `Should -BeTrue` | `Should -Be $true` |
 | `Should -BeNullOrEmpty` | `Should -Be $null` |
-| `Should -Throw '*pattern*'` | `Should -Throw` (no pattern) |
-| `-Tag 'Unit'` on Describe | No tags |
-| `-TestCases` / `-ForEach` | Copy-paste It blocks |
+| `Should -Throw '*pattern*'` | `Should -Throw` (without error pattern) |
+| `Describe 'X' -Tag 'Unit'` | Describe without tags |
+| `-TestCases @(...)` or `-ForEach` | Copy-paste It blocks for variations |
+| `@($grouped).Count` | `$grouped.Count` (single GroupInfo returns item count, not group count) |
 
-## RULE 9: Mock Everything External
-- Always mock `Connect-AzAccount`, `Get-AzContext` in Azure tests
-- Use `TestDrive:` for file I/O, `TestRegistry:` for registry
-- Use `Mock -ParameterFilter` for conditional behavior
-- Verify ALL mocks: `Should -Invoke -Times N -Exactly`
-- NEVER mock the function under test
+## Critical Pitfalls (Discovered in Production Testing)
 
-## RULE 10: Coverage Targets
-| Metric | Target |
-|--------|--------|
-| Line coverage | ≥ 90% |
-| Branch coverage | ≥ 80% |
-| Function coverage | 100% |
+### Pitfall 1: Should -Invoke Reports 0 Calls
+`Should -Invoke` defaults to `It` scope — it can't see function calls made in `BeforeAll`. Always add `-Scope Context`:
+```powershell
+# ❌ WRONG — reports 0 invocations
+It 'Calls Get-AzResource' { Should -Invoke Get-AzResource -Times 1 -Exactly }
 
-## RULE 11: File Naming
+# ✅ CORRECT — sees calls from BeforeAll
+It 'Calls Get-AzResource' { Should -Invoke Get-AzResource -Times 1 -Exactly -Scope Context }
+```
+
+### Pitfall 2: exit Keyword Crashes Pester
+`exit` is a PowerShell keyword, not a command — it cannot be mocked. If source code contains `exit 0` or `exit 1`, it will terminate the Pester test runner.
+- When extracting functions via AST, replace `exit N` with `throw "Exit code: N"` or `return`
+- When dot-sourcing scripts with top-level `exit`, use AST extraction instead
+
+### Pitfall 3: Scripts With Top-Level Code Can't Be Dot-Sourced
+Scripts with 300+ lines of inline `Write-Host`/`Read-Host` execute on import when dot-sourced. Use AST extraction to load only function definitions:
+```powershell
+BeforeAll {
+    $ast = [System.Management.Automation.Language.Parser]::ParseFile(
+        "$PSScriptRoot/../src/LargeScript.ps1", [ref]$null, [ref]$null)
+    $functions = $ast.FindAll({ $args[0] -is [FunctionDefinitionAst] }, $true)
+    foreach ($fn in $functions) { Invoke-Expression $fn.Extent.Text }
+}
+```
+
+### Pitfall 4: Group-Object Single-Result .Count
+When `Group-Object` returns a single group, `.Count` returns the number of items IN that group, not 1. Always wrap in `@()`:
+```powershell
+# ❌ WRONG — if 1 group with 5 items, returns 5
+$groups = $data | Group-Object Type
+$groups.Count  # Returns 5 (items), not 1 (group)
+
+# ✅ CORRECT — always returns group count
+@($data | Group-Object Type).Count  # Returns 1
+```
+
+## Mock Conventions
+
+- **Always mock authentication**: `Mock Connect-AzAccount { }` and `Mock Get-AzContext { @{...} }`
+- **File I/O** → use `TestDrive:` (isolated PSDrive, auto-cleaned per Describe)
+- **Registry** → use `TestRegistry:` (isolated hive)
+- **Conditional mocks** → `Mock X -ParameterFilter { $Name -eq 'test' } { return @{...} }`
+- **Verify every mock**: `Should -Invoke X -Times 1 -Exactly` (never leave mocks unverified)
+- **Never mock the function under test** — only mock its dependencies
+
+## Coverage Targets
+
+| Metric | Target | Output Format |
+|--------|--------|---------------|
+| Line coverage | ≥ 90% | JaCoCo XML → `./reports/coverage.xml` |
+| Branch coverage | ≥ 80% | (included in JaCoCo) |
+| Function coverage | 100% | (included in JaCoCo) |
+| Test results | — | NUnit XML → `./reports/test-results.xml` |
+
+## File Naming Convention
+
 - Source: `Get-ServerHealth.ps1` → Test: `Get-ServerHealth.Tests.ps1`
-- One test file per source file
-- Tests in `./tests/` directory
+- One test file per source file — no monolithic test files
+- Tests in `./tests/` directory (parallel to `./src/`)
 
-## RULE 12: Reports (5 Mandatory Deliverables)
-1. **Test Creation Report** — file inventory, testability scores, test plan
-2. **Dependency Mapping Report** — per-function parameters, mock graph
-3. **Test Points Report** — per-function test matrix with categories
-4. **Coverage Report** — line/branch/function % vs targets
-5. **Final Validation Report** — summary, quality checklist, CI/CD readiness
+## PowerShell Coding Standards (for generated/refactored code)
 
-## RULE 13: Legacy Code (Write-Host, no functions, 10K+ lines)
-If source has anti-patterns, refactor BEFORE testing:
-- `Write-Host` → `Write-Verbose` or return values
-- `Read-Host` → `param()` with defaults
-- No functions → extract logical blocks into functions with `[CmdletBinding()]`
-- Hardcoded paths → `param([string]$Path)`
-- Process in waves: 5 critical functions first, then next 10, then remainder
+- Always use `[CmdletBinding()]` and `[OutputType()]` on functions
+- Use `[Parameter(Mandatory)]` with `ValidateSet`, `ValidateNotNullOrEmpty` as needed
+- Use approved verbs: Get, Set, New, Remove, Invoke, Test
+- Use `Write-Verbose` / `Write-Debug` for diagnostics (never `Write-Host` in testable code)
+- Handle errors with `try/catch` and `-ErrorAction Stop`
 
-## Slash Commands
-`/test` — Run Invoke-Pester | `/review` — Review quality | `/deploy` — CI/CD setup | `/evaluate` — Coverage analysis
+## Legacy Code Refactoring (when source is untestable)
+
+If source functions use `Write-Host`, `Read-Host`, `$global:`, hardcoded paths, or lack `function` keywords — refactor before testing:
+- `Write-Host "msg"` → `Write-Verbose "msg"` or return structured output
+- `Read-Host "prompt"` → add `param()` with default value
+- Inline scripts → extract into functions with `[CmdletBinding()]`
+- `"C:\App\config.json"` → `param([string]$ConfigPath = "C:\App\config.json")`
+
+## Available Specialist Agents (optional — use when needed)
+
+| Agent | Use For |
+|-------|---------|
+| `@builder` | Generate Pester tests when you want the full pipeline (discovery → mocks → tests) |
+| `@reviewer` | Audit existing tests for mock completeness, assertion quality, coverage gaps |
+| `@tuner` | Fix failing tests, close coverage gaps, eliminate flaky tests |
+
+These agents have detailed skills in `.github/skills/` — they'll load them automatically.
+
+## Available Slash Commands
+
+| Command | Action |
+|---------|--------|
+| `/test` | Run Invoke-Pester with coverage |
+| `/review` | Review test quality |
+| `/deploy` | Set up CI/CD pipeline |
+| `/evaluate` | Analyze coverage gaps |
+
+## CI/CD Templates (in `.github/workflows/`)
+
+Ready-to-use pipeline templates exist for GitHub Actions and Azure DevOps. Reference them when setting up CI/CD instead of writing YAML from scratch.
