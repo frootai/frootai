@@ -58,5 +58,9 @@
   "markdown.validate.enabled": true,
   "markdown.validate.unusedLinkDefinitions": "ignore",
   "markdown.validate.undefinedLinkDefinitions": "ignore",
-  "markdown.validate.referenceLinks.enabled": "ignore"
+  "markdown.validate.referenceLinks.enabled": "ignore",
+  "github-actions.workflows.pinned.refresh.enabled": false,
+  "yaml.schemas": {
+    "https://json.schemastore.org/azure-pipelines.json": ["**/workflows/*azure-devops*"]
+  }
 }

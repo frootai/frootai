@@ -44,13 +44,13 @@ This play ships with specialized resources. Use them — they contain curated do
 | `evaluate-pester-test-development` | Evaluating test quality — coverage gaps, flaky tests, mock completeness |
 | `tune-pester-test-development` | Tuning, fixing, optimizing Pester tests for coverage and performance |
 
-### Pipeline Templates (CI/CD templates for customer)
+### Workflows (CI/CD templates for customer)
 | File | Platform | Purpose |
 |------|----------|--------|
-| `.github/pipeline-templates/pester-ci-github.yml` | GitHub Actions | Multi-OS Pester CI with coverage gating, artifact upload, PR comments |
-| `.github/pipeline-templates/pester-ci-azure-devops.yml` | Azure DevOps | Pipeline with Pester, coverage gate, PublishTestResults, PublishCodeCoverage |
+| `.github/workflows/pester-ci-github.yml` | GitHub Actions | Multi-OS Pester CI with coverage gating, artifact upload, PR comments |
+| `.github/workflows/pester-ci-azure-devops.yml` | Azure DevOps | Pipeline with Pester, coverage gate, PublishTestResults, PublishCodeCoverage |
 
-**Action:** When customer asks about CI/CD, read and reference these pipeline templates. Customer copies to `.github/workflows/` (GitHub) or repo root as `azure-pipelines.yml` (Azure DevOps).
+**Action:** When customer asks about CI/CD, read and reference these workflow templates.
 
 ### Hooks
 | Hook | Event | Effect |
