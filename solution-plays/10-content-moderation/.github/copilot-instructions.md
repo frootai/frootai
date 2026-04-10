@@ -1,220 +1,124 @@
-You are an AI coding assistant working on the FrootAI Content Moderation solution play (Play 10).
+---
+description: "Content Moderation domain knowledge — auto-injected into every Copilot conversation"
+applyTo: "**"
+---
 
-## Solution Play Overview
-This solution play implements a production-grade Content Moderation system on Azure, following the FrootAI FAI Protocol and Well-Architected Framework (WAF) principles across all six pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, and Responsible AI.
+# Content Moderation — Domain Knowledge
 
-## .github Agentic OS Structure
-This solution uses the full GitHub Copilot agentic OS:
-- **Layer 1 (Always-On):** `instructions/*.instructions.md` — coding standards, domain patterns, security
-- **Layer 2 (On-Demand):** `prompts/*.prompt.md` — /deploy, /test, /review, /evaluate
-- **Layer 2 (Agents):** `agents/*.agent.md` — builder, reviewer, tuner (chained workflow)
-- **Layer 2 (Skills):** `skills/*/SKILL.md` — deploy-azure, evaluate, tune
-- **Layer 3 (Hooks):** `hooks/guardrails.json` — preToolUse policy gates
-- **Layer 3 (Workflows):** `workflows/*.md` — AI-driven CI/CD pipelines
+This workspace implements AI-powered content moderation — detecting and filtering hate speech, violence, self-harm, sexual content, and custom categories using Azure Content Safety.
 
-## Agent Chain
-builder.agent.md → reviewer.agent.md → tuner.agent.md
-The builder implements features, the reviewer validates quality, the tuner optimizes for production.
+## Content Safety Architecture (What the Model Gets Wrong)
 
-## Architecture Context
-This play follows a modular architecture with clear separation of concerns:
-- **API Layer:** Handles incoming requests, input validation, and response formatting
-- **Processing Layer:** Core business logic, AI model interactions, data transformations
-- **Data Layer:** Storage, retrieval, caching, and state management
-- **Infrastructure Layer:** Azure resources defined in Bicep, networking, identity, monitoring
+### Azure Content Safety Client
+```python
+from azure.ai.contentsafety import ContentSafetyClient
+from azure.ai.contentsafety.models import AnalyzeTextOptions, TextCategory
+from azure.identity import DefaultAzureCredential
 
-## Your Expertise for This Play
-- Azure AI Services configuration and integration patterns
-- Infrastructure-as-Code with Bicep (modules, parameters, conditional resources)
-- Python/TypeScript application development with Azure SDKs
-- Production deployment patterns (blue-green, canary, rollback)
-- Evaluation and monitoring of AI system quality metrics
-- Cost optimization through model routing and caching strategies
+client = ContentSafetyClient(
+    endpoint=config["endpoint"],
+    credential=DefaultAzureCredential(),
+)
 
-## Rules for Code Generation
-1. **Authentication:** Always use `DefaultAzureCredential` / Managed Identity — never hardcode API keys
-2. **Configuration:** Use `config/` JSON files for all parameters — never hardcode values
-3. **Error Handling:** Wrap all Azure SDK calls with retry logic (exponential backoff, max 3 retries)
-4. **Logging:** Use structured logging with correlation IDs, send to Application Insights
-5. **Security:** Validate all inputs, sanitize outputs, use Content Safety for user-facing content
-6. **Testing:** Include unit tests for business logic, integration tests for Azure services
-7. **Documentation:** Add JSDoc/docstring comments on public functions and API endpoints
-8. **Performance:** Use async/await patterns, implement caching where appropriate
-9. **Cost:** Use model routing (cheap model for simple tasks, capable model for complex ones)
-10. **Observability:** Export custom metrics for latency, token usage, error rates, and quality scores
+# Analyze text for safety violations
+result = client.analyze_text(AnalyzeTextOptions(
+    text=user_input,
+    categories=[TextCategory.HATE, TextCategory.VIOLENCE, TextCategory.SELF_HARM, TextCategory.SEXUAL],
+))
 
-## Configuration Files Reference
-| File | Purpose | Key Fields |
-|------|---------|------------|
-| `config/openai.json` | Model parameters | model, temperature, max_tokens, top_p |
-| `config/agents.json` | Agent behavior config | roles, handoff rules, escalation |
-| `config/guardrails.json` | Content safety rules | thresholds, blocked categories, PII handling |
-| `config/model-comparison.json` | Model selection matrix | models, cost, latency, quality scores |
-| `config/chunking.json` | Data processing config | chunk_size, overlap, strategy |
-| `config/search.json` | Retrieval configuration | search_type, top_k, score_threshold |
+# Check severity (0=safe, 2=low, 4=medium, 6=high)
+for category in result.categories_analysis:
+    if category.severity >= 4:  # Block medium and above
+        return {"blocked": True, "category": category.category, "severity": category.severity}
+```
 
-## Infrastructure Reference
-| Resource | File | Purpose |
-|----------|------|---------|
-| Azure resources | `infra/main.bicep` | All Azure services for this play |
-| ARM template | `infra/main.json` | Generated ARM template |
-| Parameters | `infra/parameters.json` | Environment-specific values |
-| MCP plugin | `mcp/index.js` | MCP server integration |
+### Moderation Pipeline
+```
+User Input → Content Safety (text) → LLM Processing → Content Safety (output) → Response
+                 ↓ Block if severe                        ↓ Block if severe
+              Log + Alert                              Log + Alert
+```
 
-## Evaluation & Quality
-- Run `python evaluation/eval.py` to evaluate solution quality
-- Metrics tracked: relevance, groundedness, coherence, fluency, safety
-- CI gate: all metrics must exceed thresholds in `config/guardrails.json`
-- Test cases in `evaluation/test-set.jsonl` (minimum 10 diverse scenarios)
+### MUST Moderate BOTH Input AND Output
+```python
+# WRONG — only checking input
+safety_check = analyze_text(user_input)
+response = llm.generate(user_input)  # Output not checked!
 
-## Deployment Workflow
-1. Validate Bicep: `az bicep build -f infra/main.bicep`
-2. Deploy infrastructure: `azd up` or `az deployment group create`
-3. Configure application settings from `config/*.json`
-4. Run smoke tests to verify endpoints
-5. Run evaluation pipeline to verify quality metrics
-6. Monitor Application Insights for errors and performance
+# CORRECT — check both input AND output
+input_check = analyze_text(user_input)
+if input_check.blocked: return reject(input_check)
+response = llm.generate(user_input)
+output_check = analyze_text(response.content)
+if output_check.blocked: return reject(output_check)  # Catch LLM-generated violations
+return response
+```
 
-## Agent Workflow
-When implementing features, follow the builder → reviewer → tuner chain:
-1. **Build:** Implement using config/ values and architecture patterns
-2. **Review:** Validate against reviewer.agent.md checklist (security, quality, WAF compliance)
-3. **Tune:** Optimize config values, verify evaluation thresholds, production-ready SKUs
+### Key Pitfalls
+| Mistake | Why Wrong | Fix |
+|---------|----------|-----|
+| Check input only | LLM can generate harmful content | Check BOTH input AND output |
+| severity >= 6 only | Misses medium-severity violations | Block at severity >= 4 (medium) |
+| No custom categories | Miss domain-specific violations | Add custom blocklists for your domain |
+| Sync moderation | Blocks main thread | Async: `await client.analyze_text_async()` |
+| No logging | Can't audit moderation decisions | Log every decision with category + severity |
+| No human review queue | False positives can't be appealed | Route borderline cases (severity 2-4) to human |
+| Image moderation skipped | Only text checked | Use `analyze_image` for uploaded images |
+| No rate limiting | Users flood with harmful content | Rate limit per user: 10 req/min |
 
-## Naming Conventions
-- Files: `lowercase-hyphen.ext` (e.g., `document-processor.py`)
-- Functions: `snake_case` for Python, `camelCase` for TypeScript
-- Classes: `PascalCase` (e.g., `DocumentProcessor`)
-- Azure resources: `{project}-{env}-{resource}` (e.g., `frootai-prod-openai`)
-- Config keys: `snake_case` in JSON files
-- Environment variables: `UPPER_SNAKE_CASE`
+### Custom Blocklist
+```python
+# Add domain-specific terms to block
+blocklist = client.create_or_update_text_blocklist(
+    blocklist_name="custom-terms",
+    options={"description": "Domain-specific blocked terms"},
+)
+client.add_blocklist_items(
+    blocklist_name="custom-terms",
+    options={"blocklistItems": [
+        {"description": "Competitor name", "text": "competitor-product-name"},
+        {"description": "Internal codename", "text": "project-secret"},
+    ]},
+)
 
-## Error Handling Patterns
-- Use custom exception classes for domain-specific errors
-- Return structured error responses with error code, message, and correlation ID
-- Log errors with full context (request ID, user action, stack trace)
-- Implement circuit breaker for external service calls
-- Graceful degradation: return cached/default response when services are unavailable
+# Use in analysis
+result = client.analyze_text(AnalyzeTextOptions(
+    text=user_input,
+    blocklist_names=["custom-terms"],
+    halt_on_blocklist_hit=True,
+))
+```
 
-## Testing Strategy
-- **Unit tests:** Business logic, data transformations, validation rules
-- **Integration tests:** Azure SDK interactions with emulators or test resources
-- **E2E tests:** Full request-response cycle through deployed endpoints
-- **Load tests:** Baseline performance with 100 concurrent users
-- **Evaluation tests:** AI quality metrics via eval.py pipeline
+### Severity Levels and Actions
+| Severity | Level | Action | Example |
+|----------|-------|--------|---------|
+| 0 | Safe | Allow | Normal conversation |
+| 2 | Low | Log + Allow | Mild language |
+| 4 | Medium | Block + Log | Targeted insults |
+| 6 | High | Block + Alert + Ban review | Extreme content |
 
-## WAF Alignment
-This play aligns with all 6 Well-Architected Framework pillars:
-- **Reliability:** Retry policies, health checks, graceful degradation
-- **Security:** Managed Identity, Key Vault, Content Safety, RBAC
-- **Cost Optimization:** Model routing, caching, right-sized SKUs
-- **Operational Excellence:** IaC, CI/CD, observability, incident runbooks
-- **Performance Efficiency:** Async patterns, connection pooling, CDN
-- **Responsible AI:** Content safety, groundedness checks, bias monitoring
+## Evaluation Targets
+| Metric | Target |
+|--------|--------|
+| True positive rate (catch harmful) | >= 99% |
+| False positive rate (block safe) | < 2% |
+| Moderation latency | < 200ms |
+| Custom category detection | >= 95% |
+| Human review queue volume | < 5% of total |
 
-For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
+## Config Files (TuneKit)
+| File | What to Tune |
+|------|-------------|
+| `config/guardrails.json` | severity thresholds per category, blocklist names |
+| `config/openai.json` | LLM for borderline case analysis |
+| `config/agents.json` | moderation pipeline rules, escalation |
 
+## Available Specialist Agents (optional)
+| Agent | Use For |
+|-------|---------|
+| `@builder` | Implement moderation pipeline, custom blocklists, image moderation |
+| `@reviewer` | Audit false positive/negative rates, threshold calibration |
+| `@tuner` | Optimize thresholds per category, reduce false positives, latency |
 
-## Common Pitfalls
-- Do NOT use synchronous HTTP libraries — use async clients (httpx, aiohttp)
-- Do NOT create new Azure resources without checking config/agents.json first
-- Do NOT ignore evaluation results — all metrics must pass before deployment
-- Do NOT skip the reviewer step — every implementation must be reviewed
-- Do NOT use print statements — use structured logging with correlation IDs
-- Do NOT commit secrets — use Key Vault references and Managed Identity
-- Do NOT deploy without running Bicep lint first
-
-## Quick Reference Commands
-- Deploy infrastructure: `az bicep build -f infra/main.bicep && azd up`
-- Run evaluation: `python evaluation/eval.py`
-- Run tests: `pytest tests/ -v --cov=app`
-- Validate config: `node -e "require('./config/openai.json')"`
-- Check Bicep: `az bicep lint -f infra/main.bicep`
-
-## FAI Protocol Integration
-This play is wired through the FAI Protocol via `fai-manifest.json`:
-- **Context:** Knowledge modules and WAF pillar alignment defined
-- **Primitives:** Agent, instruction, skill, and hook references
-- **Infrastructure:** Azure resource requirements and deployment config
-- **Guardrails:** Quality thresholds, content safety rules, evaluation gates
-- **Toolkit:** DevKit (build), TuneKit (optimize), SpecKit (document)
-
-## Cross-Play Compatibility
-This play can be combined with other FrootAI solution plays:
-- Use shared agents from the agents/ directory for cross-play expertise
-- Reference shared instructions from instructions/ for coding standards
-- Import shared skills for common operations (deploy, evaluate, tune)
-- Wire plays together via fai-manifest.json compatible-plays field
-
-## Response Format
-When generating code or documentation:
-- Include inline comments explaining non-obvious logic
-- Add type hints on all function signatures
-- Return structured responses with metadata (latency, tokens, model)
-- Include error handling with meaningful error messages
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
-
-
-## Prompt Engineering Guidelines
-When crafting prompts for this solution:
-- Use clear delimiters between context, instructions, and user query
-- Include few-shot examples for complex tasks
-- Specify output format explicitly (JSON schema, markdown, bullet points)
-- Set persona context at the beginning of the system prompt
-- Include guardrails in system prompt: do not hallucinate, cite sources
-- Keep system prompts under 2000 tokens for optimal latency
-- Version-control all prompts alongside application code
-
-## Troubleshooting Quick Reference
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 Unauthorized | Managed Identity not configured | Check RBAC role assignments |
-| 429 Too Many Requests | Rate limit exceeded | Implement retry with backoff |
-| 404 Model Not Found | Wrong deployment name | Verify openai.json deployment_name |
-| Content blocked | Safety threshold triggered | Review guardrails.json thresholds |
-| Slow responses | No caching, large max_tokens | Enable cache, reduce max_tokens |
-| Evaluation fails | Config mismatch | Ensure eval.py reads config/guardrails.json |
-| Bicep errors | Missing parameters | Check parameters.json completeness |
-| Health check 503 | Missing env vars | Verify app settings match config needs |
-
-## Environment Variables
-Required environment variables for this solution:
-| Variable | Description | Example |
-|----------|-------------|---------|
-| AZURE_OPENAI_ENDPOINT | OpenAI service endpoint | https://oai-frootai-prod.openai.azure.com/ |
-| AZURE_KEY_VAULT_URL | Key Vault URI | https://kv-frootai-xxx.vault.azure.net/ |
-| APPLICATIONINSIGHTS_CONNECTION_STRING | App Insights connection | InstrumentationKey=xxx |
-| AZURE_STORAGE_ACCOUNT | Storage account name | stfrootaiprod |
-| ENVIRONMENT | Deployment environment | dev, staging, prod |
+## Slash Commands
+`/deploy` — Deploy moderation service | `/test` — Run moderation tests | `/review` — Audit accuracy | `/evaluate` — Evaluate moderation metrics
