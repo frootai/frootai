@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Data Pipeline (Play 27) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Data Pipeline (Play 27) — ETL execution and LLM enrichment"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Data Pipeline Implementation

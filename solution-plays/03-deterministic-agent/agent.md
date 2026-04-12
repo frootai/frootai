@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Deterministic Agent (Play 03) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["03-deterministic-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Implement zero-temperature pipelines, structured output, abstention logic, reproducibility, guardrails"
+    prompt: "Build the following for Deterministic Agent (Play 03): "
+  - agent: "reviewer"
+    description: "Audit reproducibility, abstention logic, structured output validation, guardrail coverage"
+    prompt: "Review the Deterministic Agent (Play 03) implementation for: "
+  - agent: "tuner"
+    description: "Optimize confidence thresholds, abstention rates, latency, model routing, caching"
+    prompt: "Tune the Deterministic Agent (Play 03) configuration for: "
 ---
 
 # Deterministic Agent Agent

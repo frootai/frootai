@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Deploy Multi Agent Service (Play 07) to Azure"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Multi Agent Service to Azure

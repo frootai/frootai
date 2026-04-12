@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Esg Compliance Agent (Play 70) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test ESG Compliance (Play 70) — assess sample company against CSRD framework"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Esg Compliance Agent Implementation

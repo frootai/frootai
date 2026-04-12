@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Multi Modal Docproc (Play 15) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["15-multi-modal-docproc"]
+handoffs:
+  - agent: "builder"
+    description: "Implement GPT-4o vision + OCR pipeline for images, charts, tables, stamps, handwriting extraction"
+    prompt: "Build the following for Multi-Modal DocProc (Play 15): "
+  - agent: "reviewer"
+    description: "Audit multi-modal extraction accuracy, PII in images, visual element interpretation quality"
+    prompt: "Review the Multi-Modal DocProc (Play 15) implementation for: "
+  - agent: "tuner"
+    description: "Optimize vision vs OCR routing per page type, image resolution, batch throughput, cost per document"
+    prompt: "Tune the Multi-Modal DocProc (Play 15) configuration for: "
 ---
 
 # Multi Modal Docproc Agent

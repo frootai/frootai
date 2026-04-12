@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Financial Risk Intelligence (Play 50) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Financial Risk Intelligence (Play 50) — credit scoring + fraud detection + regulatory reporting"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Financial Risk Intelligence to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Customer Support V2 (Play 54) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Customer Support V2 (Play 54) — intent accuracy, resolution rate, CSAT"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Customer Support V2 Quality

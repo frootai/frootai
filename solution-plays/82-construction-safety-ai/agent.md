@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Construction Safety Ai (Play 82) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement PPE detection (YOLO/RT-DETR), hazard zone monitoring, incident prediction, real-time alerting"
+    prompt: "Build the following for Construction Safety AI (Play 82): "
+  - agent: "reviewer"
+    description: "Audit detection accuracy, false positive rate, OSHA compliance, privacy controls for worker monitoring"
+    prompt: "Review the following for Construction Safety AI (Play 82): "
+  - agent: "tuner"
+    description: "Optimize detection confidence, alert thresholds, zone configuration, incident prediction sensitivity"
+    prompt: "Tune the following for Construction Safety AI (Play 82): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["82-construction-safety-ai"]
 ---

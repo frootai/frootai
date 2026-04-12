@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Carbon Footprint Tracker (Play 69) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["69-carbon-footprint-tracker"]
+handoffs:
+  - agent: "builder"
+    description: "Build carbon tracking platform — Scope 1/2/3 calculation engine, emission factor database, spend-based Scope 3 estimation with LLM classification, GHG Protocol/CDP/TCFD reporting, reduction recommendations"
+    prompt: "Build the following for Carbon Footprint Tracker (Play 69): "
+  - agent: "reviewer"
+    description: "Audit emission factor accuracy, calculation methodology compliance, Scope 3 estimation quality, data lineage completeness, reporting framework correctness"
+    prompt: "Review the Carbon Footprint Tracker (Play 69) implementation for: "
+  - agent: "tuner"
+    description: "Optimize Scope 3 estimation accuracy, emission factor updates, data collection automation, supplier engagement rate, reporting efficiency"
+    prompt: "Tune the Carbon Footprint Tracker (Play 69) configuration for: "
 ---
 
 # Carbon Footprint Tracker Agent

@@ -26,9 +26,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-call-center-voice-ai/",
+      "./.github/skills/evaluate-call-center-voice-ai/",
+      "./.github/skills/tune-call-center-voice-ai/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

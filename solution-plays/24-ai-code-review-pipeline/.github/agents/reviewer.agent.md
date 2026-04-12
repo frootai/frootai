@@ -2,7 +2,8 @@
 name: "Code Review Reviewer"
 description: "Code Review reviewer - audits review quality, false positive rate"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["24-ai-code-review-pipeline"]
 user-invocable: false
 ---

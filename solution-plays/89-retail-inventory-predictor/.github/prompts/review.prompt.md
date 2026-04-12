@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Retail Inventory Predictor (Play 89) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Retail Inventory Predictor Implementation

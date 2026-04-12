@@ -2,7 +2,8 @@
 name: "Customer Support V2 Builder"
 description: "Customer Support V2 builder - implements multi-channel, intent classification, KB grounding"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "responsible-ai"]
 plays: ["54-ai-customer-support-v2"]
 ---
 # Builder Agent - Customer Support V2

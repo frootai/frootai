@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Edge Ai Deployment (Play 34) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Edge AI (Play 34) — container packaging + IoT Edge fleet deployment"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Edge Ai Deployment to Azure

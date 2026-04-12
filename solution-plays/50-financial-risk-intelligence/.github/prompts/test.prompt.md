@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Financial Risk Intelligence (Play 50) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Financial Risk (Play 50) — risk scoring scenarios + fraud detection + stress testing"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Financial Risk Intelligence Implementation

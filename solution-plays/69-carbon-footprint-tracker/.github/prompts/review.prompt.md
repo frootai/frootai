@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Carbon Footprint Tracker (Play 69) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Carbon Footprint Tracker (Play 69) — emission factors, methodology, data lineage"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Carbon Footprint Tracker Implementation

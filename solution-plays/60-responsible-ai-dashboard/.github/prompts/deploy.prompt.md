@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Responsible Ai Dashboard (Play 60) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Responsible AI Dashboard (Play 60) — fairness monitoring + incident tracking + compliance hub"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Responsible Ai Dashboard to Azure

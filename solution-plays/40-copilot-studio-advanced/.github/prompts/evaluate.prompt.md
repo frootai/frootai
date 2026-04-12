@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Copilot Studio Advanced (Play 40) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Copilot Studio Advanced (Play 40) — plugin response quality, graph groundedness, conversation coherence"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Copilot Studio Advanced Quality

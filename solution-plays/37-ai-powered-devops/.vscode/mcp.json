@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-monitor-workspace",
+            "description": "Azure Monitor / Log Analytics Workspace ID",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "azure-devops-pat",
+            "description": "Azure DevOps PAT for deployment pipeline integration",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

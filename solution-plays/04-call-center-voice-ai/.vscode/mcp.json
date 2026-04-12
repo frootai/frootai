@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-speech-key",
+            "description": "Azure Speech Service API Key (leave blank if using Managed Identity)",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "azure-communication-connection",
+            "description": "Azure Communication Services connection string",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

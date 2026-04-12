@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Waste Recycling Optimizer (Play 73) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Waste Recycling Optimizer Implementation

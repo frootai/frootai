@@ -2,7 +2,8 @@
 name: "Multi-Modal DocProc Tuner"
 description: "Multi-Modal DocProc tuner - optimizes model selection per doc type, throughput"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["15-multi-modal-docproc"]
 user-invocable: false
 ---

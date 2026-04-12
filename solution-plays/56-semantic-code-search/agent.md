@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Semantic Code Search (Play 56) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["56-semantic-code-search"]
+handoffs:
+  - agent: "builder"
+    description: "Build code search engine — AST-aware code parsing, function-level embedding, docstring/comment indexing, hybrid keyword+vector search, incremental re-indexing on push"
+    prompt: "Build the following for Semantic Code Search (Play 56): "
+  - agent: "reviewer"
+    description: "Audit search relevance (NDCG), repo access control, index freshness, embedding model quality, result ranking fairness"
+    prompt: "Review the Semantic Code Search (Play 56) implementation for: "
+  - agent: "tuner"
+    description: "Optimize embedding model selection, boost weights (docstring vs code vs comments), query rewriting, top-k, score threshold, indexing cost"
+    prompt: "Tune the Semantic Code Search (Play 56) configuration for: "
 ---
 
 # Semantic Code Search Agent

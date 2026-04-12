@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Browser Automation Agent (Play 23) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["23-browser-automation-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Implement Playwright automation, page state extraction, DOM interaction, screenshot-based decisions, form filling"
+    prompt: "Build the following for Browser Automation Agent (Play 23): "
+  - agent: "reviewer"
+    description: "Audit security (allowed domains, credential handling), error recovery, action reliability"
+    prompt: "Review the Browser Automation Agent (Play 23) implementation for: "
+  - agent: "tuner"
+    description: "Optimize step count, wait strategies, selector resilience, screenshot resolution, action success rate"
+    prompt: "Tune the Browser Automation Agent (Play 23) configuration for: "
 ---
 
 # Browser Automation Agent Agent

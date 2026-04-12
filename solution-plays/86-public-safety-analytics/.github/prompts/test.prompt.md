@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Public Safety Analytics (Play 86) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Public Safety Analytics Implementation

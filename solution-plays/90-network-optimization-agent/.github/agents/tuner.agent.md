@@ -2,7 +2,8 @@
 name: "Network Optimizer Tuner"
 description: "Network Optimizer tuner - optimizes utilization caps, forecast accuracy"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["90-network-optimization-agent"]
 user-invocable: false
 ---

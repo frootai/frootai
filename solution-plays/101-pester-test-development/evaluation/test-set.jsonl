@@ -1,0 +1,5 @@
+{"test_cases": [
+  {"input": "function Get-UserName { param([string]$Id) return (Get-ADUser $Id).Name }", "expected": "Should mock Get-ADUser and verify Name property returned"},
+  {"input": "function Test-Connection { param([string]$Server) return Test-NetConnection $Server -Port 443 }", "expected": "Should mock Test-NetConnection and verify port parameter"},
+  {"input": "function Get-Config { return Get-Content './config.json' | ConvertFrom-Json }", "expected": "Should mock Get-Content with test JSON data"}
+]}

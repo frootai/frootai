@@ -2,7 +2,8 @@
 name: "Knowledge Graph RAG Builder"
 description: "Knowledge Graph RAG builder - implements graph construction, entity extraction, hybrid retrieval"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "security"]
 plays: ["28-knowledge-graph-rag"]
 ---
 # Builder Agent - Knowledge Graph RAG

@@ -2,7 +2,8 @@
 name: "AI Gateway V2 Builder"
 description: "AI Gateway V2 builder - implements multi-provider routing, caching, circuit breaker"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "cost-optimization"]
 plays: ["52-ai-api-gateway-v2"]
 ---
 # Builder Agent - AI Gateway V2

@@ -2,7 +2,8 @@
 name: "Model Governance Builder"
 description: "Model Governance builder - implements registry, approval workflow, A/B, model cards"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "operational-excellence", "responsible-ai"]
 plays: ["48-ai-model-governance"]
 ---
 # Builder Agent - Model Governance

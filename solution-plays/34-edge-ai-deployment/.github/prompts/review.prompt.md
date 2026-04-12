@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Edge Ai Deployment (Play 34) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Edge AI Deploy (Play 34) — container security, rollback, offline resilience"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Edge Ai Deployment Implementation

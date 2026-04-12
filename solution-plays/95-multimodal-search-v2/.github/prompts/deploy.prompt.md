@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Multimodal Search V2 (Play 95) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Multimodal Search V2 to Azure

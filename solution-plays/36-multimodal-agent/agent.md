@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Multimodal Agent (Play 36) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["36-multimodal-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Implement multimodal pipeline (text+image+audio), GPT-4o vision analysis, cross-modal synthesis, modality routing"
+    prompt: "Build the following for Multimodal Agent (Play 36): "
+  - agent: "reviewer"
+    description: "Audit content safety across modalities, image/audio handling quality, cross-modal consistency"
+    prompt: "Review the Multimodal Agent (Play 36) implementation for: "
+  - agent: "tuner"
+    description: "Optimize image detail level, parallel modality processing, cost per multimodal request"
+    prompt: "Tune the Multimodal Agent (Play 36) configuration for: "
 ---
 
 # Multimodal Agent Agent

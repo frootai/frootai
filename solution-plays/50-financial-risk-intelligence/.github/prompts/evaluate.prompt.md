@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Financial Risk Intelligence (Play 50) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Financial Risk (Play 50) — scoring accuracy, fairness, fraud detection rate, explainability"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Financial Risk Intelligence Quality

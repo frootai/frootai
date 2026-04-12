@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Biodiversity Monitor (Play 80) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Biodiversity Monitor to Azure

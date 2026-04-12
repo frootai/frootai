@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Test Copilot Studio Bot (Play 08) implementation"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Copilot Studio Bot Implementation

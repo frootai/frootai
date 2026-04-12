@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Policy Impact Analyzer (Play 85) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Policy Impact Analyzer to Azure

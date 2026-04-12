@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Public Safety Analytics (Play 86) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Public Safety Analytics Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Multi Agent Swarm (Play 22) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Multi-Agent Swarm (Play 22) — decentralized agent topology with bidding"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Multi Agent Swarm to Azure

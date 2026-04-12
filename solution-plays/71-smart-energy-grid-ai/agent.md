@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Smart Energy Grid Ai (Play 71) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement load forecasting, renewable dispatch, demand response, grid anomaly detection"
+    prompt: "Build the following for Smart Energy Grid AI (Play 71): "
+  - agent: "reviewer"
+    description: "Audit forecast accuracy, grid safety protocols, NERC compliance, data privacy"
+    prompt: "Review the following for Smart Energy Grid AI (Play 71): "
+  - agent: "tuner"
+    description: "Optimize forecast models, renewable curtailment thresholds, demand response timing, cost"
+    prompt: "Tune the following for Smart Energy Grid AI (Play 71): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["71-smart-energy-grid-ai"]
 ---

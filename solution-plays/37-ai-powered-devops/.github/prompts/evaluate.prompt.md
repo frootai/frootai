@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Powered Devops (Play 37) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI DevOps (Play 37) — incident response accuracy, remediation safety"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Powered Devops Quality

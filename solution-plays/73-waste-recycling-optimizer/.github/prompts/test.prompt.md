@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Waste Recycling Optimizer (Play 73) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Waste Recycling Optimizer Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Meeting Assistant (Play 39) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Meeting Assistant (Play 39) — transcription + diarization + action items"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Meeting Assistant to Azure

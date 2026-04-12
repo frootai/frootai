@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Responsible Ai Dashboard (Play 60) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["60-responsible-ai-dashboard"]
+handoffs:
+  - agent: "builder"
+    description: "Build RAI dashboard — multi-system metrics collector, fairness scorecards (demographic parity, equalized odds), content safety incident tracker, model card registry, compliance evidence hub"
+    prompt: "Build the following for Responsible AI Dashboard (Play 60): "
+  - agent: "reviewer"
+    description: "Audit fairness methodology, intersectionality coverage, compliance evidence completeness, incident root cause analysis, model card quality"
+    prompt: "Review the Responsible AI Dashboard (Play 60) implementation for: "
+  - agent: "tuner"
+    description: "Optimize monitoring cadence, alert thresholds, executive summary quality, report scheduling, intersectional group coverage"
+    prompt: "Tune the Responsible AI Dashboard (Play 60) configuration for: "
 ---
 
 # Responsible Ai Dashboard Agent

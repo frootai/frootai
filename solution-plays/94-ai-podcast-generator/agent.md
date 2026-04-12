@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Ai Podcast Generator (Play 94) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement script generation, multi-voice TTS with SSML, audio post-processing, publishing pipeline"
+    prompt: "Build the following for AI Podcast Generator (Play 94): "
+  - agent: "reviewer"
+    description: "Audit script quality, source accuracy, content safety, audio normalization, voice naturalness"
+    prompt: "Review the following for AI Podcast Generator (Play 94): "
+  - agent: "tuner"
+    description: "Optimize script engagement, SSML prosody, voice selection, production quality, cost per episode"
+    prompt: "Tune the following for AI Podcast Generator (Play 94): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["94-ai-podcast-generator"]
 ---

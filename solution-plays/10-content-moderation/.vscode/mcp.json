@@ -1,1 +1,20 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-content-safety-key",
+            "description": "Azure Content Safety API Key (leave blank if using Managed Identity)",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

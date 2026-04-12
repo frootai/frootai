@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Fraud Detection Agent (Play 63) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Fraud Detection (Play 63) — run detection scenarios including fraud ring simulation"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Fraud Detection Agent Implementation

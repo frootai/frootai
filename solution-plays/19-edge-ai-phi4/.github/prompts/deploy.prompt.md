@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Edge Ai Phi4 (Play 19) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Edge AI Phi-4 (Play 19) — ONNX Runtime + quantized model on device"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Edge Ai Phi4 to Azure

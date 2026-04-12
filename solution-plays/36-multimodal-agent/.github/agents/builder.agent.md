@@ -2,7 +2,8 @@
 name: "Multimodal Agent Builder"
 description: "Multimodal Agent builder - implements multimodal pipeline, vision, cross-modal synthesis"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "security"]
 plays: ["36-multimodal-agent"]
 ---
 # Builder Agent - Multimodal Agent

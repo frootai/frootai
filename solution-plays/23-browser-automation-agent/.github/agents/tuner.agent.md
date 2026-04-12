@@ -2,7 +2,8 @@
 name: "Browser Agent Tuner"
 description: "Browser Agent tuner - optimizes step count, action reliability"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["23-browser-automation-agent"]
 user-invocable: false
 ---

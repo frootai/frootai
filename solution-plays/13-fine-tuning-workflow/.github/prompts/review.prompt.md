@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Fine Tuning Workflow (Play 13) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Fine Tuning Workflow (Play 13) — data quality and training metrics"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Fine Tuning Workflow Implementation

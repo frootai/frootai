@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Telecom Fraud Shield (Play 92) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Telecom Fraud Shield Quality

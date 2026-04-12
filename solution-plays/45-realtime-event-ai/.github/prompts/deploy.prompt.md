@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Realtime Event Ai (Play 45) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Real-Time Event AI (Play 45) — streaming pipeline + anomaly detection + alerting"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Realtime Event Ai to Azure

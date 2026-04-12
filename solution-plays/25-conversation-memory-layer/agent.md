@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Conversation Memory Layer (Play 25) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["25-conversation-memory-layer"]
+handoffs:
+  - agent: "builder"
+    description: "Implement memory tiers (short/long/episodic), vector-based recall, conversation compression, PII-aware storage"
+    prompt: "Build the following for Conversation Memory Layer (Play 25): "
+  - agent: "reviewer"
+    description: "Audit privacy (PII in memory), consent management, memory relevance decay, data retention compliance"
+    prompt: "Review the Conversation Memory Layer (Play 25) implementation for: "
+  - agent: "tuner"
+    description: "Optimize compression ratio, retrieval accuracy, storage costs, memory TTL, embedding model for recall"
+    prompt: "Tune the Conversation Memory Layer (Play 25) configuration for: "
 ---
 
 # Conversation Memory Layer Agent

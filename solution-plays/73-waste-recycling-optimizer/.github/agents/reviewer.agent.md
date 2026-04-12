@@ -2,7 +2,8 @@
 name: "Waste Optimizer Reviewer"
 description: "Waste Optimizer reviewer - audits classification accuracy, contamination detection"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["73-waste-recycling-optimizer"]
 user-invocable: false
 ---

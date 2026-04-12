@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Observability (Play 17) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["17-ai-observability"]
+handoffs:
+  - agent: "builder"
+    description: "Implement Application Insights, KQL dashboards, distributed tracing, token/cost metrics, alert rules"
+    prompt: "Build the following for AI Observability (Play 17): "
+  - agent: "reviewer"
+    description: "Audit telemetry completeness, PII in logs, alert coverage, data retention compliance"
+    prompt: "Review the AI Observability (Play 17) implementation for: "
+  - agent: "tuner"
+    description: "Optimize sampling rates, log retention tiers, alert thresholds, dashboard query performance, storage cost"
+    prompt: "Tune the AI Observability (Play 17) configuration for: "
 ---
 
 # Ai Observability Agent

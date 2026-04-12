@@ -2,7 +2,8 @@
 name: "Teams Extension Builder"
 description: "Teams Extension builder - implements Teams extension, adaptive cards, Graph API"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["16-copilot-teams-extension"]
 ---
 # Builder Agent - Teams Extension

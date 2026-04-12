@@ -2,7 +2,8 @@
 name: "Realtime Event AI Reviewer"
 description: "Realtime Event AI reviewer - audits throughput, checkpointing, dedup, alerts"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["reliability", "security", "operational-excellence"]
 plays: ["45-realtime-event-ai"]
 user-invocable: false
 ---

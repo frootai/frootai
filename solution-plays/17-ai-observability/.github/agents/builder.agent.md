@@ -2,7 +2,8 @@
 name: "AI Observability Builder"
 description: "AI Observability builder - implements tracing, metrics, dashboards, alerts"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["operational-excellence", "reliability", "performance-efficiency"]
 plays: ["17-ai-observability"]
 ---
 # Builder Agent - AI Observability

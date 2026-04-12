@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Construction Safety Ai (Play 82) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Construction Safety Ai Implementation

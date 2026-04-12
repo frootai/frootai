@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Agent Evaluation Platform (Play 98) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Agent Evaluation Platform Implementation

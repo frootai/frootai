@@ -2,7 +2,8 @@
 name: "Meeting Assistant Reviewer"
 description: "Meeting Assistant reviewer - audits PII, consent, summary quality, accuracy"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["39-ai-meeting-assistant"]
 user-invocable: false
 ---

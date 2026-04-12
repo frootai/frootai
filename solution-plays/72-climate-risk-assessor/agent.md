@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Climate Risk Assessor (Play 72) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement physical risk models, transition risk analysis, NGFS scenario modeling, financial quantification"
+    prompt: "Build the following for Climate Risk Assessor (Play 72): "
+  - agent: "reviewer"
+    description: "Audit climate data sources, model assumptions, TCFD alignment, scenario coverage"
+    prompt: "Review the following for Climate Risk Assessor (Play 72): "
+  - agent: "tuner"
+    description: "Optimize scenario parameters, risk thresholds, time horizons, reporting granularity"
+    prompt: "Tune the following for Climate Risk Assessor (Play 72): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["72-climate-risk-assessor"]
 ---

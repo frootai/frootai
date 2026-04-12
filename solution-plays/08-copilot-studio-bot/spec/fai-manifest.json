@@ -25,9 +25,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-copilot-studio-bot/",
+      "./.github/skills/evaluate-copilot-studio-bot/",
+      "./.github/skills/tune-copilot-studio-bot/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

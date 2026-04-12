@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Precision Agriculture Agent (Play 78) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Precision Agriculture Agent Implementation

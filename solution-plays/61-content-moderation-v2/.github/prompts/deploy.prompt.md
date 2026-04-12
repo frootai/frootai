@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Content Moderation V2 (Play 61) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Content Moderation V2 (Play 61) — multi-modal safety + custom categories + appeal workflows"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Content Moderation V2 to Azure

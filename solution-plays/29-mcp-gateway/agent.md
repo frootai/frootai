@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Mcp Gateway (Play 29) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["29-mcp-gateway"]
+handoffs:
+  - agent: "builder"
+    description: "Implement MCP server with tool definitions, resource endpoints, transport layer (stdio/HTTP), input validation"
+    prompt: "Build the following for MCP Gateway (Play 29): "
+  - agent: "reviewer"
+    description: "Audit tool security (input validation, injection prevention), transport security (TLS), error handling"
+    prompt: "Review the MCP Gateway (Play 29) implementation for: "
+  - agent: "tuner"
+    description: "Optimize tool descriptions for LLM invocation accuracy, response schemas, transport performance"
+    prompt: "Tune the MCP Gateway (Play 29) configuration for: "
 ---
 
 # Mcp Gateway Agent

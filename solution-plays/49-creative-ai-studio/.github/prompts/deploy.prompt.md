@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Creative Ai Studio (Play 49) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Creative AI Studio (Play 49) — multi-modal content pipeline + brand voice + calendar"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Creative Ai Studio to Azure

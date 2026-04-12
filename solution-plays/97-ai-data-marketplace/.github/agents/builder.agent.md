@@ -2,7 +2,8 @@
 name: "Data Marketplace Builder"
 description: "Data Marketplace builder - implements marketplace, quality scoring, privacy controls"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["97-ai-data-marketplace"]
 ---
 # Builder Agent - Data Marketplace

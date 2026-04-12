@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Agent Evaluation Platform (Play 98) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Agent Evaluation Platform Quality

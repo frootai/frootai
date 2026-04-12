@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Fine Tuning Workflow (Play 13) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Fine Tuning Workflow (Play 13) — compare fine-tuned vs base model"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Fine Tuning Workflow Quality

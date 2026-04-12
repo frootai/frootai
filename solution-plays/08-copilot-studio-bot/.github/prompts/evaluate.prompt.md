@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "tuner"
 description: "Evaluate Copilot Studio Bot (Play 08) quality metrics"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Copilot Studio Bot Quality

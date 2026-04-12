@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Financial Risk Intelligence (Play 50) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Financial Risk (Play 50) — ECOA/GDPR explainability, bias testing, Basel III compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Financial Risk Intelligence Implementation

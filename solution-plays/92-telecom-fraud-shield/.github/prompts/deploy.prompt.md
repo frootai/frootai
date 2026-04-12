@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Telecom Fraud Shield (Play 92) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Telecom Fraud Shield to Azure

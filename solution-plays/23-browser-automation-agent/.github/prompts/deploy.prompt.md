@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Browser Automation Agent (Play 23) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Browser Automation Agent (Play 23) — Playwright + vision-based web agent"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Browser Automation Agent to Azure

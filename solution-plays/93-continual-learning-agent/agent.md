@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Continual Learning Agent (Play 93) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement persistent memory stores, reflection loops, knowledge distillation, skill acquisition tracking"
+    prompt: "Build the following for Continual Learning Agent (Play 93): "
+  - agent: "reviewer"
+    description: "Audit memory retrieval quality, reflection accuracy, knowledge drift, privacy in stored episodes"
+    prompt: "Review the following for Continual Learning Agent (Play 93): "
+  - agent: "tuner"
+    description: "Optimize memory retention TTL, distillation thresholds, reflection frequency, retrieval relevance"
+    prompt: "Tune the following for Continual Learning Agent (Play 93): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["93-continual-learning-agent"]
 ---

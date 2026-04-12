@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "inputs": [
+                {
+                    "type": "promptString",
+                    "id": "azure-openai-key",
+                    "description": "Azure OpenAI API Key for pattern analysis and report generation (leave blank if using Managed Identity)",
+                    "password": true
+                },
+                {
+                    "type": "promptString",
+                    "id": "azure-iot-hub-connection",
+                    "description": "Azure IoT Hub connection string for HACCP sensor data ingestion",
+                    "password": true
+                }
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

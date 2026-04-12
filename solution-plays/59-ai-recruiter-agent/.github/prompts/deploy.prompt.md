@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Recruiter Agent (Play 59) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Recruiter Agent (Play 59) — bias-aware resume screening + job description gen"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Recruiter Agent to Azure

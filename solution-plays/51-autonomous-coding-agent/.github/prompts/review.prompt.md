@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Autonomous Coding Agent (Play 51) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Autonomous Coding Agent (Play 51) — code quality, diff scope, test preservation"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Autonomous Coding Agent Implementation

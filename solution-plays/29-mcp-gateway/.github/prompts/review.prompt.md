@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Mcp Gateway (Play 29) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review MCP Gateway (Play 29) — tool security, input validation, injection defense"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Mcp Gateway Implementation

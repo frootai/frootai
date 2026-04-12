@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Mcp Gateway (Play 29) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy MCP Gateway (Play 29) — MCP server with tools, resources, transport"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Mcp Gateway to Azure

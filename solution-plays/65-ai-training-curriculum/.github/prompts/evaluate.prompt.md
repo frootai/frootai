@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Training Curriculum (Play 65) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Training Curriculum (Play 65) — completion rate, assessment validity, skill gain"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Training Curriculum Quality

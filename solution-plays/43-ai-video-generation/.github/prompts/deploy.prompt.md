@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Video Generation (Play 43) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Video Generation (Play 43) — text-to-video pipeline + batch queue + content safety"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Video Generation to Azure

@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "iot-hub-connection",
+            "description": "Azure IoT Hub connection string for device fleet management",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "acr-login-server",
+            "description": "Azure Container Registry for edge module images (e.g., myacr.azurecr.io)",
+            "password": false
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

@@ -2,7 +2,8 @@
 name: "Landing Zone Advanced Tuner"
 description: "Landing Zone Advanced tuner - optimizes SKUs, regions, policy effects, cost"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["11-ai-landing-zone-advanced"]
 user-invocable: false
 ---

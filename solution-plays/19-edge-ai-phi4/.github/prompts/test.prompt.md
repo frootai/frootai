@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Edge Ai Phi4 (Play 19) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Edge AI Phi-4 (Play 19) — on-device inference and offline capability"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Edge Ai Phi4 Implementation

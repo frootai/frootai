@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Continual Learning Agent (Play 93) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Continual Learning Agent to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Fai Meta Agent (Play 100) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Fai Meta Agent Implementation

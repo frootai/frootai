@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "storage-connection",
+            "description": "Azure Storage connection string for data lake",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "azure-openai-key",
+            "description": "Azure OpenAI API Key for LLM enrichment (leave blank if using Managed Identity)",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

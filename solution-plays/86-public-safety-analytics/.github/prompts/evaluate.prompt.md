@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Public Safety Analytics (Play 86) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Public Safety Analytics Quality

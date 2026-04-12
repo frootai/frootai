@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Model Governance (Play 48) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["48-ai-model-governance"]
+handoffs:
+  - agent: "builder"
+    description: "Build model registry, approval workflow gates, A/B champion/challenger framework, model cards, lineage tracking, progressive rollout"
+    prompt: "Build the following for AI Model Governance (Play 48): "
+  - agent: "reviewer"
+    description: "Audit model cards completeness, bias testing results, compliance attestation, data lineage, deployment approval chain"
+    prompt: "Review the AI Model Governance (Play 48) implementation for: "
+  - agent: "tuner"
+    description: "Optimize A/B test duration, traffic split ratios, drift detection thresholds, rollout speed, approval SLA"
+    prompt: "Tune the AI Model Governance (Play 48) configuration for: "
 ---
 
 # Ai Model Governance Agent

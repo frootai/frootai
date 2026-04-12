@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Accessibility Learning Agent (Play 76) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Accessibility Learning Agent to Azure

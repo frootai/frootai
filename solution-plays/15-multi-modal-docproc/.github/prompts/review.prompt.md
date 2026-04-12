@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Multi Modal Docproc (Play 15) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Multi-Modal DocProc (Play 15) — multi-modal pipeline and extraction quality"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Multi Modal Docproc Implementation

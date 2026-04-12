@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "reviewer"
 description: "Review Call Center Voice Ai (Play 04) code and architecture"
-tools: ["terminal", "file"]
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Call Center Voice Ai Implementation

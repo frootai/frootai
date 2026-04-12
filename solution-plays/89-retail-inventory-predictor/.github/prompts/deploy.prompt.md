@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Retail Inventory Predictor (Play 89) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Retail Inventory Predictor to Azure

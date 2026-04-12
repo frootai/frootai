@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "cosmos-connection",
+            "description": "Cosmos DB connection string for pipeline definition storage",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "azure-openai-key",
+            "description": "Azure OpenAI API Key for pipeline AI steps (leave blank if using Managed Identity)",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

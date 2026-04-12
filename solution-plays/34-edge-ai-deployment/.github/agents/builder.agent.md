@@ -2,7 +2,8 @@
 name: "Edge AI Deploy Builder"
 description: "Edge AI Deploy builder - packages models, containers, IoT Edge deployment"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "operational-excellence", "performance-efficiency"]
 plays: ["34-edge-ai-deployment"]
 ---
 # Builder Agent - Edge AI Deploy

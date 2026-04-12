@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Supply Chain Ai (Play 55) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Supply Chain AI (Play 55) — backtest forecast on historical data"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Supply Chain Ai Implementation

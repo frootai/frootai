@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-openai-key",
+            "description": "Azure OpenAI API Key for anomaly explanation and risk analysis",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "azure-data-explorer-cluster",
+            "description": "Azure Data Explorer cluster URL for time-series data",
+            "password": false
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

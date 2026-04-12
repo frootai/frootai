@@ -2,7 +2,8 @@
 name: "Browser Agent Builder"
 description: "Browser Agent builder - implements Playwright automation, page state extraction"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["23-browser-automation-agent"]
 ---
 # Builder Agent - Browser Agent

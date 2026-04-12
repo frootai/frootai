@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Telecom Fraud Shield (Play 92) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Telecom Fraud Shield Implementation

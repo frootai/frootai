@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Agent Evaluation Platform (Play 98) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement eval framework, test suite generation, multi-dimensional scoring, LLM-as-judge calibration"
+    prompt: "Build the following for Agent Evaluation Platform (Play 98): "
+  - agent: "reviewer"
+    description: "Audit evaluation methodology, judge bias, test coverage, adversarial completeness"
+    prompt: "Review the following for Agent Evaluation Platform (Play 98): "
+  - agent: "tuner"
+    description: "Optimize scoring weights, judge calibration, test rotation, baseline selection"
+    prompt: "Tune the following for Agent Evaluation Platform (Play 98): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["98-agent-evaluation-platform"]
 ---

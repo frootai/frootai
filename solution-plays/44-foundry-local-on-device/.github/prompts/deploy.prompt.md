@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Foundry Local On Device (Play 44) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Foundry Local On-Device (Play 44) — local models + hybrid cloud routing"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Foundry Local On Device to Azure

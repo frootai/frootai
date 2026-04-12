@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Edge Ai Phi4 (Play 19) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["19-edge-ai-phi4"]
+handoffs:
+  - agent: "builder"
+    description: "Set up ONNX Runtime inference, quantize Phi-4 for edge devices, configure IoT Hub cloud sync, build offline-capable pipeline"
+    prompt: "Build the following for Edge AI Phi-4 (Play 19): "
+  - agent: "reviewer"
+    description: "Audit model size vs device memory, offline resilience, data privacy, quantization quality loss"
+    prompt: "Review the Edge AI Phi-4 (Play 19) implementation for: "
+  - agent: "tuner"
+    description: "Optimize quantization level (INT4/INT8), inference speed, prompt compression, battery impact, cloud sync frequency"
+    prompt: "Tune the Edge AI Phi-4 (Play 19) configuration for: "
 ---
 
 # Edge Ai Phi4 Agent

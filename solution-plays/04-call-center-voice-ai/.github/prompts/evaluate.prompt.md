@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "tuner"
 description: "Evaluate Call Center Voice Ai (Play 04) quality metrics"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Call Center Voice Ai Quality

@@ -2,7 +2,8 @@
 name: "Multi-Agent Builder"
 description: "Multi-Agent builder - implements agent topology, supervisor, handoffs"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["07-multi-agent-service"]
 ---
 # Builder Agent - Multi-Agent

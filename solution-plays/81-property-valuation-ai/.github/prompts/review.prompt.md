@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Property Valuation Ai (Play 81) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Property Valuation Ai Implementation

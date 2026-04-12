@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Esg Compliance Agent (Play 70) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy ESG Compliance Agent (Play 70) — multi-framework scoring + evidence + gap analysis"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Esg Compliance Agent to Azure

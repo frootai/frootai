@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Responsible Ai Dashboard (Play 60) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Responsible AI Dashboard (Play 60) — fairness methodology, intersectionality, compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Responsible Ai Dashboard Implementation

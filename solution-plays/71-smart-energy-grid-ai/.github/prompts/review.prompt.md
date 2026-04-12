@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Smart Energy Grid Ai (Play 71) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Smart Energy Grid Ai Implementation

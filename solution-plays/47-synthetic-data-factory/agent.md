@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Synthetic Data Factory (Play 47) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["47-synthetic-data-factory"]
+handoffs:
+  - agent: "builder"
+    description: "Build synthetic data pipelines — LLM text generation, CTGAN tabular data, differential privacy, schema-driven generation, batch processing, validation"
+    prompt: "Build the following for Synthetic Data Factory (Play 47): "
+  - agent: "reviewer"
+    description: "Audit privacy guarantees, PII leakage detection, distribution fidelity vs real data, re-identification risk, differential privacy budget"
+    prompt: "Review the Synthetic Data Factory (Play 47) implementation for: "
+  - agent: "tuner"
+    description: "Optimize data diversity, statistical accuracy, correlation preservation, generation cost, batch size, temperature for variety"
+    prompt: "Tune the Synthetic Data Factory (Play 47) configuration for: "
 ---
 
 # Synthetic Data Factory Agent

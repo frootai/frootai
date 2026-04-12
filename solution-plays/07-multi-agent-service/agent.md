@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Multi Agent Service (Play 07) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["07-multi-agent-service"]
+handoffs:
+  - agent: "builder"
+    description: "Implement agent topology, supervisor pattern, handoff protocol, shared context store"
+    prompt: "Build the following for Multi Agent Service (Play 07): "
+  - agent: "reviewer"
+    description: "Audit agent interactions, loop detection, conflict resolution, security boundaries"
+    prompt: "Review the Multi Agent Service (Play 07) implementation for: "
+  - agent: "tuner"
+    description: "Optimize routing rules, per-agent model selection, timeout values, cost per task"
+    prompt: "Tune the Multi Agent Service (Play 07) configuration for: "
 ---
 
 # Multi Agent Service Agent

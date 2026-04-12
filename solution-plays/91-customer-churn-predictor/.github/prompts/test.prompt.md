@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Customer Churn Predictor (Play 91) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Customer Churn Predictor Implementation

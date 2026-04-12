@@ -2,7 +2,8 @@
 name: "Content Moderation Reviewer"
 description: "Content Moderation reviewer - audits false positive rates, thresholds"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["10-content-moderation"]
 user-invocable: false
 ---

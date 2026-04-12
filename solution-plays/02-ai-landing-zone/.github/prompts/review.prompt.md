@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "reviewer"
 description: "Review Ai Landing Zone (Play 02) code and architecture"
-tools: ["terminal", "file"]
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Landing Zone Implementation

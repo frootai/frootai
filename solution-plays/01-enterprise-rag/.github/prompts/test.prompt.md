@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Test Enterprise Rag (Play 01) implementation"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Enterprise Rag Implementation

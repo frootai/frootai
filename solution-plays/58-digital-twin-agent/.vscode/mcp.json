@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-digital-twins-url",
+            "description": "Azure Digital Twins instance URL",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "azure-openai-key",
+            "description": "Azure OpenAI API Key for NL-to-DTDL and predictive explanations",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

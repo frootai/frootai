@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Document Understanding V2 (Play 38) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Document Understanding V2 (Play 38) — layout extraction + cross-doc + classification"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Document Understanding V2 to Azure

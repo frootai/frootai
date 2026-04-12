@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "reviewer"
 description: "Review Content Moderation (Play 10) code and architecture"
-tools: ["terminal", "file"]
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Content Moderation Implementation

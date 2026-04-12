@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Knowledge Management (Play 67) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Knowledge Management (Play 67) — auto-capture + taxonomy + expertise finder"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Knowledge Management to Azure

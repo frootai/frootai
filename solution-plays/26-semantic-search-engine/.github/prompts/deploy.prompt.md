@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Semantic Search Engine (Play 26) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Semantic Search Engine (Play 26) — index + embedding pipeline + scoring"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Semantic Search Engine to Azure

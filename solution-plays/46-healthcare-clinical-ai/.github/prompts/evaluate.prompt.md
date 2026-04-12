@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Healthcare Clinical Ai (Play 46) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Healthcare Clinical AI (Play 46) — de-identification recall, clinical coding accuracy, drug grounding"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Healthcare Clinical Ai Quality

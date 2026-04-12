@@ -2,7 +2,8 @@
 name: "Code Search Tuner"
 description: "Code Search tuner - optimizes embedding model, boost weights, queries"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["56-semantic-code-search"]
 user-invocable: false
 ---

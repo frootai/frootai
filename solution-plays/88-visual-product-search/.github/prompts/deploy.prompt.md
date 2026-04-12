@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Visual Product Search (Play 88) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Visual Product Search to Azure

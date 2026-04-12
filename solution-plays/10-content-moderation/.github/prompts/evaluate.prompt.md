@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "tuner"
 description: "Evaluate Content Moderation (Play 10) quality metrics"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Content Moderation Quality

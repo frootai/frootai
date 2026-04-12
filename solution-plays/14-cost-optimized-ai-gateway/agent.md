@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Cost Optimized Ai Gateway (Play 14) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["14-cost-optimized-ai-gateway"]
+handoffs:
+  - agent: "builder"
+    description: "Implement APIM policies, semantic caching (Redis), token budgets per tenant, multi-region routing"
+    prompt: "Build the following for Cost-Optimized AI Gateway (Play 14): "
+  - agent: "reviewer"
+    description: "Audit routing accuracy, cache hit rates, budget enforcement, security policies, rate limiting"
+    prompt: "Review the AI Gateway (Play 14) implementation for: "
+  - agent: "tuner"
+    description: "Optimize cache TTL, similarity threshold, PTU vs pay-as-you-go, routing rules, cost per request"
+    prompt: "Tune the AI Gateway (Play 14) configuration for: "
 ---
 
 # Cost Optimized Ai Gateway Agent

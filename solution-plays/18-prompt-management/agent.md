@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Prompt Management (Play 18) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["18-prompt-management"]
+handoffs:
+  - agent: "builder"
+    description: "Implement prompt registry, versioned templates, A/B testing framework, injection defense layer"
+    prompt: "Build the following for Prompt Management (Play 18): "
+  - agent: "reviewer"
+    description: "Audit prompt quality, injection vulnerabilities, version control hygiene, template compliance"
+    prompt: "Review the Prompt Management (Play 18) implementation for: "
+  - agent: "tuner"
+    description: "Optimize prompt token usage, A/B test analysis, template compression, few-shot example selection"
+    prompt: "Tune the Prompt Management (Play 18) configuration for: "
 ---
 
 # Prompt Management Agent

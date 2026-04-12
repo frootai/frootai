@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Fine Tuning Workflow (Play 13) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Fine Tuning Workflow (Play 13) — training pipeline and model deployment"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Fine Tuning Workflow Implementation

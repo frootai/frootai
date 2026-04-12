@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Exam Generation Engine (Play 75) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Exam Generation Engine Implementation

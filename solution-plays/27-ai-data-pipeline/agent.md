@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Data Pipeline (Play 27) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["27-ai-data-pipeline"]
+handoffs:
+  - agent: "builder"
+    description: "Implement ETL/ELT pipeline with LLM enrichment, batch processing, data quality checks, Data Factory orchestration"
+    prompt: "Build the following for AI Data Pipeline (Play 27): "
+  - agent: "reviewer"
+    description: "Audit data quality, idempotency, error handling, PII detection in pipeline, lineage tracking"
+    prompt: "Review the AI Data Pipeline (Play 27) implementation for: "
+  - agent: "tuner"
+    description: "Optimize batch sizes, parallelism, LLM enrichment cost, partition strategy, pipeline scheduling"
+    prompt: "Tune the AI Data Pipeline (Play 27) configuration for: "
 ---
 
 # Ai Data Pipeline Agent

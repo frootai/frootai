@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-content-safety-key",
+            "description": "Azure Content Safety API Key for text + image + video moderation",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "azure-openai-key",
+            "description": "Azure OpenAI API Key for borderline case analysis and cultural context",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

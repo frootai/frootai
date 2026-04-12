@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Retail Inventory Predictor (Play 89) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement SKU-level demand forecasting, reorder point calculation, promotion modeling, replenishment engine"
+    prompt: "Build the following for Retail Inventory Predictor (Play 89): "
+  - agent: "reviewer"
+    description: "Audit forecast accuracy, stockout rates, overstock levels, promotion effect modeling"
+    prompt: "Review the following for Retail Inventory Predictor (Play 89): "
+  - agent: "tuner"
+    description: "Optimize safety stock levels, service level targets, forecast horizon, lead time tracking"
+    prompt: "Tune the following for Retail Inventory Predictor (Play 89): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["89-retail-inventory-predictor"]
 ---

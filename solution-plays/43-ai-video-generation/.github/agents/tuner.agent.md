@@ -2,7 +2,8 @@
 name: "Video Generation Tuner"
 description: "Video Generation tuner - optimizes quality/cost, resolution, queue throughput"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["43-ai-video-generation"]
 user-invocable: false
 ---

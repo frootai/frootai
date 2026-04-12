@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Autonomous Coding Agent (Play 51) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Autonomous Coding Agent (Play 51) — issue-to-PR pipeline + GitHub integration"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Autonomous Coding Agent to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Responsible Ai Dashboard (Play 60) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Responsible AI Dashboard (Play 60) — collect metrics from registered AI systems"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Responsible Ai Dashboard Implementation

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Anomaly Detection (Play 20) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["20-anomaly-detection"]
+handoffs:
+  - agent: "builder"
+    description: "Implement time-series anomaly detection pipeline, alerting rules, LLM-powered root cause analysis"
+    prompt: "Build the following for Anomaly Detection (Play 20): "
+  - agent: "reviewer"
+    description: "Audit detection sensitivity, false positive rates, alert routing, escalation paths"
+    prompt: "Review the Anomaly Detection (Play 20) implementation for: "
+  - agent: "tuner"
+    description: "Optimize sensitivity thresholds, reduce false positives, tune detection windows, alert fatigue reduction"
+    prompt: "Tune the Anomaly Detection (Play 20) configuration for: "
 ---
 
 # Anomaly Detection Agent

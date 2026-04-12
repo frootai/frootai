@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "tuner"
 description: "Evaluate Ai Search Portal (Play 09) quality metrics"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Search Portal Quality

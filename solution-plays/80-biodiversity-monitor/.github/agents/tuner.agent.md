@@ -2,7 +2,8 @@
 name: "Biodiversity Monitor Tuner"
 description: "Biodiversity Monitor tuner - optimizes classifier accuracy, alert sensitivity"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["80-biodiversity-monitor"]
 user-invocable: false
 ---

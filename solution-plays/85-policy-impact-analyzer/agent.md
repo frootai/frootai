@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Policy Impact Analyzer (Play 85) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement provision extraction, stakeholder impact scoring, cost-benefit modeling, public comment analysis"
+    prompt: "Build the following for Policy Impact Analyzer (Play 85): "
+  - agent: "reviewer"
+    description: "Audit evidence quality, balance, methodology rigor, non-partisanship, source verification"
+    prompt: "Review the following for Policy Impact Analyzer (Play 85): "
+  - agent: "tuner"
+    description: "Optimize stakeholder identification, cost estimation, comment deduplication, uncertainty quantification"
+    prompt: "Tune the following for Policy Impact Analyzer (Play 85): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["85-policy-impact-analyzer"]
 ---

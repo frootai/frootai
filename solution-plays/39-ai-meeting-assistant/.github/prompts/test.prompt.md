@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Meeting Assistant (Play 39) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Meeting Assistant (Play 39) — transcription pipeline and summary generation"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Meeting Assistant Implementation

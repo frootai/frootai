@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "reviewer"
 description: "Review Ai Search Portal (Play 09) code and architecture"
-tools: ["terminal", "file"]
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Search Portal Implementation

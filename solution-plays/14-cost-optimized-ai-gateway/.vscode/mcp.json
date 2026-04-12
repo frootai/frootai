@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "apim-gateway-url",
+            "description": "APIM Gateway URL (e.g., https://myapim.azure-api.net)",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "apim-subscription-key",
+            "description": "APIM Subscription Key for gateway management",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

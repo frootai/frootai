@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Powered Devops (Play 37) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI DevOps (Play 37) — auto-remediation blast radius, alert gaps"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Powered Devops Implementation

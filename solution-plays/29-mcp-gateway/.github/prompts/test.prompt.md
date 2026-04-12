@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Mcp Gateway (Play 29) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test MCP Gateway (Play 29) — tool calling, resource access, transport"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Mcp Gateway Implementation

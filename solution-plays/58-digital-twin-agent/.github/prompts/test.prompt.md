@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Digital Twin Agent (Play 58) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Digital Twin Agent (Play 58) — query twin state + simulate sensor data"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Digital Twin Agent Implementation

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Fine Tuning Workflow (Play 13) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["13-fine-tuning-workflow"]
+handoffs:
+  - agent: "builder"
+    description: "Prepare training data (JSONL), configure LoRA parameters, submit fine-tuning job, deploy fine-tuned model"
+    prompt: "Build the following for Fine-Tuning Workflow (Play 13): "
+  - agent: "reviewer"
+    description: "Audit data quality, check for overfitting, validate improvement vs base model, review training metrics"
+    prompt: "Review the Fine-Tuning Workflow (Play 13) for: "
+  - agent: "tuner"
+    description: "Optimize LoRA rank, learning rate, epochs, batch size, compute selection, cost per training run"
+    prompt: "Tune the Fine-Tuning Workflow (Play 13) hyperparameters for: "
 ---
 
 # Fine Tuning Workflow Agent

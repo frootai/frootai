@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Multimodal Agent (Play 36) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Multimodal Agent (Play 36) — content safety across modalities, image handling"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Multimodal Agent Implementation

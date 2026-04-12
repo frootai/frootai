@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "reviewer"
 description: "Review Enterprise Rag (Play 01) code and architecture"
-tools: ["terminal", "file"]
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Enterprise Rag Implementation

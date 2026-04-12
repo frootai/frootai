@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Fraud Detection Agent (Play 63) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Fraud Detection (Play 63) — regulatory compliance, explanation quality, fairness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Fraud Detection Agent Implementation

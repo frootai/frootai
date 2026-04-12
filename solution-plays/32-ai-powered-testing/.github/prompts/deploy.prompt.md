@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Powered Testing (Play 32) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI-Powered Testing (Play 32) — test generation + mutation framework"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Powered Testing to Azure

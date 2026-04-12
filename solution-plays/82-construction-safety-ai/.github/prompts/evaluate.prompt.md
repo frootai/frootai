@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Construction Safety Ai (Play 82) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Construction Safety Ai Quality

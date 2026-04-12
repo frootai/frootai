@@ -2,7 +2,8 @@
 name: "Citizen Services Tuner"
 description: "Citizen Services tuner - optimizes response quality, language clarity, resolution"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["84-citizen-services-chatbot"]
 user-invocable: false
 ---

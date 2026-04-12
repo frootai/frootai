@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Federated Learning Pipeline (Play 62) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Federated Learning (Play 62) — simulate multi-client training round"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Federated Learning Pipeline Implementation

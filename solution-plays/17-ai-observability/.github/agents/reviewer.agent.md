@@ -2,7 +2,8 @@
 name: "AI Observability Reviewer"
 description: "AI Observability reviewer - audits data collection, PII, alert coverage"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "operational-excellence", "reliability"]
 plays: ["17-ai-observability"]
 user-invocable: false
 ---

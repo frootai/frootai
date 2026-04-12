@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Video Generation (Play 43) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["43-ai-video-generation"]
+handoffs:
+  - agent: "builder"
+    description: "Build text-to-video pipeline, image-to-video, batch queue processing, async generation with polling, C2PA watermarking"
+    prompt: "Build the following for AI Video Generation (Play 43): "
+  - agent: "reviewer"
+    description: "Audit content safety on input prompts and generated frames, copyright policy, watermark compliance, cost controls"
+    prompt: "Review the AI Video Generation (Play 43) implementation for: "
+  - agent: "tuner"
+    description: "Optimize quality/cost trade-off, resolution presets, batch queue throughput, preview workflow, frame sampling rate"
+    prompt: "Tune the AI Video Generation (Play 43) configuration for: "
 ---
 
 # Ai Video Generation Agent

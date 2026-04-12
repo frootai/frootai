@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Data Pipeline (Play 27) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Data Pipeline (Play 27) — ETL + LLM enrichment orchestration"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Data Pipeline to Azure

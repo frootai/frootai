@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Policy Impact Analyzer (Play 85) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Policy Impact Analyzer Implementation

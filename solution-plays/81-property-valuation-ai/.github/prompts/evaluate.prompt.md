@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Property Valuation Ai (Play 81) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Property Valuation Ai Quality

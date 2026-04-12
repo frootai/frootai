@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Compliance Engine (Play 35) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Compliance (Play 35) — compliance check execution and evidence collection"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Compliance Engine Implementation

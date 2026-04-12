@@ -25,9 +25,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-edge-ai-phi4/",
+      "./.github/skills/evaluate-edge-ai-phi4/",
+      "./.github/skills/tune-edge-ai-phi4/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

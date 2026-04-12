@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Knowledge Graph Rag (Play 28) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["28-knowledge-graph-rag"]
+handoffs:
+  - agent: "builder"
+    description: "Implement entity extraction, relationship mapping, graph construction (Cosmos DB Gremlin), graph-based retrieval for RAG"
+    prompt: "Build the following for Knowledge Graph RAG (Play 28): "
+  - agent: "reviewer"
+    description: "Audit graph quality, relationship accuracy, entity resolution, retrieval precision vs vector RAG"
+    prompt: "Review the Knowledge Graph RAG (Play 28) implementation for: "
+  - agent: "tuner"
+    description: "Optimize graph traversal depth, entity resolution thresholds, hybrid graph+vector retrieval weights, cost per query"
+    prompt: "Tune the Knowledge Graph RAG (Play 28) configuration for: "
 ---
 
 # Knowledge Graph Rag Agent

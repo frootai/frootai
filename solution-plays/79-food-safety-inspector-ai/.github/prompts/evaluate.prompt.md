@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Food Safety Inspector Ai (Play 79) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Food Safety Inspector Ai Quality

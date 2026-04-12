@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Knowledge Management (Play 67) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Knowledge Management (Play 67) — quality, access control, taxonomy, freshness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Knowledge Management Implementation

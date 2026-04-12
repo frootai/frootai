@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Edge Ai Deployment (Play 34) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Edge AI Deploy (Play 34) — fleet health, rollout success, device compatibility"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Edge Ai Deployment Quality

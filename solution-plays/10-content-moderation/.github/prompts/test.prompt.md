@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Test Content Moderation (Play 10) implementation"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Content Moderation Implementation

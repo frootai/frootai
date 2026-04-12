@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Fraud Detection Agent (Play 63) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["63-fraud-detection-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build three-layer fraud detection — rule engine (<1ms), ML model (<50ms), graph network analysis for fraud rings, explainable decisions, velocity checks, feedback loop"
+    prompt: "Build the following for Fraud Detection Agent (Play 63): "
+  - agent: "reviewer"
+    description: "Audit false positive rate, explanation quality (PSD2/regulatory), graph analysis coverage, ML model fairness, feedback loop integrity"
+    prompt: "Review the Fraud Detection Agent (Play 63) implementation for: "
+  - agent: "tuner"
+    description: "Optimize detection thresholds per transaction type, reduce false positives, tune velocity windows, calibrate ML model, improve graph analysis depth"
+    prompt: "Tune the Fraud Detection Agent (Play 63) configuration for: "
 ---
 
 # Fraud Detection Agent Agent

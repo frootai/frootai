@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Network Optimization Agent (Play 90) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Network Optimization Agent Implementation

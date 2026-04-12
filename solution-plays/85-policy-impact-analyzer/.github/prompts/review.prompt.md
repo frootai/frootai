@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Policy Impact Analyzer (Play 85) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Policy Impact Analyzer Implementation

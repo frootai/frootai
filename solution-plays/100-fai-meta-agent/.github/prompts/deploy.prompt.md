@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Fai Meta Agent (Play 100) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Fai Meta Agent to Azure

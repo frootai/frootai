@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Knowledge Graph Rag (Play 28) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Knowledge Graph RAG (Play 28) — graph traversal and retrieval quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Knowledge Graph Rag Implementation

@@ -2,7 +2,8 @@
 name: "Agent Swarm Builder"
 description: "Agent Swarm builder - implements swarm topology, bidding, consensus"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "security"]
 plays: ["22-multi-agent-swarm"]
 ---
 # Builder Agent - Agent Swarm

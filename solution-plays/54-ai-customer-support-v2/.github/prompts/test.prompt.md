@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Customer Support V2 (Play 54) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Customer Support V2 (Play 54) — simulate customer conversations across channels"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Customer Support V2 Implementation

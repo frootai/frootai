@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Translation Engine (Play 57) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Translation Engine (Play 57) — Azure Translator + LLM post-editing + glossary"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Translation Engine to Azure

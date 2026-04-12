@@ -2,7 +2,8 @@
 name: "Moderation V2 Builder"
 description: "Moderation V2 builder - implements multi-modal pipeline, custom categories, appeal"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["responsible-ai", "security", "performance-efficiency"]
 plays: ["61-content-moderation-v2"]
 ---
 # Builder Agent - Moderation V2

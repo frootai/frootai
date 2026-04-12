@@ -2,7 +2,8 @@
 name: "Financial Risk Builder"
 description: "Financial Risk builder - implements risk scoring, fraud detection, regulatory reporting"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["50-financial-risk-intelligence"]
 ---
 # Builder Agent - Financial Risk

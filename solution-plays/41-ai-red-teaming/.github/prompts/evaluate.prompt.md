@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Red Teaming (Play 41) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Red Teaming (Play 41) — attack coverage, detection rates, severity accuracy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Red Teaming Quality

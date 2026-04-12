@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Climate Risk Assessor (Play 72) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Climate Risk Assessor to Azure

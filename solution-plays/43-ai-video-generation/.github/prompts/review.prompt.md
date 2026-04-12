@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Video Generation (Play 43) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Video Generation (Play 43) — content safety, copyright, watermarking, cost controls"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Video Generation Implementation

@@ -2,7 +2,8 @@
 name: "Autonomous Coding Reviewer"
 description: "Autonomous Coding reviewer - audits code quality, test coverage, PR completeness"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "operational-excellence"]
 plays: ["51-autonomous-coding-agent"]
 user-invocable: false
 ---

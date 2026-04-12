@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Observability (Play 17) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Observability (Play 17) — App Insights + Log Analytics + dashboards"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Observability to Azure

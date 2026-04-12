@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Biodiversity Monitor (Play 80) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Biodiversity Monitor Implementation

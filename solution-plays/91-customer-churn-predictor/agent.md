@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Customer Churn Predictor (Play 91) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement churn model, feature engineering, retention workflows, SHAP explainability"
+    prompt: "Build the following for Customer Churn Predictor (Play 91): "
+  - agent: "reviewer"
+    description: "Audit model fairness, prediction calibration, retention action effectiveness, data privacy"
+    prompt: "Review the following for Customer Churn Predictor (Play 91): "
+  - agent: "tuner"
+    description: "Optimize risk thresholds, feature selection, retention ROI, segment-specific actions"
+    prompt: "Tune the following for Customer Churn Predictor (Play 91): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["91-customer-churn-predictor"]
 ---

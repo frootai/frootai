@@ -2,7 +2,8 @@
 name: "AI Red Team Reviewer"
 description: "AI Red Team reviewer - audits attack coverage, severity classifications"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "operational-excellence"]
 plays: ["41-ai-red-teaming"]
 user-invocable: false
 ---

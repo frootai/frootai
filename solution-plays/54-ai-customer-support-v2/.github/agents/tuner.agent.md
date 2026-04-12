@@ -2,7 +2,8 @@
 name: "Customer Support V2 Tuner"
 description: "Customer Support V2 tuner - optimizes intent accuracy, escalation rate, CSAT"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["54-ai-customer-support-v2"]
 user-invocable: false
 ---

@@ -2,7 +2,8 @@
 name: "Citizen Services Reviewer"
 description: "Citizen Services reviewer - audits accessibility, privacy, accuracy, non-partisanship"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["84-citizen-services-chatbot"]
 user-invocable: false
 ---

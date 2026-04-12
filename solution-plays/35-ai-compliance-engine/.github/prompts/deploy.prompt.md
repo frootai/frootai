@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Compliance Engine (Play 35) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Compliance Engine (Play 35) — regulatory checks + audit trail + risk scoring"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Compliance Engine to Azure

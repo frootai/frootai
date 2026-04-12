@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "app-insights-connection",
+            "description": "Application Insights Connection String",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "log-analytics-workspace-id",
+            "description": "Log Analytics Workspace ID",
+            "password": false
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

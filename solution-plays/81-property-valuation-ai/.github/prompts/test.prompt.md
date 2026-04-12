@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Property Valuation Ai (Play 81) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Property Valuation Ai Implementation

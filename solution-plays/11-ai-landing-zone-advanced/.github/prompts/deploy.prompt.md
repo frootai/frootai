@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Deploy Ai Landing Zone Advanced (Play 11) to Azure"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Landing Zone Advanced to Azure

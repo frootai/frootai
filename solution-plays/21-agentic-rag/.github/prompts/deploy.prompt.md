@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Agentic Rag (Play 21) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Agentic RAG (Play 21) — autonomous retrieval with multi-source routing"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Agentic Rag to Azure

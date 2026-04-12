@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Exam Generation Engine (Play 75) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Exam Generation Engine Implementation

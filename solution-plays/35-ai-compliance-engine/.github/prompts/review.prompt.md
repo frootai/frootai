@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Compliance Engine (Play 35) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Compliance (Play 35) — check completeness, gap analysis, audit readiness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Compliance Engine Implementation

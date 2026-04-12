@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Realtime Voice Agent V2 (Play 96) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Realtime Voice Agent V2 to Azure

@@ -2,7 +2,8 @@
 name: "Multimodal Search V2 Tuner"
 description: "Multimodal Search V2 tuner - optimizes fusion weights, embedding models, personalization"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["95-multimodal-search-v2"]
 user-invocable: false
 ---

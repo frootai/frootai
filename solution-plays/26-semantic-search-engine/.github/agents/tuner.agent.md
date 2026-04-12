@@ -2,7 +2,8 @@
 name: "Semantic Search Tuner"
 description: "Semantic Search tuner - optimizes scoring, embedding model, caching"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["26-semantic-search-engine"]
 user-invocable: false
 ---

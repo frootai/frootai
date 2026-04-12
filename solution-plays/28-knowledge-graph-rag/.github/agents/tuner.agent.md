@@ -2,7 +2,8 @@
 name: "Knowledge Graph RAG Tuner"
 description: "Knowledge Graph RAG tuner - optimizes graph depth, entity resolution, performance"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["28-knowledge-graph-rag"]
 user-invocable: false
 ---

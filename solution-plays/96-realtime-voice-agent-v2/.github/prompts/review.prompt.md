@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Realtime Voice Agent V2 (Play 96) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Realtime Voice Agent V2 Implementation

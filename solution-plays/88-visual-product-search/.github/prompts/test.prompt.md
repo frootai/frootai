@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Visual Product Search (Play 88) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Visual Product Search Implementation

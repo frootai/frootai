@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Landing Zone Advanced (Play 11) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Ai Landing Zone Advanced (Play 11) infrastructure deployment"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Landing Zone Advanced Implementation

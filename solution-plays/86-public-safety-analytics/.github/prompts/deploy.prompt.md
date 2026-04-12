@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Public Safety Analytics (Play 86) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Public Safety Analytics to Azure

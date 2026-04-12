@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Conversation Memory Layer (Play 25) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Memory Layer (Play 25) — memory storage, recall, and compression"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Conversation Memory Layer Implementation

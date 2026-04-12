@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Test Call Center Voice Ai (Play 04) implementation"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Call Center Voice Ai Implementation

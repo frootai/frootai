@@ -2,7 +2,8 @@
 name: "AI Gateway V2 Tuner"
 description: "AI Gateway V2 tuner - optimizes routing rules, cache hit rate, cost"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["52-ai-api-gateway-v2"]
 user-invocable: false
 ---

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Predictive Maintenance Ai (Play 68) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["68-predictive-maintenance-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Build predictive maintenance pipeline — IoT sensor ingestion, multivariate feature engineering, RUL model training, failure pattern recognition, condition-based scheduling, root cause analysis"
+    prompt: "Build the following for Predictive Maintenance AI (Play 68): "
+  - agent: "reviewer"
+    description: "Audit RUL prediction accuracy, false alarm rate, safety-critical failure coverage, sensor data quality, feedback loop integrity"
+    prompt: "Review the Predictive Maintenance AI (Play 68) implementation for: "
+  - agent: "tuner"
+    description: "Optimize RUL thresholds (urgent/planned/monitor), feature selection, model retrain frequency, alert aggregation, cost of downtime vs maintenance"
+    prompt: "Tune the Predictive Maintenance AI (Play 68) configuration for: "
 ---
 
 # Predictive Maintenance Ai Agent

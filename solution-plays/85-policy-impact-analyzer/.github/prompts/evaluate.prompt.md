@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Policy Impact Analyzer (Play 85) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Policy Impact Analyzer Quality

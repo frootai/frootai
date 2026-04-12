@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Semantic Search Engine (Play 26) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Semantic Search (Play 26) — NDCG, MRR, latency, zero-result rate"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Semantic Search Engine Quality

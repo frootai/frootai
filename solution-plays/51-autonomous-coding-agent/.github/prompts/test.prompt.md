@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Autonomous Coding Agent (Play 51) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Autonomous Coding Agent (Play 51) — resolve sample issue end-to-end"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Autonomous Coding Agent Implementation

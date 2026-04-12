@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Continual Learning Agent (Play 93) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Continual Learning Agent Implementation

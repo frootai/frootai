@@ -2,7 +2,8 @@
 name: "Predictive Maintenance Reviewer"
 description: "Predictive Maintenance reviewer - audits prediction accuracy, false alarm rate, safety"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["reliability", "security", "responsible-ai"]
 plays: ["68-predictive-maintenance-ai"]
 user-invocable: false
 ---

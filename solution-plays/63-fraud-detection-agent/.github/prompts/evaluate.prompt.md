@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Fraud Detection Agent (Play 63) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Fraud Detection (Play 63) — precision/recall, latency, false positive rate, graph coverage"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Fraud Detection Agent Quality

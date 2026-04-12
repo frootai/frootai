@@ -2,7 +2,8 @@
 name: "RAI Dashboard Reviewer"
 description: "RAI Dashboard reviewer - audits fairness methodology, compliance evidence"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "operational-excellence"]
 plays: ["60-responsible-ai-dashboard"]
 user-invocable: false
 ---

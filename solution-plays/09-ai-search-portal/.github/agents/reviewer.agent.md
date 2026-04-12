@@ -2,7 +2,8 @@
 name: "AI Search Reviewer"
 description: "AI Search reviewer - audits search relevance, access control"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["09-ai-search-portal"]
 user-invocable: false
 ---

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Meeting Assistant (Play 39) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Meeting Assistant (Play 39) — PII in transcripts, consent, summary quality"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Meeting Assistant Implementation

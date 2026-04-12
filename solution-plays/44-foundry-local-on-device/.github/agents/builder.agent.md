@@ -2,7 +2,8 @@
 name: "Foundry Local Builder"
 description: "Foundry Local builder - sets up Foundry Local, model config, hybrid routing"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "cost-optimization"]
 plays: ["44-foundry-local-on-device"]
 ---
 # Builder Agent - Foundry Local

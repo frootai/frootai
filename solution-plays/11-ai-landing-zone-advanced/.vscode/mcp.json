@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "azure-tenant-id",
+            "description": "Azure Tenant ID for management group deployment",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "azure-subscription-id",
+            "description": "Azure Subscription ID for landing zone deployment",
+            "password": false
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

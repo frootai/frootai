@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Retail Inventory Predictor (Play 89) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Retail Inventory Predictor Implementation

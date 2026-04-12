@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Continual Learning Agent (Play 93) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Continual Learning Agent Implementation

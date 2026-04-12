@@ -2,7 +2,8 @@
 name: "Energy Grid AI Tuner"
 description: "Energy Grid AI tuner - optimizes forecast models, dispatch, peak shaving"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["71-smart-energy-grid-ai"]
 user-invocable: false
 ---

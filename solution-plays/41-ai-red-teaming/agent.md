@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Red Teaming (Play 41) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["41-ai-red-teaming"]
+handoffs:
+  - agent: "builder"
+    description: "Build automated attack framework — jailbreak generators, prompt injection simulators, encoding bypass tests, multi-turn escalation attacks"
+    prompt: "Build the following for AI Red Teaming (Play 41): "
+  - agent: "reviewer"
+    description: "Audit attack coverage completeness, severity classifications, defense gap analysis, OWASP LLM Top 10 mapping"
+    prompt: "Review the AI Red Teaming (Play 41) implementation for: "
+  - agent: "tuner"
+    description: "Optimize attack success detection, reduce false positives, calibrate severity scoring, tune regression suites"
+    prompt: "Tune the AI Red Teaming (Play 41) configuration for: "
 ---
 
 # Ai Red Teaming Agent

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Agent Evaluation Platform (Play 98) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Agent Evaluation Platform to Azure

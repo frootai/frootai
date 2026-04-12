@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Recruiter Agent (Play 59) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Recruiter Agent (Play 59) — bias testing, EEOC compliance, PII, explainability"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Recruiter Agent Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Anomaly Detection (Play 20) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Anomaly Detection (Play 20) — detection accuracy and alerting behavior"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Anomaly Detection Implementation

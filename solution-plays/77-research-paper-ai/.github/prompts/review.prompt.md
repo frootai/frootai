@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Research Paper Ai (Play 77) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Research Paper Ai Implementation

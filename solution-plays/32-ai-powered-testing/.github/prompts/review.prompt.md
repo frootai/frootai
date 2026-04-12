@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Powered Testing (Play 32) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI-Powered Testing (Play 32) — assertion quality, mocks, flaky detection"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Powered Testing Implementation

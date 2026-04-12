@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Deploy Copilot Studio Bot (Play 08) to Azure"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Copilot Studio Bot to Azure

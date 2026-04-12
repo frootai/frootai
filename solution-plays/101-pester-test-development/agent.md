@@ -2,7 +2,17 @@
 name: "Pester Test Architect"
 description: "Pester test orchestrator — analyzes PowerShell code, auto-delegates to builder/reviewer/tuner specialists, delivers tested code with >90% coverage"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Generate Pester 5.x test suites from PowerShell code using AST analysis, comprehensive mocking, >90% coverage"
+    prompt: "Build the following for Pester Test Development (Play 101): "
+  - agent: "reviewer"
+    description: "Validate test quality, mock completeness, assertion correctness, coverage gaps, CI/CD readiness"
+    prompt: "Review the following for Pester Test Development (Play 101): "
+  - agent: "tuner"
+    description: "Optimize code coverage, eliminate flaky tests, tune CI/CD pipelines, improve test performance"
+    prompt: "Tune the following for Pester Test Development (Play 101): "
 waf: ["reliability", "operational-excellence", "security"]
 plays: ["101-pester-test-development"]
 ---

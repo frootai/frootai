@@ -46,7 +46,7 @@ For explicit agent handoffs, use @builder, @reviewer, or @tuner in Copilot Chat.
 
 ## Solution Play Modernization (MUST READ before modifying any solution play)
 
-The golden standard for modernizing solution plays lives at `.internal/improvisation/solution-play-improvisation.md` (1,721 lines, 46 rules). **Before starting ANY solution play work, `read_file .internal/improvisation/solution-play-improvisation.md` — specifically Section 34 (Modernization Execution Checklist) and the golden blueprint rules.**
+The golden standard for modernizing solution plays lives at `.internal/improvisation/solution-play-improvisation.md` (3,724 lines, 56 rules). **Before starting ANY solution play work, `read_file .internal/improvisation/solution-play-improvisation.md` — specifically Section 47 (Condensed Execution Reference), Section 46 (Master Gap Register), and Section 34 (Modernization Execution Checklist).**
 
 ### Three-Phase Execution (Rule 46 — NEVER skip a phase)
 
@@ -56,12 +56,17 @@ The golden standard for modernizing solution plays lives at `.internal/improvisa
 | **Phase 2: Distribution** | VS Code, npm, PyPI | Update VS Code extension (SOLUTION_PLAYS, Init DevKit scanner). Update MCP knowledge.json. Update Python SDK. Tag per channel: `ext-vN.N.N`, `mcp-vN.N.N`, `sdk-vN.N.N`. Do in batches (after 5-10 plays), not per-play. |
 | **Phase 3: Website** | `c:\CodeSpace\frootai.dev` | Update play detail pages, user guides, primitives counts, search index. Do in batches after distribution channel updates. |
 
-### Key Principles (from 46 golden rules)
+### Key Principles (from 56 golden rules)
 - **Rule 41**: copilot-instructions.md = knowledge supplement, NOT behavioral override. If removing a line doesn't change model output quality, delete it.
 - **Rule 42**: Hybrid model — generic Copilot does 90%, Play adds domain corrections. Agents are OPTIONAL.
 - **Rule 31**: copilot-instructions.md MUST be <150 lines / <1500 tokens (most expensive file — always loaded).
-- **Rule 33**: NEVER use PreToolUse hooks (spawn process per tool call → 5s delay each).
+- **Rule 33**: NEVER use PreToolUse hooks (spawn process per tool call → 5s delay each). 8 events available: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PreCompact, SubagentStart, SubagentStop, Stop.
 - **Rule 45**: Play 101 file structure is the golden template. Match it for every play.
+- **Rule 50**: Agents must use handoffs for builder→reviewer→tuner with pre-filled prompts.
+- **Rule 52**: Differentiate models by agent role — builder=gpt-4o, reviewer/tuner=gpt-4o-mini, add fallback arrays.
+- **Rule 53**: MCP config = committed infra — use `inputs` for secrets, `envFile` for .env, never hardcode keys.
+- **Rule 55**: Plugins = DevKit distribution format. Design DevKit to be plugin-extractable.
+- **Rule 56**: Follow MS 4-step workflow — Explore → Plan → Implement → Review.
 
 ### Play 101 Golden Template Structure
 ```
@@ -96,7 +101,7 @@ When reviewing PRs that add or modify agents, instructions, skills, hooks, or pl
 | `.agent.md` | `description` (10+ chars) | Optional: `name`, `model`, `tools`, `waf[]`, `plays[]` |
 | `.instructions.md` | `description` (10+ chars), `applyTo` (glob) | Optional: `waf[]` |
 | `SKILL.md` | `name` (kebab, matches folder), `description` (10-1024 chars) | Name must equal parent folder |
-| `hooks.json` | `version: 1`, at least one event | Events: sessionStart, sessionEnd, userPromptSubmitted, preToolUse |
+| `hooks.json` | `version: 1`, at least one event | Events: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PreCompact, SubagentStart, SubagentStop, Stop |
 | `plugin.json` | `name`, `description`, `version` (semver), `author.name`, `license` | Name must match folder |
 | `fai-manifest.json` | `play` (NN-kebab), `version` (semver), `context.knowledge[]`, `context.waf[]`, `primitives` | Guardrails thresholds 0-1 |
 | `fai-context.json` | None required | WAF values must be valid pillar names |

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "tuner"
 description: "Evaluate Enterprise Rag (Play 01) quality metrics"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Enterprise Rag Quality

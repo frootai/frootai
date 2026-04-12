@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Test It Ticket Resolution (Play 05) implementation"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test It Ticket Resolution Implementation

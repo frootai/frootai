@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Computer Use Agent (Play 42) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Computer Use Agent (Play 42) — run automation workflows in sandbox VM"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Computer Use Agent Implementation

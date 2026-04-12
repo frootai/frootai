@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Building Energy Optimizer (Play 83) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Building Energy Optimizer to Azure

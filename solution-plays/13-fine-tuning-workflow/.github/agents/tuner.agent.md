@@ -2,7 +2,8 @@
 name: "Fine-Tuning Tuner"
 description: "Fine-Tuning tuner - optimizes hyperparameters, cost/quality trade-offs"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["13-fine-tuning-workflow"]
 user-invocable: false
 ---

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Foundry Local On Device (Play 44) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["44-foundry-local-on-device"]
+handoffs:
+  - agent: "builder"
+    description: "Set up Foundry Local SDK, hardware-aware model selection, hybrid cloud/local routing, offline caching, complexity classifier"
+    prompt: "Build the following for Foundry Local On-Device (Play 44): "
+  - agent: "reviewer"
+    description: "Audit hardware compatibility, graceful cloud fallback, offline capability, disk space management, model cache integrity"
+    prompt: "Review the Foundry Local On-Device (Play 44) implementation for: "
+  - agent: "tuner"
+    description: "Optimize model selection per device class, complexity routing thresholds, local vs cloud cost savings, quantization levels"
+    prompt: "Tune the Foundry Local On-Device (Play 44) configuration for: "
 ---
 
 # Foundry Local On Device Agent

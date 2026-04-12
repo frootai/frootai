@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Prompt Management (Play 18) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Prompt Management (Play 18) — prompt quality and injection resilience"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Prompt Management Quality

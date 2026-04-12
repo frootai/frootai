@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Citizen Services Chatbot (Play 84) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Citizen Services Chatbot Implementation

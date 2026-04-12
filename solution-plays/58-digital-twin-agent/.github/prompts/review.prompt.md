@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Digital Twin Agent (Play 58) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Digital Twin Agent (Play 58) — twin accuracy, IoT security, telemetry coverage"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Digital Twin Agent Implementation

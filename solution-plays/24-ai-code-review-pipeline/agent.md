@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Code Review Pipeline (Play 24) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["24-ai-code-review-pipeline"]
+handoffs:
+  - agent: "builder"
+    description: "Implement GitHub PR review pipeline, static analysis integration, LLM review prompts, merge gate rules"
+    prompt: "Build the following for AI Code Review Pipeline (Play 24): "
+  - agent: "reviewer"
+    description: "Audit review quality (false positive rate), OWASP coverage, comment actionability, bias detection"
+    prompt: "Review the AI Code Review Pipeline (Play 24) implementation for: "
+  - agent: "tuner"
+    description: "Optimize review prompts, reduce noise/false positives, tune severity thresholds, model routing for cost"
+    prompt: "Tune the AI Code Review Pipeline (Play 24) configuration for: "
 ---
 
 # Ai Code Review Pipeline Agent

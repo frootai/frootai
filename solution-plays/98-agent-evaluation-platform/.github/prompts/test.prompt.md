@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Agent Evaluation Platform (Play 98) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Agent Evaluation Platform Implementation

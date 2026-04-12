@@ -2,7 +2,8 @@
 name: "Browser Agent Reviewer"
 description: "Browser Agent reviewer - audits security, allowed domains, error handling"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["23-browser-automation-agent"]
 user-invocable: false
 ---

@@ -2,7 +2,8 @@
 name: "AI Recruiter Tuner"
 description: "AI Recruiter tuner - optimizes matching accuracy, bias reduction"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "cost-optimization", "performance-efficiency"]
 plays: ["59-ai-recruiter-agent"]
 user-invocable: false
 ---

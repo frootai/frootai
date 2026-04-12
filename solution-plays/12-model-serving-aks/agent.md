@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Model Serving Aks (Play 12) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["12-model-serving-aks"]
+handoffs:
+  - agent: "builder"
+    description: "Set up AKS cluster with GPU node pools, deploy vLLM/TGI serving, configure HPA and health checks"
+    prompt: "Build the following for Model Serving AKS (Play 12): "
+  - agent: "reviewer"
+    description: "Audit resource limits, pod security, GPU utilization, health probes, network policies"
+    prompt: "Review the Model Serving AKS (Play 12) infrastructure for: "
+  - agent: "tuner"
+    description: "Optimize GPU utilization, spot node pools, auto-scaling rules, quantization level, batch size"
+    prompt: "Tune the Model Serving AKS (Play 12) configuration for: "
 ---
 
 # Model Serving Aks Agent

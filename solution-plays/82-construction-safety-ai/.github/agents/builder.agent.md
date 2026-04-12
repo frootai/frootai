@@ -2,7 +2,8 @@
 name: "Construction Safety Builder"
 description: "Construction Safety builder - implements PPE detection, zone monitoring, alerting"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["82-construction-safety-ai"]
 ---
 # Builder Agent - Construction Safety

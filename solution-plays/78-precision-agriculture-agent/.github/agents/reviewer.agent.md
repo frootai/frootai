@@ -2,7 +2,8 @@
 name: "Precision Agriculture Reviewer"
 description: "Precision Agriculture reviewer - audits detection accuracy, recommendation quality"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["78-precision-agriculture-agent"]
 user-invocable: false
 ---

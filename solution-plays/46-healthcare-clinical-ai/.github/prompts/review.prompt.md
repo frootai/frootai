@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Healthcare Clinical Ai (Play 46) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Healthcare Clinical AI (Play 46) — HIPAA compliance, BAA, PHI handling, audit trails"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Healthcare Clinical Ai Implementation

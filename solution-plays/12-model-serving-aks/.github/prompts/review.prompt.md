@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Model Serving Aks (Play 12) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Model Serving Aks (Play 12) cluster security and resource limits"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Model Serving Aks Implementation

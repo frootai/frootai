@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Telecom Fraud Shield (Play 92) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Telecom Fraud Shield Implementation

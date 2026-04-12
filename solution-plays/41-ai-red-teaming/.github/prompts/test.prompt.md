@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Red Teaming (Play 41) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Red Teaming (Play 41) — run attack suites against target application"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Red Teaming Implementation

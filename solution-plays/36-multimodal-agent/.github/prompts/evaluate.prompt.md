@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Multimodal Agent (Play 36) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Multimodal Agent (Play 36) — cross-modal quality and modality accuracy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Multimodal Agent Quality

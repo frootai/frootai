@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Document Understanding V2 (Play 38) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Document Understanding V2 (Play 38) — extraction accuracy, classification, comparison"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Document Understanding V2 Quality

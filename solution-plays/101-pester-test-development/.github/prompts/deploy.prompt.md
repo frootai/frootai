@@ -1,5 +1,8 @@
 ---
+mode: "agent"
 description: "Deploy prompt for Play 101 — Deploy Pester test suite to target project and configure CI/CD pipeline"
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # /deploy — Play 101: Pester Test Development

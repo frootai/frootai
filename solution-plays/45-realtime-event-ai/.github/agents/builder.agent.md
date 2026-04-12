@@ -2,7 +2,8 @@
 name: "Realtime Event AI Builder"
 description: "Realtime Event AI builder - implements event pipeline, anomaly detection, patterns"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "operational-excellence"]
 plays: ["45-realtime-event-ai"]
 ---
 # Builder Agent - Realtime Event AI

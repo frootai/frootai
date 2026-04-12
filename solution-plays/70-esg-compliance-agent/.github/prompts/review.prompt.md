@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Esg Compliance Agent (Play 70) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review ESG Compliance (Play 70) — evidence verification, greenwashing, double materiality"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Esg Compliance Agent Implementation

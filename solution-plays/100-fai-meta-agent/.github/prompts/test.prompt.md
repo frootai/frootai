@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Fai Meta Agent (Play 100) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Fai Meta Agent Implementation

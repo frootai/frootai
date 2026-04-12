@@ -2,7 +2,8 @@
 name: "Data Marketplace Reviewer"
 description: "Data Marketplace reviewer - audits data quality, privacy compliance, license accuracy"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["97-ai-data-marketplace"]
 user-invocable: false
 ---

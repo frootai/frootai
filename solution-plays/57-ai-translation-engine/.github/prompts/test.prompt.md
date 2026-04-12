@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Translation Engine (Play 57) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Translation Engine (Play 57) — translate sample content across languages"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Translation Engine Implementation

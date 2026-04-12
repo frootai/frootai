@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Cost Optimized Ai Gateway (Play 14) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Gateway (Play 14) — security policies, budget enforcement, rate limiting"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Cost Optimized Ai Gateway Implementation

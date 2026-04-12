@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Foundry Local On Device (Play 44) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Foundry Local (Play 44) — local vs cloud quality, latency, cost savings"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Foundry Local On Device Quality

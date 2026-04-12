@@ -2,7 +2,8 @@
 name: "Supply Chain AI Tuner"
 description: "Supply Chain AI tuner - optimizes model parameters, feature selection, frequency"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["55-supply-chain-ai"]
 user-invocable: false
 ---

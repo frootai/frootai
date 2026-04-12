@@ -2,7 +2,8 @@
 name: "Legal AI Tuner"
 description: "Legal AI tuner - optimizes clause detection, risk calibration"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["53-legal-document-ai"]
 user-invocable: false
 ---

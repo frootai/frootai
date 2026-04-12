@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Semantic Search Engine (Play 26) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Semantic Search (Play 26) — relevance, access control, data freshness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Semantic Search Engine Implementation

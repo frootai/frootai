@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Deploy Call Center Voice Ai (Play 04) to Azure"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Call Center Voice Ai to Azure

@@ -2,7 +2,8 @@
 name: "Churn Predictor Reviewer"
 description: "Churn Predictor reviewer - audits model fairness, prediction accuracy, action effectiveness"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["91-customer-churn-predictor"]
 user-invocable: false
 ---

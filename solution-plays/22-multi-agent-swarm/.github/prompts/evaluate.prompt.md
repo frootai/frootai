@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Multi Agent Swarm (Play 22) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Multi-Agent Swarm (Play 22) — consensus quality and swarm efficiency"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Multi Agent Swarm Quality

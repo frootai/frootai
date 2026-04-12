@@ -1,4 +1,4 @@
-# FrootAI — Agents (201)
+# FrootAI — Agents (238)
 
 > 201 standalone role-based agents that work individually AND wire into solution plays via the FAI Layer.
 
@@ -30,15 +30,15 @@ Body content follows the pattern:
 
 | Tier | Focus | Lines | Example |
 |------|-------|-------|---------|
-| Specialist | Deep domain (Azure, RAG, MCP) | 40-50 | `frootai-rag-architect.agent.md` |
-| Role-Based | Architecture, security, testing | 100-200 | `frootai-security-reviewer.agent.md` |
-| Orchestration | Planning, multi-agent, lifecycle | 200-500 | `frootai-play-dispatcher.agent.md` |
+| Specialist | Deep domain (Azure, RAG, MCP) | 40-50 | `fai-rag-architect.agent.md` |
+| Role-Based | Architecture, security, testing | 100-200 | `fai-security-reviewer.agent.md` |
+| Orchestration | Planning, multi-agent, lifecycle | 200-500 | `fai-play-dispatcher.agent.md` |
 
 ## Naming Convention
 
 `kebab-case.agent.md` — always lowercase, hyphen-separated.
 
-Prefix with `frootai-` for official agents. Community agents use descriptive names without prefix.
+Prefix with `fai-` for official agents. Community agents use descriptive names without prefix.
 
 ## FAI Layer Integration
 

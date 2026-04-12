@@ -2,7 +2,8 @@
 name: "AI Governance Hub Reviewer"
 description: "AI Governance Hub reviewer - audits classification accuracy, compliance evidence, gaps"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["99-enterprise-ai-governance-hub"]
 user-invocable: false
 ---

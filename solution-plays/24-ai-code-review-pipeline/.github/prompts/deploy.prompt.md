@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Code Review Pipeline (Play 24) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Code Review Pipeline (Play 24) — GitHub Actions + LLM review"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Code Review Pipeline to Azure

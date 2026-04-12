@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Biodiversity Monitor (Play 80) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Biodiversity Monitor Quality

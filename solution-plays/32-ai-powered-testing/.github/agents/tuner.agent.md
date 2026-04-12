@@ -2,7 +2,8 @@
 name: "AI Testing Tuner"
 description: "AI Testing tuner - optimizes test prioritization, reduces flaky tests"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["32-ai-powered-testing"]
 user-invocable: false
 ---

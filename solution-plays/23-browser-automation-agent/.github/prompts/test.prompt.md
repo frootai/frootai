@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Browser Automation Agent (Play 23) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Browser Automation Agent (Play 23) — web navigation and form automation"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Browser Automation Agent Implementation

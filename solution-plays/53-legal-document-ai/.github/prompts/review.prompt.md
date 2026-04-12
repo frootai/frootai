@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Legal Document Ai (Play 53) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Legal Document AI (Play 53) — UPL compliance, privilege markers, PII handling"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Legal Document Ai Implementation

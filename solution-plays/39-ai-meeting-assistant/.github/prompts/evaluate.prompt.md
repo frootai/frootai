@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Meeting Assistant (Play 39) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Meeting Assistant (Play 39) — transcription accuracy, diarization, action items"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Meeting Assistant Quality

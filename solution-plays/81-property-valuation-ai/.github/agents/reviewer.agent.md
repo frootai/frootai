@@ -2,7 +2,8 @@
 name: "Property Valuation Reviewer"
 description: "Property Valuation reviewer - audits valuation accuracy, bias testing, compliance"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["81-property-valuation-ai"]
 user-invocable: false
 ---

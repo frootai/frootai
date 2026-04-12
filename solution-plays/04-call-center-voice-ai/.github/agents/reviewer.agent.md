@@ -2,7 +2,8 @@
 name: "Voice AI Reviewer"
 description: "Voice AI reviewer - audits latency, security, compliance"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["04-call-center-voice-ai"]
 user-invocable: false
 ---

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Semantic Code Search (Play 56) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Semantic Code Search (Play 56) — relevance, access control, index freshness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Semantic Code Search Implementation

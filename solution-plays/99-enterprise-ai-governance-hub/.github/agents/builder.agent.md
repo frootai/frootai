@@ -2,7 +2,8 @@
 name: "AI Governance Hub Builder"
 description: "AI Governance Hub builder - implements registry, risk classification, policy enforcement"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "responsible-ai", "operational-excellence"]
 plays: ["99-enterprise-ai-governance-hub"]
 ---
 # Builder Agent - AI Governance Hub

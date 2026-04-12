@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Legal Document Ai (Play 53) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["53-legal-document-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Build legal document pipeline — clause extraction, risk scoring per clause against industry benchmarks, redlining suggestions, contract version diff, jurisdiction-aware analysis"
+    prompt: "Build the following for Legal Document AI (Play 53): "
+  - agent: "reviewer"
+    description: "Audit UPL compliance (no legal advice), attorney-client privilege markers, PII de-identification, clause extraction accuracy, jurisdictional correctness"
+    prompt: "Review the Legal Document AI (Play 53) implementation for: "
+  - agent: "tuner"
+    description: "Optimize clause detection accuracy, risk score calibration, redline quality, processing throughput for large contracts, clause library coverage"
+    prompt: "Tune the Legal Document AI (Play 53) configuration for: "
 ---
 
 # Legal Document Ai Agent

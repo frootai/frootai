@@ -2,7 +2,8 @@
 name: "Voice AI Agent Builder"
 description: "Voice AI Agent builder - implements voice loop, dialog state, intent detection"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "security"]
 plays: ["33-voice-ai-agent"]
 ---
 # Builder Agent - Voice AI Agent

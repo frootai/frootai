@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Synthetic Data Factory (Play 47) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Synthetic Data Factory (Play 47) — generation pipelines + CTGAN + validation"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Synthetic Data Factory to Azure

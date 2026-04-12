@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Multi Modal Docproc (Play 15) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Multi-Modal DocProc (Play 15) — vision + OCR extraction pipeline"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Multi Modal Docproc Implementation

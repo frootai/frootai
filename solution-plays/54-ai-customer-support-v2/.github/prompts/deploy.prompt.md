@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Customer Support V2 (Play 54) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Customer Support V2 (Play 54) — multi-channel + intent + KB grounding + escalation"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Customer Support V2 to Azure

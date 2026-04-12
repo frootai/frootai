@@ -2,7 +2,8 @@
 name: "Legal AI Builder"
 description: "Legal AI builder - implements clause extraction, risk scoring, redlining"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["53-legal-document-ai"]
 ---
 # Builder Agent - Legal AI

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
+agent: "builder"
 description: "Deploy It Ticket Resolution (Play 05) to Azure"
-tools: ["terminal", "file"]
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy It Ticket Resolution to Azure

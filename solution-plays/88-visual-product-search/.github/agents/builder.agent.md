@@ -2,7 +2,8 @@
 name: "Visual Search Builder"
 description: "Visual Search builder - implements visual encoder, product indexing, search API"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["performance-efficiency", "reliability", "cost-optimization"]
 plays: ["88-visual-product-search"]
 ---
 # Builder Agent - Visual Search

@@ -2,7 +2,8 @@
 name: "Voice AI Tuner"
 description: "Voice AI tuner - optimizes response time, model routing, cost"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["04-call-center-voice-ai"]
 user-invocable: false
 ---

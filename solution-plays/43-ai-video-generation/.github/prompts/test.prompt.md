@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Video Generation (Play 43) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Video Generation (Play 43) — generate test videos and verify quality + safety"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Video Generation Implementation

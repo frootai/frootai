@@ -2,7 +2,8 @@
 name: "Infra Optimizer Builder"
 description: "Infra Optimizer builder - implements monitoring, right-sizing, auto-scaling"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["66-ai-infrastructure-optimizer"]
 ---
 # Builder Agent - Infra Optimizer

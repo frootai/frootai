@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Conversation Memory Layer (Play 25) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Memory Layer (Play 25) — recall accuracy, compression quality, privacy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Conversation Memory Layer Quality

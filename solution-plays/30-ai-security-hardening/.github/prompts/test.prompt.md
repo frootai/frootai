@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Security Hardening (Play 30) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Security (Play 30) — defense layers and attack vectors"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Security Hardening Implementation

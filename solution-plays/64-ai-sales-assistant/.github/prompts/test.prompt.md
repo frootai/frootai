@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Sales Assistant (Play 64) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Sales Assistant (Play 64) — score sample leads and generate personalized outreach"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Sales Assistant Implementation

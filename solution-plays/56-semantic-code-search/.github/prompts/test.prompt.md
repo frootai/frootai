@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Semantic Code Search (Play 56) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Semantic Code Search (Play 56) — natural language queries against indexed codebase"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Semantic Code Search Implementation

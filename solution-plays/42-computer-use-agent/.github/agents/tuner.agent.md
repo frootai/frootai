@@ -2,7 +2,8 @@
 name: "Computer Use Agent Tuner"
 description: "Computer Use Agent tuner - optimizes screenshot resolution, action reliability"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["42-computer-use-agent"]
 user-invocable: false
 ---

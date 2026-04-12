@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Carbon Footprint Tracker (Play 69) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Carbon Footprint Tracker (Play 69) — Scope 1/2/3 engine + GHG Protocol reporting"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Carbon Footprint Tracker to Azure

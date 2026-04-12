@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Knowledge Graph Rag (Play 28) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Knowledge Graph RAG (Play 28) — graph construction + entity extraction + retrieval"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Knowledge Graph Rag to Azure

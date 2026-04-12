@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Low Code Ai Builder (Play 31) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Low-Code AI Builder (Play 31) — visual pipeline designer + template library"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Low Code Ai Builder to Azure

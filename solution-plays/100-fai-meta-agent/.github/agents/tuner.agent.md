@@ -2,7 +2,8 @@
 name: "FAI Meta-Agent Tuner"
 description: "FAI Meta-Agent tuner - optimizes routing accuracy, recommendation relevance"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["100-fai-meta-agent"]
 user-invocable: false
 ---

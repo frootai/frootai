@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Training Curriculum (Play 65) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Training Curriculum (Play 65) — content accuracy, assessment validity, accessibility"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Training Curriculum Implementation

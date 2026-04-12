@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Creative Ai Studio (Play 49) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Creative AI Studio (Play 49) — brand voice, content safety, copyright compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Creative Ai Studio Implementation

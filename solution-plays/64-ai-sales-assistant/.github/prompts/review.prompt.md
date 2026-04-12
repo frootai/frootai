@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Sales Assistant (Play 64) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Sales Assistant (Play 64) — scoring fairness, email brand compliance, CRM accuracy"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Sales Assistant Implementation

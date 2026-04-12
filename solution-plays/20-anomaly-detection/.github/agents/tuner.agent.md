@@ -2,7 +2,8 @@
 name: "Anomaly Detection Tuner"
 description: "Anomaly Detection tuner - optimizes sensitivity, reduces false positives"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["20-anomaly-detection"]
 user-invocable: false
 ---

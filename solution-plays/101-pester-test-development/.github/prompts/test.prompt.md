@@ -1,5 +1,8 @@
 ---
+mode: "agent"
 description: "Test prompt for Play 101 — Run Pester test suite with coverage"
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # /test — Play 101: Pester Test Development

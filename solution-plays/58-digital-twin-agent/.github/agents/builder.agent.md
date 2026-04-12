@@ -2,7 +2,8 @@
 name: "Digital Twin Builder"
 description: "Digital Twin builder - implements twin models, NL query, predictive maintenance"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "operational-excellence"]
 plays: ["58-digital-twin-agent"]
 ---
 # Builder Agent - Digital Twin

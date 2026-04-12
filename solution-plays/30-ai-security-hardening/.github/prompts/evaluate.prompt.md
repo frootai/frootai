@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Security Hardening (Play 30) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate AI Security (Play 30) — red-team OWASP LLM Top 10 and injection resilience"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Security Hardening Quality

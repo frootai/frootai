@@ -2,7 +2,8 @@
 name: "AI Security Tuner"
 description: "AI Security tuner - optimizes detection patterns, reduces false positives"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "performance-efficiency", "operational-excellence"]
 plays: ["30-ai-security-hardening"]
 user-invocable: false
 ---

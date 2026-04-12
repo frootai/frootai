@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Copilot Teams Extension (Play 16) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["16-copilot-teams-extension"]
+handoffs:
+  - agent: "builder"
+    description: "Implement Teams message extension, Adaptive Cards, Microsoft Graph API integration, SSO flow"
+    prompt: "Build the following for Copilot Teams Extension (Play 16): "
+  - agent: "reviewer"
+    description: "Audit SSO configuration, Graph API permissions (least privilege), throttling handling, Teams manifest"
+    prompt: "Review the Copilot Teams Extension (Play 16) implementation for: "
+  - agent: "tuner"
+    description: "Optimize Adaptive Card layouts, response quality, Graph API batching, caching strategy"
+    prompt: "Tune the Copilot Teams Extension (Play 16) for: "
 ---
 
 # Copilot Teams Extension Agent

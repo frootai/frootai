@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Exam Generation Engine (Play 75) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Exam Generation Engine to Azure

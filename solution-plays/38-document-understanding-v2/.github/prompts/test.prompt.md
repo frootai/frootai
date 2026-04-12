@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Document Understanding V2 (Play 38) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Document Understanding V2 (Play 38) — layout extraction and document workflow"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Document Understanding V2 Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Ai Podcast Generator (Play 94) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Ai Podcast Generator Quality

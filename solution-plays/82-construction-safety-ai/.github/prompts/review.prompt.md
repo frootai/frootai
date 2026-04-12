@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Construction Safety Ai (Play 82) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Construction Safety Ai Implementation

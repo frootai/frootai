@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Recruiter Agent (Play 59) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["59-ai-recruiter-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build recruiter pipeline — resume parsing with PII redaction, bias-aware candidate scoring (skills+experience only), job description generation with bias-check, explainable scoring factors"
+    prompt: "Build the following for AI Recruiter Agent (Play 59): "
+  - agent: "reviewer"
+    description: "Audit bias testing across protected attributes, PII redaction completeness, score explainability, job description language neutrality, EEOC compliance"
+    prompt: "Review the AI Recruiter Agent (Play 59) implementation for: "
+  - agent: "tuner"
+    description: "Optimize matching accuracy, reduce disparate impact, calibrate scoring weights, tune PII detection recall, minimize cost per screening"
+    prompt: "Tune the AI Recruiter Agent (Play 59) configuration for: "
 ---
 
 # Ai Recruiter Agent Agent

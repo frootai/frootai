@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Model Serving Aks (Play 12) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Model Serving Aks (Play 12) — AKS cluster with GPU nodes"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Model Serving Aks to Azure

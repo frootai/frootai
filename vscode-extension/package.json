@@ -2,7 +2,7 @@
   "name": "frootai-vscode",
   "displayName": "FrootAI — From the Roots to the Fruits",
   "description": "101 solution plays + 25 MCP tools + 830+ primitives for building production AI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click. Works standalone from any workspace.",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "publisher": "frootai",
   "engines": {
     "vscode": "^1.85.0"

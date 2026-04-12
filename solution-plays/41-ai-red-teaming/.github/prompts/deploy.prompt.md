@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Red Teaming (Play 41) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Red Teaming (Play 41) — attack framework + safety evaluation pipeline"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Red Teaming to Azure

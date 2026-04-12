@@ -3,7 +3,7 @@
 /**
  * FrootAI MCP Server
  * ------------------
- * Exposes the FrootAI knowledge base (17 modules, 200+ AI terms)
+ * Exposes the FrootAI knowledge base (16 modules, 200+ AI terms)
  * as an MCP server that any AI agent can query.
  *
  * Usage:
@@ -226,7 +226,7 @@ server.tool(
       content: [
         {
           type: "text",
-          text: `FrootAI Knowledge Base — 18 Modules\n${"═".repeat(45)}\n\n${result.join("\n\n")}\n\n📋 Reference\n  REF: Quick Reference Cards\n  QUIZ: Quiz & Assessment\n\nUse get_module to read any module. Use search_knowledge to search across all modules.\n\n🔌 Live tools: fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os`,
+          text: `FrootAI Knowledge Base — 16 Modules\n${"═".repeat(45)}\n\n${result.join("\n\n")}\n\n📋 Reference\n  REF: Quick Reference Cards\n  QUIZ: Quiz & Assessment\n\nUse get_module to read any module. Use search_knowledge to search across all modules.\n\n🔌 Live tools: fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os`,
         },
       ],
     };
@@ -654,7 +654,7 @@ Fine-tuning teaches HOW to respond, not WHAT to know.
 
 server.tool(
   "get_froot_overview",
-  "Get a complete overview of the FROOT framework — all 5 layers, 18 modules, what each layer covers, and how they connect. Use when asked 'what is FrootAI' or 'show me the framework'.",
+  "Get a complete overview of the FROOT framework — all 5 layers, 16 modules, what each layer covers, and how they connect. Use when asked 'what is FrootAI' or 'show me the framework'.",
   {},
   async () => {
     const overview = `# FrootAI — The FROOT Framework Overview
@@ -1024,7 +1024,7 @@ Permissions: read-only unless explicitly elevated.`,
 
 Bundle agents + skills + commands into distributable packages:
 {
-  "plugin": "frootai-enterprise-rag",
+  "plugin": "fai-enterprise-rag",
   "agents": ["builder", "reviewer", "tuner"],
   "skills": ["deploy-azure", "evaluate", "tune"],
   "prompts": ["deploy", "test", "review", "evaluate"]
@@ -1756,7 +1756,7 @@ server.tool(
 
 server.tool(
   "list_primitives",
-  "PRIMITIVES CATALOG — Browse all 830+ FrootAI primitives by type: agents (201), instructions (176), skills (282), hooks (10), plugins (77), workflows (13), cookbook (17). Returns name, description, WAF alignment, and compatible plays for each primitive.",
+  "PRIMITIVES CATALOG — Browse all 830+ FrootAI primitives by type: agents (238), instructions (176), skills (282), hooks (10), plugins (77), workflows (13), cookbook (17). Returns name, description, WAF alignment, and compatible plays for each primitive.",
   {
     type: z.enum(["agents", "instructions", "skills", "hooks", "plugins", "workflows", "cookbook"]).describe("Primitive type to list"),
     limit: z.number().optional().default(20).describe("Max results to return (default 20)"),
@@ -1921,7 +1921,7 @@ The open glue that binds infrastructure, platform, and application.
 🏗️ O — Operations: Azure AI Platform, Infrastructure, Copilot
 🍎 T — Transformation: Fine-Tuning, Responsible AI, Production Patterns
 
-18 modules | 200+ AI terms | 25 tools (6 static + 4 live + 3 chain + 6 AI ecosystem + 6 compute) | 101 solution plays
+16 modules | 200+ AI terms | 25 tools (6 static + 4 live + 3 chain + 6 AI ecosystem + 6 compute) | 100 solution plays
 https://frootai.dev`,
       },
     ],

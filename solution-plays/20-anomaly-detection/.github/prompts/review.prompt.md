@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Anomaly Detection (Play 20) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Anomaly Detection (Play 20) — sensitivity, alert routing, escalation"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Anomaly Detection Implementation

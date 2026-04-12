@@ -2,7 +2,8 @@
 name: "Edge AI Deploy Reviewer"
 description: "Edge AI Deploy reviewer - audits model size, memory, rollback, offline mode"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "operational-excellence"]
 plays: ["34-edge-ai-deployment"]
 user-invocable: false
 ---

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Powered Devops (Play 37) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI-Powered DevOps (Play 37) — incident pipeline + risk scoring + auto-remediation"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Powered Devops to Azure

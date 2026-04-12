@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Sales Assistant (Play 64) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Sales Assistant (Play 64) — lead-to-close rate, email response rate, scoring accuracy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Sales Assistant Quality

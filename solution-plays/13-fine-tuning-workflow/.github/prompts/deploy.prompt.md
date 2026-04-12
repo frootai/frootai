@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Fine Tuning Workflow (Play 13) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Fine Tuning Workflow (Play 13) — Azure ML workspace and training pipeline"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Fine Tuning Workflow to Azure

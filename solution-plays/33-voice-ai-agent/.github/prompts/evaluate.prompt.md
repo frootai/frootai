@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Voice Ai Agent (Play 33) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Voice AI Agent (Play 33) — latency, intent accuracy, conversation quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Voice Ai Agent Quality

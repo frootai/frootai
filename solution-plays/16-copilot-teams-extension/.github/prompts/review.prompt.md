@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Copilot Teams Extension (Play 16) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Copilot Teams Extension (Play 16) — security, manifest, Graph API scopes"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Copilot Teams Extension Implementation

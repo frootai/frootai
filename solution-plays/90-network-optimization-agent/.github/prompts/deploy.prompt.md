@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Network Optimization Agent (Play 90) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Network Optimization Agent to Azure

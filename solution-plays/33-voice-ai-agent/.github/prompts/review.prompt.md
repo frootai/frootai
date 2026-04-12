@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Voice Ai Agent (Play 33) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Voice AI Agent (Play 33) — compliance, escalation, latency budget"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Voice Ai Agent Implementation

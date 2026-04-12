@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Copilot Teams Extension (Play 16) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Copilot Teams Extension (Play 16) — SSO, permissions, response quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Copilot Teams Extension Quality

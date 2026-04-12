@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Voice Ai Agent (Play 33) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Voice AI Agent (Play 33) — dialog state + voice interaction loop"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Voice Ai Agent to Azure

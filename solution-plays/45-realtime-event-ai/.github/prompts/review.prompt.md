@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Realtime Event Ai (Play 45) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Real-Time Event AI (Play 45) — checkpoint consistency, dedup, backpressure"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Realtime Event Ai Implementation

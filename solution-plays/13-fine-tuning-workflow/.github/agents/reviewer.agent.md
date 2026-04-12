@@ -2,7 +2,8 @@
 name: "Fine-Tuning Reviewer"
 description: "Fine-Tuning reviewer - audits data quality, overfitting, improvements vs base"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["13-fine-tuning-workflow"]
 user-invocable: false
 ---

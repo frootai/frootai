@@ -2,7 +2,8 @@
 name: "Waste Optimizer Builder"
 description: "Waste Optimizer builder - implements classification, route optimization, analytics"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "cost-optimization"]
 plays: ["73-waste-recycling-optimizer"]
 ---
 # Builder Agent - Waste Optimizer

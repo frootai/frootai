@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Compliance Engine (Play 35) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["35-ai-compliance-engine"]
+handoffs:
+  - agent: "builder"
+    description: "Implement compliance check framework (GDPR, HIPAA, EU AI Act), audit trail, risk scoring, evidence collection"
+    prompt: "Build the following for AI Compliance Engine (Play 35): "
+  - agent: "reviewer"
+    description: "Audit check completeness, evidence quality, regulatory coverage gaps, false positive rate"
+    prompt: "Review the AI Compliance Engine (Play 35) implementation for: "
+  - agent: "tuner"
+    description: "Optimize check frequency, reduce false positives, tune risk scoring weights, evidence retention policy"
+    prompt: "Tune the AI Compliance Engine (Play 35) configuration for: "
 ---
 
 # Ai Compliance Engine Agent

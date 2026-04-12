@@ -2,7 +2,8 @@
 name: "AI Gateway Tuner"
 description: "AI Gateway tuner - optimizes routing thresholds, cache TTL, PTU sizing"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["14-cost-optimized-ai-gateway"]
 user-invocable: false
 ---

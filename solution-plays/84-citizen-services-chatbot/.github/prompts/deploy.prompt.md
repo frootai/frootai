@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Citizen Services Chatbot (Play 84) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Citizen Services Chatbot to Azure

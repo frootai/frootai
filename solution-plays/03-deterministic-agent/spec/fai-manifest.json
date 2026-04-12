@@ -25,9 +25,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-deterministic-agent/",
+      "./.github/skills/evaluate-deterministic-agent/",
+      "./.github/skills/tune-deterministic-agent/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

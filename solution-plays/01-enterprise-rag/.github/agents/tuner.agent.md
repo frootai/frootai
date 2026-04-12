@@ -2,7 +2,7 @@
 name: "RAG Tuner"
 description: "Enterprise RAG tuner — optimizes chunking, search config, model routing, caching, evaluation thresholds, cost"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
 waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["01-enterprise-rag"]
 user-invocable: false

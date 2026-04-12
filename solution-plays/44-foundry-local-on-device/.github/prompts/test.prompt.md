@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Foundry Local On Device (Play 44) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Foundry Local (Play 44) — local inference + offline mode + cloud fallback"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Foundry Local On Device Implementation

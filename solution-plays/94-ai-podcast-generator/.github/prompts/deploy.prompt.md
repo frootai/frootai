@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Ai Podcast Generator (Play 94) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Ai Podcast Generator to Azure

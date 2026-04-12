@@ -2,7 +2,8 @@
 name: "ESG Compliance Reviewer"
 description: "ESG Compliance reviewer - audits evidence quality, greenwashing detection"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["70-esg-compliance-agent"]
 user-invocable: false
 ---

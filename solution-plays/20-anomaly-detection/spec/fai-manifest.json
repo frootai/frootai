@@ -25,9 +25,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-anomaly-detection/",
+      "./.github/skills/evaluate-anomaly-detection/",
+      "./.github/skills/tune-anomaly-detection/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

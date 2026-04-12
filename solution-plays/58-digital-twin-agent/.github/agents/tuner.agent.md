@@ -2,7 +2,8 @@
 name: "Digital Twin Tuner"
 description: "Digital Twin tuner - optimizes prediction accuracy, query performance"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["58-digital-twin-agent"]
 user-invocable: false
 ---

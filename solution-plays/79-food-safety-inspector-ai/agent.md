@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Food Safety Inspector Ai (Play 79) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement HACCP monitoring, contamination risk scoring, supply chain traceability, recall management"
+    prompt: "Build the following for Food Safety Inspector AI (Play 79): "
+  - agent: "reviewer"
+    description: "Audit FDA/EFSA compliance, critical limit accuracy, traceability completeness, risk scoring validity"
+    prompt: "Review the following for Food Safety Inspector AI (Play 79): "
+  - agent: "tuner"
+    description: "Optimize critical limits, pattern detection sensitivity, alert thresholds, inspection scheduling"
+    prompt: "Tune the following for Food Safety Inspector AI (Play 79): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["79-food-safety-inspector-ai"]
 ---

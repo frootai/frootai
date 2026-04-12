@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Copilot Studio Advanced (Play 40) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Copilot Studio Advanced (Play 40) — SSO/OAuth2 scoping, plugin security, admin controls"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Copilot Studio Advanced Implementation

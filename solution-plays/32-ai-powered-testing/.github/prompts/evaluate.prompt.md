@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Powered Testing (Play 32) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate AI-Powered Testing (Play 32) — test quality, coverage, mutation score"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Powered Testing Quality

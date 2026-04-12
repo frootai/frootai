@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Low Code Ai Builder (Play 31) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["31-low-code-ai-builder"]
+handoffs:
+  - agent: "builder"
+    description: "Implement visual pipeline designer, template library, connector framework, one-click deployment"
+    prompt: "Build the following for Low-Code AI Builder (Play 31): "
+  - agent: "reviewer"
+    description: "Audit pipeline logic validation, error handling, security of user-created workflows"
+    prompt: "Review the Low-Code AI Builder (Play 31) implementation for: "
+  - agent: "tuner"
+    description: "Optimize pipeline execution performance, model selection per step, template quality, deployment speed"
+    prompt: "Tune the Low-Code AI Builder (Play 31) configuration for: "
 ---
 
 # Low Code Ai Builder Agent

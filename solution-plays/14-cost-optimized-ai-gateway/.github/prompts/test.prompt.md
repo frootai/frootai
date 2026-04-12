@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Cost Optimized Ai Gateway (Play 14) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Gateway (Play 14) — routing, caching, budget limits"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Cost Optimized Ai Gateway Implementation

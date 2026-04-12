@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Network Optimization Agent (Play 90) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Network Optimization Agent Implementation

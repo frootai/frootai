@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Dynamic Pricing Engine (Play 87) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Dynamic Pricing Engine Quality

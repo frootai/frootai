@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Ai Data Marketplace (Play 97) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Ai Data Marketplace Implementation

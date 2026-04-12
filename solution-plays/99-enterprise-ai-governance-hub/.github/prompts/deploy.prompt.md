@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Enterprise Ai Governance Hub (Play 99) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Enterprise Ai Governance Hub to Azure

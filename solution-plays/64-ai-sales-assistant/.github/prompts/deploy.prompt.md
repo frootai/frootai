@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Sales Assistant (Play 64) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Sales Assistant (Play 64) — CRM scoring + email gen + competitive intel"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Sales Assistant to Azure

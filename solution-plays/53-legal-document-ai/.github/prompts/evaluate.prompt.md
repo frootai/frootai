@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Legal Document Ai (Play 53) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Legal Document AI (Play 53) — clause accuracy, risk calibration, UPL compliance"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Legal Document Ai Quality

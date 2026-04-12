@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Digital Twin Agent (Play 58) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["58-digital-twin-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build digital twin pipeline — DTDL twin models, IoT Hub sensor ingestion, NL→DTDL query translation, predictive maintenance (RUL), twin graph relationships, event-driven updates"
+    prompt: "Build the following for Digital Twin Agent (Play 58): "
+  - agent: "reviewer"
+    description: "Audit twin model accuracy, sensor telemetry coverage, query correctness, security (IoT device auth), data retention compliance"
+    prompt: "Review the Digital Twin Agent (Play 58) implementation for: "
+  - agent: "tuner"
+    description: "Optimize NL→DTDL query accuracy, predictive maintenance confidence, sensor refresh rate, telemetry archival cost, twin update throughput"
+    prompt: "Tune the Digital Twin Agent (Play 58) configuration for: "
 ---
 
 # Digital Twin Agent Agent

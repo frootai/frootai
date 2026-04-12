@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Compliance Engine (Play 35) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate AI Compliance (Play 35) — regulatory coverage, evidence quality, risk accuracy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Compliance Engine Quality

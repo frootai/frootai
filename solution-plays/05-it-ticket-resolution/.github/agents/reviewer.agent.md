@@ -2,7 +2,8 @@
 name: "IT Ticket Reviewer"
 description: "IT Ticket reviewer - audits classification accuracy, SLA compliance"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["05-it-ticket-resolution"]
 user-invocable: false
 ---

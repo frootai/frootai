@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Construction Safety Ai (Play 82) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Construction Safety Ai to Azure

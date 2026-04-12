@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Voice Ai Agent (Play 33) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["33-voice-ai-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Implement voice interaction loop, dialog state machine, intent detection, multi-turn conversation, proactive actions"
+    prompt: "Build the following for Voice AI Agent (Play 33): "
+  - agent: "reviewer"
+    description: "Audit voice latency budget, escalation paths, compliance (recording consent), conversation UX"
+    prompt: "Review the Voice AI Agent (Play 33) implementation for: "
+  - agent: "tuner"
+    description: "Optimize response speed, voice quality (prosody/rate), intent accuracy, dialog flow efficiency"
+    prompt: "Tune the Voice AI Agent (Play 33) configuration for: "
 ---
 
 # Voice Ai Agent Agent

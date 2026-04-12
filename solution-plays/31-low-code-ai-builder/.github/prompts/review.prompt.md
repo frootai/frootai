@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Low Code Ai Builder (Play 31) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Low-Code AI Builder (Play 31) — pipeline validation, security, error handling"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Low Code Ai Builder Implementation

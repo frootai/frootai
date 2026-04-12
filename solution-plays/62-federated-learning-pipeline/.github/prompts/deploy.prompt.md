@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Federated Learning Pipeline (Play 62) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Federated Learning Pipeline (Play 62) — FedAvg server + DP + secure aggregation"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Federated Learning Pipeline to Azure

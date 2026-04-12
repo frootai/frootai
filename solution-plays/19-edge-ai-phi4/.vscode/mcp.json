@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "iot-hub-connection",
+            "description": "Azure IoT Hub connection string for edge device management",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "huggingface-token",
+            "description": "HuggingFace token for Phi-4 model download",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

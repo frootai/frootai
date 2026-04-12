@@ -2,7 +2,8 @@
 name: "Precision Agriculture Tuner"
 description: "Precision Agriculture tuner - optimizes NDVI thresholds, classification models"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["78-precision-agriculture-agent"]
 user-invocable: false
 ---

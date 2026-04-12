@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Landing Zone Advanced (Play 11) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["11-ai-landing-zone-advanced"]
+handoffs:
+  - agent: "builder"
+    description: "Implement multi-region Bicep, management group hierarchy, Azure Policy, Firewall, DNS zones"
+    prompt: "Build the following infrastructure for Landing Zone Advanced (Play 11): "
+  - agent: "reviewer"
+    description: "Audit governance policies, compliance (CIS/NIST), Defender for Cloud, network segmentation"
+    prompt: "Review the Landing Zone Advanced (Play 11) infrastructure for: "
+  - agent: "tuner"
+    description: "Optimize SKU sizing, region selection, policy effects (Audit vs Deny), reserved instances, cost"
+    prompt: "Tune the Landing Zone Advanced (Play 11) configuration for: "
 ---
 
 # Ai Landing Zone Advanced Agent

@@ -2,7 +2,8 @@
 name: "Copilot Studio Adv Builder"
 description: "Copilot Studio Adv builder - designs advanced topics, custom plugins, Power Automate"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["40-copilot-studio-advanced"]
 ---
 # Builder Agent - Copilot Studio Adv

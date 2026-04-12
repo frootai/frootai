@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Landing Zone Advanced (Play 11) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Ai Landing Zone Advanced (Play 11) security and governance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Landing Zone Advanced Implementation

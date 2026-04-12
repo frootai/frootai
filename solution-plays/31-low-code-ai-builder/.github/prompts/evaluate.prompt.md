@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Low Code Ai Builder (Play 31) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Low-Code AI Builder (Play 31) — pipeline execution quality and template coverage"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Low Code Ai Builder Quality

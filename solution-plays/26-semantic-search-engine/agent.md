@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Semantic Search Engine (Play 26) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["26-semantic-search-engine"]
+handoffs:
+  - agent: "builder"
+    description: "Design search index schema, configure embedding pipeline, scoring profiles, personalization, search-as-a-service API"
+    prompt: "Build the following for Semantic Search Engine (Play 26): "
+  - agent: "reviewer"
+    description: "Audit search relevance (NDCG), access control, data freshness, embedding quality"
+    prompt: "Review the Semantic Search Engine (Play 26) implementation for: "
+  - agent: "tuner"
+    description: "Optimize scoring profiles, embedding model selection, query expansion, result re-ranking, cost per query"
+    prompt: "Tune the Semantic Search Engine (Play 26) configuration for: "
 ---
 
 # Semantic Search Engine Agent

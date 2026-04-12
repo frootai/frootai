@@ -2,7 +2,8 @@
 name: "Construction Safety Tuner"
 description: "Construction Safety tuner - optimizes detection models, false positive rate"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["82-construction-safety-ai"]
 user-invocable: false
 ---

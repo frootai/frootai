@@ -2,7 +2,8 @@
 name: "AI Recruiter Reviewer"
 description: "AI Recruiter reviewer - audits bias testing, PII redaction, explainability"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "operational-excellence"]
 plays: ["59-ai-recruiter-agent"]
 user-invocable: false
 ---

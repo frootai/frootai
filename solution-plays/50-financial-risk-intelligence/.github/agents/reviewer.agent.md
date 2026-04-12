@@ -2,7 +2,8 @@
 name: "Financial Risk Reviewer"
 description: "Financial Risk reviewer - audits explainability, bias testing, regulatory compliance"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "operational-excellence"]
 plays: ["50-financial-risk-intelligence"]
 user-invocable: false
 ---

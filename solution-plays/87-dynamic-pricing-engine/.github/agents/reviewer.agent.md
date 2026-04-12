@@ -2,7 +2,8 @@
 name: "Dynamic Pricing Reviewer"
 description: "Dynamic Pricing reviewer - audits fairness, regulatory compliance, margin"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["87-dynamic-pricing-engine"]
 user-invocable: false
 ---

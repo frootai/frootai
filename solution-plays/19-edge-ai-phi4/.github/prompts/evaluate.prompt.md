@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Edge Ai Phi4 (Play 19) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Edge AI Phi-4 (Play 19) — inference speed, memory usage, quality vs cloud"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Edge Ai Phi4 Quality

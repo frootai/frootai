@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Cost Optimized Ai Gateway (Play 14) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Gateway (Play 14) — cache hit rates, cost savings, routing"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Cost Optimized Ai Gateway Quality

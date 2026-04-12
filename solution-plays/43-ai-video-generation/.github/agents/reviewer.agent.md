@@ -2,7 +2,8 @@
 name: "Video Generation Reviewer"
 description: "Video Generation reviewer - audits content safety, copyright, watermarking"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["43-ai-video-generation"]
 user-invocable: false
 ---

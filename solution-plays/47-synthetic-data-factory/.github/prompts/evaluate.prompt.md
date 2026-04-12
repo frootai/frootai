@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Synthetic Data Factory (Play 47) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Synthetic Data Factory (Play 47) — distribution fidelity, privacy, diversity"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Synthetic Data Factory Quality

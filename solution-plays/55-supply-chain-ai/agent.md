@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Supply Chain Ai (Play 55) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["55-supply-chain-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Build demand forecasting pipeline (ML + LLM explanation), supplier risk scoring, inventory optimization, logistics routing, procurement anomaly detection"
+    prompt: "Build the following for Supply Chain AI (Play 55): "
+  - agent: "reviewer"
+    description: "Audit forecast accuracy (MAPE/RMSE), supplier risk model fairness, data quality, confidence interval calibration, external signal integration"
+    prompt: "Review the Supply Chain AI (Play 55) implementation for: "
+  - agent: "tuner"
+    description: "Optimize forecast model parameters, feature selection, reforecast triggers, risk thresholds, safety stock levels, lead time buffers"
+    prompt: "Tune the Supply Chain AI (Play 55) configuration for: "
 ---
 
 # Supply Chain Ai Agent

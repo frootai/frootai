@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Healthcare Clinical Ai (Play 46) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Healthcare Clinical AI (Play 46) — synthetic patient data, de-identification, clinical NLP"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Healthcare Clinical Ai Implementation

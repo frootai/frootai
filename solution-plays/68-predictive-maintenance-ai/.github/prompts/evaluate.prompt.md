@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Predictive Maintenance Ai (Play 68) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Predictive Maintenance (Play 68) — RUL accuracy, false alarms, downtime reduction"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Predictive Maintenance Ai Quality

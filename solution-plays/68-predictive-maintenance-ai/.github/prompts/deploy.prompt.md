@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Predictive Maintenance Ai (Play 68) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Predictive Maintenance AI (Play 68) — sensor pipeline + RUL model + scheduling"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Predictive Maintenance Ai to Azure

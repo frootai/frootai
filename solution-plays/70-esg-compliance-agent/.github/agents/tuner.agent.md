@@ -2,7 +2,8 @@
 name: "ESG Compliance Tuner"
 description: "ESG Compliance tuner - optimizes evidence matching, gap prioritization"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "operational-excellence", "responsible-ai"]
 plays: ["70-esg-compliance-agent"]
 user-invocable: false
 ---

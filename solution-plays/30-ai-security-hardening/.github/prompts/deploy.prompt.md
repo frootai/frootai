@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Security Hardening (Play 30) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Security Hardening (Play 30) — defense layers + injection prevention"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Security Hardening to Azure

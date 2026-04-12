@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Fai Meta Agent (Play 100) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement play routing, DevKit/TuneKit/SpecKit initialization, cross-play intelligence, play combination engine"
+    prompt: "Build the following for FAI Meta-Agent (Play 100): "
+  - agent: "reviewer"
+    description: "Audit routing accuracy, play recommendation relevance, cross-play compatibility, DevKit completeness"
+    prompt: "Review the following for FAI Meta-Agent (Play 100): "
+  - agent: "tuner"
+    description: "Optimize routing model, play matching, combination rules, recommendation feedback loop"
+    prompt: "Tune the following for FAI Meta-Agent (Play 100): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["100-fai-meta-agent"]
 ---

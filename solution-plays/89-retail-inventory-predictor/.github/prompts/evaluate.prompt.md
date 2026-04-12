@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Retail Inventory Predictor (Play 89) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Retail Inventory Predictor Quality

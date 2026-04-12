@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Computer Use Agent (Play 42) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Computer Use Agent (Play 42) — vision-based desktop automation with sandbox VM"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Computer Use Agent to Azure

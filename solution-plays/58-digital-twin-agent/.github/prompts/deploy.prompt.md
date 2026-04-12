@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Digital Twin Agent (Play 58) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Digital Twin Agent (Play 58) — DTDL models + IoT ingestion + NL queries + predictive maintenance"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Digital Twin Agent to Azure

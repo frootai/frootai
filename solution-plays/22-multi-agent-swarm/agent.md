@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Multi Agent Swarm (Play 22) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["22-multi-agent-swarm"]
+handoffs:
+  - agent: "builder"
+    description: "Implement swarm topology, bidding protocol, consensus mechanism, parallel execution, conflict resolution"
+    prompt: "Build the following for Multi-Agent Swarm (Play 22): "
+  - agent: "reviewer"
+    description: "Audit consensus quality, vote aggregation accuracy, deduplication, cost per swarm task"
+    prompt: "Review the Multi-Agent Swarm (Play 22) implementation for: "
+  - agent: "tuner"
+    description: "Optimize swarm size, agent selection strategy, voting thresholds, parallel vs sequential, cost per task"
+    prompt: "Tune the Multi-Agent Swarm (Play 22) configuration for: "
 ---
 
 # Multi Agent Swarm Agent

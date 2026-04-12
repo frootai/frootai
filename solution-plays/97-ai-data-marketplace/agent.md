@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Ai Data Marketplace (Play 97) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement dataset discovery, quality scoring, privacy controls, synthetic data generation, licensing engine"
+    prompt: "Build the following for AI Data Marketplace (Play 97): "
+  - agent: "reviewer"
+    description: "Audit privacy compliance, data quality accuracy, license enforcement, PII detection"
+    prompt: "Review the following for AI Data Marketplace (Play 97): "
+  - agent: "tuner"
+    description: "Optimize quality scoring weights, search relevance, pricing strategy, synthetic data fidelity"
+    prompt: "Tune the following for AI Data Marketplace (Play 97): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["97-ai-data-marketplace"]
 ---

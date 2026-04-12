@@ -2,7 +2,8 @@
 name: "Agent Eval Platform Reviewer"
 description: "Agent Eval Platform reviewer - audits evaluation methodology, judge calibration, coverage"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["98-agent-evaluation-platform"]
 user-invocable: false
 ---

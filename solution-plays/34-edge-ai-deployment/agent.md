@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Edge Ai Deployment (Play 34) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["34-edge-ai-deployment"]
+handoffs:
+  - agent: "builder"
+    description: "Package AI models into containers, configure IoT Edge modules, set up fleet deployment pipelines, canary rollouts"
+    prompt: "Build the following for Edge AI Deployment (Play 34): "
+  - agent: "reviewer"
+    description: "Audit model size vs device constraints, rollback capability, offline resilience, container security"
+    prompt: "Review the Edge AI Deployment (Play 34) implementation for: "
+  - agent: "tuner"
+    description: "Optimize container size, rollout strategy, model update frequency, fleet health monitoring"
+    prompt: "Tune the Edge AI Deployment (Play 34) configuration for: "
 ---
 
 # Edge Ai Deployment Agent

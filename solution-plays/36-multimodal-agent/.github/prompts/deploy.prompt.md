@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Multimodal Agent (Play 36) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Multimodal Agent (Play 36) — text + image + audio unified pipeline"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Multimodal Agent to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Biodiversity Monitor (Play 80) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Biodiversity Monitor Implementation

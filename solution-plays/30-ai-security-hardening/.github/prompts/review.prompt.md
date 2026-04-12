@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Security Hardening (Play 30) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Security (Play 30) — penetration testing, data leakage, jailbreak defense"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Security Hardening Implementation

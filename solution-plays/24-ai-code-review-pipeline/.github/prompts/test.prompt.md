@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Code Review Pipeline (Play 24) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Code Review (Play 24) — review pipeline and merge gate rules"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Code Review Pipeline Implementation

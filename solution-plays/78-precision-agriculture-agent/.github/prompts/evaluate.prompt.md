@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Precision Agriculture Agent (Play 78) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Precision Agriculture Agent Quality

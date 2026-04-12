@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Creative Ai Studio (Play 49) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Creative AI Studio (Play 49) — brand fidelity, content quality, variation diversity"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Creative Ai Studio Quality

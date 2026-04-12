@@ -2,7 +2,8 @@
 name: "Exam Engine Tuner"
 description: "Exam Engine tuner - optimizes difficulty calibration, distractor plausibility"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["75-exam-generation-engine"]
 user-invocable: false
 ---

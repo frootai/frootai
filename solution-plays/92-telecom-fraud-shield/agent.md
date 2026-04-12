@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Telecom Fraud Shield (Play 92) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement SIM swap detection, IRSF rules, Wangiri pattern engine, CDR anomaly model, real-time blocking"
+    prompt: "Build the following for Telecom Fraud Shield (Play 92): "
+  - agent: "reviewer"
+    description: "Audit false positive rate, pattern coverage, detection latency, subscriber impact"
+    prompt: "Review the following for Telecom Fraud Shield (Play 92): "
+  - agent: "tuner"
+    description: "Optimize fraud thresholds, velocity limits, IRSF range updates, anomaly sensitivity, false positive reduction"
+    prompt: "Tune the following for Telecom Fraud Shield (Play 92): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["92-telecom-fraud-shield"]
 ---

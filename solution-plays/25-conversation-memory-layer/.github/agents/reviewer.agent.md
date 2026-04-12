@@ -2,7 +2,8 @@
 name: "Memory Layer Reviewer"
 description: "Memory Layer reviewer - audits privacy, PII, memory relevance, consent"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["25-conversation-memory-layer"]
 user-invocable: false
 ---

@@ -2,7 +2,8 @@
 name: "Multimodal Agent Tuner"
 description: "Multimodal Agent tuner - optimizes image detail, parallel processing, cost"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["36-multimodal-agent"]
 user-invocable: false
 ---

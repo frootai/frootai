@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Multi Agent Swarm (Play 22) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Multi-Agent Swarm (Play 22) — parallel execution and consensus"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Multi Agent Swarm Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Smart Energy Grid Ai (Play 71) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Smart Energy Grid Ai to Azure

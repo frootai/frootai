@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Model Governance (Play 48) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Model Governance (Play 48) — register model, run approval workflow, simulate A/B"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Model Governance Implementation

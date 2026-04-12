@@ -2,7 +2,8 @@
 name: "Continual Learning Builder"
 description: "Continual Learning builder - implements memory stores, reflection loops, skill tracking"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "responsible-ai"]
 plays: ["93-continual-learning-agent"]
 ---
 # Builder Agent - Continual Learning

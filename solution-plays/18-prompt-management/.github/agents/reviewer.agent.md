@@ -2,7 +2,8 @@
 name: "Prompt Management Reviewer"
 description: "Prompt Management reviewer - audits prompt quality, injection risks, versioning"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["18-prompt-management"]
 user-invocable: false
 ---

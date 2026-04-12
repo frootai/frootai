@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Federated Learning Pipeline (Play 62) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Federated Learning (Play 62) — convergence, privacy budget, client contribution"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Federated Learning Pipeline Quality

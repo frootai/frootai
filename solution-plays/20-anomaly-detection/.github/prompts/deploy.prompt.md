@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Anomaly Detection (Play 20) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Anomaly Detection (Play 20) — detection pipeline + alerting + root cause"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Anomaly Detection to Azure

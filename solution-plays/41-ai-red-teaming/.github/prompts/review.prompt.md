@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Red Teaming (Play 41) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Red Teaming (Play 41) — attack coverage gaps, OWASP LLM Top 10, defense effectiveness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Red Teaming Implementation

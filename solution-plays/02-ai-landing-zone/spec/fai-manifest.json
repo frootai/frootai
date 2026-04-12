@@ -26,9 +26,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-landing-zone/",
+      "./.github/skills/evaluate-landing-zone/",
+      "./.github/skills/tune-landing-zone/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

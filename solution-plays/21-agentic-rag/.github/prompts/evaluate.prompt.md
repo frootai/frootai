@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Agentic Rag (Play 21) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Agentic RAG (Play 21) — retrieval quality, groundedness, iteration efficiency"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Agentic Rag Quality

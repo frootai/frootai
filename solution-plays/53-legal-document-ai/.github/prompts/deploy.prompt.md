@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Legal Document Ai (Play 53) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Legal Document AI (Play 53) — clause extraction + risk scoring + redlining"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Legal Document Ai to Azure

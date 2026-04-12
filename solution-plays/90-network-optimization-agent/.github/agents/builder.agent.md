@@ -2,7 +2,8 @@
 name: "Network Optimizer Builder"
 description: "Network Optimizer builder - implements traffic forecasting, routing, monitoring"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "operational-excellence"]
 plays: ["90-network-optimization-agent"]
 ---
 # Builder Agent - Network Optimizer

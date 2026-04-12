@@ -2,7 +2,8 @@
 name: "Model Serving AKS Reviewer"
 description: "Model Serving AKS reviewer - audits resource limits, security, health checks"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "cost-optimization"]
 plays: ["12-model-serving-aks"]
 user-invocable: false
 ---

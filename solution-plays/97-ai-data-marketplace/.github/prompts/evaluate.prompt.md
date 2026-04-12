@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Ai Data Marketplace (Play 97) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Ai Data Marketplace Quality

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Healthcare Clinical Ai (Play 46) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["46-healthcare-clinical-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Build clinical NLP pipeline — PHI de-identification (Presidio), ICD-10/CPT medical coding, drug interaction checking, patient risk scoring, FHIR integration"
+    prompt: "Build the following for Healthcare Clinical AI (Play 46): "
+  - agent: "reviewer"
+    description: "Audit HIPAA compliance, BAA verification, PHI handling, audit trail completeness, de-identification accuracy, clinical safety"
+    prompt: "Review the Healthcare Clinical AI (Play 46) implementation for: "
+  - agent: "tuner"
+    description: "Optimize de-identification recall, clinical coding accuracy, drug interaction grounding, response latency, evidence sourcing"
+    prompt: "Tune the Healthcare Clinical AI (Play 46) configuration for: "
 ---
 
 # Healthcare Clinical Ai Agent

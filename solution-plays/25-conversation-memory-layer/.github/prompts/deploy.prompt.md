@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Conversation Memory Layer (Play 25) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Conversation Memory Layer (Play 25) — tiered memory with vector recall"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Conversation Memory Layer to Azure

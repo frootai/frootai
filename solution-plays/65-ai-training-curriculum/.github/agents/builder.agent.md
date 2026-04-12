@@ -2,7 +2,8 @@
 name: "Training Curriculum Builder"
 description: "Training Curriculum builder - implements adaptive paths, content generation, assessments"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "responsible-ai", "performance-efficiency"]
 plays: ["65-ai-training-curriculum"]
 ---
 # Builder Agent - Training Curriculum

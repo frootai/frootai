@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Api Gateway V2 (Play 52) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI API Gateway V2 (Play 52) — failover logic, circuit breakers, API key security"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Api Gateway V2 Implementation

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Landing Zone (Play 02) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["02-ai-landing-zone"]
+handoffs:
+  - agent: "builder"
+    description: "Implement Bicep infrastructure — networking, RBAC, private endpoints, monitoring"
+    prompt: "Build the following for AI Landing Zone (Play 02): "
+  - agent: "reviewer"
+    description: "Audit security (private endpoints, NSG, RBAC), compliance, WAF alignment, Bicep best practices"
+    prompt: "Review the AI Landing Zone (Play 02) implementation for: "
+  - agent: "tuner"
+    description: "Optimize SKU sizing, cost, quota, monitoring thresholds, network configuration"
+    prompt: "Tune the AI Landing Zone (Play 02) configuration for: "
 ---
 
 # Ai Landing Zone Agent

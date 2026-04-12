@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Knowledge Management (Play 67) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["67-ai-knowledge-management"]
+handoffs:
+  - agent: "builder"
+    description: "Build knowledge management pipeline — auto-capture from conversations/docs/tickets, taxonomy generation, semantic deduplication, knowledge graph, expertise finder, organizational memory"
+    prompt: "Build the following for AI Knowledge Management (Play 67): "
+  - agent: "reviewer"
+    description: "Audit knowledge quality, access control inheritance, freshness scoring, taxonomy coverage, deduplication accuracy, expert profile fairness"
+    prompt: "Review the AI Knowledge Management (Play 67) implementation for: "
+  - agent: "tuner"
+    description: "Optimize capture rate from sources, dedup similarity threshold, taxonomy depth, freshness TTL, expertise scoring weights, retrieval relevance"
+    prompt: "Tune the AI Knowledge Management (Play 67) configuration for: "
 ---
 
 # Ai Knowledge Management Agent

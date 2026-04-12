@@ -2,14 +2,30 @@
   "play": "23-browser-automation-agent",
   "version": "1.0.0",
   "context": {
-    "knowledge": ["O2-AI-Agents", "O3-MCP-Tools-Functions", "R1-Prompt-Engineering", "T3-Production-Patterns"],
-    "waf": ["security", "reliability", "performance-efficiency", "responsible-ai"],
+    "knowledge": [
+      "O2-AI-Agents",
+      "O3-MCP-Tools-Functions",
+      "R1-Prompt-Engineering",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
     "scope": "browser-automation-web-tasks"
   },
   "primitives": {
-    "agents": ["./.github/agents/browser-agent.agent.md"],
+    "agents": [
+      "./.github/agents/browser-agent.agent.md"
+    ],
     "instructions": [],
-    "skills": [],
+    "skills": [
+      "./.github/skills/deploy-browser-automation-agent/",
+      "./.github/skills/evaluate-browser-automation-agent/",
+      "./.github/skills/tune-browser-automation-agent/"
+    ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",
       "../../hooks/frootai-tool-guardian/",

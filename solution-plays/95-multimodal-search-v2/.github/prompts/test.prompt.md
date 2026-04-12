@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Multimodal Search V2 (Play 95) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Multimodal Search V2 Implementation

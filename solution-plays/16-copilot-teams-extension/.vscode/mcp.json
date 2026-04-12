@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "teams-bot-id",
+            "description": "Teams Bot/App Registration Client ID",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "teams-bot-secret",
+            "description": "Teams Bot/App Registration Client Secret",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

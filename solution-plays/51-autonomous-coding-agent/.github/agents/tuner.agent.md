@@ -2,7 +2,8 @@
 name: "Autonomous Coding Tuner"
 description: "Autonomous Coding tuner - optimizes plan quality, iteration count, coverage"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["51-autonomous-coding-agent"]
 user-invocable: false
 ---

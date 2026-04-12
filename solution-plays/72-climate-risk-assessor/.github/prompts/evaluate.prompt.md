@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Climate Risk Assessor (Play 72) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Climate Risk Assessor Quality

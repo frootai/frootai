@@ -2,7 +2,8 @@
 name: "Dynamic Pricing Builder"
 description: "Dynamic Pricing builder - implements pricing engine, elasticity model, A/B"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "cost-optimization"]
 plays: ["87-dynamic-pricing-engine"]
 ---
 # Builder Agent - Dynamic Pricing

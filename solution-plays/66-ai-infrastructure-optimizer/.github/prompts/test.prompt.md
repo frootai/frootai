@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Infrastructure Optimizer (Play 66) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Infrastructure Optimizer (Play 66) — analyze resource group for optimization"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Infrastructure Optimizer Implementation

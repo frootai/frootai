@@ -2,7 +2,8 @@
 name: "RAI Dashboard Tuner"
 description: "RAI Dashboard tuner - optimizes monitoring cadence, alert thresholds"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["60-responsible-ai-dashboard"]
 user-invocable: false
 ---

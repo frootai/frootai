@@ -2,7 +2,7 @@
 name: "Landing Zone Reviewer"
 description: "AI Landing Zone reviewer — audits security (private endpoints, NSG, RBAC), compliance, WAF alignment, Bicep best practices"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
 waf: ["security", "reliability", "cost-optimization"]
 plays: ["02-ai-landing-zone"]
 user-invocable: false

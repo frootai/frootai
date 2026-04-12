@@ -2,7 +2,8 @@
 name: "Churn Predictor Tuner"
 description: "Churn Predictor tuner - optimizes risk thresholds, feature selection, retention ROI"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["91-customer-churn-predictor"]
 user-invocable: false
 ---

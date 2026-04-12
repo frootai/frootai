@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Dynamic Pricing Engine (Play 87) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement elasticity model, price optimization engine, competitor monitoring, A/B testing framework"
+    prompt: "Build the following for Dynamic Pricing Engine (Play 87): "
+  - agent: "reviewer"
+    description: "Audit pricing fairness, no demographic discrimination, margin protection, regulatory compliance"
+    prompt: "Review the following for Dynamic Pricing Engine (Play 87): "
+  - agent: "tuner"
+    description: "Optimize elasticity coefficients, change limits, revenue vs margin trade-off, surge pricing caps"
+    prompt: "Tune the following for Dynamic Pricing Engine (Play 87): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["87-dynamic-pricing-engine"]
 ---

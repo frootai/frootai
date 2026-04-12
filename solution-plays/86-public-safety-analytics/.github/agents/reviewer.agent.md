@@ -2,7 +2,8 @@
 name: "Public Safety Reviewer"
 description: "Public Safety reviewer - audits bias, privacy, community impact, transparency"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["86-public-safety-analytics"]
 user-invocable: false
 ---

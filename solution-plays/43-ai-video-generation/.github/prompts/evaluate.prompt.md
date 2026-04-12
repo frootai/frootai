@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Video Generation (Play 43) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Video Generation (Play 43) — visual quality, safety compliance, cost per video"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Video Generation Quality

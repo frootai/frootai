@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Dynamic Pricing Engine (Play 87) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Dynamic Pricing Engine Implementation

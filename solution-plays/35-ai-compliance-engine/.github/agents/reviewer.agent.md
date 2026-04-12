@@ -2,7 +2,8 @@
 name: "AI Compliance Reviewer"
 description: "AI Compliance reviewer - audits check completeness, evidence quality, gaps"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["35-ai-compliance-engine"]
 user-invocable: false
 ---

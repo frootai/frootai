@@ -2,17 +2,34 @@
   "play": "21-agentic-rag",
   "version": "1.0.0",
   "context": {
-    "knowledge": ["R2-RAG-Architecture", "O2-AI-Agents", "O3-MCP-Tools-Functions", "T3-Production-Patterns"],
-    "waf": ["security", "reliability", "cost-optimization", "performance-efficiency", "responsible-ai"],
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "O2-AI-Agents",
+      "O3-MCP-Tools-Functions",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
     "scope": "agentic-rag-multi-source"
   },
   "primitives": {
-    "agents": ["./.github/agents/agentic-rag.agent.md"],
+    "agents": [
+      "./.github/agents/agentic-rag.agent.md"
+    ],
     "instructions": [
       "./.github/instructions/agentic-rag.instructions.md",
       "../../instructions/python-waf.instructions.md"
     ],
-    "skills": [],
+    "skills": [
+      "./.github/skills/deploy-agentic-rag/",
+      "./.github/skills/evaluate-agentic-rag/",
+      "./.github/skills/tune-agentic-rag/"
+    ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",
       "../../hooks/frootai-tool-guardian/",

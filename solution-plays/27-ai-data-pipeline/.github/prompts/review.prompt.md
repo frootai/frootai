@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Data Pipeline (Play 27) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Data Pipeline (Play 27) — idempotency, PII handling, error recovery"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Data Pipeline Implementation

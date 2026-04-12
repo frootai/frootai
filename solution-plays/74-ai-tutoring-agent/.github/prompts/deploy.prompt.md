@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Ai Tutoring Agent (Play 74) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Ai Tutoring Agent to Azure

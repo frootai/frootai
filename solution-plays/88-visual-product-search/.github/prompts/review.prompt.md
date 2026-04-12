@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Visual Product Search (Play 88) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Visual Product Search Implementation

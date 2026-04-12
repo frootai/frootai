@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Financial Risk Intelligence (Play 50) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["50-financial-risk-intelligence"]
+handoffs:
+  - agent: "builder"
+    description: "Build explainable credit risk scoring, real-time fraud detection (rules→ML→LLM), market sentiment analysis, regulatory reporting, audit trail logging"
+    prompt: "Build the following for Financial Risk Intelligence (Play 50): "
+  - agent: "reviewer"
+    description: "Audit decision explainability (ECOA/GDPR Art.22), bias testing across protected attributes, Basel III model validation, SOX data integrity"
+    prompt: "Review the Financial Risk Intelligence (Play 50) implementation for: "
+  - agent: "tuner"
+    description: "Optimize fraud decision thresholds, risk score accuracy, LLM usage ratio for edge cases, latency for real-time scoring, fairness constraints"
+    prompt: "Tune the Financial Risk Intelligence (Play 50) configuration for: "
 ---
 
 # Financial Risk Intelligence Agent

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Agentic Rag (Play 21) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Agentic RAG (Play 21) — autonomous retrieval and multi-source synthesis"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Agentic Rag Implementation

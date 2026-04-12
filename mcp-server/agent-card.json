@@ -2,8 +2,8 @@
   "$schema": "https://a2a-protocol.dev/schema/agent-card.json",
   "_comment": "A2A (Agent-to-Agent) Protocol Agent Card — Google's open protocol for agent interoperability",
   "name": "FrootAI Architecture Agent",
-  "description": "AI architecture knowledge agent that helps infrastructure and platform teams design, deploy, and operate AI solutions. Provides 18 FROOT knowledge modules, 200+ AI terms, model recommendations, cost estimates, and guided build→review→tune workflows.",
-  "version": "2.2.0",
+  "description": "AI architecture knowledge agent that helps infrastructure and platform teams design, deploy, and operate AI solutions. Provides 16 FROOT knowledge modules, 200+ AI terms, model recommendations, cost estimates, and guided build\u2192review\u2192tune workflows.",
+  "version": "5.0.1",
   "url": "https://frootai-mcp.azurewebsites.net",
   "provider": {
     "name": "FrootAI",
@@ -17,7 +17,7 @@
     "knowledge": {
       "query": true,
       "search": true,
-      "modules": 18,
+      "modules": 16,
       "terms": 200
     },
     "planning": {
@@ -65,7 +65,7 @@
     {
       "id": "solution_architect",
       "name": "Solution Architecture Guide",
-      "description": "Guide through 20 pre-packaged solution plays with DevKit + TuneKit configurations",
+      "description": "Guide through 23 pre-packaged solution plays with DevKit + TuneKit configurations",
       "inputModes": [
         "text"
       ],

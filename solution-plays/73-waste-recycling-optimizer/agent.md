@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Waste Recycling Optimizer (Play 73) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement material classification (CV), contamination detection, route optimization, recycling analytics"
+    prompt: "Build the following for Waste Recycling Optimizer (Play 73): "
+  - agent: "reviewer"
+    description: "Audit classification accuracy, contamination thresholds, route efficiency, data privacy"
+    prompt: "Review the following for Waste Recycling Optimizer (Play 73): "
+  - agent: "tuner"
+    description: "Optimize vision model accuracy, route parameters, collection scheduling, contamination thresholds"
+    prompt: "Tune the following for Waste Recycling Optimizer (Play 73): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["73-waste-recycling-optimizer"]
 ---

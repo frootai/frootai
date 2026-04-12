@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Esg Compliance Agent (Play 70) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["70-esg-compliance-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build ESG compliance platform — multi-framework scoring (GRI/SASB/CSRD/TCFD), evidence-based assessment, gap analysis with prioritization, double materiality, greenwashing detection, automated report generation"
+    prompt: "Build the following for ESG Compliance Agent (Play 70): "
+  - agent: "reviewer"
+    description: "Audit evidence quality, greenwashing detection accuracy, framework requirement coverage, double materiality assessment, claims vs evidence verification"
+    prompt: "Review the ESG Compliance Agent (Play 70) implementation for: "
+  - agent: "tuner"
+    description: "Optimize evidence matching confidence, gap prioritization, assessment cadence, materiality thresholds, report quality, cost per assessment"
+    prompt: "Tune the ESG Compliance Agent (Play 70) configuration for: "
 ---
 
 # Esg Compliance Agent Agent

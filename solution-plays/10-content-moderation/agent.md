@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Content Moderation (Play 10) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["10-content-moderation"]
+handoffs:
+  - agent: "builder"
+    description: "Implement moderation pipeline, custom blocklists, severity thresholds, image moderation"
+    prompt: "Build the following for Content Moderation (Play 10): "
+  - agent: "reviewer"
+    description: "Audit false positive rates, severity thresholds, category coverage, compliance"
+    prompt: "Review the Content Moderation (Play 10) implementation for: "
+  - agent: "tuner"
+    description: "Optimize category thresholds, reduce false positives, custom blocklist management, latency"
+    prompt: "Tune the Content Moderation (Play 10) configuration for: "
 ---
 
 # Content Moderation Agent

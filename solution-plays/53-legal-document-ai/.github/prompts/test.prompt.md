@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Legal Document Ai (Play 53) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Legal Document AI (Play 53) — review sample contracts with clause extraction"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Legal Document Ai Implementation

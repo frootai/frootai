@@ -2,7 +2,8 @@
 name: "IT Ticket Builder"
 description: "IT Ticket builder - implements classification, routing, KB integration"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["05-it-ticket-resolution"]
 ---
 # Builder Agent - IT Ticket

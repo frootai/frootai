@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Multimodal Agent (Play 36) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Multimodal Agent (Play 36) — multi-input processing and cross-modal output"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Multimodal Agent Implementation

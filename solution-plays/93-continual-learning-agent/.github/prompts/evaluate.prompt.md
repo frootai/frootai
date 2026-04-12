@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Continual Learning Agent (Play 93) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Continual Learning Agent Quality

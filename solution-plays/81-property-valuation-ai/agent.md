@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Property Valuation Ai (Play 81) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement AVM model, comparable sales search, adjustment engine, market trend integration"
+    prompt: "Build the following for Property Valuation AI (Play 81): "
+  - agent: "reviewer"
+    description: "Audit valuation accuracy, fair lending compliance, bias testing, comp selection quality"
+    prompt: "Review the following for Property Valuation AI (Play 81): "
+  - agent: "tuner"
+    description: "Optimize adjustment factors, comp selection radius, model accuracy, confidence intervals"
+    prompt: "Tune the following for Property Valuation AI (Play 81): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["81-property-valuation-ai"]
 ---

@@ -2,7 +2,8 @@
 name: "Policy Impact Builder"
 description: "Policy Impact builder - implements impact analysis, comment analysis, cost-benefit"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "responsible-ai", "performance-efficiency"]
 plays: ["85-policy-impact-analyzer"]
 ---
 # Builder Agent - Policy Impact

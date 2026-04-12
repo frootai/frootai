@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Smart Energy Grid Ai (Play 71) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Smart Energy Grid Ai Implementation

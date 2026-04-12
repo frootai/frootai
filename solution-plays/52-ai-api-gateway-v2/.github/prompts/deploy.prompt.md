@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Api Gateway V2 (Play 52) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI API Gateway V2 (Play 52) — multi-provider routing + semantic cache + circuit breakers"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Api Gateway V2 to Azure

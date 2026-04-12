@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Food Safety Inspector Ai (Play 79) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Food Safety Inspector Ai Implementation

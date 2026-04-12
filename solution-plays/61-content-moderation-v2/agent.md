@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Content Moderation V2 (Play 61) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["61-content-moderation-v2"]
+handoffs:
+  - agent: "builder"
+    description: "Build multi-modal moderation pipeline — text+image+video safety, custom category training, severity-based routing, human review queues, appeal workflows, streaming moderation"
+    prompt: "Build the following for Content Moderation V2 (Play 61): "
+  - agent: "reviewer"
+    description: "Audit false positive rates per category, threshold calibration, multi-modal coverage, appeal queue fairness, cultural context handling"
+    prompt: "Review the Content Moderation V2 (Play 61) implementation for: "
+  - agent: "tuner"
+    description: "Optimize per-category severity thresholds, reduce false positives, tune custom blocklists, improve review queue throughput, minimize latency"
+    prompt: "Tune the Content Moderation V2 (Play 61) configuration for: "
 ---
 
 # Content Moderation V2 Agent

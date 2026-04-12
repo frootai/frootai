@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Observability (Play 17) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate AI Observability (Play 17) — telemetry coverage and alert effectiveness"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Observability Quality

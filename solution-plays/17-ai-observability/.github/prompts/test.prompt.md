@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Observability (Play 17) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Observability (Play 17) — tracing, metrics collection, alert triggers"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Observability Implementation

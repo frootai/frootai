@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Computer Use Agent (Play 42) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Computer Use Agent (Play 42) — task completion rate, action accuracy, step efficiency"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Computer Use Agent Quality

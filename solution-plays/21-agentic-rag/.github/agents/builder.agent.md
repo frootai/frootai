@@ -2,7 +2,8 @@
 name: "Agentic RAG Builder"
 description: "Agentic RAG builder - implements autonomous retrieval, source routing, iteration"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "security"]
 plays: ["21-agentic-rag"]
 ---
 # Builder Agent - Agentic RAG

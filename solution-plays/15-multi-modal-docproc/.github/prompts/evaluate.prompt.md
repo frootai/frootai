@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Multi Modal Docproc (Play 15) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Multi-Modal DocProc (Play 15) — vision extraction accuracy and PII"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Multi Modal Docproc Quality

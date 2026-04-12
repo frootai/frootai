@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Code Review Pipeline (Play 24) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Code Review (Play 24) — review quality, false positive rate, developer trust"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Code Review Pipeline Quality

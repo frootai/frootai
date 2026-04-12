@@ -2,7 +2,8 @@
 name: "Network Optimizer Reviewer"
 description: "Network Optimizer reviewer - audits SLA compliance, redundancy, equipment health"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["90-network-optimization-agent"]
 user-invocable: false
 ---

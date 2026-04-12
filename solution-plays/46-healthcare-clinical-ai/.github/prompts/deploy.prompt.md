@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Healthcare Clinical Ai (Play 46) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Healthcare Clinical AI (Play 46) — HIPAA-compliant clinical NLP + de-identification"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Healthcare Clinical Ai to Azure

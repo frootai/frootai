@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Model Governance (Play 48) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Model Governance (Play 48) — model cards, bias testing, compliance attestation, lineage"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Model Governance Implementation

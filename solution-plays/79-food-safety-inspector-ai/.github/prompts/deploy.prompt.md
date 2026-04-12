@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Food Safety Inspector Ai (Play 79) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Food Safety Inspector Ai to Azure

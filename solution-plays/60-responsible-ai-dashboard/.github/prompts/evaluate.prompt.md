@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Responsible Ai Dashboard (Play 60) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Responsible AI Dashboard (Play 60) — fairness coverage, compliance evidence, alert quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Responsible Ai Dashboard Quality

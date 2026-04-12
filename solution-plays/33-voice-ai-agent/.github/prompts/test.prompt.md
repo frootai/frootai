@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Voice Ai Agent (Play 33) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Voice AI Agent (Play 33) — voice interaction loop and dialog flow"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Voice Ai Agent Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Synthetic Data Factory (Play 47) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Synthetic Data Factory (Play 47) — privacy guarantees, PII leakage, re-identification risk"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Synthetic Data Factory Implementation

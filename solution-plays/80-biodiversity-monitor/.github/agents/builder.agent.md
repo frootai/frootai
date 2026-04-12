@@ -2,7 +2,8 @@
 name: "Biodiversity Monitor Builder"
 description: "Biodiversity Monitor builder - implements species ID, bioacoustics, population tracking"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "responsible-ai"]
 plays: ["80-biodiversity-monitor"]
 ---
 # Builder Agent - Biodiversity Monitor

@@ -2,7 +2,8 @@
 name: "Landing Zone Advanced Reviewer"
 description: "Landing Zone Advanced reviewer - audits governance, compliance, Defender"
 tools: ["read", "search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "cost-optimization"]
 plays: ["11-ai-landing-zone-advanced"]
 user-invocable: false
 ---

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Waste Recycling Optimizer (Play 73) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Waste Recycling Optimizer Quality

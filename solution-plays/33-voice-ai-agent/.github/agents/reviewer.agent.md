@@ -2,7 +2,8 @@
 name: "Voice AI Agent Reviewer"
 description: "Voice AI Agent reviewer - audits latency, escalation, compliance, UX"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["33-voice-ai-agent"]
 user-invocable: false
 ---

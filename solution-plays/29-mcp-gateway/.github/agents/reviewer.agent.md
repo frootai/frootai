@@ -2,7 +2,8 @@
 name: "MCP Gateway Reviewer"
 description: "MCP Gateway reviewer - audits tool security, input validation, errors"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["29-mcp-gateway"]
 user-invocable: false
 ---

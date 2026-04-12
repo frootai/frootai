@@ -2,7 +2,8 @@
 name: "MCP Gateway Builder"
 description: "MCP Gateway builder - implements MCP server, tools, resources, transport"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "reliability", "operational-excellence"]
 plays: ["29-mcp-gateway"]
 ---
 # Builder Agent - MCP Gateway

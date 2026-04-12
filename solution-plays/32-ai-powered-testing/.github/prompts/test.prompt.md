@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Powered Testing (Play 32) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI-Powered Testing (Play 32) — generated test execution and CI pipeline"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Powered Testing Implementation

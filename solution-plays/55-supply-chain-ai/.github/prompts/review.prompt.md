@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Supply Chain Ai (Play 55) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Supply Chain AI (Play 55) — forecast accuracy, risk fairness, data quality"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Supply Chain Ai Implementation

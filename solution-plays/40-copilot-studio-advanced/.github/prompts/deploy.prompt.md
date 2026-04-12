@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Copilot Studio Advanced (Play 40) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Copilot Studio Advanced (Play 40) — declarative agents + API plugins + Graph grounding"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Copilot Studio Advanced to Azure

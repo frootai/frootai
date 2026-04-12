@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Translation Engine (Play 57) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["57-ai-translation-engine"]
+handoffs:
+  - agent: "builder"
+    description: "Build translation pipeline — Azure Translator for bulk, LLM post-editing for nuanced content, custom glossary enforcement, HTML/markdown preservation, batch processing with checkpoints"
+    prompt: "Build the following for AI Translation Engine (Play 57): "
+  - agent: "reviewer"
+    description: "Audit translation quality (BLEU/COMET), glossary consistency, locale correctness, markup preservation, terminology accuracy"
+    prompt: "Review the AI Translation Engine (Play 57) implementation for: "
+  - agent: "tuner"
+    description: "Optimize LLM refinement ratio, quality score thresholds, glossary coverage, batch throughput, cost per 1K words"
+    prompt: "Tune the AI Translation Engine (Play 57) configuration for: "
 ---
 
 # Ai Translation Engine Agent

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Conversation Memory Layer (Play 25) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Memory Layer (Play 25) — PII handling, consent, retention compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Conversation Memory Layer Implementation

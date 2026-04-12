@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Federated Learning Pipeline (Play 62) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Federated Learning (Play 62) — DP epsilon, data isolation, gradient leakage"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Federated Learning Pipeline Implementation

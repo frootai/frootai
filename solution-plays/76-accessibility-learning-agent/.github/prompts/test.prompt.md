@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Accessibility Learning Agent (Play 76) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Accessibility Learning Agent Implementation

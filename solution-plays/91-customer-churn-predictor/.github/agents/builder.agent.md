@@ -2,7 +2,8 @@
 name: "Churn Predictor Builder"
 description: "Churn Predictor builder - implements churn model, feature engineering, retention"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "cost-optimization"]
 plays: ["91-customer-churn-predictor"]
 ---
 # Builder Agent - Churn Predictor

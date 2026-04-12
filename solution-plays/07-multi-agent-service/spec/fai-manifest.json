@@ -26,9 +26,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-multi-agent-service/",
+      "./.github/skills/evaluate-multi-agent-service/",
+      "./.github/skills/tune-multi-agent-service/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

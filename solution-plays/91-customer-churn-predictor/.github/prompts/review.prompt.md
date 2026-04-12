@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Customer Churn Predictor (Play 91) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Customer Churn Predictor Implementation

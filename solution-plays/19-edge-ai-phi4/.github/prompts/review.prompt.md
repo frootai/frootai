@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Edge Ai Phi4 (Play 19) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Edge AI Phi-4 (Play 19) — model size, memory constraints, data privacy"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Edge Ai Phi4 Implementation

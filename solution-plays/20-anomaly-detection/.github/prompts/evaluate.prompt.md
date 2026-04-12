@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Anomaly Detection (Play 20) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Anomaly Detection (Play 20) — precision, recall, false positive rate"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Anomaly Detection Quality

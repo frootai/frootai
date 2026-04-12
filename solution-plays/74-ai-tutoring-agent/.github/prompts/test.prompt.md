@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Ai Tutoring Agent (Play 74) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Ai Tutoring Agent Implementation

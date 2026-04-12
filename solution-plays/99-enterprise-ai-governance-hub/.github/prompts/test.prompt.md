@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Enterprise Ai Governance Hub (Play 99) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Enterprise Ai Governance Hub Implementation

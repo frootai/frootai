@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Training Curriculum (Play 65) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["65-ai-training-curriculum"]
+handoffs:
+  - agent: "builder"
+    description: "Build adaptive learning platform — skill assessment, gap analysis, dependency-ordered learning paths, content generation per learning style, interactive assessments, progress tracking"
+    prompt: "Build the following for AI Training Curriculum (Play 65): "
+  - agent: "reviewer"
+    description: "Audit content accuracy, assessment validity, accessibility compliance, skill taxonomy coverage, SME review workflow"
+    prompt: "Review the AI Training Curriculum (Play 65) implementation for: "
+  - agent: "tuner"
+    description: "Optimize learning path effectiveness, completion rates, assessment difficulty calibration, content freshness, cost per learner"
+    prompt: "Tune the AI Training Curriculum (Play 65) configuration for: "
 ---
 
 # Ai Training Curriculum Agent

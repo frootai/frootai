@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Landing Zone Advanced (Play 11) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate Ai Landing Zone Advanced (Play 11) compliance and governance"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Landing Zone Advanced Quality

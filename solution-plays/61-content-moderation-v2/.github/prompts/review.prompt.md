@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Content Moderation V2 (Play 61) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Content Moderation V2 (Play 61) — false positive rates, cultural context, appeal fairness"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Content Moderation V2 Implementation

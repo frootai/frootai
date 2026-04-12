@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Ai Podcast Generator (Play 94) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Ai Podcast Generator Implementation

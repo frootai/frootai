@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Sales Assistant (Play 64) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["64-ai-sales-assistant"]
+handoffs:
+  - agent: "builder"
+    description: "Build sales AI pipeline — CRM-grounded lead scoring, personalized email generation, call prep with talk tracks, competitive intelligence from win/loss data, deal stage coaching"
+    prompt: "Build the following for AI Sales Assistant (Play 64): "
+  - agent: "reviewer"
+    description: "Audit lead scoring fairness, email quality and brand compliance, CRM data accuracy, competitive intelligence freshness, email review workflow"
+    prompt: "Review the AI Sales Assistant (Play 64) implementation for: "
+  - agent: "tuner"
+    description: "Optimize scoring weights for conversion correlation, email personalization depth, talk track relevance, CRM sync frequency, cost per lead"
+    prompt: "Tune the AI Sales Assistant (Play 64) configuration for: "
 ---
 
 # Ai Sales Assistant Agent

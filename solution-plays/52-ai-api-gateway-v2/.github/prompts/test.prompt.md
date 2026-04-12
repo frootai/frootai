@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Api Gateway V2 (Play 52) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI API Gateway V2 (Play 52) — provider failover + cache hit + rate limiting"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Api Gateway V2 Implementation

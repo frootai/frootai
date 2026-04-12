@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Creative Ai Studio (Play 49) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Creative AI Studio (Play 49) — generate sample campaign with variations"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Creative Ai Studio Implementation

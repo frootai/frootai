@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Federated Learning Pipeline (Play 62) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["62-federated-learning-pipeline"]
+handoffs:
+  - agent: "builder"
+    description: "Build federated learning pipeline — FedAvg server, client local training, secure aggregation, differential privacy noise, convergence monitoring, non-IID handling (FedProx)"
+    prompt: "Build the following for Federated Learning Pipeline (Play 62): "
+  - agent: "reviewer"
+    description: "Audit differential privacy guarantees (epsilon/delta), data isolation verification, gradient leakage prevention, client authentication, secure aggregation integrity"
+    prompt: "Review the Federated Learning Pipeline (Play 62) implementation for: "
+  - agent: "tuner"
+    description: "Optimize convergence speed, client selection strategy, DP epsilon/utility trade-off, aggregation weights, round count, learning rate schedule"
+    prompt: "Tune the Federated Learning Pipeline (Play 62) configuration for: "
 ---
 
 # Federated Learning Pipeline Agent

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Enterprise Ai Governance Hub (Play 99) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Enterprise Ai Governance Hub Implementation

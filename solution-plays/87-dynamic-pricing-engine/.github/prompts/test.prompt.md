@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Dynamic Pricing Engine (Play 87) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Dynamic Pricing Engine Implementation

@@ -2,7 +2,8 @@
 name: "Property Valuation Tuner"
 description: "Property Valuation tuner - optimizes adjustment factors, model accuracy"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["81-property-valuation-ai"]
 user-invocable: false
 ---

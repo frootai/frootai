@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "aks-cluster-name",
+            "description": "AKS Cluster name for model serving",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "acr-login-server",
+            "description": "Azure Container Registry login server (e.g., myacr.azurecr.io)",
+            "password": false
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

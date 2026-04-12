@@ -2,7 +2,8 @@
 name: "Synthetic Data Reviewer"
 description: "Synthetic Data reviewer - audits privacy guarantees, distribution fidelity, PII leakage"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["47-synthetic-data-factory"]
 user-invocable: false
 ---

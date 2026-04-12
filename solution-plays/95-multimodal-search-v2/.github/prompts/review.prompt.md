@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Multimodal Search V2 (Play 95) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Multimodal Search V2 Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Agentic Rag (Play 21) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Agentic RAG (Play 21) — source selection, citation accuracy, iteration limits"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Agentic Rag Implementation

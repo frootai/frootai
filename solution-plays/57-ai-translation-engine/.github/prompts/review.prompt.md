@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Translation Engine (Play 57) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Translation Engine (Play 57) — quality, glossary, locale, markup preservation"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Translation Engine Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Powered Devops (Play 37) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI DevOps (Play 37) — incident simulation and remediation execution"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Powered Devops Implementation

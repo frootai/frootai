@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Research Paper Ai (Play 77) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Research Paper Ai to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Training Curriculum (Play 65) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Training Curriculum (Play 65) — adaptive learning + assessments + content gen"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Training Curriculum to Azure

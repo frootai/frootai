@@ -2,7 +2,8 @@
 name: "Telecom Fraud Reviewer"
 description: "Telecom Fraud reviewer - audits false positive rate, pattern coverage, response time"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["92-telecom-fraud-shield"]
 user-invocable: false
 ---

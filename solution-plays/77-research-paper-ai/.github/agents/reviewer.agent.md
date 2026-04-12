@@ -2,7 +2,8 @@
 name: "Research Paper AI Reviewer"
 description: "Research Paper AI reviewer - audits citation accuracy, synthesis quality, gaps"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["77-research-paper-ai"]
 user-invocable: false
 ---

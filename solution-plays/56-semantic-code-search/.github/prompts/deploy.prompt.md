@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Semantic Code Search (Play 56) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Semantic Code Search (Play 56) — code indexing + embedding + hybrid search API"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Semantic Code Search to Azure

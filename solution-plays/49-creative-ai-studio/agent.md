@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Creative Ai Studio (Play 49) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["49-creative-ai-studio"]
+handoffs:
+  - agent: "builder"
+    description: "Build multi-modal content pipeline — brand voice templates, text/image/social generation, content calendar automation, cross-platform adaptation, variation generation"
+    prompt: "Build the following for Creative AI Studio (Play 49): "
+  - agent: "reviewer"
+    description: "Audit brand voice consistency, content safety on generated images, copyright/IP compliance, platform-specific tone, forbidden word detection"
+    prompt: "Review the Creative AI Studio (Play 49) implementation for: "
+  - agent: "tuner"
+    description: "Optimize creative temperature, variation diversity, brand voice fidelity, A/B test performance, cross-platform adaptation quality"
+    prompt: "Tune the Creative AI Studio (Play 49) configuration for: "
 ---
 
 # Creative Ai Studio Agent

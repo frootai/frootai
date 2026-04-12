@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Ai Tutoring Agent (Play 74) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement Socratic tutoring, knowledge state tracking, adaptive difficulty, misconception detection"
+    prompt: "Build the following for AI Tutoring Agent (Play 74): "
+  - agent: "reviewer"
+    description: "Audit pedagogical quality, content safety for minors, misconception handling, learning efficacy"
+    prompt: "Review the following for AI Tutoring Agent (Play 74): "
+  - agent: "tuner"
+    description: "Optimize difficulty curves, Socratic prompt quality, hint timing, engagement metrics"
+    prompt: "Tune the following for AI Tutoring Agent (Play 74): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["74-ai-tutoring-agent"]
 ---

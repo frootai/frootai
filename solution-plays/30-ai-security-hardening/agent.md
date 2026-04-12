@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Security Hardening (Play 30) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["30-ai-security-hardening"]
+handoffs:
+  - agent: "builder"
+    description: "Implement prompt injection defense layers, input/output validation, jailbreak detection, data exfiltration prevention"
+    prompt: "Build the following for AI Security Hardening (Play 30): "
+  - agent: "reviewer"
+    description: "Red-team test OWASP LLM Top 10, penetration testing, prompt injection attacks, data leakage audit"
+    prompt: "Review the AI Security Hardening (Play 30) implementation for: "
+  - agent: "tuner"
+    description: "Optimize detection patterns, reduce false positives on legitimate requests, tune sensitivity thresholds"
+    prompt: "Tune the AI Security Hardening (Play 30) configuration for: "
 ---
 
 # Ai Security Hardening Agent

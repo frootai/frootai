@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Ai Data Marketplace (Play 97) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Ai Data Marketplace to Azure

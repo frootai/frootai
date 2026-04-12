@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Infrastructure Optimizer (Play 66) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["66-ai-infrastructure-optimizer"]
+handoffs:
+  - agent: "builder"
+    description: "Build FinOps optimizer — Azure Monitor metrics collection, GPU utilization analysis, SKU right-sizing engine, cost anomaly detection, auto-scaling recommendations, FinOps dashboard"
+    prompt: "Build the following for AI Infrastructure Optimizer (Play 66): "
+  - agent: "reviewer"
+    description: "Audit recommendation safety (no downsize below minimum), cost accuracy, GPU analysis methodology, auto-scale rule correctness"
+    prompt: "Review the AI Infrastructure Optimizer (Play 66) implementation for: "
+  - agent: "tuner"
+    description: "Optimize utilization thresholds, cost anomaly sensitivity, analysis frequency, auto-scale triggers, GPU-to-CPU migration criteria"
+    prompt: "Tune the AI Infrastructure Optimizer (Play 66) configuration for: "
 ---
 
 # Ai Infrastructure Optimizer Agent

@@ -2,8 +2,19 @@
   "play": "22-multi-agent-swarm",
   "version": "1.0.0",
   "context": {
-    "knowledge": ["O2-AI-Agents", "O1-Semantic-Kernel", "O3-MCP-Tools-Functions", "T3-Production-Patterns"],
-    "waf": ["security", "reliability", "cost-optimization", "performance-efficiency", "operational-excellence"],
+    "knowledge": [
+      "O2-AI-Agents",
+      "O1-Semantic-Kernel",
+      "O3-MCP-Tools-Functions",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "operational-excellence"
+    ],
     "scope": "multi-agent-swarm-orchestration"
   },
   "primitives": {
@@ -12,8 +23,14 @@
       "./.github/agents/swarm-researcher.agent.md",
       "./.github/agents/swarm-analyst.agent.md"
     ],
-    "instructions": ["../../instructions/python-waf.instructions.md"],
-    "skills": [],
+    "instructions": [
+      "../../instructions/python-waf.instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/deploy-multi-agent-swarm/",
+      "./.github/skills/evaluate-multi-agent-swarm/",
+      "./.github/skills/tune-multi-agent-swarm/"
+    ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",
       "../../hooks/frootai-tool-guardian/",

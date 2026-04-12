@@ -1,32 +1,6 @@
 # AI-Powered Deployment Workflow — Ai Compliance Engine
+# Layer 3 — Agentic Workflow. Compiles to GitHub Actions for automated Azure deployment.
 
-> Layer 3 — Agentic Workflow. Compiles to GitHub Actions for automated Azure deployment.
-
-## Trigger
-On push to `main` branch after PR merge, when files in `solution-plays/35-ai-compliance-engine/infra/` are modified.
-
-## Steps
-
-1. **Checkout** the main branch
-2. **Validate Bicep**: Run `az bicep build` to verify template syntax
-3. **Validate configs**: Run `tune-config.sh` to verify production readiness
-4. **Deploy to staging**: Deploy to staging resource group first
-5. **Smoke test**: Run health check against staging endpoint
-6. **Evaluate**: Run `evaluation/eval.py` against staging
-7. **Deploy to production**: If staging passes all quality gates
-8. **Post-deploy verification**: Verify all endpoints respond correctly
-
-## Quality Gates
-- Bicep compiles without errors
-- All config JSON files parse correctly
-- Content safety enabled in guardrails.json
-- Groundedness ≥ 0.85
-- Safety = 0 failures
-- Cost per query ≤ $0.05
-
-## Compiled GitHub Action
-
-```yaml
 name: AI Deploy — Ai Compliance Engine
 on:
   push:
@@ -53,7 +27,7 @@ jobs:
   deploy-staging:
     needs: validate
     runs-on: ubuntu-latest
-    environment: staging
+    environment: stg
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -84,7 +58,7 @@ jobs:
   deploy-production:
     needs: evaluate
     runs-on: ubuntu-latest
-    environment: production
+    environment: prd
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -99,4 +73,3 @@ jobs:
             --template-file solution-plays/35-ai-compliance-engine/infra/main.bicep \
             --parameters solution-plays/35-ai-compliance-engine/infra/parameters.json \
             --parameters environment=prod
-```

@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "inputs": [
+                {
+                    "type": "promptString",
+                    "id": "azure-custom-vision-key",
+                    "description": "Azure Custom Vision API Key for PPE detection model (leave blank if using Managed Identity)",
+                    "password": true
+                },
+                {
+                    "type": "promptString",
+                    "id": "azure-openai-key",
+                    "description": "Azure OpenAI API Key for incident report generation",
+                    "password": true
+                }
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

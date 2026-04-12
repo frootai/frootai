@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Accessibility Learning Agent (Play 76) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement WCAG compliance checks, alt-text generation, cognitive load assessment, screen reader optimization"
+    prompt: "Build the following for Accessibility Learning Agent (Play 76): "
+  - agent: "reviewer"
+    description: "Audit WCAG coverage completeness, false positive rate, inclusive design compliance"
+    prompt: "Review the following for Accessibility Learning Agent (Play 76): "
+  - agent: "tuner"
+    description: "Optimize check accuracy, prioritize high-impact fixes, tune alt-text quality, reduce false positives"
+    prompt: "Tune the following for Accessibility Learning Agent (Play 76): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["76-accessibility-learning-agent"]
 ---

@@ -2,7 +2,8 @@
 name: "AI Tutor Tuner"
 description: "AI Tutor tuner - optimizes difficulty curves, hint quality, engagement"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["74-ai-tutoring-agent"]
 user-invocable: false
 ---

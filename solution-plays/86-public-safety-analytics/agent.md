@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Public Safety Analytics (Play 86) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement incident pattern analysis, resource allocation optimization, response time analytics, community dashboards"
+    prompt: "Build the following for Public Safety Analytics (Play 86): "
+  - agent: "reviewer"
+    description: "Audit racial/socioeconomic bias, privacy controls, transparency, predictive policing safeguards"
+    prompt: "Review the following for Public Safety Analytics (Play 86): "
+  - agent: "tuner"
+    description: "Optimize resource allocation, response time targets, bias thresholds, temporal pattern sensitivity"
+    prompt: "Tune the following for Public Safety Analytics (Play 86): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["86-public-safety-analytics"]
 ---

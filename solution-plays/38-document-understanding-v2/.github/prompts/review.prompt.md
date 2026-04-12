@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Document Understanding V2 (Play 38) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Document Understanding V2 (Play 38) — PII handling, cross-doc consistency"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Document Understanding V2 Implementation

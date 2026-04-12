@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Precision Agriculture Agent (Play 78) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement NDVI crop monitoring, pest/disease detection, irrigation optimization, yield prediction"
+    prompt: "Build the following for Precision Agriculture Agent (Play 78): "
+  - agent: "reviewer"
+    description: "Audit detection accuracy, recommendation safety, sensor data quality, agronomic validity"
+    prompt: "Review the following for Precision Agriculture Agent (Play 78): "
+  - agent: "tuner"
+    description: "Optimize NDVI thresholds, classification models, irrigation scheduling, variable-rate prescriptions"
+    prompt: "Tune the following for Precision Agriculture Agent (Play 78): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["78-precision-agriculture-agent"]
 ---

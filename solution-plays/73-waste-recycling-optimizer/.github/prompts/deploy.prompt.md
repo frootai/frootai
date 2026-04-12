@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Waste Recycling Optimizer (Play 73) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Waste Recycling Optimizer to Azure

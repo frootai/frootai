@@ -2,7 +2,8 @@
 name: "Code Search Builder"
 description: "Code Search builder - implements code indexing, embedding pipeline, search API"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["performance-efficiency", "reliability", "security"]
 plays: ["56-semantic-code-search"]
 ---
 # Builder Agent - Code Search

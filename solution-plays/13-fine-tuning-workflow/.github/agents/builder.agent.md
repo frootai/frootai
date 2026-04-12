@@ -2,7 +2,8 @@
 name: "Fine-Tuning Builder"
 description: "Fine-Tuning builder - prepares data, configures training, deploys fine-tuned model"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "operational-excellence", "performance-efficiency"]
 plays: ["13-fine-tuning-workflow"]
 ---
 # Builder Agent - Fine-Tuning

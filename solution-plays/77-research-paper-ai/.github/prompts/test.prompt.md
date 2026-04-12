@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Research Paper Ai (Play 77) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Research Paper Ai Implementation

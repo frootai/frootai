@@ -2,7 +2,8 @@
 name: "Carbon Tracker Tuner"
 description: "Carbon Tracker tuner - optimizes Scope 3 estimation, data collection"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
 plays: ["69-carbon-footprint-tracker"]
 user-invocable: false
 ---

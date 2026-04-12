@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Supply Chain Ai (Play 55) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Supply Chain AI (Play 55) — demand forecasting + supplier risk + inventory optimization"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Supply Chain Ai to Azure

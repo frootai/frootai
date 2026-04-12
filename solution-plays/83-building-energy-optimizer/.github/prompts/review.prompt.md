@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Building Energy Optimizer (Play 83) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Building Energy Optimizer Implementation

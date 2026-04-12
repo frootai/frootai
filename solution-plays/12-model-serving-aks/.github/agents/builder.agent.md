@@ -2,7 +2,8 @@
 name: "Model Serving AKS Builder"
 description: "Model Serving AKS builder - sets up AKS cluster, GPU nodes, model deployment, HPA"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "performance-efficiency", "operational-excellence"]
 plays: ["12-model-serving-aks"]
 ---
 # Builder Agent - Model Serving AKS

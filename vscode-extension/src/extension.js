@@ -563,7 +563,7 @@ class PrimitivesCatalogProvider {
   getChildren(element) {
     const categories = [
       {
-        label: "Agents (201)", icon: "hubot", children: [
+        label: "Agents (238)", icon: "hubot", children: [
           { label: "Install agent via VS Code", desc: "vscode://github.copilot-chat/createAgent", icon: "cloud-download" },
           { label: "Browse on website", desc: "frootai.dev/primitives/agents", icon: "globe" },
           { label: "WAF-aligned AI personas", desc: "Each agent has expertise + tools + WAF alignment", icon: "info" },
@@ -620,7 +620,7 @@ class PrimitivesCatalogProvider {
 
     if (!element) {
       return categories.map(cat => {
-        const item = new vscode.TreeItem(cat.label, vscode.TreeItemCollapsible.Collapsed);
+        const item = new vscode.TreeItem(cat.label, vscode.TreeItemCollapsibleState.Collapsed);
         item.iconPath = new vscode.ThemeIcon(cat.icon);
         item.contextValue = "primitiveCategory";
         item._children = cat.children;
@@ -629,7 +629,7 @@ class PrimitivesCatalogProvider {
     }
     if (element._children) {
       return element._children.map(child => {
-        const item = new vscode.TreeItem(child.label, vscode.TreeItemCollapsible.None);
+        const item = new vscode.TreeItem(child.label, vscode.TreeItemCollapsibleState.None);
         item.description = child.desc;
         item.iconPath = new vscode.ThemeIcon(child.icon);
         item.tooltip = child.desc;
@@ -689,7 +689,7 @@ class FaiProtocolProvider {
 
     if (!element) {
       return layers.map(layer => {
-        const item = new vscode.TreeItem(layer.label, vscode.TreeItemCollapsible.Collapsed);
+        const item = new vscode.TreeItem(layer.label, vscode.TreeItemCollapsibleState.Collapsed);
         item.description = layer.desc;
         item.iconPath = new vscode.ThemeIcon(layer.icon);
         item._children = layer.children;
@@ -698,7 +698,7 @@ class FaiProtocolProvider {
     }
     if (element._children) {
       return element._children.map(child => {
-        const item = new vscode.TreeItem(child.label, vscode.TreeItemCollapsible.None);
+        const item = new vscode.TreeItem(child.label, vscode.TreeItemCollapsibleState.None);
         item.description = child.desc;
         item.iconPath = new vscode.ThemeIcon(child.icon);
         item.tooltip = child.desc;

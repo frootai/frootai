@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "cosmos-connection",
+            "description": "Cosmos DB connection string for long-term memory storage",
+            "password": true
+        },
+        {
+            "type": "promptString",
+            "id": "redis-connection",
+            "description": "Redis connection string for short-term memory cache",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

@@ -1,30 +1,6 @@
 # AI-Powered Code Review Workflow
+# Layer 3 — Agentic Workflow. Compiles to GitHub Actions for automated AI code review.
 
-> Layer 3 — Agentic Workflow. Compiles to GitHub Actions for automated AI code review.
-
-## Trigger
-On pull request to `main` branch that modifies files in `solution-plays/01-enterprise-rag/`.
-
-## Steps
-
-1. **Checkout** the PR branch
-2. **Validate configs**: Run `tune-config.sh` to verify all TuneKit configs are valid
-3. **Run tests**: Execute `evaluation/eval.py` against test set
-4. **AI Review**: Use the reviewer agent to check:
-   - No hardcoded secrets
-   - Config values from files (not hardcoded)
-   - Azure best practices followed
-   - RAG quality patterns implemented
-5. **Post comment** on PR with review findings and quality metrics
-6. **Block merge** if any 🔴 Critical issues found
-
-## Permissions
-- read: contents, pull-requests
-- write: pull-requests (for posting comments)
-
-## Compiled GitHub Action
-
-```yaml
 name: AI Code Review
 on:
   pull_request:
@@ -59,4 +35,3 @@ jobs:
               repo: context.repo.repo,
               body: '✅ FrootAI AI Review passed. Configs valid, evaluation metrics within thresholds.'
             })
-```

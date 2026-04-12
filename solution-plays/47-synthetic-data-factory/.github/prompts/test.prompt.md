@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Synthetic Data Factory (Play 47) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Synthetic Data Factory (Play 47) — generate sample dataset + validate distributions"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Synthetic Data Factory Implementation

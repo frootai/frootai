@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Api Gateway V2 (Play 52) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["52-ai-api-gateway-v2"]
+handoffs:
+  - agent: "builder"
+    description: "Build multi-provider gateway — priority-based routing with fallback, semantic caching (Redis + embeddings), circuit breakers, token metering, per-consumer rate limiting"
+    prompt: "Build the following for AI API Gateway V2 (Play 52): "
+  - agent: "reviewer"
+    description: "Audit failover logic, circuit breaker thresholds, rate limiting correctness, API key security, provider credential isolation"
+    prompt: "Review the AI API Gateway V2 (Play 52) implementation for: "
+  - agent: "tuner"
+    description: "Optimize routing rules (complexity-based), cache hit rate, circuit breaker timing, cost per query, per-consumer quotas"
+    prompt: "Tune the AI API Gateway V2 (Play 52) configuration for: "
 ---
 
 # Ai Api Gateway V2 Agent

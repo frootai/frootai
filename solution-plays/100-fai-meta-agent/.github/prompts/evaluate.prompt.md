@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Fai Meta Agent (Play 100) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Fai Meta Agent Quality

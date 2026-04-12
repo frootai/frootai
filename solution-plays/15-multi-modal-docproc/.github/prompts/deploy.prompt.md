@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Multi Modal Docproc (Play 15) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Multi-Modal DocProc (Play 15) — GPT-4o vision + Document Intelligence"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Multi Modal Docproc to Azure

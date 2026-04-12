@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Prompt Management (Play 18) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Prompt Management (Play 18) — registry, templates, A/B testing"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Prompt Management Implementation

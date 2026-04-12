@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Content Moderation V2 (Play 61) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Content Moderation V2 (Play 61) — multi-modal samples across categories"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Content Moderation V2 Implementation

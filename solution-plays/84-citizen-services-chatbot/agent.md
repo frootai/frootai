@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Citizen Services Chatbot (Play 84) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement multi-lingual chatbot, form assistance, permit tracking, complaint routing, accessibility compliance"
+    prompt: "Build the following for Citizen Services Chatbot (Play 84): "
+  - agent: "reviewer"
+    description: "Audit WCAG accessibility, privacy compliance, non-partisanship, plain language, human escalation paths"
+    prompt: "Review the following for Citizen Services Chatbot (Play 84): "
+  - agent: "tuner"
+    description: "Optimize response accuracy, reading level, language coverage, resolution rate, escalation rules"
+    prompt: "Tune the following for Citizen Services Chatbot (Play 84): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["84-citizen-services-chatbot"]
 ---

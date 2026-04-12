@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Precision Agriculture Agent (Play 78) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Precision Agriculture Agent to Azure

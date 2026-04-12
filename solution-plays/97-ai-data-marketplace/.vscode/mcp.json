@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "inputs": [
+                {
+                    "type": "promptString",
+                    "id": "azure-openai-key",
+                    "description": "Azure OpenAI API Key for dataset description and search (leave blank if using Managed Identity)",
+                    "password": true
+                },
+                {
+                    "type": "promptString",
+                    "id": "azure-search-key",
+                    "description": "Azure AI Search API Key for dataset catalog index",
+                    "password": true
+                }
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

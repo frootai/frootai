@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Realtime Event Ai (Play 45) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Real-Time Event AI (Play 45) — simulate event streams and verify processing"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Realtime Event Ai Implementation

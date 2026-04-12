@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Model Governance (Play 48) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Model Governance (Play 48) — approval SLA, A/B test effectiveness, drift detection"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Model Governance Quality

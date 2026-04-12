@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Realtime Event Ai (Play 45) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Real-Time Event AI (Play 45) — throughput, anomaly accuracy, alert quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Realtime Event Ai Quality

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Foundry Local On Device (Play 44) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Foundry Local (Play 44) — hardware compatibility, fallback logic, offline mode"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Foundry Local On Device Implementation

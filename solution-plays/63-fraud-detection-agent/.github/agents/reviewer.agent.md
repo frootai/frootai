@@ -2,7 +2,8 @@
 name: "Fraud Detection Reviewer"
 description: "Fraud Detection reviewer - audits false positive rate, explanation quality, compliance"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "operational-excellence"]
 plays: ["63-fraud-detection-agent"]
 user-invocable: false
 ---

@@ -1,1 +1,20 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "inputs": [
+                {
+                    "type": "promptString",
+                    "id": "azure-openai-key",
+                    "description": "Azure OpenAI API Key for LLM-as-judge evaluation (leave blank if using Managed Identity)",
+                    "password": true
+                }
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

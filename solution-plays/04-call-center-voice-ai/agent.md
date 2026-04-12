@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Call Center Voice Ai (Play 04) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["04-call-center-voice-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Implement STT/TTS pipelines, real-time streaming, WebSocket audio, SSML templates"
+    prompt: "Build the following for Call Center Voice AI (Play 04): "
+  - agent: "reviewer"
+    description: "Audit latency budgets, security, compliance (recording consent), voice quality"
+    prompt: "Review the Call Center Voice AI (Play 04) implementation for: "
+  - agent: "tuner"
+    description: "Optimize response time (STT+LLM+TTS < 2s), model routing, TTS prosody, cost"
+    prompt: "Tune the Call Center Voice AI (Play 04) configuration for: "
 ---
 
 # Call Center Voice Ai Agent

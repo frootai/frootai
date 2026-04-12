@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Copilot Studio Advanced (Play 40) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["40-copilot-studio-advanced"]
+handoffs:
+  - agent: "builder"
+    description: "Build declarative agents, TypeSpec API plugins, Graph API data grounding, adaptive card responses, Power Automate flows"
+    prompt: "Build the following for Copilot Studio Advanced (Play 40): "
+  - agent: "reviewer"
+    description: "Audit SSO/OAuth2 scoping, permission boundaries, plugin security, admin controls, content safety"
+    prompt: "Review the Copilot Studio Advanced (Play 40) implementation for: "
+  - agent: "tuner"
+    description: "Optimize plugin latency, conversation context, Graph query efficiency, adaptive card rendering"
+    prompt: "Tune the Copilot Studio Advanced (Play 40) configuration for: "
 ---
 
 # Copilot Studio Advanced Agent

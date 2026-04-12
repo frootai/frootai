@@ -2,7 +2,8 @@
 name: "AI Red Team Builder"
 description: "AI Red Team builder - implements attack framework, custom generators, reporting"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["41-ai-red-teaming"]
 ---
 # Builder Agent - AI Red Team

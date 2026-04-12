@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Semantic Code Search (Play 56) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Semantic Code Search (Play 56) — NDCG, recall, latency, relevance"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Semantic Code Search Quality

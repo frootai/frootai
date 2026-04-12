@@ -42,49 +42,19 @@ Never make up facts not in the context."""
 ## Azure AI SDK Pitfalls
 
 ### Authentication — Always DefaultAzureCredential
-```python
-# ❌ WRONG — hardcoded key
-client = AzureOpenAI(api_key="sk-xxx")
+Never use `AzureOpenAI(api_key="sk-xxx")`. Always use `DefaultAzureCredential()` with `get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")`.
 
-# ✅ CORRECT — Managed Identity
-from azure.identity import DefaultAzureCredential
-credential = DefaultAzureCredential()
-client = AzureOpenAI(azure_ad_token_provider=get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default"))
-```
+### Search Client — Semantic Configuration Name Must Match Deployment
+The `semantic_configuration_name` parameter must match the exact name configured in Azure Portal (often "default" or "my-semantic-config"). Mismatch = silent fallback to non-semantic search.
 
-### Search Client — Use Semantic Configuration
-```python
-from azure.search.documents import SearchClient
-# semantic_configuration_name MUST match what's deployed in AI Search
-# Common mistake: "default" vs "my-semantic-config" — check Azure portal
-```
+### Token Counting — Use tiktoken
+Use `tiktoken.encoding_for_model("gpt-4o")` for accurate counts. Budget: system(500) + chunks(3000) + query(200) + response(1000) = ~4700 total.
 
-### Token Counting — tiktoken for Accurate Budgets
-```python
-import tiktoken
-enc = tiktoken.encoding_for_model("gpt-4o")
-token_count = len(enc.encode(text))
-# Rule: context window = system_prompt + retrieved_chunks + user_query + response
-# Budget: system ~500, chunks ~3000, query ~200, response ~1000 = ~4700 total
-```
-
-### Embedding Model Mismatch
-```python
-# ❌ WRONG — query embedding model differs from index embedding model
-query_vector = embed("text-embedding-ada-002", query)  # Different model!
-# Index was built with text-embedding-3-large → dimension mismatch → 0 results
-
-# ✅ CORRECT — same model for query AND index
-query_vector = embed("text-embedding-3-large", query)  # Must match index
-```
+### Embedding Model Mismatch = Zero Results
+Query embedding model MUST match the index embedding model. If index built with `text-embedding-3-large`, query must also use `text-embedding-3-large`. Different model = dimension mismatch = 0 results.
 
 ## Content Safety (Non-Negotiable for Enterprise)
-```python
-from azure.ai.contentsafety import ContentSafetyClient
-# Check BOTH user input AND model output
-# Categories: Hate, Violence, SelfHarm, Sexual
-# Severity threshold: reject >= 4 (Medium), log >= 2 (Low)
-```
+Check BOTH user input AND model output with `ContentSafetyClient`. Categories: Hate, Violence, SelfHarm, Sexual. Severity threshold: reject >= 4 (Medium), log >= 2 (Low).
 
 ## Coverage Targets for RAG Evaluation
 

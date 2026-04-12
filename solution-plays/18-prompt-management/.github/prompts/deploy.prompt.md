@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Prompt Management (Play 18) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Prompt Management (Play 18) — prompt registry + A/B framework"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Prompt Management to Azure

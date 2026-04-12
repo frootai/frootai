@@ -2,7 +2,8 @@
 name: "Computer Use Agent Builder"
 description: "Computer Use Agent builder - implements screenshot loop, accessibility, action execution"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["42-computer-use-agent"]
 ---
 # Builder Agent - Computer Use Agent

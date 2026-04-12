@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Building Energy Optimizer (Play 83) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement occupancy prediction, zone-based HVAC optimization, fault detection, BMS integration"
+    prompt: "Build the following for Building Energy Optimizer (Play 83): "
+  - agent: "reviewer"
+    description: "Audit energy savings accuracy, comfort compliance, fault detection reliability, safety controls"
+    prompt: "Review the following for Building Energy Optimizer (Play 83): "
+  - agent: "tuner"
+    description: "Optimize setpoint ranges, occupancy thresholds, comfort vs savings trade-off, fault sensitivity"
+    prompt: "Tune the following for Building Energy Optimizer (Play 83): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["83-building-energy-optimizer"]
 ---

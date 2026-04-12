@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Fraud Detection Agent (Play 63) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Fraud Detection Agent (Play 63) — three-layer detection + graph analysis + explainable decisions"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Fraud Detection Agent to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Property Valuation Ai (Play 81) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Property Valuation Ai to Azure

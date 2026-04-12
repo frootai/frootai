@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Customer Support V2 (Play 54) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Customer Support V2 (Play 54) — KB grounding, escalation logic, PII handling"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Customer Support V2 Implementation

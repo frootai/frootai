@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Autonomous Coding Agent (Play 51) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["51-autonomous-coding-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build issue-to-PR pipeline — issue analysis, codebase indexing, multi-file implementation plan, test generation, branch+PR creation, CI self-healing"
+    prompt: "Build the following for Autonomous Coding Agent (Play 51): "
+  - agent: "reviewer"
+    description: "Audit code quality, test coverage, PR completeness, diff scope (max 10 files), security scanning, existing test preservation"
+    prompt: "Review the Autonomous Coding Agent (Play 51) implementation for: "
+  - agent: "tuner"
+    description: "Optimize plan accuracy, reduce iteration cycles, improve test coverage, tune auto-merge criteria, minimize token cost per PR"
+    prompt: "Tune the Autonomous Coding Agent (Play 51) configuration for: "
 ---
 
 # Autonomous Coding Agent Agent

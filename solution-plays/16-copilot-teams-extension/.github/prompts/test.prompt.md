@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Copilot Teams Extension (Play 16) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Copilot Teams Extension (Play 16) — message extension and Adaptive Cards"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Copilot Teams Extension Implementation

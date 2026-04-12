@@ -2,7 +2,8 @@
 name: "AI Search Tuner"
 description: "AI Search tuner - optimizes scoring profiles, caching, cost"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
 plays: ["09-ai-search-portal"]
 user-invocable: false
 ---

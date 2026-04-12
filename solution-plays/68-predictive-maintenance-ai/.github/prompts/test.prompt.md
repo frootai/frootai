@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Predictive Maintenance Ai (Play 68) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Predictive Maintenance (Play 68) — backtest RUL against historical failures"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Predictive Maintenance Ai Implementation

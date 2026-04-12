@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "power-platform-client-id",
+            "description": "Power Platform App Registration Client ID",
+            "password": false
+        },
+        {
+            "type": "promptString",
+            "id": "power-platform-client-secret",
+            "description": "Power Platform App Registration Client Secret",
+            "password": true
+        }
+    ],
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

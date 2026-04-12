@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Observability (Play 17) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Observability (Play 17) — PII in logs, data retention, compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Observability Implementation

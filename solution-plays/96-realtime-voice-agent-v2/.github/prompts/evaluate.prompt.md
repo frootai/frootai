@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Realtime Voice Agent V2 (Play 96) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Realtime Voice Agent V2 Quality

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Recruiter Agent (Play 59) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Recruiter Agent (Play 59) — score sample resumes with bias checks"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Recruiter Agent Implementation

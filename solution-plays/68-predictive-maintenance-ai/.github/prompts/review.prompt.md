@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Predictive Maintenance Ai (Play 68) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Predictive Maintenance (Play 68) — prediction accuracy, safety coverage, false alarms"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Predictive Maintenance Ai Implementation

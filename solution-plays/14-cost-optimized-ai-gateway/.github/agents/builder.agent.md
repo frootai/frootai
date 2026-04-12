@@ -2,7 +2,8 @@
 name: "AI Gateway Builder"
 description: "AI Gateway builder - implements routing, caching, budget tracking, rate limiting"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["14-cost-optimized-ai-gateway"]
 ---
 # Builder Agent - AI Gateway

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Precision Agriculture Agent (Play 78) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Precision Agriculture Agent Implementation

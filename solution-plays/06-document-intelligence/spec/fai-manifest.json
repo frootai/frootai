@@ -25,9 +25,9 @@
       "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      "./.github/skills/deploy-azure/",
-      "./.github/skills/evaluate/",
-      "./.github/skills/tune/"
+      "./.github/skills/deploy-document-intelligence/",
+      "./.github/skills/evaluate-document-intelligence/",
+      "./.github/skills/tune-document-intelligence/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

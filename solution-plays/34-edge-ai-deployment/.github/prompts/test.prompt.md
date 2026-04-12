@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Edge Ai Deployment (Play 34) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Edge AI Deploy (Play 34) — container deployment and fleet rollout"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Edge Ai Deployment Implementation

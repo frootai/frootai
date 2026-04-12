@@ -2,7 +2,8 @@
 name: "AI DevOps Reviewer"
 description: "AI DevOps reviewer - audits auto-remediation safety, alert coverage"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "operational-excellence"]
 plays: ["37-ai-powered-devops"]
 user-invocable: false
 ---

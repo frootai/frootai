@@ -1,5 +1,8 @@
 ---
+mode: "agent"
 description: "Evaluate prompt for Play 101 — Evaluate Pester test suite quality metrics"
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # /evaluate — Play 101: Pester Test Development

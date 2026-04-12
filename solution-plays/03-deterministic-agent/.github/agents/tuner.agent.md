@@ -2,7 +2,7 @@
 name: "Deterministic Agent Tuner"
 description: "Deterministic Agent tuner — optimizes confidence thresholds, abstention rates, latency, model routing, caching"
 tools: ["read", "edit", "search", "execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
 waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["03-deterministic-agent"]
 user-invocable: false

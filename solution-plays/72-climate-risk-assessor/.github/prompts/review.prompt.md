@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Climate Risk Assessor (Play 72) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Climate Risk Assessor Implementation

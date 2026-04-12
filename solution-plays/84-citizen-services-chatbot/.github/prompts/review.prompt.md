@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Citizen Services Chatbot (Play 84) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Citizen Services Chatbot Implementation

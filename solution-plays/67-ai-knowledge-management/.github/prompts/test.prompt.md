@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Knowledge Management (Play 67) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Knowledge Management (Play 67) — capture knowledge from sample sources"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Knowledge Management Implementation

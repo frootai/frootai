@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Smart Energy Grid Ai (Play 71) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Smart Energy Grid Ai Quality

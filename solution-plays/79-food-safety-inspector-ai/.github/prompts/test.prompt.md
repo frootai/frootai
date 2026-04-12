@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Food Safety Inspector Ai (Play 79) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Food Safety Inspector Ai Implementation

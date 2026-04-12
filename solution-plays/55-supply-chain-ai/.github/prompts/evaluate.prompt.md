@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Supply Chain Ai (Play 55) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Supply Chain AI (Play 55) — forecast MAPE, risk precision, optimization savings"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Supply Chain Ai Quality

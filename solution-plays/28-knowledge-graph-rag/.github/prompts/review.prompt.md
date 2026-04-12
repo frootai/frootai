@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Knowledge Graph Rag (Play 28) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Knowledge Graph RAG (Play 28) — relationship accuracy, entity resolution, graph integrity"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Knowledge Graph Rag Implementation

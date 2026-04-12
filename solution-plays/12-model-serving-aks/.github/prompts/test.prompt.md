@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Model Serving Aks (Play 12) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Model Serving Aks (Play 12) inference endpoints and scaling"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Model Serving Aks Implementation

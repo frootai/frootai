@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Visual Product Search (Play 88) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Visual Product Search Quality

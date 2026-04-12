@@ -2,7 +2,8 @@
 name: "Biodiversity Monitor Reviewer"
 description: "Biodiversity Monitor reviewer - audits identification accuracy, invasive detection"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["80-biodiversity-monitor"]
 user-invocable: false
 ---

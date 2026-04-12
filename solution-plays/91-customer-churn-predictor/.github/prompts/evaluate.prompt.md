@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Customer Churn Predictor (Play 91) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Customer Churn Predictor Quality

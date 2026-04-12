@@ -2,7 +2,8 @@
 name: "Copilot Studio Adv Reviewer"
 description: "Copilot Studio Adv reviewer - audits auth, permissions, conversation flow, UX"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "responsible-ai", "reliability"]
 plays: ["40-copilot-studio-advanced"]
 user-invocable: false
 ---

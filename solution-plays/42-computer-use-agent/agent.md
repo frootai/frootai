@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Computer Use Agent (Play 42) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["42-computer-use-agent"]
+handoffs:
+  - agent: "builder"
+    description: "Build screenshot→reason→act loop, accessibility API integration, action executor, VM sandbox, workflow recording"
+    prompt: "Build the following for Computer Use Agent (Play 42): "
+  - agent: "reviewer"
+    description: "Audit sandbox isolation, permission scoping, destructive action guards, loop detection, credential safety"
+    prompt: "Review the Computer Use Agent (Play 42) implementation for: "
+  - agent: "tuner"
+    description: "Optimize screenshot resolution, action reliability, step efficiency, vision token cost, coordinate accuracy"
+    prompt: "Tune the Computer Use Agent (Play 42) configuration for: "
 ---
 
 # Computer Use Agent Agent

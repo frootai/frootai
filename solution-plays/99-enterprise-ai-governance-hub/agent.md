@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Enterprise Ai Governance Hub (Play 99) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement AI system registry, EU AI Act risk classification, policy enforcement gates, compliance dashboard"
+    prompt: "Build the following for Enterprise AI Governance Hub (Play 99): "
+  - agent: "reviewer"
+    description: "Audit risk classification accuracy, compliance evidence, policy coverage, review schedule adherence"
+    prompt: "Review the following for Enterprise AI Governance Hub (Play 99): "
+  - agent: "tuner"
+    description: "Optimize review cadence, risk classification rules, policy enforcement, dashboard metrics"
+    prompt: "Tune the following for Enterprise AI Governance Hub (Play 99): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["99-enterprise-ai-governance-hub"]
 ---

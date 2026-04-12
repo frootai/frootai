@@ -2,7 +2,8 @@
 name: "Podcast Generator Reviewer"
 description: "Podcast Generator reviewer - audits content quality, source accuracy, audio quality"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["responsible-ai", "security", "reliability"]
 plays: ["94-ai-podcast-generator"]
 user-invocable: false
 ---

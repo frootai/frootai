@@ -2,7 +2,8 @@
 name: "Model Governance Tuner"
 description: "Model Governance tuner - optimizes A/B duration, drift detection, rollout speed"
 tools: ["read","edit","search","execute"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["cost-optimization", "performance-efficiency", "reliability"]
 plays: ["48-ai-model-governance"]
 user-invocable: false
 ---

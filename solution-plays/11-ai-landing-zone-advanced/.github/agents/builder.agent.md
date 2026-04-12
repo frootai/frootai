@@ -2,7 +2,8 @@
 name: "Landing Zone Advanced Builder"
 description: "Landing Zone Advanced builder - implements multi-region Bicep, MG hierarchy, Policy"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "reliability", "operational-excellence"]
 plays: ["11-ai-landing-zone-advanced"]
 ---
 # Builder Agent - Landing Zone Advanced

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Cost Optimized Ai Gateway (Play 14) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Cost Optimized AI Gateway (Play 14) — APIM + Redis + multi-region"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Cost Optimized Ai Gateway to Azure

@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Visual Product Search (Play 88) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement visual encoder, product catalog indexing, multi-modal search, reranking pipeline"
+    prompt: "Build the following for Visual Product Search (Play 88): "
+  - agent: "reviewer"
+    description: "Audit search relevance, content safety on uploads, latency compliance, bias in results"
+    prompt: "Review the following for Visual Product Search (Play 88): "
+  - agent: "tuner"
+    description: "Optimize embeddings, similarity thresholds, reranking weights, catalog indexing frequency"
+    prompt: "Tune the following for Visual Product Search (Play 88): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["88-visual-product-search"]
 ---

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Building Energy Optimizer (Play 83) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Building Energy Optimizer Quality

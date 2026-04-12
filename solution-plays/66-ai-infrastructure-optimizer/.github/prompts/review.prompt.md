@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Infrastructure Optimizer (Play 66) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Infrastructure Optimizer (Play 66) — recommendation safety, cost accuracy"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Infrastructure Optimizer Implementation

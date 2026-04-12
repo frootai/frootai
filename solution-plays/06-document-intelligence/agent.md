@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Document Intelligence (Play 06) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["06-document-intelligence"]
+handoffs:
+  - agent: "builder"
+    description: "Implement OCR extraction, form processing, custom models, validation pipelines"
+    prompt: "Build the following for Document Intelligence (Play 06): "
+  - agent: "reviewer"
+    description: "Audit extraction accuracy, PII handling, table recognition quality, compliance"
+    prompt: "Review the Document Intelligence (Play 06) implementation for: "
+  - agent: "tuner"
+    description: "Optimize model selection, confidence thresholds, batch throughput, cost per document"
+    prompt: "Tune the Document Intelligence (Play 06) configuration for: "
 ---
 
 # Document Intelligence Agent

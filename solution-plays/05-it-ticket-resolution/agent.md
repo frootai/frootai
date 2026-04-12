@@ -1,9 +1,19 @@
 ---
 description: "Production agent for It Ticket Resolution (Play 05) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["05-it-ticket-resolution"]
+handoffs:
+  - agent: "builder"
+    description: "Implement ticket classification pipeline, routing rules, KB integration, SLA tracking"
+    prompt: "Build the following for IT Ticket Resolution (Play 05): "
+  - agent: "reviewer"
+    description: "Audit classification accuracy, SLA compliance, PII handling, routing correctness"
+    prompt: "Review the IT Ticket Resolution (Play 05) implementation for: "
+  - agent: "tuner"
+    description: "Optimize routing rules, confidence thresholds, model selection, KB retrieval quality"
+    prompt: "Tune the IT Ticket Resolution (Play 05) configuration for: "
 ---
 
 # It Ticket Resolution Agent

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Network Optimization Agent (Play 90) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Network Optimization Agent Quality

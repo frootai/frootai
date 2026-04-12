@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Prompt Management (Play 18) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Prompt Management (Play 18) — versioning, injection defense, compliance"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Prompt Management Implementation

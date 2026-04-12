@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Browser Automation Agent (Play 23) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Browser Automation Agent (Play 23) — security, domain allowlist, credentials"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Browser Automation Agent Implementation

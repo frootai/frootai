@@ -1,5 +1,8 @@
 ---
+mode: "agent"
 description: "Review prompt for Play 101 — Review Pester test suite code quality"
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # /review — Play 101: Pester Test Development

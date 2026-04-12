@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Model Governance (Play 48) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Model Governance (Play 48) — model registry + approval workflows + A/B gates"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Model Governance to Azure

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Ai Code Review Pipeline (Play 24) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review AI Code Review (Play 24) — OWASP coverage, comment quality, bias"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Ai Code Review Pipeline Implementation

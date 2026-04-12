@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Agentic Rag (Play 21) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["21-agentic-rag"]
+handoffs:
+  - agent: "builder"
+    description: "Implement autonomous retrieval agent, multi-source routing, iterative search, citation assembly, semantic caching"
+    prompt: "Build the following for Agentic RAG (Play 21): "
+  - agent: "reviewer"
+    description: "Audit retrieval quality, citation accuracy, source selection logic, iteration limits, groundedness"
+    prompt: "Review the Agentic RAG (Play 21) implementation for: "
+  - agent: "tuner"
+    description: "Optimize source selection weights, iteration thresholds, cache hit rates, cost per query, max retrieval hops"
+    prompt: "Tune the Agentic RAG (Play 21) configuration for: "
 ---
 
 # Agentic Rag Agent

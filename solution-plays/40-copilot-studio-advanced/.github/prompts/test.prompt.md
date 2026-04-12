@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Copilot Studio Advanced (Play 40) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Copilot Studio Advanced (Play 40) — plugin routing, conversation context, adaptive cards"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Copilot Studio Advanced Implementation

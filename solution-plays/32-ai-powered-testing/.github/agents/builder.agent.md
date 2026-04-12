@@ -2,7 +2,8 @@
 name: "AI Testing Builder"
 description: "AI Testing builder - generates tests from source AST, mutation testing, CI"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "operational-excellence", "security"]
 plays: ["32-ai-powered-testing"]
 ---
 # Builder Agent - AI Testing

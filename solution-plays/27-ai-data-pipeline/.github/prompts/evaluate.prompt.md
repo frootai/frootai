@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Data Pipeline (Play 27) quality metrics"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Evaluate AI Data Pipeline (Play 27) — data quality, enrichment accuracy, throughput"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Data Pipeline Quality

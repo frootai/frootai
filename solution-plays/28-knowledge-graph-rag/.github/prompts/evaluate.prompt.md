@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Knowledge Graph Rag (Play 28) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Knowledge Graph RAG (Play 28) — graph quality, retrieval precision, entity accuracy"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Knowledge Graph Rag Quality

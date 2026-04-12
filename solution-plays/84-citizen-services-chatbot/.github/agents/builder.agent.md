@@ -2,7 +2,8 @@
 name: "Citizen Services Builder"
 description: "Citizen Services builder - implements chatbot, multi-lingual, form assistance"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "responsible-ai"]
 plays: ["84-citizen-services-chatbot"]
 ---
 # Builder Agent - Citizen Services

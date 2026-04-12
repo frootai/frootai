@@ -2,7 +2,8 @@
 name: "AI Compliance Builder"
 description: "AI Compliance builder - implements compliance checks, audit trail, risk scoring"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["security", "responsible-ai", "operational-excellence"]
 plays: ["35-ai-compliance-engine"]
 ---
 # Builder Agent - AI Compliance

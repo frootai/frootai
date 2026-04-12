@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Copilot Studio Bot (Play 08) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["08-copilot-studio-bot"]
+handoffs:
+  - agent: "builder"
+    description: "Design topics, triggers, actions, connectors, authentication flows for Copilot Studio"
+    prompt: "Build the following for Copilot Studio Bot (Play 08): "
+  - agent: "reviewer"
+    description: "Audit conversation flows, security, authentication, knowledge source quality"
+    prompt: "Review the Copilot Studio Bot (Play 08) implementation for: "
+  - agent: "tuner"
+    description: "Optimize topic triggers, knowledge relevance, generative answers quality, fallback rate"
+    prompt: "Tune the Copilot Studio Bot (Play 08) configuration for: "
 ---
 
 # Copilot Studio Bot Agent

@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Exam Generation Engine (Play 75) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement question generation, Bloom's taxonomy distribution, distractor creation, IRT analysis"
+    prompt: "Build the following for Exam Generation Engine (Play 75): "
+  - agent: "reviewer"
+    description: "Audit question quality, answer accuracy, Bloom's alignment, distractor plausibility, bias detection"
+    prompt: "Review the following for Exam Generation Engine (Play 75): "
+  - agent: "tuner"
+    description: "Optimize difficulty calibration, distractor quality, Bloom's distribution, generation cost"
+    prompt: "Tune the following for Exam Generation Engine (Play 75): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["75-exam-generation-engine"]
 ---

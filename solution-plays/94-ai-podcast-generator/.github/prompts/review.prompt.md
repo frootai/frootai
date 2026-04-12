@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Ai Podcast Generator (Play 94) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Ai Podcast Generator Implementation

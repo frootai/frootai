@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Realtime Voice Agent V2 (Play 96) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Realtime Voice Agent V2 Implementation

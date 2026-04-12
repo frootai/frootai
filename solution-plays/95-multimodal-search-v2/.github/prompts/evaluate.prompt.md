@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Multimodal Search V2 (Play 95) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Multimodal Search V2 Quality

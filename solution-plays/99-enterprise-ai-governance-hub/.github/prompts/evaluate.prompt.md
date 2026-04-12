@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Enterprise Ai Governance Hub (Play 99) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Enterprise Ai Governance Hub Quality

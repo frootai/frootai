@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Semantic Search Engine (Play 26) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Semantic Search (Play 26) — query pipeline and ranking quality"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Semantic Search Engine Implementation

@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Meeting Assistant (Play 39) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["39-ai-meeting-assistant"]
+handoffs:
+  - agent: "builder"
+    description: "Implement real-time transcription, speaker diarization, action item extraction, meeting summaries, follow-up generation"
+    prompt: "Build the following for AI Meeting Assistant (Play 39): "
+  - agent: "reviewer"
+    description: "Audit PII in transcripts, recording consent, summary accuracy, action item completeness"
+    prompt: "Review the AI Meeting Assistant (Play 39) implementation for: "
+  - agent: "tuner"
+    description: "Optimize diarization accuracy, summary conciseness, action item precision, Teams/Outlook integration"
+    prompt: "Tune the AI Meeting Assistant (Play 39) configuration for: "
 ---
 
 # Ai Meeting Assistant Agent

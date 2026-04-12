@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Multimodal Search V2 (Play 95) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement multimodal indexing (text+image+audio+video), cross-modal retrieval, late fusion ranking"
+    prompt: "Build the following for Multimodal Search V2 (Play 95): "
+  - agent: "reviewer"
+    description: "Audit cross-modal relevance, content safety per modality, retrieval latency, ranking fairness"
+    prompt: "Review the following for Multimodal Search V2 (Play 95): "
+  - agent: "tuner"
+    description: "Optimize fusion weights, embedding models, cross-modal accuracy, personalization, latency"
+    prompt: "Tune the following for Multimodal Search V2 (Play 95): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["95-multimodal-search-v2"]
 ---

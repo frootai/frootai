@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Realtime Event Ai (Play 45) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["45-realtime-event-ai"]
+handoffs:
+  - agent: "builder"
+    description: "Build event processing pipeline — Event Hubs consumer, batch AI enrichment, anomaly detection, pattern matching, checkpointing, dead letter queue"
+    prompt: "Build the following for Real-Time Event AI (Play 45): "
+  - agent: "reviewer"
+    description: "Audit event throughput, checkpoint consistency, deduplication, alert quality, backpressure handling, DLQ monitoring"
+    prompt: "Review the Real-Time Event AI (Play 45) implementation for: "
+  - agent: "tuner"
+    description: "Optimize batch size, anomaly thresholds, LLM-to-rule ratio, consumer scaling, alert aggregation, checkpoint intervals"
+    prompt: "Tune the Real-Time Event AI (Play 45) configuration for: "
 ---
 
 # Realtime Event Ai Agent

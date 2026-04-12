@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Ai Translation Engine (Play 57) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate AI Translation Engine (Play 57) — BLEU/COMET quality, glossary coverage, cost"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Ai Translation Engine Quality

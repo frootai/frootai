@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Low Code Ai Builder (Play 31) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Low-Code AI Builder (Play 31) — pipeline execution and template deployment"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Low Code Ai Builder Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Carbon Footprint Tracker (Play 69) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Carbon Footprint Tracker (Play 69) — calculation accuracy, Scope 3 estimation, reporting compliance"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Carbon Footprint Tracker Quality

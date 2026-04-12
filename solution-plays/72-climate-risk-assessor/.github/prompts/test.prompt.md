@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Climate Risk Assessor (Play 72) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Climate Risk Assessor Implementation

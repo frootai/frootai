@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Ai Training Curriculum (Play 65) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test AI Training Curriculum (Play 65) — generate path for sample learner profile"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Ai Training Curriculum Implementation

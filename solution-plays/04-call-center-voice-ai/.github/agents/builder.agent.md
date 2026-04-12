@@ -2,7 +2,8 @@
 name: "Voice AI Builder"
 description: "Voice AI builder - implements STT/TTS pipelines, real-time streaming"
 tools: ["read", "edit", "search", "execute", "agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["reliability", "security", "performance-efficiency"]
 plays: ["04-call-center-voice-ai"]
 ---
 # Builder Agent - Voice AI

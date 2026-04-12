@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Dynamic Pricing Engine (Play 87) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Dynamic Pricing Engine to Azure

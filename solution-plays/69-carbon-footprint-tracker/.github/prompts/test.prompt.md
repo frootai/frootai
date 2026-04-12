@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Test Carbon Footprint Tracker (Play 69) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Test Carbon Footprint Tracker (Play 69) — calculate emissions with sample company data"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Test Carbon Footprint Tracker Implementation

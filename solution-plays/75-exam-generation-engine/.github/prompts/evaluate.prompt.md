@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Exam Generation Engine (Play 75) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Exam Generation Engine Quality

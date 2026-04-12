@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Evaluate Research Paper Ai (Play 77) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+tools: ["terminal", "file", "search"]
 ---
 
 # Evaluate Research Paper Ai Quality

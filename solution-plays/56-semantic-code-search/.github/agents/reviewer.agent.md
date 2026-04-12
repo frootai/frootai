@@ -2,7 +2,8 @@
 name: "Code Search Reviewer"
 description: "Code Search reviewer - audits search relevance, access control, freshness"
 tools: ["read","search"]
-model: "gpt-4o"
+model: ["gpt-4o-mini", "gpt-4o"]
+waf: ["security", "reliability", "responsible-ai"]
 plays: ["56-semantic-code-search"]
 user-invocable: false
 ---

@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Research Paper Ai (Play 77) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement paper search, structured extraction, literature synthesis, citation network analysis, gap identification"
+    prompt: "Build the following for Research Paper AI (Play 77): "
+  - agent: "reviewer"
+    description: "Audit citation accuracy, DOI verification, synthesis quality, hallucination detection"
+    prompt: "Review the following for Research Paper AI (Play 77): "
+  - agent: "tuner"
+    description: "Optimize search relevance, extraction precision, synthesis coherence, citation coverage"
+    prompt: "Tune the following for Research Paper AI (Play 77): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["77-research-paper-ai"]
 ---

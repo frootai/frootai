@@ -27,7 +27,9 @@
       "../../instructions/bicep-waf.instructions.md"
     ],
     "skills": [
-      "../../skills/frootai-play-initializer/"
+      "./.github/skills/deploy-enterprise-rag/",
+      "./.github/skills/evaluate-enterprise-rag/",
+      "./.github/skills/tune-enterprise-rag/"
     ],
     "hooks": [
       "../../hooks/frootai-secrets-scanner/",

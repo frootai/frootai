@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Powered Testing (Play 32) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["32-ai-powered-testing"]
+handoffs:
+  - agent: "builder"
+    description: "Generate tests from source AST, implement mutation testing framework, configure test prioritization, CI integration"
+    prompt: "Build the following for AI-Powered Testing (Play 32): "
+  - agent: "reviewer"
+    description: "Audit test quality, mock completeness, coverage gaps, assertion strength, flaky test detection"
+    prompt: "Review the AI-Powered Testing (Play 32) implementation for: "
+  - agent: "tuner"
+    description: "Optimize test prioritization, reduce flaky tests, tune generation prompts, coverage targets"
+    prompt: "Tune the AI-Powered Testing (Play 32) configuration for: "
 ---
 
 # Ai Powered Testing Agent

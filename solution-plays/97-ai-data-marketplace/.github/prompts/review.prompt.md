@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Ai Data Marketplace (Play 97) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Ai Data Marketplace Implementation

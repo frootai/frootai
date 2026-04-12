@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Enterprise Rag (Play 01) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["01-enterprise-rag"]
+handoffs:
+  - agent: "builder"
+    description: "Implement RAG pipeline features — chunking, search, generation, evaluation integration"
+    prompt: "Build the following for Enterprise RAG (Play 01): "
+  - agent: "reviewer"
+    description: "Audit security (Managed Identity, Content Safety), RAG quality (grounding, citations), WAF compliance"
+    prompt: "Review the Enterprise RAG (Play 01) implementation for: "
+  - agent: "tuner"
+    description: "Optimize config values — chunking params, search weights, model routing, caching, evaluation thresholds"
+    prompt: "Tune the Enterprise RAG (Play 01) configuration for: "
 ---
 
 # Enterprise Rag Agent

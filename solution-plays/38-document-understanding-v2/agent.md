@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Document Understanding V2 (Play 38) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["38-document-understanding-v2"]
+handoffs:
+  - agent: "builder"
+    description: "Implement layout-aware extraction, cross-document comparison, classification pipeline, document workflow automation"
+    prompt: "Build the following for Document Understanding V2 (Play 38): "
+  - agent: "reviewer"
+    description: "Audit extraction accuracy, cross-document consistency, PII handling, classification quality"
+    prompt: "Review the Document Understanding V2 (Play 38) implementation for: "
+  - agent: "tuner"
+    description: "Optimize model selection per doc type, classification thresholds, comparison accuracy, throughput"
+    prompt: "Tune the Document Understanding V2 (Play 38) configuration for: "
 ---
 
 # Document Understanding V2 Agent

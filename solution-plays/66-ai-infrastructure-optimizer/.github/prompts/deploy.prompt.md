@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Ai Infrastructure Optimizer (Play 66) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy AI Infrastructure Optimizer (Play 66) — right-sizing + GPU analysis + cost anomaly"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Ai Infrastructure Optimizer to Azure

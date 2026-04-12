@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Computer Use Agent (Play 42) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Computer Use Agent (Play 42) — sandbox isolation, credential safety, destructive action guards"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Computer Use Agent Implementation

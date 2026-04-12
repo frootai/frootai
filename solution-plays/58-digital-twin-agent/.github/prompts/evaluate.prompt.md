@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Evaluate Digital Twin Agent (Play 58) quality metrics"
-tools: ["terminal", "file"]
+agent: "tuner"
+description: "Evaluate Digital Twin Agent (Play 58) — query accuracy, prediction RUL, twin sync latency"
+tools: ["terminal", "file", "read", "search"]
 ---
 
 # Evaluate Digital Twin Agent Quality

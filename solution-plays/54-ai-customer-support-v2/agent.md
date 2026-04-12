@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Customer Support V2 (Play 54) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["54-ai-customer-support-v2"]
+handoffs:
+  - agent: "builder"
+    description: "Build multi-channel support pipeline — intent classification with slot filling, knowledge-grounded responses, sentiment-aware escalation, session memory, channel formatting (chat/email/voice)"
+    prompt: "Build the following for AI Customer Support V2 (Play 54): "
+  - agent: "reviewer"
+    description: "Audit response accuracy against KB, escalation logic correctness, tone appropriateness, PII handling in conversations, CSAT tracking"
+    prompt: "Review the AI Customer Support V2 (Play 54) implementation for: "
+  - agent: "tuner"
+    description: "Optimize intent classification accuracy, reduce unnecessary escalations, improve CSAT scores, tune sentiment thresholds, minimize cost per resolution"
+    prompt: "Tune the AI Customer Support V2 (Play 54) configuration for: "
 ---
 
 # Ai Customer Support V2 Agent

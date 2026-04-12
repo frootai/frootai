@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Accessibility Learning Agent (Play 76) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Accessibility Learning Agent Implementation

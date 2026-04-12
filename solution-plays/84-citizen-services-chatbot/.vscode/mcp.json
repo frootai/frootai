@@ -1,1 +1,26 @@
-{"servers":{"frootai":{"type":"stdio","command":"npx","args":["frootai-mcp@latest"]}}}
+{
+    "servers": {
+        "frootai": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "frootai-mcp@latest"
+            ],
+            "inputs": [
+                {
+                    "type": "promptString",
+                    "id": "azure-openai-key",
+                    "description": "Azure OpenAI API Key for citizen conversation handling (leave blank if using Managed Identity)",
+                    "password": true
+                },
+                {
+                    "type": "promptString",
+                    "id": "azure-translator-key",
+                    "description": "Azure Translator API Key for multi-lingual citizen support",
+                    "password": true
+                }
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    }
+}

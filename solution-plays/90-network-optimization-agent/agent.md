@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Network Optimization Agent (Play 90) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement traffic forecasting, dynamic routing, capacity planning, predictive maintenance, 5G resource allocation"
+    prompt: "Build the following for Network Optimization Agent (Play 90): "
+  - agent: "reviewer"
+    description: "Audit SLA compliance, redundancy paths, equipment health, utilization headroom"
+    prompt: "Review the following for Network Optimization Agent (Play 90): "
+  - agent: "tuner"
+    description: "Optimize utilization caps, latency SLAs, maintenance thresholds, forecast accuracy, routing weights"
+    prompt: "Tune the following for Network Optimization Agent (Play 90): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["90-network-optimization-agent"]
 ---

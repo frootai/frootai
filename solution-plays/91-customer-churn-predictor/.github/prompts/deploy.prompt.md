@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Deploy Customer Churn Predictor (Play 91) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Deploy Customer Churn Predictor to Azure

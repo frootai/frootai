@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Test Building Energy Optimizer (Play 83) implementation"
-tools: ["terminal", "file"]
+agent: "builder"
+tools: ["terminal", "file", "search"]
 ---
 
 # Test Building Energy Optimizer Implementation

@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Deploy Copilot Teams Extension (Play 16) to Azure"
-tools: ["terminal", "file"]
+agent: "builder"
+description: "Deploy Copilot Teams Extension (Play 16) — Teams app + Bot Service + Graph"
+tools: ["terminal", "file", "read", "edit"]
 ---
 
 # Deploy Copilot Teams Extension to Azure

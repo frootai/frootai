@@ -2,7 +2,8 @@
 name: "RAI Dashboard Builder"
 description: "RAI Dashboard builder - implements dashboard, metrics collection, incident tracking"
 tools: ["read","edit","search","execute","agent"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["responsible-ai", "operational-excellence", "reliability"]
 plays: ["60-responsible-ai-dashboard"]
 ---
 # Builder Agent - RAI Dashboard

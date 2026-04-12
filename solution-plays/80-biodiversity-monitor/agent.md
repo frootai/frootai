@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Biodiversity Monitor (Play 80) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement species identification (camera+audio), population tracking, invasive species alerting, habitat assessment"
+    prompt: "Build the following for Biodiversity Monitor (Play 80): "
+  - agent: "reviewer"
+    description: "Audit species ID accuracy, geo-spatial validation, conservation data quality, taxonomic correctness"
+    prompt: "Review the following for Biodiversity Monitor (Play 80): "
+  - agent: "tuner"
+    description: "Optimize classifier thresholds, camera trap filtering, bioacoustic sensitivity, occupancy model parameters"
+    prompt: "Tune the following for Biodiversity Monitor (Play 80): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["80-biodiversity-monitor"]
 ---

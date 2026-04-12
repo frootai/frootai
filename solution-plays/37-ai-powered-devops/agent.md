@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Powered Devops (Play 37) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["37-ai-powered-devops"]
+handoffs:
+  - agent: "builder"
+    description: "Implement AI incident pipeline, deployment risk scoring, auto-remediation runbooks, alert correlation engine"
+    prompt: "Build the following for AI-Powered DevOps (Play 37): "
+  - agent: "reviewer"
+    description: "Audit auto-remediation safety (blast radius), alert coverage gaps, incident response accuracy"
+    prompt: "Review the AI-Powered DevOps (Play 37) implementation for: "
+  - agent: "tuner"
+    description: "Optimize alert correlation windows, risk scoring weights, remediation confidence thresholds, false positive rate"
+    prompt: "Tune the AI-Powered DevOps (Play 37) configuration for: "
 ---
 
 # Ai Powered Devops Agent

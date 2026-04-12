@@ -1,7 +1,8 @@
 ---
 mode: "agent"
 description: "Review Ai Tutoring Agent (Play 74) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+tools: ["terminal", "file", "search"]
 ---
 
 # Review Ai Tutoring Agent Implementation

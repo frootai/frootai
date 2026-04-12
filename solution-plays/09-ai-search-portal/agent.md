@@ -1,9 +1,19 @@
 ---
 description: "Production agent for Ai Search Portal (Play 09) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["09-ai-search-portal"]
+handoffs:
+  - agent: "builder"
+    description: "Design search index schema, hybrid search, semantic ranking, facets, autocomplete, scoring profiles"
+    prompt: "Build the following for AI Search Portal (Play 09): "
+  - agent: "reviewer"
+    description: "Audit search relevance, access control, data freshness, security configuration"
+    prompt: "Review the AI Search Portal (Play 09) implementation for: "
+  - agent: "tuner"
+    description: "Optimize scoring profiles, boost functions, caching strategy, embedding model selection, cost"
+    prompt: "Tune the AI Search Portal (Play 09) configuration for: "
 ---
 
 # Ai Search Portal Agent

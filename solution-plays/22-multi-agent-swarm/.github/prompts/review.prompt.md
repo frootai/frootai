@@ -1,7 +1,8 @@
 ---
 mode: "agent"
-description: "Review Multi Agent Swarm (Play 22) code and architecture"
-tools: ["terminal", "file"]
+agent: "reviewer"
+description: "Review Multi-Agent Swarm (Play 22) — voting, dedup, conflict resolution"
+tools: ["read", "search", "terminal"]
 ---
 
 # Review Multi Agent Swarm Implementation

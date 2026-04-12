@@ -1,7 +1,17 @@
 ---
 description: "Production agent for Realtime Voice Agent V2 (Play 96) — implements the FAI Protocol agent specification"
 tools: ["terminal", "file", "search"]
-model: "gpt-4o"
+model: ["gpt-4o", "gpt-4o-mini"]
+handoffs:
+  - agent: "builder"
+    description: "Implement WebSocket streaming STT/TTS, function calling mid-conversation, barge-in detection, emotion analysis"
+    prompt: "Build the following for Realtime Voice Agent V2 (Play 96): "
+  - agent: "reviewer"
+    description: "Audit TTFT latency, barge-in reliability, language switching, content safety, compliance"
+    prompt: "Review the following for Realtime Voice Agent V2 (Play 96): "
+  - agent: "tuner"
+    description: "Optimize streaming latency, voice quality, function call filler speech, emotion sensitivity"
+    prompt: "Tune the following for Realtime Voice Agent V2 (Play 96): "
 waf: ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
 plays: ["96-realtime-voice-agent-v2"]
 ---
