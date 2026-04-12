@@ -27,7 +27,7 @@ jobs:
   deploy-staging:
     needs: validate
     runs-on: ubuntu-latest
-    environment: stg
+    # environment: staging  # Configure in your repo Settings > Environments
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -58,7 +58,7 @@ jobs:
   deploy-production:
     needs: evaluate
     runs-on: ubuntu-latest
-    environment: prd
+    # environment: production  # Configure in your repo Settings > Environments
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2

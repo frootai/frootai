@@ -14,7 +14,7 @@ permissions:
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
-    environment: stg
+    # environment: staging  # Configure in your repo Settings > Environments
     steps:
       - uses: actions/checkout@v4
 
@@ -38,7 +38,7 @@ jobs:
   deploy-production:
     needs: deploy-staging
     runs-on: ubuntu-latest
-    environment: prd
+    # environment: production  # Configure in your repo Settings > Environments
     steps:
       - uses: actions/checkout@v4
 
