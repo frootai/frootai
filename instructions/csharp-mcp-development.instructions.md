@@ -7,130 +7,154 @@ waf:
   - "performance-efficiency"
 ---
 
-# Csharp Mcp Development — WAF-Aligned Coding Standards
+# C# MCP Server Development — FAI Standards
 
-> C#/.NET MCP server development standards — ModelContextProtocol NuGet patterns, [McpServerTool] attributes, dependency injection, IHostedService lifecycle, and Azure Managed Identity integration.
+## Package & Project Setup
 
-## Core Rules
+- Use `ModelContextProtocol` NuGet package (≥1.0) — the official C# SDK for MCP
+- Target `net8.0` or later — MCP SDK requires modern .NET for `IAsyncEnumerable` and hosting APIs
+- Register MCP services via `builder.Services.AddMcpServer()` then chain `.WithStdioTransport()` or `.WithSseTransport()`
+- Use the `Microsoft.Extensions.Hosting` generic host — MCP server runs as an `IHostedService`
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```csharp
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services
+    .AddMcpServer(options => options.ServerInfo = new() { Name = "fai-server", Version = "1.0.0" })
+    .WithStdioTransport()
+    .WithToolsFromAssembly(typeof(Program).Assembly);
+await builder.Build().RunAsync();
+```
 
-## Implementation Patterns
+## Tool Registration
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+- Prefer `[McpServerTool]` attribute on static methods for simple tools — auto-discovered via `WithToolsFromAssembly()`
+- Use `[Description]` on parameters and methods — MCP SDK generates JSON schema from these attributes
+- For tools requiring DI services, use `[McpServerTool]` on instance methods and register the class with `WithTools<T>()`
+- Return `string` or `McpToolResponse` — never `void`. Always provide an actionable result
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+```csharp
+[McpServerTool("search_documents")]
+[Description("Search indexed documents by semantic query")]
+public static async Task<string> SearchDocuments(
+    IMcpToolContext context,
+    [Description("Natural language search query")] string query,
+    [Description("Max results to return (1-50)")] int maxResults = 10)
+{
+    ArgumentException.ThrowIfNullOrWhiteSpace(query);
+    ArgumentOutOfRangeException.ThrowIfLessThan(maxResults, 1);
+    ArgumentOutOfRangeException.ThrowIfGreaterThan(maxResults, 50);
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+    var searchClient = context.Services!.GetRequiredService<SearchClient>();
+    var results = await searchClient.SearchAsync<SearchDocument>(query, new() { Size = maxResults });
+    return JsonSerializer.Serialize(results.Value.GetResults().Select(r => r.Document));
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Resource & Prompt Handlers
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Implement `IResourceHandler` for exposing data sources — return `McpResource` with MIME type and UTF-8 content
+- Implement `IPromptHandler` for reusable prompt templates — accept `Dictionary<string, string>` arguments
+- Register handlers via `.WithResources<T>()` and `.WithPrompts<T>()` on the MCP builder
+- Resource URIs must follow the `scheme://authority/path` format — e.g., `db://inventory/products`
 
-## Code Quality Standards
+## Dependency Injection
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+- Register all external clients (`SearchClient`, `OpenAIClient`, `CosmosClient`) in the DI container
+- Access services in tools via `IMcpToolContext.Services.GetRequiredService<T>()`
+- Use `IOptions<T>` pattern for configuration — bind from `appsettings.json` or environment variables
+- Register `DefaultAzureCredential` as a singleton — never instantiate per-request
 
-## Testing Requirements
+```csharp
+builder.Services.AddSingleton<TokenCredential>(new DefaultAzureCredential());
+builder.Services.AddSingleton(sp =>
+{
+    var cred = sp.GetRequiredService<TokenCredential>();
+    var config = sp.GetRequiredService<IOptions<AzureOpenAIConfig>>().Value;
+    return new OpenAIClient(new Uri(config.Endpoint), cred);
+});
+```
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+## Error Handling
 
-## Security Checklist
+- Throw `McpException` with meaningful messages for tool-level failures — SDK serializes these to MCP error responses
+- Validate all tool inputs at entry with `ArgumentException.ThrowIfNullOrWhiteSpace` and range checks
+- Catch `RequestFailedException` from Azure SDK calls and re-throw as `McpException` with context
+- Never swallow exceptions — log with `ILogger<T>` then rethrow or return error content
+- Use `CancellationToken` from `IMcpToolContext` — respect client cancellation on long operations
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+```csharp
+catch (RequestFailedException ex) when (ex.Status == 429)
+{
+    logger.LogWarning(ex, "Rate limited calling {Service}", serviceName);
+    throw new McpException("Service temporarily unavailable — retry after a few seconds");
+}
+```
+
+## Logging & Observability
+
+- Inject `ILogger<T>` — never use `Console.WriteLine` (stdout is the MCP stdio transport channel)
+- Configure logging to write to stderr for stdio transport: `builder.Logging.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.Trace)`
+- Use structured log templates: `logger.LogInformation("Tool {ToolName} executed in {ElapsedMs}ms", name, sw.ElapsedMilliseconds)`
+- Add `ActivitySource` tracing for tool execution spans — correlate with Application Insights
+
+## Transport Configuration
+
+- **stdio**: Default for CLI and VS Code integrations — use `WithStdioTransport()`. No HTTP server needed
+- **SSE**: For remote/web clients — use `WithSseTransport()` which adds `/sse` and `/message` endpoints
+- SSE transport requires `builder.Services.AddControllers()` and Kestrel configuration
+- For SSE, bind to `localhost` only in dev; use reverse proxy (YARP/nginx) with TLS in production
+- Never expose SSE transport on `0.0.0.0` without authentication middleware
+
+## Input Validation & JSON Schema
+
+- MCP SDK auto-generates JSON schema from `[Description]` attributes and parameter types
+- Use `enum` parameters for constrained choices — SDK generates `enum` in the schema automatically
+- Apply `[Range]`, `[StringLength]`, `[RegularExpression]` data annotations for additional constraints
+- Validate complex object inputs with `System.ComponentModel.DataAnnotations.Validator.TryValidateObject`
+
+## Testing MCP Tools
+
+- Test tools as regular async methods — call directly with mocked `IMcpToolContext`
+- Mock `IMcpToolContext.Services` with a real `ServiceCollection` containing test doubles
+- Use `Verify` or `Shouldly` for snapshot testing tool JSON responses
+- Integration test the full server by spawning the process and communicating via stdio protocol
+
+```csharp
+[Fact]
+public async Task SearchDocuments_ValidQuery_ReturnsResults()
+{
+    var mockSearch = Substitute.For<SearchClient>();
+    var services = new ServiceCollection().AddSingleton(mockSearch).BuildServiceProvider();
+    var context = Substitute.For<IMcpToolContext>();
+    context.Services.Returns(services);
+
+    var result = await MyTools.SearchDocuments(context, "test query", maxResults: 5);
+
+    result.Should().NotBeNullOrEmpty();
+    var docs = JsonSerializer.Deserialize<List<SearchDocument>>(result);
+    docs.Should().NotBeNull();
+}
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Writing to `Console.Out` in stdio mode — corrupts the MCP JSON-RPC message stream
+- ❌ Registering tools with side effects in constructors — use async factory methods or lazy initialization
+- ❌ Returning raw exception stack traces in tool responses — leaks internals to the LLM client
+- ❌ Blocking async calls with `.Result` or `.GetAwaiter().GetResult()` — causes deadlocks in the hosting pipeline
+- ❌ Ignoring `CancellationToken` — tool keeps running after client disconnects, wasting resources
+- ❌ Using `HttpClient` directly instead of `IHttpClientFactory` — socket exhaustion under load
+- ❌ Hardcoding tool names — use `nameof` or constants for refactor safety
+- ❌ Skipping input validation because "the LLM will send valid data" — LLMs hallucinate parameters
+- ❌ Deploying SSE transport without auth — any network client can invoke your tools
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | C# MCP Implementation |
+|--------|----------------------|
+| **Security** | `DefaultAzureCredential` for Azure auth; validate all tool inputs at entry; never expose secrets in tool responses; SSE behind auth middleware; TLS 1.2+ enforced |
+| **Reliability** | `CancellationToken` propagation; retry with Polly on transient Azure SDK failures; health check via `/health` on SSE transport; graceful shutdown via `IHostApplicationLifetime` |
+| **Performance** | Async/await throughout — no blocking calls; `IHttpClientFactory` for connection pooling; `IMemoryCache` for repeated lookups; streaming results via `IAsyncEnumerable<T>` |
+| **Cost Optimization** | Token budgets in config; model routing (gpt-4o-mini for simple tools, gpt-4o for complex); cache tool results with TTL; right-size Kestrel thread pool |
+| **Operational Excellence** | Structured logging to stderr/Application Insights; `ActivitySource` tracing per tool; CI with `dotnet test` + coverage; publish as single-file or container |
+| **Responsible AI** | Content Safety check on tool outputs containing LLM text; PII redaction before logging; tool descriptions include capability boundaries |

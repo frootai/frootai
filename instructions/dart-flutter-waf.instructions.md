@@ -6,130 +6,144 @@ waf:
   - "reliability"
 ---
 
-# Dart Flutter Waf — WAF-Aligned Coding Standards
+# Dart / Flutter — FAI Standards
 
-> Dart/Flutter coding standards — effective Dart, widget composition, state management, and null safety.
+## Effective Dart Style
 
-## Core Rules
+- Use `lowerCamelCase` for variables, functions, parameters; `UpperCamelCase` for types, extensions, enums
+- Prefer `final` over `var` when a variable is never reassigned
+- Use trailing commas on all argument lists, parameter lists, and collection literals for clean diffs
+- Prefer single quotes for strings; use interpolation `'Hello $name'` over concatenation
+- Never use `new` — Dart 2+ makes it unnecessary
+- Annotate return types on public APIs; rely on inference for local variables
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+## Widget Composition
 
-## Implementation Patterns
+- Extract widgets into separate classes rather than nesting `build()` deeper than 3 levels
+- Prefer `const` constructors on every widget and data class that allows it — reduces rebuilds
+- Use `const` keyword at call sites: `const SizedBox(height: 16)` not `SizedBox(height: 16)`
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+```dart
+// preferred — const constructor, extracted widget
+class PriceTag extends StatelessWidget {
+  const PriceTag({super.key, required this.amount});
+  final double amount;
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+  @override
+  Widget build(BuildContext context) {
+    return Text('\$${amount.toStringAsFixed(2)}',
+        style: Theme.of(context).textTheme.titleMedium);
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## StatelessWidget vs StatefulWidget
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Default to `StatelessWidget`; only use `StatefulWidget` when local mutable state (animations, TextEditingController, focus) is required
+- Move business logic into providers/blocs — widgets should only render and dispatch
+- Dispose controllers and subscriptions in `dispose()` to prevent memory leaks
 
-## Code Quality Standards
+## State Management (Riverpod / Bloc)
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+- Prefer Riverpod `@riverpod` code-generation for type-safe providers with auto-dispose
+- Keep state classes immutable — use `freezed` or manual `copyWith` patterns
+- Never mutate state directly; always emit a new state object
 
-## Testing Requirements
+```dart
+// preferred — immutable state with copyWith
+@freezed
+class CartState with _$CartState {
+  const factory CartState({
+    @Default([]) List<CartItem> items,
+    @Default(false) bool isLoading,
+  }) = _CartState;
+}
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+// avoided — mutable state
+class CartState {
+  List<CartItem> items = []; // WRONG: mutable list
+  bool isLoading = false;    // WRONG: direct mutation
+}
+```
 
-## Security Checklist
+## Null Safety
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Never use `!` (bang operator) unless you can prove non-null with a comment explaining why
+- Prefer `?.` and `??` for null-aware access and defaults
+- Use `required` on named parameters that must never be null
+- Pattern match with `if (value case final v?)` for null checks with binding
+
+## Navigation — go_router
+
+- Define routes declaratively with `GoRouter` configuration; avoid imperative `Navigator.push`
+- Use typed route parameters via code-generation (`@TypedGoRoute`)
+- Guard authenticated routes with `redirect` callbacks, not manual checks in widgets
+
+```dart
+final router = GoRouter(
+  redirect: (context, state) {
+    final loggedIn = ref.read(authProvider).isAuthenticated;
+    if (!loggedIn && state.matchedLocation != '/login') return '/login';
+    return null;
+  },
+  routes: [
+    GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
+    GoRoute(path: '/product/:id', builder: (_, state) {
+      return ProductScreen(id: state.pathParameters['id']!);
+    }),
+  ],
+);
+```
+
+## Theming & Responsive Layout
+
+- Define a single `ThemeData` with `ColorScheme.fromSeed()` — never hardcode colors in widgets
+- Use `LayoutBuilder` or `MediaQuery.sizeOf(context)` for responsive breakpoints
+- Prefer `Flex`, `Wrap`, and `ConstrainedBox` over fixed pixel widths
+
+## Platform Channels
+
+- Use `MethodChannel` with typed codec; always handle `MissingPluginException`
+- Define channel names as constants: `static const _channel = MethodChannel('com.app/feature')`
+- Run channel calls inside `try/catch` with `PlatformException` handling
+
+## Testing
+
+- Use `testWidgets` with `WidgetTester` for widget tests; `test` for pure logic
+- Pump frames explicitly: `await tester.pumpAndSettle()` after async actions
+- Mock dependencies with `ProviderScope.overrides` (Riverpod) or `MockBloc` (Bloc)
+- Target 80%+ coverage on business logic; widget tests for critical user flows
+
+```dart
+testWidgets('PriceTag renders formatted amount', (tester) async {
+  await tester.pumpWidget(
+    const MaterialApp(home: Scaffold(body: PriceTag(amount: 9.99))),
+  );
+  expect(find.text('\$9.99'), findsOneWidget);
+});
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+| Anti-Pattern | Why It Hurts | Fix |
+|---|---|---|
+| God widget with 200+ line `build()` | Unreadable, defeats widget caching | Extract child widgets with `const` constructors |
+| `setState` for app-wide state | Triggers full subtree rebuilds | Use Riverpod/Bloc with scoped rebuilds |
+| `MediaQuery.of(context)` in deep widgets | Rebuilds entire subtree on keyboard open | Use `MediaQuery.sizeOf(context)` (Flutter 3.10+) |
+| `FutureBuilder` for network calls | Refires on every rebuild, no caching | Use `AsyncValue` from Riverpod or Bloc events |
+| `context.read` inside `build()` | Misses reactive updates | Use `context.watch` or `ref.watch` inside build |
+| Skipping `const` on static widgets | Prevents Flutter's const-widget optimization | Add `const` to every eligible constructor call |
+| String concatenation for routes | Typo-prone, no compile-time safety | Use `@TypedGoRoute` code-gen or route constants |
+| `print()` for logging | No log levels, floods console | Use `package:logging` or `debugPrint` with tags |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
+| WAF Pillar | Dart/Flutter Practice |
+|---|---|
+| **Performance Efficiency** | `const` constructors, `RepaintBoundary`, lazy provider initialization, image caching with `cached_network_image` |
+| **Reliability** | Null safety, `try/catch` on platform channels, `AsyncValue` error states, `ErrorWidget.builder` for graceful fallback |
+| **Security** | Secure storage via `flutter_secure_storage`, certificate pinning with `Dio`, obfuscation with `--obfuscate --split-debug-info` |
+| **Cost Optimization** | Tree-shaking unused packages, deferred imports for large features, `compute()` for CPU-bound work off main isolate |
+| **Operational Excellence** | `flutter_lints` strict rules, CI with `flutter test --coverage`, Crashlytics integration, `dart fix --apply` in CI |
+| **Responsible AI** | Accessibility labels via `Semantics`, sufficient contrast ratios in `ThemeData`, `excludeFromSemantics` only when redundant |
 
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks

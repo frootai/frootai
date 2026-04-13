@@ -6,130 +6,149 @@ waf:
   - "reliability"
 ---
 
-# Django Waf — WAF-Aligned Coding Standards
+# Django — FAI Standards
 
-> Django standards — models, views, URLs, ORM queries, and security middleware patterns.
+## Model Best Practices
 
-## Core Rules
+- Every model must define `class Meta` with `ordering`, `verbose_name`, and `verbose_name_plural`
+- Add `db_index=True` on fields used in `filter()`, `order_by()`, or `exclude()` queries
+- Use `UniqueConstraint` and `CheckConstraint` in `Meta.constraints` instead of field-level `unique=True` for composite rules
+- Define `__str__` on every model — admin and debugging depend on it
+- Use `validators=[...]` on model fields for domain rules; reserve `clean()` for cross-field validation
+- Prefer `UUIDField(default=uuid.uuid4)` as primary key for public-facing APIs — never expose auto-increment IDs
+- Use `related_name` on every `ForeignKey` and `ManyToManyField` — avoid `foo_set` reverse lookups
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```python
+# ✅ Preferred model pattern
+from django.db import models
+from django.core.validators import MinValueValidator
 
-## Implementation Patterns
+class Product(models.Model):
+    name = models.CharField(max_length=200, db_index=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    category = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="products")
+    created_at = models.DateTimeField(auto_now_add=True)
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [models.CheckConstraint(check=models.Q(price__gte=0), name="product_price_positive")]
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+    def __str__(self):
+        return self.name
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Views & URL Patterns
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Use `path()` with typed converters — never raw regex unless `re_path()` is truly needed
+- Prefer class-based views (`ListView`, `DetailView`, `CreateView`) for CRUD; use function views for one-off logic
+- Use `LoginRequiredMixin` / `PermissionRequiredMixin` on CBVs — never check `request.user` manually in every view
+- Return `JsonResponse` with explicit `status` codes — never bare `HttpResponse` with JSON strings
+- Apply `@require_http_methods(["GET", "POST"])` on function views to reject unexpected methods
 
-## Code Quality Standards
+```python
+# ✅ URL patterns with typed converters
+from django.urls import path
+from . import views
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+urlpatterns = [
+    path("products/", views.ProductListView.as_view(), name="product-list"),
+    path("products/<int:pk>/", views.ProductDetailView.as_view(), name="product-detail"),
+]
+```
 
-## Testing Requirements
+## ORM Query Optimization
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+- Use `select_related("fk_field")` for ForeignKey / OneToOneField joins — eliminates N+1 queries
+- Use `prefetch_related("m2m_field")` for ManyToMany / reverse FK — batches into 2 queries
+- Use `.only("field1", "field2")` or `.defer("large_field")` to limit column fetches
+- Call `QuerySet.explain()` during development to verify index usage and scan types
+- Use `.iterator(chunk_size=2000)` for large result sets to avoid loading all rows into memory
+- Never call `.count()` + `.all()` separately — use `len()` if you need both, or paginate with `Paginator`
 
-## Security Checklist
+```python
+# ❌ N+1 query — fires one query per product for category
+products = Product.objects.all()
+for p in products:
+    print(p.category.name)
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+# ✅ Single JOIN query
+products = Product.objects.select_related("category").all()
+for p in products:
+    print(p.category.name)
+```
+
+## Settings Management
+
+- Split settings: `settings/base.py`, `settings/dev.py`, `settings/prod.py` — import from base
+- Use `django-environ` or `os.environ.get()` for secrets — never hardcode `SECRET_KEY`, database credentials, or API keys
+- Set `DJANGO_SETTINGS_MODULE` via environment variable — not in code
+- Keep `DEBUG = False` in production; enforce via environment check in `prod.py`
+- Define `ALLOWED_HOSTS` explicitly — never `["*"]` in production
+
+## Security Middleware & Headers
+
+- `SecurityMiddleware` must be first in `MIDDLEWARE` — enables HSTS, SSL redirect, content-type sniffing protection
+- Set `SECURE_HSTS_SECONDS = 31536000`, `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`, `SECURE_HSTS_PRELOAD = True`
+- Enable `SECURE_SSL_REDIRECT = True` in production
+- `CSRFViewMiddleware` must remain active — never disable it globally; use `@csrf_exempt` sparingly with documentation
+- Set `SESSION_COOKIE_SECURE = True`, `CSRF_COOKIE_SECURE = True`, `SESSION_COOKIE_HTTPONLY = True`
+- Add CSP headers via `django-csp` middleware — default-src 'self', restrict inline scripts
+
+## Django REST Framework
+
+- Use `ModelSerializer` with explicit `fields` list — never `fields = "__all__"` (leaks new fields automatically)
+- Apply `permission_classes` on every viewset — default to `IsAuthenticated`
+- Use `throttle_classes` for rate limiting — `AnonRateThrottle` and `UserRateThrottle`
+- Paginate all list endpoints — set `DEFAULT_PAGINATION_CLASS` in DRF settings
+- Use `SerializerMethodField` for computed fields; keep serializer logic out of views
+
+```python
+# ✅ Explicit serializer with controlled fields
+class ProductSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source="category.name", read_only=True)
+
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price", "category_name", "created_at"]
+        read_only_fields = ["id", "created_at"]
+```
+
+## Migrations & Signals
+
+- Run `makemigrations` and `migrate` in CI — never skip migration checks
+- Use `RunPython` with `reverse_code` for data migrations — always make them reversible
+- Prefer overriding `Model.save()` over signals for single-model side effects — signals hide control flow
+- Use signals only for decoupled cross-app events (e.g., user creation triggers profile creation)
+- Never import models at module level in signals — use `apps.get_model()` inside the handler
+- Add `--check` flag to `makemigrations` in CI to catch uncommitted schema changes
+
+## Template Security
+
+- Use `{{ variable }}` (auto-escaped) — never `{{ variable|safe }}` unless content is explicitly sanitized
+- Use `{% url 'name' %}` for all links — never hardcode URL paths in templates
+- Mark output of `format_html()` as safe — never concatenate raw HTML strings
+- Validate and sanitize user-uploaded file types — never serve uploads from the same domain without checks
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `fields = "__all__"` in serializers or `ModelForm` — leaks fields added later
+- ❌ Calling `len(queryset)` to check existence — use `queryset.exists()` instead
+- ❌ `ForeignKey(on_delete=models.CASCADE)` without considering data integrity — use `PROTECT` or `SET_NULL` where appropriate
+- ❌ Business logic in views — extract to model methods or service layer
+- ❌ Raw SQL via `cursor.execute()` without parameterized queries — SQL injection risk
+- ❌ Disabling CSRF globally or using `@csrf_exempt` without API token auth replacement
+- ❌ `DEBUG = True` in production — exposes settings, tracebacks, and SQL queries
+- ❌ Storing uploaded files in `MEDIA_ROOT` without filename sanitization
+- ❌ Unbounded `queryset.all()` in API endpoints without pagination
+- ❌ Catching bare `except Exception` in views — let Django's error handling return proper 500s
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Django Practice |
+|--------|----------------|
+| **Security** | SecurityMiddleware first, HSTS + CSP headers, CSRF protection, `@csrf_exempt` only with token auth, parameterized queries, `SESSION_COOKIE_SECURE`, no `DEBUG=True` in prod |
+| **Reliability** | Database connection pooling via `django-db-connection-pool`, health check at `/health/`, graceful SIGTERM handling in ASGI/Gunicorn, migration rollback with `reverse_code` |
+| **Cost Optimization** | `select_related`/`prefetch_related` to reduce DB round-trips, `.only()`/`.defer()` to limit data transfer, `Paginator` to bound response sizes, `django.core.cache` with Redis backend |
+| **Operational Excellence** | Structured logging via `django-structlog`, split settings per environment, `makemigrations --check` in CI, `django-health-check` for dependency monitoring |
+| **Performance Efficiency** | QuerySet `.iterator()` for large scans, database indexes on filter/order fields, `Meta.constraints` for DB-level validation, `@cached_property` for expensive model computations |
+| **Responsible AI** | Input sanitization before LLM calls, PII redaction in logs, content safety checks on AI-generated template output, audit trail on AI-assisted actions |

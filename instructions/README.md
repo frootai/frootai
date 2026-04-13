@@ -1,8 +1,8 @@
-# FrootAI — Instructions (176)
+# FAI — Instructions (176)
 
 > 176 language, framework, and cross-cutting coding standards that auto-apply via `applyTo` glob patterns.
 
-## What Are FrootAI Instructions?
+## What Are FAI Instructions?
 
 Instructions are `.instructions.md` files that define coding standards, best practices, and rules for specific languages, frameworks, or cross-cutting concerns. They auto-apply to matching files via the `applyTo` glob pattern.
 
@@ -19,7 +19,7 @@ applyTo: "glob pattern(s)"
 
 ## Existing Instructions (WAF Architecture)
 
-FrootAI already has 6 WAF-aligned instructions in `.github/instructions/`:
+FAI has 6 WAF-aligned instructions in `.github/instructions/`:
 
 | Instruction | Scope | applyTo |
 |-------------|-------|---------|
@@ -38,12 +38,12 @@ This folder holds **language-level and framework-level** coding standards — co
 |----------|----------|---------|
 | Language standards | `python-waf.instructions.md` | `**/*.py` |
 | IaC standards | `bicep-waf.instructions.md` | `**/*.bicep` |
-| MCP development | `python-mcp-frootai.instructions.md` | `**/*.py` |
+| MCP development | `python-mcp-development.instructions.md` | `**/*.py` |
 | Cross-cutting | `security-owasp.instructions.md` | `*` |
 
 ## Unique Advantage
 
-FrootAI instructions combine **coding rules** (like awesome-copilot) with **WAF pillar alignment** (unique to FrootAI). Every instruction references which WAF pillar it enforces.
+FAI instructions combine **coding rules** with **WAF pillar alignment**. Every instruction references which WAF pillar it enforces.
 
 ## Naming Convention
 

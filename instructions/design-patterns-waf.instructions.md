@@ -6,130 +6,159 @@ waf:
   - "operational-excellence"
 ---
 
-# Design Patterns Waf — WAF-Aligned Coding Standards
+# Design Patterns — FAI Standards
 
-> OOP design patterns — interface segregation, composition over inheritance, and SOLID principles.
+## SOLID Principles — Actionable Rules
 
-## Core Rules
+### Single Responsibility (SRP)
+- One class = one reason to change. If a class name needs "And" or "Manager", split it
+- Services own business logic OR orchestration, never both
+- Extract cross-cutting concerns (logging, auth, caching) into decorators or middleware
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+### Open/Closed (OCP)
+- Extend behavior via new implementations, not `if/else` chains on type strings
+- Use strategy maps (`Record<string, Strategy>`) instead of switch statements on discriminator fields
+- Plugin points: accept interfaces at boundaries so new behavior ships without touching existing code
 
-## Implementation Patterns
+### Liskov Substitution (LSP)
+- Subtypes must honor the base contract — no `throw new Error("not supported")` in overrides
+- If a subclass ignores or breaks a parent method, it is not a valid subtype — use composition instead
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+### Interface Segregation (ISP)
+- No interface with >5 methods — split by consumer need
+- Clients must not depend on methods they don't call. Prefer `Readable`, `Writable` over a single `Stream`
 
-### Azure SDK Integration
+### Dependency Inversion (DIP)
+- High-level modules depend on abstractions, not concrete implementations
+- Inject dependencies through constructor parameters, never via `new` inside business logic
+- Configuration and infrastructure concerns live at the composition root
+
+## Composition Over Inheritance
+
+- Prefer object composition (`has-a`) over class inheritance (`is-a`) in all new code
+- Max inheritance depth: 2 levels. Beyond that, extract shared behavior into composable mixins or delegates
+- Never inherit to reuse — inherit only to express a true "is-a" relationship
+
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+// ✅ Composition — behaviors are pluggable
+interface RetryPolicy { execute<T>(fn: () => Promise<T>): Promise<T>; }
+interface Logger { log(msg: string, ctx?: Record<string, unknown>): void; }
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+class OrderService {
+  constructor(private repo: OrderRepository, private retry: RetryPolicy, private logger: Logger) {}
+  async place(order: Order): Promise<string> {
+    return this.retry.execute(async () => {
+      const id = await this.repo.save(order);
+      this.logger.log("order_placed", { orderId: id });
+      return id;
+    });
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+```typescript
+// ❌ Inheritance — rigid coupling, unclear responsibilities
+class OrderService extends BaseRetryService {
+  // inherits retry, logging, config, metrics — can't swap any independently
+  async place(order: Order): Promise<string> { /* ... */ }
+}
+```
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Dependency Injection
 
-## Code Quality Standards
+- Register all dependencies at the composition root (app entry point)
+- Use constructor injection exclusively — no property injection, no service locator
+- Scoped lifetimes: singletons for stateless services, transient for stateful or per-request
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```typescript
+// ✅ Composition root wires everything — business code stays clean
+const repo = new PostgresOrderRepository(pool);
+const retry = new ExponentialRetry({ base: 1000, max: 30000, retries: 3 });
+const logger = new StructuredLogger("OrderService");
+const service = new OrderService(repo, retry, logger);
+```
 
-## Testing Requirements
+## Strategy Pattern
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+- Use when behavior varies by type, role, or configuration — never a growing switch/if-else
+- Strategies implement a shared interface and are selected via a registry map
 
-## Security Checklist
+```typescript
+interface Summarizer { summarize(text: string): Promise<string>; }
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+const summarizers: Record<string, Summarizer> = {
+  extractive: new ExtractiveSummarizer(),
+  abstractive: new LlmSummarizer(client),
+};
 
-## Anti-Patterns
+function getSummarizer(mode: string): Summarizer {
+  const s = summarizers[mode];
+  if (!s) throw new Error(`Unknown summarizer: ${mode}`);
+  return s;
+}
+```
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+## Observer / Event-Driven
+
+- Use events to decouple side effects (notifications, auditing, cache invalidation) from core logic
+- Emitters own the event contract (typed event payloads). Listeners are registered at startup
+- Never put business-critical logic in event listeners — listeners handle secondary effects only
+
+## Builder Pattern
+
+- Use builders when constructing objects with >4 optional parameters or complex validation
+- Builder methods return `this` for chaining. `build()` validates invariants and returns the immutable object
+- Never expose partially constructed objects — invalid state must throw at build time
+
+## Repository Pattern
+
+- Repositories encapsulate data access behind a collection-like interface (`find`, `save`, `delete`)
+- Business logic calls the repository interface — never raw SQL, ORM queries, or SDK calls in services
+- One repository per aggregate root. No repositories for value objects or child entities
+
+## Middleware / Chain of Responsibility
+
+- Use for cross-cutting pipelines: auth → validation → rate-limit → handler → logging
+- Each middleware calls `next()` or short-circuits. Order is defined at the composition root
+- Middleware must not hold request-scoped state between invocations
+
+## Factory Pattern
+
+- Use factories when object creation requires conditional logic or environment-specific deps
+- Factory methods return the interface type, never the concrete class
+- Consolidate `new` calls — if the same conditional creation appears twice, extract a factory
+
+## Anti-Corruption Layer (ACL)
+
+- Wrap external/legacy APIs behind an adapter that speaks your domain language
+- Translate external DTOs into domain models at the boundary — never leak external schemas inward
+- ACL changes when the external system changes, domain models stay stable
+
+## Event Sourcing Basics
+
+- Store state transitions as immutable events, derive current state by replaying the event stream
+- Events are facts — past tense naming (`OrderPlaced`, `ItemShipped`), append-only, never mutated
+- Use only when audit trail, temporal queries, or undo/replay are genuine requirements — not by default
+
+## Anti-Patterns — Never Do These
+
+| Anti-Pattern | Problem | Fix |
+|---|---|---|
+| **God Class** | One class with 500+ lines handling everything | Split by responsibility — one class, one job |
+| **Anemic Domain Model** | Models are data bags; all logic in external services | Move behavior into the entity that owns the data |
+| **Service Locator** | `Container.resolve<T>()` called inside business code | Constructor injection — dependencies are explicit |
+| **Deep Inheritance** (>2 levels) | Fragile base class problem, unclear method resolution | Flatten to composition with delegate objects |
+| **Primitive Obsession** | `string` for email, `number` for money | Value objects: `Email`, `Money`, `OrderId` |
+| **Temporal Coupling** | Methods must be called in secret order or state breaks | Builder or state machine — enforce order structurally |
+| **Feature Envy** | Method uses 5 fields from another class, 0 from its own | Move the method to the class whose data it uses |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| WAF Pillar | Design Pattern Contribution |
+|---|---|
+| **Reliability** | Strategy + retry policies, circuit breaker as middleware, repository isolation from data-layer failures |
+| **Operational Excellence** | DI makes components testable and swappable, observer decouples side effects, middleware standardizes pipelines |
+| **Security** | ACL prevents external schema leaks, factory centralizes credential handling, ISP limits attack surface per interface |
+| **Cost Optimization** | Strategy enables model routing (cheap model for simple tasks), composition allows swapping cache layers without rewrite |
+| **Performance** | Chain of responsibility enables short-circuit (skip expensive steps), event sourcing enables async projections |
+| **Responsible AI** | Observer emits audit events for transparency, builder enforces guardrail config at construction time |

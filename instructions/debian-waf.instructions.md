@@ -6,130 +6,193 @@ waf:
   - "security"
 ---
 
-# Debian Waf — WAF-Aligned Coding Standards
-
-> Debian/Ubuntu administration standards — apt, systemd, UFW firewall, and server hardening.
+# Debian / Ubuntu — FAI Standards
 
 ## Core Rules
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+- Use `apt` (never `apt-get` in scripts without `-y` and `DEBIAN_FRONTEND=noninteractive`)
+- Pin critical packages with `apt-mark hold <pkg>` to prevent unintended upgrades
+- Every service runs as a dedicated non-root user with `DynamicUser=yes` or explicit `User=`/`Group=`
+- All shell scripts start with `#!/usr/bin/env bash`, use `set -euo pipefail`, and pass `shellcheck`
+- SSH root login disabled (`PermitRootLogin no`), key-only auth (`PasswordAuthentication no`)
+- UFW enabled on all servers — default deny inbound, explicit allow per service port
+- Unattended security upgrades enabled via `unattended-upgrades` with reboot window
+- Filesystem permissions: config files `0640 root:<service-group>`, secrets `0600 root:root`
+- Logs managed by journald with persistent storage and size caps — no unbounded `/var/log` growth
+- AppArmor enforcing on all custom services — never disable for convenience
 
-## Implementation Patterns
+## Package Management
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+```bash
+# Preferred: non-interactive, auto-confirm, clean after install
+export DEBIAN_FRONTEND=noninteractive
+apt update && apt install -y --no-install-recommends nginx curl && apt clean
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+# Pin a package to prevent upgrade breakage
+apt-mark hold postgresql-16
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+# Remove unused dependencies
+apt autoremove -y --purge
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+- Always use `--no-install-recommends` to minimize attack surface
+- Add third-party repos via signed `.sources` files in `/etc/apt/sources.list.d/`, never piping `curl | bash`
+- Verify GPG keys with `gpg --verify` before adding to trusted keyring
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Systemd Service Files
 
-## Code Quality Standards
+```ini
+# /etc/systemd/system/myapp.service
+[Unit]
+Description=MyApp API Server
+After=network-online.target postgresql.service
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+[Service]
+Type=notify
+User=myapp
+Group=myapp
+WorkingDirectory=/opt/myapp
+ExecStart=/opt/myapp/bin/server --config /etc/myapp/config.yaml
+Restart=on-failure
+RestartSec=5s
+WatchdogSec=30s
+ProtectSystem=strict
+ProtectHome=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/myapp /var/log/myapp
 
-## Testing Requirements
+[Install]
+WantedBy=multi-user.target
+```
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+- Use `ProtectSystem=strict`, `NoNewPrivileges=yes`, `PrivateTmp=yes` on every custom service
+- Set `StartLimitBurst` + `StartLimitIntervalSec` to prevent crash-loop storms
+- Use `WatchdogSec` with `Type=notify` for health-aware restart
 
-## Security Checklist
+## SSH Hardening (`/etc/ssh/sshd_config.d/hardening.conf`)
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+```bash
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 2
+AllowUsers deploy admin
+Protocol 2
+```
+
+## UFW Firewall
+
+```bash
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow 22/tcp comment "SSH"
+ufw allow 443/tcp comment "HTTPS"
+ufw --force enable
+ufw status verbose
+```
+
+- Never use `ufw allow <port>` without specifying protocol (`/tcp` or `/udp`)
+- Use `ufw limit 22/tcp` on public-facing SSH to rate-limit brute force
+
+## Fail2ban
+
+```ini
+# /etc/fail2ban/jail.local
+[sshd]
+enabled = true
+port = 22
+maxretry = 5
+bantime = 3600
+findtime = 600
+```
+
+## Unattended Upgrades
+
+```bash
+apt install -y unattended-upgrades
+dpkg-reconfigure -plow unattended-upgrades
+# /etc/apt/apt.conf.d/50unattended-upgrades
+# Unattended-Upgrade::Automatic-Reboot "true";
+# Unattended-Upgrade::Automatic-Reboot-Time "03:00";
+```
+
+## Log Management with journald
+
+```ini
+# /etc/systemd/journald.conf.d/retention.conf
+[Journal]
+Storage=persistent
+SystemMaxUse=500M
+MaxRetentionSec=30day
+Compress=yes
+```
+
+- Query with `journalctl -u myapp --since "1 hour ago" --no-pager -o json`
+- Forward to remote syslog with `ForwardToSyslog=yes` for centralized logging
+
+## User & Group Management
+
+```bash
+# Create service account — no login shell, no home
+useradd --system --no-create-home --shell /usr/sbin/nologin myapp
+# Add deploy user with sudo
+useradd -m -G sudo -s /bin/bash deploy
+```
+
+## Network Configuration (Netplan)
+
+```yaml
+# /etc/netplan/01-config.yaml
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: false
+      addresses: [10.0.1.10/24]
+      routes:
+        - to: default
+          via: 10.0.1.1
+      nameservers:
+        addresses: [1.1.1.1, 8.8.8.8]
+```
+
+Apply with `netplan apply` — never edit `/etc/network/interfaces` on modern Ubuntu.
+
+## Backup with rsync / borgbackup
+
+```bash
+# Incremental encrypted backup with borg
+borg create --compression zstd,3 --encryption repokey \
+  /backup/repo::'{hostname}-{now}' /etc /var/lib/myapp /opt/myapp
+borg prune --keep-daily 7 --keep-weekly 4 --keep-monthly 6 /backup/repo
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Running services as root when they don't need privileged ports
+- ❌ `chmod 777` or `chmod -R 777` — always set minimal required permissions
+- ❌ Piping `curl | bash` for installation — download, inspect, then execute
+- ❌ Disabling AppArmor/UFW to "fix" connectivity issues — fix the rule instead
+- ❌ Using `crontab -e` for tasks that should be systemd timers (no logging, no dependency)
+- ❌ Editing `/etc/resolv.conf` directly — it's managed by `systemd-resolved` or netplan
+- ❌ Running `apt upgrade -y` in production without `--no-install-recommends` and testing
+- ❌ Storing secrets in plaintext `/etc/environment` or shell profiles
+- ❌ `kill -9` as first resort — send `SIGTERM`, wait, then escalate
+- ❌ Ignoring `needrestart` — services using outdated libs remain vulnerable
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Debian/Ubuntu Practice |
+|--------|----------------------|
+| **Security** | SSH key-only auth, UFW default-deny, fail2ban, AppArmor enforcing, `NoNewPrivileges` in systemd, unattended security patches |
+| **Reliability** | Systemd restart policies with backoff, watchdog health checks, `apt-mark hold` for critical packages, borg backup with retention |
+| **Cost Optimization** | `--no-install-recommends` to reduce image size, journald size caps, `apt autoremove --purge`, systemd resource limits (`MemoryMax`, `CPUQuota`) |
+| **Operational Excellence** | Journald persistent logging with JSON output, netplan declarative networking, systemd timers over cron, `needrestart` after upgrades |
+| **Performance Efficiency** | `zstd` compression for backups, journald compression, systemd socket activation for on-demand services, `PrivateTmp` reduces I/O contention |
+| **Responsible AI** | Audit trails via journald, user isolation with dedicated service accounts, file permission enforcement for model artifacts |
