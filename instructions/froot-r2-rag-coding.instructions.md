@@ -6,130 +6,136 @@ waf:
   - "performance-efficiency"
 ---
 
-# Froot R2 Rag Coding — WAF-Aligned Coding Standards
+# RAG Coding Patterns — FAI Standards
 
-> RAG coding standards — chunking config, embedding batch calls, reranker integration, citation injection.
+## Document Processing Pipeline
 
-## Core Rules
+Follow: **Extract → Clean → Chunk → Embed → Index**. Never skip steps.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+```python
+async def ingest(doc: Document, cfg: RAGConfig) -> IndexResult:
+    text = extract_text(doc)                          # PDF/DOCX/HTML → plain text
+    cleaned = strip_headers_footers(text)             # Remove boilerplate
+    chunks = chunk_with_metadata(cleaned, doc.source) # Preserve source lineage
+    embeddings = await batch_embed(chunks, cfg)       # Batched API calls
+    return await upsert_to_index(chunks, embeddings, cfg)
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Chunking Strategies
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Configure sizes via `config/rag.json` — never hardcode. Choose strategy by document type:
 
-## Code Quality Standards
+- **Fixed-size + overlap** (default): `size=512` tokens, `overlap=128`. Use for unstructured text.
+- **Structure-aware**: Split on headings (H1/H2/H3), fall back to fixed when section exceeds max tokens. Use for Markdown, HTML, legal docs.
+- **Semantic**: Split at topic boundaries via embedding similarity. Expensive — use only when quality demands it.
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```python
+def chunk_fixed(text: str, size: int = 512, overlap: int = 128) -> list[Chunk]:
+    tokens = tokenizer.encode(text)
+    return [Chunk(text=tokenizer.decode(tokens[i:i + size]),
+                  start_token=i, end_token=min(i + size, len(tokens)))
+            for i in range(0, len(tokens), size - overlap)]
+```
 
-## Testing Requirements
+## Embedding Best Practices
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+Batch requests — Azure OpenAI supports up to 16 inputs per call.
 
-## Security Checklist
+```python
+async def batch_embed(chunks: list[Chunk], cfg: RAGConfig) -> list[list[float]]:
+    results = []
+    for i in range(0, len(chunks), cfg.embedding_batch_size):
+        batch = [c.text for c in chunks[i:i + cfg.embedding_batch_size]]
+        resp = await client.embeddings.create(
+            model=cfg.embedding_model, input=batch, dimensions=cfg.embedding_dimensions)
+        results.extend([item.embedding for item in resp.data])
+    return results
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- `text-embedding-3-large` with `dimensions=1536` for production
+- `text-embedding-3-small` for dev/prototyping only
+- Strip HTML/Markdown formatting before embedding — tags are noise
+
+## Hybrid Search with Semantic Reranking
+
+Always combine keyword + vector + semantic reranker. Pure vector search misses exact matches.
+
+```python
+results = search_client.search(
+    search_text=query,                                      # BM25 keyword
+    vector_queries=[VectorizableTextQuery(
+        text=query, k_nearest_neighbors=50, fields="content_vector")],
+    query_type="semantic", semantic_configuration_name="default",
+    top=cfg.retrieval_top_k,                                # 5-10 for generation
+    select=["id", "content", "source_url", "chunk_id"],
+    filter=metadata_filter,                                 # Tenant/date scoping
+)
+```
+
+- `k_nearest_neighbors=50` candidate pool → reranker selects `top=5`
+- Semantic reranker adds ~200ms — worth it for quality
+- Use `filter` for tenant isolation, date ranges, document categories
+
+## Vector Store Configuration
+
+**Azure AI Search** — preferred. Define HNSW profile with `m=4`, `efConstruction=400`.
+**Cosmos DB vCore** — when transactional consistency + vector search needed. `m=16`, `efConstruction=64`, `similarity=COS`.
+
+## Citation Pipeline
+
+Every chunk carries source lineage: `source_url`, `page_number`, `chunk_id`, `heading`. Tag chunks `[Source N]` in context, instruct model to cite them, post-process to resolve URLs.
+
+## Context Window Budget
+
+Reserve tokens explicitly — never fill the full window with retrieved content.
+
+- System prompt: 500–1000 tokens
+- Retrieved context: 60% of window
+- Conversation history: 15% of window
+- Response: `max_tokens` from config
+- Count with `tiktoken` — never estimate. Truncate oldest turns first, not context.
+
+## Multi-Index Routing & Metadata Filtering
+
+- Route queries to domain-specific indexes based on intent classification
+- `tenant_id` filters for multi-tenant isolation — never rely on prompt alone
+- Date filters for time-sensitive content (policies, release notes)
+
+## Retrieval Evaluation
+
+| Metric | Target | Measures |
+|--------|--------|----------|
+| Recall@5 | ≥ 0.80 | Relevant docs in top-k |
+| MRR | ≥ 0.70 | First relevant doc rank |
+| NDCG@10 | ≥ 0.75 | Rank quality with position weighting |
+| Groundedness | ≥ 4.0/5 | Answer supported by context |
+
+Run `evaluation/eval_retrieval.py` against labeled test set before every index config change.
+
+## Grounding Check
+
+Verify LLM answers against retrieved sources at `temperature=0`. Reject ungrounded claims.
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Embedding raw HTML/Markdown — formatting tags kill retrieval precision
+- ❌ Single monolithic index for all doc types — use domain-specific indexes
+- ❌ Pure vector search without BM25 keyword component
+- ❌ Filling entire context window with chunks — no room for response
+- ❌ Hardcoded chunk sizes — configure in `config/rag.json`
+- ❌ Skipping overlap in fixed chunking — loses boundary context
+- ❌ No citation tracking — can't verify or debug answers
+- ❌ Embedding full documents instead of chunks — embeddings lose specificity
+- ❌ Cosine similarity threshold as sole filter — always use reranking
+- ❌ `temperature > 0` for grounding checks or RAG classification
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | RAG Practice |
+|--------|-------------|
+| **Reliability** | Retry embedding/search with backoff. Circuit breaker on vector store. Keyword-only fallback. |
+| **Security** | Tenant metadata filters. Managed Identity for clients. PII strip before indexing. Prompt injection detection. |
+| **Cost** | Batch embeddings (16/call). Cache query embeddings. `text-embedding-3-small` for dev. Right-size HNSW params. |
+| **Performance** | Async embed calls. Pre-compute at ingest. Semantic cache. Stream LLM responses. |
+| **Ops Excellence** | Log recall, latency, reranker scores. Track token usage. Alert on groundedness drops. Version index schemas. |
+| **Responsible AI** | Grounding check every answer. Citations for transparency. Content Safety on chunks + answers. |

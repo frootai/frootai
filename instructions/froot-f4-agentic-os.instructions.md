@@ -5,130 +5,161 @@ waf:
   - "operational-excellence"
 ---
 
-# Froot F4 Agentic Os — WAF-Aligned Coding Standards
+# Agentic OS & Copilot Customization — FAI Standards
 
-> Agentic OS standards — .github folder structure, 7 primitives, 4 layers, plugin packaging.
+> Rules for structuring the `.github/` folder as an AI agent operating system using the 7-primitive model.
 
-## Core Rules
+## .github Folder Structure
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```
+.github/
+├── copilot-instructions.md              # Always-on workspace context (<150 lines)
+├── agents/
+│   ├── builder.agent.md                 # Build/implement agent
+│   ├── reviewer.agent.md                # Security + quality review agent
+│   └── tuner.agent.md                   # Config validation + eval agent
+├── instructions/
+│   ├── python-waf.instructions.md       # File-scoped rules (applyTo globs)
+│   └── bicep-standards.instructions.md
+├── prompts/
+│   ├── test.prompt.md                   # One-shot task templates
+│   └── deploy.prompt.md
+├── skills/
+│   └── provision-infra/
+│       ├── SKILL.md                     # Multi-step workflow
+│       └── templates/main.bicep         # Bundled assets
+├── hooks/
+│   └── guardrails.json                  # Lifecycle event handlers
+└── workflows/
+    └── evaluate.yml                     # CI/CD automation
+```
 
-## Implementation Patterns
+## The 4-Layer Architecture
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+| Layer | Scope | Files | Loaded When |
+|-------|-------|-------|-------------|
+| **Always-on** | Every conversation | `copilot-instructions.md` | Automatically — every request |
+| **File-based** | Matching glob | `instructions/*.instructions.md` | File matches `applyTo` pattern |
+| **Agent-scoped** | Agent invoked | `agents/*.agent.md` | User invokes `@agent-name` |
+| **Skill-invoked** | On demand | `skills/*/SKILL.md` | Agent decides via `description` match |
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+**Cost rule**: Always-on is the most expensive layer (burns tokens every turn). Keep `copilot-instructions.md` under 150 lines. Push domain rules to file-based instructions.
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+## 7 Primitive Types — Frontmatter Reference
+
+### 1. Workspace Instructions (`copilot-instructions.md`)
+No frontmatter. Plain markdown. Knowledge-only — never behavioral overrides. If removing a line doesn't change output quality, delete it.
+
+### 2. Agents (`*.agent.md`)
+```yaml
+---
+description: "Enterprise RAG pipeline builder — chunking, indexing, retrieval"
+tools: ["codebase", "terminal", "mcp_frootai_agent_build"]
+model: ["gpt-4o", "gpt-4o-mini"]           # Fallback array
+waf: ["security", "reliability"]
+plays: ["01-enterprise-rag"]
+---
+```
+Agents get context isolation. Use for builder→reviewer→tuner triads with `#<agent-name>` handoffs.
+
+### 3. Instructions (`*.instructions.md`)
+```yaml
+---
+description: "Python WAF coding standards for Azure AI services"
+applyTo: "**/*.py"
+waf: ["security", "operational-excellence"]
+---
+```
+`applyTo` controls when loaded. Use specific globs — `**/*.py`, `src/api/**`. Never `**` unless truly global.
+
+### 4. Prompts (`*.prompt.md`)
+```yaml
+---
+description: "Generate unit tests for the selected function"
+mode: "ask"
+tools: ["codebase"]
+---
+```
+Single focused task with `${input:variable}` placeholders. Appears as `/prompt-name` in chat.
+
+### 5. Skills (`SKILL.md` inside named folder)
+```yaml
+---
+name: "provision-infra"
+description: "Provision Azure infrastructure using AVM Bicep modules. Use when: deploying, setting up cloud resources, creating landing zones."
+---
+```
+`name` MUST match parent folder name. `description` is the discovery surface — include "Use when:" trigger phrases. Can bundle scripts, templates, and config files as assets.
+
+### 6. Hooks (`*.json`)
+```json
+{
+  "version": 1,
+  "hooks": {
+    "SessionStart": [{
+      "command": "node scripts/inject-context.js",
+      "description": "Load play context at session start"
+    }]
   }
 }
 ```
+Available events: `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `PreCompact`, `SubagentStart`, `SubagentStop`, `Stop`. **Never use `PreToolUse`** — it spawns a process per tool call (~5s delay each).
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+### 7. Workflows (`*.yml`)
+Standard GitHub Actions YAML. Wire evaluation pipelines, deployment gates, and quality checks.
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Naming Conventions
 
-## Code Quality Standards
+All primitive files use **lowercase-kebab-case**:
+- Agents: `fai-rag-architect.agent.md`
+- Instructions: `python-waf.instructions.md`
+- Skills: `provision-infra/SKILL.md` (folder = kebab, file = `SKILL.md`)
+- Hooks: `guardrails.json`
+- Prompts: `test-generation.prompt.md`
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Composition in Solution Plays
 
-## Testing Requirements
-
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
-
-## Security Checklist
-
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+Primitives wire together via `fai-manifest.json`:
+```json
+{
+  "play": "01-enterprise-rag",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["copilot-instructions.md"],
+    "waf": ["security", "reliability", "cost-optimization"]
+  },
+  "primitives": {
+    "agents": [".github/agents/builder.agent.md"],
+    "instructions": [".github/instructions/python-waf.instructions.md"],
+    "skills": [".github/skills/provision-infra/SKILL.md"],
+    "hooks": [".github/hooks/guardrails.json"],
+    "prompts": [".github/prompts/test.prompt.md"]
+  }
+}
+```
+Standalone primitives auto-wire when placed inside a solution play's `.github/` folder. The manifest makes wiring explicit for cross-play reuse.
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+| Anti-Pattern | Why It Fails | Fix |
+|-------------|-------------|-----|
+| `copilot-instructions.md` > 150 lines | Burns tokens every turn, crowds out user context | Move domain rules to `instructions/*.instructions.md` |
+| `applyTo: "**"` on instructions | Loaded for every file interaction, even irrelevant ones | Use specific globs: `**/*.py`, `infra/**/*.bicep` |
+| `PreToolUse` hooks | Spawns shell process per tool call — 5s latency each | Use `SessionStart` or `PostToolUse` instead |
+| Behavioral overrides in instructions | "Always respond in bullet points" — fragile, model-dependent | Write knowledge facts, not personality directives |
+| Missing `description` on skills | Agent can't discover the skill — never invoked | Add "Use when:" phrases with domain keywords |
+| `name` ≠ folder name in skills | Silent failure — skill won't load | Ensure `name: "provision-infra"` matches folder `provision-infra/` |
+| Hardcoded secrets in hooks | Shell commands in hooks run with full env access | Use `inputs` variables or `.env` files via `envFile` |
+| Agents without model fallbacks | Single model fails → entire agent breaks | Use array: `model: ["gpt-4o", "gpt-4o-mini"]` |
+| Giant monolithic agent | All logic in one agent — no isolation, no reuse | Split into builder/reviewer/tuner triad with handoffs |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| WAF Pillar | Agentic OS Practice |
+|-----------|-------------------|
+| **Security** | Hooks enforce secret scanning at `SessionStart`; agents use least-privilege `tools` lists; `inputs` for secrets in MCP config |
+| **Reliability** | Model fallback arrays in agents; `PostToolUse` hooks validate outputs; graceful degradation when skills fail |
+| **Cost Optimization** | Role-based model selection (builder=gpt-4o, reviewer=gpt-4o-mini); token budgets in `copilot-instructions.md` (<150 lines); `applyTo` globs prevent unnecessary context loading |
+| **Operational Excellence** | Primitives version-controlled in `.github/`; `fai-manifest.json` tracks wiring; `npm run validate:primitives` CI gate |
+| **Performance Efficiency** | 4-layer architecture loads only relevant context per request; skills bundle assets locally instead of fetching at runtime |
+| **Responsible AI** | Content safety hooks on `UserPromptSubmit`; guardrail thresholds in `config/guardrails.json`; bias review in tuner agent |

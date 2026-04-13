@@ -6,130 +6,186 @@ waf:
   - "responsible-ai"
 ---
 
-# Froot R3 Determinism — WAF-Aligned Coding Standards
+# Deterministic AI — FAI Standards
 
-> Determinism standards — temperature=0+seed, structured output, validation pipeline, grounding checks.
+## 1. Reproducible LLM Calls
 
-## Core Rules
+Every LLM call MUST pin `temperature=0` and supply a `seed`. Log the `system_fingerprint` returned by the API for audit.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```python
+# Python — deterministic call with seed pinning
+response = client.chat.completions.create(
+    model=config["model"],
+    messages=messages,
+    temperature=0,
+    seed=config.get("seed", 42),
+    max_tokens=config["max_tokens"],
+)
+fingerprint = response.system_fingerprint  # log for reproducibility audit
+```
 
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+// TypeScript — deterministic call with seed pinning
+const response = await client.chat.completions.create({
+  model: config.model,
+  messages,
+  temperature: 0,
+  seed: config.seed ?? 42,
+  max_tokens: config.maxTokens,
+});
+const fingerprint = response.system_fingerprint; // log for reproducibility audit
+```
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+- Store `(prompt_hash, seed, system_fingerprint, model_version)` per request for replay
+- If the upstream model updates (fingerprint drift), alert — do NOT silently continue
+
+## 2. Structured Output Enforcement
+
+Never parse free-text LLM output with regex. Use the API's structured output or function-calling mode.
+
+```python
+# Python — Pydantic model as structured output schema
+from pydantic import BaseModel, Field
+
+class TicketClassification(BaseModel):
+    category: str = Field(..., pattern="^(billing|technical|account)$")
+    confidence: float = Field(..., ge=0.0, le=1.0)
+    reasoning: str = Field(..., min_length=10)
+
+response = client.beta.chat.completions.parse(
+    model=config["model"],
+    messages=messages,
+    response_format=TicketClassification,
+    temperature=0,
+    seed=42,
+)
+result: TicketClassification = response.choices[0].message.parsed
+```
+
+```typescript
+// TypeScript — Zod schema as structured output
+import { z } from "zod";
+
+const TicketClassification = z.object({
+  category: z.enum(["billing", "technical", "account"]),
+  confidence: z.number().min(0).max(1),
+  reasoning: z.string().min(10),
+});
+
+const response = await client.beta.chat.completions.parse({
+  model: config.model,
+  messages,
+  response_format: zodResponseFormat(TicketClassification, "ticket"),
+  temperature: 0,
+  seed: 42,
+});
+const result = response.choices[0].message.parsed;
+```
+
+## 3. Output Validation with Retry
+
+Validate every LLM output against the schema. On validation failure, retry up to `max_retries` (default 2) with the error fed back as context.
+
+```python
+for attempt in range(config.get("max_retries", 2) + 1):
+    response = call_llm(messages, temperature=0, seed=42)
+    try:
+        result = TicketClassification.model_validate_json(response.content)
+        break
+    except ValidationError as e:
+        messages.append({"role": "user", "content": f"Fix: {e.errors()}"})
+else:
+    raise DeterminismError("LLM output failed validation after retries")
+```
+
+## 4. Deterministic Tool Calling
+
+- Tools MUST be invoked in a **fixed, declared order** — never randomize or shuffle
+- Tool results are **idempotent**: same input → same output, no side effects on read operations
+- Log every tool call with `(tool_name, input_hash, output_hash, duration_ms)`
+- If a tool has side effects (write/delete), guard with an idempotency key
+
+## 5. Fixed Embedding & Chunking
+
+- Pin embedding model version explicitly: `text-embedding-3-small` not `text-embedding-latest`
+- Pin `dimensions` parameter (e.g., `1536`) — never let the API default
+- Use deterministic chunking: fixed `chunk_size` + `chunk_overlap` from config, no random sampling
+- Sentence splitters MUST use the same locale and tokenizer version across environments
+- Record `(model_version, dimensions, chunk_size, chunk_overlap)` in index metadata
+
+## 6. Config-Driven Randomness Control
+
+All randomness parameters live in `config/*.json` — never hardcoded. Any parameter that affects output distribution:
+
+```json
+{
+  "model": "gpt-4o-2024-11-20",
+  "temperature": 0,
+  "seed": 42,
+  "top_p": 1,
+  "max_tokens": 2048,
+  "embedding_model": "text-embedding-3-small",
+  "embedding_dimensions": 1536,
+  "chunk_size": 512,
+  "chunk_overlap": 64,
+  "max_retries": 2,
+  "deterministic_tool_order": true
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## 7. Testing for Determinism
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+### Snapshot Testing for Prompts
+- Pin prompt templates in version control — any change triggers a diff review
+- Snapshot-test rendered prompts (with variables substituted) against `.snap` files
+- CI fails on unexpected prompt drift
 
-## Code Quality Standards
+### Pinned Response Fixtures
+- Record golden LLM responses as JSON fixtures in `tests/fixtures/`
+- Unit tests mock the LLM client to return fixtures — zero network calls
+- Re-record fixtures explicitly with `RECORD_FIXTURES=1` — never auto-update
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+### Semantic Diff for Output Comparison
+- Exact string match is too brittle for natural language. Use embedding cosine similarity ≥ 0.95 threshold
+- For structured output, compare parsed objects field-by-field, not raw strings
+- Log both expected and actual with diff when threshold fails
 
-## Testing Requirements
+### A/B Test Isolation
+- A/B variants MUST use separate `seed` values — never share seeds across variants
+- Each variant logs its own `(variant_id, seed, model, config_hash)` tuple
+- Statistical significance required before promoting a variant (p < 0.05, n ≥ 100)
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+## 8. Preferred Patterns
 
-## Security Checklist
+- ✅ `temperature=0, seed=N` on every LLM call — no exceptions
+- ✅ Pydantic/Zod schema validation on every LLM response
+- ✅ Idempotency keys on write operations
+- ✅ Pinned model versions (`gpt-4o-2024-11-20` not `gpt-4o`)
+- ✅ Config files for all tunable parameters — seed, thresholds, model names
+- ✅ Deterministic iteration order (arrays, not sets/dicts without ordering)
+- ✅ Snapshot tests for prompt templates with CI enforcement
+- ✅ `system_fingerprint` logging for model-version drift detection
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## 9. Anti-Patterns
 
-## Anti-Patterns
+- ❌ `temperature > 0` in production without documented justification and approval
+- ❌ Parsing LLM free-text with regex instead of structured output
+- ❌ Omitting `seed` — makes reproduction impossible across runs
+- ❌ Using model aliases (`gpt-4o`) instead of dated snapshots (`gpt-4o-2024-11-20`)
+- ❌ Random tool execution order or shuffled few-shot examples
+- ❌ Embedding model upgrades without re-indexing all vectors
+- ❌ `top_p < 1` combined with `temperature=0` (contradictory — pick one strategy)
+- ❌ Auto-updating test fixtures without human review
+- ❌ Comparing LLM outputs with exact string match (fragile, false negatives)
+- ❌ Sharing seeds across A/B variants (contaminates experiment)
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+## 10. WAF Alignment
 
-## WAF Alignment
-
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| WAF Pillar | Determinism Practice |
+|---|---|
+| **Reliability** | Seed pinning + validation retry guarantees consistent outputs across deployments. Fingerprint monitoring detects model drift before it impacts users. |
+| **Responsible AI** | Structured output prevents hallucinated fields. Validation pipelines enforce schema constraints. Snapshot testing catches prompt regression. |
+| **Security** | Schema validation blocks injection via malformed output. Idempotency keys prevent replay attacks on write operations. |
+| **Cost Optimization** | `temperature=0` reduces token waste from retries. Pinned models prevent surprise cost changes from auto-upgrades. |
+| **Operational Excellence** | Config-driven parameters enable environment parity. Fixture-based tests run in CI without API calls. Semantic diff reduces false-positive test failures. |
+| **Performance Efficiency** | Fixed chunking + pinned dimensions enable stable vector index performance. Deterministic tool order enables predictable latency profiling. |
