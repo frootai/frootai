@@ -5,130 +5,196 @@ waf:
   - "performance-efficiency"
 ---
 
-# Power Apps Canvas Waf — WAF-Aligned Coding Standards
+# Power Apps Canvas — FAI Standards
 
-> Power Apps Canvas standards — delegation, collections, component libraries.
+## Naming Conventions
 
-## Core Rules
+Every control name uses a 3-letter prefix matching its type. Never use default names like `Button1`.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+| Prefix | Control | Example |
+|--------|---------|---------|
+| `lbl` | Label | `lblOrderTotal` |
+| `btn` | Button | `btnSubmitForm` |
+| `txt` | Text Input | `txtSearchQuery` |
+| `gal` | Gallery | `galEmployeeList` |
+| `drp` | Dropdown | `drpDepartment` |
+| `icn` | Icon | `icnRefresh` |
+| `img` | Image | `imgProfilePhoto` |
+| `tgl` | Toggle | `tglDarkMode` |
+| `chk` | Checkbox | `chkAgreeTerms` |
+| `cmp` | Component | `cmpHeaderNav` |
 
-## Implementation Patterns
+Screens: `scrHome`, `scrOrderDetail`, `scrSettings`. Variables: `varCurrentUser`, `locSelectedItem` (global vs local scope).
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+## Screen Organization
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+- Maximum 15-20 screens per app — split into sub-apps with deep links beyond that
+- Group screens by domain: `scrInv_List`, `scrInv_Detail`, `scrInv_Edit` for inventory
+- Use `App.StartScreen` instead of `OnStart` navigation — avoids hidden redirect logic
+- Place one-time initialization in `App.OnStart`; use `App.StartScreen` for routing
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+```
+// App.StartScreen (preferred over Navigate in OnStart)
+If(
+    Param("screen") = "detail",
+    scrOrderDetail,
+    scrHome
+)
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Responsive Containers
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Use horizontal/vertical containers instead of absolute positioning:
 
-## Code Quality Standards
+```
+// Container layout — never hardcode X/Y coordinates
+Container.LayoutDirection: Vertical
+Container.LayoutAlignItems: Stretch
+Container.LayoutGap: 16
+// Child controls use flexible width:
+lblTitle.Width: Parent.Width
+galItems.Height: Parent.Height - lblTitle.Height - 64
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+- Set `App.Width` and `App.Height` with `Max(App.Width, 1024)` for responsive breakpoints
+- Use `Parent.Width` references — never hardcode pixel values for layout
 
-## Testing Requirements
+## Component Libraries
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+Extract reusable UI into component libraries shared across apps:
 
-## Security Checklist
+- `cmpSearchBar` — text input + filter icon + clear button, exposes `SearchText` output property
+- `cmpConfirmDialog` — modal overlay with configurable title, message, confirm/cancel actions
+- `cmpStatusBadge` — colored badge driven by `Status` custom input property
+- Publish libraries to an environment for cross-app reuse via `Import components`
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Delegation and Data Limits
+
+Delegation determines whether a query runs on the server or client. Non-delegable queries silently truncate at **500 rows** (default) or **2000 rows** (max setting).
+
+```
+// ❌ Non-delegable — silently truncates results
+Filter(Orders, Year(CreatedDate) = 2026)
+
+// ✅ Delegable — pushes filter to data source
+Filter(Orders, CreatedDate >= Date(2026, 1, 1) && CreatedDate < Date(2027, 1, 1))
+```
+
+Non-delegable functions: `Search()`, `Len()`, `Left()`, `Trim()`, `IsBlank()` on SQL/SharePoint. Check the blue dotted underline warning in the formula bar — never ignore it.
+
+### Collection vs Data Source Patterns
+
+```
+// Cache a small lookup table at startup (< 2000 rows)
+ClearCollect(colDepartments, Departments);
+
+// For large data — query the source directly with delegable filters
+Filter(Orders, Status = drpStatus.Selected.Value && CustomerID = varCurrentCustomer)
+
+// Paginated loading for galleries over delegation limit
+ClearCollect(
+    colPagedOrders,
+    FirstN(
+        Filter(Orders, Status = "Active"),
+        100
+    )
+)
+```
+
+- Collections (`Collect`/`ClearCollect`): local copies, good for lookups < 2000 rows
+- Data sources: always delegable queries, no local copy, uses server-side filtering
+- Never `ClearCollect` an entire table with 10K+ rows — it will silently truncate
+
+## Error Handling
+
+```
+// IfError pattern for data operations
+IfError(
+    Patch(Orders, Defaults(Orders), {Title: txtTitle.Text, Amount: Value(txtAmount.Text)}),
+    Notify("Failed to save order: " & FirstError.Message, NotificationType.Error)
+);
+
+// Validate before submit
+If(
+    IsBlank(txtTitle.Text),
+    Notify("Title is required", NotificationType.Warning);
+    Set(varTitleError, true),
+    Set(varTitleError, false);
+    SubmitForm(frmOrder)
+)
+```
+
+- Wrap every `Patch`, `Remove`, `SubmitForm` in `IfError`
+- Use `Notify()` with appropriate `NotificationType` (Success/Warning/Error/Information)
+- Set `varIsLoading` before/after long operations for spinner UX
+
+## Theming and Accessibility
+
+- Define colors once in a `colTheme` collection or component library — never hardcode `RGBA` per control
+- Minimum 4.5:1 contrast ratio for text (WCAG AA) — test with Accessibility Checker
+- Set `AccessibleLabel` on every icon and image control
+- Tab order: set `TabIndex` sequentially per screen — test keyboard-only navigation
+- `FocusBorderThickness: 2` on interactive controls for visible focus indicators
+
+## App Checker and Performance
+
+Run App Checker (`File → App checker`) before every publish — zero errors, zero accessibility warnings.
+
+```
+// ✅ Concurrent calls — parallel instead of sequential
+Concurrent(
+    ClearCollect(colOrders, Filter(Orders, Status = "Active")),
+    ClearCollect(colCustomers, Customers),
+    Set(varConfig, LookUp(AppConfig, Key = "Settings"))
+);
+
+// ✅ Cache expensive lookups with Set/Collect — don't recalculate in every control
+// OnStart:
+Set(varUserProfile, Office365Users.MyProfile());
+Set(varUserPhoto, Office365Users.UserPhotoV2(varUserProfile.Id));
+// Then reference varUserProfile.DisplayName — not Office365Users.MyProfile().DisplayName
+```
+
+- Use `Concurrent()` for parallel data loads — cuts startup time by 50%+
+- Cache user profile, config, and lookup tables in `OnStart` with `Set`/`ClearCollect`
+- Avoid `CountRows(Filter(...))` in gallery templates — pre-calculate into a collection
+- Gallery `DelayItemLoading: true` for galleries with 100+ items
+
+## Connection References and ALM
+
+- Use connection references (not embedded connections) for environment portability
+- Package apps in Dataverse solutions for ALM — never export/import `.msapp` files directly
+- Solution layering: publisher prefix `fai_` for all custom tables and components
+- Environment variables for API URLs, feature flags, tenant-specific values
+- CI/CD: Power Platform CLI (`pac solution export/import`) in GitHub Actions pipelines
+
+## Testing
+
+- **Test Studio**: record UI tests for critical paths (submit form, navigation, CRUD operations)
+- **Monitor tool**: trace network calls, delegation warnings, slow operations in real time
+- **App Checker**: zero errors + zero accessibility violations before any publish
+- Test with delegation limit set to minimum (50 rows) to catch non-delegable queries early
+- Validate on both tablet and phone form factors if `App.ResponsiveLayout` is enabled
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Using `OnStart` for `Navigate()` — use `App.StartScreen` property instead
+- ❌ Ignoring delegation warnings (blue underline) — data silently truncates
+- ❌ `ClearCollect` on tables with 10K+ rows — hits 2000-row cap without error
+- ❌ Default control names (`Button1`, `Label3`) — unreadable, unmaintainable
+- ❌ Hardcoding colors per control — use theme collections or component properties
+- ❌ Embedding connections instead of connection references — breaks environment promotion
+- ❌ Nesting `LookUp` inside gallery templates — O(n×m) performance, pre-join with `AddColumns`
+- ❌ Using `UpdateContext` for cross-screen state — use `Set()` for global, `Navigate` params for context
+- ❌ Skipping `IfError` on `Patch`/`Remove` — users see no feedback on silent failures
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Power Apps Canvas Practice |
+|--------|---------------------------|
+| **Performance** | `Concurrent()` loads, `DelayItemLoading`, delegable queries only, collection caching |
+| **Reliability** | `IfError` on all writes, `Notify` for user feedback, offline `LoadData`/`SaveData` |
+| **Security** | Connection references via solution, row-level security in Dataverse, no embedded secrets |
+| **Cost** | Premium connectors only when needed, batch calls to reduce API consumption |
+| **Operational Excellence** | Solution-based ALM, Power Platform CLI CI/CD, App Checker gates |
+| **Responsible AI** | Accessible labels, WCAG contrast, keyboard navigation, screen reader testing |

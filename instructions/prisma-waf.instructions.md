@@ -6,130 +6,179 @@ waf:
   - "performance-efficiency"
 ---
 
-# Prisma Waf — WAF-Aligned Coding Standards
+# Prisma — FAI Standards
 
-> Prisma ORM standards — schema design, migrations, query optimization, relation loading, type safety.
+## Schema Design
 
-## Core Rules
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      Role     @default(USER)
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  @@index([email, role])
+  @@map("users")
+}
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+model Post {
+  id        String  @id @default(cuid())
+  title     String  @db.VarChar(255)
+  published Boolean @default(false)
+  authorId  String
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  @@unique([authorId, title])
+  @@index([authorId, published])
+  @@map("posts")
+}
 
-## Implementation Patterns
+enum Role { USER ADMIN MODERATOR }
+```
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+- `@@index` on every FK and filter column. `@@unique` for compound constraints. `@@map`/`@map` for naming.
+- Prefer `cuid()` over `uuid()` — shorter, sortable, index-friendly. `@db.*` for DB-specific types.
 
-### Azure SDK Integration
+## Prisma Client Queries
+
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+// Paginated list with filtering
+const users = await prisma.user.findMany({
+  where: { role: "ADMIN", deletedAt: null },
+  select: { id: true, email: true, name: true },
+  orderBy: { createdAt: "desc" },
+  skip: (page - 1) * pageSize,
+  take: pageSize,
+});
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+// Unique lookup — throws if not found
+const user = await prisma.user.findUniqueOrThrow({
+  where: { id: userId },
+  include: { posts: { where: { published: true }, take: 10 } },
+});
+
+// Upsert — create or update atomically
+const profile = await prisma.profile.upsert({
+  where: { userId },
+  create: { userId, bio, avatarUrl },
+  update: { bio, avatarUrl },
+});
+```
+
+- `select` for specific fields, `include` for relations — never combine both on the same level.
+- Always paginate: `skip`/`take` or cursor-based (`cursor`, `take`, `skip: 1`).
+
+## Transactions
+
+```typescript
+const order = await prisma.$transaction(async (tx) => {
+  const order = await tx.order.create({ data: { userId, total } });
+  await tx.orderItem.createMany({ data: items.map((i) => ({ orderId: order.id, ...i })) });
+  await tx.user.update({ where: { id: userId }, data: { balance: { decrement: total } } });
+  return order;
+}, { timeout: 10_000, isolationLevel: "Serializable" });
+
+// Sequential — independent ops, single round-trip
+const [userCount, postCount] = await prisma.$transaction([
+  prisma.user.count(), prisma.post.count({ where: { published: true } }),
+]);
+```
+
+- Interactive for dependent ops with rollback. Sequential for batched independent reads/writes.
+- Set `timeout` on interactive transactions to prevent long-held locks.
+
+## Raw SQL
+
+```typescript
+const results = await prisma.$queryRaw<{ id: string; rank: number }[]>`
+  SELECT id, ts_rank(search_vector, to_tsquery(${searchTerm})) AS rank
+  FROM posts WHERE search_vector @@ to_tsquery(${searchTerm})
+  ORDER BY rank DESC LIMIT ${limit}`;
+```
+
+- Tagged template literals auto-escape parameters. Never use `$queryRawUnsafe` with user input.
+
+## Migrations & Seeding
+
+```bash
+prisma migrate dev --name add-role    # Dev: generate + apply + regen client
+prisma migrate deploy                 # Prod: apply pending only (CI/CD)
+prisma migrate resolve --applied "20240101_init"  # Mark as applied (hotfix)
+prisma db seed                        # Runs prisma.seed from package.json
+```
+
+- Never edit applied SQL. Never run `migrate dev` in production.
+- Seed config: `"prisma": { "seed": "tsx prisma/seed.ts" }` in `package.json`.
+
+## Middleware, Soft Delete & Pooling
+
+```typescript
+// Slow-query logging middleware
+prisma.$use(async (params, next) => {
+  const start = performance.now();
+  const result = await next(params);
+  const ms = performance.now() - start;
+  if (ms > 200) logger.warn({ model: params.model, action: params.action, ms }, "Slow query");
+  return result;
+});
+
+// Soft delete via client extension
+const xprisma = new PrismaClient().$extends({
+  query: { $allModels: {
+    async findMany({ args, query }) { args.where = { ...args.where, deletedAt: null }; return query(args); },
+    async delete({ model, args }) { return (prisma as any)[model].update({ where: args.where, data: { deletedAt: new Date() } }); },
+  }},
+});
+```
+
+- PgBouncer: `transaction` mode, `?pgbouncer=true&connection_limit=1` in URL.
+- Serverless: Prisma Accelerate or `connection_limit=1` per instance. Set `pool_timeout`.
+
+## Error Handling
+
+```typescript
+try { await prisma.user.create({ data: { email } }); }
+catch (e) {
+  if (e instanceof PrismaClientKnownRequestError) {
+    if (e.code === "P2002") throw new ConflictError(`Duplicate: ${e.meta?.target}`);
+    if (e.code === "P2025") throw new NotFoundError("Record not found");
+    if (e.code === "P2003") throw new BadRequestError("FK constraint failed");
   }
+  throw e;
+}
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Testing
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```typescript
+// Singleton client — prevents connection pool exhaustion across test files
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+```
 
-## Code Quality Standards
-
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
-
-## Testing Requirements
-
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
-
-## Security Checklist
-
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Singleton client — one per test suite. Test against real DB (Docker Postgres), not mocks.
+- Use `jest-prisma` or `vitest --pool=forks` for connection isolation.
+- **Prisma Studio** (`npx prisma studio`) for visual data inspection during development.
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ N+1 queries — use `include`/`select` with the parent, not loops
+- ❌ Missing `@@index` on FK/filter columns — causes full table scans
+- ❌ `findMany` without `take` — unbounded results crash memory
+- ❌ `$queryRawUnsafe` with user input — SQL injection
+- ❌ Editing applied migrations — creates environment drift
+- ❌ `new PrismaClient()` per request — pool exhaustion
+- ❌ Mixing `select` + `include` on same level — `include` silently ignored
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Practices |
+|--------|-----------||
+| **Reliability** | Interactive transactions with timeout + isolation. Retry on P1001 (connection). Health check `SELECT 1`. `prisma.$disconnect()` on shutdown. |
+| **Security** | Tagged template `$queryRaw` prevents injection. `env("DATABASE_URL")` — no inline credentials. Middleware audit logging. Row-level tenant isolation. |
+| **Performance** | `@@index` on FK + filter columns. `select` over `include`. Cursor pagination. PgBouncer/Accelerate pooling. Slow-query threshold at 200ms. |
+| **Cost** | `connection_limit=1` for serverless, `10-20` for servers. `createMany` to reduce round-trips. |
+| **Ops** | `migrate deploy` in CI/CD only. Seed scripts for reproducible data. Schema + migrations versioned in git. |

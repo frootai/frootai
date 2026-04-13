@@ -6,130 +6,175 @@ waf:
   - "reliability"
 ---
 
-# Power Platform Connector Waf — WAF-Aligned Coding Standards
+# Power Platform Custom Connectors — FAI Standards
 
-> Custom connector standards — OpenAPI definition, auth configuration, throttling, testing.
+## OpenAPI Definition
+Every custom connector requires a valid OpenAPI 2.0 (Swagger) definition. Power Platform does not support OpenAPI 3.x.
 
-## Core Rules
-
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+```json
+{
+  "swagger": "2.0",
+  "info": { "title": "Contoso API", "version": "1.0.0" },
+  "host": "@connectionParameters('baseUrl')",
+  "basePath": "/api/v1",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/token",
+      "scopes": { "api://contoso/.default": "Access Contoso API" }
+    }
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+- Set `host` dynamically via connection parameters — never hardcode environment-specific URLs
+- Use `x-ms-api-annotation` for visibility (`important`, `advanced`, `internal`) on every operation
+- Define `x-ms-summary` and `description` on all parameters — these surface in the Power Apps/Automate UX
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Actions, Triggers, and Pagination
 
-## Code Quality Standards
+```json
+{
+  "paths": {
+    "/orders": {
+      "get": {
+        "operationId": "ListOrders",
+        "summary": "List orders",
+        "x-ms-visibility": "important",
+        "x-ms-pageable": { "nextLinkName": "@odata.nextLink" },
+        "parameters": [
+          { "name": "$top", "in": "query", "type": "integer", "default": 50, "x-ms-summary": "Page size" }
+        ]
+      }
+    },
+    "/orders/webhook": {
+      "x-ms-trigger": "single",
+      "post": {
+        "operationId": "OnNewOrder",
+        "summary": "When a new order is created",
+        "x-ms-trigger-hint": "Subscribe to new order events"
+      }
+    }
+  }
+}
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+- Triggers: `x-ms-trigger: single` (one item) or `batch` (array) — webhook triggers need subscribe/unsubscribe via `x-ms-notification-content`
+- Pagination: `x-ms-pageable.nextLinkName` must match your API's next-page link property
+- Polling triggers: return `Retry-After` header and HTTP 202 for no-new-data
 
-## Testing Requirements
+## Authentication Types
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```json
+{
+  "connectionParameters": {
+    "token": {
+      "type": "oauthSetting",
+      "oAuthSettings": {
+        "identityProvider": "aad",
+        "clientId": "{from-env}",
+        "scopes": ["api://contoso/.default"],
+        "redirectMode": "Global"
+      }
+    }
+  }
+}
+```
 
-## Security Checklist
+- **OAuth2 (AAD)**: preferred — `redirectMode: "Global"` for GCC/sovereign cloud compat
+- **API Key**: header only (`x-api-key`), `"type": "securestring"` — never in query string
+- **Basic Auth**: avoid; if required, password as `"type": "securestring"`
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Dynamic Schemas and Values
+
+Use `x-ms-dynamic-values` for dropdown picklists (include `value-title`) and `x-ms-dynamic-schema` when response shape varies by input. Dynamic endpoints must respond within 5 seconds.
+
+```json
+{
+  "x-ms-dynamic-values": {
+    "operationId": "ListEntities",
+    "value-collection": "value",
+    "value-path": "id",
+    "value-title": "displayName"
+  }
+}
+```
+
+## Policy Templates
+
+```xml
+<set-header name="X-Correlation-Id" existsAction="skip">
+  <value>@(context.Request.Headers.GetValueOrDefault("x-ms-client-request-id","unknown"))</value>
+</set-header>
+<set-backend-service base-url="@connectionParameters('baseUrl')" />
+```
+
+- `set-header` for correlation IDs/versioning; `set-backend-service` for environment URL rewriting; never inject secrets via policies
+
+## Custom Code (C# Script)
+
+```csharp
+public class Script : ScriptBase {
+    public override async Task<HttpResponseMessage> ExecuteAsync() {
+        var body = JObject.Parse(await this.Context.Request.Content.ReadAsStringAsync());
+        body["timestamp"] = DateTime.UtcNow.ToString("o");
+        this.Context.Request.Content = CreateJsonContent(body.ToString());
+        var response = await this.Context.SendAsync(this.Context.Request, this.CancellationToken);
+        return response;
+    }
+}
+```
+
+- Runs per-operation — keep under 5 seconds; only `Newtonsoft.Json` and `System.Net.Http` available
+- Handle errors explicitly — unhandled exceptions return 500 to the flow
+
+## Connection Parameters, Environment, and Branding
+
+- Define `baseUrl` as a connection parameter — makers switch dev/test/prod without editing the connector
+- Use environment variables in solutions: `@parameters('ContosoApiUrl')` for ALM-managed URLs
+- Mark sensitive fields `"type": "securestring"` — encrypted at rest
+- Icon: 1:1 PNG, 160×160px min, ≤1MB, transparent background; brand color as 6-char hex
+
+## Error Responses and Throttling
+
+```json
+{ "error": { "code": "INVALID_ORDER_ID", "message": "Order ID must be a valid GUID." } }
+```
+
+- Return structured `error.code` + `error.message` — Power Automate surfaces these in run history
+- HTTP 429 with `Retry-After` header — Power Platform auto-retries on throttling
+- Default limit: 500 actions/minute per connection — use batch endpoints to reduce action count
+- Never leak stack traces or internal paths in error responses
+
+## Testing and Certification
+
+- **Connector Test Tool**: validate each operation in the maker portal; **Postman**: import OpenAPI definition for auth flow testing
+- Validate pagination end-to-end (iterate until `nextLink` is null) and test dynamic values with varied parameters
+- Run `paconn validate` in CI — all operations need `summary`, `description`, `operationId`, `x-ms-visibility`
+- Response schemas must cover success and error shapes; provide test account + sandbox to Microsoft reviewers
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Using OpenAPI 3.x — Power Platform only supports Swagger 2.0
+- ❌ Hardcoding `host` instead of using connection parameters for environment-specific URLs
+- ❌ Omitting `x-ms-visibility` — operations default to `advanced`, confusing makers
+- ❌ Missing `x-ms-summary` on parameters — raw parameter names shown in UX
+- ❌ Polling triggers without `Retry-After` — causes unnecessary API load; custom code exceeding 5s times out silently
+- ❌ Returning HTML error pages instead of structured JSON error objects
+- ❌ Storing secrets in connector JSON files committed to source control
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Connector Practice |
+|---|---|
+| **Security** | OAuth2 with AAD, `securestring` for secrets, no keys in source, HTTPS-only |
+| **Reliability** | 429 + `Retry-After`, pagination via `nextLink`, webhook subscribe/unsubscribe cleanup |
+| **Cost** | Batch endpoints to reduce action count, cache dynamic values server-side |
+| **Ops Excellence** | `paconn validate` in CI, environment variables for ALM, structured error codes |
+| **Performance** | Dynamic endpoints respond <5s, custom code <5s, paginated list operations |
+| **Responsible AI** | Content filtering on AI-powered operations, transparent error messages to makers |

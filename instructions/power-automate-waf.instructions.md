@@ -6,130 +6,187 @@ waf:
   - "operational-excellence"
 ---
 
-# Power Automate Waf — WAF-Aligned Coding Standards
+# Power Automate — FAI Standards
 
-> Power Automate flow standards — error handling, parallel branches, approvals, SLA tracking.
+## Flow Naming & Structure
 
-## Core Rules
+- Name pattern: `[Env]-[App]-[Entity]-[Action]` — e.g., `PRD-CRM-Lead-QualifyAndRoute`
+- Prefix child flows with `CF-` — e.g., `CF-Shared-SendApproval`
+- Every action: rename from default to descriptive PascalCase — `Get_Account_Details` not `Get_item`
+- Group related actions inside **Scope** blocks named by purpose: `Scope-ValidateInput`, `Scope-CallExternalAPI`
+- Limit flow depth to 8 nesting levels — extract child flows beyond that
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+## Trigger Conditions & Filtering
 
-## Implementation Patterns
+Apply trigger conditions to prevent unnecessary runs — saves API calls and quota:
+```json
+{
+  "conditions": [
+    {
+      "expression": "@equals(triggerOutputs()?['body/statuscode'], 'Active')"
+    },
+    {
+      "expression": "@not(empty(triggerOutputs()?['body/email']))"
+    }
+  ]
+}
+```
+- Dataverse triggers: add filtering attributes to fire only on relevant column changes
+- Recurrence triggers: set time zone explicitly — never rely on UTC default for business logic
+- When polling: set frequency to minimum needed cadence, use webhook triggers when available
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+## Error Handling with Scope + Configure Run After
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+Wrap risky operations in a try-catch-finally pattern using Scope blocks:
+```json
+{
+  "Scope-TryProcess": {
+    "type": "Scope",
+    "actions": { "Call_External_API": { "type": "Http", "inputs": { "method": "POST" } } }
+  },
+  "Scope-CatchError": {
+    "type": "Scope",
+    "runAfter": { "Scope-TryProcess": ["Failed", "TimedOut"] },
+    "actions": {
+      "Log_Error": {
+        "type": "Compose",
+        "inputs": "@{result('Scope-TryProcess')}"
+      },
+      "Send_Alert": { "type": "ApiConnection", "inputs": {} }
+    }
+  },
+  "Scope-Finally": {
+    "type": "Scope",
+    "runAfter": {
+      "Scope-TryProcess": ["Succeeded", "Failed", "Skipped", "TimedOut"],
+      "Scope-CatchError": ["Succeeded", "Failed", "Skipped", "TimedOut"]
+    },
+    "actions": { "Cleanup_Temp_Data": { "type": "Compose", "inputs": "done" } }
   }
 }
 ```
+- **Configure Run After** on catch scope: `Failed`, `TimedOut` — never leave it on `Succeeded` only
+- Use `result('ScopeName')` to capture all action outcomes for logging
+- Terminate with `Failed` status after catch if the error is unrecoverable
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Retry Policies
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```json
+{
+  "retryPolicy": {
+    "type": "exponential",
+    "count": 4,
+    "interval": "PT10S",
+    "minimumInterval": "PT5S",
+    "maximumInterval": "PT1H"
+  }
+}
+```
+- HTTP/API actions: exponential retry (4 attempts, 10s base, 1h max)
+- Dataverse/SharePoint actions: fixed retry (3 attempts, 30s interval) — avoids throttling cascade
+- Set `retryPolicy.type` to `none` on idempotency-unsafe operations (payment, provisioning)
 
-## Code Quality Standards
+## Expression Functions
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```json
+{
+  "Safe_Null_Handling": "@coalesce(triggerOutputs()?['body/companyName'], 'Unknown')",
+  "Format_Date": "@formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')",
+  "Parse_JSON_String": "@json(body('Get_Response')?['content'])",
+  "Conditional_Value": "@if(equals(variables('Status'), 'Approved'), 'Process', 'Hold')",
+  "String_Interpolation": "@concat('Order-', triggerOutputs()?['body/orderid'], '-', formatDateTime(utcNow(), 'yyyyMMdd'))",
+  "Array_Filter": "@filter(body('List_Items')?['value'], item(), equals(item()?['status'], 'Active'))"
+}
+```
+- Always use `coalesce()` or null-conditional `?[]` — raw property access on null crashes the flow
+- `formatDateTime` with explicit format strings — never rely on locale-dependent defaults
+- Parse JSON with schema validation — define expected schema in the Parse JSON action
 
-## Testing Requirements
+## Variables & Compose
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+- Initialize ALL variables at flow top-level (outside loops/conditions) — Power Automate requirement
+- Name pattern: `var_PascalCase` — e.g., `var_RetryCount`, `var_ProcessedItems`
+- Prefer **Compose** over variables for intermediate transformations — Compose is stateless:
+```json
+{
+  "Compose_CleanPayload": {
+    "type": "Compose",
+    "inputs": {
+      "id": "@triggerOutputs()?['body/id']",
+      "name": "@trim(triggerOutputs()?['body/fullname'])",
+      "created": "@formatDateTime(triggerOutputs()?['body/createdon'], 'yyyy-MM-dd')"
+    }
+  }
+}
+```
+- Use `Append to array variable` inside loops, never `Set variable` with `union()` concatenation
 
-## Security Checklist
+## Parallel Branches & Concurrency
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Use parallel branches for independent operations (e.g., send email + update CRM + log)
+- Set `concurrency.repetitions` on Apply to Each — default is 1 (sequential), max is 50:
+```json
+{
+  "Apply_to_each_record": {
+    "type": "Foreach",
+    "operationOptions": "Sequential",
+    "runtimeConfiguration": { "concurrency": { "repetitions": 20 } }
+  }
+}
+```
+- Concurrency on triggers: limit to 1 for order-dependent processing (approval chains, sequential IDs)
+- Do-Until loops: always set a `count` limit (default 60) and `timeout` (e.g., `PT1H`)
+
+## Connection References & Environment Variables
+
+- **Solution-aware flows only** — never build flows outside solutions for production workloads
+- Use connection references (not embedded connections) — enables environment promotion without re-auth
+- Environment variables for all environment-specific values:
+  - SharePoint site URLs, email distribution lists, API endpoints, threshold values
+  - Reference via `@parameters('env_ApiBaseUrl')` — never hardcode URLs
+- Store secrets in Azure Key Vault, retrieve via the Key Vault connector — not environment variables
+
+## Child Flows (Solution-Aware)
+
+- Extract reusable logic into child flows with `Run a Child Flow` action
+- Child flows must be solution-aware and in the same solution or a shared component solution
+- Define explicit input/output parameters with types — avoid passing entire records
+- Child flows cannot trigger other child flows beyond 5 levels deep — flatten if needed
+- Use child flows for: shared approval logic, notification templates, data validation routines
+
+## Approval Workflows
+
+- Use the Approvals connector (not custom email-based) — provides audit trail, mobile support, adaptive cards
+- Set timeout on `Wait for an approval` — default runs indefinitely, set `PT72H` or business SLA
+- Handle all outcomes: Approve, Reject, Timeout — never assume approval
+- Sequential approvals: chain `Start and wait` actions; parallel: use `Everyone must approve` type
+- Store approval outcome + approver + timestamp in Dataverse for compliance audit
+
+## DLP Policies & Governance
+
+- Classify connectors: Business vs Non-Business vs Blocked — enforce at environment level
+- HTTP connector (custom API calls) must be in Business group or blocked in non-dev environments
+- Flows using premium connectors: document justification and get CoE approval
+- Enable flow analytics in the CoE Starter Kit for usage monitoring and orphan detection
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Unnamed actions (`Apply_to_each`, `Condition`, `Get_item`) — rename everything descriptively
+- ❌ No error handling — every flow needs at least one try-catch Scope pattern
+- ❌ Hardcoded URLs, email addresses, or connection strings — use environment variables
+- ❌ `Delay` actions for polling — use `When a record is updated` trigger or webhook instead
+- ❌ Deeply nested conditions (>4 levels) — extract to child flow or use Switch action
+- ❌ Using `Get items` without `$top` or `$filter` — fetches all records, hits delegation limits
+- ❌ Variables inside Apply to Each for aggregation without concurrency=1 — race condition
+- ❌ Ignoring flow checker warnings — resolve all before promoting to production
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Power Automate Practice |
+|--------|------------------------|
+| **Reliability** | Scope try-catch pattern, exponential retry, Configure Run After on Failed/TimedOut, Do-Until count+timeout limits |
+| **Security** | Connection references (no embedded creds), Key Vault for secrets, DLP policies, least-privilege service accounts |
+| **Cost Optimization** | Trigger conditions to prevent unnecessary runs, concurrency limits, Standard vs Premium connector choices |
+| **Operational Excellence** | Solution-aware flows, environment variables, flow naming conventions, CoE analytics, flow checker zero-warnings |
+| **Performance Efficiency** | Parallel branches, concurrency on Apply to Each, Compose over variables, Select action for array transforms |
+| **Responsible AI** | Approval audit trails, human-in-the-loop for AI-generated actions, Content Safety on AI Builder outputs |

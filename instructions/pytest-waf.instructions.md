@@ -5,130 +5,222 @@ waf:
   - "reliability"
 ---
 
-# Pytest Waf — WAF-Aligned Coding Standards
+# pytest — FAI Standards
 
-> pytest testing standards — fixtures, parametrize, coverage, and mock patterns for Python.
+## Test Discovery & Naming
 
-## Core Rules
+Files must match `test_*.py` or `*_test.py`. Classes start with `Test` (no `__init__`). Functions start with `test_`.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+```
+tests/
+├── unit/
+│   ├── test_models.py
+│   └── test_services.py
+├── integration/
+│   └── test_api_endpoints.py
+├── e2e/
+│   └── test_workflows.py
+└── conftest.py            # shared fixtures
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Fixtures
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```python
+import pytest
 
-## Code Quality Standards
+@pytest.fixture
+def db_session():
+    session = create_session()
+    yield session
+    session.rollback()
+    session.close()
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+@pytest.fixture(scope="module")
+def api_client(db_session):
+    return TestClient(app)
 
-## Testing Requirements
+# autouse — applies to every test in scope
+@pytest.fixture(autouse=True)
+def reset_caches():
+    cache.clear()
+    yield
+    cache.clear()
+```
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+### Fixture Factories
 
-## Security Checklist
+```python
+@pytest.fixture
+def make_user(db_session):
+    created = []
+    def _make(name="default", role="viewer"):
+        user = User(name=name, role=role)
+        db_session.add(user)
+        db_session.flush()
+        created.append(user)
+        return user
+    yield _make
+    for u in created:
+        db_session.delete(u)
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+def test_admin_access(make_user):
+    admin = make_user(name="alice", role="admin")
+    assert admin.can_access("/settings")
+```
+
+### conftest Hierarchy
+
+Place fixtures at the narrowest scope. `conftest.py` in `tests/` is shared across all tests. `tests/unit/conftest.py` only applies to unit tests. pytest merges them automatically — no imports needed.
+
+## Parametrize
+
+```python
+@pytest.mark.parametrize("input_val,expected", [
+    ("hello", 5),
+    ("", 0),
+    ("café", 4),
+])
+def test_string_length(input_val, expected):
+    assert len(input_val) == expected
+
+# stacked parametrize = cartesian product
+@pytest.mark.parametrize("x", [1, 2])
+@pytest.mark.parametrize("y", [10, 20])
+def test_multiply(x, y):
+    assert x * y > 0
+```
+
+## Markers
+
+```python
+@pytest.mark.slow
+def test_full_reindex():
+    reindex_all()
+
+@pytest.mark.skip(reason="upstream bug #1234")
+def test_broken_feature(): ...
+
+@pytest.mark.xfail(raises=ValueError, strict=True)
+def test_invalid_input():
+    parse("bad data")
+```
+
+Register custom markers in `pyproject.toml` to silence warnings:
+
+```toml
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m not slow')",
+    "integration: requires external services",
+]
+```
+
+## Monkeypatch
+
+```python
+def test_api_call(monkeypatch):
+    monkeypatch.setenv("API_KEY", "test-key-123")
+    monkeypatch.setattr("myapp.client.requests.get", lambda *a, **kw: MockResponse(200))
+    result = myapp.client.fetch_data()
+    assert result["status"] == "ok"
+
+def test_config_missing(monkeypatch):
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    with pytest.raises(ConfigError):
+        load_config()
+```
+
+## tmp_path & capsys
+
+```python
+def test_export_csv(tmp_path):
+    out = tmp_path / "report.csv"
+    export(out, data=[{"a": 1}])
+    assert out.read_text().startswith("a\n1")
+
+def test_logging_output(capsys):
+    process_item(42)
+    captured = capsys.readouterr()
+    assert "processed 42" in captured.out
+    assert captured.err == ""
+```
+
+## Assertions
+
+Use plain `assert` — pytest rewrites the AST to show diffs on failure. Never use `self.assertEqual`.
+
+```python
+def test_response():
+    data = get_response()
+    assert data["count"] == 3               # shows actual vs expected
+    assert "error" not in data              # shows dict contents
+    assert all(v > 0 for v in data["ids"])  # shows failing element
+```
+
+## Coverage (pytest-cov)
+
+```bash
+pytest --cov=src --cov-report=term-missing --cov-fail-under=80
+```
+
+```toml
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = ["*/migrations/*", "*/conftest.py"]
+```
+
+## Async Tests (pytest-asyncio)
+
+```python
+import pytest
+
+@pytest.mark.asyncio
+async def test_async_fetch(httpx_mock):
+    httpx_mock.add_response(json={"ok": True})
+    result = await fetch_data("https://api.example.com/v1")
+    assert result["ok"] is True
+```
+
+## Custom Plugins
+
+```python
+# conftest.py — local plugin
+def pytest_collection_modifyitems(items):
+    for item in items:
+        if "integration" in str(item.fspath):
+            item.add_marker(pytest.mark.integration)
+```
+
+## pyproject.toml Config
+
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q --strict-markers"
+filterwarnings = ["error", "ignore::DeprecationWarning:third_party"]
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+| Anti-Pattern | Fix |
+|---|---|
+| `self.assertEqual(a, b)` in pytest | Plain `assert a == b` — pytest rewrites for diffs |
+| Global mutable state between tests | Use fixtures with proper teardown via `yield` |
+| `scope="session"` fixture mutating data | Keep mutating fixtures at `function` scope |
+| Importing fixtures manually | Place in `conftest.py` — auto-discovered |
+| Hardcoded `/tmp/test_file` paths | Use `tmp_path` fixture — unique per test |
+| Mocking with `unittest.mock.patch` everywhere | Prefer `monkeypatch` — lighter, auto-reverted |
+| No markers on slow tests | Add `@pytest.mark.slow` + run `-m "not slow"` in CI fast lane |
+| Tests depend on execution order | Each test must be independent — use fixtures for setup |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Practice |
+|---|---|
+| **Reliability** | Fixture teardown via `yield`, strict markers, `--strict-config` |
+| **Security** | `monkeypatch.setenv` for secrets — never hardcode in tests |
+| **Cost Optimization** | Marker-based `-m "not slow"` for fast CI feedback loops |
+| **Operational Excellence** | `--cov-fail-under` in CI, `pyproject.toml` as single config source |
+| **Performance Efficiency** | `scope="session"` for expensive setup, `tmp_path` over disk I/O |
+| **Responsible AI** | Deterministic seeds in parametrize, snapshot-based output validation |

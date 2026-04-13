@@ -6,130 +6,177 @@ waf:
   - "reliability"
 ---
 
-# Powershell Waf — WAF-Aligned Coding Standards
+# PowerShell — FAI Standards
 
-> PowerShell standards — Verb-Noun naming, PascalCase, standard parameters, and error handling patterns.
+## Approved Verbs & Naming
 
-## Core Rules
+Use only approved verbs from `Get-Verb`. Enforce Verb-Noun PascalCase naming.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```powershell
+# ✅ Approved verbs
+function Get-DeploymentStatus { }
+function New-AiSearchIndex { }
+function Remove-StalePod { }
 
-## Implementation Patterns
+# ❌ Unapproved — Fetch-Data (Get-), Create-Index (New-), Delete-Resource (Remove-)
+```
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+## Advanced Functions
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+Every public function must use `[CmdletBinding()]`, typed `[Parameter()]`, and `[OutputType()]`.
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+```powershell
+function Get-ModelDeployment {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
+    param(
+        [Parameter(Mandatory, Position = 0, ValueFromPipelineByPropertyName)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ResourceGroupName,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateSet('gpt-4o', 'gpt-4o-mini', 'text-embedding-3-large')]
+        [string]$ModelName = 'gpt-4o'
+    )
+    process {
+        [PSCustomObject]@{ ResourceGroup = $ResourceGroupName; Model = $ModelName; Status = 'Deployed' }
+    }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Error Handling
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Set `$ErrorActionPreference = 'Stop'` at script scope. Use `try/catch` with typed exceptions. Always use `-ErrorAction Stop` on cmdlets inside try blocks.
 
-## Code Quality Standards
+```powershell
+$ErrorActionPreference = 'Stop'
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+function Invoke-SafeDeployment {
+    [CmdletBinding()]
+    param([string]$Name)
+    try {
+        $result = New-AzResourceGroupDeployment -Name $Name -ErrorAction Stop
+        Write-Output $result
+    }
+    catch [Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkModels.PSDeploymentException] {
+        Write-Error "Deployment failed: $_"
+    }
+    catch {
+        Write-Error "Unexpected error: $($_.Exception.Message)"
+        throw  # Re-throw unknown errors
+    }
+}
+```
 
-## Testing Requirements
+## ShouldProcess for Destructive Operations
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+Functions that modify or remove resources must support `-WhatIf` and `-Confirm`.
 
-## Security Checklist
+```powershell
+function Remove-StaleDeployment {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    param([Parameter(Mandatory, ValueFromPipeline)][string]$DeploymentId)
+    process {
+        if ($PSCmdlet.ShouldProcess($DeploymentId, 'Remove deployment')) {
+            Remove-AzResourceGroupDeployment -Id $DeploymentId -ErrorAction Stop
+        }
+    }
+}
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Credential Handling & Splatting
+
+Never store credentials as plaintext. Use `[PSCredential]` params or Key Vault. Use splatting for 3+ params. Prefer `Invoke-RestMethod` over `Invoke-WebRequest` for JSON APIs.
+
+```powershell
+# ✅ Credential parameter + Key Vault
+param(
+    [Parameter(Mandatory)]
+    [System.Management.Automation.PSCredential]
+    [System.Management.Automation.Credential()]
+    $Credential
+)
+$secret = Get-AzKeyVaultSecret -VaultName 'kv-prod' -Name 'api-key' -AsPlainText
+
+# ✅ Splatting for readability
+$params = @{
+    Uri         = 'https://api.openai.com/v1/chat/completions'
+    Method      = 'POST'
+    Headers     = @{ Authorization = "Bearer $token" }
+    Body        = $payload | ConvertTo-Json -Depth 10
+    ContentType = 'application/json'
+}
+$response = Invoke-RestMethod @params
+```
+
+## Module Structure & Help
+
+One function per file. Export only `Public/` functions. Every exported function needs `.SYNOPSIS`, `.PARAMETER`, `.EXAMPLE`.
+
+```powershell
+# MyModule.psm1 — dot-source Public/ and Private/, export only Public
+$Public  = @(Get-ChildItem -Path "$PSScriptRoot/Public/*.ps1" -ErrorAction SilentlyContinue)
+$Private = @(Get-ChildItem -Path "$PSScriptRoot/Private/*.ps1" -ErrorAction SilentlyContinue)
+foreach ($file in @($Public + $Private)) { . $file.FullName }
+Export-ModuleMember -Function $Public.BaseName
+
+function Get-TokenUsage {
+    <#
+    .SYNOPSIS
+        Retrieves token usage metrics for an Azure OpenAI deployment.
+    .EXAMPLE
+        Get-TokenUsage -DeploymentName 'gpt4o-prod' | Format-Table
+    #>
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
+    param([Parameter(Mandatory)][string]$DeploymentName)
+    # ...
+}
+```
+
+## Pester Integration
+
+Mock external dependencies. Use `-Scope Context` for invocations called in `BeforeAll`.
+
+```powershell
+Describe 'Get-ModelDeployment' {
+    BeforeAll {
+        Mock Get-AzCognitiveServicesAccountDeployment { @{ Name = 'gpt4o'; State = 'Succeeded' } }
+        $result = Get-ModelDeployment -ResourceGroupName 'rg-ai'
+    }
+    It 'returns correct name' { $result.Name | Should -Be 'gpt4o' }
+    It 'calls API once' { Should -Invoke Get-AzCognitiveServicesAccountDeployment -Times 1 -Scope Context }
+}
+```
+
+## PSScriptAnalyzer
+
+Run `Invoke-ScriptAnalyzer -Recurse -Path ./src` in CI. Enforce these rules:
+
+- `PSAvoidUsingPlainTextForPassword` — no plaintext secrets
+- `PSUseShouldProcessForStateChangingFunctions` — destructive ops need WhatIf
+- `PSUseApprovedVerbs` — only Get-Verb approved verbs
+- `PSAvoidGlobalVars` — no `$global:` scope pollution
+- `PSUsePSCredentialType` — credential params must be PSCredential
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+| Anti-Pattern | Fix |
+|---|---|
+| `Write-Host` for output | Use `Write-Output` or return objects; `Write-Host` bypasses pipeline |
+| Backtick line continuation | Use splatting or pipeline operators instead |
+| `Invoke-Expression` with user input | Parse/validate input explicitly — injection risk |
+| Raw `try {} catch { $_ }` swallowing | Always log or re-throw — silent failures kill reliability |
+| `[string]$Password` parameter | Use `[SecureString]` or `[PSCredential]` |
+| `Select-Object *` in production | Select specific properties — reduces memory and data leakage |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | PowerShell Practice |
+|---|---|
+| **Reliability** | `$ErrorActionPreference = 'Stop'`, typed catch blocks, retry logic with exponential backoff |
+| **Security** | PSCredential params, Key Vault secrets, no `Invoke-Expression`, ScriptAnalyzer in CI |
+| **Cost Optimization** | Filter left with `-Filter` params at source, avoid `Get-* | Where-Object` roundtrips |
+| **Operational Excellence** | Module structure, comment-based help, Pester tests, PSScriptAnalyzer enforcement |
+| **Performance Efficiency** | Pipeline streaming via `process {}`, `ForEach-Object -Parallel`, splatting over repeated calls |
+| **Responsible AI** | Log prompt/response pairs for audit, mask PII in telemetry, enforce content safety checks |
