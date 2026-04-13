@@ -6,130 +6,192 @@ waf:
   - "performance-efficiency"
 ---
 
-# Docker Waf — WAF-Aligned Coding Standards
-
-> Dockerfile standards — multi-stage builds, non-root user, minimal base images, and security scanning.
+# Docker — FAI Standards
 
 ## Core Rules
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+- Multi-stage builds for every production image — separate build from runtime
+- Non-root `USER` in every final stage — never run containers as root
+- Pin base image digests or exact tags — never use `latest` in production
+- `.dockerignore` required — exclude `.git`, `node_modules`, `__pycache__`, `.env`, `*.md`
+- `COPY --chown` to set ownership at copy time — avoid extra `RUN chown` layers
+- Exec form for `ENTRYPOINT` and `CMD` — ensures proper signal forwarding
+- `HEALTHCHECK` instruction in every production Dockerfile
+- OCI annotation labels on every image (`org.opencontainers.image.*`)
+- Scan images with Trivy or Grype in CI — fail on HIGH/CRITICAL CVEs
+- No secrets in build args or image layers — use BuildKit `--mount=type=secret`
 
-## Implementation Patterns
+## Base Image Selection
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+- Prefer distroless (`gcr.io/distroless/`) or Chainguard (`cgr.dev/chainguard/`) for runtime
+- Alpine for builds needing a shell — use `apk --no-cache` to avoid index caching
+- Never use full OS images (ubuntu, debian) as runtime base unless required by native deps
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+## Multi-Stage Build Pattern
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+```dockerfile
+# ✅ Preferred: multi-stage with minimal runtime
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+COPY . .
+RUN npm run build && npm prune --production
+
+FROM gcr.io/distroless/nodejs22-debian12
+WORKDIR /app
+COPY --from=build --chown=65532:65532 /app/dist ./dist
+COPY --from=build --chown=65532:65532 /app/node_modules ./node_modules
+COPY --from=build --chown=65532:65532 /app/package.json ./
+ENV NODE_ENV=production
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD ["/nodejs/bin/node", "-e", "fetch('http://localhost:8080/health').then(r=>{if(!r.ok)throw 1})"]
+USER 65532
+ENTRYPOINT ["/nodejs/bin/node", "dist/server.js"]
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Layer Caching
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- COPY dependency manifests (`package*.json`, `requirements*.txt`, `go.sum`) before source
+- Run install step immediately after manifest copy — layer is cached until deps change
+- COPY source code last — most frequently changing layer
 
-## Code Quality Standards
+```dockerfile
+# ✅ Optimal layer order for Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```dockerfile
+# ❌ Bad: busts pip cache on every source change
+COPY . .
+RUN pip install -r requirements.txt
+```
 
-## Testing Requirements
+## Security Patterns
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+### Non-Root User
+```dockerfile
+# ✅ Create and switch to non-root user
+RUN addgroup --system --gid 1001 appgroup && \
+    adduser --system --uid 1001 --ingroup appgroup appuser
+USER appuser
+```
 
-## Security Checklist
+### BuildKit Secrets (never bake secrets into layers)
+```dockerfile
+# syntax=docker/dockerfile:1
+RUN --mount=type=secret,id=npm_token \
+    NPM_TOKEN=$(cat /run/secrets/npm_token) npm ci
+```
+```shell
+# Build command
+DOCKER_BUILDKIT=1 docker build --secret id=npm_token,src=.npm_token .
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+### Image Scanning in CI
+```shell
+# Fail pipeline on HIGH/CRITICAL vulnerabilities
+trivy image --exit-code 1 --severity HIGH,CRITICAL myapp:latest
+grype myapp:latest --fail-on high
+```
+
+## Signal Handling
+
+- Always use exec form: `ENTRYPOINT ["node", "server.js"]` — PID 1 receives SIGTERM
+- Shell form (`ENTRYPOINT node server.js`) wraps in `/bin/sh` — signals lost
+- Set `STOPSIGNAL SIGTERM` explicitly when overriding default
+- Application must handle SIGTERM — drain connections, flush logs, exit cleanly
+
+```dockerfile
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["node", "server.js"]
+```
+
+## HEALTHCHECK
+
+```dockerfile
+# HTTP health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# For distroless (no curl/wget) — use the runtime
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD ["/nodejs/bin/node", "-e", "fetch('http://localhost:8080/health').then(r=>{if(!r.ok)process.exit(1)})"]
+```
+
+## OCI Labels
+
+```dockerfile
+LABEL org.opencontainers.image.source="https://github.com/frootai/myapp" \
+      org.opencontainers.image.title="myapp" \
+      org.opencontainers.image.version="1.0.0" \
+      org.opencontainers.image.vendor="FrootAI" \
+      org.opencontainers.image.licenses="MIT"
+```
+
+## Docker Compose Best Practices
+
+- Pin image tags — never `image: myapp` without a version
+- Set `mem_limit` and `cpus` — prevent runaway containers
+- Always define `restart: unless-stopped` for services
+- Use `depends_on` with `condition: service_healthy` — not just service start
+- Externalize secrets via `secrets:` top-level key — never `environment:` for credentials
+- Separate `compose.override.yml` for dev-only volumes/ports
+
+```yaml
+services:
+  api:
+    build: { context: ., dockerfile: Dockerfile, target: runtime }
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: "1.0"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+```
+
+## .dockerignore
+
+```
+.git
+.github
+node_modules
+__pycache__
+*.md
+.env*
+.vscode
+dist
+coverage
+.internal
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `FROM node:latest` — unpinned tags break builds silently
+- ❌ Running as root in production — container escape → host compromise
+- ❌ `RUN apt-get update && apt-get install` without `--no-install-recommends` and cleanup
+- ❌ `COPY . .` before dependency install — busts cache on every code change
+- ❌ Secrets in `ARG` or `ENV` — visible in `docker history` and layer inspection
+- ❌ Shell form `ENTRYPOINT npm start` — PID 1 is sh, signals never reach app
+- ❌ No `.dockerignore` — sends `.git`, `node_modules`, secrets to build context
+- ❌ Single-stage builds shipping compilers, dev deps, and test fixtures to production
+- ❌ `HEALTHCHECK` omitted — orchestrator can't detect unhealthy containers
+- ❌ `ADD` for local files — use `COPY` (ADD has implicit tar extraction and URL fetch)
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Docker Practice |
+|--------|----------------|
+| **Security** | Non-root USER, BuildKit secrets, distroless base, Trivy/Grype scan in CI, no secrets in layers |
+| **Performance** | Multi-stage builds (small images), layer cache ordering, `.dockerignore` reduces context size |
+| **Reliability** | HEALTHCHECK instruction, exec-form ENTRYPOINT for signal handling, `restart: unless-stopped` |
+| **Cost** | Minimal base images reduce pull/storage costs, layer caching speeds CI, multi-stage prunes dev deps |
+| **Ops Excellence** | OCI labels for traceability, compose health conditions, reproducible builds via pinned digests |

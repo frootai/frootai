@@ -6,130 +6,145 @@ waf:
   - "reliability"
 ---
 
-# Ef Core Waf — WAF-Aligned Coding Standards
+# Entity Framework Core — FAI Standards
 
-> Entity Framework Core standards — migrations, query optimization, eager/lazy loading, concurrency handling.
+## DbContext Configuration
 
-## Core Rules
+- One DbContext per bounded context — never a single "GodContext" for the entire domain
+- Register with `AddDbContext<T>` using pooling when possible: `AddDbContextPool<T>`
+- Configure connection resiliency for transient failures:
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```csharp
+services.AddDbContext<OrderContext>(opts =>
+    opts.UseSqlServer(conn, sql => sql
+        .EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null)
+        .CommandTimeout(30)));
+```
 
-## Implementation Patterns
+- Prefer Fluent API over data annotations for complex mappings
+- Use `IEntityTypeConfiguration<T>` per entity to keep `OnModelCreating` clean:
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+```csharp
+public class OrderConfiguration : IEntityTypeConfiguration<Order>
+{
+    public void Configure(EntityTypeBuilder<Order> builder)
+    {
+        builder.ToTable("Orders", "ordering");
+        builder.HasKey(o => o.Id);
+        builder.Property(o => o.Total).HasPrecision(18, 4);
+        builder.Property(o => o.RowVersion).IsRowVersion(); // concurrency token
+        builder.HasQueryFilter(o => !o.IsDeleted);          // global soft-delete filter
+        builder.OwnsOne(o => o.ShippingAddress);             // owned type
+    }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Query Optimization
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Use `AsNoTracking()` for read-only queries — reduces memory and CPU overhead
+- Use `AsSplitQuery()` for multi-level `Include` to avoid cartesian explosion
+- Prefer explicit `Include`/`ThenInclude` over lazy loading — use compiled queries for hot paths:
 
-## Code Quality Standards
+```csharp
+private static readonly Func<OrderContext, int, Task<Order?>> GetOrderById =
+    EF.CompileAsyncQuery((OrderContext ctx, int id) =>
+        ctx.Orders
+            .AsNoTracking()
+            .Include(o => o.Items)
+            .FirstOrDefault(o => o.Id == id));
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+- Project with `Select` to fetch only needed columns — never materialize full entities for DTOs
 
-## Testing Requirements
+## Value Converters & Shadow Properties
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```csharp
+builder.Property(o => o.Status)
+    .HasConversion(v => v.ToString(), v => Enum.Parse<OrderStatus>(v));
+builder.Property<DateTime>("LastModified");  // shadow property — not on CLR type
+builder.Property<string>("ModifiedBy").HasMaxLength(256);
+```
 
-## Security Checklist
+## Migration Management
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Always generate named migrations: `dotnet ef migrations add AddOrderShipping`
+- Idempotent scripts in CI/CD: `dotnet ef migrations script --idempotent -o migrate.sql`
+- Never call `Database.Migrate()` at startup in production — use release pipelines
+- Guard data-loss ops — `migrationBuilder.Sql()` for data moves before column drops
+- Review generated migration code before committing — EF can silently generate destructive changes
+
+## Bulk Operations & Raw SQL
+
+- Use `ExecuteUpdate`/`ExecuteDelete` (EF 7+) for set-based mutations without loading entities:
+
+```csharp
+await ctx.Orders.Where(o => o.CreatedAt < cutoff).ExecuteDeleteAsync(cancellationToken);
+```
+
+- For raw SQL, always use parameterized interpolation — never string concatenation:
+
+```csharp
+var orders = await ctx.Orders.FromSqlInterpolated($"SELECT * FROM ordering.Orders WHERE TenantId = {tenantId}").ToListAsync();
+```
+
+## Seeding
+
+- Use `HasData` for reference/lookup data only — seed IDs must be stable (changing them = destructive migration)
+
+```csharp
+builder.HasData(new OrderStatus { Id = 1, Name = "Pending" }, new OrderStatus { Id = 2, Name = "Shipped" });
+```
+
+## Preferred Patterns
+
+```csharp
+// ✅ Projection — only fetch what the API needs
+var dto = await ctx.Orders.AsNoTracking()
+    .Where(o => o.CustomerId == customerId)
+    .Select(o => new OrderSummaryDto(o.Id, o.Total, o.Status.ToString(), o.Items.Count))
+    .ToListAsync(ct);
+
+// ✅ Explicit transaction for multi-step writes
+await using var tx = await ctx.Database.BeginTransactionAsync(ct);
+ctx.Orders.Add(order);
+await ctx.SaveChangesAsync(ct);
+await ctx.Database.ExecuteSqlInterpolatedAsync(
+    $"UPDATE ordering.Inventory SET Qty = Qty - {qty} WHERE Sku = {sku}", ct);
+await tx.CommitAsync(ct);
+```
+
+## Avoided Patterns
+
+```csharp
+// ❌ Loading all entities to count them
+var count = ctx.Orders.ToList().Count;       // use .CountAsync()
+
+// ❌ N+1 via lazy loading in a loop
+foreach (var order in orders)
+    Console.WriteLine(order.Customer.Name);  // use .Include(o => o.Customer)
+
+// ❌ String concatenation in raw SQL — SQL injection risk
+ctx.Orders.FromSqlRaw("SELECT * FROM Orders WHERE Name = '" + name + "'");
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+| Anti-Pattern | Problem | Fix |
+|---|---|---|
+| Fat DbContext (100+ DbSets) | Slow model building, high memory | Split per bounded context |
+| Lazy loading everywhere | N+1 queries, unpredictable perf | Explicit `Include` or projection |
+| `Database.Migrate()` in `Program.cs` | Race conditions in scaled-out apps, no rollback | CI/CD idempotent scripts |
+| No concurrency tokens | Silent last-write-wins overwrites | `IsRowVersion()` or `IsConcurrencyToken()` |
+| Tracking queries for read APIs | Wasted change-tracker overhead | `AsNoTracking()` / `AsNoTrackingWithIdentityResolution()` |
+| Cartesian explosion | Multi-Include joins multiply rows | `AsSplitQuery()` |
+| Hardcoded connection strings | Secret leakage, no rotation | Key Vault / managed identity |
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | EF Core Practice |
+|---|---|
+| Performance Efficiency | Compiled queries, `AsNoTracking`, `AsSplitQuery`, projections, `ExecuteUpdate/Delete` |
+| Reliability | `EnableRetryOnFailure`, concurrency tokens, idempotent migrations, explicit transactions |
+| Security | `FromSqlInterpolated` (never raw concat), managed identity auth, no secrets in config |
+| Cost Optimization | Connection pooling (`AddDbContextPool`), projection to reduce data transfer |
+| Operational Excellence | Named migrations, idempotent scripts, `IEntityTypeConfiguration<T>` per entity |

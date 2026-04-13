@@ -6,130 +6,145 @@ waf:
   - "cost-optimization"
 ---
 
-# Froot F1 Genai Foundations — WAF-Aligned Coding Standards
+# GenAI Foundations — FAI Standards
 
-> GenAI foundations coding — token counting, model parameter configuration, inference optimization.
+## Token Counting & Budget Enforcement
 
-## Core Rules
+- Count tokens before every request: `available = context_window - system - user - max_tokens`
+- Truncate or summarize context when approaching limits, not after hitting errors
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```python
+import tiktoken
+def count_tokens(text: str, model: str = "gpt-4o") -> int:
+    return len(tiktoken.encoding_for_model(model).encode(text))
 
-## Implementation Patterns
+def enforce_budget(messages: list[dict], max_ctx: int = 128_000, reserve: int = 4_096) -> list[dict]:
+    budget = max_ctx - reserve
+    total = sum(count_tokens(m["content"]) for m in messages)
+    while total > budget and len(messages) > 2:  # keep system + latest user
+        total -= count_tokens(messages.pop(1)["content"])
+    return messages
+```
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+import { encoding_for_model } from "tiktoken";
+function countTokens(text: string, model = "gpt-4o"): number {
+  const enc = encoding_for_model(model);
+  const n = enc.encode(text).length; enc.free(); return n;
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Model Parameter Configuration
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- All params in `config/*.json` — never hardcode temperature, top_p, max_tokens
+- Pin deployment names, not model names: `"deployment": "gpt-4o-2024-08-06"`
+- `temperature=0` + `seed` for deterministic tasks; `≤0.7` for creative (document why)
+- Tune `temperature` OR `top_p`, never both simultaneously
 
-## Code Quality Standards
+```json
+{ "deployment": "gpt-4o-2024-08-06", "temperature": 0, "max_tokens": 4096, "seed": 42 }
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Message Structure & Prompt Templates
 
-## Testing Requirements
+- System message first, then alternating user/assistant — never skip system
+- System messages under 2000 tokens — move examples to few-shot pairs
+- Use XML delimiters for injected content, not raw string concatenation
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```python
+messages = [
+    {"role": "system", "content": SYSTEM_PROMPT},
+    {"role": "user", "content": f"<document>\n{doc_text}\n</document>\n\nExtract entities."},
+]
+# ❌ Avoided: prompt = f"You are an expert. {user_input}"  — loses role separation
+```
 
-## Security Checklist
+## Structured Output
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Set `response_format: { type: "json_object" }` when expecting JSON
+- Prefer function calling with Pydantic/Zod schemas over free-form JSON
+- Validate LLM output against schema before downstream use
+
+```python
+from pydantic import BaseModel
+class Entity(BaseModel):
+    name: str; entity_type: str; confidence: float
+
+resp = client.chat.completions.create(
+    model=config["deployment"], messages=messages,
+    response_format={"type": "json_object"}, temperature=0, seed=42,
+)
+entity = Entity.model_validate_json(resp.choices[0].message.content)
+```
+
+```typescript
+import { z } from "zod";
+const EntitySchema = z.object({ name: z.string(), type: z.string(), confidence: z.number() });
+const entity = EntitySchema.parse(JSON.parse(choice.message.content ?? "{}"));
+```
+
+## Streaming Responses
+
+- Stream all user-facing responses — reduces time-to-first-token
+- Accumulate chunks for logging after stream; check `finish_reason` per chunk
+
+```python
+collected = []
+async for chunk in await client.chat.completions.create(
+    model=config["deployment"], messages=messages, stream=True):
+    if delta := chunk.choices[0].delta.content:
+        collected.append(delta); yield delta
+```
+
+## Embeddings
+
+- Batch max 2048 items/call; pin model version — switching invalidates vector index
+
+```python
+resp = client.embeddings.create(model=config["embedding_deployment"], input=texts[:2048])
+vectors = [item.embedding for item in resp.data]
+```
+
+## Retry & Rate Limits
+
+- Retry only 429 and 5xx — never retry 400/401/403. Read `Retry-After` header
+- Timeouts: 30s chat, 60s embedding batch, 120s image generation
+
+```python
+from openai import RateLimitError
+for attempt in range(3):
+    try: return client.chat.completions.create(**params)
+    except RateLimitError as e:
+        time.sleep(float(e.response.headers.get("Retry-After", 2**attempt)))
+```
+
+## Content Filter & Context Window
+
+- Check `finish_reason` on every response — `"content_filter"` = output blocked
+- Return graceful error on filter, never raw exception. Log for audit
+- Model limits: gpt-4o=128K, gpt-4o-mini=128K, o3-mini=200K
+- Multi-turn: sliding window (system + last N turns). RAG: 20% system / 60% context / 20% response
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Calling LLM without counting tokens — context overflow errors
+- ❌ Hardcoding `model: "gpt-4o"` instead of deployment name from config
+- ❌ `temperature > 0` for classification/extraction — nondeterministic results
+- ❌ Parsing LLM JSON without schema validation — brittle failures
+- ❌ Ignoring `finish_reason: "content_filter"` — silent data loss
+- ❌ Retrying 400 Bad Request — wastes tokens, never succeeds
+- ❌ No `max_tokens` cap — runaway cost and latency
+- ❌ Switching embedding models without reindexing vectors
+- ❌ String-concatenating user input into prompts — injection risk
+- ❌ Logging full prompts/completions — PII exposure
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | GenAI Practice |
+|--------|---------------|
+| **Security** | Validate LLM output before use; Content Safety on user-facing responses; never log raw prompts |
+| **Reliability** | Retry 429/5xx with Retry-After; fallback model on failure; enforce context limits pre-call |
+| **Cost** | Token counting before calls; model routing (mini→simple, full→complex); max_tokens caps; cache |
+| **Performance** | Streaming for users; batch embeddings; async parallel for independent calls |
+| **Ops Excellence** | Log token usage per request; track finish_reason; pin deployment versions; config-driven params |
+| **Responsible AI** | Content filter on all outputs; human-in-the-loop for high-stakes; bias eval in CI |

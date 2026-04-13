@@ -6,127 +6,206 @@ waf:
   - "operational-excellence"
 ---
 
-# Dotnet Architecture Waf — WAF-Aligned Coding Standards
+# .NET Architecture — FAI Standards
 
-> .NET architecture standards — DDD, SOLID, clean architecture, CQRS, event sourcing.
+> DDD, Clean Architecture, CQRS with MediatR, EF Core patterns, Result pattern, and vertical slices for .NET 8+.
 
-## Core Rules
+## Clean Architecture Layers
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+- **Domain** → Entities, aggregates, value objects, domain events, repository interfaces. Zero dependencies on other layers.
+- **Application** → Use cases (command/query handlers), DTOs, validation, interfaces for infra services. References Domain only.
+- **Infrastructure** → EF Core `DbContext`, repository implementations, external service clients, email, blob storage. References Application.
+- **Presentation** → Minimal APIs or controllers, middleware, auth config, model binding. References Application only.
 
-## Implementation Patterns
+```
+src/
+├── Domain/           # Entities, ValueObjects, Events, IRepository<T>
+├── Application/      # Commands/, Queries/, DTOs/, Behaviors/, IServices
+├── Infrastructure/   # Persistence/, ExternalServices/, DI registration
+└── WebApi/           # Endpoints/, Middleware/, Program.cs
+```
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+## Domain-Driven Design
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+### Aggregates & Entities
+```csharp
+public sealed class Order : AggregateRoot
+{
+    private readonly List<OrderLine> _lines = [];
+    public IReadOnlyList<OrderLine> Lines => _lines.AsReadOnly();
+    public Money Total => _lines.Aggregate(Money.Zero, (sum, l) => sum + l.SubTotal);
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+    public void AddLine(ProductId productId, Quantity qty, Money unitPrice)
+    {
+        Guard.Against.Negative(qty.Value, nameof(qty));
+        _lines.Add(new OrderLine(productId, qty, unitPrice));
+        AddDomainEvent(new OrderLineAddedEvent(Id, productId));
+    }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+### Value Objects
+```csharp
+public sealed record Money(decimal Amount, string Currency)
+{
+    public static Money Zero => new(0, "USD");
+    public static Money operator +(Money a, Money b)
+    {
+        if (a.Currency != b.Currency) throw new CurrencyMismatchException(a.Currency, b.Currency);
+        return a with { Amount = a.Amount + b.Amount };
+    }
+}
+```
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Value objects are `record` types — immutable, structural equality by default
+- Entities use `Id` property with strongly-typed IDs (`OrderId`, `ProductId`)
+- Domain events raised via `AddDomainEvent()` on aggregate root, dispatched after `SaveChangesAsync`
 
-## Code Quality Standards
+## CQRS with MediatR
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```csharp
+// Command — returns Result, not entity
+public sealed record CreateOrderCommand(Guid CustomerId, List<LineDto> Lines)
+    : IRequest<Result<OrderId>>;
 
-## Testing Requirements
+public sealed class CreateOrderHandler(IOrderRepository repo, IUnitOfWork uow)
+    : IRequestHandler<CreateOrderCommand, Result<OrderId>>
+{
+    public async Task<Result<OrderId>> Handle(CreateOrderCommand cmd, CancellationToken ct)
+    {
+        var order = Order.Create(new CustomerId(cmd.CustomerId));
+        foreach (var line in cmd.Lines)
+            order.AddLine(new ProductId(line.ProductId), new Quantity(line.Qty), new Money(line.Price, "USD"));
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+        repo.Add(order);
+        await uow.SaveChangesAsync(ct);
+        return Result.Success(order.Id);
+    }
+}
 
-## Security Checklist
+// Query — returns DTO, never entity
+public sealed record GetOrderQuery(Guid OrderId) : IRequest<Result<OrderDto>>;
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- Commands mutate state, queries read — never mix
+- Pipeline behaviors for cross-cutting: `ValidationBehavior<,>`, `LoggingBehavior<,>`, `TransactionBehavior<,>`
+- Register via `services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateOrderHandler).Assembly))`
+
+## Result Pattern
+
+```csharp
+public class Result<T>
+{
+    public T? Value { get; }
+    public Error? Error { get; }
+    public bool IsSuccess => Error is null;
+
+    public static Result<T> Success(T value) => new() { Value = value };
+    public static Result<T> Failure(Error error) => new() { Error = error };
+}
+```
+
+- Return `Result<T>` from handlers — never throw for business rule violations
+- Exceptions reserved for truly exceptional cases (network failure, corrupted state)
+- Map `Result` to HTTP status in endpoint: `IsSuccess ? Ok(r.Value) : Problem(r.Error)`
+
+## Repository Pattern with EF Core
+
+```csharp
+public sealed class OrderRepository(AppDbContext db) : IOrderRepository
+{
+    public async Task<Order?> GetByIdAsync(OrderId id, CancellationToken ct) =>
+        await db.Orders.Include(o => o.Lines).FirstOrDefaultAsync(o => o.Id == id, ct);
+
+    public void Add(Order order) => db.Orders.Add(order);
+}
+```
+
+- Repository interfaces live in **Domain**, implementations in **Infrastructure**
+- `IUnitOfWork` wraps `SaveChangesAsync` — called in handler, not repository
+- Use `AsNoTracking()` for all read queries; split read/write `DbContext` when scaling
+
+## Vertical Slice Alternative
+
+When Clean Architecture layers add overhead for simple CRUD, use vertical slices:
+
+```csharp
+// One file per feature: Features/Orders/CreateOrder.cs
+public static class CreateOrder
+{
+    public sealed record Command(Guid CustomerId) : IRequest<Result<Guid>>;
+    public sealed class Handler(AppDbContext db) : IRequestHandler<Command, Result<Guid>> { ... }
+    public sealed class Validator : AbstractValidator<Command> { ... }
+}
+```
+
+- Group by feature, not by layer — all related code in one folder
+- Still use MediatR, FluentValidation, Result pattern inside each slice
+
+## Minimal API Organization
+
+```csharp
+// Endpoints/OrderEndpoints.cs
+public static class OrderEndpoints
+{
+    public static RouteGroupBuilder MapOrderEndpoints(this IEndpointRouteBuilder app)
+    {
+        var group = app.MapGroup("/api/v{version:apiVersion}/orders")
+            .WithTags("Orders")
+            .RequireAuthorization();
+
+        group.MapPost("/", CreateOrder).WithName(nameof(CreateOrder));
+        group.MapGet("/{id:guid}", GetOrder).WithName(nameof(GetOrder));
+        return group;
+    }
+
+    private static async Task<IResult> CreateOrder(CreateOrderCommand cmd, ISender sender, CancellationToken ct)
+    {
+        var result = await sender.Send(cmd, ct);
+        return result.IsSuccess
+            ? Results.CreatedAtRoute(nameof(GetOrder), new { id = result.Value }, result.Value)
+            : Results.Problem(result.Error!.Message, statusCode: 400);
+    }
+}
+```
+
+## Configuration & Middleware
+
+- Use Options pattern: `services.Configure<AzureOpenAIOptions>(config.GetSection("AzureOpenAI"))` — inject `IOptions<T>`
+- Validate options at startup: `services.AddOptionsWithValidateOnStart<T>().ValidateDataAnnotations()`
+- API versioning: `services.AddApiVersioning(o => { o.DefaultApiVersion = new(1, 0); o.AssumeDefaultVersionWhenUnspecified = true; })`
+- Middleware order: ExceptionHandler → CORS → Auth → RateLimiter → Endpoints
+
+## Preferred Patterns
+
+- ✅ Primary constructors for DI: `class Handler(IRepo repo)` — no manual field assignment
+- ✅ `sealed` on classes not designed for inheritance — lets JIT devirtualize
+- ✅ `CancellationToken` threaded through every async call chain
+- ✅ `TimeProvider` for testable time — never `DateTime.UtcNow` directly
+- ✅ `IAsyncEnumerable<T>` for streaming large result sets
+- ✅ `global using` in a single `GlobalUsings.cs` file per project
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Anemic domain model — entities with only getters and all logic in services
+- ❌ Injecting `DbContext` directly into endpoints — use repository + unit-of-work
+- ❌ Returning entities from API endpoints — always map to DTOs
+- ❌ `Task.Result` or `.Wait()` — causes deadlocks; always `await`
+- ❌ Service locator via `IServiceProvider.GetService<T>()` in business logic
+- ❌ `catch (Exception) { }` swallowing errors silently
+- ❌ God classes (`OrderService` with 40 methods) — split into command/query handlers
+- ❌ Storing domain logic in stored procedures or EF query interceptors
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
+| Pillar | .NET Implementation |
+|---|---|
+| **Reliability** | Polly v8 `ResiliencePipeline` (retry + circuit breaker + timeout), health checks via `MapHealthChecks`, `IHostedService` graceful shutdown |
+| **Security** | `DefaultAzureCredential`, Data Protection API, `[Authorize]` policies, AntiForgery, parameterized EF queries (no raw SQL interpolation) |
+| **Cost Optimization** | Response caching middleware, `IMemoryCache`/`IDistributedCache`, model routing via config, right-sized Container Apps |
+| **Operational Excellence** | `ILogger<T>` + Serilog sinks to App Insights, `Activity`/`ActivitySource` for distributed tracing, `/health` + `/ready` endpoints |
+| **Performance** | `System.Text.Json` source generators, `ValueTask` for hot paths, `ObjectPool<T>`, output caching, `AsNoTracking` reads |
+| **Responsible AI** | Content Safety middleware, PII redaction in logs via `Destructure.ByTransforming`, prompt injection validation at boundary |
 
 ### Operational Excellence
 - Structured JSON logging with Application Insights + correlation IDs

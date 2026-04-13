@@ -6,130 +6,181 @@ waf:
   - "performance-efficiency"
 ---
 
-# Froot F2 Llm Selection — WAF-Aligned Coding Standards
+# LLM Selection & Routing — FAI Standards
 
-> LLM selection standards — model routing config, benchmark-driven selection, cost/quality tradeoffs.
+## Model Routing by Task Complexity
 
-## Core Rules
+Route requests to the cheapest model that meets quality thresholds:
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+| Task Type | Model | Why |
+|-----------|-------|-----|
+| Classification, tagging, extraction | `gpt-4o-mini` | Fast, cheap, 95%+ accuracy on structured tasks |
+| Summarization, Q&A, RAG grounding | `gpt-4o` | Best quality/cost ratio for reasoning |
+| Complex multi-step analysis, math, code | `o3-mini` | Chain-of-thought reasoning, higher accuracy |
+| Research, long-context synthesis | `o3` | Deep reasoning, large context handling |
+| Embeddings | `text-embedding-3-large` | 3072-dim, best retrieval quality |
+| Embeddings (budget) | `text-embedding-3-small` | 1536-dim, 5x cheaper, adequate for most RAG |
 
-## Implementation Patterns
+## Deployment Name Abstraction
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+Never hardcode model names. Use deployment aliases in `config/models.json`:
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+```json
+{
+  "models": {
+    "fast": { "deployment": "gpt-4o-mini-2024-07-18", "maxTokens": 4096, "temperature": 0.0 },
+    "balanced": { "deployment": "gpt-4o-2024-11-20", "maxTokens": 8192, "temperature": 0.3 },
+    "reasoning": { "deployment": "o3-mini-2025-01-31", "maxTokens": 16384, "temperature": 1.0 },
+    "embedding": { "deployment": "text-embedding-3-large", "dimensions": 3072 }
+  },
+  "routing": {
+    "classify": "fast",
+    "summarize": "balanced",
+    "analyze": "reasoning",
+    "embed": "embedding"
+  },
+  "fallback": ["balanced", "fast"]
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Model Router Implementation
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```python
+# config-driven model router with fallback chain
+import json, os
+from openai import AzureOpenAI
 
-## Code Quality Standards
+class ModelRouter:
+    def __init__(self, config_path: str = "config/models.json"):
+        with open(config_path) as f:
+            self.config = json.load(f)
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+    def get_model(self, task: str) -> dict:
+        alias = self.config["routing"].get(task, "balanced")
+        return self.config["models"][alias]
 
-## Testing Requirements
+    async def complete(self, task: str, messages: list, client: AzureOpenAI) -> str:
+        model_cfg = self.get_model(task)
+        fallbacks = [model_cfg["deployment"]] + [
+            self.config["models"][f]["deployment"] for f in self.config.get("fallback", [])
+        ]
+        for deployment in fallbacks:
+            try:
+                resp = client.chat.completions.create(
+                    model=deployment,
+                    messages=messages,
+                    max_tokens=model_cfg.get("maxTokens", 4096),
+                    temperature=model_cfg.get("temperature", 0.0),
+                )
+                return resp.choices[0].message.content
+            except Exception as e:
+                if "429" in str(e) or "503" in str(e):
+                    continue  # try next fallback
+                raise
+        raise RuntimeError("All model fallbacks exhausted")
+```
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+## SLM vs LLM Decision Criteria
 
-## Security Checklist
+Use **Small Language Models** (gpt-4o-mini, Phi-3) when:
+- Task is classification, extraction, or formatting (structured output)
+- Latency budget is <500ms p95
+- Cost per 1M tokens matters (10x cheaper than large models)
+- Input/output is short (<2K tokens)
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+Use **Large Language Models** (gpt-4o, o3) when:
+- Multi-step reasoning or complex instruction following required
+- Output quality directly impacts user trust (customer-facing summaries)
+- Long-context grounding (>8K input tokens with citations)
+- Task requires world knowledge beyond training data
+
+## PTU vs Pay-As-You-Go Decision Matrix
+
+| Criteria | PTU (Provisioned) | PAYG (Token-based) |
+|----------|-------------------|--------------------|
+| Traffic | Steady, predictable >50K TPM | Bursty, <10K TPM average |
+| Latency SLA | Guaranteed p99 <2s | Best-effort, may spike |
+| Cost breakeven | ~$0.06/1K tokens equivalent | Standard per-token pricing |
+| Commitment | 1-month minimum | None |
+| Recommendation | Production workloads | Dev/test, low-volume prod |
+
+## Model Version Pinning
+
+- Always pin to dated versions: `gpt-4o-2024-11-20`, never `gpt-4o` (auto-upgrades break prompts)
+- Track model retirement dates — Azure gives 90-day deprecation notice
+- Test new versions against evaluation suite BEFORE swapping deployment
+- Keep a `model-versions.lock` file in config/ tracking deployed versions per environment
+
+## A/B Testing Models
+
+```typescript
+// Traffic splitting for model comparison
+function selectModel(userId: string, experiment: string): string {
+  const config = loadConfig("config/experiments.json");
+  const exp = config.experiments[experiment];
+  if (!exp?.enabled) return exp?.control ?? "balanced";
+
+  // Deterministic split by user ID hash
+  const hash = createHash("sha256").update(userId + experiment).digest();
+  const bucket = hash[0] / 255;
+  return bucket < exp.trafficSplit ? exp.treatment : exp.control;
+}
+// Log: { experiment, model, userId, latencyMs, qualityScore, tokenCount }
+```
+
+## Evaluation Metrics (Gate Before Promotion)
+
+Every model swap must pass these thresholds on the evaluation dataset:
+
+| Metric | Threshold | Measurement |
+|--------|-----------|-------------|
+| Groundedness | ≥ 4.0 / 5.0 | Does output stay faithful to provided context? |
+| Relevance | ≥ 4.0 / 5.0 | Does output address the user's question? |
+| Fluency | ≥ 4.0 / 5.0 | Is output grammatically correct and readable? |
+| Coherence | ≥ 3.5 / 5.0 | Is output logically consistent? |
+| Latency p95 | ≤ 3,000ms | End-to-end response time |
+| Cost delta | ≤ +20% | Per-request cost vs current model |
+
+## Multi-Model Pipelines
+
+Chain models for cost-efficient quality:
+
+1. **Classify** (gpt-4o-mini) → determine intent + complexity score
+2. **Route** → simple queries to gpt-4o-mini, complex to gpt-4o
+3. **Generate** → primary response with citations
+4. **Validate** (gpt-4o-mini) → check groundedness, reject hallucinations
+5. **Fallback** → if validation fails, re-generate with gpt-4o + stricter prompt
+
+## Preferred Patterns
+
+- ✅ Config-driven deployment names — swap models without code changes
+- ✅ Fallback chains with automatic failover on 429/503
+- ✅ Evaluation gate before any model promotion to production
+- ✅ Deterministic A/B splits by user hash (not random — reproducible)
+- ✅ `temperature: 0.0` for classification/extraction, `0.3` for generation, `1.0` for reasoning models
+- ✅ `max_tokens` always set from config — never unlimited
+- ✅ Pin model versions with dated suffixes in deployment config
+- ✅ Track token usage per-request for FinOps dashboards
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Hardcoding `model="gpt-4o"` in application code — use deployment abstraction
+- ❌ Using gpt-4o for simple classification (10x cost, no quality gain)
+- ❌ Using gpt-4o-mini for complex reasoning (fails on multi-step logic)
+- ❌ Setting `temperature > 0` on reasoning models (o1/o3 ignore it, wastes prompt space)
+- ❌ Skipping evaluation when swapping model versions ("same family, should be fine")
+- ❌ PAYG for steady 100K+ TPM workloads (PTU is 40-60% cheaper)
+- ❌ Unpinned model versions — auto-upgrade causes silent regression
+- ❌ Single model for all tasks — no routing = overpaying or underperforming
+- ❌ Logging full prompts/completions in production (PII + cost + storage)
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | LLM Selection Practice |
+|--------|----------------------|
+| **Cost Optimization** | Model routing by complexity, PTU for steady traffic, token budget enforcement, SLM-first policy |
+| **Performance Efficiency** | Latency-aware routing, streaming for generation, gpt-4o-mini for <500ms tasks |
+| **Reliability** | Fallback chains across deployments, version pinning, evaluation gates |
+| **Security** | No model names/keys in code, DefaultAzureCredential, Content Safety on outputs |
+| **Operational Excellence** | A/B testing framework, per-request telemetry, model version tracking |
+| **Responsible AI** | Groundedness thresholds, hallucination validation step, bias evaluation in test suite |
