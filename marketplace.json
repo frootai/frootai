@@ -3,7 +3,7 @@
   "name": "FrootAI Plugin Marketplace",
   "description": "Registry of all FrootAI plugins — themed bundles of agents, instructions, skills, and hooks.",
   "version": "1.0.0",
-  "generated": "2026-04-13T16:51:02.038Z",
+  "generated": "2026-04-13T22:50:11.723Z",
   "plugins": [
     {
       "name": "agentic-rag",
