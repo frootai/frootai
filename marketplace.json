@@ -3,13 +3,13 @@
   "name": "FrootAI Plugin Marketplace",
   "description": "Registry of all FrootAI plugins — themed bundles of agents, instructions, skills, and hooks.",
   "version": "1.0.0",
-  "generated": "2026-04-12T21:33:43.456Z",
+  "generated": "2026-04-13T12:29:55.184Z",
   "plugins": [
     {
       "name": "agentic-rag",
       "description": "Autonomous RAG where the AI agent controls retrieval — decides when to search, which sources to query, iterates on results, and synthesizes across multiple knowledge bases with citations.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/agentic-rag",
       "keywords": [
@@ -33,7 +33,7 @@
       "name": "ai-evaluation-suite",
       "description": "AI Evaluation Suite — groundedness, coherence, relevance, fluency, and safety scoring. Build evaluation pipelines with Azure AI Evaluation SDK, custom metrics, regression tracking, and CI/CD integration.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ai-evaluation-suite",
       "keywords": [
@@ -59,7 +59,7 @@
       "name": "ai-landing-zone",
       "description": "Azure AI Landing Zone — subscription vending, network topology, RBAC, policy enforcement, and hub-spoke architecture for enterprise AI workloads. Includes Bicep IaC modules validated against all 6 WAF pillars.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ai-landing-zone",
       "keywords": [
@@ -87,7 +87,7 @@
       "name": "ai-landing-zone-advanced",
       "description": "Advanced AI Landing Zone — multi-region deployment, private endpoints, Azure Firewall, DDoS protection, sovereign cloud patterns, and compliance-ready infrastructure for regulated industries.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ai-landing-zone-advanced",
       "keywords": [
@@ -114,7 +114,7 @@
       "name": "ai-observability",
       "description": "AI Observability — distributed tracing for LLM calls, token usage dashboards, latency monitoring, evaluation score tracking, and alerting. Build full observability for AI workloads with Azure Monitor and OpenTelemetry.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ai-observability",
       "keywords": [
@@ -141,7 +141,7 @@
       "name": "ai-search-portal",
       "description": "AI Search Portal — full-text and vector hybrid search with semantic ranking, faceted navigation, autocomplete, and personalized results. Build a production search experience on Azure AI Search with RAG integration.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ai-search-portal",
       "keywords": [
@@ -167,7 +167,7 @@
       "name": "anomaly-detection",
       "description": "Anomaly Detection — real-time and batch anomaly detection for time-series, metrics, and log data. Uses Azure AI Anomaly Detector, custom ML models, and event-driven alerting with Azure Event Hubs.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/anomaly-detection",
       "keywords": [
@@ -194,7 +194,7 @@
       "name": "architecture-patterns",
       "description": "Architecture Patterns — cloud design patterns, domain-driven design, microservices, event sourcing, CQRS, and hexagonal architecture. Generate architecture blueprints, C4 diagrams, and ADRs.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/architecture-patterns",
       "keywords": [
@@ -219,7 +219,7 @@
       "name": "azure-ai-services",
       "description": "Azure AI Services — OpenAI, AI Search, Document Intelligence, Language, Speech, Vision, and Content Safety integration patterns. Production-ready wrappers with retry, circuit breaker, and cost tracking.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-ai-services",
       "keywords": [
@@ -245,7 +245,7 @@
       "name": "azure-containers",
       "description": "Azure Containers — AKS, Container Apps, Container Registry, and Dockerized deployment patterns. GPU workloads, KEDA autoscaling, Dapr sidecar integration, and multi-arch builds for AI model serving.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-containers",
       "keywords": [
@@ -271,7 +271,7 @@
       "name": "azure-data-services",
       "description": "Azure Data Services — Cosmos DB, SQL Database, Blob Storage, Data Explorer, and Redis Cache patterns. Schema design, partition strategies, query optimization, and data lifecycle management.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-data-services",
       "keywords": [
@@ -296,7 +296,7 @@
       "name": "azure-identity-security",
       "description": "Azure Identity & Security — Managed Identity, Key Vault, RBAC, Conditional Access, and zero-trust architecture. Secure AI workloads with certificate-based auth, secret rotation, and compliance auditing.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-identity-security",
       "keywords": [
@@ -321,7 +321,7 @@
       "name": "azure-infrastructure",
       "description": "Azure Infrastructure — landing zones, hub-spoke networking, private endpoints, Azure Policy, RBAC, and subscription vending. Enterprise-grade Bicep IaC for AI workloads validated against all 6 WAF pillars.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-infrastructure",
       "keywords": [
@@ -347,7 +347,7 @@
       "name": "azure-messaging",
       "description": "Azure Messaging — Service Bus, Event Hubs, and Event Grid patterns for async communication, event sourcing, and CQRS. Build reliable message-driven architectures with dead-letter handling and partitioning.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-messaging",
       "keywords": [
@@ -372,7 +372,7 @@
       "name": "azure-monitoring",
       "description": "Azure Monitoring — Application Insights, Log Analytics, KQL queries, alert rules, workbooks, and dashboards. Full observability for AI workloads with custom metrics, distributed tracing, and SLO tracking.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-monitoring",
       "keywords": [
@@ -397,7 +397,7 @@
       "name": "azure-serverless",
       "description": "Azure Serverless — Functions, Logic Apps, Event Grid, and Durable Functions patterns. Event-driven architectures with consumption-based scaling, cold start mitigation, and cost optimization.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/azure-serverless",
       "keywords": [
@@ -422,7 +422,7 @@
       "name": "browser-automation",
       "description": "AI-driven web task execution using Playwright MCP and GPT-4o Vision — navigate websites, extract data, fill forms, and automate multi-step web workflows from natural language.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/browser-automation",
       "keywords": [
@@ -445,7 +445,7 @@
       "name": "call-center-voice-ai",
       "description": "Call Center Voice AI — real-time speech-to-text, intent classification, sentiment analysis, and AI-assisted agent coaching. Integrates Azure AI Speech, Azure Communication Services, and GPT-4o for voice-driven customer service.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/call-center-voice-ai",
       "keywords": [
@@ -471,7 +471,7 @@
       "name": "cicd-automation",
       "description": "CI/CD Automation — GitHub Actions, Azure DevOps pipelines, build matrices, deployment gates, and release management. Automate test → build → deploy → evaluate pipelines for AI workloads.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/cicd-automation",
       "keywords": [
@@ -495,7 +495,7 @@
       "name": "code-quality",
       "description": "Code Quality — automated code review, refactoring suggestions, dead code removal, complexity analysis, and technical debt tracking. AI-powered quality gates with custom rulesets and team coding standards.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/code-quality",
       "keywords": [
@@ -519,7 +519,7 @@
       "name": "content-moderation",
       "description": "Content Moderation — real-time text, image, and multi-modal content safety with Azure AI Content Safety. Includes severity scoring, blocklist management, custom categories, and human-in-the-loop review workflows.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/content-moderation",
       "keywords": [
@@ -545,7 +545,7 @@
       "name": "content-safety-toolkit",
       "description": "Content Safety Toolkit — Azure AI Content Safety integration, custom blocklists, severity thresholds, image moderation, prompt injection detection, and jailbreak defense patterns for production AI.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/content-safety-toolkit",
       "keywords": [
@@ -569,7 +569,7 @@
       "name": "context-engineering",
       "description": "Context Engineering — maximize AI effectiveness with structured context, memory banks, knowledge wiring, and smart prompt assembly. Build context-aware agents that retrieve the right information at the right time.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/context-engineering",
       "keywords": [
@@ -592,7 +592,7 @@
       "name": "copilot-studio-bot",
       "description": "Copilot Studio Bot — custom copilot experiences with Microsoft Copilot Studio, Power Virtual Agents, and Teams integration. Build conversational AI with enterprise SSO, Dataverse, and multi-channel deployment.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/copilot-studio-bot",
       "keywords": [
@@ -618,7 +618,7 @@
       "name": "copilot-teams-extension",
       "description": "Copilot for Teams Extension — declarative agents, API plugins, message extensions, and adaptive cards for Microsoft 365 Copilot. Build custom AI experiences that surface inside Teams, Outlook, and M365 apps.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/copilot-teams-extension",
       "keywords": [
@@ -644,7 +644,7 @@
       "name": "cost-optimized-ai-gateway",
       "description": "Cost-Optimized AI Gateway — intelligent model routing, token budget enforcement, request caching, rate limiting, and usage analytics. Route between GPT-4o, GPT-4o-mini, and Phi models based on complexity and cost.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/cost-optimized-ai-gateway",
       "keywords": [
@@ -671,7 +671,7 @@
       "name": "csharp-dotnet-development",
       "description": "C# .NET Development — ASP.NET Core, Minimal API, Blazor, MAUI, EF Core, xUnit/NUnit testing, and architecture patterns. Full-stack .NET with WAF-aligned coding standards and code review agents.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/csharp-dotnet-development",
       "keywords": [
@@ -696,7 +696,7 @@
       "name": "csharp-mcp-development",
       "description": "C# MCP Development — build Model Context Protocol servers in C# with .NET SDK, ASP.NET Core hosting, dependency injection, and Azure deployment patterns.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/csharp-mcp-development",
       "keywords": [
@@ -720,7 +720,7 @@
       "name": "database-management",
       "description": "Database administration and optimization — PostgreSQL, SQL Server, Cosmos DB modeling, query optimization, migration planning, and data pipeline patterns.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/database-management",
       "keywords": [
@@ -742,7 +742,7 @@
       "name": "design-system",
       "description": "Design System — UI components, design tokens, theming, responsive layouts, accessibility, animations, and form patterns. Build consistent, accessible UIs with AI-generated component variants and Storybook docs.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/design-system",
       "keywords": [
@@ -766,7 +766,7 @@
       "name": "deterministic-agent",
       "description": "Deterministic AI Agent — finite state machines, rule-based routing, guardrailed tool use, and reproducible conversation flows. Build agents that produce consistent outputs regardless of LLM temperature.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/deterministic-agent",
       "keywords": [
@@ -792,7 +792,7 @@
       "name": "devops-oncall",
       "description": "DevOps and on-call operations — incident triage, Azure resource diagnostics, KQL query generation, deployment automation, and SRE patterns for AI workloads.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/devops-oncall",
       "keywords": [
@@ -817,7 +817,7 @@
       "name": "docker-containerization",
       "description": "Docker Containerization — multi-stage builds, distroless images, BuildKit caching, health checks, and security scanning. Containerize any workload with optimized images for AI inference and web services.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/docker-containerization",
       "keywords": [
@@ -841,7 +841,7 @@
       "name": "document-intelligence",
       "description": "Document Intelligence — OCR, form extraction, table recognition, and intelligent document processing. Uses Azure AI Document Intelligence with custom models for invoices, receipts, contracts, and domain-specific forms.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/document-intelligence",
       "keywords": [
@@ -868,7 +868,7 @@
       "name": "edge-ai-phi4",
       "description": "Edge AI with Phi-4 — deploy small language models on edge devices, IoT hubs, and local inference servers. Quantization, ONNX optimization, and offline-capable AI with Microsoft Phi-4 models.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/edge-ai-phi4",
       "keywords": [
@@ -895,7 +895,7 @@
       "name": "enterprise-rag",
       "description": "Production-grade Retrieval-Augmented Generation pipeline with Azure AI Search, OpenAI embeddings, Container Apps deployment, and WAF-aligned evaluation. Includes the RAG Architect agent, Python + Bicep instructions, play initializer skill, and all 3 security hooks.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/enterprise-rag",
       "keywords": [
@@ -921,10 +921,61 @@
       }
     },
     {
+      "name": "fai-discovery",
+      "description": "FAI Discovery — meta-plugin for exploring and recommending agents, instructions, skills, hooks, and plugins. Suggests the right primitives for your task based on project context and WAF alignment.",
+      "version": "1.0.0",
+      "author": "FAI Contributors",
+      "license": "MIT",
+      "source": "./plugins/fai-discovery",
+      "keywords": [
+        "discovery",
+        "meta",
+        "recommendation",
+        "suggest",
+        "explore",
+        "catalog",
+        "primitives",
+        "marketplace"
+      ],
+      "plays": [],
+      "items": {
+        "agents": 2,
+        "instructions": 2,
+        "skills": 6,
+        "hooks": 3
+      }
+    },
+    {
+      "name": "fai-essentials",
+      "description": "The essential FAI toolkit — WAF-aligned agents (security reviewer, cost optimizer, architect), cross-cutting instructions (OWASP, agent-safety, testing), and security hooks (secrets scanner, tool guardian, governance audit). The recommended starting plugin for every FAI project.",
+      "version": "1.0.0",
+      "author": "FAI Contributors",
+      "license": "MIT",
+      "source": "./plugins/fai-essentials",
+      "keywords": [
+        "essentials",
+        "waf",
+        "security",
+        "cost",
+        "owasp",
+        "agent-safety",
+        "testing",
+        "hooks",
+        "starter"
+      ],
+      "plays": [],
+      "items": {
+        "agents": 5,
+        "instructions": 3,
+        "skills": 3,
+        "hooks": 3
+      }
+    },
+    {
       "name": "fai-protocol-starter",
       "description": "FAI Protocol Starter — quickstart for the FAI Protocol ecosystem. Scaffold fai-manifest.json, fai-context.json, and connect primitives into wired solution plays. The entry point for building FAI Protocol compliant solutions.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/fai-protocol-starter",
       "keywords": [
@@ -948,7 +999,7 @@
       "name": "fine-tuning-mlops",
       "description": "Fine-Tuning & MLOps — dataset curation, model training, hyperparameter optimization, model registry, and deployment pipelines. End-to-end ML lifecycle with Azure AI Foundry, MLflow, and evaluation gates.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/fine-tuning-mlops",
       "keywords": [
@@ -973,7 +1024,7 @@
       "name": "fine-tuning-workflow",
       "description": "Fine-Tuning Workflow — dataset preparation, training job orchestration, evaluation pipelines, model registry, and deployment automation. Fine-tune GPT, Phi, and open-source models on Azure AI Foundry.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/fine-tuning-workflow",
       "keywords": [
@@ -999,7 +1050,7 @@
       "name": "frontend-web-development",
       "description": "Frontend Web Development — React, Angular, Vue, Svelte, Astro, and Tailwind CSS patterns. Component architecture, state management, accessibility, and performance optimization for modern web apps.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/frontend-web-development",
       "keywords": [
@@ -1022,61 +1073,10 @@
       }
     },
     {
-      "name": "frootai-discovery",
-      "description": "FrootAI Discovery — meta-plugin for exploring and recommending agents, instructions, skills, hooks, and plugins. Suggests the right primitives for your task based on project context and WAF alignment.",
-      "version": "1.0.0",
-      "author": "FrootAI Contributors",
-      "license": "MIT",
-      "source": "./plugins/frootai-discovery",
-      "keywords": [
-        "discovery",
-        "meta",
-        "recommendation",
-        "suggest",
-        "explore",
-        "catalog",
-        "primitives",
-        "marketplace"
-      ],
-      "plays": [],
-      "items": {
-        "agents": 2,
-        "instructions": 2,
-        "skills": 6,
-        "hooks": 3
-      }
-    },
-    {
-      "name": "frootai-essentials",
-      "description": "The essential FrootAI toolkit — WAF-aligned agents (security reviewer, cost optimizer, architect), cross-cutting instructions (OWASP, agent-safety, testing), and security hooks (secrets scanner, tool guardian, governance audit). The recommended starting plugin for every FrootAI project.",
-      "version": "1.0.0",
-      "author": "FrootAI Contributors",
-      "license": "MIT",
-      "source": "./plugins/frootai-essentials",
-      "keywords": [
-        "essentials",
-        "waf",
-        "security",
-        "cost",
-        "owasp",
-        "agent-safety",
-        "testing",
-        "hooks",
-        "starter"
-      ],
-      "plays": [],
-      "items": {
-        "agents": 5,
-        "instructions": 3,
-        "skills": 3,
-        "hooks": 3
-      }
-    },
-    {
       "name": "go-development",
       "description": "Go Development — high-performance services, gRPC APIs, concurrent patterns, and cloud-native tooling. Idiomatic Go with table-driven tests, error handling, and minimal dependency builds.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/go-development",
       "keywords": [
@@ -1100,7 +1100,7 @@
       "name": "go-mcp-development",
       "description": "Go MCP Development — build high-performance MCP servers in Go with goroutine concurrency, gRPC transport, and minimal memory footprint for edge deployment.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/go-mcp-development",
       "keywords": [
@@ -1124,7 +1124,7 @@
       "name": "incident-response",
       "description": "Incident Response — on-call triage, KQL query generation, Azure resource diagnostics, runbook automation, and post-incident reviews. AI-assisted SRE with intelligent alerting and root cause analysis.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/incident-response",
       "keywords": [
@@ -1149,7 +1149,7 @@
       "name": "it-ticket-resolution",
       "description": "IT Ticket Resolution — automated incident classification, knowledge base search, resolution suggestion, and escalation routing. Uses RAG over IT documentation with Azure AI Search and Semantic Kernel orchestration.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/it-ticket-resolution",
       "keywords": [
@@ -1175,7 +1175,7 @@
       "name": "java-development",
       "description": "Java Development — Spring Boot, Quarkus, JUnit 5, Gradle/Maven builds, and microservice patterns. Enterprise Java with reactive streams, GraalVM native images, and cloud-native deployment.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/java-development",
       "keywords": [
@@ -1200,7 +1200,7 @@
       "name": "java-mcp-development",
       "description": "Java MCP Development — build MCP servers in Java with Spring Boot, reactive streams, Maven/Gradle builds, and enterprise middleware integration.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/java-mcp-development",
       "keywords": [
@@ -1224,7 +1224,7 @@
       "name": "kotlin-mcp-development",
       "description": "Kotlin MCP Development — build MCP servers in Kotlin with Ktor, coroutines, multiplatform support, and Android-compatible tool implementations.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/kotlin-mcp-development",
       "keywords": [
@@ -1248,7 +1248,7 @@
       "name": "kubernetes-orchestration",
       "description": "Kubernetes Orchestration — cluster setup, Helm charts, KEDA autoscaling, Dapr sidecars, Istio service mesh, and GPU scheduling. Production K8s patterns for AI model serving and microservices.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/kubernetes-orchestration",
       "keywords": [
@@ -1273,7 +1273,7 @@
       "name": "llm-observability",
       "description": "LLM Observability — trace every LLM call with input/output logging, token counts, latency percentiles, cost attribution, and evaluation score trends. OpenTelemetry-based tracing for Azure OpenAI and open-source models.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/llm-observability",
       "keywords": [
@@ -1297,7 +1297,7 @@
       "name": "mobile-development",
       "description": "Mobile Development — Swift/SwiftUI for iOS, Kotlin for Android, .NET MAUI for cross-platform, and Flutter/Dart for hybrid apps. Native AI integration with on-device inference and platform-specific UX patterns.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/mobile-development",
       "keywords": [
@@ -1323,7 +1323,7 @@
       "name": "model-serving-aks",
       "description": "Model Serving on AKS — GPU-accelerated inference, autoscaling with KEDA, model versioning, A/B deployment, and canary rollouts. Deploy open-source LLMs (Phi-4, Llama, Mistral) on Azure Kubernetes Service.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/model-serving-aks",
       "keywords": [
@@ -1351,7 +1351,7 @@
       "name": "multi-agent-service",
       "description": "Multi-Agent Service — orchestrated agent teams with supervisor patterns, tool delegation, shared memory, and conflict resolution. Build production agent services on Azure Container Apps with Semantic Kernel or AutoGen.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/multi-agent-service",
       "keywords": [
@@ -1377,7 +1377,7 @@
       "name": "multi-agent-swarm",
       "description": "Deploy specialized AI agents that collaborate via supervisor, pipeline, and debate patterns — a distributed agent team for complex workflows that no single agent can handle.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/multi-agent-swarm",
       "keywords": [
@@ -1401,7 +1401,7 @@
       "name": "multi-modal-docproc",
       "description": "Multi-Modal Document Processing — combine OCR, vision, speech, and text analysis for complex document workflows. Extract structured data from PDFs, images, audio, and video using Azure AI multi-modal capabilities.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/multi-modal-docproc",
       "keywords": [
@@ -1428,7 +1428,7 @@
       "name": "oracle-migration",
       "description": "Oracle Migration — Oracle-to-PostgreSQL and Oracle-to-Azure SQL migration patterns. Schema conversion, PL/SQL translation, data pipeline design, and validation testing for database modernization.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/oracle-migration",
       "keywords": [
@@ -1452,7 +1452,7 @@
       "name": "php-mcp-development",
       "description": "PHP MCP Development — build MCP servers in PHP with Laravel integration, Composer packaging, Swoole async runtime, and WordPress compatibility.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/php-mcp-development",
       "keywords": [
@@ -1476,7 +1476,7 @@
       "name": "power-bi-analytics",
       "description": "Power BI Analytics — DAX formulas, data modeling, report design, dashboard layout, and performance optimization. Build self-service AI analytics with DirectQuery, incremental refresh, and composite models.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/power-bi-analytics",
       "keywords": [
@@ -1500,7 +1500,7 @@
       "name": "power-platform",
       "description": "Power Platform AI integration — Power Apps code components, Power BI DAX and modeling, Power Automate flow design, Dataverse SDK patterns, and Copilot Studio custom connectors.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/power-platform",
       "keywords": [
@@ -1525,7 +1525,7 @@
       "name": "project-planning",
       "description": "Project Planning — PRDs, epic breakdown, implementation plans, technical spikes, and rollout strategies. AI-assisted project management with architecture decision records and feature decomposition.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/project-planning",
       "keywords": [
@@ -1549,7 +1549,7 @@
       "name": "prompt-engineering",
       "description": "Prompt Engineering — chain-of-thought, few-shot, tree-of-thought, and meta-prompting patterns. Template management, dynamic prompt assembly, safety guardrails, and evaluation-driven prompt optimization.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/prompt-engineering",
       "keywords": [
@@ -1573,7 +1573,7 @@
       "name": "prompt-management",
       "description": "Prompt Management — version-controlled prompt templates, A/B testing, evaluation pipelines, and dynamic prompt assembly. Manage hundreds of prompts across models with Semantic Kernel prompt functions.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/prompt-management",
       "keywords": [
@@ -1599,7 +1599,7 @@
       "name": "python-fullstack",
       "description": "Python Full-Stack — FastAPI, Django, Flask, Pydantic, SQLAlchemy, pytest, and async patterns. Data science to web APIs with type safety, dependency injection, and production deployment.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/python-fullstack",
       "keywords": [
@@ -1624,7 +1624,7 @@
       "name": "python-mcp-development",
       "description": "Python MCP Development — build MCP servers in Python with FastMCP, asyncio, Pydantic models, type-safe tool schemas, and Azure Functions hosting.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/python-mcp-development",
       "keywords": [
@@ -1648,7 +1648,7 @@
       "name": "responsible-ai",
       "description": "Responsible AI — content safety, bias testing, fairness metrics, transparency cards, and human-in-the-loop review. Build ethical AI systems aligned with Microsoft Responsible AI Standard and EU AI Act requirements.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/responsible-ai",
       "keywords": [
@@ -1673,7 +1673,7 @@
       "name": "ruby-mcp-development",
       "description": "Ruby MCP Development — build MCP servers in Ruby with Rails integration, Rack middleware, Sorbet typing, and Bundler gem packaging.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/ruby-mcp-development",
       "keywords": [
@@ -1697,7 +1697,7 @@
       "name": "rust-development",
       "description": "Rust Development — systems programming, zero-cost abstractions, async with Tokio, WASM targets, and memory-safe concurrency. Build high-performance tools, CLIs, and servers without garbage collection.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/rust-development",
       "keywords": [
@@ -1721,7 +1721,7 @@
       "name": "rust-mcp-development",
       "description": "Rust MCP Development — build blazing-fast MCP servers in Rust with Tokio async runtime, RMCP SDK, WASM compilation, and zero-allocation tool handlers.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/rust-mcp-development",
       "keywords": [
@@ -1745,7 +1745,7 @@
       "name": "salesforce-integration",
       "description": "Salesforce Integration — Apex development, Lightning Web Components, SOQL optimization, Salesforce MCP connectors, and AI-powered CRM workflows. Bridge Salesforce data with Azure AI services.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/salesforce-integration",
       "keywords": [
@@ -1768,7 +1768,7 @@
       "name": "security-hardening",
       "description": "Security Hardening — OWASP Top 10, secrets scanning, dependency auditing, supply chain security, threat modeling, and penetration testing patterns. Harden AI applications with defense-in-depth and zero-trust.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/security-hardening",
       "keywords": [
@@ -1792,7 +1792,7 @@
       "name": "swift-mcp-development",
       "description": "Swift MCP Development — build MCP servers in Swift with Vapor framework, SwiftUI tool previews, iOS/macOS native integration, and Apple silicon optimization.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/swift-mcp-development",
       "keywords": [
@@ -1817,7 +1817,7 @@
       "name": "technical-documentation",
       "description": "Technical Documentation — API references, architecture guides, README generation, changelog automation, tutorials, and ADRs. AI-assisted writing with Mermaid diagrams, PlantUML, and DrawIO integration.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/technical-documentation",
       "keywords": [
@@ -1842,7 +1842,7 @@
       "name": "terraform-iac",
       "description": "Terraform IaC — module authoring, state management, workspace strategies, provider configuration, and drift detection. Multi-cloud infrastructure as code with Azure-optimized patterns and cost estimation.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/terraform-iac",
       "keywords": [
@@ -1866,7 +1866,7 @@
       "name": "testing-automation",
       "description": "AI-powered testing — unit test generation, integration testing, E2E with Playwright, AI evaluation pipelines, and TDD workflow agents for polyglot codebases.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/testing-automation",
       "keywords": [
@@ -1890,7 +1890,7 @@
       "name": "typescript-fullstack",
       "description": "TypeScript Full-Stack — Next.js, React, NestJS, Prisma, Zod, Vitest, and end-to-end type safety. Modern web development with server components, tRPC, and Tailwind CSS.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/typescript-fullstack",
       "keywords": [
@@ -1915,7 +1915,7 @@
       "name": "typescript-mcp-development",
       "description": "TypeScript MCP Development — build MCP servers in TypeScript with Node.js, Express/Fastify hosting, Zod schema validation, and npm package distribution.",
       "version": "1.0.0",
-      "author": "FrootAI Contributors",
+      "author": "FAI Contributors",
       "license": "MIT",
       "source": "./plugins/typescript-mcp-development",
       "keywords": [
