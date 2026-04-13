@@ -3,7 +3,7 @@
   "description": "Go Development — high-performance services, gRPC APIs, concurrent patterns, and cloud-native tooling. Idiomatic Go with table-driven tests, error handling, and minimal dependency builds.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,19 +18,19 @@
     "minimal"
   ],
   "agents": [
-    "../../agents/frootai-go-expert.agent.md",
-    "../../agents/frootai-go-mcp-expert.agent.md"
+    "../../agents/fai-go-expert.agent.md",
+    "../../agents/fai-go-mcp-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/go-waf.instructions.md",
     "../../instructions/grpc-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-go-scaffold/"
+    "../../skills/fai-mcp-go-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

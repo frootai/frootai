@@ -3,7 +3,7 @@
   "description": "Context Engineering — maximize AI effectiveness with structured context, memory banks, knowledge wiring, and smart prompt assembly. Build context-aware agents that retrieve the right information at the right time.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -17,8 +17,8 @@
     "prompt-context"
   ],
   "agents": [
-    "../../agents/frootai-rag-expert.agent.md",
-    "../../agents/frootai-prompt-engineer.agent.md"
+    "../../agents/fai-rag-expert.agent.md",
+    "../../agents/fai-prompt-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/context-engineering-waf.instructions.md",
@@ -26,16 +26,16 @@
     "../../instructions/copilot-thought-logging-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-what-context-needed/",
-    "../../skills/frootai-context-map/",
-    "../../skills/frootai-contextual-rag/",
-    "../../skills/frootai-remember/",
-    "../../skills/frootai-build-genai-rag/"
+    "../../skills/fai-what-context-needed/",
+    "../../skills/fai-context-map/",
+    "../../skills/fai-contextual-rag/",
+    "../../skills/fai-remember/",
+    "../../skills/fai-build-genai-rag/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/"
   ]
 }

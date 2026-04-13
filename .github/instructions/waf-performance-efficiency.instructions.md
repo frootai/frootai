@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Performance efficiency patterns — caching, streaming, async processing, bundle optimization, and latency reduction aligned to Azure Well-Architected Framework."
 ---
 # Performance Efficiency — Azure Well-Architected Framework
 

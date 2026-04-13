@@ -3,7 +3,7 @@
   "description": "TypeScript MCP Development — build MCP servers in TypeScript with Node.js, Express/Fastify hosting, Zod schema validation, and npm package distribution.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-typescript-mcp-expert.agent.md",
-    "../../agents/frootai-typescript-expert.agent.md"
+    "../../agents/fai-typescript-mcp-expert.agent.md",
+    "../../agents/fai-typescript-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/typescript-mcp-development.instructions.md",
     "../../instructions/typescript-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-typescript-scaffold/",
-    "../../skills/frootai-mcp-typescript-generator/"
+    "../../skills/fai-mcp-typescript-scaffold/",
+    "../../skills/fai-mcp-typescript-generator/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

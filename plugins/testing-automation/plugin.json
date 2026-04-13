@@ -2,12 +2,12 @@
   "name": "testing-automation",
   "description": "AI-powered testing — unit test generation, integration testing, E2E with Playwright, AI evaluation pipelines, and TDD workflow agents for polyglot codebases.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["testing", "unit-test", "integration", "playwright", "tdd", "evaluation", "polyglot", "ci-cd"],
   "agents": [],
   "instructions": ["../../instructions/testing-best-practices.instructions.md"],
-  "skills": ["../../skills/frootai-eval-runner/"],
+  "skills": ["../../skills/fai-eval-runner/"],
   "plays": []
 }

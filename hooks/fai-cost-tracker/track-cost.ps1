@@ -15,12 +15,12 @@ if (-not (Test-Path $LOG_DIR)) { New-Item -ItemType Directory -Path $LOG_DIR -Fo
 
 # Model pricing (USD per 1K tokens)
 $pricing = @{
-    "gpt-4o"          = 0.005
-    "gpt-4o-mini"     = 0.0003
-    "o3"              = 0.010
-    "o3-mini"         = 0.0012
-    "gpt-4-turbo"     = 0.010
-    "gpt-4.1"         = 0.005
+    "gpt-4o"      = 0.005
+    "gpt-4o-mini" = 0.0003
+    "o3"          = 0.010
+    "o3-mini"     = 0.0012
+    "gpt-4-turbo" = 0.010
+    "gpt-4.1"     = 0.005
 }
 $rate = if ($pricing.ContainsKey($MODEL)) { $pricing[$MODEL] } else { 0.005 }
 
@@ -32,10 +32,12 @@ try {
         $filesChanged = $lines.Count
         $linesAdded = ($lines | ForEach-Object { ($_ -split '\t')[0] } | Measure-Object -Sum).Sum
         $linesRemoved = ($lines | ForEach-Object { ($_ -split '\t')[1] } | Measure-Object -Sum).Sum
-    } else {
+    }
+    else {
         $filesChanged = 0; $linesAdded = 0; $linesRemoved = 0
     }
-} catch {
+}
+catch {
     $filesChanged = 0; $linesAdded = 0; $linesRemoved = 0
 }
 
@@ -43,7 +45,8 @@ try {
 try {
     $addedChars = (git diff --unified=0 2>$null | Select-String '^\+[^+]' | ForEach-Object { $_.Line.Substring(1) } | Measure-Object -Character).Characters
     $estimatedTokens = [math]::Max(1, [math]::Floor($addedChars / 4))
-} catch {
+}
+catch {
     $estimatedTokens = 0
 }
 
@@ -52,15 +55,15 @@ $timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 
 # Log entry
 $entry = @{
-    timestamp = $timestamp
-    event = "Stop"
-    model = $MODEL
-    files_changed = $filesChanged
-    lines_added = $linesAdded
-    lines_removed = $linesRemoved
-    estimated_tokens = $estimatedTokens
+    timestamp          = $timestamp
+    event              = "Stop"
+    model              = $MODEL
+    files_changed      = $filesChanged
+    lines_added        = $linesAdded
+    lines_removed      = $linesRemoved
+    estimated_tokens   = $estimatedTokens
     estimated_cost_usd = $estimatedCost
-    mode = $MODE
+    mode               = $MODE
 } | ConvertTo-Json -Compress
 
 Add-Content -Path $LOG_FILE -Value $entry

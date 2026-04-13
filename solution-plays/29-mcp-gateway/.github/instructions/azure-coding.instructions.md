@@ -150,10 +150,10 @@ resource openaiRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-0
 
 ## Azure Resource Naming
 Follow the convention: `{project}-{environment}-{resource-type}`
-- Resource Group: `rg-frootai-{env}`
-- OpenAI: `oai-frootai-{env}`
-- Key Vault: `kv-frootai-{env}`
-- App Service: `app-frootai-{env}`
+- Resource Group: `rg-fai-{env}`
+- OpenAI: `oai-fai-{env}`
+- Key Vault: `kv-fai-{env}`
+- App Service: `app-fai-{env}`
 - Storage: `stfrootai{env}` (no hyphens allowed)
 
 ## Cost Optimization Patterns

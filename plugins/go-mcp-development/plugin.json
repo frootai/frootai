@@ -3,7 +3,7 @@
   "description": "Go MCP Development — build high-performance MCP servers in Go with goroutine concurrency, gRPC transport, and minimal memory footprint for edge deployment.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-go-mcp-expert.agent.md",
-    "../../agents/frootai-go-expert.agent.md"
+    "../../agents/fai-go-mcp-expert.agent.md",
+    "../../agents/fai-go-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/go-mcp-development.instructions.md",
     "../../instructions/go-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-go-scaffold/",
-    "../../skills/frootai-mcp-go-scaffold/"
+    "../../skills/fai-mcp-go-scaffold/",
+    "../../skills/fai-mcp-go-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

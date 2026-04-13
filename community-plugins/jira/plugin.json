@@ -1,9 +1,9 @@
 {
   "name": "fai-jira-plugin",
-  "description": "Jira integration plugin for FrootAI — 4 MCP tools, dedicated agent, compatible plays",
+  "description": "Jira integration plugin for FAI — 4 MCP tools, dedicated agent, compatible plays",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI",
+    "name": "FAI",
     "url": "https://frootai.dev"
   },
   "license": "MIT",

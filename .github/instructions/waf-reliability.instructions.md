@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Reliability patterns — retry policies, circuit breakers, health checks, graceful degradation, and resilience aligned to Azure Well-Architected Framework."
 ---
 # Reliability — Azure Well-Architected Framework
 

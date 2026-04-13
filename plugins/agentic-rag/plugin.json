@@ -2,12 +2,12 @@
   "name": "agentic-rag",
   "description": "Autonomous RAG where the AI agent controls retrieval — decides when to search, which sources to query, iterates on results, and synthesizes across multiple knowledge bases with citations.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["agentic-rag", "autonomous-retrieval", "multi-source", "azure-ai-search", "openai", "evaluated"],
   "agents": ["../../solution-plays/21-agentic-rag/.github/agents/agentic-rag.agent.md"],
   "instructions": ["../../instructions/python-waf.instructions.md"],
-  "hooks": ["../../hooks/frootai-secrets-scanner/", "../../hooks/frootai-tool-guardian/", "../../hooks/frootai-governance-audit/"],
+  "hooks": ["../../hooks/fai-secrets-scanner/", "../../hooks/fai-tool-guardian/", "../../hooks/fai-governance-audit/"],
   "plays": ["21-agentic-rag"]
 }

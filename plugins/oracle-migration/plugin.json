@@ -3,7 +3,7 @@
   "description": "Oracle Migration — Oracle-to-PostgreSQL and Oracle-to-Azure SQL migration patterns. Schema conversion, PL/SQL translation, data pipeline design, and validation testing for database modernization.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,24 +18,24 @@
     "database-modernization"
   ],
   "agents": [
-    "../../agents/frootai-migration-expert.agent.md",
-    "../../agents/frootai-postgresql-expert.agent.md",
-    "../../agents/frootai-sql-server-expert.agent.md"
+    "../../agents/fai-migration-expert.agent.md",
+    "../../agents/fai-postgresql-expert.agent.md",
+    "../../agents/fai-sql-server-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/sql-optimization-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-build-sql-migration/",
-    "../../skills/frootai-postgresql-optimization/",
-    "../../skills/frootai-postgresql-code-review/",
-    "../../skills/frootai-sql-optimization-skill/",
-    "../../skills/frootai-sql-code-review-skill/",
-    "../../skills/frootai-database-schema-designer/"
+    "../../skills/fai-build-sql-migration/",
+    "../../skills/fai-postgresql-optimization/",
+    "../../skills/fai-postgresql-code-review/",
+    "../../skills/fai-sql-optimization-skill/",
+    "../../skills/fai-sql-code-review-skill/",
+    "../../skills/fai-database-schema-designer/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

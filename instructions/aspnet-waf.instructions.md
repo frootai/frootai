@@ -9,7 +9,7 @@ waf:
   - "cost-optimization"
 ---
 
-# ASP.NET Core WAF — FrootAI Standards
+# ASP.NET Core WAF — FAI Standards
 
 When writing or reviewing ASP.NET Core code, enforce these WAF-aligned standards.
 

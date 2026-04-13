@@ -3,7 +3,7 @@
   "description": "Power BI Analytics — DAX formulas, data modeling, report design, dashboard layout, and performance optimization. Build self-service AI analytics with DirectQuery, incremental refresh, and composite models.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,21 +18,21 @@
     "analytics"
   ],
   "agents": [
-    "../../agents/frootai-power-bi-expert.agent.md"
+    "../../agents/fai-power-bi-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/power-bi-dax-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-power-bi-dashboard/",
-    "../../skills/frootai-power-bi-report/",
-    "../../skills/frootai-powerbi-modeling/",
-    "../../skills/frootai-build-data-lakehouse/",
-    "../../skills/frootai-fabric-lakehouse/"
+    "../../skills/fai-power-bi-dashboard/",
+    "../../skills/fai-power-bi-report/",
+    "../../skills/fai-powerbi-modeling/",
+    "../../skills/fai-build-data-lakehouse/",
+    "../../skills/fai-fabric-lakehouse/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

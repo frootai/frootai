@@ -3,7 +3,7 @@
   "description": "Azure Identity & Security — Managed Identity, Key Vault, RBAC, Conditional Access, and zero-trust architecture. Secure AI workloads with certificate-based auth, secret rotation, and compliance auditing.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,10 +19,10 @@
     "conditional-access"
   ],
   "agents": [
-    "../../agents/frootai-azure-identity-expert.agent.md",
-    "../../agents/frootai-azure-key-vault-expert.agent.md",
-    "../../agents/frootai-security-reviewer.agent.md",
-    "../../agents/frootai-compliance-expert.agent.md"
+    "../../agents/fai-azure-identity-expert.agent.md",
+    "../../agents/fai-azure-key-vault-expert.agent.md",
+    "../../agents/fai-security-reviewer.agent.md",
+    "../../agents/fai-compliance-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/security-python.instructions.md",
@@ -31,22 +31,22 @@
     "../../instructions/security-owasp.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-key-vault-setup/",
-    "../../skills/frootai-azure-role-selector/",
-    "../../skills/frootai-secret-scanning/",
-    "../../skills/frootai-threat-model/",
-    "../../skills/frootai-security-review-skill/"
+    "../../skills/fai-azure-key-vault-setup/",
+    "../../skills/fai-azure-role-selector/",
+    "../../skills/fai-secret-scanning/",
+    "../../skills/fai-threat-model/",
+    "../../skills/fai-security-review-skill/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-pii-redactor/",
-    "../../hooks/frootai-output-validator/",
-    "../../hooks/frootai-token-budget-enforcer/",
-    "../../hooks/frootai-session-logger/",
-    "../../hooks/frootai-license-checker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-pii-redactor/",
+    "../../hooks/fai-output-validator/",
+    "../../hooks/fai-token-budget-enforcer/",
+    "../../hooks/fai-session-logger/",
+    "../../hooks/fai-license-checker/"
   ]
 }

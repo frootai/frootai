@@ -27,7 +27,7 @@ pkgver=2.1.0
 pkgrel=1
 pkgdesc="CLI tool for managing FAI solution plays"
 arch=('x86_64')
-url="https://github.com/frootai/myapp"
+url="https://github.com/FAI/myapp"
 license=('MIT')
 depends=('python>=3.11' 'python-requests')
 makedepends=('python-build' 'python-installer' 'python-wheel')

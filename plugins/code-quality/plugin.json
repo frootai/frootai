@@ -3,7 +3,7 @@
   "description": "Code Quality — automated code review, refactoring suggestions, dead code removal, complexity analysis, and technical debt tracking. AI-powered quality gates with custom rulesets and team coding standards.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,9 +18,9 @@
     "linting"
   ],
   "agents": [
-    "../../agents/frootai-code-reviewer.agent.md",
-    "../../agents/frootai-refactoring-expert.agent.md",
-    "../../agents/frootai-tech-debt-analyst.agent.md"
+    "../../agents/fai-code-reviewer.agent.md",
+    "../../agents/fai-refactoring-expert.agent.md",
+    "../../agents/fai-tech-debt-analyst.agent.md"
   ],
   "instructions": [
     "../../instructions/code-review-waf.instructions.md",
@@ -29,17 +29,17 @@
     "../../instructions/self-documenting-code-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-code-smell-detector/",
-    "../../skills/frootai-dead-code-removal/",
-    "../../skills/frootai-refactor-complexity/",
-    "../../skills/frootai-refactor-plan/",
-    "../../skills/frootai-refactor-skill/",
-    "../../skills/frootai-review-and-refactor/"
+    "../../skills/fai-code-smell-detector/",
+    "../../skills/fai-dead-code-removal/",
+    "../../skills/fai-refactor-complexity/",
+    "../../skills/fai-refactor-plan/",
+    "../../skills/fai-refactor-skill/",
+    "../../skills/fai-review-and-refactor/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ]
 }

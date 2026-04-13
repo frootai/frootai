@@ -3,7 +3,7 @@
   "description": "Kubernetes Orchestration — cluster setup, Helm charts, KEDA autoscaling, Dapr sidecars, Istio service mesh, and GPU scheduling. Production K8s patterns for AI model serving and microservices.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,19 +19,19 @@
     "service-mesh"
   ],
   "agents": [
-    "../../agents/frootai-kubernetes-expert.agent.md",
-    "../../agents/frootai-azure-aks-expert.agent.md"
+    "../../agents/fai-kubernetes-expert.agent.md",
+    "../../agents/fai-azure-aks-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/kubernetes-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-build-kubernetes-manifest/"
+    "../../skills/fai-build-kubernetes-manifest/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/"
   ]
 }

@@ -3,7 +3,7 @@
   "description": "Design System — UI components, design tokens, theming, responsive layouts, accessibility, animations, and form patterns. Build consistent, accessible UIs with AI-generated component variants and Storybook docs.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,8 +18,8 @@
     "storybook"
   ],
   "agents": [
-    "../../agents/frootai-ux-designer.agent.md",
-    "../../agents/frootai-accessibility-expert.agent.md"
+    "../../agents/fai-ux-designer.agent.md",
+    "../../agents/fai-accessibility-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/a11y-waf.instructions.md",
@@ -27,25 +27,25 @@
     "../../instructions/html-css-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-design-ui-components/",
-    "../../skills/frootai-design-system-tokens/",
-    "../../skills/frootai-design-themes/",
-    "../../skills/frootai-design-responsive/",
-    "../../skills/frootai-design-forms/",
-    "../../skills/frootai-design-accessibility/",
-    "../../skills/frootai-design-animations/",
-    "../../skills/frootai-design-layouts/",
-    "../../skills/frootai-design-loading-states/",
-    "../../skills/frootai-design-error-states/",
-    "../../skills/frootai-design-data-visualization/",
-    "../../skills/frootai-design-onboarding/",
-    "../../skills/frootai-design-dialog-system/",
-    "../../skills/frootai-design-icon-system/",
-    "../../skills/frootai-design-state-management/"
+    "../../skills/fai-design-ui-components/",
+    "../../skills/fai-design-system-tokens/",
+    "../../skills/fai-design-themes/",
+    "../../skills/fai-design-responsive/",
+    "../../skills/fai-design-forms/",
+    "../../skills/fai-design-accessibility/",
+    "../../skills/fai-design-animations/",
+    "../../skills/fai-design-layouts/",
+    "../../skills/fai-design-loading-states/",
+    "../../skills/fai-design-error-states/",
+    "../../skills/fai-design-data-visualization/",
+    "../../skills/fai-design-onboarding/",
+    "../../skills/fai-design-dialog-system/",
+    "../../skills/fai-design-icon-system/",
+    "../../skills/fai-design-state-management/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

@@ -3,7 +3,7 @@
   "description": "Edge AI with Phi-4 — deploy small language models on edge devices, IoT hubs, and local inference servers. Quantization, ONNX optimization, and offline-capable AI with Microsoft Phi-4 models.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,10 +19,10 @@
     "offline"
   ],
   "agents": [
-    "../../agents/frootai-play-19-builder.agent.md",
-    "../../agents/frootai-play-19-reviewer.agent.md",
-    "../../agents/frootai-play-19-tuner.agent.md",
-    "../../agents/frootai-ml-engineer.agent.md"
+    "../../agents/fai-play-19-builder.agent.md",
+    "../../agents/fai-play-19-reviewer.agent.md",
+    "../../agents/fai-play-19-tuner.agent.md",
+    "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-19-edge-ai-phi4-patterns.instructions.md",
@@ -30,17 +30,17 @@
     "../../instructions/docker-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-19-edge-ai-phi4/",
-    "../../skills/frootai-evaluate-19-edge-ai-phi4/",
-    "../../skills/frootai-tune-19-edge-ai-phi4/",
-    "../../skills/frootai-inference-optimization/",
-    "../../skills/frootai-multi-stage-docker/"
+    "../../skills/fai-deploy-19-edge-ai-phi4/",
+    "../../skills/fai-evaluate-19-edge-ai-phi4/",
+    "../../skills/fai-tune-19-edge-ai-phi4/",
+    "../../skills/fai-inference-optimization/",
+    "../../skills/fai-multi-stage-docker/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/"
   ],
   "plays": [
     "19-edge-ai-phi4"

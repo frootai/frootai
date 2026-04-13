@@ -2,7 +2,7 @@
   "name": "power-platform",
   "description": "Power Platform AI integration — Power Apps code components, Power BI DAX and modeling, Power Automate flow design, Dataverse SDK patterns, and Copilot Studio custom connectors.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["power-platform", "power-apps", "power-bi", "power-automate", "dataverse", "copilot-studio", "pcf", "dax"],

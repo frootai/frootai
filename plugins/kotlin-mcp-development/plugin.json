@@ -3,7 +3,7 @@
   "description": "Kotlin MCP Development — build MCP servers in Kotlin with Ktor, coroutines, multiplatform support, and Android-compatible tool implementations.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-kotlin-mcp-expert.agent.md",
-    "../../agents/frootai-kotlin-expert.agent.md"
+    "../../agents/fai-kotlin-mcp-expert.agent.md",
+    "../../agents/fai-kotlin-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/kotlin-mcp-development.instructions.md",
     "../../instructions/kotlin-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-kotlin-scaffold/",
-    "../../skills/frootai-mcp-kotlin-scaffold/"
+    "../../skills/fai-mcp-kotlin-scaffold/",
+    "../../skills/fai-mcp-kotlin-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

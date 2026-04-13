@@ -9,9 +9,9 @@ waf:
   - "performance-efficiency"
 ---
 
-# Bicep — FrootAI WAF-Aligned Standards
+# Bicep — FAI WAF-Aligned Standards
 
-When writing or reviewing Bicep templates in FrootAI projects, enforce these standards.
+When writing or reviewing Bicep templates in FAI projects, enforce these standards.
 
 ## Security (WAF: Security Pillar)
 
@@ -87,7 +87,7 @@ var commonTags = {
   environment: environment
   project: projectName
   costCenter: costCenter
-  managedBy: 'frootai-bicep'
+  managedBy: 'FAI-bicep'
   createdDate: utcNow('yyyy-MM-dd')
 }
 

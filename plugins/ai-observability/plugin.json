@@ -3,7 +3,7 @@
   "description": "AI Observability — distributed tracing for LLM calls, token usage dashboards, latency monitoring, evaluation score tracking, and alerting. Build full observability for AI workloads with Azure Monitor and OpenTelemetry.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,11 +19,11 @@
     "dashboards"
   ],
   "agents": [
-    "../../agents/frootai-play-17-builder.agent.md",
-    "../../agents/frootai-play-17-reviewer.agent.md",
-    "../../agents/frootai-play-17-tuner.agent.md",
-    "../../agents/frootai-azure-monitor-expert.agent.md",
-    "../../agents/frootai-performance-profiler.agent.md"
+    "../../agents/fai-play-17-builder.agent.md",
+    "../../agents/fai-play-17-reviewer.agent.md",
+    "../../agents/fai-play-17-tuner.agent.md",
+    "../../agents/fai-azure-monitor-expert.agent.md",
+    "../../agents/fai-performance-profiler.agent.md"
   ],
   "instructions": [
     "../../instructions/play-17-ai-observability-patterns.instructions.md",
@@ -31,17 +31,17 @@
     "../../instructions/python-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-17-ai-observability/",
-    "../../skills/frootai-evaluate-17-ai-observability/",
-    "../../skills/frootai-tune-17-ai-observability/",
-    "../../skills/frootai-copilot-usage-metrics/"
+    "../../skills/fai-deploy-17-ai-observability/",
+    "../../skills/fai-evaluate-17-ai-observability/",
+    "../../skills/fai-tune-17-ai-observability/",
+    "../../skills/fai-copilot-usage-metrics/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/",
+    "../../hooks/fai-cost-tracker/"
   ],
   "plays": [
     "17-ai-observability"

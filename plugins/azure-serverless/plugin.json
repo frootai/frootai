@@ -3,7 +3,7 @@
   "description": "Azure Serverless — Functions, Logic Apps, Event Grid, and Durable Functions patterns. Event-driven architectures with consumption-based scaling, cold start mitigation, and cost optimization.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,22 +19,22 @@
     "consumption"
   ],
   "agents": [
-    "../../agents/frootai-azure-functions-expert.agent.md",
-    "../../agents/frootai-azure-logic-apps-expert.agent.md",
-    "../../agents/frootai-event-driven-expert.agent.md"
+    "../../agents/fai-azure-functions-expert.agent.md",
+    "../../agents/fai-azure-logic-apps-expert.agent.md",
+    "../../agents/fai-event-driven-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/azure-functions-waf.instructions.md",
     "../../instructions/azure-logic-apps-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-functions-setup/",
-    "../../skills/frootai-azure-event-grid-setup/"
+    "../../skills/fai-azure-functions-setup/",
+    "../../skills/fai-azure-event-grid-setup/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/"
   ]
 }

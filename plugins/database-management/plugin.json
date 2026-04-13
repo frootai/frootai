@@ -2,7 +2,7 @@
   "name": "database-management",
   "description": "Database administration and optimization — PostgreSQL, SQL Server, Cosmos DB modeling, query optimization, migration planning, and data pipeline patterns.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["database", "postgresql", "sql-server", "cosmos-db", "migration", "optimization", "schema-design"],

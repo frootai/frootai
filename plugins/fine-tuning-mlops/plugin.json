@@ -3,7 +3,7 @@
   "description": "Fine-Tuning & MLOps — dataset curation, model training, hyperparameter optimization, model registry, and deployment pipelines. End-to-end ML lifecycle with Azure AI Foundry, MLflow, and evaluation gates.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,25 +19,25 @@
     "azure-ai-foundry"
   ],
   "agents": [
-    "../../agents/frootai-fine-tuning-expert.agent.md",
-    "../../agents/frootai-ml-engineer.agent.md",
-    "../../agents/frootai-data-engineer.agent.md"
+    "../../agents/fai-fine-tuning-expert.agent.md",
+    "../../agents/fai-ml-engineer.agent.md",
+    "../../agents/fai-data-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/froot-t1-fine-tuning-data.instructions.md",
     "../../instructions/python-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-fine-tune-llm/",
-    "../../skills/frootai-build-llm-evaluator/",
-    "../../skills/frootai-model-recommendation/",
-    "../../skills/frootai-inference-optimization/",
-    "../../skills/frootai-build-tokenizer/"
+    "../../skills/fai-fine-tune-llm/",
+    "../../skills/fai-build-llm-evaluator/",
+    "../../skills/fai-model-recommendation/",
+    "../../skills/fai-inference-optimization/",
+    "../../skills/fai-build-tokenizer/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/"
   ]
 }

@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Operational excellence patterns — CI/CD, observability, IaC, incident management, and deployment automation aligned to Azure Well-Architected Framework."
 ---
 # Operational Excellence — Azure Well-Architected Framework
 

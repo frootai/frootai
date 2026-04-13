@@ -3,7 +3,7 @@
   "description": "PHP MCP Development — build MCP servers in PHP with Laravel integration, Composer packaging, Swoole async runtime, and WordPress compatibility.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-php-mcp-expert.agent.md",
-    "../../agents/frootai-php-expert.agent.md"
+    "../../agents/fai-php-mcp-expert.agent.md",
+    "../../agents/fai-php-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/php-mcp-development.instructions.md",
     "../../instructions/php-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-php-scaffold/",
-    "../../skills/frootai-mcp-php-scaffold/"
+    "../../skills/fai-mcp-php-scaffold/",
+    "../../skills/fai-mcp-php-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

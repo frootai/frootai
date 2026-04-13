@@ -3,7 +3,7 @@
   "description": "Incident Response — on-call triage, KQL query generation, Azure resource diagnostics, runbook automation, and post-incident reviews. AI-assisted SRE with intelligent alerting and root cause analysis.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,21 +19,21 @@
     "alerting"
   ],
   "agents": [
-    "../../agents/frootai-incident-responder.agent.md",
-    "../../agents/frootai-devops-expert.agent.md",
-    "../../agents/frootai-azure-monitor-expert.agent.md"
+    "../../agents/fai-incident-responder.agent.md",
+    "../../agents/fai-devops-expert.agent.md",
+    "../../agents/fai-azure-monitor-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/opex-monitoring.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-resource-health/",
-    "../../skills/frootai-azure-resource-graph/"
+    "../../skills/fai-azure-resource-health/",
+    "../../skills/fai-azure-resource-graph/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/"
   ]
 }

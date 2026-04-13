@@ -3,7 +3,7 @@
   "description": "Rust Development — systems programming, zero-cost abstractions, async with Tokio, WASM targets, and memory-safe concurrency. Build high-performance tools, CLIs, and servers without garbage collection.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,18 +18,18 @@
     "cli"
   ],
   "agents": [
-    "../../agents/frootai-rust-expert.agent.md",
-    "../../agents/frootai-rust-mcp-expert.agent.md"
+    "../../agents/fai-rust-expert.agent.md",
+    "../../agents/fai-rust-mcp-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/rust-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-rust-scaffold/"
+    "../../skills/fai-mcp-rust-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

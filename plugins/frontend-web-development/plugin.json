@@ -3,7 +3,7 @@
   "description": "Frontend Web Development — React, Angular, Vue, Svelte, Astro, and Tailwind CSS patterns. Component architecture, state management, accessibility, and performance optimization for modern web apps.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,12 +20,12 @@
     "responsive"
   ],
   "agents": [
-    "../../agents/frootai-react-expert.agent.md",
-    "../../agents/frootai-vue-expert.agent.md",
-    "../../agents/frootai-svelte-expert.agent.md",
-    "../../agents/frootai-angular-expert.agent.md",
-    "../../agents/frootai-ux-designer.agent.md",
-    "../../agents/frootai-accessibility-expert.agent.md"
+    "../../agents/fai-react-expert.agent.md",
+    "../../agents/fai-vue-expert.agent.md",
+    "../../agents/fai-svelte-expert.agent.md",
+    "../../agents/fai-angular-expert.agent.md",
+    "../../agents/fai-ux-designer.agent.md",
+    "../../agents/fai-accessibility-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/html-css-waf.instructions.md",
@@ -37,16 +37,16 @@
     "../../instructions/a11y-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-react-component-scaffold/",
-    "../../skills/frootai-design-ui-components/",
-    "../../skills/frootai-design-responsive/",
-    "../../skills/frootai-design-accessibility/",
-    "../../skills/frootai-design-themes/",
-    "../../skills/frootai-premium-frontend-ui/"
+    "../../skills/fai-react-component-scaffold/",
+    "../../skills/fai-design-ui-components/",
+    "../../skills/fai-design-responsive/",
+    "../../skills/fai-design-accessibility/",
+    "../../skills/fai-design-themes/",
+    "../../skills/fai-premium-frontend-ui/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

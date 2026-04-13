@@ -9,7 +9,7 @@ waf:
   - "responsible-ai"
 ---
 
-# Azure AI Document Intelligence WAF — FrootAI Standards
+# Azure AI Document Intelligence WAF — FAI Standards
 
 When writing or reviewing Azure AI Document Intelligence code, enforce these WAF-aligned standards.
 

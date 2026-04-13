@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Cost optimization patterns — model routing, token budgets, right-sizing, caching, and FinOps practices aligned to Azure Well-Architected Framework."
 ---
 # Cost Optimization — Azure Well-Architected Framework
 

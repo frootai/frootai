@@ -3,7 +3,7 @@
   "description": "Cost-Optimized AI Gateway — intelligent model routing, token budget enforcement, request caching, rate limiting, and usage analytics. Route between GPT-4o, GPT-4o-mini, and Phi models based on complexity and cost.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,12 +19,12 @@
     "usage-analytics"
   ],
   "agents": [
-    "../../agents/frootai-play-14-builder.agent.md",
-    "../../agents/frootai-play-14-reviewer.agent.md",
-    "../../agents/frootai-play-14-tuner.agent.md",
-    "../../agents/frootai-cost-optimizer.agent.md",
-    "../../agents/frootai-cost-gateway.agent.md",
-    "../../agents/frootai-azure-apim-expert.agent.md"
+    "../../agents/fai-play-14-builder.agent.md",
+    "../../agents/fai-play-14-reviewer.agent.md",
+    "../../agents/fai-play-14-tuner.agent.md",
+    "../../agents/fai-cost-optimizer.agent.md",
+    "../../agents/fai-cost-gateway.agent.md",
+    "../../agents/fai-azure-apim-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-14-cost-optimized-ai-gateway-patterns.instructions.md",
@@ -32,19 +32,19 @@
     "../../instructions/cost-typescript.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-14-cost-optimized-ai-gateway/",
-    "../../skills/frootai-evaluate-14-cost-optimized-ai-gateway/",
-    "../../skills/frootai-tune-14-cost-optimized-ai-gateway/",
-    "../../skills/frootai-cost-estimator/",
-    "../../skills/frootai-az-cost-optimize/",
-    "../../skills/frootai-model-recommendation/"
+    "../../skills/fai-deploy-14-cost-optimized-ai-gateway/",
+    "../../skills/fai-evaluate-14-cost-optimized-ai-gateway/",
+    "../../skills/fai-tune-14-cost-optimized-ai-gateway/",
+    "../../skills/fai-cost-estimator/",
+    "../../skills/fai-az-cost-optimize/",
+    "../../skills/fai-model-recommendation/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-token-budget-enforcer/"
   ],
   "plays": [
     "14-cost-optimized-ai-gateway"

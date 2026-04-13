@@ -9,7 +9,7 @@ waf:
   - "cost-optimization"
 ---
 
-# Azure AI Language WAF — FrootAI Standards
+# Azure AI Language WAF — FAI Standards
 
 When writing or reviewing Azure AI Language code, enforce these WAF-aligned standards.
 

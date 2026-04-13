@@ -3,7 +3,7 @@
   "description": "AI Search Portal — full-text and vector hybrid search with semantic ranking, faceted navigation, autocomplete, and personalized results. Build a production search experience on Azure AI Search with RAG integration.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "rag"
   ],
   "agents": [
-    "../../agents/frootai-play-09-builder.agent.md",
-    "../../agents/frootai-play-09-reviewer.agent.md",
-    "../../agents/frootai-play-09-tuner.agent.md",
-    "../../agents/frootai-azure-ai-search-expert.agent.md",
-    "../../agents/frootai-embedding-expert.agent.md"
+    "../../agents/fai-play-09-builder.agent.md",
+    "../../agents/fai-play-09-reviewer.agent.md",
+    "../../agents/fai-play-09-tuner.agent.md",
+    "../../agents/fai-azure-ai-search-expert.agent.md",
+    "../../agents/fai-embedding-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-09-ai-search-portal-patterns.instructions.md",
@@ -30,16 +30,16 @@
     "../../instructions/nextjs-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-09-ai-search-portal/",
-    "../../skills/frootai-evaluate-09-ai-search-portal/",
-    "../../skills/frootai-tune-09-ai-search-portal/",
-    "../../skills/frootai-azure-ai-search-index/",
-    "../../skills/frootai-build-semantic-search/"
+    "../../skills/fai-deploy-09-ai-search-portal/",
+    "../../skills/fai-evaluate-09-ai-search-portal/",
+    "../../skills/fai-tune-09-ai-search-portal/",
+    "../../skills/fai-azure-ai-search-index/",
+    "../../skills/fai-build-semantic-search/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ],
   "plays": [
     "09-ai-search-portal"

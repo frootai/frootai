@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Security patterns — Managed Identity, Key Vault, RBAC, content safety, prompt injection defense, and OWASP LLM Top 10 aligned to Azure Well-Architected Framework."
 ---
 # Security — Azure Well-Architected Framework
 

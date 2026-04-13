@@ -3,7 +3,7 @@
   "description": "Document Intelligence — OCR, form extraction, table recognition, and intelligent document processing. Uses Azure AI Document Intelligence with custom models for invoices, receipts, contracts, and domain-specific forms.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,10 +19,10 @@
     "waf-aligned"
   ],
   "agents": [
-    "../../agents/frootai-play-06-builder.agent.md",
-    "../../agents/frootai-play-06-reviewer.agent.md",
-    "../../agents/frootai-play-06-tuner.agent.md",
-    "../../agents/frootai-data-engineer.agent.md"
+    "../../agents/fai-play-06-builder.agent.md",
+    "../../agents/fai-play-06-reviewer.agent.md",
+    "../../agents/fai-play-06-tuner.agent.md",
+    "../../agents/fai-data-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-06-document-intelligence-patterns.instructions.md",
@@ -30,16 +30,16 @@
     "../../instructions/azure-ai-document-intelligence-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-06-document-intelligence/",
-    "../../skills/frootai-evaluate-06-document-intelligence/",
-    "../../skills/frootai-tune-06-document-intelligence/",
-    "../../skills/frootai-build-etl-pipeline/"
+    "../../skills/fai-deploy-06-document-intelligence/",
+    "../../skills/fai-evaluate-06-document-intelligence/",
+    "../../skills/fai-tune-06-document-intelligence/",
+    "../../skills/fai-build-etl-pipeline/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-pii-redactor/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-pii-redactor/"
   ],
   "plays": [
     "06-document-intelligence"

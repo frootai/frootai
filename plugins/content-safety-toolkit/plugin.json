@@ -3,7 +3,7 @@
   "description": "Content Safety Toolkit — Azure AI Content Safety integration, custom blocklists, severity thresholds, image moderation, prompt injection detection, and jailbreak defense patterns for production AI.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,22 +18,22 @@
     "azure-ai"
   ],
   "agents": [
-    "../../agents/frootai-content-safety-expert.agent.md",
-    "../../agents/frootai-red-team-expert.agent.md"
+    "../../agents/fai-content-safety-expert.agent.md",
+    "../../agents/fai-red-team-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/rai-content-safety.instructions.md",
     "../../instructions/ai-prompt-safety-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-content-safety-review/",
-    "../../skills/frootai-guardrails-policy/"
+    "../../skills/fai-content-safety-review/",
+    "../../skills/fai-guardrails-policy/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/",
-    "../../hooks/frootai-pii-redactor/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/",
+    "../../hooks/fai-pii-redactor/"
   ]
 }

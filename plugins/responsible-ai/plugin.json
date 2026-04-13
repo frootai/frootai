@@ -3,7 +3,7 @@
   "description": "Responsible AI — content safety, bias testing, fairness metrics, transparency cards, and human-in-the-loop review. Build ethical AI systems aligned with Microsoft Responsible AI Standard and EU AI Act requirements.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,9 +19,9 @@
     "ethics"
   ],
   "agents": [
-    "../../agents/frootai-responsible-ai-reviewer.agent.md",
-    "../../agents/frootai-content-safety-expert.agent.md",
-    "../../agents/frootai-red-team-expert.agent.md"
+    "../../agents/fai-responsible-ai-reviewer.agent.md",
+    "../../agents/fai-content-safety-expert.agent.md",
+    "../../agents/fai-red-team-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/rai-content-safety.instructions.md",
@@ -30,16 +30,16 @@
     "../../instructions/agent-safety.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-content-safety-review/",
-    "../../skills/frootai-human-in-the-loop/",
-    "../../skills/frootai-guardrails-policy/",
-    "../../skills/frootai-gdpr-compliance/"
+    "../../skills/fai-content-safety-review/",
+    "../../skills/fai-human-in-the-loop/",
+    "../../skills/fai-guardrails-policy/",
+    "../../skills/fai-gdpr-compliance/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-pii-redactor/",
-    "../../hooks/frootai-output-validator/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-pii-redactor/",
+    "../../hooks/fai-output-validator/"
   ]
 }

@@ -6,13 +6,13 @@ description: "Create an observability dashboard with KQL queries for AI system h
 # Observability Dashboard
 
 ## Overview
-Create an observability dashboard with KQL queries for AI system health. This skill provides a production-grade, step-by-step procedure for implementing this capability in FrootAI solution plays.
+Create an observability dashboard with KQL queries for AI system health. This skill provides a production-grade, step-by-step procedure for implementing this capability in FAI solution plays.
 
 ## Prerequisites
 - Azure CLI v2.60+ authenticated (`az login`)
 - Azure subscription with Contributor access
 - Node.js 20+ or Python 3.10+
-- FrootAI DevKit initialized in the solution play
+- FAI DevKit initialized in the solution play
 
 ## Step 1: Verify Environment
 ```bash
@@ -48,7 +48,7 @@ npm run validate:primitives
 pytest tests/ -v --cov=app
 
 # Check Azure resources
-az resource list -g rg-frootai-dev -o table
+az resource list -g rg-fai-dev -o table
 ```
 
 ## Step 5: Deploy
@@ -77,6 +77,6 @@ curl -sf https://${APP_URL}/health | jq .
 | Validation error | Review config/*.json for correct values |
 
 ## Related
-- [FrootAI Documentation](https://frootai.dev)
+- [FAI Documentation](https://frootai.dev)
 - [Azure Best Practices](https://learn.microsoft.com/azure/well-architected/)
 - [FAI Protocol](https://frootai.dev/fai-protocol)

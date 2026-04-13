@@ -3,7 +3,7 @@
   "description": "Prompt Management — version-controlled prompt templates, A/B testing, evaluation pipelines, and dynamic prompt assembly. Manage hundreds of prompts across models with Semantic Kernel prompt functions.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "versioning"
   ],
   "agents": [
-    "../../agents/frootai-play-18-builder.agent.md",
-    "../../agents/frootai-play-18-reviewer.agent.md",
-    "../../agents/frootai-play-18-tuner.agent.md",
-    "../../agents/frootai-prompt-engineer.agent.md",
-    "../../agents/frootai-semantic-kernel-expert.agent.md"
+    "../../agents/fai-play-18-builder.agent.md",
+    "../../agents/fai-play-18-reviewer.agent.md",
+    "../../agents/fai-play-18-tuner.agent.md",
+    "../../agents/fai-prompt-engineer.agent.md",
+    "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-18-prompt-management-patterns.instructions.md",
@@ -30,18 +30,18 @@
     "../../instructions/python-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-18-prompt-management/",
-    "../../skills/frootai-evaluate-18-prompt-management/",
-    "../../skills/frootai-tune-18-prompt-management/",
-    "../../skills/frootai-prompt-builder/",
-    "../../skills/frootai-dynamic-prompt/",
-    "../../skills/frootai-basic-prompt-optimization/"
+    "../../skills/fai-deploy-18-prompt-management/",
+    "../../skills/fai-evaluate-18-prompt-management/",
+    "../../skills/fai-tune-18-prompt-management/",
+    "../../skills/fai-prompt-builder/",
+    "../../skills/fai-dynamic-prompt/",
+    "../../skills/fai-basic-prompt-optimization/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/"
   ],
   "plays": [
     "18-prompt-management"

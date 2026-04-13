@@ -3,7 +3,7 @@
   "description": "Advanced AI Landing Zone — multi-region deployment, private endpoints, Azure Firewall, DDoS protection, sovereign cloud patterns, and compliance-ready infrastructure for regulated industries.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,12 +19,12 @@
     "enterprise"
   ],
   "agents": [
-    "../../agents/frootai-play-11-builder.agent.md",
-    "../../agents/frootai-play-11-reviewer.agent.md",
-    "../../agents/frootai-play-11-tuner.agent.md",
-    "../../agents/frootai-landing-zone.agent.md",
-    "../../agents/frootai-azure-networking-expert.agent.md",
-    "../../agents/frootai-compliance-expert.agent.md"
+    "../../agents/fai-play-11-builder.agent.md",
+    "../../agents/fai-play-11-reviewer.agent.md",
+    "../../agents/fai-play-11-tuner.agent.md",
+    "../../agents/fai-landing-zone.agent.md",
+    "../../agents/fai-azure-networking-expert.agent.md",
+    "../../agents/fai-compliance-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-11-ai-landing-zone-advanced-patterns.instructions.md",
@@ -33,18 +33,18 @@
     "../../instructions/azure-front-door-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-11-ai-landing-zone-advanced/",
-    "../../skills/frootai-evaluate-11-ai-landing-zone-advanced/",
-    "../../skills/frootai-tune-11-ai-landing-zone-advanced/",
-    "../../skills/frootai-build-bicep-module/",
-    "../../skills/frootai-threat-model/"
+    "../../skills/fai-deploy-11-ai-landing-zone-advanced/",
+    "../../skills/fai-evaluate-11-ai-landing-zone-advanced/",
+    "../../skills/fai-tune-11-ai-landing-zone-advanced/",
+    "../../skills/fai-build-bicep-module/",
+    "../../skills/fai-threat-model/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/",
+    "../../hooks/fai-cost-tracker/"
   ],
   "plays": [
     "11-ai-landing-zone-advanced"

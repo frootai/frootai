@@ -3,7 +3,7 @@
   "description": "Deterministic AI Agent — finite state machines, rule-based routing, guardrailed tool use, and reproducible conversation flows. Build agents that produce consistent outputs regardless of LLM temperature.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,10 +18,10 @@
     "waf-aligned"
   ],
   "agents": [
-    "../../agents/frootai-play-03-builder.agent.md",
-    "../../agents/frootai-play-03-reviewer.agent.md",
-    "../../agents/frootai-play-03-tuner.agent.md",
-    "../../agents/frootai-deterministic-expert.agent.md"
+    "../../agents/fai-play-03-builder.agent.md",
+    "../../agents/fai-play-03-reviewer.agent.md",
+    "../../agents/fai-play-03-tuner.agent.md",
+    "../../agents/fai-deterministic-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-03-deterministic-agent-patterns.instructions.md",
@@ -29,17 +29,17 @@
     "../../instructions/agent-safety.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-03-deterministic-agent/",
-    "../../skills/frootai-evaluate-03-deterministic-agent/",
-    "../../skills/frootai-tune-03-deterministic-agent/",
-    "../../skills/frootai-deterministic-agent-skill/",
-    "../../skills/frootai-guardrails-policy/"
+    "../../skills/fai-deploy-03-deterministic-agent/",
+    "../../skills/fai-evaluate-03-deterministic-agent/",
+    "../../skills/fai-tune-03-deterministic-agent/",
+    "../../skills/fai-deterministic-agent-skill/",
+    "../../skills/fai-guardrails-policy/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/"
   ],
   "plays": [
     "03-deterministic-agent"

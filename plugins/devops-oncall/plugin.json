@@ -2,7 +2,7 @@
   "name": "devops-oncall",
   "description": "DevOps and on-call operations — incident triage, Azure resource diagnostics, KQL query generation, deployment automation, and SRE patterns for AI workloads.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["devops", "oncall", "incident", "sre", "kubernetes", "monitoring", "kql", "deployment"],

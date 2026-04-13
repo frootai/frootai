@@ -3,7 +3,7 @@
   "description": "Salesforce Integration — Apex development, Lightning Web Components, SOQL optimization, Salesforce MCP connectors, and AI-powered CRM workflows. Bridge Salesforce data with Azure AI services.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,15 +18,15 @@
     "salesforce-ai"
   ],
   "agents": [
-    "../../agents/frootai-salesforce-expert.agent.md"
+    "../../agents/fai-salesforce-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/salesforce-apex-waf.instructions.md",
     "../../instructions/salesforce-lwc-waf.instructions.md"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

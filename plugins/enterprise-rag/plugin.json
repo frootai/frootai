@@ -3,7 +3,7 @@
   "description": "Production-grade Retrieval-Augmented Generation pipeline with Azure AI Search, OpenAI embeddings, Container Apps deployment, and WAF-aligned evaluation. Includes the RAG Architect agent, Python + Bicep instructions, play initializer skill, and all 3 security hooks.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -22,19 +22,19 @@
     "evaluated"
   ],
   "agents": [
-    "../../agents/frootai-rag-architect.agent.md"
+    "../../agents/fai-rag-architect.agent.md"
   ],
   "instructions": [
     "../../instructions/python-waf.instructions.md",
     "../../instructions/bicep-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-play-initializer/"
+    "../../skills/fai-play-initializer/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ],
   "plays": [
     "01-enterprise-rag"

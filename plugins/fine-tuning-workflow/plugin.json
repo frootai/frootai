@@ -3,7 +3,7 @@
   "description": "Fine-Tuning Workflow — dataset preparation, training job orchestration, evaluation pipelines, model registry, and deployment automation. Fine-tune GPT, Phi, and open-source models on Azure AI Foundry.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "training"
   ],
   "agents": [
-    "../../agents/frootai-play-13-builder.agent.md",
-    "../../agents/frootai-play-13-reviewer.agent.md",
-    "../../agents/frootai-play-13-tuner.agent.md",
-    "../../agents/frootai-fine-tuning-expert.agent.md",
-    "../../agents/frootai-ml-engineer.agent.md"
+    "../../agents/fai-play-13-builder.agent.md",
+    "../../agents/fai-play-13-reviewer.agent.md",
+    "../../agents/fai-play-13-tuner.agent.md",
+    "../../agents/fai-fine-tuning-expert.agent.md",
+    "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-13-fine-tuning-workflow-patterns.instructions.md",
@@ -30,17 +30,17 @@
     "../../instructions/froot-t1-fine-tuning-data.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-13-fine-tuning-workflow/",
-    "../../skills/frootai-evaluate-13-fine-tuning-workflow/",
-    "../../skills/frootai-tune-13-fine-tuning-workflow/",
-    "../../skills/frootai-fine-tune-llm/",
-    "../../skills/frootai-build-llm-evaluator/"
+    "../../skills/fai-deploy-13-fine-tuning-workflow/",
+    "../../skills/fai-evaluate-13-fine-tuning-workflow/",
+    "../../skills/fai-tune-13-fine-tuning-workflow/",
+    "../../skills/fai-fine-tune-llm/",
+    "../../skills/fai-build-llm-evaluator/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/"
   ],
   "plays": [
     "13-fine-tuning-workflow"

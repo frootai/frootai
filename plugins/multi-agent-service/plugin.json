@@ -3,7 +3,7 @@
   "description": "Multi-Agent Service — orchestrated agent teams with supervisor patterns, tool delegation, shared memory, and conflict resolution. Build production agent services on Azure Container Apps with Semantic Kernel or AutoGen.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "container-apps"
   ],
   "agents": [
-    "../../agents/frootai-play-07-builder.agent.md",
-    "../../agents/frootai-play-07-reviewer.agent.md",
-    "../../agents/frootai-play-07-tuner.agent.md",
-    "../../agents/frootai-swarm-supervisor.agent.md",
-    "../../agents/frootai-semantic-kernel-expert.agent.md"
+    "../../agents/fai-play-07-builder.agent.md",
+    "../../agents/fai-play-07-reviewer.agent.md",
+    "../../agents/fai-play-07-tuner.agent.md",
+    "../../agents/fai-swarm-supervisor.agent.md",
+    "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-07-multi-agent-service-patterns.instructions.md",
@@ -30,18 +30,18 @@
     "../../instructions/froot-o2-agent-coding.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-07-multi-agent-service/",
-    "../../skills/frootai-evaluate-07-multi-agent-service/",
-    "../../skills/frootai-tune-07-multi-agent-service/",
-    "../../skills/frootai-build-agentic-loops/",
-    "../../skills/frootai-human-in-the-loop/"
+    "../../skills/fai-deploy-07-multi-agent-service/",
+    "../../skills/fai-evaluate-07-multi-agent-service/",
+    "../../skills/fai-tune-07-multi-agent-service/",
+    "../../skills/fai-build-agentic-loops/",
+    "../../skills/fai-human-in-the-loop/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/",
+    "../../hooks/fai-token-budget-enforcer/"
   ],
   "plays": [
     "07-multi-agent-service"

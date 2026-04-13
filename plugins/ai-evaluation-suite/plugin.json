@@ -3,7 +3,7 @@
   "description": "AI Evaluation Suite — groundedness, coherence, relevance, fluency, and safety scoring. Build evaluation pipelines with Azure AI Evaluation SDK, custom metrics, regression tracking, and CI/CD integration.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,8 +20,8 @@
     "quality"
   ],
   "agents": [
-    "../../agents/frootai-responsible-ai-reviewer.agent.md",
-    "../../agents/frootai-content-safety-expert.agent.md"
+    "../../agents/fai-responsible-ai-reviewer.agent.md",
+    "../../agents/fai-content-safety-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/rai-content-safety.instructions.md",
@@ -29,16 +29,16 @@
     "../../instructions/froot-t2-responsible-ai.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-eval-runner/",
-    "../../skills/frootai-evaluation-framework/",
-    "../../skills/frootai-build-llm-evaluator/",
-    "../../skills/frootai-agentic-eval/",
-    "../../skills/frootai-eval-driven-dev/"
+    "../../skills/fai-eval-runner/",
+    "../../skills/fai-evaluation-framework/",
+    "../../skills/fai-build-llm-evaluator/",
+    "../../skills/fai-agentic-eval/",
+    "../../skills/fai-eval-driven-dev/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/"
   ]
 }

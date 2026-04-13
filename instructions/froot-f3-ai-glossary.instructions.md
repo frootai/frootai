@@ -1,5 +1,5 @@
 ---
-description: "AI glossary consistency — use standard FrootAI terminology, avoid ambiguous AI terms in code comments."
+description: "AI glossary consistency — use standard FAI terminology, avoid ambiguous AI terms in code comments."
 applyTo: "**"
 waf:
   - "operational-excellence"
@@ -7,7 +7,7 @@ waf:
 
 # Froot F3 Ai Glossary — WAF-Aligned Coding Standards
 
-> AI glossary consistency — use standard FrootAI terminology, avoid ambiguous AI terms in code comments.
+> AI glossary consistency — use standard FAI terminology, avoid ambiguous AI terms in code comments.
 
 ## Core Rules
 

@@ -1,0 +1,42 @@
+{
+  "name": "fai-discovery",
+  "description": "FAI Discovery — meta-plugin for exploring and recommending agents, instructions, skills, hooks, and plugins. Suggests the right primitives for your task based on project context and WAF alignment.",
+  "version": "1.0.0",
+  "author": {
+    "name": "FAI Contributors",
+    "url": "https://frootai.dev"
+  },
+  "repository": "https://github.com/frootai/frootai",
+  "license": "MIT",
+  "keywords": [
+    "discovery",
+    "meta",
+    "recommendation",
+    "suggest",
+    "explore",
+    "catalog",
+    "primitives",
+    "marketplace"
+  ],
+  "agents": [
+    "../../agents/fai-play-dispatcher.agent.md",
+    "../../agents/fai-play-lifecycle.agent.md"
+  ],
+  "instructions": [
+    "../../instructions/context-engineering-waf.instructions.md",
+    "../../instructions/taming-copilot-waf.instructions.md"
+  ],
+  "skills": [
+    "../../skills/fai-suggest-agents/",
+    "../../skills/fai-suggest-instructions/",
+    "../../skills/fai-suggest-skills/",
+    "../../skills/fai-what-context-needed/",
+    "../../skills/fai-first-ask/",
+    "../../skills/fai-copilot-instructions-generator/"
+  ],
+  "hooks": [
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
+  ]
+}

@@ -3,7 +3,7 @@
   "description": "Copilot Studio Bot — custom copilot experiences with Microsoft Copilot Studio, Power Virtual Agents, and Teams integration. Build conversational AI with enterprise SSO, Dataverse, and multi-channel deployment.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "enterprise"
   ],
   "agents": [
-    "../../agents/frootai-play-08-builder.agent.md",
-    "../../agents/frootai-play-08-reviewer.agent.md",
-    "../../agents/frootai-play-08-tuner.agent.md",
-    "../../agents/frootai-power-platform-expert.agent.md",
-    "../../agents/frootai-copilot-ecosystem-expert.agent.md"
+    "../../agents/fai-play-08-builder.agent.md",
+    "../../agents/fai-play-08-reviewer.agent.md",
+    "../../agents/fai-play-08-tuner.agent.md",
+    "../../agents/fai-power-platform-expert.agent.md",
+    "../../agents/fai-copilot-ecosystem-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-08-copilot-studio-bot-patterns.instructions.md",
@@ -30,17 +30,17 @@
     "../../instructions/dataverse-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-08-copilot-studio-bot/",
-    "../../skills/frootai-evaluate-08-copilot-studio-bot/",
-    "../../skills/frootai-tune-08-copilot-studio-bot/",
-    "../../skills/frootai-copilot-sdk-integration/",
-    "../../skills/frootai-power-platform-connector/"
+    "../../skills/fai-deploy-08-copilot-studio-bot/",
+    "../../skills/fai-evaluate-08-copilot-studio-bot/",
+    "../../skills/fai-tune-08-copilot-studio-bot/",
+    "../../skills/fai-copilot-sdk-integration/",
+    "../../skills/fai-power-platform-connector/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ],
   "plays": [
     "08-copilot-studio-bot"

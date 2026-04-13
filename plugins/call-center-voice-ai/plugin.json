@@ -3,7 +3,7 @@
   "description": "Call Center Voice AI — real-time speech-to-text, intent classification, sentiment analysis, and AI-assisted agent coaching. Integrates Azure AI Speech, Azure Communication Services, and GPT-4o for voice-driven customer service.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,10 +18,10 @@
     "customer-service"
   ],
   "agents": [
-    "../../agents/frootai-play-04-builder.agent.md",
-    "../../agents/frootai-play-04-reviewer.agent.md",
-    "../../agents/frootai-play-04-tuner.agent.md",
-    "../../agents/frootai-streaming-expert.agent.md"
+    "../../agents/fai-play-04-builder.agent.md",
+    "../../agents/fai-play-04-reviewer.agent.md",
+    "../../agents/fai-play-04-tuner.agent.md",
+    "../../agents/fai-streaming-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-04-call-center-voice-ai-patterns.instructions.md",
@@ -29,17 +29,17 @@
     "../../instructions/rai-content-safety.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-04-call-center-voice-ai/",
-    "../../skills/frootai-evaluate-04-call-center-voice-ai/",
-    "../../skills/frootai-tune-04-call-center-voice-ai/",
-    "../../skills/frootai-build-genai-rag/"
+    "../../skills/fai-deploy-04-call-center-voice-ai/",
+    "../../skills/fai-evaluate-04-call-center-voice-ai/",
+    "../../skills/fai-tune-04-call-center-voice-ai/",
+    "../../skills/fai-build-genai-rag/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-pii-redactor/",
-    "../../hooks/frootai-cost-tracker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-pii-redactor/",
+    "../../hooks/fai-cost-tracker/"
   ],
   "plays": [
     "04-call-center-voice-ai"

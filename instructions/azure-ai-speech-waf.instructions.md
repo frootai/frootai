@@ -9,7 +9,7 @@ waf:
   - "responsible-ai"
 ---
 
-# Azure AI Speech WAF — FrootAI Standards
+# Azure AI Speech WAF — FAI Standards
 
 When writing or reviewing Azure AI Speech code, enforce these WAF-aligned standards.
 
@@ -118,7 +118,7 @@ recognizer = speechsdk.SpeechRecognizer(speech_config, audio_config)
 
 # Boost domain-specific terms
 phrase_list = speechsdk.PhraseListGrammar.from_recognizer(recognizer)
-phrase_list.addPhrase("FrootAI")
+phrase_list.addPhrase("FAI")
 phrase_list.addPhrase("Kubernetes")
 
 def on_recognized(evt):

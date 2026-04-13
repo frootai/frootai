@@ -3,7 +3,7 @@
   "description": "Azure Monitoring — Application Insights, Log Analytics, KQL queries, alert rules, workbooks, and dashboards. Full observability for AI workloads with custom metrics, distributed tracing, and SLO tracking.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,22 +19,22 @@
     "observability"
   ],
   "agents": [
-    "../../agents/frootai-azure-monitor-expert.agent.md",
-    "../../agents/frootai-performance-profiler.agent.md",
-    "../../agents/frootai-incident-responder.agent.md"
+    "../../agents/fai-azure-monitor-expert.agent.md",
+    "../../agents/fai-performance-profiler.agent.md",
+    "../../agents/fai-incident-responder.agent.md"
   ],
   "instructions": [
     "../../instructions/opex-monitoring.instructions.md",
     "../../instructions/performance-optimization-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-copilot-usage-metrics/",
-    "../../skills/frootai-azure-resource-health/"
+    "../../skills/fai-copilot-usage-metrics/",
+    "../../skills/fai-azure-resource-health/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/"
   ]
 }

@@ -8,9 +8,9 @@ waf:
   - "performance-efficiency"
 ---
 
-# Python — FrootAI WAF-Aligned Standards
+# Python — FAI WAF-Aligned Standards
 
-When writing or reviewing Python code in FrootAI projects, enforce these standards.
+When writing or reviewing Python code in FAI projects, enforce these standards.
 
 ## Security (WAF: Security Pillar)
 

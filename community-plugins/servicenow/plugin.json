@@ -2,7 +2,7 @@
   "name": "servicenow-ai-agent",
   "version": "1.0.0",
   "description": "ServiceNow IT Service Management integration — AI-powered ticket routing, auto-resolution, knowledge base search",
-  "author": "FrootAI Community",
+  "author": "FAI Community",
   "play": "05-it-ticket-resolution",
   "layers": {
     "instructions": [".github/instructions/servicenow-integration.instructions.md"],

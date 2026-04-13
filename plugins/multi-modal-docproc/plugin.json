@@ -3,7 +3,7 @@
   "description": "Multi-Modal Document Processing — combine OCR, vision, speech, and text analysis for complex document workflows. Extract structured data from PDFs, images, audio, and video using Azure AI multi-modal capabilities.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,10 +19,10 @@
     "structured-data"
   ],
   "agents": [
-    "../../agents/frootai-play-15-builder.agent.md",
-    "../../agents/frootai-play-15-reviewer.agent.md",
-    "../../agents/frootai-play-15-tuner.agent.md",
-    "../../agents/frootai-data-engineer.agent.md"
+    "../../agents/fai-play-15-builder.agent.md",
+    "../../agents/fai-play-15-reviewer.agent.md",
+    "../../agents/fai-play-15-tuner.agent.md",
+    "../../agents/fai-data-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-15-multi-modal-docproc-patterns.instructions.md",
@@ -31,16 +31,16 @@
     "../../instructions/azure-ai-speech-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-15-multi-modal-docproc/",
-    "../../skills/frootai-evaluate-15-multi-modal-docproc/",
-    "../../skills/frootai-tune-15-multi-modal-docproc/",
-    "../../skills/frootai-build-etl-pipeline/"
+    "../../skills/fai-deploy-15-multi-modal-docproc/",
+    "../../skills/fai-evaluate-15-multi-modal-docproc/",
+    "../../skills/fai-tune-15-multi-modal-docproc/",
+    "../../skills/fai-build-etl-pipeline/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-pii-redactor/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-pii-redactor/"
   ],
   "plays": [
     "15-multi-modal-docproc"

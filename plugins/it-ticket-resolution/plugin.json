@@ -3,7 +3,7 @@
   "description": "IT Ticket Resolution — automated incident classification, knowledge base search, resolution suggestion, and escalation routing. Uses RAG over IT documentation with Azure AI Search and Semantic Kernel orchestration.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,11 +18,11 @@
     "waf-aligned"
   ],
   "agents": [
-    "../../agents/frootai-play-05-builder.agent.md",
-    "../../agents/frootai-play-05-reviewer.agent.md",
-    "../../agents/frootai-play-05-tuner.agent.md",
-    "../../agents/frootai-rag-expert.agent.md",
-    "../../agents/frootai-semantic-kernel-expert.agent.md"
+    "../../agents/fai-play-05-builder.agent.md",
+    "../../agents/fai-play-05-reviewer.agent.md",
+    "../../agents/fai-play-05-tuner.agent.md",
+    "../../agents/fai-rag-expert.agent.md",
+    "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/play-05-it-ticket-resolution-patterns.instructions.md",
@@ -30,17 +30,17 @@
     "../../instructions/froot-o1-semantic-kernel.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-05-it-ticket-resolution/",
-    "../../skills/frootai-evaluate-05-it-ticket-resolution/",
-    "../../skills/frootai-tune-05-it-ticket-resolution/",
-    "../../skills/frootai-build-genai-rag/",
-    "../../skills/frootai-contextual-rag/"
+    "../../skills/fai-deploy-05-it-ticket-resolution/",
+    "../../skills/fai-evaluate-05-it-ticket-resolution/",
+    "../../skills/fai-tune-05-it-ticket-resolution/",
+    "../../skills/fai-build-genai-rag/",
+    "../../skills/fai-contextual-rag/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-pii-redactor/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-pii-redactor/"
   ],
   "plays": [
     "05-it-ticket-resolution"

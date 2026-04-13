@@ -3,7 +3,7 @@
   "description": "Python Full-Stack — FastAPI, Django, Flask, Pydantic, SQLAlchemy, pytest, and async patterns. Data science to web APIs with type safety, dependency injection, and production deployment.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,8 +19,8 @@
     "async"
   ],
   "agents": [
-    "../../agents/frootai-python-expert.agent.md",
-    "../../agents/frootai-python-mcp-expert.agent.md"
+    "../../agents/fai-python-expert.agent.md",
+    "../../agents/fai-python-mcp-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/python-waf.instructions.md",
@@ -32,13 +32,13 @@
     "../../instructions/pytest-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-fastapi-scaffold/",
-    "../../skills/frootai-pytest-coverage/",
-    "../../skills/frootai-playwright-python-test/"
+    "../../skills/fai-fastapi-scaffold/",
+    "../../skills/fai-pytest-coverage/",
+    "../../skills/fai-playwright-python-test/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

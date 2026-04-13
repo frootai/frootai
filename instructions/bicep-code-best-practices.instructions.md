@@ -44,7 +44,7 @@ param projectName string
 
 ```bicep
 var suffix = uniqueString(resourceGroup().id)
-var tags = { environment: environment, project: 'frootai', play: playName, 'managed-by': 'bicep' }
+var tags = { environment: environment, project: 'FAI', play: playName, 'managed-by': 'bicep' }
 ```
 
 - uniqueString() suffix for globally unique names

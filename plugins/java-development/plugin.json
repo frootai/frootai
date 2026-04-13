@@ -3,7 +3,7 @@
   "description": "Java Development — Spring Boot, Quarkus, JUnit 5, Gradle/Maven builds, and microservice patterns. Enterprise Java with reactive streams, GraalVM native images, and cloud-native deployment.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,8 +19,8 @@
     "graalvm"
   ],
   "agents": [
-    "../../agents/frootai-java-expert.agent.md",
-    "../../agents/frootai-java-mcp-expert.agent.md"
+    "../../agents/fai-java-expert.agent.md",
+    "../../agents/fai-java-mcp-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/java-waf.instructions.md",
@@ -28,15 +28,15 @@
     "../../instructions/quarkus-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-springboot-scaffold/",
-    "../../skills/frootai-springboot-kotlin-scaffold/",
-    "../../skills/frootai-springboot-test/",
-    "../../skills/frootai-junit-test/",
-    "../../skills/frootai-java-extract-method/"
+    "../../skills/fai-springboot-scaffold/",
+    "../../skills/fai-springboot-kotlin-scaffold/",
+    "../../skills/fai-springboot-test/",
+    "../../skills/fai-junit-test/",
+    "../../skills/fai-java-extract-method/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

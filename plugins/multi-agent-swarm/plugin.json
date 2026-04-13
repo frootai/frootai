@@ -2,12 +2,12 @@
   "name": "multi-agent-swarm",
   "description": "Deploy specialized AI agents that collaborate via supervisor, pipeline, and debate patterns — a distributed agent team for complex workflows that no single agent can handle.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["multi-agent", "swarm", "collaboration", "supervisor", "pipeline", "semantic-kernel"],
   "agents": ["../../solution-plays/22-multi-agent-swarm/.github/agents/swarm-supervisor.agent.md"],
   "instructions": ["../../instructions/python-waf.instructions.md"],
-  "hooks": ["../../hooks/frootai-secrets-scanner/", "../../hooks/frootai-tool-guardian/", "../../hooks/frootai-governance-audit/"],
+  "hooks": ["../../hooks/fai-secrets-scanner/", "../../hooks/fai-tool-guardian/", "../../hooks/fai-governance-audit/"],
   "plays": ["22-multi-agent-swarm"]
 }

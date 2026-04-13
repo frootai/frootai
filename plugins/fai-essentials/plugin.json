@@ -1,0 +1,32 @@
+{
+  "name": "fai-essentials",
+  "description": "The essential FAI toolkit — WAF-aligned agents (security reviewer, cost optimizer, architect), cross-cutting instructions (OWASP, agent-safety, testing), and security hooks (secrets scanner, tool guardian, governance audit). The recommended starting plugin for every FAI project.",
+  "version": "1.0.0",
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
+  "repository": "https://github.com/frootai/frootai",
+  "license": "MIT",
+  "keywords": ["essentials", "waf", "security", "cost", "owasp", "agent-safety", "testing", "hooks", "starter"],
+  "agents": [
+    "../../agents/fai-security-reviewer.agent.md",
+    "../../agents/fai-cost-optimizer.agent.md",
+    "../../agents/fai-architect.agent.md",
+    "../../agents/fai-play-dispatcher.agent.md",
+    "../../agents/fai-play-lifecycle.agent.md"
+  ],
+  "instructions": [
+    "../../instructions/security-owasp.instructions.md",
+    "../../instructions/agent-safety.instructions.md",
+    "../../instructions/testing-best-practices.instructions.md"
+  ],
+  "skills": [
+    "../../skills/fai-play-initializer/",
+    "../../skills/fai-deploy-preflight/",
+    "../../skills/fai-eval-runner/"
+  ],
+  "hooks": [
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
+  ],
+  "plays": []
+}

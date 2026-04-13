@@ -3,7 +3,7 @@
   "description": "LLM Observability — trace every LLM call with input/output logging, token counts, latency percentiles, cost attribution, and evaluation score trends. OpenTelemetry-based tracing for Azure OpenAI and open-source models.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,23 +18,23 @@
     "azure-openai"
   ],
   "agents": [
-    "../../agents/frootai-azure-monitor-expert.agent.md",
-    "../../agents/frootai-performance-profiler.agent.md"
+    "../../agents/fai-azure-monitor-expert.agent.md",
+    "../../agents/fai-performance-profiler.agent.md"
   ],
   "instructions": [
     "../../instructions/opex-monitoring.instructions.md",
     "../../instructions/performance-optimization-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-copilot-usage-metrics/",
-    "../../skills/frootai-azure-resource-health/"
+    "../../skills/fai-copilot-usage-metrics/",
+    "../../skills/fai-azure-resource-health/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-token-budget-enforcer/"
   ]
 }

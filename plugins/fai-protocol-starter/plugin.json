@@ -3,7 +3,7 @@
   "description": "FAI Protocol Starter — quickstart for the FAI Protocol ecosystem. Scaffold fai-manifest.json, fai-context.json, and connect primitives into wired solution plays. The entry point for building FAI Protocol compliant solutions.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,23 +18,23 @@
     "solution-play"
   ],
   "agents": [
-    "../../agents/frootai-architect.agent.md",
-    "../../agents/frootai-play-dispatcher.agent.md"
+    "../../agents/fai-architect.agent.md",
+    "../../agents/fai-play-dispatcher.agent.md"
   ],
   "instructions": [
     "../../instructions/froot-o3-mcp-patterns.instructions.md",
     "../../instructions/froot-o4-foundry-config.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-play-initializer/",
-    "../../skills/frootai-skill-template/",
-    "../../skills/frootai-folder-structure/",
-    "../../skills/frootai-copilot-instructions-generator/"
+    "../../skills/fai-play-initializer/",
+    "../../skills/fai-skill-template/",
+    "../../skills/fai-folder-structure/",
+    "../../skills/fai-copilot-instructions-generator/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ]
 }

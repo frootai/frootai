@@ -3,7 +3,7 @@
   "description": "Azure Messaging — Service Bus, Event Hubs, and Event Grid patterns for async communication, event sourcing, and CQRS. Build reliable message-driven architectures with dead-letter handling and partitioning.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,22 +19,22 @@
     "event-sourcing"
   ],
   "agents": [
-    "../../agents/frootai-azure-service-bus-expert.agent.md",
-    "../../agents/frootai-azure-event-hubs-expert.agent.md",
-    "../../agents/frootai-event-driven-expert.agent.md"
+    "../../agents/fai-azure-service-bus-expert.agent.md",
+    "../../agents/fai-azure-event-hubs-expert.agent.md",
+    "../../agents/fai-event-driven-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/reliability-python.instructions.md",
     "../../instructions/reliability-typescript.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-service-bus-setup/",
-    "../../skills/frootai-azure-event-hubs-setup/",
-    "../../skills/frootai-azure-event-grid-setup/"
+    "../../skills/fai-azure-service-bus-setup/",
+    "../../skills/fai-azure-event-hubs-setup/",
+    "../../skills/fai-azure-event-grid-setup/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

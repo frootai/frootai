@@ -3,7 +3,7 @@
   "description": "Azure AI Services — OpenAI, AI Search, Document Intelligence, Language, Speech, Vision, and Content Safety integration patterns. Production-ready wrappers with retry, circuit breaker, and cost tracking.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,11 +20,11 @@
     "content-safety"
   ],
   "agents": [
-    "../../agents/frootai-azure-openai-expert.agent.md",
-    "../../agents/frootai-azure-ai-search-expert.agent.md",
-    "../../agents/frootai-azure-ai-foundry-expert.agent.md",
-    "../../agents/frootai-content-safety-expert.agent.md",
-    "../../agents/frootai-embedding-expert.agent.md"
+    "../../agents/fai-azure-openai-expert.agent.md",
+    "../../agents/fai-azure-ai-search-expert.agent.md",
+    "../../agents/fai-azure-ai-foundry-expert.agent.md",
+    "../../agents/fai-content-safety-expert.agent.md",
+    "../../agents/fai-embedding-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/azure-ai-document-intelligence-waf.instructions.md",
@@ -33,17 +33,17 @@
     "../../instructions/azure-ai-vision-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-openai-integration/",
-    "../../skills/frootai-azure-ai-search-index/",
-    "../../skills/frootai-azure-ai-foundry-setup/",
-    "../../skills/frootai-azure-cognitive-services/",
-    "../../skills/frootai-content-safety-review/"
+    "../../skills/fai-azure-openai-integration/",
+    "../../skills/fai-azure-ai-search-index/",
+    "../../skills/fai-azure-ai-foundry-setup/",
+    "../../skills/fai-azure-cognitive-services/",
+    "../../skills/fai-content-safety-review/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-token-budget-enforcer/"
   ]
 }

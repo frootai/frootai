@@ -3,7 +3,7 @@
   "description": "Project Planning — PRDs, epic breakdown, implementation plans, technical spikes, and rollout strategies. AI-assisted project management with architecture decision records and feature decomposition.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,27 +18,27 @@
     "adr"
   ],
   "agents": [
-    "../../agents/frootai-product-manager.agent.md",
-    "../../agents/frootai-prd-writer.agent.md",
-    "../../agents/frootai-specification-writer.agent.md",
-    "../../agents/frootai-epic-breakdown-expert.agent.md"
+    "../../agents/fai-product-manager.agent.md",
+    "../../agents/fai-prd-writer.agent.md",
+    "../../agents/fai-specification-writer.agent.md",
+    "../../agents/fai-epic-breakdown-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/markdown-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-prd-generator/",
-    "../../skills/frootai-epic-breakdown-pm/",
-    "../../skills/frootai-epic-breakdown-arch/",
-    "../../skills/frootai-implementation-plan-generator/",
-    "../../skills/frootai-specification-generator/",
-    "../../skills/frootai-technical-spike/",
-    "../../skills/frootai-rollout-plan/",
-    "../../skills/frootai-feature-breakdown/"
+    "../../skills/fai-prd-generator/",
+    "../../skills/fai-epic-breakdown-pm/",
+    "../../skills/fai-epic-breakdown-arch/",
+    "../../skills/fai-implementation-plan-generator/",
+    "../../skills/fai-specification-generator/",
+    "../../skills/fai-technical-spike/",
+    "../../skills/fai-rollout-plan/",
+    "../../skills/fai-feature-breakdown/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

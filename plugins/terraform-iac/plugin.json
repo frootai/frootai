@@ -3,7 +3,7 @@
   "description": "Terraform IaC — module authoring, state management, workspace strategies, provider configuration, and drift detection. Multi-cloud infrastructure as code with Azure-optimized patterns and cost estimation.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,21 +18,21 @@
     "drift-detection"
   ],
   "agents": [
-    "../../agents/frootai-terraform-expert.agent.md"
+    "../../agents/fai-terraform-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/terraform-waf.instructions.md",
     "../../instructions/terraform-azure-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-build-terraform-module/",
-    "../../skills/frootai-terraform-module-scaffold/",
-    "../../skills/frootai-import-iac/"
+    "../../skills/fai-build-terraform-module/",
+    "../../skills/fai-terraform-module-scaffold/",
+    "../../skills/fai-import-iac/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ]
 }

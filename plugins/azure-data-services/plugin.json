@@ -3,7 +3,7 @@
   "description": "Azure Data Services — Cosmos DB, SQL Database, Blob Storage, Data Explorer, and Redis Cache patterns. Schema design, partition strategies, query optimization, and data lifecycle management.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,11 +19,11 @@
     "schema-design"
   ],
   "agents": [
-    "../../agents/frootai-azure-cosmos-db-expert.agent.md",
-    "../../agents/frootai-azure-sql-expert.agent.md",
-    "../../agents/frootai-azure-storage-expert.agent.md",
-    "../../agents/frootai-data-engineer.agent.md",
-    "../../agents/frootai-redis-expert.agent.md"
+    "../../agents/fai-azure-cosmos-db-expert.agent.md",
+    "../../agents/fai-azure-sql-expert.agent.md",
+    "../../agents/fai-azure-storage-expert.agent.md",
+    "../../agents/fai-data-engineer.agent.md",
+    "../../agents/fai-redis-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/azure-cosmos-waf.instructions.md",
@@ -32,16 +32,16 @@
     "../../instructions/mongodb-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-azure-cosmos-modeling/",
-    "../../skills/frootai-azure-sql-setup/",
-    "../../skills/frootai-azure-storage-patterns/",
-    "../../skills/frootai-azure-data-explorer/",
-    "../../skills/frootai-build-nosql-data-model/",
-    "../../skills/frootai-build-sql-migration/"
+    "../../skills/fai-azure-cosmos-modeling/",
+    "../../skills/fai-azure-sql-setup/",
+    "../../skills/fai-azure-storage-patterns/",
+    "../../skills/fai-azure-data-explorer/",
+    "../../skills/fai-build-nosql-data-model/",
+    "../../skills/fai-build-sql-migration/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

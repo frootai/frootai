@@ -3,7 +3,7 @@
   "description": "Model Serving on AKS — GPU-accelerated inference, autoscaling with KEDA, model versioning, A/B deployment, and canary rollouts. Deploy open-source LLMs (Phi-4, Llama, Mistral) on Azure Kubernetes Service.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,12 +20,12 @@
     "autoscaling"
   ],
   "agents": [
-    "../../agents/frootai-play-12-builder.agent.md",
-    "../../agents/frootai-play-12-reviewer.agent.md",
-    "../../agents/frootai-play-12-tuner.agent.md",
-    "../../agents/frootai-azure-aks-expert.agent.md",
-    "../../agents/frootai-kubernetes-expert.agent.md",
-    "../../agents/frootai-ml-engineer.agent.md"
+    "../../agents/fai-play-12-builder.agent.md",
+    "../../agents/fai-play-12-reviewer.agent.md",
+    "../../agents/fai-play-12-tuner.agent.md",
+    "../../agents/fai-azure-aks-expert.agent.md",
+    "../../agents/fai-kubernetes-expert.agent.md",
+    "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-12-model-serving-aks-patterns.instructions.md",
@@ -33,19 +33,19 @@
     "../../instructions/docker-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-12-model-serving-aks/",
-    "../../skills/frootai-evaluate-12-model-serving-aks/",
-    "../../skills/frootai-tune-12-model-serving-aks/",
-    "../../skills/frootai-build-kubernetes-manifest/",
-    "../../skills/frootai-multi-stage-docker/",
-    "../../skills/frootai-inference-optimization/"
+    "../../skills/fai-deploy-12-model-serving-aks/",
+    "../../skills/fai-evaluate-12-model-serving-aks/",
+    "../../skills/fai-tune-12-model-serving-aks/",
+    "../../skills/fai-build-kubernetes-manifest/",
+    "../../skills/fai-multi-stage-docker/",
+    "../../skills/fai-inference-optimization/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-token-budget-enforcer/"
   ],
   "plays": [
     "12-model-serving-aks"

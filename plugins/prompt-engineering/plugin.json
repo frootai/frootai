@@ -3,7 +3,7 @@
   "description": "Prompt Engineering — chain-of-thought, few-shot, tree-of-thought, and meta-prompting patterns. Template management, dynamic prompt assembly, safety guardrails, and evaluation-driven prompt optimization.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,8 +18,8 @@
     "meta-prompting"
   ],
   "agents": [
-    "../../agents/frootai-prompt-engineer.agent.md",
-    "../../agents/frootai-genai-foundations-expert.agent.md"
+    "../../agents/fai-prompt-engineer.agent.md",
+    "../../agents/fai-genai-foundations-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/froot-r1-prompt-patterns.instructions.md",
@@ -27,19 +27,19 @@
     "../../instructions/froot-f1-genai-foundations.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-prompt-builder/",
-    "../../skills/frootai-dynamic-prompt/",
-    "../../skills/frootai-basic-prompt-optimization/",
-    "../../skills/frootai-boost-prompt/",
-    "../../skills/frootai-tldr-prompt/",
-    "../../skills/frootai-finalize-agent-prompt/",
-    "../../skills/frootai-build-prompting-system/"
+    "../../skills/fai-prompt-builder/",
+    "../../skills/fai-dynamic-prompt/",
+    "../../skills/fai-basic-prompt-optimization/",
+    "../../skills/fai-boost-prompt/",
+    "../../skills/fai-tldr-prompt/",
+    "../../skills/fai-finalize-agent-prompt/",
+    "../../skills/fai-build-prompting-system/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-output-validator/",
-    "../../hooks/frootai-token-budget-enforcer/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-output-validator/",
+    "../../hooks/fai-token-budget-enforcer/"
   ]
 }

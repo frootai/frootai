@@ -1,5 +1,6 @@
 ---
 applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+description: "Responsible AI patterns — content safety, groundedness, fairness, transparency, bias detection, and human oversight aligned to Microsoft AI Principles."
 ---
 # Responsible AI — Azure Well-Architected Framework + Microsoft AI Principles
 

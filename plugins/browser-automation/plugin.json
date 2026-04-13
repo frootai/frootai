@@ -2,11 +2,11 @@
   "name": "browser-automation",
   "description": "AI-driven web task execution using Playwright MCP and GPT-4o Vision — navigate websites, extract data, fill forms, and automate multi-step web workflows from natural language.",
   "version": "1.0.0",
-  "author": { "name": "FrootAI Contributors", "url": "https://frootai.dev" },
+  "author": { "name": "FAI Contributors", "url": "https://frootai.dev" },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "keywords": ["browser-automation", "playwright", "web-scraping", "vision", "mcp", "headless"],
   "agents": ["../../solution-plays/23-browser-automation-agent/.github/agents/browser-agent.agent.md"],
-  "hooks": ["../../hooks/frootai-secrets-scanner/", "../../hooks/frootai-tool-guardian/", "../../hooks/frootai-governance-audit/"],
+  "hooks": ["../../hooks/fai-secrets-scanner/", "../../hooks/fai-tool-guardian/", "../../hooks/fai-governance-audit/"],
   "plays": ["23-browser-automation-agent"]
 }

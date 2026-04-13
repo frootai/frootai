@@ -3,7 +3,7 @@
   "description": "Architecture Patterns — cloud design patterns, domain-driven design, microservices, event sourcing, CQRS, and hexagonal architecture. Generate architecture blueprints, C4 diagrams, and ADRs.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,9 +19,9 @@
     "c4-diagram"
   ],
   "agents": [
-    "../../agents/frootai-architect.agent.md",
-    "../../agents/frootai-solutions-architect.agent.md",
-    "../../agents/frootai-api-gateway-designer.agent.md"
+    "../../agents/fai-architect.agent.md",
+    "../../agents/fai-solutions-architect.agent.md",
+    "../../agents/fai-api-gateway-designer.agent.md"
   ],
   "instructions": [
     "../../instructions/design-patterns-waf.instructions.md",
@@ -30,16 +30,16 @@
     "../../instructions/grpc-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-architecture-blueprint/",
-    "../../skills/frootai-architecture-decision-record/",
-    "../../skills/frootai-cloud-design-patterns/",
-    "../../skills/frootai-domain-driven-design/",
-    "../../skills/frootai-tech-stack-blueprint/",
-    "../../skills/frootai-context-map/"
+    "../../skills/fai-architecture-blueprint/",
+    "../../skills/fai-architecture-decision-record/",
+    "../../skills/fai-cloud-design-patterns/",
+    "../../skills/fai-domain-driven-design/",
+    "../../skills/fai-tech-stack-blueprint/",
+    "../../skills/fai-context-map/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

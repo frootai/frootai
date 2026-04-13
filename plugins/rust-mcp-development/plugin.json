@@ -3,7 +3,7 @@
   "description": "Rust MCP Development — build blazing-fast MCP servers in Rust with Tokio async runtime, RMCP SDK, WASM compilation, and zero-allocation tool handlers.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-rust-mcp-expert.agent.md",
-    "../../agents/frootai-rust-expert.agent.md"
+    "../../agents/fai-rust-mcp-expert.agent.md",
+    "../../agents/fai-rust-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/rust-mcp-development.instructions.md",
     "../../instructions/rust-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-rust-scaffold/",
-    "../../skills/frootai-mcp-rust-scaffold/"
+    "../../skills/fai-mcp-rust-scaffold/",
+    "../../skills/fai-mcp-rust-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

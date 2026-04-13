@@ -3,7 +3,7 @@
   "description": "C# MCP Development — build Model Context Protocol servers in C# with .NET SDK, ASP.NET Core hosting, dependency injection, and Azure deployment patterns.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-csharp-mcp-expert.agent.md",
-    "../../agents/frootai-csharp-expert.agent.md"
+    "../../agents/fai-csharp-mcp-expert.agent.md",
+    "../../agents/fai-csharp-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/csharp-mcp-development.instructions.md",
     "../../instructions/csharp-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-csharp-scaffold/",
-    "../../skills/frootai-mcp-csharp-generator/"
+    "../../skills/fai-mcp-csharp-scaffold/",
+    "../../skills/fai-mcp-csharp-generator/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

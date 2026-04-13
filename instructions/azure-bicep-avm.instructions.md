@@ -51,14 +51,14 @@ var suffix = uniqueString(resourceGroup().id)
 var resourcePrefix = '${projectName}-${environment}'
 var tags = {
   environment: environment
-  project: 'frootai'
+  project: 'FAI'
   play: playName
   'managed-by': 'bicep'
 }
 ```
 
 - Use `uniqueString()` suffix for globally unique names (storage, cognitive services)
-- Include environment in resource names: `frootai-rag-dev-oai-abc123`
+- Include environment in resource names: `FAI-rag-dev-oai-abc123`
 - Tag ALL resources: environment, project, play, managed-by
 - Use variables for computed names — don't repeat naming logic
 

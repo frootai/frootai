@@ -3,7 +3,7 @@
   "description": "Security Hardening — OWASP Top 10, secrets scanning, dependency auditing, supply chain security, threat modeling, and penetration testing patterns. Harden AI applications with defense-in-depth and zero-trust.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,9 +18,9 @@
     "zero-trust"
   ],
   "agents": [
-    "../../agents/frootai-security-reviewer.agent.md",
-    "../../agents/frootai-red-team-expert.agent.md",
-    "../../agents/frootai-compliance-expert.agent.md"
+    "../../agents/fai-security-reviewer.agent.md",
+    "../../agents/fai-red-team-expert.agent.md",
+    "../../agents/fai-compliance-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/security-owasp.instructions.md",
@@ -30,21 +30,21 @@
     "../../instructions/security-bicep.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-security-review-skill/",
-    "../../skills/frootai-secret-scanning/",
-    "../../skills/frootai-threat-model/",
-    "../../skills/frootai-codeql-setup/"
+    "../../skills/fai-security-review-skill/",
+    "../../skills/fai-secret-scanning/",
+    "../../skills/fai-threat-model/",
+    "../../skills/fai-codeql-setup/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/",
-    "../../hooks/frootai-cost-tracker/",
-    "../../hooks/frootai-pii-redactor/",
-    "../../hooks/frootai-output-validator/",
-    "../../hooks/frootai-token-budget-enforcer/",
-    "../../hooks/frootai-session-logger/",
-    "../../hooks/frootai-license-checker/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/",
+    "../../hooks/fai-cost-tracker/",
+    "../../hooks/fai-pii-redactor/",
+    "../../hooks/fai-output-validator/",
+    "../../hooks/fai-token-budget-enforcer/",
+    "../../hooks/fai-session-logger/",
+    "../../hooks/fai-license-checker/"
   ]
 }

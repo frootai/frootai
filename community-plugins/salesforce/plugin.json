@@ -2,7 +2,7 @@
   "name": "salesforce-ai-copilot",
   "version": "1.0.0",
   "description": "Salesforce CRM integration — AI copilot for sales forecasting, lead scoring, account summarization",
-  "author": "FrootAI Community",
+  "author": "FAI Community",
   "play": "07-multi-agent-service",
   "layers": {
     "instructions": [".github/instructions/salesforce-integration.instructions.md"],

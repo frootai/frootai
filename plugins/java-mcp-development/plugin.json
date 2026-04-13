@@ -3,7 +3,7 @@
   "description": "Java MCP Development — build MCP servers in Java with Spring Boot, reactive streams, Maven/Gradle builds, and enterprise middleware integration.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -18,20 +18,20 @@
     "tool-server"
   ],
   "agents": [
-    "../../agents/frootai-java-mcp-expert.agent.md",
-    "../../agents/frootai-java-expert.agent.md"
+    "../../agents/fai-java-mcp-expert.agent.md",
+    "../../agents/fai-java-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/java-mcp-development.instructions.md",
     "../../instructions/java-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-mcp-java-scaffold/",
-    "../../skills/frootai-mcp-java-scaffold/"
+    "../../skills/fai-mcp-java-scaffold/",
+    "../../skills/fai-mcp-java-scaffold/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

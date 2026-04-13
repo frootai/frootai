@@ -3,7 +3,7 @@
   "description": "Azure AI Landing Zone — subscription vending, network topology, RBAC, policy enforcement, and hub-spoke architecture for enterprise AI workloads. Includes Bicep IaC modules validated against all 6 WAF pillars.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,11 +20,11 @@
     "waf-aligned"
   ],
   "agents": [
-    "../../agents/frootai-play-02-builder.agent.md",
-    "../../agents/frootai-play-02-reviewer.agent.md",
-    "../../agents/frootai-play-02-tuner.agent.md",
-    "../../agents/frootai-landing-zone.agent.md",
-    "../../agents/frootai-architect.agent.md"
+    "../../agents/fai-play-02-builder.agent.md",
+    "../../agents/fai-play-02-reviewer.agent.md",
+    "../../agents/fai-play-02-tuner.agent.md",
+    "../../agents/fai-landing-zone.agent.md",
+    "../../agents/fai-architect.agent.md"
   ],
   "instructions": [
     "../../instructions/play-02-ai-landing-zone-patterns.instructions.md",
@@ -32,17 +32,17 @@
     "../../instructions/security-bicep.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-02-ai-landing-zone/",
-    "../../skills/frootai-evaluate-02-ai-landing-zone/",
-    "../../skills/frootai-tune-02-ai-landing-zone/",
-    "../../skills/frootai-build-bicep-module/",
-    "../../skills/frootai-architecture-blueprint/"
+    "../../skills/fai-deploy-02-ai-landing-zone/",
+    "../../skills/fai-evaluate-02-ai-landing-zone/",
+    "../../skills/fai-tune-02-ai-landing-zone/",
+    "../../skills/fai-build-bicep-module/",
+    "../../skills/fai-architecture-blueprint/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ],
   "plays": [
     "02-ai-landing-zone"

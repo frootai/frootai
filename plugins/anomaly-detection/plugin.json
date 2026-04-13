@@ -3,7 +3,7 @@
   "description": "Anomaly Detection — real-time and batch anomaly detection for time-series, metrics, and log data. Uses Azure AI Anomaly Detector, custom ML models, and event-driven alerting with Azure Event Hubs.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,11 +19,11 @@
     "ml"
   ],
   "agents": [
-    "../../agents/frootai-play-20-builder.agent.md",
-    "../../agents/frootai-play-20-reviewer.agent.md",
-    "../../agents/frootai-play-20-tuner.agent.md",
-    "../../agents/frootai-data-engineer.agent.md",
-    "../../agents/frootai-ml-engineer.agent.md"
+    "../../agents/fai-play-20-builder.agent.md",
+    "../../agents/fai-play-20-reviewer.agent.md",
+    "../../agents/fai-play-20-tuner.agent.md",
+    "../../agents/fai-data-engineer.agent.md",
+    "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
     "../../instructions/play-20-anomaly-detection-patterns.instructions.md",
@@ -31,16 +31,16 @@
     "../../instructions/opex-monitoring.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-deploy-20-anomaly-detection/",
-    "../../skills/frootai-evaluate-20-anomaly-detection/",
-    "../../skills/frootai-tune-20-anomaly-detection/",
-    "../../skills/frootai-build-etl-pipeline/"
+    "../../skills/fai-deploy-20-anomaly-detection/",
+    "../../skills/fai-evaluate-20-anomaly-detection/",
+    "../../skills/fai-tune-20-anomaly-detection/",
+    "../../skills/fai-build-etl-pipeline/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-session-logger/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-session-logger/"
   ],
   "plays": [
     "20-anomaly-detection"

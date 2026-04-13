@@ -3,7 +3,7 @@
   "description": "Azure Infrastructure — landing zones, hub-spoke networking, private endpoints, Azure Policy, RBAC, and subscription vending. Enterprise-grade Bicep IaC for AI workloads validated against all 6 WAF pillars.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -20,11 +20,11 @@
     "hub-spoke"
   ],
   "agents": [
-    "../../agents/frootai-landing-zone.agent.md",
-    "../../agents/frootai-architect.agent.md",
-    "../../agents/frootai-azure-networking-expert.agent.md",
-    "../../agents/frootai-azure-policy-expert.agent.md",
-    "../../agents/frootai-azure-identity-expert.agent.md"
+    "../../agents/fai-landing-zone.agent.md",
+    "../../agents/fai-architect.agent.md",
+    "../../agents/fai-azure-networking-expert.agent.md",
+    "../../agents/fai-azure-policy-expert.agent.md",
+    "../../agents/fai-azure-identity-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/bicep-waf.instructions.md",
@@ -34,16 +34,16 @@
     "../../instructions/azure-front-door-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-build-bicep-module/",
-    "../../skills/frootai-architecture-blueprint/",
-    "../../skills/frootai-azure-resource-visualizer/",
-    "../../skills/frootai-threat-model/",
-    "../../skills/frootai-import-iac/"
+    "../../skills/fai-build-bicep-module/",
+    "../../skills/fai-architecture-blueprint/",
+    "../../skills/fai-azure-resource-visualizer/",
+    "../../skills/fai-threat-model/",
+    "../../skills/fai-import-iac/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/",
-    "../../hooks/frootai-waf-compliance/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/",
+    "../../hooks/fai-waf-compliance/"
   ]
 }

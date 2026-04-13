@@ -3,7 +3,7 @@
   "description": "Technical Documentation — API references, architecture guides, README generation, changelog automation, tutorials, and ADRs. AI-assisted writing with Mermaid diagrams, PlantUML, and DrawIO integration.",
   "version": "1.0.0",
   "author": {
-    "name": "FrootAI Contributors",
+    "name": "FAI Contributors",
     "url": "https://frootai.dev"
   },
   "repository": "https://github.com/frootai/frootai",
@@ -19,10 +19,10 @@
     "drawio"
   ],
   "agents": [
-    "../../agents/frootai-technical-writer.agent.md",
-    "../../agents/frootai-adr-writer.agent.md",
-    "../../agents/frootai-mermaid-diagram-expert.agent.md",
-    "../../agents/frootai-markdown-expert.agent.md"
+    "../../agents/fai-technical-writer.agent.md",
+    "../../agents/fai-adr-writer.agent.md",
+    "../../agents/fai-mermaid-diagram-expert.agent.md",
+    "../../agents/fai-markdown-expert.agent.md"
   ],
   "instructions": [
     "../../instructions/markdown-waf.instructions.md",
@@ -30,20 +30,20 @@
     "../../instructions/self-documenting-code-waf.instructions.md"
   ],
   "skills": [
-    "../../skills/frootai-documentation-writer/",
-    "../../skills/frootai-readme-generator/",
-    "../../skills/frootai-changelog-generator/",
-    "../../skills/frootai-api-docs-generator/",
-    "../../skills/frootai-tutorial-generator/",
-    "../../skills/frootai-mermaid-generator/",
-    "../../skills/frootai-plantuml-generator/",
-    "../../skills/frootai-drawio-generator/",
-    "../../skills/frootai-excalidraw-generator/",
-    "../../skills/frootai-component-docs/"
+    "../../skills/fai-documentation-writer/",
+    "../../skills/fai-readme-generator/",
+    "../../skills/fai-changelog-generator/",
+    "../../skills/fai-api-docs-generator/",
+    "../../skills/fai-tutorial-generator/",
+    "../../skills/fai-mermaid-generator/",
+    "../../skills/fai-plantuml-generator/",
+    "../../skills/fai-drawio-generator/",
+    "../../skills/fai-excalidraw-generator/",
+    "../../skills/fai-component-docs/"
   ],
   "hooks": [
-    "../../hooks/frootai-secrets-scanner/",
-    "../../hooks/frootai-tool-guardian/",
-    "../../hooks/frootai-governance-audit/"
+    "../../hooks/fai-secrets-scanner/",
+    "../../hooks/fai-tool-guardian/",
+    "../../hooks/fai-governance-audit/"
   ]
 }

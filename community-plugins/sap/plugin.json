@@ -2,7 +2,7 @@
   "name": "sap-ai-gateway",
   "version": "1.0.0",
   "description": "SAP integration — AI gateway for S/4HANA, BTP, document processing, supply chain optimization",
-  "author": "FrootAI Community",
+  "author": "FAI Community",
   "play": "14-cost-optimized-ai-gateway",
   "layers": {
     "instructions": [".github/instructions/sap-integration.instructions.md"],

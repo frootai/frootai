@@ -8,7 +8,7 @@ waf:
   - "security"
 ---
 
-# Astro WAF — FrootAI Standards
+# Astro WAF — FAI Standards
 
 When writing or reviewing Astro code, enforce these WAF-aligned standards.
 
