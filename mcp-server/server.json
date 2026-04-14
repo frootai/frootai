@@ -1,0 +1,44 @@
+{
+  "$schema": "https://cdn.jsdelivr.net/npm/@anthropic-ai/mcp-server-schema@latest/dist/schema.json",
+  "name": "frootai",
+  "version": "5.0.1",
+  "description": "FrootAI MCP Server — The open glue for the GenAI ecosystem. 45 tools, 18 modules, 100 solution plays, 830+ primitives.",
+  "publisher": {
+    "name": "FrootAI Contributors",
+    "url": "https://frootai.dev"
+  },
+  "repository": "https://github.com/frootai/frootai",
+  "license": "MIT",
+  "packages": [
+    {
+      "registry_name": "npm",
+      "name": "frootai-mcp",
+      "version": "5.0.1"
+    }
+  ],
+  "remotes": [
+    {
+      "transportType": "stdio",
+      "command": "npx",
+      "args": ["frootai-mcp@latest"]
+    },
+    {
+      "transportType": "streamable-http",
+      "url": "https://mcp.frootai.dev/mcp"
+    }
+  ],
+  "tools": {
+    "total": 45,
+    "categories": [
+      "knowledge (6): list_modules, get_module, lookup_term, search_knowledge, get_architecture_pattern, get_froot_overview",
+      "live (4): fetch_azure_docs, fetch_external_mcp, list_community_plays, get_github_agentic_os",
+      "agent-chain (3): agent_build, agent_review, agent_tune",
+      "ecosystem (10): get_model_catalog, get_azure_pricing, estimate_cost, compare_models, compare_plays, semantic_search_plays, embedding_playground, run_evaluation, validate_config, generate_architecture_diagram",
+      "engine (6): wire_play, inspect_wiring, validate_manifest, get_play_detail, list_primitives, evaluate_quality",
+      "scaffold (3): scaffold_play, create_primitive, smart_scaffold",
+      "marketplace (13): marketplace_search, marketplace_browse, install_plugin, uninstall_plugin, list_installed, check_compatibility, validate_plugin, compose_plugins, publish_plugin, check_plugin_updates, resolve_dependencies, list_external_plugins, marketplace_stats"
+    ]
+  },
+  "resources": ["fai://overview", "fai://module/{id}", "fai://schema/{name}", "fai://marketplace", "fai://tools", "fai://waf"],
+  "prompts": ["build", "review", "tune", "wire", "design", "cost"]
+}

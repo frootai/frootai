@@ -1,0 +1,134 @@
+# FrootAI MCP Server — Complete Reference
+
+> Version 5.0.1 | 45 tools | MIT License
+> The open glue for the GenAI ecosystem.
+
+## Overview
+
+FrootAI is an AI infrastructure platform that unifies agents, instructions, skills, hooks, workflows, plugins, and prompts through the FAI Protocol. The MCP server is the primary distribution channel — it gives any AI agent instant access to the full ecosystem.
+
+## Architecture
+
+The server runs in two modes:
+- **stdio** (default): Local agent communication (VS Code, Claude Desktop, Cursor)
+- **HTTP/SSE**: Remote server (`npx frootai-mcp http`) with multi-client sessions, API key auth, health probes
+
+Internal modules:
+- `src/knowledge/` — Knowledge loading, parsing, search
+- `src/tools/` — Tool handler implementations (knowledge, ecosystem, engine, scaffold, marketplace)
+- `src/prompts/` — MCP prompt templates
+- `src/resources/` — MCP resource definitions (fai:// URIs)
+- `src/data/` — Static data (models, pricing, patterns)
+- `src/middleware/` — LRU cache, rate limiter, error handling
+- `src/telemetry/` — OpenTelemetry integration
+- `src/capabilities/` — MCP sampling and elicitation
+- `src/types/` — TypeScript type definitions
+
+## Complete Tool Reference (45 tools)
+
+### Category 1: Static Knowledge (6 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `list_modules` | `layer?: string` | Browse 18 FROOT knowledge modules by layer (F/R/O/T) |
+| `get_module` | `module_id: string, section?: string` | Read full module content or a specific section |
+| `lookup_term` | `term: string` | Look up any of 200+ AI/ML terms in the glossary |
+| `search_knowledge` | `query: string, max_results?: number` | Full-text search across all 18 modules |
+| `get_architecture_pattern` | `scenario: string` | Get architecture decision guide (rag_pipeline, agent_hosting, model_selection, cost_optimization, deterministic_ai, multi_agent, fine_tuning_decision) |
+| `get_froot_overview` | none | Complete FROOT framework summary with all layers and modules |
+
+### Category 2: Live Tools (4 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `fetch_azure_docs` | `service: string` | Search Microsoft Learn for Azure service documentation |
+| `fetch_external_mcp` | `query: string` | Discover MCP servers from public registries |
+| `list_community_plays` | `filter?: string` | Browse 100 solution plays from the GitHub repository |
+| `get_github_agentic_os` | `primitive?: string` | Get .github Agentic OS guide (overview, instructions, prompts, agents, skills, hooks, workflows, plugins) |
+
+### Category 3: Agent Chain (3 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `agent_build` | `task: string` | Architecture guidance + code patterns for building AI solutions |
+| `agent_review` | `context?: string` | Security + quality + compliance audit checklist |
+| `agent_tune` | `context?: string` | Production readiness validation and verdict |
+
+### Category 4: Ecosystem (10 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `get_model_catalog` | `category?: string` | Azure AI model catalog with pricing (gpt, embedding, image, speech) |
+| `get_azure_pricing` | `scenario: string, scale?: string` | Monthly cost estimates by scenario and scale |
+| `estimate_cost` | `play: string, scale?: string` | Itemized Azure cost estimate per solution play |
+| `compare_models` | `useCase: string, priority?: string` | Side-by-side model comparison for a use case |
+| `compare_plays` | `plays: string` | Compare 2-3 solution plays (services, cost, complexity) |
+| `semantic_search_plays` | `query: string, top_k?: number` | Natural language search across 100 solution plays |
+| `embedding_playground` | `text1: string, text2: string` | Cosine similarity between two texts (educational) |
+| `run_evaluation` | `scores: object, thresholds?: object` | Quality scoring with configurable pass/fail |
+| `validate_config` | `config_type: string, config_content: string` | Validate TuneKit configs against best practices |
+| `generate_architecture_diagram` | `play: string` | Generate Mermaid.js architecture diagram for any play |
+
+### Category 5: FAI Engine (6 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `wire_play` | `playId: string` | Resolve FAI Protocol context, bind primitives, activate guardrails |
+| `inspect_wiring` | `playId: string` | Audit a play's wiring — primitives, context, health score |
+| `validate_manifest` | `playId: string` | Validate fai-manifest.json schema + completeness |
+| `get_play_detail` | `play_number: string` | Full play spec — services, config, WAF alignment |
+| `list_primitives` | `type: string, limit?: number` | Browse 830+ primitives by type |
+| `evaluate_quality` | `scores: object, thresholds?: object, play?: string` | Run quality evaluation with pass/fail thresholds |
+
+### Category 6: Scaffold (3 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `scaffold_play` | `name: string, model?: string, wafPillars?: string[], dryRun?: boolean` | Generate complete solution play (24+ files) with FAI Protocol auto-wired |
+| `create_primitive` | `type: string, name: string, description?: string, waf?: string[]` | Create an agent, instruction, or skill with proper frontmatter |
+| `smart_scaffold` | `query: string, top_k?: number` | Semantic search to find best matching play then scaffold it |
+
+### Category 7: Marketplace (13 tools)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `marketplace_search` | `query: string, limit?: number` | Semantic search across 77+ plugins by use case |
+| `marketplace_browse` | `page?: number, perPage?: number, category?: string` | Paginated listing with 8 category filters |
+| `install_plugin` | `pluginName: string, projectRoot?: string` | Copy plugin primitives into .github/ with conflict detection |
+| `uninstall_plugin` | `pluginName: string, projectRoot?: string` | Remove plugin primitives from project |
+| `list_installed` | `projectRoot?: string` | Scan .github/ and match against marketplace |
+| `check_compatibility` | `pluginName: string, playId?: string` | Validate plugin + play alignment + WAF + conflicts |
+| `validate_plugin` | `pluginPath: string` | Check plugin.json schema, naming, file refs |
+| `compose_plugins` | `plugins: string[]` | Multi-install with cross-plugin conflict detection |
+| `publish_plugin` | `pluginPath: string` | Validate → generate marketplace entry → register |
+| `check_plugin_updates` | `projectRoot?: string` | Compare installed vs marketplace versions |
+| `resolve_dependencies` | `plugins: string[]` | Topological dependency resolution + install order |
+| `list_external_plugins` | none | Browse community-plugins/ and external sources |
+| `marketplace_stats` | none | Full analytics: totals, categories, top plugins, coverage |
+
+## MCP Resources (fai:// URIs)
+- `fai://overview` — Ecosystem summary
+- `fai://module/{F1..T3}` — 16 knowledge modules as markdown
+- `fai://schema/{name}` — 7 FAI Protocol JSON schemas
+- `fai://marketplace` — Full plugin registry
+- `fai://tools` — Tool catalog as JSON
+- `fai://waf` — WAF 6 pillars reference
+
+## MCP Prompts
+- `/build {task}` — Start the builder workflow
+- `/review {context}` — Security + quality audit
+- `/tune {context}` — Production readiness check
+- `/wire {playId}` — Wire a play through FAI Protocol
+- `/design {requirements}` — Guided architecture design
+- `/cost {play} {scale}` — Azure cost estimation
+
+## FAI Protocol
+The FAI Protocol (`fai-manifest.json`) is the context-wiring spec that binds all AI primitives together. When you `wire_play`, the engine reads the manifest, resolves all primitive paths, builds the context chain, and activates guardrails.
+
+## Configuration
+| Env Variable | Description | Default |
+|-------------|-------------|---------|
+| `PORT` | HTTP server port | 3000 |
+| `FAI_AUTH_MODE` | Auth mode: `none` or `apikey` | none |
+| `FAI_API_KEYS` | Comma-separated API keys | — |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OpenTelemetry endpoint | — |
+
+## Links
+- Website: https://frootai.dev
+- GitHub: https://github.com/frootai/frootai
+- npm: https://www.npmjs.com/package/frootai-mcp
+- Setup: https://frootai.dev/setup-guide
+- MCP Tools: https://frootai.dev/mcp-tooling

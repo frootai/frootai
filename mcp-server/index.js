@@ -28,6 +28,8 @@ import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync as writ
 import { join, dirname, basename, resolve } from "path";
 import { fileURLToPath } from "url";
 
+import { getLatestKnowledge } from "./auto-update.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -198,6 +200,25 @@ const FROOT_MAP = {
 };
 
 /**
+ * Load modules — uses auto-update (fetches from GitHub if stale), falls back to bundled/local
+ */
+async function loadModulesWithAutoUpdate() {
+  try {
+    const bundle = await getLatestKnowledge();
+    if (bundle && bundle.modules) {
+      const modules = {};
+      for (const [modId, mod] of Object.entries(bundle.modules)) {
+        modules[modId] = { ...mod, sections: parseSections(mod.content) };
+      }
+      return modules;
+    }
+  } catch {
+    // Auto-update failed — fall through to static loading
+  }
+  return loadModules();
+}
+
+/**
  * Load modules — tries bundled JSON first (for npx), falls back to local files (for repo)
  */
 function loadModules() {
@@ -303,7 +324,7 @@ function loadGlossary(modules) {
 
 // ─── Initialize Knowledge Base ─────────────────────────────────────
 
-const modules = loadModules();
+const modules = await loadModulesWithAutoUpdate();
 const glossary = loadGlossary(modules);
 
 // ─── MCP Server ────────────────────────────────────────────────────
