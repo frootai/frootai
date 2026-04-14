@@ -231,7 +231,7 @@ frootai/frootai
 ├── engine/               FAI Engine v0.1 (7 modules — manifest reader → evaluator)
 ├── solution-plays/       50 deployable plays with DevKit+TuneKit+SpecKit+Bicep
 ├── mcp-server/           MCP tools + knowledge.json (45 tools)
-├── vscode-extension/     VS Code extension (26 commands)
+├── vscode-extension/     VS Code extension (27 commands)
 ├── python-sdk/           Python SDK — offline, zero deps
 ├── python-mcp/           Python MCP Server
 ├── functions/            REST API + Agent FAI chatbot
