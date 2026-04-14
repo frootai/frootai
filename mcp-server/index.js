@@ -2907,6 +2907,469 @@ ${description}
 
 } // end if (faiEngine.available)
 
+  // ════════════════════════════════════════════════════════════════════
+  // FAI MARKETPLACE TOOLS — Phase 5
+  // Plugin discovery, install, compose, validate — all via MCP.
+  // "npm for AI primitives" — the package manager IS the AI agent.
+  // ════════════════════════════════════════════════════════════════════
+
+  // ── Marketplace loader ──────────────────────────────────────────
+
+  const MARKETPLACE_PATH = join(__dirname, "..", "marketplace.json");
+  const PLUGINS_DIR = join(__dirname, "..", "plugins");
+  const COMMUNITY_DIR = join(__dirname, "..", "community-plugins");
+
+  function loadMarketplace() {
+    try {
+      return JSON.parse(readFileSync(MARKETPLACE_PATH, "utf-8"));
+    } catch {
+      return { plugins: [], stats: { totalPlugins: 0, totalItems: 0 } };
+    }
+  }
+
+  function loadPluginJson(pluginName) {
+    for (const dir of [PLUGINS_DIR, COMMUNITY_DIR]) {
+      const pjPath = join(dir, pluginName, "plugin.json");
+      if (existsSync(pjPath)) {
+        try { return { json: JSON.parse(readFileSync(pjPath, "utf-8")), dir: join(dir, pluginName) }; }
+        catch { /* skip */ }
+      }
+    }
+    return null;
+  }
+
+  function countItems(items) {
+    if (!items || typeof items !== "object") return 0;
+    return Object.values(items).reduce((s, n) => s + (typeof n === "number" ? n : 0), 0);
+  }
+
+  // ── Tool: marketplace_search ────────────────────────────────────
+
+  server.tool(
+    "marketplace_search",
+    "FAI MARKETPLACE — Search 77+ plugins by use case, technology, or keyword. Describe what you need in natural language, get ranked plugin recommendations with install commands.",
+    {
+      query: z.string().describe("What you're looking for (e.g., 'RAG with ServiceNow', 'content moderation', 'Kubernetes GPU')"),
+      limit: z.number().optional().default(5).describe("Max results (default: 5)"),
+      playId: z.string().optional().describe("Filter to plugins compatible with a specific play"),
+    },
+    { annotations: { readOnlyHint: true, idempotentHint: true } },
+    async ({ query, limit, playId }) => {
+      const marketplace = loadMarketplace();
+      const queryLower = query.toLowerCase();
+      const queryWords = queryLower.split(/\s+/).filter(w => w.length >= 3);
+
+      const scored = marketplace.plugins
+        .filter(p => !playId || !p.plays?.length || p.plays.some(pp => pp.includes(playId)))
+        .map(plugin => {
+          let score = 0;
+          const text = `${plugin.name} ${plugin.description} ${(plugin.keywords || []).join(" ")}`.toLowerCase();
+          if (text.includes(queryLower)) score += 20;
+          for (const w of queryWords) {
+            if (text.includes(w)) score += 3;
+            if (plugin.name.includes(w)) score += 5;
+            if ((plugin.keywords || []).some(k => k.includes(w))) score += 4;
+          }
+          if (playId && plugin.plays?.some(p => p.includes(playId))) score += 10;
+          return { plugin, score };
+        })
+        .filter(({ score }) => score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
+
+      if (scored.length === 0) {
+        return { content: [{ type: "text", text: `No plugins found for "${query}". Try broader terms or use marketplace_browse to see all ${marketplace.plugins.length} plugins.` }] };
+      }
+
+      const results = scored.map(({ plugin, score }, i) => {
+        const items = countItems(plugin.items);
+        const plays = plugin.plays?.length > 0 ? plugin.plays.join(", ") : "universal";
+        return `### ${i + 1}. ${plugin.name} (${items} items, ${(score * 3).toFixed(0)}% match)\n${plugin.description?.substring(0, 200)}\n- **Plays**: ${plays}\n- **Keywords**: ${(plugin.keywords || []).slice(0, 8).join(", ")}\n- **Install**: \`install_plugin name="${plugin.name}"\``;
+      }).join("\n\n---\n\n");
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 🔍 Marketplace: "${query}"\n*${scored.length} results from ${marketplace.plugins.length} plugins*\n\n${results}\n\n---\n💡 Use \`install_plugin\` to install, \`check_compatibility\` to verify with your play.`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: marketplace_browse ────────────────────────────────────
+
+  server.tool(
+    "marketplace_browse",
+    "FAI MARKETPLACE — Browse all 77+ plugins with pagination and category filters. Shows themed bundles of agents, instructions, skills, and hooks.",
+    {
+      category: z.enum(["all", "solution-play", "language", "infrastructure", "security", "testing", "observability", "integration", "mcp-development"]).optional().default("all"),
+      page: z.number().optional().default(1).describe("Page number (20 per page)"),
+    },
+    { annotations: { readOnlyHint: true, idempotentHint: true } },
+    async ({ category, page }) => {
+      const marketplace = loadMarketplace();
+      let plugins = [...marketplace.plugins];
+
+      if (category !== "all") {
+        const catKeywords = {
+          "solution-play": ["enterprise-rag", "ai-landing-zone", "deterministic", "call-center", "document-intelligence", "multi-agent", "copilot", "content-moderation", "fine-tuning", "cost-optimized"],
+          "language": ["python", "typescript", "csharp", "go", "java", "rust", "kotlin", "ruby", "swift", "php"],
+          "infrastructure": ["azure", "kubernetes", "docker", "terraform", "landing-zone", "bicep", "containers"],
+          "security": ["security", "owasp", "content-safety", "compliance", "governance", "hardening"],
+          "testing": ["testing", "evaluation", "quality", "code-quality"],
+          "observability": ["observability", "monitoring", "logging", "metrics"],
+          "integration": ["servicenow", "salesforce", "sap", "jira", "slack", "teams", "oracle"],
+          "mcp-development": ["mcp-development"],
+        };
+        const kws = catKeywords[category] || [];
+        plugins = plugins.filter(p => kws.some(kw => p.name.includes(kw) || (p.keywords || []).some(k => k.includes(kw))));
+      }
+
+      const perPage = 20;
+      const totalPages = Math.ceil(plugins.length / perPage);
+      const start = (page - 1) * perPage;
+      const pagePlugins = plugins.slice(start, start + perPage);
+
+      const listing = pagePlugins.map((p, i) => {
+        const items = countItems(p.items);
+        return `${start + i + 1}. **${p.name}** (${items} items) — ${(p.description || "").substring(0, 100)}`;
+      }).join("\n");
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 📦 FAI Marketplace${category !== "all" ? ` — ${category}` : ""}\n*Page ${page}/${totalPages} · ${plugins.length} plugins · ${marketplace.stats?.totalItems || "1000+"} total items*\n\n${listing}\n\n---\n${page < totalPages ? `📄 Next page: \`marketplace_browse page=${page + 1}\`` : "📄 Last page"}\n🔍 Use \`marketplace_search\` for semantic search.`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: install_plugin ────────────────────────────────────────
+
+  server.tool(
+    "install_plugin",
+    "FAI INSTALL — Install a FrootAI plugin into the current project. Copies agents, instructions, skills, hooks into .github/ structure. Optionally auto-wires fai-manifest.json.",
+    {
+      name: z.string().describe("Plugin name (e.g., 'enterprise-rag', 'fai-essentials', 'servicenow-ai-agent')"),
+      targetDir: z.string().optional().describe("Target project directory (default: cwd)"),
+      dryRun: z.boolean().optional().default(false),
+    },
+    { annotations: { destructiveHint: true, idempotentHint: false } },
+    async ({ name: pluginName, targetDir, dryRun }) => {
+      const plugin = loadPluginJson(pluginName);
+      if (!plugin) return mcpError(`Plugin "${pluginName}" not found in marketplace.`);
+
+      const pj = plugin.json;
+      const pluginDir = plugin.dir;
+      const target = targetDir || process.cwd();
+      const results = [];
+      let copied = 0, skipped = 0;
+
+      for (const type of ["agents", "instructions", "skills", "hooks"]) {
+        const refs = pj[type] || [];
+        for (const ref of refs) {
+          const source = resolve(pluginDir, ref);
+          const destDir = join(target, ".github", type);
+          const destName = basename(ref);
+          const dest = join(destDir, destName);
+
+          if (!existsSync(source)) { results.push(`⚠️ ${type}/${destName} (source missing)`); continue; }
+
+          if (existsSync(dest)) { results.push(`⏭  ${type}/${destName} (exists)`); skipped++; continue; }
+
+          if (dryRun) { results.push(`📋 ${type}/${destName}`); copied++; continue; }
+
+          mkdirSync(destDir, { recursive: true });
+          try {
+            if (statSync_fn(source).isDirectory()) {
+              // Recursive copy for directories (skills, hooks)
+              const copyDir = (src, dst) => {
+                mkdirSync(dst, { recursive: true });
+                for (const entry of readdirSync(src, { withFileTypes: true })) {
+                  const s = join(src, entry.name), d = join(dst, entry.name);
+                  if (entry.isDirectory()) copyDir(s, d);
+                  else writeFileSync_fn(d, readFileSync(s));
+                }
+              };
+              copyDir(source, dest);
+            } else {
+              writeFileSync_fn(dest, readFileSync(source));
+            }
+            results.push(`✅ ${type}/${destName}`);
+            copied++;
+          } catch (err) {
+            results.push(`❌ ${type}/${destName} (${err.message})`);
+          }
+        }
+      }
+
+      const verb = dryRun ? "would be" : "";
+      return {
+        content: [{
+          type: "text",
+          text: `## 📦 ${dryRun ? "Preview" : "Installed"}: ${pluginName} v${pj.version || "1.0.0"}\n\n${results.join("\n")}\n\n**Summary**: ${copied} ${verb} copied, ${skipped} skipped\n${pj.plays?.length ? `**Compatible plays**: ${pj.plays.join(", ")}` : "**Universal** — works with any play"}\n\n${dryRun ? "💡 Remove dryRun to install." : "💡 Run `wire_play` to verify wiring."}`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: uninstall_plugin ──────────────────────────────────────
+
+  server.tool(
+    "uninstall_plugin",
+    "FAI UNINSTALL — Remove a plugin's primitives from the current project (.github/ structure).",
+    {
+      name: z.string().describe("Plugin name to uninstall"),
+      targetDir: z.string().optional(),
+    },
+    { annotations: { destructiveHint: true } },
+    async ({ name: pluginName, targetDir }) => {
+      const plugin = loadPluginJson(pluginName);
+      if (!plugin) return mcpError(`Plugin "${pluginName}" not found.`);
+
+      const pj = plugin.json;
+      const target = targetDir || process.cwd();
+      const removed = [];
+      const { rmSync } = await import("fs");
+
+      for (const type of ["agents", "instructions", "skills", "hooks"]) {
+        for (const ref of pj[type] || []) {
+          const dest = join(target, ".github", type, basename(ref));
+          if (existsSync(dest)) {
+            rmSync(dest, { recursive: true, force: true });
+            removed.push(`🗑️ ${type}/${basename(ref)}`);
+          }
+        }
+      }
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 🗑️ Uninstalled: ${pluginName}\n\n${removed.length > 0 ? removed.join("\n") : "No installed files found."}\n\n**${removed.length} items removed.**`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: list_installed ────────────────────────────────────────
+
+  server.tool(
+    "list_installed",
+    "FAI INSTALLED — List plugins currently installed in the project by scanning .github/ and matching against the marketplace.",
+    {
+      targetDir: z.string().optional(),
+    },
+    { annotations: { readOnlyHint: true } },
+    async ({ targetDir }) => {
+      const target = targetDir || process.cwd();
+      const githubDir = join(target, ".github");
+      if (!existsSync(githubDir)) {
+        return { content: [{ type: "text", text: "No .github/ directory found. No plugins installed." }] };
+      }
+
+      const marketplace = loadMarketplace();
+      const installedFiles = new Set();
+
+      // Collect all files in .github/{agents,instructions,skills,hooks}
+      for (const type of ["agents", "instructions", "skills", "hooks"]) {
+        const dir = join(githubDir, type);
+        if (!existsSync(dir)) continue;
+        for (const entry of readdirSync(dir)) {
+          installedFiles.add(`${type}/${entry}`);
+        }
+      }
+
+      // Match against marketplace plugins
+      const installed = new Map();
+      for (const plugin of marketplace.plugins) {
+        const pData = loadPluginJson(plugin.name);
+        if (!pData) continue;
+        const pj = pData.json;
+        let matchCount = 0;
+        const matchedFiles = [];
+
+        for (const type of ["agents", "instructions", "skills", "hooks"]) {
+          for (const ref of pj[type] || []) {
+            const name = basename(ref);
+            if (installedFiles.has(`${type}/${name}`)) {
+              matchCount++;
+              matchedFiles.push(`${type}/${name}`);
+            }
+          }
+        }
+
+        if (matchCount > 0) {
+          const totalRefs = ["agents", "instructions", "skills", "hooks"].reduce((s, t) => s + (pj[t]?.length || 0), 0);
+          installed.set(plugin.name, { matched: matchCount, total: totalRefs, files: matchedFiles });
+        }
+      }
+
+      if (installed.size === 0) {
+        return { content: [{ type: "text", text: `No recognized plugins found in .github/ (${installedFiles.size} files present but don't match marketplace plugins).` }] };
+      }
+
+      const listing = [...installed.entries()].map(([name, info]) =>
+        `### ${name} (${info.matched}/${info.total} items)\n${info.files.map(f => `  - ${f}`).join("\n")}`
+      ).join("\n\n");
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 📋 Installed Plugins (${installed.size})\n\n${listing}\n\n---\n💡 Use \`uninstall_plugin\` to remove, \`marketplace_search\` to find more.`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: check_compatibility ───────────────────────────────────
+
+  server.tool(
+    "check_compatibility",
+    "FAI COMPATIBILITY — Check if a plugin is compatible with a solution play before installing. Validates play alignment and potential naming conflicts.",
+    {
+      pluginName: z.string().describe("Plugin to check"),
+      playId: z.string().describe("Play to check against (e.g., '01', '21-agentic-rag')"),
+    },
+    { annotations: { readOnlyHint: true } },
+    async ({ pluginName, playId }) => {
+      const plugin = loadPluginJson(pluginName);
+      if (!plugin) return mcpError(`Plugin "${pluginName}" not found.`);
+      const pj = plugin.json;
+
+      const checks = [];
+      let issues = 0;
+
+      // Play compatibility
+      if (pj.plays?.length > 0) {
+        const match = pj.plays.some(p => p.includes(playId));
+        checks.push(match ? `✅ Plugin designed for play ${playId}` : `⚠️ Plugin designed for: ${pj.plays.join(", ")} (not ${playId})`);
+        if (!match) issues++;
+      } else {
+        checks.push(`✅ Universal plugin — works with any play`);
+      }
+
+      // Item count
+      const items = countItems(pj.items || {});
+      checks.push(`ℹ️ Plugin adds ${items} items: agents=${(pj.agents || []).length}, instructions=${(pj.instructions || []).length}, skills=${(pj.skills || []).length}, hooks=${(pj.hooks || []).length}`);
+
+      // Check for file conflicts in target
+      const targetGithub = join(process.cwd(), ".github");
+      if (existsSync(targetGithub)) {
+        let conflicts = 0;
+        for (const type of ["agents", "instructions", "skills", "hooks"]) {
+          for (const ref of pj[type] || []) {
+            if (existsSync(join(targetGithub, type, basename(ref)))) conflicts++;
+          }
+        }
+        checks.push(conflicts === 0 ? `✅ No file conflicts` : `⚠️ ${conflicts} file(s) already exist (will be skipped)`);
+        if (conflicts > 0) issues++;
+      }
+
+      // WAF alignment (if engine available)
+      if (faiEngine?.available) {
+        const mfPath = faiEngine.findManifest(playId);
+        if (mfPath) {
+          const { manifest } = faiEngine.loadManifest(mfPath);
+          if (manifest?.context?.waf) {
+            checks.push(`ℹ️ Play enforces WAF: ${manifest.context.waf.join(", ")}`);
+          }
+        }
+      }
+
+      const verdict = issues === 0
+        ? `✅ **COMPATIBLE** — Safe to install with \`install_plugin name="${pluginName}"\``
+        : `⚠️ **${issues} concern(s)** — Review warnings above before installing.`;
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 🔄 Compatibility: ${pluginName} ↔ Play ${playId}\n\n${checks.join("\n")}\n\n${verdict}`
+        }]
+      };
+    }
+  );
+
+  // ── Tool: validate_plugin ───────────────────────────────────────
+
+  server.tool(
+    "validate_plugin",
+    "FAI PLUGIN VALIDATOR — Validate a plugin's plugin.json against the FAI Plugin Schema. Checks required fields, naming conventions, and file references.",
+    {
+      pluginName: z.string().describe("Plugin name to validate"),
+    },
+    { annotations: { readOnlyHint: true } },
+    async ({ pluginName }) => {
+      const plugin = loadPluginJson(pluginName);
+      if (!plugin) return mcpError(`Plugin "${pluginName}" not found.`);
+
+      const pj = plugin.json;
+      const pluginDir = plugin.dir;
+      const checks = [];
+      let errors = 0;
+
+      // Required fields
+      for (const field of ["name", "description", "version", "author", "license"]) {
+        if (pj[field]) { checks.push(`✅ ${field}: present`); }
+        else { checks.push(`❌ ${field}: MISSING`); errors++; }
+      }
+
+      // Name matches folder
+      const folderName = basename(pluginDir);
+      if (pj.name === folderName) { checks.push(`✅ name matches folder`); }
+      else { checks.push(`❌ name "${pj.name}" ≠ folder "${folderName}"`); errors++; }
+
+      // Version is semver
+      if (/^[0-9]+\.[0-9]+\.[0-9]+/.test(pj.version || "")) { checks.push(`✅ version: ${pj.version}`); }
+      else { checks.push(`❌ version invalid: ${pj.version}`); errors++; }
+
+      // Check file references
+      let refCount = 0, missingCount = 0;
+      for (const type of ["agents", "instructions", "skills", "hooks"]) {
+        for (const ref of pj[type] || []) {
+          refCount++;
+          if (!existsSync(resolve(pluginDir, ref))) { missingCount++; checks.push(`❌ ${type}: ${ref} NOT FOUND`); errors++; }
+        }
+      }
+      if (missingCount === 0 && refCount > 0) { checks.push(`✅ All ${refCount} file references resolve`); }
+
+      // README
+      checks.push(existsSync(join(pluginDir, "README.md")) ? `✅ README.md present` : `⚠️ README.md missing`);
+
+      const verdict = errors === 0
+        ? `✅ **VALID** — Plugin passes all checks.`
+        : `❌ **${errors} ERROR(S)** — Fix before publishing.`;
+
+      return {
+        content: [{
+          type: "text",
+          text: `## 📋 Plugin Validation: ${pluginName}\n\n${checks.join("\n")}\n\n${verdict}`
+        }]
+      };
+    }
+  );
+
+  // ── MCP Resources: Marketplace ──────────────────────────────────
+
+  server.resource(
+    "fai-marketplace",
+    "fai://marketplace",
+    { mimeType: "application/json" },
+    async () => {
+      const marketplace = loadMarketplace();
+      return {
+        contents: [{
+          uri: "fai://marketplace",
+          mimeType: "application/json",
+          text: JSON.stringify({
+            totalPlugins: marketplace.plugins.length,
+            totalItems: marketplace.stats?.totalItems || 0,
+            plugins: marketplace.plugins.map(p => ({ name: p.name, items: countItems(p.items), plays: p.plays })),
+          }, null, 2),
+        }],
+      };
+    }
+  );
+
   return server;
 } // end createConfiguredServer()
 
