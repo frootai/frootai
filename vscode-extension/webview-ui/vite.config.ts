@@ -7,8 +7,12 @@ export default defineConfig({
     outDir: "../out/webview",
     emptyOutDir: true,
     rollupOptions: {
+      input: {
+        main: "index.html",
+        sidebar: "sidebar.html",
+      },
       output: {
-        entryFileNames: "main.js",
+        entryFileNames: "[name].js",
         chunkFileNames: "[name].js",
         assetFileNames: "[name].[ext]",
       },

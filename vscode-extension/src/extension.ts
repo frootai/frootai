@@ -5,6 +5,7 @@
 import * as vscode from "vscode";
 import { searchAll } from "./commands/search";
 import { createReactPanel } from "./webviews/reactHost";
+import { SidebarProvider } from "./providers/SidebarProvider";
 import { SOLUTION_PLAYS } from "./data/plays";
 
 // Legacy extension handles existing commands + tree views
@@ -12,8 +13,14 @@ import { SOLUTION_PLAYS } from "./data/plays";
 const legacy = require("./extension.js");
 
 export function activate(context: vscode.ExtensionContext): void {
-  // Activate legacy (existing 25 commands, tree views, MCP provider)
+  // Activate legacy (existing 25 commands, MCP provider)
   legacy.activate(context);
+
+  // ─── React Sidebar ───
+  const sidebarProvider = new SidebarProvider(context.extensionUri);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(SidebarProvider.viewType, sidebarProvider),
+  );
 
   // ─── New Commands — React Webview Panels ───
 

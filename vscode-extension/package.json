@@ -66,20 +66,9 @@
     "views": {
       "frootai-sidebar": [
         {
-          "id": "frootai.solutionPlays",
-          "name": "FAI Solution Plays (100)"
-        },
-        {
-          "id": "frootai.primitivesCatalog",
-          "name": "FAI Primitives (830+)"
-        },
-        {
-          "id": "frootai.faiProtocol",
-          "name": "FAI Protocol & Layer"
-        },
-        {
-          "id": "frootai.mcpTools",
-          "name": "FAI MCP Tools (45)"
+          "type": "webview",
+          "id": "frootai.sidebarView",
+          "name": "FrootAI"
         }
       ]
     },
