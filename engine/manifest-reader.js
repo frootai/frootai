@@ -7,7 +7,7 @@
  */
 
 const { readFileSync, existsSync } = require('fs');
-const { join, resolve, dirname } = require('path');
+const { join, resolve, dirname, basename } = require('path');
 
 const WAF_PILLARS = [
   'security', 'reliability', 'cost-optimization',
@@ -34,7 +34,11 @@ function loadManifest(manifestPath) {
     return { manifest: null, playDir: null, errors: [`Invalid JSON: ${err.message}`] };
   }
 
-  const playDir = dirname(absPath);
+  // playDir is the play root — if manifest is in spec/, go up one level
+  let playDir = dirname(absPath);
+  if (basename(playDir) === 'spec') {
+    playDir = dirname(playDir);
+  }
 
   // Validate required fields
   if (!manifest.play || !/^[0-9]{2}-[a-z0-9-]+$/.test(manifest.play)) {

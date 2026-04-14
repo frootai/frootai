@@ -7,130 +7,237 @@ waf:
   - "performance-efficiency"
 ---
 
-# Typescript Mcp Development — WAF-Aligned Coding Standards
+# TypeScript MCP Server Development — FAI Standards
 
-> TypeScript MCP server development standards — @modelcontextprotocol/sdk patterns, Zod parameter schemas, McpServer class, stdio/SSE transports, and npm publishing for distribution.
+## Server Bootstrap & Transport
 
-## Core Rules
+Initialize with `Server` class, declare capabilities, connect via `StdioServerTransport`:
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema, ListToolsRequestSchema,
+  ListResourcesRequestSchema, ReadResourceRequestSchema,
+  ListPromptsRequestSchema, GetPromptRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+const server = new Server(
+  { name: "my-mcp-server", version: "1.0.0" },
+  { capabilities: { tools: {}, resources: {}, prompts: {} } }
+);
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+console.error("[mcp] server started"); // stderr — never stdout
+```
+
+- `ServerCapabilities` keys: `tools`, `resources`, `prompts`, `logging` — only declare what you implement
+- All user-visible logging goes to `console.error` (stderr) — stdout is reserved for JSON-RPC
+
+## Tool Registration with Zod Validation
+
+Register tools via paired `ListTools` + `CallTool` handlers. Use `zod` for input schemas:
+
+```typescript
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
+import { McpError, ErrorCode } from "@modelcontextprotocol/sdk/types.js";
+
+const SearchSchema = z.object({
+  query: z.string().min(1).max(500).describe("Search query text"),
+  top_k: z.number().int().min(1).max(50).default(10),
+});
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [{
+    name: "search_documents",
+    description: "Search indexed documents by semantic similarity",
+    inputSchema: zodToJsonSchema(SearchSchema),
+  }],
+}));
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "search_documents") {
+    const parsed = SearchSchema.safeParse(request.params.arguments);
+    if (!parsed.success) {
+      throw new McpError(ErrorCode.InvalidParams, parsed.error.message);
+    }
+    const results = await searchIndex(parsed.data.query, parsed.data.top_k);
+    return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+  }
+  throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${request.params.name}`);
+});
+```
+
+- Always `safeParse` — never `parse` (throw-on-error leaks internal schema details)
+- One `CallToolRequestSchema` handler dispatches all tools — use switch/map for >3 tools
+- Return `isError: true` in content for recoverable failures the LLM should see
+
+## Resource Handlers
+
+Expose files, DB records, or API data as browsable resources:
+
+```typescript
+server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+  resources: [{
+    uri: "config://openai",
+    name: "OpenAI Configuration",
+    mimeType: "application/json",
+  }],
+}));
+
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  const { uri } = request.params;
+  if (uri === "config://openai") {
+    const config = await fs.readFile("config/openai.json", "utf8");
+    return { contents: [{ uri, mimeType: "application/json", text: config }] };
+  }
+  throw new McpError(ErrorCode.InvalidRequest, `Unknown resource: ${uri}`);
+});
+```
+
+For binary/image content, return base64 with `blob` field instead of `text`:
+
+```typescript
+return { contents: [{ uri, mimeType: "image/png", blob: buffer.toString("base64") }] };
+```
+
+## Prompt Templates
+
+Expose reusable prompt templates that clients can discover and fill:
+
+```typescript
+server.setRequestHandler(ListPromptsRequestSchema, async () => ({
+  prompts: [{
+    name: "review_code",
+    description: "Security-focused code review prompt",
+    arguments: [{ name: "language", description: "Programming language", required: true }],
+  }],
+}));
+
+server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+  if (request.params.name === "review_code") {
+    return {
+      messages: [{
+        role: "user",
+        content: { type: "text", text: `Review this ${request.params.arguments?.language} code for OWASP Top 10 vulnerabilities.` },
+      }],
+    };
+  }
+  throw new McpError(ErrorCode.InvalidRequest, `Unknown prompt: ${request.params.name}`);
+});
+```
+
+## Error Handling
+
+Use `McpError` with specific `ErrorCode` values — never throw raw `Error`:
+
+```typescript
+// ErrorCode enum: InvalidRequest, MethodNotFound, InvalidParams, InternalError
+throw new McpError(ErrorCode.InvalidParams, "query must be non-empty");
+throw new McpError(ErrorCode.InternalError, "upstream API unavailable");
+```
+
+Wrap external calls with try/catch — surface actionable messages, never stack traces:
+
+```typescript
+try {
+  return await externalApi.call(params);
+} catch (err) {
+  console.error("[mcp] external call failed:", (err as Error).message);
+  throw new McpError(ErrorCode.InternalError, "Service temporarily unavailable");
+}
+```
+
+## Progress Notifications
+
+For long-running tools, send progress updates via the `server.notification` method:
+
+```typescript
+const { progressToken } = request.params._meta ?? {};
+if (progressToken !== undefined) {
+  for (let i = 0; i < chunks.length; i++) {
+    await server.notification({ method: "notifications/progress", params: { progressToken, progress: i + 1, total: chunks.length } });
+    await processChunk(chunks[i]);
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Testing with Vitest
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Test tools using in-memory client/server transport pairs:
 
-## Code Quality Standards
+```typescript
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { describe, it, expect } from "vitest";
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+describe("search_documents tool", () => {
+  it("returns results for valid query", async () => {
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await server.connect(serverTransport);
+    const client = new Client({ name: "test", version: "1.0.0" });
+    await client.connect(clientTransport);
 
-## Testing Requirements
+    const result = await client.callTool({ name: "search_documents", arguments: { query: "test" } });
+    expect(result.content).toHaveLength(1);
+    expect(result.content[0].type).toBe("text");
+  });
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+  it("rejects empty query with InvalidParams", async () => {
+    const [ct, st] = InMemoryTransport.createLinkedPair();
+    await server.connect(st);
+    const client = new Client({ name: "test", version: "1.0.0" });
+    await client.connect(ct);
+    await expect(client.callTool({ name: "search_documents", arguments: { query: "" } }))
+      .rejects.toMatchObject({ code: -32602 }); // InvalidParams
+  });
+});
+```
 
-## Security Checklist
+## Distribution — npx Pattern
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+Configure `package.json` for `npx` execution and npm publishing:
+
+```jsonc
+{
+  "name": "my-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": { "my-mcp-server": "./dist/index.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  }
+}
+```
+
+- Add `#!/usr/bin/env node` as first line of entry file
+- Users install via: `npx my-mcp-server@latest` or `npm i -g my-mcp-server`
+- MCP client config: `{ "command": "npx", "args": ["-y", "my-mcp-server@latest"] }`
+- Use `inputs` for secrets in `.vscode/mcp.json` — never hardcode API keys
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Writing to `stdout` for logging — breaks JSON-RPC framing, use `console.error`
+- ❌ Using `z.parse()` instead of `z.safeParse()` — leaks schema internals in error messages
+- ❌ Throwing raw `Error` instead of `McpError` — clients can't distinguish error categories
+- ❌ Declaring unused capabilities (e.g., `prompts: {}` with no prompt handlers)
+- ❌ Hardcoding secrets in source — use `process.env` + `inputs` in MCP client config
+- ❌ Skipping `bin` field in `package.json` — `npx` execution fails silently
+- ❌ Returning unbounded results without pagination — context window overflow
+- ❌ Missing shebang (`#!/usr/bin/env node`) — cross-platform execution fails
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | MCP Server Practice |
+|--------|-------------------|
+| **Security** | `safeParse` all inputs, `McpError` for controlled errors, env vars for secrets, validate URIs in resource handlers |
+| **Reliability** | Try/catch on all external calls, `ErrorCode.InternalError` with actionable messages, graceful `SIGTERM` handling |
+| **Performance** | Progress notifications for long ops, streaming where supported, in-memory caching with TTL, batch tool results |
+| **Cost** | Token-aware responses (truncate large results), model routing via config, cache repeated lookups |
+| **Ops Excellence** | Structured stderr logging, vitest coverage in CI, `npx` distribution, semver versioning |
+| **Responsible AI** | Content safety before returning LLM outputs, PII redaction in logs, rate limiting per client |

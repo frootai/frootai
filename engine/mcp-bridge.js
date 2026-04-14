@@ -30,8 +30,12 @@ function findManifest(playId) {
   });
 
   for (const folder of folders) {
-    const manifestPath = join(playsDir, folder, 'fai-manifest.json');
-    if (existsSync(manifestPath)) return manifestPath;
+    // Check root level first, then spec/ subdirectory
+    const rootPath = join(playsDir, folder, 'fai-manifest.json');
+    if (existsSync(rootPath)) return rootPath;
+
+    const specPath = join(playsDir, folder, 'spec', 'fai-manifest.json');
+    if (existsSync(specPath)) return specPath;
   }
 
   return null;

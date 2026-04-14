@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * FrootAI MCP Server
- * ------------------
- * Exposes the FrootAI knowledge base (16 modules, 200+ AI terms)
- * as an MCP server that any AI agent can query.
+ * FrootAI MCP Server — FAI Engine Runtime Interface
+ * --------------------------------------------------
+ * The MCP server IS the FAI Engine's network interface.
+ * Knowledge tools + FAI Engine tools + Resources + Prompts.
  *
  * Usage:
  *   npx frootai-mcp          # Run directly
- *   node index.js             # Run from source
+ *   node index.js             # Run from source (with engine)
  *
  * MCP Config (Claude Desktop / VS Code):
  *   {
@@ -27,9 +27,42 @@ import { z } from "zod";
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// ─── FAI Engine Bridge (CommonJS → ESM) ───────────────────────────
+// The engine is CommonJS; this server is ESM. createRequire() bridges them.
+// When running from repo: engine/ is available → engine tools register.
+// When running via npx: engine/ not shipped → graceful degradation.
+
+let faiEngine = null;
+try {
+  const esmRequire = createRequire(import.meta.url);
+  const engineBridge = esmRequire('../engine/mcp-bridge.js');
+  const engineIndex = esmRequire('../engine/index.js');
+  const engineEvaluator = esmRequire('../engine/evaluator.js');
+  const engineManifest = esmRequire('../engine/manifest-reader.js');
+  const engineContext = esmRequire('../engine/context-resolver.js');
+  const engineWirer = esmRequire('../engine/primitive-wirer.js');
+
+  faiEngine = {
+    available: true,
+    runPlay: engineBridge.runPlay,
+    findManifest: engineBridge.findManifest,
+    initEngine: engineIndex.initEngine,
+    createEvaluator: engineEvaluator.createEvaluator,
+    loadManifest: engineManifest.loadManifest,
+    resolvePaths: engineManifest.resolvePaths,
+    buildContext: engineContext.buildContext,
+    wirePrimitives: engineWirer.wirePrimitives,
+    loadPrimitive: engineWirer.loadPrimitive,
+  };
+} catch (err) {
+  // Engine not available (npm distribution mode — engine/ not shipped in package)
+  faiEngine = { available: false, reason: err.message };
+}
 
 // ─── Knowledge Base Loader ─────────────────────────────────────────
 // Two modes:
@@ -205,9 +238,11 @@ const glossary = loadGlossary(modules);
 
 // ─── MCP Server ────────────────────────────────────────────────────
 
+const PKG_VERSION = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf-8")).version;
+
 const server = new McpServer({
   name: "frootai",
-  version: "2.1.0",
+  version: PKG_VERSION,
 });
 
 // ── Tool: list_modules ─────────────────────────────────────────────

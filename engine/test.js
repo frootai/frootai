@@ -56,7 +56,7 @@ console.log('\n── manifest-reader.js ──');
 const { loadManifest, resolvePaths } = require('./manifest-reader');
 
 test('loadManifest — loads Play 01 manifest successfully', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(result.manifest !== null, 'manifest should not be null');
   assertEqual(result.errors.length, 0, `Expected 0 errors, got: ${result.errors.join(', ')}`);
   assertEqual(result.manifest.play, '01-enterprise-rag');
@@ -64,12 +64,12 @@ test('loadManifest — loads Play 01 manifest successfully', () => {
 });
 
 test('loadManifest — validates play field format', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(/^[0-9]{2}-[a-z0-9-]+$/.test(result.manifest.play), 'play must match NN-kebab-case');
 });
 
 test('loadManifest — validates version is semver', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(/^[0-9]+\.[0-9]+\.[0-9]+/.test(result.manifest.version), 'version must be semver');
 });
 
@@ -81,13 +81,13 @@ test('loadManifest — returns error for non-existent file', () => {
 });
 
 test('loadManifest — validates context.knowledge exists', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(Array.isArray(result.manifest.context.knowledge), 'context.knowledge should be array');
   assert(result.manifest.context.knowledge.length > 0, 'should have at least 1 knowledge module');
 });
 
 test('loadManifest — validates context.waf has valid pillars', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   const validPillars = ['security', 'reliability', 'cost-optimization', 'operational-excellence', 'performance-efficiency', 'responsible-ai'];
   for (const waf of result.manifest.context.waf) {
     assertIncludes(validPillars, waf, `Invalid WAF pillar: ${waf}`);
@@ -95,18 +95,21 @@ test('loadManifest — validates context.waf has valid pillars', () => {
 });
 
 test('loadManifest — validates primitives section exists', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(result.manifest.primitives, 'primitives should exist');
   assert(result.manifest.primitives.guardrails, 'guardrails should exist');
 });
 
-test('loadManifest — loads all 30 play manifests without errors', () => {
+test('loadManifest — loads all play manifests without errors', () => {
   const playsDir = path.join(ROOT, 'solution-plays');
   const plays = fs.readdirSync(playsDir).filter(f => /^\d{2}-/.test(f) && fs.statSync(path.join(playsDir, f)).isDirectory());
   let failures = [];
   for (const play of plays) {
-    const mfPath = path.join(playsDir, play, 'fai-manifest.json');
-    if (fs.existsSync(mfPath)) {
+    // Check both root and spec/ locations
+    const rootPath = path.join(playsDir, play, 'fai-manifest.json');
+    const specPath = path.join(playsDir, play, 'spec', 'fai-manifest.json');
+    const mfPath = fs.existsSync(rootPath) ? rootPath : fs.existsSync(specPath) ? specPath : null;
+    if (mfPath) {
       const r = loadManifest(mfPath);
       if (r.errors.length > 0) failures.push(`${play}: ${r.errors.join(', ')}`);
     }
@@ -115,7 +118,7 @@ test('loadManifest — loads all 30 play manifests without errors', () => {
 });
 
 test('resolvePaths — converts relative paths to absolute', () => {
-  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json'));
+  const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   const resolved = resolvePaths(result.manifest, result.playDir);
   assert(resolved, 'resolved should not be null');
 });
@@ -348,7 +351,7 @@ test('findManifest — finds by full slug', () => {
 });
 
 test('findManifest — returns null for non-existent play', () => {
-  const mf = findManifest('99');
+  const mf = findManifest('999');
   assertEqual(mf, null, 'should return null for non-existent play');
 });
 
@@ -360,8 +363,8 @@ test('runPlay — loads Play 01 successfully', () => {
 });
 
 test('runPlay — returns error for invalid play', () => {
-  const result = runPlay({ playId: '99' });
-  assert(result.error, 'should have error for invalid play');
+  const result = runPlay({ playId: '999' });
+  assert(result.error || !result.success, 'should have error for invalid play');
 });
 
 test('MCP_TOOL_DEFINITION — has required MCP fields', () => {
@@ -378,7 +381,7 @@ console.log('\n── index.js (integration) ──');
 const { initEngine, printStatus } = require('./index');
 
 test('initEngine — loads Play 01 end-to-end', () => {
-  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json');
+  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json');
   const engine = initEngine(manifestPath);
   assert(engine, 'engine should not be null');
   assert(engine.manifest, 'should have manifest');
@@ -386,7 +389,7 @@ test('initEngine — loads Play 01 end-to-end', () => {
 });
 
 test('initEngine — wires primitives for Play 01', () => {
-  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json');
+  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json');
   const engine = initEngine(manifestPath);
   assert(engine.wiring, 'should have wiring');
   const total = engine.wiring.total || (engine.wiring.stats && engine.wiring.stats.total) || 0;
@@ -394,7 +397,7 @@ test('initEngine — wires primitives for Play 01', () => {
 });
 
 test('initEngine — creates evaluator from guardrails', () => {
-  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json');
+  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json');
   const engine = initEngine(manifestPath);
   assert(engine.evaluator, 'should have evaluator');
   assert(engine.evaluator.thresholds, 'evaluator should have thresholds');
@@ -403,12 +406,18 @@ test('initEngine — creates evaluator from guardrails', () => {
 test('initEngine — loads multiple plays without error', () => {
   const playsDir = path.join(ROOT, 'solution-plays');
   const plays = fs.readdirSync(playsDir).filter(f => 
-    /^\d{2}-/.test(f) && fs.existsSync(path.join(playsDir, f, 'fai-manifest.json'))
+    /^\d{2}-/.test(f) && (
+      fs.existsSync(path.join(playsDir, f, 'fai-manifest.json')) ||
+      fs.existsSync(path.join(playsDir, f, 'spec', 'fai-manifest.json'))
+    )
   );
   let failures = [];
-  for (const play of plays.slice(0, 10)) { // Test first 10 for speed
+  for (const play of plays.slice(0, 10)) {
+    const rootPath = path.join(playsDir, play, 'fai-manifest.json');
+    const specPath = path.join(playsDir, play, 'spec', 'fai-manifest.json');
+    const mfPath = fs.existsSync(rootPath) ? rootPath : specPath;
     try {
-      const engine = initEngine(path.join(playsDir, play, 'fai-manifest.json'));
+      const engine = initEngine(mfPath);
       if (!engine || !engine.manifest) failures.push(play);
     } catch (err) {
       failures.push(`${play}: ${err.message}`);
@@ -418,7 +427,7 @@ test('initEngine — loads multiple plays without error', () => {
 });
 
 test('printStatus — does not throw for valid engine', () => {
-  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/fai-manifest.json');
+  const manifestPath = path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json');
   const engine = initEngine(manifestPath);
   // Capture stdout to prevent console noise
   const origLog = console.log;

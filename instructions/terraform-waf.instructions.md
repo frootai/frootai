@@ -7,127 +7,243 @@ waf:
   - "reliability"
 ---
 
-# Terraform Waf — WAF-Aligned Coding Standards
+# Terraform — FAI Standards
 
-> Terraform standards — latest providers, modular design, state safety, and secrets management.
+## Project Structure
 
-## Core Rules
+```
+infra/
+├── main.tf              # Root module — orchestrates child modules
+├── variables.tf         # Input variables with validation blocks
+├── outputs.tf           # Outputs for downstream consumers
+├── providers.tf         # Provider config + required_providers
+├── backend.tf           # Remote state backend
+├── locals.tf            # Computed values, naming conventions
+├── moved.tf             # Refactoring moves (never break state)
+├── imports.tf           # Brownfield import blocks
+├── .tflint.hcl          # Linter rules
+├── modules/
+│   ├── networking/      # VNet, subnets, NSGs, private endpoints
+│   ├── compute/         # VMs, VMSS, AKS, Container Apps
+│   └── data/            # Storage, Cosmos DB, SQL, Redis
+└── environments/
+    ├── dev.tfvars
+    ├── staging.tfvars
+    └── prod.tfvars
+```
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+- One root module per deployment unit — never mix unrelated resources
+- `environments/*.tfvars` for per-env overrides, never `terraform.tfvars` in repo root
+- Modules in `modules/` are reusable — no hardcoded environment-specific values
 
-## Implementation Patterns
+## Provider Pinning
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+```hcl
+terraform {
+  required_version = ">= 1.9.0"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"     # Pessimistic — allows 4.x patches, blocks 5.0
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 3.0"
+    }
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+- Pin `required_version` to minimum Terraform CLI — prevents drift across team
+- Use pessimistic constraint `~>` to allow patches, block majors
+- Run `terraform init -upgrade` explicitly when bumping — never auto-upgrade in CI
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Module Design
 
-## Code Quality Standards
+```hcl
+# modules/compute/variables.tf
+variable "sku" {
+  type        = string
+  description = "VM SKU size"
+  validation {
+    condition     = can(regex("^Standard_", var.sku))
+    error_message = "SKU must start with 'Standard_'."
+  }
+}
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+variable "instance_count" {
+  type = number
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 100
+    error_message = "instance_count must be 1-100."
+  }
+}
 
-## Testing Requirements
+# modules/compute/outputs.tf — output ALL useful attributes
+output "principal_id" {
+  value       = azurerm_linux_virtual_machine.main.identity[0].principal_id
+  description = "Managed identity principal ID for RBAC assignments"
+}
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+output "private_ip" {
+  value = azurerm_network_interface.main.private_ip_address
+}
+```
 
-## Security Checklist
+- Every variable has `type`, `description`, and `validation` where constraints exist
+- Modules output all attributes consumers might need — principal IDs, IPs, resource IDs
+- Never expose `sensitive = true` outputs unless downstream requires them
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Locals for Computed Values
+
+```hcl
+locals {
+  name_prefix = "${var.project}-${var.environment}"
+  tags = {
+    Environment = var.environment
+    ManagedBy   = "terraform"
+    CostCenter  = var.cost_center
+  }
+  # Conditional logic belongs in locals, not inline
+  sku_tier = var.environment == "prod" ? "Premium" : "Standard"
+}
+```
+
+## State Management
+
+```hcl
+# backend.tf
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "stterraformstate"
+    container_name       = "tfstate"
+    key                  = "networking.tfstate"
+    use_oidc             = true          # Federated identity — no storage keys
+  }
+}
+```
+
+- One state file per deployment unit — networking, compute, data separated
+- Enable blob versioning + soft delete on state storage account
+- State locking via Azure Blob lease — never disable with `-lock=false`
+- Use workspaces only for identical environments, not structurally different stacks
+
+## Sensitive Variables
+
+```hcl
+variable "db_password" {
+  type      = string
+  sensitive = true   # Redacted from plan/apply output and state CLI
+}
+```
+
+- Mark secrets `sensitive = true` — Terraform redacts from CLI output
+- Feed via `TF_VAR_db_password` env var in CI, never in `.tfvars` files
+- Prefer Key Vault data sources over passing secrets as variables when possible
+
+## Moved and Import Blocks
+
+```hcl
+# moved.tf — refactor without destroy/recreate
+moved {
+  from = azurerm_resource_group.legacy
+  to   = module.platform.azurerm_resource_group.main
+}
+
+# imports.tf — adopt existing resources
+import {
+  to = azurerm_resource_group.main
+  id = "/subscriptions/SUB_ID/resourceGroups/rg-existing"
+}
+```
+
+- `moved` blocks let you restructure modules without state surgery
+- `import` blocks (TF 1.5+) replace `terraform import` CLI — declarative, reviewable in PR
+- Always run `terraform plan` after adding moved/import to verify no destroy
+
+## CI/CD Workflow
+
+```yaml
+# plan on PR, apply on merge to main
+- terraform fmt -check -recursive
+- terraform init -backend-config=environments/prod.backend.hcl
+- terraform validate
+- terraform plan -var-file=environments/prod.tfvars -out=tfplan
+- checkov -d . --framework terraform --soft-fail-on LOW
+- tflint --recursive
+# manual approval gate for prod
+- terraform apply tfplan
+```
+
+- `plan -out=tfplan` then `apply tfplan` — guarantees reviewed plan is what applies
+- Never run `apply -auto-approve` in production pipelines
+- Use OIDC / workload identity federation for CI auth — no service principal secrets
+
+## Linting and Security Scanning
+
+```hcl
+# .tflint.hcl
+plugin "azurerm" {
+  enabled = true
+  version = "0.27.0"
+  source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
+}
+
+rule "terraform_naming_convention" {
+  enabled = true
+  format  = "snake_case"
+}
+```
+
+- `tflint` catches provider-specific issues (deprecated SKUs, invalid regions)
+- `checkov` / `tfsec` for security posture — misconfigured NSGs, public IPs, missing encryption
+- `terraform-docs` auto-generates module README from variables/outputs — run in pre-commit
+
+## Testing with Terratest
+
+```go
+func TestNetworkingModule(t *testing.T) {
+    opts := &terraform.Options{
+        TerraformDir: "../modules/networking",
+        Vars: map[string]interface{}{
+            "environment": "test",
+            "location":    "eastus2",
+        },
+    }
+    defer terraform.Destroy(t, opts)
+    terraform.InitAndApply(t, opts)
+
+    vnetId := terraform.Output(t, opts, "vnet_id")
+    assert.Contains(t, vnetId, "/virtualNetworks/")
+}
+```
+
+- Terratest deploys real infrastructure in isolated subscription, then destroys
+- Run in CI on a schedule (nightly), not on every PR — cost and time
+- Use `defer Destroy` to guarantee cleanup even on test failure
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `terraform apply -auto-approve` in production — bypasses review
+- ❌ Storing `.tfstate` locally or in git — state contains secrets, needs locking
+- ❌ Hardcoding subscription IDs, tenant IDs, or secrets in `.tf` files
+- ❌ Wildcard provider constraints (`version = ">= 3.0"`) — allows breaking upgrades
+- ❌ One monolithic state file for entire infrastructure — blast radius too large
+- ❌ `terraform taint` instead of `moved` blocks — causes unnecessary destroy/recreate
+- ❌ Skipping `terraform plan` review — apply without plan is blind deployment
+- ❌ Using `count` for complex conditional resources — use `for_each` with maps instead
+- ❌ Inline provider blocks in modules — providers must be passed from root
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
+| Pillar | Terraform Practice |
+|--------|--------------------|
+| **Security** | OIDC auth for CI, `sensitive = true` on secrets, checkov/tfsec scanning, Key Vault data sources |
+| **Reliability** | Remote state with locking, `moved` blocks for safe refactoring, `plan -out` for deterministic apply |
+| **Operational Excellence** | `terraform-docs` generation, tflint in pre-commit, fmt/validate in CI, environment-specific tfvars |
+| **Cost Optimization** | Right-sized SKUs via variable validation, `locals` for conditional tier selection, Terratest in isolated sub |
+| **Performance Efficiency** | Parallelism tuning (`-parallelism=20`), targeted plans (`-target`), split state for independent deploy |
 
 ### Operational Excellence
 - Structured JSON logging with Application Insights + correlation IDs

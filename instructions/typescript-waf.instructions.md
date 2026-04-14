@@ -7,130 +7,202 @@ waf:
   - "performance-efficiency"
 ---
 
-# Typescript Waf — WAF-Aligned Coding Standards
+# TypeScript — FAI Standards
 
-> TypeScript/JavaScript coding standards aligned with Azure WAF pillars — secure credential handling, async patterns, Zod validation, structured error handling, and production-ready testing with Vitest.
+## Strict Mode & Compiler
 
-## Core Rules
+Always enable `strict: true` in `tsconfig.json`. Use `"module": "NodeNext"`, `"moduleResolution": "NodeNext"`, and `"type": "module"` in `package.json` for ESM-first. Target ES2022+ for top-level await and native `structuredClone`.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+```jsonc
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Discriminated Unions & Exhaustive Checks
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Model domain states as tagged unions. Use `never` to guarantee exhaustiveness at compile time.
 
-## Code Quality Standards
+```typescript
+type ApiResult =
+  | { status: "ok"; data: Record<string, unknown> }
+  | { status: "error"; code: number; message: string }
+  | { status: "rate_limited"; retryAfterMs: number };
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+function handle(result: ApiResult): string {
+  switch (result.status) {
+    case "ok": return JSON.stringify(result.data);
+    case "error": return `[${result.code}] ${result.message}`;
+    case "rate_limited": return `Retry in ${result.retryAfterMs}ms`;
+    default: {
+      const _exhaustive: never = result;
+      throw new Error(`Unhandled status: ${JSON.stringify(_exhaustive)}`);
+    }
+  }
+}
+```
 
-## Testing Requirements
+## Type Guards, `satisfies`, and Const Assertions
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```typescript
+// Type guard with `is` keyword — narrows at call site
+function isRetryable(err: unknown): err is { statusCode: number; retryAfterMs: number } {
+  return typeof err === "object" && err !== null && "statusCode" in err && "retryAfterMs" in err;
+}
 
-## Security Checklist
+// satisfies — validates shape without widening
+const endpoints = {
+  openai: "https://eastus.api.cognitive.microsoft.com",
+  search: "https://my-search.search.windows.net",
+} satisfies Record<string, string>;
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+// as const — freezes literal types for config objects
+const RETRY_CONFIG = { maxAttempts: 3, baseDelayMs: 1000, maxDelayMs: 30_000 } as const;
+type RetryKey = keyof typeof RETRY_CONFIG; // "maxAttempts" | "baseDelayMs" | "maxDelayMs"
+```
+
+## Branded Types for Domain Safety
+
+Prevent accidental mixing of structurally identical primitives.
+
+```typescript
+type Brand<T, B extends string> = T & { readonly __brand: B };
+type UserId = Brand<string, "UserId">;
+type SessionId = Brand<string, "SessionId">;
+
+function createUserId(raw: string): UserId {
+  if (!raw.startsWith("usr_")) throw new Error("Invalid user ID format");
+  return raw as UserId;
+}
+
+// Compile error: Argument of type 'SessionId' is not assignable to parameter of type 'UserId'
+function getUser(id: UserId): Promise<unknown> { /* ... */ }
+```
+
+## Template Literal Types
+
+```typescript
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+type ApiVersion = `v${number}`;
+type Endpoint = `/${string}`;
+type Route = `${HttpMethod} ${ApiVersion}${Endpoint}`;
+
+const route: Route = "GET v2/users/profile"; // ✅
+```
+
+## Utility Types & Generic Constraints
+
+```typescript
+// Pick/Omit for API boundaries — expose only what clients need
+type UserPublic = Pick<User, "id" | "displayName" | "avatar">;
+type UserCreate = Omit<User, "id" | "createdAt">;
+
+// Partial/Required for update vs create contracts
+type UserUpdate = Partial<Pick<User, "displayName" | "avatar">>;
+
+// Record for maps — always declare value type
+type FeatureFlags = Record<string, boolean>;
+
+// Generic constraints — bound T to what the function actually needs
+function getProperty<T extends Record<string, unknown>, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+
+## Result Pattern & Error Handling
+
+Never throw for expected failures. Reserve `throw` for programmer bugs.
+
+```typescript
+type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
+
+class AppError extends Error {
+  constructor(
+    message: string,
+    public readonly code: string,
+    public readonly statusCode: number,
+    public readonly cause?: unknown,
+  ) {
+    super(message);
+    this.name = "AppError";
+  }
+}
+
+async function fetchConfig(path: string): Promise<Result<Config, AppError>> {
+  try {
+    const raw = await fs.readFile(path, "utf8");
+    return { ok: true, value: JSON.parse(raw) as Config };
+  } catch (cause) {
+    return { ok: false, error: new AppError("Config load failed", "CONFIG_ERR", 500, cause) };
+  }
+}
+```
+
+## Barrel Exports
+
+Use `index.ts` to define public API surface per module. Re-export only what consumers need.
+
+```typescript
+// src/domain/index.ts
+export type { UserId, SessionId } from "./branded.js";
+export { createUserId } from "./branded.js";
+export { AppError } from "./errors.js";
+// Internal helpers NOT exported — enforces encapsulation
+```
+
+## Testing Types with Vitest
+
+```typescript
+import { expectTypeOf, describe, it } from "vitest";
+
+describe("type contracts", () => {
+  it("createUserId returns branded type", () => {
+    expectTypeOf(createUserId).returns.toEqualTypeOf<UserId>();
+  });
+  it("Result discriminates correctly", () => {
+    expectTypeOf<Result<string>>().toMatchTypeOf<{ ok: boolean }>();
+  });
+});
+```
+
+## Linting & Formatting (Biome-first)
+
+Prefer Biome over ESLint+Prettier for speed. If ESLint is required, use flat config (`eslint.config.ts`).
+
+```jsonc
+// biome.json
+{
+  "linter": { "rules": { "suspicious": { "noExplicitAny": "error" } } },
+  "formatter": { "indentStyle": "space", "indentWidth": 2 }
+}
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `any` / `as unknown as T` — use type guards or `satisfies` instead
+- ❌ Barrel re-exports of entire directories (`export * from`) — causes tree-shaking failures
+- ❌ Throwing strings — always throw `Error` subclasses with `.code` and `.cause`
+- ❌ `enum` — use `as const` objects + template literal unions; enums emit runtime code
+- ❌ Default exports — named exports enable auto-import and refactoring tools
+- ❌ `@ts-ignore` without issue link — use `@ts-expect-error` with justification
+- ❌ Untyped `catch(e)` — narrow with `instanceof` or type guard before accessing properties
+- ❌ `require()` in ESM — use `import` with `.js` extension for NodeNext resolution
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | TypeScript Practice |
+|---|---|
+| **Security** | Branded types prevent ID confusion; Zod validates all external input at system boundaries; `noUncheckedIndexedAccess` catches undefined access; `DefaultAzureCredential` for auth |
+| **Reliability** | `Result<T,E>` pattern makes failures explicit in the type system; discriminated unions ensure exhaustive case handling; `exactOptionalPropertyTypes` prevents accidental `undefined` |
+| **Performance** | Named exports enable tree-shaking; `verbatimModuleSyntax` avoids transpiler-injected helpers; `as const` compiles away at runtime; generic constraints reduce overloads |
+| **Cost** | Biome runs 100x faster than ESLint+Prettier — saves CI minutes; strict types catch bugs at compile time instead of production monitoring |
+| **Operational Excellence** | Consistent barrel exports enforce module boundaries; `satisfies` validates config objects without losing literal inference; `expectTypeOf` catches contract regressions in CI |

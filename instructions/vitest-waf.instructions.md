@@ -5,130 +5,220 @@ waf:
   - "reliability"
 ---
 
-# Vitest Waf — WAF-Aligned Coding Standards
+# Vitest — FAI Standards
 
-> Vitest testing standards — ES2022, snapshot testing, coverage, and mock patterns for Node.js/TypeScript.
+## Configuration
 
-## Core Rules
-
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+export default defineConfig({
+  test: {
+    globals: true,                    // describe/it/expect without imports
+    environment: 'node',              // 'jsdom' | 'happy-dom' for DOM tests
+    include: ['src/**/*.{test,spec}.ts'],
+    setupFiles: ['./tests/setup.ts'],
+    testTimeout: 10_000,
+    coverage: {
+      provider: 'v8',                // 'v8' (fast, c8-based) or 'istanbul' (precise)
+      reporter: ['text', 'lcov', 'json-summary'],
+      thresholds: { lines: 80, branches: 75, functions: 80, statements: 80 },
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.d.ts', 'src/**/index.ts'],
+    },
+    typecheck: { enabled: true, tsconfig: './tsconfig.json' },
+  },
+});
+```
+
+Workspace mode for monorepos — `vitest.workspace.ts`:
+```typescript
+import { defineWorkspace } from 'vitest/config';
+export default defineWorkspace([
+  'packages/*/vitest.config.ts',
+  { test: { name: 'shared', root: './shared', environment: 'node' } },
+]);
+```
+
+## Test Structure
+
+```typescript
+describe('EmbeddingService', () => {
+  let service: EmbeddingService;
+
+  beforeEach(() => { service = new EmbeddingService({ model: 'text-embedding-3-small' }); });
+
+  it('generates embeddings with correct dimensions', async () => {
+    const result = await service.embed('hello world');
+    expect(result).toHaveLength(1536);
+    expect(result.every((v) => typeof v === 'number')).toBe(true);
+  });
+
+  it.concurrent('handles batch requests in parallel', async () => {
+    const texts = Array.from({ length: 10 }, (_, i) => `text-${i}`);
+    const results = await service.embedBatch(texts);
+    expect(results).toHaveLength(10);
+  });
+
+  it.each([
+    { input: '', error: 'empty input' },
+    { input: 'x'.repeat(8192), error: 'exceeds token limit' },
+  ])('rejects $error', async ({ input, error }) => {
+    await expect(service.embed(input)).rejects.toThrow(error);
+  });
+
+  it.skip('pending: streaming embeddings', () => { /* tracked in #142 */ });
+});
+```
+
+## Mocking
+
+```typescript
+// vi.mock — module-level mock (hoisted automatically)
+vi.mock('./openai-client', () => ({
+  createCompletion: vi.fn().mockResolvedValue({ text: 'mocked' }),
+}));
+
+// vi.fn — standalone mock function
+const onChunk = vi.fn<[chunk: string], void>();
+await streamResponse('prompt', onChunk);
+expect(onChunk).toHaveBeenCalledTimes(3);
+expect(onChunk.mock.calls[0][0]).toContain('Hello');
+
+// vi.spyOn — spy on existing object methods
+const spy = vi.spyOn(logger, 'warn');
+service.processUnsafe('<script>');
+expect(spy).toHaveBeenCalledWith(expect.stringContaining('sanitized'));
+spy.mockRestore();
+
+// Mock timers
+vi.useFakeTimers();
+const promise = retryWithBackoff(failingFn, { maxRetries: 3, baseDelay: 1000 });
+await vi.advanceTimersByTimeAsync(7000);
+await expect(promise).rejects.toThrow();
+vi.useRealTimers();
+```
+
+## Snapshot Testing
+
+```typescript
+it('serializes config to expected shape', () => {
+  expect(generateManifest('play-01')).toMatchSnapshot();  // .snap file
+});
+
+it('renders error message', () => {
+  const msg = formatError(new ValidationError('bad input'));
+  expect(msg).toMatchInlineSnapshot(`"[ValidationError] bad input"`);
+});
+```
+
+Update snapshots: `vitest --update` or press `u` in watch mode.
+
+## In-Source Testing
+
+```typescript
+// src/utils/hash.ts — tests colocated with source
+export function sha256(data: string): string {
+  return createHash('sha256').update(data).digest('hex');
+}
+
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+  it('hashes deterministically', () => {
+    expect(sha256('test')).toBe(sha256('test'));
+    expect(sha256('a')).not.toBe(sha256('b'));
+  });
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+Enable: `defineInlineTest: true` in vitest config, strip with `define: { 'import.meta.vitest': 'undefined' }` in production build.
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Browser Mode
 
-## Code Quality Standards
+```typescript
+// vitest.config.ts for browser tests
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    browser: { enabled: true, provider: 'playwright', name: 'chromium' },
+    include: ['src/**/*.browser.test.ts'],
+  },
+});
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Type Testing
 
-## Testing Requirements
+```typescript
+import { expectTypeOf } from 'vitest';
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+it('infers return type from config', () => {
+  expectTypeOf(createClient({ streaming: true })).toEqualTypeOf<StreamingClient>();
+  expectTypeOf<Config>().toHaveProperty('retries').toBeNumber();
+  expectTypeOf(parseResponse).parameter(0).toMatchTypeOf<RawResponse>();
+});
+```
 
-## Security Checklist
+## Custom Matchers
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+```typescript
+// tests/setup.ts
+expect.extend({
+  toBeWithinRange(received: number, floor: number, ceiling: number) {
+    const pass = received >= floor && received <= ceiling;
+    return { pass, message: () => `expected ${received} to be within [${floor}, ${ceiling}]` };
+  },
+});
+
+// usage
+expect(latencyMs).toBeWithinRange(0, 500);
+```
+
+Augment types in `tests/vitest.d.ts`:
+```typescript
+interface CustomMatchers<R = unknown> { toBeWithinRange(floor: number, ceiling: number): R; }
+declare module 'vitest' { interface Assertion extends CustomMatchers {} }
+```
+
+## Fixture Files
+
+```typescript
+import { readFile } from 'fs/promises';
+import { resolve } from 'path';
+
+const fixture = (name: string) => readFile(resolve(__dirname, `fixtures/${name}`), 'utf-8');
+
+it('parses invoice PDF extract', async () => {
+  const raw = await fixture('invoice-001.json');
+  expect(parseInvoice(JSON.parse(raw))).toMatchObject({ total: 1250.00 });
+});
+```
+
+## Test Filtering & UI
+
+- `vitest --grep "EmbeddingService"` — run tests matching pattern
+- `vitest --ui` — browser UI at `localhost:51204` with module graph and coverage
+- `.only` / `.skip` — focus or skip at `describe` or `it` level (CI must reject `.only`)
+- `vitest related src/service.ts` — run only tests that import the changed file
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `vi.mock` inside `it` blocks — hoisting breaks; use `vi.fn` or factory in `beforeEach`
+- ❌ Shared mutable state across tests without `beforeEach` reset — causes order-dependent flakes
+- ❌ `toMatchSnapshot` on large dynamic objects (timestamps, IDs) — snapshot churn; use `toMatchObject`
+- ❌ Missing `mockRestore()` on spies — leaks into subsequent tests
+- ❌ `any` in test types — defeats `typecheck.enabled`; define fixtures with proper interfaces
+- ❌ Committing `.only` — use a CI lint rule (`no-only-tests`) to block
+- ❌ No coverage thresholds — coverage silently drops; enforce in `vitest.config.ts`
+- ❌ Testing implementation details (private methods, internal state) — test behavior via public API
+- ❌ `setTimeout` in tests instead of `vi.useFakeTimers` — real timers cause slow, flaky suites
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Practice |
+|--------|----------|
+| **Reliability** | Coverage thresholds enforced in CI; `testTimeout` prevents hanging; `retry: 2` for known-flaky integration tests during stabilization |
+| **Security** | Never hardcode secrets in test fixtures; use `vi.stubEnv` for env-dependent code; sanitize snapshot files for PII before commit |
+| **Cost Optimization** | `v8` coverage provider is 3-5× faster than `istanbul`; `vitest related` in CI runs only affected tests on PRs |
+| **Operational Excellence** | `--reporter=json` feeds CI dashboards; `--coverage` in merge pipelines with threshold gates; `vitest.workspace.ts` scales to monorepo |
+| **Performance Efficiency** | `it.concurrent` parallelizes independent tests; `pool: 'threads'` (default) for CPU-bound, `pool: 'forks'` for isolation; `--shard=1/4` for CI matrix |
