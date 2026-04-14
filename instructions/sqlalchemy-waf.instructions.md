@@ -6,130 +6,241 @@ waf:
   - "performance-efficiency"
 ---
 
-# Sqlalchemy Waf — WAF-Aligned Coding Standards
+# SQLAlchemy — FAI Standards
 
-> SQLAlchemy standards — async sessions, relationship mapping, migration with Alembic, connection pooling.
+## Declarative Base & Mapped Columns (2.0 Style)
 
-## Core Rules
+```python
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, MappedAsDataclass
+from sqlalchemy import String, ForeignKey, func
+from datetime import datetime
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+class Base(DeclarativeBase):
+    pass
 
-## Implementation Patterns
+class User(Base):
+    __tablename__ = "users"
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    is_active: Mapped[bool] = mapped_column(default=True)
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+    orders: Mapped[list["Order"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+class Order(Base):
+    __tablename__ = "orders"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    total: Mapped[float]
+
+    user: Mapped["User"] = relationship(back_populates="orders")
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## MappedAsDataclass
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```python
+class Config(MappedAsDataclass, Base):
+    __tablename__ = "configs"
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+    key: Mapped[str] = mapped_column(String(64), unique=True)
+    value: Mapped[str] = mapped_column(String(512))
+```
 
-## Code Quality Standards
+## Hybrid Properties
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+```python
+from sqlalchemy.ext.hybrid import hybrid_property
 
-## Testing Requirements
+class Product(Base):
+    __tablename__ = "products"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    price: Mapped[float]
+    discount: Mapped[float] = mapped_column(default=0.0)
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+    @hybrid_property
+    def final_price(self) -> float:
+        return self.price * (1 - self.discount)
 
-## Security Checklist
+    @final_price.inplace.expression
+    @classmethod
+    def _final_price_expr(cls):
+        return cls.price * (1 - cls.discount)
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Connection Pooling & Engine
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine
+
+engine = create_engine(
+    "postgresql+psycopg://user:pass@host/db",
+    pool_size=10,           # steady-state connections
+    max_overflow=20,        # burst above pool_size
+    pool_recycle=1800,      # recycle stale connections (seconds)
+    pool_pre_ping=True,     # test connection before checkout
+    echo=False,             # never True in production
+)
+
+async_engine = create_async_engine(
+    "postgresql+asyncpg://user:pass@host/db",
+    pool_size=10, pool_recycle=1800, pool_pre_ping=True,
+)
+```
+
+## Session Management
+
+```python
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
+
+# Sync — scoped_session for web frameworks
+ScopedSession = scoped_session(sessionmaker(bind=engine))
+
+def get_user(user_id: int) -> User | None:
+    with Session(engine) as session:
+        return session.get(User, user_id)
+
+# Async session
+async_session = async_sessionmaker(async_engine, expire_on_commit=False)
+
+async def get_user_async(user_id: int) -> User | None:
+    async with async_session() as session:
+        return await session.get(User, user_id)
+```
+
+## Query Patterns (2.0 select() Style)
+
+```python
+from sqlalchemy import select, func, text
+
+# Filtered query with join
+stmt = (
+    select(User, func.count(Order.id).label("order_count"))
+    .join(Order, User.id == Order.user_id, isouter=True)
+    .where(User.is_active == True)
+    .group_by(User.id)
+    .having(func.count(Order.id) > 0)
+    .order_by(User.created_at.desc())
+    .limit(50)
+)
+
+with Session(engine) as session:
+    results = session.execute(stmt).all()
+
+# Subquery
+high_spenders = (
+    select(Order.user_id)
+    .group_by(Order.user_id)
+    .having(func.sum(Order.total) > 1000)
+).subquery()
+
+stmt = select(User).where(User.id.in_(select(high_spenders.c.user_id)))
+
+# Raw SQL when ORM is overkill
+result = session.execute(text("SELECT version()")).scalar()
+```
+
+## Eager Loading
+
+```python
+from sqlalchemy.orm import joinedload, selectinload, subqueryload
+
+# joinedload — single query via LEFT JOIN (1-to-1, small 1-to-many)
+stmt = select(User).options(joinedload(User.orders)).where(User.id == 42)
+
+# selectinload — separate IN query (large collections, avoids cartesian)
+stmt = select(User).options(selectinload(User.orders))
+
+# subqueryload — subquery for related rows
+stmt = select(User).options(subqueryload(User.orders))
+```
+
+## Bulk Operations
+
+```python
+from sqlalchemy import insert, update
+
+# Bulk insert — bypasses ORM identity map for speed
+with Session(engine) as session:
+    session.execute(
+        insert(User),
+        [{"email": f"u{i}@co.com", "name": f"User {i}"} for i in range(1000)],
+    )
+    session.commit()
+
+# Bulk update
+session.execute(update(User).where(User.is_active == False).values(name="[deleted]"))
+```
+
+## Events
+
+```python
+from sqlalchemy import event
+
+@event.listens_for(Session, "before_flush")
+def before_flush(session, flush_context, instances):
+    for obj in session.dirty:
+        if isinstance(obj, User) and "email" in session.inspect(obj).attrs.email.history.added:
+            obj.email = obj.email.lower()
+
+@event.listens_for(Session, "after_commit")
+def after_commit(session):
+    # Trigger async tasks, invalidate cache
+    pass
+```
+
+## Alembic Migrations
+
+```bash
+alembic init migrations                  # scaffold
+alembic revision --autogenerate -m "add users"  # detect model changes
+alembic upgrade head                     # apply all
+alembic downgrade -1                     # rollback one
+alembic upgrade head --sql > migration.sql  # offline mode — generate SQL without DB
+```
+
+Set `target_metadata = Base.metadata` in `env.py`. Review every autogenerated migration — it cannot detect column renames or data migrations.
+
+## Testing with In-Memory SQLite
+
+```python
+import pytest
+from sqlalchemy import create_engine, StaticPool
+
+@pytest.fixture
+def session():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(engine)
+    with Session(engine) as s:
+        yield s
+    Base.metadata.drop_all(engine)
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `session.query(Model)` — legacy 1.x style; use `select(Model)` everywhere
+- ❌ Lazy loading inside loops (N+1) — use `selectinload` / `joinedload`
+- ❌ `autocommit=True` or `expire_on_commit=True` in async — causes implicit IO
+- ❌ Sharing a `Session` across threads — sessions are NOT thread-safe
+- ❌ Missing `pool_pre_ping` — stale connections crash after DB restart
+- ❌ `echo=True` in production — dumps full SQL to stdout
+- ❌ Skipping Alembic review — autogenerate misses renames and data migrations
+- ❌ `text()` with f-strings — SQL injection; always use bound parameters
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Practice |
+|--------|----------|
+| **Reliability** | `pool_pre_ping=True`, connection recycling, retry on `OperationalError`, Alembic for schema versioning |
+| **Performance** | Eager loading to kill N+1, bulk inserts via `insert().values()`, `pool_size` tuned to workload |
+| **Security** | Bound parameters only (never f-string SQL), `ondelete="CASCADE"` for referential integrity, least-privilege DB roles |
+| **Cost** | Right-size `pool_size` / `max_overflow`, avoid `SELECT *` — project only needed columns |
+| **Ops Excellence** | Alembic in CI/CD, `echo=False` with structured logging, migration dry-run via `--sql` |

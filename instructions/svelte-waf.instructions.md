@@ -6,130 +6,267 @@ waf:
   - "reliability"
 ---
 
-# Svelte Waf — WAF-Aligned Coding Standards
+# Svelte — FAI Standards
 
-> Svelte 5 standards — runes, SvelteKit, TypeScript, and minimal-bundle patterns.
+## Svelte 5 Runes
 
-## Core Rules
+Use runes for all reactive state. Never use legacy `let` reactivity or `$:` labels.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```svelte
+<script lang="ts">
+  // ✅ $state for mutable reactive values
+  let count = $state(0);
+  let items = $state<string[]>([]);
 
-## Implementation Patterns
+  // ✅ $derived for computed values (replaces $: reactive statements)
+  let doubled = $derived(count * 2);
+  let total = $derived.by(() => items.reduce((sum, i) => sum + i.length, 0));
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+  // ✅ $effect for side effects (replaces onMount + $: side-effect blocks)
+  $effect(() => {
+    document.title = `Count: ${count}`;
+    return () => { /* cleanup on teardown or re-run */ };
+  });
+</script>
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Component Props & Snippets
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```svelte
+<script lang="ts">
+  import type { Snippet } from 'svelte';
 
-## Code Quality Standards
+  // ✅ $props with destructuring + defaults
+  let { title, variant = 'primary', children, header }: {
+    title: string;
+    variant?: 'primary' | 'secondary';
+    children: Snippet;
+    header?: Snippet<[{ close: () => void }]>;
+  } = $props();
+</script>
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+<div class="card {variant}">
+  {#if header}
+    {@render header({ close: () => console.log('closed') })}
+  {/if}
+  <h2>{title}</h2>
+  {@render children()}
+</div>
+```
 
-## Testing Requirements
+- Type all props inline or with a separate `interface` — never use `any`
+- Use `Snippet` for composable render slots; prefer snippets over `<slot>` (deprecated in v5)
+- `$bindable()` for two-way binding props: `let { value = $bindable('') } = $props()`
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+## SvelteKit Routing & Data Loading
 
-## Security Checklist
+```
+src/routes/
+├── +layout.svelte          ← shared shell (nav, footer)
+├── +layout.server.ts       ← runs on server every request
+├── +page.svelte             ← renders at /
+├── +page.server.ts          ← server load + form actions
+├── +error.svelte            ← error boundary
+├── api/health/+server.ts    ← API route (GET/POST handlers)
+└── items/[id]/
+    ├── +page.svelte
+    └── +page.ts             ← universal load (SSR + client)
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+### Server Load vs Universal Load
+
+```typescript
+// +page.server.ts — runs ONLY on server, can access DB/secrets
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, locals }) => {
+  const item = await db.items.find(params.id);
+  if (!item) error(404, 'Item not found');
+  return { item }; // serialized to client
+};
+```
+
+```typescript
+// +page.ts — universal load (SSR + client navigation)
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch, params }) => {
+  const res = await fetch(`/api/items/${params.id}`);
+  if (!res.ok) throw new Error('Failed to load');
+  return { item: await res.json() };
+};
+```
+
+- Use `+page.server.ts` when accessing secrets, DB, or server-only APIs
+- Use `+page.ts` for data that can be fetched client-side on navigation
+- Never import `$env/static/private` in universal load or client code
+
+### Form Actions
+
+```typescript
+// +page.server.ts
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions } from './$types';
+
+export const actions: Actions = {
+  create: async ({ request, locals }) => {
+    const data = await request.formData();
+    const name = data.get('name')?.toString().trim();
+    if (!name) return fail(400, { name, missing: true });
+    await db.items.create({ name, userId: locals.user.id });
+    redirect(303, '/items');
+  }
+};
+```
+
+```svelte
+<script lang="ts">
+  import { enhance } from '$app/forms';
+  let { form } = $props();
+</script>
+
+<form method="POST" action="?/create" use:enhance>
+  <input name="name" value={form?.name ?? ''} aria-describedby="err" />
+  {#if form?.missing}<span id="err" role="alert">Name required</span>{/if}
+  <button>Create</button>
+</form>
+```
+
+## Environment Variables
+
+```typescript
+import { SECRET_API_KEY } from '$env/static/private';   // server-only, build-time
+import { PUBLIC_APP_URL } from '$env/static/public';     // available on client
+import { env } from '$env/dynamic/private';               // server-only, runtime
+```
+
+- `$env/static/private` — inlined at build, tree-shaken, fails if imported in client
+- `$env/dynamic/private` — read at runtime, for values that change per deployment
+- Prefix client-safe vars with `PUBLIC_` — SvelteKit enforces this boundary
+
+## Stores & Navigation
+
+```svelte
+<script lang="ts">
+  import { page, navigating } from '$app/stores';
+  import { goto, invalidateAll } from '$app/navigation';
+
+  let currentPath = $derived($page.url.pathname);
+
+  async function refresh() {
+    await invalidateAll(); // re-run all load functions
+  }
+</script>
+
+{#if $navigating}<progress />{/if}
+```
+
+## CSS Scoping & Transitions
+
+```svelte
+<style>
+  /* Scoped by default — only affects this component */
+  .card { padding: 1rem; }
+
+  /* Escape hatch for global overrides */
+  :global(.toast-container) { position: fixed; z-index: 50; }
+</style>
+
+<script lang="ts">
+  import { fly, fade } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
+
+  let visible = $state(true);
+</script>
+
+{#if visible}
+  <div transition:fade={{ duration: 200 }}>Fades in/out</div>
+{/if}
+
+{#each items as item (item.id)}
+  <div animate:flip={{ duration: 300 }} in:fly={{ y: 20 }}>
+    {item.name}
+  </div>
+{/each}
+```
+
+## Error Handling
+
+```svelte
+<!-- +error.svelte — error boundary per layout segment -->
+<script lang="ts">
+  import { page } from '$app/stores';
+</script>
+
+<h1>{$page.status}</h1>
+<p>{$page.error?.message}</p>
+<a href="/">Go home</a>
+```
+
+- Use `error(status, message)` from `@sveltejs/kit` in load/actions — never throw raw
+- Nest `+error.svelte` in route groups for segment-specific error pages
+- `handleError` hook in `hooks.server.ts` for logging unhandled errors
+
+## Adapter Configuration
+
+```javascript
+// svelte.config.js
+import adapter from '@sveltejs/adapter-auto'; // auto-detects deploy target
+// import adapter from '@sveltejs/adapter-node';   // Node server
+// import adapter from '@sveltejs/adapter-static'; // full SSG (prerender all)
+
+export default {
+  kit: {
+    adapter: adapter(),
+    csrf: { checkOrigin: true },       // enabled by default — never disable
+    env: { dir: './' },
+  }
+};
+```
+
+- `adapter-auto` for Vercel/Cloudflare/Netlify auto-detection
+- `adapter-node` for self-hosted Docker/Azure Container Apps — set `ORIGIN` env var
+- `adapter-static` for pre-rendered SPAs — requires `export const prerender = true` on all pages
+
+## Testing
+
+```typescript
+import { render, screen } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
+import Counter from './Counter.svelte';
+
+test('increments on click', async () => {
+  render(Counter, { props: { initial: 0 } });
+  const btn = screen.getByRole('button', { name: /increment/i });
+  await userEvent.click(btn);
+  expect(screen.getByText('1')).toBeInTheDocument();
+});
+```
+
+- Use `@testing-library/svelte` with Vitest — avoid `mount()` from `svelte` directly
+- Heed all a11y warnings from `svelte-check` — role, aria-label, alt text
+- Run `svelte-check --tsconfig ./tsconfig.json` in CI for type + a11y validation
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `let x = 0` without `$state` — not reactive in Svelte 5, UI won't update
+- ❌ `$:` reactive labels — removed in Svelte 5, use `$derived` / `$effect`
+- ❌ `<slot>` / `<slot name="x">` — deprecated, use `{@render children()}` snippets
+- ❌ Importing `$env/static/private` in `+page.svelte` or `+page.ts` — build error
+- ❌ `use:enhance` without handling — always add callback for optimistic UI or error display
+- ❌ Global CSS without `:global()` — styles leak or silently fail
+- ❌ `$effect` for derived state — use `$derived` instead, effects are for side-effects only
+- ❌ `goto()` in form actions — use `redirect()` from `@sveltejs/kit` (proper 303)
+- ❌ Disabling CSRF (`csrf: { checkOrigin: false }`) in production
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Svelte/SvelteKit Practice |
+|---|---|
+| **Performance** | Svelte compiles to vanilla JS — no virtual DOM overhead. Use `$derived` over `$effect` to avoid unnecessary re-renders. Lazy-load with `{#await import()}`. `adapter-static` for CDN-served pre-rendered pages. |
+| **Reliability** | `+error.svelte` per route segment. `handleError` in `hooks.server.ts` for centralized logging. `fail()` in form actions for typed validation errors. |
+| **Security** | CSRF origin checks enabled by default. `$env/static/private` enforced server-only at build. Form actions validate + sanitize with `fail()`. CSP headers via `hooks.server.ts` `handle`. |
+| **Cost** | Minimal JS bundles (compiler strips unused code). `adapter-static` eliminates server costs entirely. Selective prerendering (`export const prerender = true`) for stable pages. |
+| **Operations** | `svelte-check` in CI for type + a11y errors. Vitest + `@testing-library/svelte` for unit tests. Playwright for E2E. `adapter-node` with Docker for predictable container deployments. |
+| **Responsible AI** | Svelte a11y warnings are compiler errors — enforce `alt`, `aria-*`, semantic HTML. Use `role="alert"` for dynamic error messages. Respect `prefers-reduced-motion` in transitions. |

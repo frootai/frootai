@@ -6,127 +6,195 @@ waf:
   - "reliability"
 ---
 
-# Signalr Waf — WAF-Aligned Coding Standards
+# SignalR — FAI Standards
 
-> SignalR real-time standards — hub design, groups, streaming, connection management, Azure SignalR Service.
+## Hub Design
 
-## Core Rules
+- Use strongly-typed hubs — define an `IClient` interface, inherit `Hub<IClient>` instead of raw `Hub`
+- Keep hubs thin — delegate business logic to injected services, hubs are transport endpoints
+- Use `IHubContext<THub, TClient>` for sending messages from background services, controllers, or hosted services
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```csharp
+public interface IChatClient
+{
+    Task ReceiveMessage(string user, string content, DateTimeOffset timestamp);
+    Task UserJoined(string user);
+}
 
-## Implementation Patterns
+public class ChatHub : Hub<IChatClient>
+{
+    private readonly IChatService _chat;
+    public ChatHub(IChatService chat) => _chat = chat;
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+    public async Task SendMessage(string content)
+    {
+        var sanitized = _chat.Sanitize(content);
+        await Clients.Group("room-1").ReceiveMessage(
+            Context.UserIdentifier!, sanitized, DateTimeOffset.UtcNow);
+    }
+}
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+// Background service sending via IHubContext
+public class NotificationService(IHubContext<ChatHub, IChatClient> hub)
+{
+    public Task NotifyAll(string msg) =>
+        hub.Clients.All.ReceiveMessage("system", msg, DateTimeOffset.UtcNow);
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Connection Management
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+- Track connections in `OnConnectedAsync` / `OnDisconnectedAsync` — add to groups, update presence
+- Use `Context.UserIdentifier` (set from `ClaimTypes.NameIdentifier`) for user-targeted messages
+- Add users to groups based on claims or query params — never trust client-sent group names
 
-## Code Quality Standards
+```csharp
+public override async Task OnConnectedAsync()
+{
+    var tenant = Context.User!.FindFirstValue("tenant_id")!;
+    await Groups.AddToGroupAsync(Context.ConnectionId, $"tenant-{tenant}");
+    await Clients.Group($"tenant-{tenant}").UserJoined(Context.UserIdentifier!);
+    await base.OnConnectedAsync();
+}
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+public override async Task OnDisconnectedAsync(Exception? ex)
+{
+    // Groups auto-remove on disconnect — handle custom cleanup here
+    await base.OnDisconnectedAsync(ex);
+}
+```
 
-## Testing Requirements
+## Authentication
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+- JWT bearer for SPAs and mobile — pass token via `accessTokenFactory` on the client
+- Cookie auth for server-rendered apps — SignalR uses the existing cookie automatically
+- Map `NameIdentifier` claim so `Context.UserIdentifier` resolves correctly
 
-## Security Checklist
+```csharp
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
+            {
+                var token = ctx.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(token) &&
+                    ctx.HttpContext.Request.Path.StartsWithSegments("/hubs"))
+                    ctx.Token = token;
+                return Task.CompletedTask;
+            }
+        };
+    });
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Azure SignalR Service
+
+- **Default mode**: app server maintains hub logic, Azure handles connections and fan-out
+- **Serverless mode**: no hub server — trigger from Azure Functions bindings, use REST API to send
+- Set connection string from Key Vault, never hardcode: `AddAzureSignalR(config["Azure:SignalR:ConnectionString"])`
+- Use Managed Identity: `AddAzureSignalR().WithUrl(...).WithCredential(new DefaultAzureCredential())`
+
+## Scaling
+
+- Azure SignalR Service acts as backplane — no sticky sessions needed when using it
+- Without Azure SignalR: enable sticky sessions (`ARRAffinity`) + Redis backplane via `AddStackExchangeRedis`
+- Never rely on in-memory state across instances — use distributed cache or database
+
+## Message Patterns
+
+```csharp
+// Broadcast to all
+await Clients.All.ReceiveMessage(user, msg, now);
+// Target specific user (by ClaimTypes.NameIdentifier)
+await Clients.User(userId).ReceiveMessage(user, msg, now);
+// Group send
+await Clients.Group("room-42").ReceiveMessage(user, msg, now);
+// Exclude caller
+await Clients.OthersInGroup("room-42").ReceiveMessage(user, msg, now);
+```
+
+## Streaming
+
+```csharp
+// Server-to-client streaming
+public async IAsyncEnumerable<int> StreamCounter(
+    int count, int delay, [EnumeratorCancellation] CancellationToken ct)
+{
+    for (var i = 0; i < count && !ct.IsCancellationRequested; i++)
+    {
+        yield return i;
+        await Task.Delay(delay, ct);
+    }
+}
+```
+
+## Client SDK (TypeScript)
+
+```typescript
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+
+const connection = new HubConnectionBuilder()
+  .withUrl("/hubs/chat", { accessTokenFactory: () => getToken() })
+  .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
+  .withHubProtocol(new MessagePackHubProtocol()) // binary perf boost
+  .configureLogging(LogLevel.Warning)
+  .build();
+
+connection.on("ReceiveMessage", (user: string, content: string) => {
+  appendMessage(user, content);
+});
+
+connection.onreconnecting((err) => showBanner("Reconnecting..."));
+connection.onreconnected((id) => hideBanner());
+connection.onclose((err) => showBanner("Disconnected. Refresh to retry."));
+
+await connection.start();
+// Client-to-server streaming
+const subject = new Subject<string>();
+await connection.send("UploadStream", subject);
+subject.next("chunk-1");
+subject.complete();
+```
+
+## MessagePack Protocol
+
+- Add `Microsoft.AspNetCore.SignalR.Protocols.MessagePack` server-side, call `.AddMessagePackProtocol()`
+- Client: `@microsoft/signalr-protocol-msgpack` + `withHubProtocol(new MessagePackHubProtocol())`
+- 30-50% smaller payloads vs JSON — measurable on high-throughput hubs
+
+## Error Handling
+
+- Throw `HubException` for client-visible errors — other exceptions are masked by default
+- Log all hub exceptions via `ILogger` — include `ConnectionId` and `UserIdentifier` for correlation
+- Never expose stack traces — `HubException("Payment failed")` not `HubException(ex.ToString())`
+
+## Testing Hubs
+
+- Unit test hub methods by mocking `IHubCallerClients<T>`, `HubCallerContext`, and `IGroupManager`
+- Integration test with `WebApplicationFactory` + `HubConnection` against the real pipeline
+- Assert group membership and message delivery via mock callbacks
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Storing per-connection state in hub instance fields (hubs are transient — new instance per call)
+- ❌ Using raw `Hub` instead of `Hub<T>` — loses compile-time safety on client method names
+- ❌ Blocking hub methods with `.Result` or `.Wait()` — deadlocks under load
+- ❌ Sending the `access_token` in custom headers (WebSockets don't support custom headers — use query string)
+- ❌ Trusting client-sent group names without server-side authorization
+- ❌ Skipping `withAutomaticReconnect` — users silently lose connection on network blips
+- ❌ Using SignalR for large file transfer — use blob storage + notify via SignalR instead
+- ❌ Not disposing `HubConnection` on client — leaks WebSocket handles
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
+| Pillar | SignalR Practices |
+|---|---|
+| **Reliability** | `withAutomaticReconnect` with escalating delays; `OnDisconnectedAsync` cleanup; Azure SignalR 99.95% SLA; Redis backplane for multi-instance |
+| **Security** | JWT via query string on `/hubs` path only; authorize hubs with `[Authorize]`; validate group membership server-side; TLS-only transport |
+| **Performance** | MessagePack protocol; streaming for large payloads; Azure SignalR offloads connection management; avoid broadcast storms with groups |
+| **Cost** | Azure SignalR Free tier (20 concurrent, 20K msgs/day) for dev; Standard with unit auto-scale; serverless mode for sporadic traffic |
+| **Operations** | Structured logging with ConnectionId; Azure Monitor integration; health checks via `/health`; connection count metrics |
 
 ### Operational Excellence
 - Structured JSON logging with Application Insights + correlation IDs

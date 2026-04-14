@@ -6,130 +6,231 @@ waf:
   - "reliability"
 ---
 
-# Shell Waf — WAF-Aligned Coding Standards
+# Shell Scripting — FAI Standards
 
-> Shell scripting standards — set -euo pipefail, safe expansions, quoting, and portable POSIX patterns.
+## Strict Mode
 
-## Core Rules
+Every bash script starts with strict mode. No exceptions.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+```
 
-## Implementation Patterns
+- `set -e` — exit on first non-zero return (use `|| true` for intentional failures)
+- `set -u` — treat unset variables as errors (catches typos like `$VERISON`)
+- `set -o pipefail` — propagate failures through pipes (`curl | jq` fails if curl fails)
+- `IFS=$'\n\t'` — prevent word splitting on spaces in `for` loops over filenames
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+## ShellCheck & shfmt
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+Integrate static analysis into CI. ShellCheck catches quoting bugs, unreachable code, and POSIX issues.
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+```bash
+# CI pipeline — lint all scripts
+shellcheck --severity=warning scripts/**/*.sh
+shfmt -d -i 2 -ci -bn scripts/**/*.sh  # diff mode, 2-space indent, case indent, binary next-line
+```
+
+Suppress only with inline directives and justification:
+```bash
+# shellcheck disable=SC2034  # Variable used by sourcing script
+EXPORTED_CONFIG="${config_path}"
+```
+
+## Quoting
+
+Always double-quote variable expansions. Unquoted variables cause word splitting and glob expansion.
+
+```bash
+# Correct
+cp "${source_dir}/file.txt" "${dest_dir}/"
+if [[ -n "${MY_VAR:-}" ]]; then  # :-  provides default for set -u
+  echo "Value: ${MY_VAR}"
+fi
+
+# Wrong — breaks on paths with spaces, expands globs
+cp $source_dir/file.txt $dest_dir/
+```
+
+Use `"$@"` to forward arguments (preserves quoting). Never use `$*` unquoted.
+
+## Arrays Over Word Splitting
+
+Use bash arrays instead of space-delimited strings for lists.
+
+```bash
+declare -a files=("report 2024.csv" "data (final).json" "notes.txt")
+for f in "${files[@]}"; do
+  process_file "${f}"
+done
+
+# Build command arrays for complex invocations
+declare -a curl_opts=(--silent --fail --retry 3 --max-time 30)
+curl "${curl_opts[@]}" "${api_url}"
+```
+
+## Functions
+
+Use `local` for all variables inside functions. Return exit codes, not strings via `return`.
+
+```bash
+validate_input() {
+  local input="${1:?validate_input requires an argument}"
+  local max_length="${2:-255}"
+
+  if [[ ${#input} -gt "${max_length}" ]]; then
+    log_error "Input exceeds ${max_length} chars"
+    return 1
+  fi
+  [[ "${input}" =~ ^[a-zA-Z0-9_-]+$ ]] || return 1
+}
+
+# Capture output with command substitution
+get_timestamp() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+local ts
+ts="$(get_timestamp)"
+```
+
+## Error Handling & Cleanup
+
+Use `trap` for cleanup on EXIT and error reporting on ERR.
+
+```bash
+cleanup() {
+  local exit_code=$?
+  rm -rf "${TMPDIR:-}"
+  if [[ ${exit_code} -ne 0 ]]; then
+    log_error "Script failed with exit code ${exit_code}"
+  fi
+  exit "${exit_code}"
+}
+trap cleanup EXIT
+
+on_error() {
+  local line=$1 cmd=$2
+  log_error "FAILED: line ${line}: ${cmd}"
+}
+trap 'on_error ${LINENO} "${BASH_COMMAND}"' ERR
+```
+
+## Temp Files
+
+Always use `mktemp`. Never hardcode `/tmp/myscript.tmp` (race conditions, symlink attacks).
+
+```bash
+TMPDIR="$(mktemp -d)" || { echo "mktemp failed" >&2; exit 1; }
+readonly TMPDIR
+# cleanup trap (above) handles removal
+intermediate="${TMPDIR}/results.json"
+```
+
+## Logging
+
+Diagnostics to stderr, data to stdout. This lets callers pipe output without log noise.
+
+```bash
+log_info()  { echo "[INFO]  $(date -u +%H:%M:%S) $*" >&2; }
+log_error() { echo "[ERROR] $(date -u +%H:%M:%S) $*" >&2; }
+log_debug() { [[ "${DEBUG:-0}" == "1" ]] && echo "[DEBUG] $(date -u +%H:%M:%S) $*" >&2 || true; }
+
+# Data goes to stdout — pipeable
+generate_report() {
+  log_info "Generating report for ${project}"
+  jq '.results' "${TMPDIR}/data.json"  # stdout = data
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Argument Parsing
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Use `getopts` for simple flags, manual `while/case/shift` for long options.
 
-## Code Quality Standards
+```bash
+usage() { echo "Usage: $0 -e <env> -r <region> [-v] [-h]" >&2; exit 1; }
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+verbose=0 env="" region=""
+while getopts ":e:r:vh" opt; do
+  case "${opt}" in
+    e) env="${OPTARG}" ;;
+    r) region="${OPTARG}" ;;
+    v) verbose=1 ;;
+    h) usage ;;
+    :) log_error "Option -${OPTARG} requires argument"; usage ;;
+    *) log_error "Unknown option -${OPTARG}"; usage ;;
+  esac
+done
+shift $((OPTIND - 1))
+[[ -z "${env}" ]] && { log_error "-e <env> is required"; usage; }
+```
 
-## Testing Requirements
+## Portable Syntax
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+Know when you need bash vs POSIX sh. Use `#!/usr/bin/env bash` for bash features, `#!/bin/sh` for portability.
 
-## Security Checklist
+| Feature | Bash | POSIX sh |
+|---|---|---|
+| `[[ ]]` tests | ✅ | ❌ use `[ ]` |
+| Arrays | ✅ | ❌ |
+| `local` keyword | ✅ | ❌ (but widely supported) |
+| `$(( ))` arithmetic | ✅ | ✅ |
+| `$( )` substitution | ✅ | ✅ |
+| Process substitution `<()` | ✅ | ❌ |
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Subprocess Management
+
+Use `wait` to collect exit codes. Avoid orphan processes.
+
+```bash
+pids=()
+for shard in "${shards[@]}"; do
+  process_shard "${shard}" &
+  pids+=($!)
+done
+for pid in "${pids[@]}"; do
+  wait "${pid}" || { log_error "Shard PID ${pid} failed"; exit 1; }
+done
+```
+
+## Testing with bats-core
+
+```bash
+# test/deploy.bats
+@test "validate_input rejects special characters" {
+  run validate_input "rm -rf /"
+  [ "$status" -eq 1 ]
+}
+
+@test "get_timestamp returns ISO format" {
+  run get_timestamp
+  [[ "$output" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T ]]
+}
+```
+
+Run: `bats test/` in CI alongside shellcheck.
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `eval "${user_input}"` — command injection vector, use arrays instead
+- ❌ `curl ... | bash` — unverified remote code execution
+- ❌ Unquoted `$var` in `[ ]` or command args — word splitting, glob expansion
+- ❌ `cd dir && ... || ...` without subshell — pollutes working directory
+- ❌ `cat file | grep` — useless use of cat, use `grep pattern file`
+- ❌ Parsing `ls` output — breaks on whitespace/newlines, use `find` or globs
+- ❌ `rm -rf "${DIR}/"` when `DIR` could be empty — deletes `/`
+- ❌ Storing secrets in script variables — use env vars from vault, `read -rs`
+- ❌ `#!/bin/bash` hardcoded path — use `#!/usr/bin/env bash` for portability
+- ❌ `test -f` on user-supplied path without sanitization — path traversal
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Shell Practice |
+|---|---|
+| **Security** | Never `eval` user input. No `curl\|bash`. Validate/sanitize all external input. Use `mktemp` (no predictable paths). Secrets via env vars from Key Vault, never in scripts. `umask 077` for sensitive file creation. |
+| **Reliability** | `set -euo pipefail` in every script. `trap cleanup EXIT`. Retry loops with backoff for network calls. `wait` on all background PIDs. Idempotent operations (create-if-not-exists). |
+| **Cost Optimization** | Exit early on precondition failure (avoid billable API calls). Cache intermediate results in temp files. Batch API calls instead of per-item loops. |
+| **Operational Excellence** | ShellCheck + shfmt in CI. Structured logging to stderr. bats-core test suites. `--dry-run` flag for destructive operations. Consistent exit codes (0=success, 1=error, 2=usage). |
+| **Performance** | Parallel subprocess execution with `wait`. Prefer built-in string ops over `sed`/`awk` for simple transforms. Stream large files instead of loading into variables. |
+| **Responsible AI** | Sanitize prompts piped to LLM APIs. Redact PII from log output. Never log full API responses containing user data. |

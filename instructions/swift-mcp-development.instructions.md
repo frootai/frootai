@@ -6,130 +6,277 @@ waf:
   - "reliability"
 ---
 
-# Swift Mcp Development — WAF-Aligned Coding Standards
+# Swift MCP Server Development — FAI Standards
 
-> Swift MCP server development — actors, Codable, async/await patterns.
+## Swift Package Manager Setup
 
-## Core Rules
+```swift
+// Package.swift
+let package = Package(
+    name: "MyMCPServer",
+    platforms: [.macOS(.v13)],
+    dependencies: [
+        .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.7.0")
+    ],
+    targets: [
+        .executableTarget(name: "MyMCPServer", dependencies: [
+            .product(name: "MCP", package: "swift-sdk")
+        ]),
+        .testTarget(name: "MyMCPServerTests", dependencies: ["MyMCPServer"])
+    ]
+)
+```
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+## Server Actor & Stdio Transport
 
-## Implementation Patterns
+```swift
+import MCP
+import Foundation
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
+@main
+struct MyMCPServer {
+    static func main() async throws {
+        let server = Server(
+            name: "my-mcp-server",
+            version: "1.0.0",
+            capabilities: .init(tools: .init(), resources: .init(), prompts: .init())
+        )
+        registerTools(on: server)
+        registerResources(on: server)
+        registerPrompts(on: server)
 
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+        let transport = StdioTransport()
+        try await server.start(transport: transport)
+        // Block until transport closes (graceful shutdown via SIGINT/SIGTERM)
+        await server.waitUntilCompleted()
+    }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Tool Registration with Tool Protocol
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```swift
+import MCP
 
-## Code Quality Standards
+func registerTools(on server: Server) {
+    server.withMethodHandler(ListTools.self) { _ in
+        .init(tools: [
+            Tool(name: "search_docs", description: "Search documentation by query",
+                 inputSchema: .object([
+                     "query": .string(description: "Search query"),
+                     "limit": .integer(description: "Max results (1-50)")
+                 ], required: ["query"]))
+        ])
+    }
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+    server.withMethodHandler(CallTool.self) { request in
+        guard let args = request.params.arguments else {
+            throw MCPError.invalidParams("Missing arguments")
+        }
+        switch request.params.name {
+        case "search_docs":
+            return try await handleSearchDocs(args)
+        default:
+            throw MCPError.methodNotFound("Unknown tool: \(request.params.name)")
+        }
+    }
+}
+```
 
-## Testing Requirements
+## Async Handler with Input Validation & Codable
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```swift
+struct SearchQuery: Codable {
+    let query: String
+    let limit: Int?
+}
 
-## Security Checklist
+struct SearchResult: Codable {
+    let title: String
+    let snippet: String
+    let score: Double
+}
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+func handleSearchDocs(_ args: [String: JSONValue]) async throws -> CallTool.Result {
+    // Decode with Codable — type-safe deserialization
+    let data = try JSONSerialization.data(withJSONObject: args.jsonObject)
+    let input = try JSONDecoder().decode(SearchQuery.self, from: data)
+
+    // Validate at system boundary
+    guard !input.query.trimmingCharacters(in: .whitespaces).isEmpty else {
+        throw MCPError.invalidParams("query must not be empty")
+    }
+    let safeLimit = min(max(input.limit ?? 10, 1), 50)
+
+    let results = try await searchIndex(query: input.query, limit: safeLimit)
+    let encoded = try JSONEncoder().encode(results)
+    return .init(content: [.text(String(data: encoded, encoding: .utf8)!)])
+}
+```
+
+## Resource Handlers
+
+```swift
+func registerResources(on server: Server) {
+    server.withMethodHandler(ListResources.self) { _ in
+        .init(resources: [
+            Resource(uri: "config://settings", name: "Server Settings",
+                     mimeType: "application/json")
+        ])
+    }
+
+    server.withMethodHandler(ReadResource.self) { request in
+        switch request.params.uri {
+        case "config://settings":
+            let settings = try loadSettings()
+            let json = try JSONEncoder().encode(settings)
+            return .init(contents: [
+                .text(TextResourceContents(uri: request.params.uri,
+                      text: String(data: json, encoding: .utf8)!,
+                      mimeType: "application/json"))
+            ])
+        default:
+            throw MCPError.invalidParams("Unknown resource: \(request.params.uri)")
+        }
+    }
+}
+```
+
+## Prompt Templates
+
+```swift
+func registerPrompts(on server: Server) {
+    server.withMethodHandler(ListPrompts.self) { _ in
+        .init(prompts: [
+            Prompt(name: "summarize", description: "Summarize a document",
+                   arguments: [.init(name: "content", description: "Text to summarize", required: true)])
+        ])
+    }
+
+    server.withMethodHandler(GetPrompt.self) { request in
+        let content = request.params.arguments?["content"] ?? ""
+        return .init(messages: [
+            .init(role: .user, content: .text("Summarize concisely:\n\n\(content)"))
+        ])
+    }
+}
+```
+
+## Structured Logging (os.Logger → stderr)
+
+```swift
+import os
+
+private let logger = Logger(subsystem: "com.myorg.mcpserver", category: "tools")
+
+func searchIndex(query: String, limit: Int) async throws -> [SearchResult] {
+    logger.info("search_docs called",
+                metadata: ["query": "\(query, privacy: .public)", "limit": "\(limit)"])
+    let start = ContinuousClock.now
+    defer {
+        let elapsed = ContinuousClock.now - start
+        logger.info("search_docs completed in \(elapsed)")
+    }
+    // Never log PII, secrets, or full user prompts
+    // os.Logger writes to stderr — does not interfere with stdio transport on stdout
+    return try await performSearch(query, limit: limit)
+}
+```
+
+## Error Handling — MCPError + Result
+
+```swift
+enum ServerError: Error, LocalizedError {
+    case indexUnavailable(String)
+    case timeout(seconds: Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .indexUnavailable(let name): return "Index '\(name)' is unavailable"
+        case .timeout(let s): return "Operation timed out after \(s)s"
+        }
+    }
+}
+
+// Convert domain errors → MCPError at the boundary
+func safeTool(_ block: @Sendable () async throws -> CallTool.Result) async -> CallTool.Result {
+    do {
+        return try await block()
+    } catch let error as MCPError {
+        return .init(content: [.text(error.localizedDescription)], isError: true)
+    } catch {
+        logger.error("Unhandled: \(error.localizedDescription)")
+        return .init(content: [.text("Internal server error")], isError: true)
+    }
+}
+```
+
+## Graceful Shutdown (Signal Handling)
+
+```swift
+import Foundation
+
+func installSignalHandlers(server: Server) {
+    let source = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+    signal(SIGINT, SIG_IGN)  // Let DispatchSource handle it
+    source.setEventHandler {
+        logger.info("SIGINT received — shutting down")
+        Task { await server.shutdown() }
+    }
+    source.resume()
+}
+```
+
+## Testing with XCTest
+
+```swift
+import XCTest
+@testable import MyMCPServer
+
+final class SearchToolTests: XCTestCase {
+    func testValidQuery() async throws {
+        let args: [String: JSONValue] = ["query": .string("swift concurrency"), "limit": .integer(5)]
+        let result = try await handleSearchDocs(args)
+        XCTAssertFalse(result.isError ?? false)
+        XCTAssertFalse(result.content.isEmpty)
+    }
+
+    func testEmptyQueryRejects() async {
+        let args: [String: JSONValue] = ["query": .string("   ")]
+        do {
+            _ = try await handleSearchDocs(args)
+            XCTFail("Expected invalidParams error")
+        } catch let error as MCPError {
+            XCTAssertTrue(error.localizedDescription.contains("must not be empty"))
+        }
+    }
+
+    func testLimitClamping() async throws {
+        let args: [String: JSONValue] = ["query": .string("test"), "limit": .integer(999)]
+        let result = try await handleSearchDocs(args)
+        // Verify limit was clamped to 50 — no unbounded queries
+        XCTAssertFalse(result.isError ?? false)
+    }
+}
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `print()` for logging — pollutes stdout stdio transport; use `os.Logger` (stderr)
+- ❌ Blocking `DispatchSemaphore.wait()` inside async contexts — causes deadlocks
+- ❌ `try!` / `fatalError` in handlers — crashes server on bad input; return `MCPError`
+- ❌ Unstructured `[String: Any]` for tool args — use `Codable` structs for type safety
+- ❌ Skipping input validation — clamp ranges, check emptiness, reject oversized payloads
+- ❌ Logging secrets or PII even at `.debug` level
+- ❌ `@Sendable` violations — all closures crossing actor boundaries must be `Sendable`
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Swift MCP Practices |
+|--------|-------------------|
+| **Performance** | `async/await` throughout, `TaskGroup` for parallel ops, `actor` isolation avoids locks, streaming via `AsyncSequence` |
+| **Reliability** | `MCPError` for typed failures, `defer` for cleanup, `DispatchSource` signal handling, structured concurrency cancellation |
+| **Security** | `Codable` input validation at boundary, `os.Logger` with `.private` for PII, no secrets in logs, `Sendable` enforcement |
+| **Cost** | Lightweight stdio transport (no HTTP overhead), lazy resource loading, `TaskGroup` batch ops reduce round trips |
+| **Ops Excellence** | `os.Logger` subsystem/category taxonomy, `ContinuousClock` latency tracking, XCTest + `swift test` in CI |
+| **Responsible AI** | Validate/sanitize all tool inputs before LLM forwarding, content length limits, structured error responses |

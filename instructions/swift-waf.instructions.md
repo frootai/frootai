@@ -6,130 +6,252 @@ waf:
   - "reliability"
 ---
 
-# Swift Waf — WAF-Aligned Coding Standards
+# Swift — FAI Standards
 
-> Swift coding standards — actors for concurrency, Codable, async/await, SwiftUI, and value types over reference types.
+## Swift 5.9+ Language Features
 
-## Core Rules
+Use parameter packs for variadic generics instead of overloads:
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
+```swift
+func evaluate<each T: Encodable>(_ value: repeat each T) -> [Data] {
+    var results: [Data] = []
+    repeat results.append(try! JSONEncoder().encode(each value))
+    return results
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+Use `consuming` and `borrowing` ownership modifiers to control copies:
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+```swift
+struct LargePayload {
+    var buffer: [UInt8]
+    
+    consuming func finalize() -> Data {
+        Data(buffer) // ownership transferred, no copy
+    }
+    
+    borrowing func checksum() -> UInt32 {
+        buffer.reduce(0) { $0 &+ UInt32($1) }
+    }
+}
+```
 
-## Code Quality Standards
+Use attached macros for boilerplate elimination (e.g., `@Observable`, custom macros via `swift-syntax`).
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Protocol-Oriented Programming
 
-## Testing Requirements
+Prefer protocols with default extensions over class inheritance:
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```swift
+protocol RetryableRequest {
+    associatedtype Response: Decodable
+    var maxRetries: Int { get }
+    func execute() async throws -> Response
+}
 
-## Security Checklist
+extension RetryableRequest {
+    var maxRetries: Int { 3 }
+    
+    func executeWithRetry() async throws -> Response {
+        for attempt in 1...maxRetries {
+            do { return try await execute() }
+            catch where attempt < maxRetries { continue }
+        }
+        return try await execute()
+    }
+}
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## Value Types vs Reference Types
+
+- Default to `struct` — copy semantics prevent shared mutable state bugs.
+- Use `class` only for identity semantics, inheritance requirements, or Objective-C interop.
+- Use copy-on-write for large value types via internal reference storage.
+
+## Async/Await and Structured Concurrency
+
+Use `TaskGroup` for parallel fan-out with bounded concurrency:
+
+```swift
+func fetchAll(ids: [String]) async throws -> [Item] {
+    try await withThrowingTaskGroup(of: Item.self) { group in
+        for id in ids {
+            group.addTask { try await api.fetch(id) }
+        }
+        return try await group.reduce(into: []) { $0.append($1) }
+    }
+}
+```
+
+Never use `Task.detached` unless you explicitly need to escape the actor context. Prefer structured `async let` for small fixed concurrency:
+
+```swift
+async let profile = fetchProfile(userId)
+async let orders = fetchOrders(userId)
+let (p, o) = try await (profile, orders)
+```
+
+## Sendable and Actor Isolation
+
+Mark types crossing concurrency boundaries as `Sendable`. Use actors for mutable shared state:
+
+```swift
+actor RateLimiter: Sendable {
+    private var tokens: Int
+    
+    init(maxTokens: Int) { self.tokens = maxTokens }
+    
+    func acquire() -> Bool {
+        guard tokens > 0 else { return false }
+        tokens -= 1
+        return true
+    }
+}
+```
+
+Enable strict concurrency checking: `swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]`.
+
+## SwiftUI State Management
+
+Use `@Observable` (Observation framework) instead of `ObservableObject`:
+
+```swift
+@Observable
+final class AppState {
+    var items: [Item] = []
+    var isLoading = false
+    var errorMessage: String?
+}
+
+struct ContentView: View {
+    @State private var state = AppState()
+    @Environment(\.networkService) private var network
+    
+    var body: some View {
+        List(state.items) { item in ItemRow(item: item) }
+            .overlay { if state.isLoading { ProgressView() } }
+            .task { await loadItems() }
+    }
+}
+```
+
+Inject dependencies through `@Environment` custom keys, not singletons.
+
+## Codable and JSON
+
+Leverage synthesized conformance. Customize only when API keys differ:
+
+```swift
+struct APIResponse: Codable, Sendable {
+    let requestId: String
+    let createdAt: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case requestId = "request_id"
+        case createdAt = "created_at"
+    }
+}
+
+let decoder = JSONDecoder()
+decoder.dateDecodingStrategy = .iso8601
+```
+
+## Error Handling
+
+Use typed throws (Swift 6) when error types are known. Use `Result` for callback-based APIs:
+
+```swift
+enum ServiceError: Error, LocalizedError {
+    case notFound(id: String)
+    case rateLimited(retryAfter: TimeInterval)
+    
+    var errorDescription: String? {
+        switch self {
+        case .notFound(let id): "Resource \(id) not found"
+        case .rateLimited(let s): "Rate limited, retry after \(s)s"
+        }
+    }
+}
+
+func load() async throws(ServiceError) -> Item { ... }
+```
+
+## Swift Package Manager
+
+Structure packages with clear target boundaries:
+
+```swift
+// Package.swift
+let package = Package(
+    name: "MyService",
+    platforms: [.macOS(.v14), .iOS(.v17)],
+    products: [.library(name: "MyService", targets: ["MyService"])],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.5.0"),
+    ],
+    targets: [
+        .target(name: "MyService", dependencies: [.product(name: "Logging", package: "swift-log")]),
+        .testTarget(name: "MyServiceTests", dependencies: ["MyService"]),
+    ]
+)
+```
+
+## Testing
+
+Use Swift Testing framework (`import Testing`) for new code:
+
+```swift
+import Testing
+@testable import MyService
+
+@Suite("RateLimiter")
+struct RateLimiterTests {
+    @Test("acquires tokens until depleted")
+    func tokenDepletion() async {
+        let limiter = RateLimiter(maxTokens: 2)
+        #expect(await limiter.acquire() == true)
+        #expect(await limiter.acquire() == true)
+        #expect(await limiter.acquire() == false)
+    }
+    
+    @Test("handles concurrent access", arguments: [10, 50, 100])
+    func concurrentAccess(count: Int) async { ... }
+}
+```
+
+Use XCTest for existing suites and UI testing. Prefer `#expect` over `XCTAssert`.
+
+## Access Control, Linting, Documentation
+
+- Default is `internal` — expose `public` only for module API surfaces.
+- Use `package` access for multi-target packages sharing internals.
+- Enforce SwiftLint with `.swiftlint.yml`; key rules: `force_cast`, `force_unwrapping`, `cyclomatic_complexity`.
+- Document public API with `///` and DocC syntax:
+
+```swift
+/// Fetches items matching the query.
+/// - Parameter query: Search term (minimum 2 characters).
+/// - Returns: Matching items sorted by relevance.
+/// - Throws: ``ServiceError/rateLimited`` when quota exceeded.
+func search(query: String) async throws -> [Item] { ... }
+```
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- **Force unwrapping (`!`)** — use `guard let` or nil-coalescing. Reserve `!` for `@IBOutlet` only.
+- **Massive view controllers / views** — extract into composable child views and view models.
+- **Retain cycles** — use `[weak self]` in closures capturing `self` on reference types.
+- **Unstructured `Task { }` everywhere** — prefer `.task` modifier in SwiftUI, `TaskGroup` in services.
+- **Stringly-typed APIs** — use enums with associated values instead of raw strings.
+- **Blocking the main actor** — offload CPU work with `Task.detached` or custom executors.
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | Practice |
+|--------|----------|
+| Performance Efficiency | Value types reduce heap allocations; `TaskGroup` parallelizes I/O; `consuming` avoids copies |
+| Reliability | Typed throws enforce exhaustive error handling; structured concurrency prevents leaked tasks |
+| Security | `Sendable` eliminates data races; actor isolation protects mutable state; avoid force unwraps |
+| Cost Optimization | Lazy sequences defer computation; `async let` avoids redundant fetches |
+| Operational Excellence | SwiftLint CI gates; DocC generates API docs; Swift Package Manager reproducible builds |
+| Responsible AI | Validate and sanitize all user inputs before LLM calls; log prompt/response pairs for audit |

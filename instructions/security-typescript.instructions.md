@@ -5,130 +5,201 @@ waf:
   - "security"
 ---
 
-# Security Typescript — WAF-Aligned Coding Standards
+# TypeScript Security Patterns — FAI Standards
 
-> TypeScript security standards — XSS prevention, CSP headers, input sanitization, dependency audit.
+## Input Validation
 
-## Core Rules
+Validate at system boundaries before any processing. Reject unknown fields.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+import { z } from "zod";
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+const ChatRequestSchema = z.object({
+  message: z.string().min(1).max(4000).trim(),
+  sessionId: z.string().uuid(),
+  temperature: z.number().min(0).max(1).default(0.3),
+});
+type ChatRequest = z.infer<typeof ChatRequestSchema>;
+
+// Express route — parse throws on invalid input
+app.post("/chat", (req, res) => {
+  const body = ChatRequestSchema.parse(req.body); // 400 on failure
+});
+```
+
+Joi alternative for legacy codebases: `Joi.object({ message: Joi.string().required().max(4000) }).options({ stripUnknown: true })`.
+
+## XSS Prevention
+
+Sanitize all user-generated HTML before rendering. Set CSP headers at the middleware layer.
+
+```typescript
+import DOMPurify from "isomorphic-dompurify";
+const safeHtml = DOMPurify.sanitize(userInput, { ALLOWED_TAGS: ["b", "i", "a"], ALLOWED_ATTR: ["href"] });
+
+// CSP via helmet (see Security Headers section)
+// Never use dangerouslySetInnerHTML with unsanitized content
+// Never construct HTML via string concatenation with user input
+```
+
+## SQL Injection Prevention
+
+Always use parameterized queries. ORMs like Prisma are safe by default — never drop to raw SQL with interpolation.
+
+```typescript
+// Prisma — safe by default
+const user = await prisma.user.findUnique({ where: { id: userId } });
+
+// Raw query — MUST use parameterized form
+const results = await prisma.$queryRaw`SELECT * FROM users WHERE email = ${email}`;
+// ❌ NEVER: prisma.$queryRawUnsafe(`SELECT * FROM users WHERE email = '${email}'`)
+```
+
+## CORS Configuration
+
+Explicit origin allowlist. Never use `*` in production.
+
+```typescript
+import cors from "cors";
+app.use(cors({
+  origin: ["https://app.contoso.com", "https://admin.contoso.com"],
+  methods: ["GET", "POST"],
+  credentials: true,
+  maxAge: 86400,
+}));
+```
+
+## Secrets Management
+
+No secrets in source code. Use env vars for local dev, Azure Key Vault SDK for production.
+
+```typescript
+import { SecretClient } from "@azure/keyvault-secrets";
+import { DefaultAzureCredential } from "@azure/identity";
+
+const client = new SecretClient("https://my-vault.vault.azure.net", new DefaultAzureCredential());
+const apiKey = (await client.getSecret("openai-api-key")).value;
+// Local dev: process.env.OPENAI_API_KEY via .env (gitignored)
+// ❌ NEVER: const key = "sk-abc123..." in source
+```
+
+## JWT Verification
+
+Use `jose` for token verification. Always validate issuer, audience, and expiration.
+
+```typescript
+import { jwtVerify, createRemoteJWKSet } from "jose";
+
+const JWKS = createRemoteJWKSet(new URL("https://login.microsoftonline.com/{tenant}/discovery/v2.0/keys"));
+const { payload } = await jwtVerify(token, JWKS, {
+  issuer: "https://login.microsoftonline.com/{tenant}/v2.0",
+  audience: "api://my-app-client-id",
+});
+// ❌ NEVER: jwt.decode(token) without verification
+// ❌ NEVER: algorithms: ["none"] or disabling expiration checks
+```
+
+## HTTPS Enforcement
+
+Redirect HTTP → HTTPS. Enforce HSTS in production.
+
+```typescript
+app.use((req, res, next) => {
+  if (req.header("x-forwarded-proto") !== "https" && process.env.NODE_ENV === "production") {
+    return res.redirect(301, `https://${req.hostname}${req.url}`);
   }
+  next();
+});
+// HSTS handled by helmet (see Security Headers)
+```
+
+## Rate Limiting
+
+Per-user/IP rate limiting at the middleware layer. Keyed by authenticated user when available.
+
+```typescript
+import rateLimit from "express-rate-limit";
+app.use("/api/", rateLimit({
+  windowMs: 60_000,
+  max: 60,
+  standardHeaders: true,
+  keyGenerator: (req) => req.user?.id ?? req.ip,
+  message: { error: "Rate limit exceeded. Retry after window reset." },
+}));
+```
+
+## Security Headers (Helmet)
+
+```typescript
+import helmet from "helmet";
+app.use(helmet({
+  contentSecurityPolicy: { directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'"], styleSrc: ["'self'", "'unsafe-inline'"] } },
+  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+}));
+```
+
+## CSRF Protection
+
+Use `csurf` or double-submit cookie pattern on state-changing endpoints.
+
+```typescript
+import csrf from "csurf";
+app.use(csrf({ cookie: { httpOnly: true, sameSite: "strict", secure: true } }));
+app.get("/form", (req, res) => res.json({ csrfToken: req.csrfToken() }));
+// Client sends token in X-CSRF-Token header on POST/PUT/DELETE
+```
+
+## Path Traversal Prevention
+
+Resolve paths and validate against an allowed base directory.
+
+```typescript
+import path from "node:path";
+const UPLOAD_DIR = path.resolve("/app/uploads");
+function safePath(userInput: string): string {
+  const resolved = path.resolve(UPLOAD_DIR, userInput);
+  if (!resolved.startsWith(UPLOAD_DIR)) throw new Error("Path traversal blocked");
+  return resolved;
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+## Prototype Pollution Prevention
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+Freeze prototypes on startup. Reject `__proto__`, `constructor`, `prototype` keys in parsed JSON.
 
-## Code Quality Standards
+```typescript
+Object.freeze(Object.prototype);
+// Use Map instead of plain objects for user-keyed data
+// Validate with zod .strict() — rejects unknown keys including __proto__
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Dependency Scanning
 
-## Testing Requirements
-
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
-
-## Security Checklist
-
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+- `npm audit --audit-level=high` in CI — fail on high/critical vulnerabilities
+- `npx socket scan` (socket.dev) for supply-chain risk detection
+- Pin exact versions in `package-lock.json`, enable Dependabot/Renovate
+- Review `postinstall` scripts before adding new dependencies
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `eval()`, `new Function()`, or `vm.runInNewContext()` with user input
+- ❌ `dangerouslySetInnerHTML` without DOMPurify sanitization
+- ❌ String-interpolated SQL: `` `WHERE id = '${id}'` ``
+- ❌ `cors({ origin: "*" })` in production
+- ❌ Storing secrets in source, environment files committed to git, or client bundles
+- ❌ `jwt.decode()` without `jwtVerify()` — decode ≠ verify
+- ❌ Disabling TLS certificate verification (`rejectUnauthorized: false`)
+- ❌ `JSON.parse(untrusted)` without schema validation (prototype pollution vector)
+- ❌ Dependencies with `postinstall` scripts not reviewed for malicious code
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | TypeScript Security Controls |
+|--------|------------------------------|
+| **Security** | Zod input validation, DOMPurify XSS sanitization, Prisma parameterized queries, helmet CSP/HSTS, jose JWT verification, Key Vault secrets, CSRF double-submit, path traversal guards |
+| **Reliability** | Rate limiting prevents resource exhaustion, input validation rejects malformed requests early, CORS blocks unauthorized origins |
+| **Cost Optimization** | Early input rejection avoids wasted compute, rate limiting caps per-user resource consumption, dependency audit prevents incident costs |
+| **Operational Excellence** | `npm audit` + socket.dev in CI pipeline, Dependabot automated PRs, structured error responses with correlation IDs |
+| **Performance Efficiency** | Zod schema parsing is ~10μs per validation, helmet headers cached per response, JWKS cached via `createRemoteJWKSet` |
+| **Responsible AI** | Input sanitization blocks prompt injection vectors, content length limits prevent token abuse, CSRF protects state-changing AI endpoints |

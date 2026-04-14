@@ -6,130 +6,215 @@ waf:
   - "reliability"
 ---
 
-# Sql Optimization Waf — WAF-Aligned Coding Standards
+# SQL Optimization — FAI Standards
 
-> SQL optimization standards — index strategy, query plans, normalized design, and migration patterns.
+## Indexing Strategy
 
-## Core Rules
+Design indexes for your query workload, not your table structure.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
+```sql
+-- Composite index: leftmost prefix rule — put equality columns first, range last
+CREATE NONCLUSTERED INDEX IX_Orders_Status_Date
+ON Orders (Status, CustomerId, OrderDate DESC);
 
-## Implementation Patterns
+-- Covering index: eliminates key lookups by including non-key columns
+CREATE NONCLUSTERED INDEX IX_Orders_Covering
+ON Orders (CustomerId, Status)
+INCLUDE (TotalAmount, OrderDate);
 
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
-```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
-
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
-  }
-}
+-- Filtered index: smaller, faster — only index rows that matter
+CREATE NONCLUSTERED INDEX IX_Orders_Active
+ON Orders (CustomerId, OrderDate)
+WHERE Status = 'Active'
+WITH (FILLFACTOR = 90);
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+- Composite indexes: equality predicates first, then inequality, then ORDER BY columns
+- Limit to ≤5 key columns per index — wide indexes slow writes disproportionately
+- Review missing index DMVs monthly: `sys.dm_db_missing_index_details`
+- Drop unused indexes: `sys.dm_db_index_usage_stats` where `user_seeks + user_scans = 0` over 30 days
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+## Query Plan Analysis
 
-## Code Quality Standards
+```sql
+-- Lightweight: logical I/O counts per table (most useful single diagnostic)
+SET STATISTICS IO ON;
+SELECT c.Name, COUNT(*) FROM Orders o JOIN Customers c ON o.CustomerId = c.Id
+WHERE o.OrderDate > '2025-01-01' GROUP BY c.Name;
+SET STATISTICS IO OFF;
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+-- Full plan: look for Scans, Key Lookups, Hash Matches on small sets, fat arrows
+SET STATISTICS PROFILE ON; -- or use CTRL+M in SSMS for actual execution plan
+```
 
-## Testing Requirements
+- Key Lookup + Nested Loop on >1000 rows → add INCLUDE columns to eliminate lookup
+- Table Scan on >10K rows → missing index or non-SARGable predicate
+- Hash Match Join on small tables → outdated statistics or cardinality misestimate
+- Sort operator with spill to tempdb → add index matching ORDER BY or increase memory grant
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+## N+1 Detection and Elimination
 
-## Security Checklist
+```sql
+-- ❌ N+1: application loops calling this per customer
+SELECT * FROM Orders WHERE CustomerId = @id;
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+-- ✅ Batch: single round-trip with JOIN or IN clause
+SELECT c.Id, c.Name, o.OrderId, o.TotalAmount
+FROM Customers c
+JOIN Orders o ON c.Id = o.CustomerId
+WHERE c.Region = @region;
+```
+
+- Identify via `sys.dm_exec_query_stats` — queries with high `execution_count` but low `total_rows`
+- ORM-generated queries: enable SQL logging, grep for repeated single-row SELECTs
+- Fix at data access layer: eager loading, batch fetching, or materialized views
+
+## Pagination
+
+```sql
+-- ❌ OFFSET/FETCH: performance degrades linearly — page 10000 reads 100K rows
+SELECT * FROM Products ORDER BY Id OFFSET 99980 ROWS FETCH NEXT 20 ROWS ONLY;
+
+-- ✅ Keyset pagination: constant performance regardless of page depth
+SELECT TOP 20 * FROM Products WHERE Id > @lastSeenId ORDER BY Id;
+
+-- Keyset with composite sort (non-unique column + tiebreaker)
+SELECT TOP 20 * FROM Products
+WHERE (Rating < @lastRating) OR (Rating = @lastRating AND Id > @lastId)
+ORDER BY Rating DESC, Id ASC;
+```
+
+- Use keyset/cursor pagination for any dataset >10K rows or API endpoints
+- OFFSET/FETCH acceptable only for admin UIs with bounded page counts (<100 pages)
+
+## CTEs vs Subqueries vs Temp Tables
+
+```sql
+-- CTE: readable, single-use — optimizer inlines it (no materialization guarantee)
+WITH ActiveOrders AS (
+    SELECT CustomerId, COUNT(*) AS OrderCount
+    FROM Orders WHERE Status = 'Active' GROUP BY CustomerId
+)
+SELECT c.Name, ao.OrderCount FROM Customers c JOIN ActiveOrders ao ON c.Id = ao.CustomerId;
+
+-- Temp table: materialized, indexed — use when CTE is referenced multiple times or >100K rows
+SELECT CustomerId, COUNT(*) AS OrderCount
+INTO #ActiveOrders FROM Orders WHERE Status = 'Active' GROUP BY CustomerId;
+CREATE INDEX IX_tmp ON #ActiveOrders (CustomerId);
+-- join against #ActiveOrders multiple times here
+DROP TABLE #ActiveOrders;
+```
+
+- CTEs referenced once → let optimizer inline. CTEs referenced 2+ times → temp table
+- Recursive CTEs: set `OPTION (MAXRECURSION 100)` — default 100, 0 = unlimited (dangerous)
+- Avoid nested subqueries >2 levels deep — extract to CTE or temp table for readability
+
+## Window Functions
+
+```sql
+-- Pagination / deduplication with ROW_NUMBER
+SELECT * FROM (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY CustomerId ORDER BY OrderDate DESC) AS rn
+    FROM Orders
+) ranked WHERE rn = 1; -- latest order per customer
+
+-- Change detection with LAG
+SELECT OrderId, TotalAmount,
+    TotalAmount - LAG(TotalAmount) OVER (PARTITION BY CustomerId ORDER BY OrderDate) AS Delta
+FROM Orders;
+
+-- Running total (careful: no index can accelerate ROWS UNBOUNDED PRECEDING on large sets)
+SELECT OrderId, OrderDate, TotalAmount,
+    SUM(TotalAmount) OVER (PARTITION BY CustomerId ORDER BY OrderDate
+        ROWS UNBOUNDED PRECEDING) AS RunningTotal
+FROM Orders;
+```
+
+- Window functions avoid self-joins but still scan the partition — keep partitions bounded
+- ROWS vs RANGE: prefer ROWS (deterministic, faster) unless you need RANGE semantics for ties
+
+## Batch Operations
+
+```sql
+-- Bulk insert from another table — no row-by-row cursor
+INSERT INTO OrderArchive (OrderId, CustomerId, OrderDate, TotalAmount)
+SELECT OrderId, CustomerId, OrderDate, TotalAmount
+FROM Orders WHERE OrderDate < DATEADD(YEAR, -2, GETDATE());
+
+-- MERGE: atomic upsert — use OUTPUT to audit what changed
+MERGE INTO Products AS tgt
+USING StagingProducts AS src ON tgt.SKU = src.SKU
+WHEN MATCHED THEN UPDATE SET tgt.Price = src.Price, tgt.UpdatedAt = GETDATE()
+WHEN NOT MATCHED THEN INSERT (SKU, Name, Price, UpdatedAt) VALUES (src.SKU, src.Name, src.Price, GETDATE())
+OUTPUT $action, inserted.SKU;
+
+-- Large deletes: batch to avoid lock escalation and log growth
+WHILE 1 = 1 BEGIN
+    DELETE TOP (5000) FROM AuditLog WHERE CreatedAt < DATEADD(MONTH, -6, GETDATE());
+    IF @@ROWCOUNT = 0 BREAK;
+END;
+```
+
+## Deadlock Prevention
+
+- Access tables in consistent alphabetical order across all transactions
+- Keep transactions short — do reads outside, writes inside
+- Use `READ COMMITTED SNAPSHOT` (RCSI) to eliminate reader-writer blocking
+- Index foreign key columns to prevent table scans during parent deletes
+
+## Parameter Sniffing
+
+```sql
+-- When first-compiled plan is bad for subsequent parameter values
+CREATE PROCEDURE GetOrders @Status NVARCHAR(20) AS
+SELECT * FROM Orders WHERE Status = @Status
+OPTION (RECOMPILE); -- recompile each call — use when data skew is extreme
+
+-- Alternative: OPTIMIZE FOR UNKNOWN — generic plan, no sniffing
+SELECT * FROM Orders WHERE Status = @Status OPTION (OPTIMIZE FOR (@Status UNKNOWN));
+```
+
+- Detect via `sys.dm_exec_query_stats`: same `query_hash`, wildly different `last_elapsed_time`
+- Plan guides: last resort for vendor SQL you cannot modify
+
+## Statistics and Maintenance
+
+- Enable `AUTO_UPDATE_STATISTICS_ASYNC` — prevents query blocking on stats refresh
+- Manual update after bulk loads: `UPDATE STATISTICS Orders WITH FULLSCAN`
+- Rebuild indexes when fragmentation >30%: `ALTER INDEX IX_Orders_Status ON Orders REBUILD`
+- Reorganize when 10-30%: `ALTER INDEX IX_Orders_Status ON Orders REORGANIZE`
+
+## Connection Pooling and Read Replicas
+
+- Set pool min/max in connection string: `Min Pool Size=5; Max Pool Size=100`
+- Route reporting/analytics to read replica: `ApplicationIntent=ReadOnly` in connection string
+- Close connections explicitly — leaked connections exhaust the pool under load
+- Monitor via `sys.dm_exec_connections` and pool counters in APM
+
+## Schema Design Tradeoffs
+
+- Normalize to 3NF by default — denormalize only with measured query evidence
+- Denormalization candidates: fields always JOINed and rarely updated (e.g., CustomerName on Orders)
+- Use computed columns over triggers for derived values
+- JSON columns (`NVARCHAR(MAX)` with `ISJSON` check) for semi-structured data — but never query inside JSON at scale without computed column + index
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ `SELECT *` in production — fetches unused columns, breaks covering indexes
+- ❌ Functions on indexed columns in WHERE: `WHERE YEAR(OrderDate) = 2025` → non-SARGable
+- ❌ Implicit conversions: `WHERE VarcharCol = 12` forces scan — match types explicitly
+- ❌ Cursors for set-based operations — rewrite as INSERT...SELECT or window function
+- ❌ NOLOCK hint everywhere — reads dirty/phantom data, use RCSI instead
+- ❌ Over-indexing write-heavy tables — each index adds overhead to INSERT/UPDATE/DELETE
+- ❌ Missing WHERE on UPDATE/DELETE — always test with SELECT first
+- ❌ Unbounded SELECT without TOP or pagination — OOM risk on large tables
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | SQL Practice |
+|--------|-------------|
+| **Performance Efficiency** | Covering indexes, keyset pagination, batch operations, window functions over self-joins, query plan analysis |
+| **Reliability** | Deadlock prevention via consistent access order, RCSI isolation, batched deletes to prevent log explosion, statistics maintenance |
+| **Cost Optimization** | Read replicas for reporting workloads, filtered indexes (smaller storage), drop unused indexes, right-sized connection pools |
+| **Operational Excellence** | DMV monitoring for missing indexes + query stats, automated index maintenance, `SET STATISTICS IO` in dev workflow |
+| **Security** | Parameterized queries (never string concat), least-privilege database roles, `EXECUTE AS` for stored procedures, audit via OUTPUT clause |

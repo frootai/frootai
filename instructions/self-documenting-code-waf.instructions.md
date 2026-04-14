@@ -5,130 +5,234 @@ waf:
   - "operational-excellence"
 ---
 
-# Self Documenting Code Waf — WAF-Aligned Coding Standards
+# Self-Documenting Code — FAI Standards
 
-> Self-documenting code standards — comment WHY not WHAT, meaningful names, and code as documentation.
+## Meaningful Names
 
-## Core Rules
+Names are the primary documentation. A reader should understand purpose without scrolling to the definition.
 
-- Follow the principle of least privilege for all operations and access controls
-- Use configuration files (`config/*.json`) for all tunable parameters — never hardcode values
-- Implement structured JSON logging with correlation IDs via Application Insights
-- Error handling with retry and exponential backoff (base=1s, max=30s, 3 retries) for external calls
-- Health check endpoints at `/health` for load balancer integration and instance rotation
-- Input validation and sanitization at all system boundaries — reject invalid before processing
-- PII detection and redaction before logging, analytics storage, or telemetry
-- `DefaultAzureCredential` for all Azure service authentication — no API keys in production
-- Content Safety API integration for all user-facing AI outputs
-
-## Implementation Patterns
-
-### Config-Driven Development
-- Read ALL parameters from `config/*.json` — temperature, thresholds, endpoints, model names
-- Environment-specific configuration via parameter files or environment variables
-- Validate configuration at startup — fail fast on missing required values
-- Feature flags for gradual rollout and A/B testing
-
-### Azure SDK Integration
 ```typescript
-// Pattern: Managed Identity + config-driven + error handling
-import { DefaultAzureCredential } from "@azure/identity";
-const credential = new DefaultAzureCredential();
-const config = JSON.parse(fs.readFileSync("config/openai.json", "utf8"));
+// ❌ Cryptic
+const d = new Date();
+const r = users.filter(u => u.a > 30 && u.s === "active");
+function proc(d: any[]) { /* ... */ }
 
-async function callService(operation: string) {
-  const correlationId = crypto.randomUUID();
-  try {
-    const result = await client.operation({ ...config, correlationId });
-    telemetry.trackEvent({ name: operation, properties: { correlationId, duration: elapsed } });
-    return result;
-  } catch (error) {
-    telemetry.trackException({ exception: error, properties: { correlationId, operation } });
-    if (error.statusCode === 429) await backoff(attempt); // Retry-After
-    throw error;
+// ✅ Intent-revealing
+const accountCreatedAt = new Date();
+const activeAdultUsers = users.filter(u => u.age > 30 && u.status === "active");
+function processRefundRequests(pendingRefunds: RefundRequest[]) { /* ... */ }
+```
+
+```python
+# ❌ Abbreviations hide meaning
+def calc_ttl_amt(itms):
+    return sum(i.p * i.q for i in itms)
+
+# ✅ Full words — no mental decoding
+def calculate_total_amount(line_items: list[LineItem]) -> Decimal:
+    return sum(item.price * item.quantity for item in line_items)
+```
+
+**Rules:** No single-letter variables outside loops/lambdas. No abbreviations (`usr`, `mgr`, `ctx`) unless universally understood (`id`, `url`, `http`). Class names = nouns (`InvoiceProcessor`). Functions = verbs (`validate_payment`, `fetchUserProfile`).
+
+## Boolean Naming
+
+Booleans must read as true/false questions using `is`, `has`, `can`, `should`, or `was` prefixes.
+
+```typescript
+// ❌ Ambiguous — is this a noun or adjective?
+const enabled = true;
+const admin = user.role === "admin";
+
+// ✅ Reads as a question
+const isEnabled = true;
+const isAdmin = user.role === "admin";
+const hasExpired = token.expiresAt < Date.now();
+const canRetry = attemptCount < MAX_RETRIES;
+const shouldThrottle = requestsPerMinute > RATE_LIMIT;
+```
+
+## Named Constants Over Magic Numbers
+
+Every literal with domain meaning must be a named constant.
+
+```python
+# ❌ What do these numbers mean?
+if len(chunks) > 512:
+    chunks = chunks[:512]
+if score < 0.7:
+    return None
+
+# ✅ Constants document the constraint
+MAX_CHUNKS_PER_INDEX = 512
+MIN_RELEVANCE_SCORE = 0.7
+
+if len(chunks) > MAX_CHUNKS_PER_INDEX:
+    chunks = chunks[:MAX_CHUNKS_PER_INDEX]
+if score < MIN_RELEVANCE_SCORE:
+    return None
+```
+
+## Function Size and Single Responsibility
+
+Functions ≤25 lines. Each function does exactly one thing at one level of abstraction.
+
+```typescript
+// ❌ God function — fetches, validates, transforms, saves
+async function handleOrder(req: Request) {
+  // ... 80 lines doing everything
+}
+
+// ✅ Decomposed — each function has one job
+async function handleOrder(req: Request): Promise<Response> {
+  const order = parseOrderRequest(req);
+  validateOrderRules(order);
+  const enrichedOrder = await enrichWithInventory(order);
+  const confirmation = await saveOrder(enrichedOrder);
+  return formatOrderResponse(confirmation);
+}
+```
+
+## Early Returns and Guard Clauses
+
+Eliminate nesting by handling edge cases first. Return/throw at the top, keep the happy path unindented.
+
+```python
+# ❌ Deeply nested
+def process_document(doc):
+    if doc is not None:
+        if doc.status == "ready":
+            if len(doc.pages) > 0:
+                return extract_text(doc)
+    return None
+
+# ✅ Guard clauses — flat and scannable
+def process_document(doc: Document | None) -> str | None:
+    if doc is None:
+        return None
+    if doc.status != "ready":
+        return None
+    if not doc.pages:
+        return None
+    return extract_text(doc)
+```
+
+## Expressive Types Over Primitive Strings
+
+Use discriminated unions (TypeScript) and enums/Literal types (Python) to make illegal states unrepresentable.
+
+```typescript
+// ❌ Stringly-typed — any typo compiles fine
+function setStatus(status: string) { /* "actve" won't be caught */ }
+
+// ✅ Discriminated union — compiler enforces valid states
+type DeploymentStatus =
+  | { kind: "pending"; scheduledAt: Date }
+  | { kind: "running"; startedAt: Date; progress: number }
+  | { kind: "failed"; error: string; failedAt: Date }
+  | { kind: "succeeded"; completedAt: Date };
+
+function renderStatus(status: DeploymentStatus): string {
+  switch (status.kind) {
+    case "pending": return `Scheduled for ${status.scheduledAt}`;
+    case "running": return `${status.progress}% complete`;
+    case "failed": return `Error: ${status.error}`;
+    case "succeeded": return `Done at ${status.completedAt}`;
   }
 }
 ```
 
-### Resilience Patterns
-- Retry with exponential backoff: `delay = min(baseDelay * 2^attempt + jitter, maxDelay)`
-- Circuit breaker: open after 50% failure rate in 30s window, half-open after cooldown
-- Connection pooling for database and HTTP clients (max connections from config)
-- Graceful shutdown on SIGTERM — drain in-flight requests, close connections, flush telemetry
+```python
+from typing import Literal
 
-### Performance Patterns
-- Streaming responses (SSE/WebSocket) for real-time user experience
-- Async/parallel processing for independent operations (`Promise.all` / `asyncio.gather`)
-- Cache with TTL from configuration (Redis or in-memory)
-- Batch operations for bulk processing (embeddings: max 16/call, classification: batch)
+ModelTier = Literal["gpt-4o", "gpt-4o-mini", "o3-mini"]
 
-## Code Quality Standards
+def estimate_cost(model: ModelTier, tokens: int) -> float:
+    rates: dict[ModelTier, float] = {"gpt-4o": 0.005, "gpt-4o-mini": 0.00015, "o3-mini": 0.0011}
+    return rates[model] * (tokens / 1000)
+```
 
-- TypeScript with `strict: true` in tsconfig OR Python with type hints on all functions
-- No `any` types in TypeScript — define proper interfaces, type guards, discriminated unions
-- Structured JSON logging only — never `console.log` in production code
-- Every `async` operation wrapped in try/catch with actionable, context-rich error messages
-- No commented-out code — use feature flags or remove. No TODO without linked issue number
-- Functions ≤ 50 lines, files ≤ 300 lines — extract when growing beyond limits
-- Consistent naming: camelCase (TypeScript), snake_case (Python), kebab-case (files/folders)
-- JSDoc/docstrings on all public functions with parameter descriptions and return types
+## Parameter Objects for 3+ Arguments
 
-## Testing Requirements
+When a function takes 3+ parameters, group them into a typed object. Prevents positional bugs and is self-documenting at call sites.
 
-- Unit tests for business logic (80%+ coverage target, measured in CI)
-- Integration tests for Azure SDK interactions (mock with nock/responses/WireMock)
-- End-to-end tests for critical user journeys (Playwright/Cypress)
-- Mutation testing for critical paths (Stryker for TS, mutmut for Python)
-- No flaky tests — fix root cause or quarantine with tracking issue
-- Evaluation pipeline (`eval.py`) passes all quality thresholds before production
+```typescript
+// ❌ Positional args — easy to swap query and filter
+searchDocuments("contracts", "active", 50, 0, true, "relevance");
 
-## Security Checklist
+// ✅ Named fields — intention is clear
+searchDocuments({
+  index: "contracts",
+  filter: "active",
+  topK: 50,
+  offset: 0,
+  includeVectors: true,
+  rankBy: "relevance",
+});
+```
 
-- [ ] `DefaultAzureCredential` for all Azure service authentication
-- [ ] Secrets stored exclusively in Azure Key Vault
-- [ ] Private endpoints for data-plane operations in production
-- [ ] Content Safety API for all user-facing LLM outputs
-- [ ] Input validation and sanitization (prompt injection defense)
-- [ ] PII detection and redaction before logging
-- [ ] CORS with explicit origin allowlist (never `*` in production)
-- [ ] TLS 1.2+ enforced on all connections
-- [ ] Dependency audit (`npm audit` / `pip audit`) in CI pipeline
-- [ ] Rate limiting per user/IP (60 req/min default)
+## When Comments ARE Needed
+
+Comment **why**, never **what**. The code already says what — comments explain intent, constraints, and non-obvious decisions.
+
+```typescript
+// ❌ Redundant — repeats the code
+// Increment retry count by 1
+retryCount += 1;
+
+// ✅ Explains WHY — a decision that isn't obvious from the code
+// Azure OpenAI returns 429 with Retry-After header but the value
+// is unreliable for batch endpoints. Use exponential backoff instead.
+const delay = Math.min(BASE_DELAY * 2 ** attempt, MAX_DELAY);
+```
+
+Valid comment scenarios: regulatory/compliance reasons, performance trade-offs with benchmarks, workarounds for external bugs (link the issue), algorithm citations (paper/RFC references).
+
+## Extract vs. Inline
+
+Extract a function when: logic is reused, it needs a name to clarify intent, or the parent exceeds 25 lines. Keep it inline when: the operation is trivial and only used once, and the surrounding context already explains it.
+
+## Code as Documentation — Tests as Specs
+
+Tests document behavior better than prose. Name tests as specifications.
+
+```python
+# ❌ Vague test name
+def test_search():
+    assert search("hello") is not None
+
+# ✅ Test name IS the specification
+def test_search_returns_top_k_results_ranked_by_relevance():
+    results = search(query="quarterly earnings", top_k=5)
+    assert len(results) == 5
+    assert results[0].score >= results[1].score
+
+def test_search_returns_empty_list_when_no_documents_match():
+    results = search(query="xyzzy_nonexistent", top_k=10)
+    assert results == []
+```
+
+## README-Driven Development
+
+Write the README before writing code. If you can't explain the API, the CLI flags, or the config format in a README, the design is too complex. The README is a usability test for your interface.
 
 ## Anti-Patterns
 
-- ❌ Hardcoding API keys, connection strings, or secrets in source code
-- ❌ Using `console.log` instead of structured Application Insights logging
-- ❌ Missing error handling on async operations (unhandled promise rejections)
-- ❌ Public endpoints in production without authentication and authorization
-- ❌ Unbounded queries without pagination or result limits
-- ❌ Not implementing health check endpoint (load balancer can't detect unhealthy)
-- ❌ Logging PII, full user prompts, or secret values — even in debug mode
-- ❌ Using `temperature > 0.5` in production without documented justification
-- ❌ Deploying without Content Safety enabled for user-facing endpoints
+- ❌ Abbreviations: `usrMgr`, `calcTtlAmt`, `svcCfg` — write the full word
+- ❌ Hungarian notation: `strName`, `iCount`, `bEnabled` — types are in the type system
+- ❌ Generic names: `data`, `result`, `info`, `temp`, `stuff` — name the domain concept
+- ❌ Commented-out code — delete it, git remembers
+- ❌ TODO without issue number — `// TODO: fix later` is a lie; `// TODO(#342): handle pagination` is a commitment
+- ❌ Functions >25 lines — extract or simplify
+- ❌ Boolean parameters — `createUser(true, false)` is unreadable; use an options object
+- ❌ Negated booleans — `isNotDisabled` requires mental inversion; use `isEnabled`
 
 ## WAF Alignment
 
-### Security
-- DefaultAzureCredential for all auth — zero API keys in code
-- Key Vault for secrets, certificates, encryption keys
-- Private endpoints for data-plane in production
-- Content Safety API, PII detection + redaction, input validation
-
-### Reliability
-- Retry with exponential backoff (3 retries, 1-30s jitter)
-- Circuit breaker (50% failure → open 30s)
-- Health check at /health with dependency status
-- Graceful degradation, connection pooling, SIGTERM handling
-
-### Cost Optimization
-- max_tokens from config — never unlimited
-- Model routing (gpt-4o-mini for classification, gpt-4o for reasoning)
-- Semantic caching with Redis (TTL from config)
-- Right-sized SKUs, FinOps telemetry (token usage per request)
-
-### Operational Excellence
-- Structured JSON logging with Application Insights + correlation IDs
-- Custom metrics: latency p50/p95/p99, token usage, quality scores
-- Automated Bicep deployment via GitHub Actions (staging → prod)
-- Feature flags for gradual rollout, incident runbooks
+| Pillar | How Self-Documenting Code Contributes |
+|--------|---------------------------------------|
+| **Operational Excellence** | Meaningful names reduce onboarding time. Tests-as-specs serve as living documentation. Guard clauses make control flow auditable. README-driven design catches complexity early. |
+| **Reliability** | Expressive types make illegal states unrepresentable. Early returns eliminate null-path bugs. Named constants prevent mistyped magic values. Small functions are easier to test exhaustively. |
+| **Security** | Typed parameters prevent injection via stringly-typed inputs. Named constants for limits enforce consistent validation. Code clarity enables effective security review. |
+| **Cost Optimization** | Clear code reduces review/debug time (largest engineering cost). Parameter objects prevent subtle bugs that cause costly production incidents. |
+| **Performance Efficiency** | Small, focused functions enable targeted profiling and optimization. Named constants centralize tuning knobs for caching TTLs, batch sizes, and rate limits. |
