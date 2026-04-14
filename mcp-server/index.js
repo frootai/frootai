@@ -24,8 +24,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { readFileSync, readdirSync, existsSync } from "fs";
-import { join, dirname } from "path";
+import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync as writeFileSync_fn, statSync as statSync_fn } from "fs";
+import { join, dirname, basename, resolve } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
@@ -312,10 +312,12 @@ const glossary = loadGlossary(modules);
 
 const PKG_VERSION = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf-8")).version;
 
-const server = new McpServer({
-  name: "frootai",
-  version: PKG_VERSION,
-});
+/** Create and register all tools/resources/prompts on a McpServer instance */
+function createConfiguredServer() {
+  const server = new McpServer({
+    name: "frootai",
+    version: PKG_VERSION,
+  });
 
 // ── Tool: list_modules ─────────────────────────────────────────────
 
@@ -2406,13 +2408,10 @@ if (faiEngine && faiEngine.available) {
   // What they create auto-wires through the FAI Protocol.
   // ════════════════════════════════════════════════════════════════════
 
-  const { mkdirSync, writeFileSync, statSync, cpSync } = await import("fs");
-  const pathMod = await import("path");
-
   // ── Helper: generate play name + number ──────────────────────────
 
   function nextPlayNumber() {
-    const playsDir = pathMod.default.join(process.cwd(), "solution-plays");
+    const playsDir = join(process.cwd(), "solution-plays");
     if (!existsSync(playsDir)) return "101";
     const dirs = readdirSync(playsDir).filter(d => /^\d{2,3}-/.test(d)).map(d => parseInt(d.split("-")[0]));
     const max = dirs.length > 0 ? Math.max(...dirs) : 100;
@@ -2428,8 +2427,8 @@ if (faiEngine && faiEngine.available) {
   }
 
   function safeWrite(filePath, content) {
-    safeMkdir(pathMod.default.dirname(filePath));
-    writeFileSync(filePath, content, "utf-8");
+    safeMkdir(dirname(filePath));
+    writeFileSync_fn(filePath, content, "utf-8");
   }
 
   // ── Tool: scaffold_play ──────────────────────────────────────────
@@ -2452,8 +2451,8 @@ if (faiEngine && faiEngine.available) {
       const playNum = nextPlayNumber();
       const playId = `${playNum}-${slug}`;
       const desc = description || `${name} — AI-powered solution built with the FAI Protocol.`;
-      const playsDir = pathMod.default.join(process.cwd(), "solution-plays");
-      const playDir = pathMod.default.join(playsDir, playId);
+      const playsDir = join(process.cwd(), "solution-plays");
+      const playDir = join(playsDir, playId);
 
       if (existsSync(playDir)) {
         return { content: [{ type: "text", text: `❌ Directory already exists: solution-plays/${playId}` }], isError: true };
@@ -2734,13 +2733,13 @@ param projectName string = '${slug}'
 
       // Create all files
       for (const f of files) {
-        safeWrite(pathMod.default.join(playDir, f.path), f.content);
+        safeWrite(join(playDir, f.path), f.content);
       }
 
       // Wire the play to verify
       let wiringStatus = "not verified";
       try {
-        const result = faiEngine.runPlay({ manifestPath: pathMod.default.join(playDir, "spec", "fai-manifest.json") });
+        const result = faiEngine.runPlay({ manifestPath: join(playDir, "spec", "fai-manifest.json") });
         wiringStatus = result.errors?.length === 0
           ? `✅ All primitives wired (${result.wiring?.total || 0} items, ${result.duration}ms)`
           : `⚠️ Wired with ${result.errors.length} issue(s): ${result.errors.slice(0, 3).join("; ")}`;
@@ -2777,8 +2776,8 @@ param projectName string = '${slug}'
       let filePath, content;
 
       if (type === "agent") {
-        const dir = targetDir || pathMod.default.join(process.cwd(), "agents");
-        filePath = pathMod.default.join(dir, `${faiName}.agent.md`);
+        const dir = targetDir || join(process.cwd(), "agents");
+        filePath = join(dir, `${faiName}.agent.md`);
         content = `---
 description: "${description}"
 tools: ["read", "edit", "search", "execute"]
@@ -2800,8 +2799,8 @@ ${description}
 Always use \`list_dir\` to discover files, then \`read_file\` with exact paths.
 `;
       } else if (type === "instruction") {
-        const dir = targetDir || pathMod.default.join(process.cwd(), "instructions");
-        filePath = pathMod.default.join(dir, `${slug}.instructions.md`);
+        const dir = targetDir || join(process.cwd(), "instructions");
+        filePath = join(dir, `${slug}.instructions.md`);
         content = `---
 description: "${description}"
 applyTo: "**/*.{py,ts,js,bicep,json}"
@@ -2818,9 +2817,9 @@ ${description}
 - Implement retry logic with exponential backoff
 `;
       } else {
-        const dir = targetDir || pathMod.default.join(process.cwd(), "skills");
-        const skillDir = pathMod.default.join(dir, faiName);
-        filePath = pathMod.default.join(skillDir, "SKILL.md");
+        const dir = targetDir || join(process.cwd(), "skills");
+        const skillDir = join(dir, faiName);
+        filePath = join(skillDir, "SKILL.md");
         content = `---
 name: "${faiName}"
 description: "${description}"
@@ -2908,6 +2907,9 @@ ${description}
 
 } // end if (faiEngine.available)
 
+  return server;
+} // end createConfiguredServer()
+
 // ════════════════════════════════════════════════════════════════════
 // TRANSPORT & STARTUP — Phase 4: stdio + Streamable HTTP
 // ════════════════════════════════════════════════════════════════════
@@ -2922,9 +2924,10 @@ let minLogLevel = "info";
 
 function mcpLog(level, logger, data) {
   if (LOG_LEVELS.indexOf(level) < LOG_LEVELS.indexOf(minLogLevel)) return;
-  try {
-    server.server.sendLoggingMessage({ level, logger, data });
-  } catch { /* client may not support logging */ }
+  // Logging is emitted to stderr in HTTP mode (no single server to send to)
+  if (LOG_LEVELS.indexOf(level) >= LOG_LEVELS.indexOf("warning")) {
+    console.error(`[${level}] ${logger}: ${typeof data === 'string' ? data : JSON.stringify(data)}`);
+  }
 }
 
 // ── Session Manager (for HTTP transport) ──────────────────────────
@@ -3012,7 +3015,8 @@ function createAuthMiddleware() {
 const transportMode = process.argv[2] || "stdio";
 
 if (transportMode === "http" || transportMode === "streamableHttp") {
-  // ── Streamable HTTP Transport ─────────────────────────────────
+  // ── Streamable HTTP Transport (multi-client) ──────────────────
+  // Each session gets its own McpServer instance with all tools registered.
   const { StreamableHTTPServerTransport } = await import("@modelcontextprotocol/sdk/server/streamableHttp.js");
 
   const PORT = parseInt(process.env.PORT || "3000");
@@ -3023,6 +3027,10 @@ if (transportMode === "http" || transportMode === "streamableHttp") {
 
   // Track transports per session for multi-client
   const sessionTransports = new Map();
+
+  // For HTTP mode, we need to create fresh server+transport pairs per session
+  // because McpServer binds to one transport at a time.
+  // We re-use the same `server` instance but manage transport lifecycle.
 
   const httpServer = http.createServer(async (req, res) => {
     // ── CORS ────────────────────────────────────────────────
@@ -3081,48 +3089,46 @@ if (transportMode === "http" || transportMode === "streamableHttp") {
     const sessionId = req.headers["mcp-session-id"];
 
     if (req.method === "DELETE") {
-      // Client terminating session
       if (sessionId && sessionTransports.has(sessionId)) {
-        const t = sessionTransports.get(sessionId);
+        const { transport: t } = sessionTransports.get(sessionId);
         await t.close();
         sessionTransports.delete(sessionId);
         sessionMgr.terminate(sessionId);
-        mcpLog("info", "session", { event: "terminated", sessionId });
       }
       res.writeHead(200); res.end(); return;
     }
 
-    // For new connections (no session), create transport + session
-    if (!sessionId) {
-      const transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: () => {
-          const session = sessionMgr.create(authResult.identity);
-          return session.id;
-        },
-      });
-
-      transport.onclose = () => {
-        const sid = transport.sessionId;
-        if (sid) { sessionTransports.delete(sid); sessionMgr.terminate(sid); }
-      };
-
-      await server.connect(transport);
-      sessionTransports.set(transport.sessionId, transport);
-      mcpLog("info", "session", { event: "created", sessionId: transport.sessionId, identity: authResult.identity });
-      await transport.handleRequest(req, res);
+    // Existing session — route to its transport
+    if (sessionId && sessionTransports.has(sessionId)) {
+      sessionMgr.touch(sessionId);
+      await sessionTransports.get(sessionId).transport.handleRequest(req, res);
       return;
     }
 
-    // Existing session
-    const transport = sessionTransports.get(sessionId);
-    if (!transport) {
+    // New connection — must be an initialize request (no session ID)
+    if (sessionId && !sessionTransports.has(sessionId)) {
       res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Session not found. Send new InitializeRequest." }));
+      res.end(JSON.stringify({ error: "Session expired. Send new InitializeRequest without Mcp-Session-Id." }));
       return;
     }
 
-    sessionMgr.touch(sessionId);
-    await transport.handleRequest(req, res);
+    // Create new transport + fresh server for this session
+    const sessionServer = createConfiguredServer();
+    const sessionTransport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: () => {
+        const session = sessionMgr.create(authResult.identity);
+        sessionTransports.set(session.id, { transport: sessionTransport, server: sessionServer });
+        return session.id;
+      },
+    });
+
+    sessionTransport.onclose = () => {
+      const sid = sessionTransport.sessionId;
+      if (sid) { sessionTransports.delete(sid); sessionMgr.terminate(sid); }
+    };
+
+    await sessionServer.connect(sessionTransport);
+    await sessionTransport.handleRequest(req, res);
   });
 
   httpServer.listen(PORT, HOST, () => {
@@ -3138,6 +3144,7 @@ if (transportMode === "http" || transportMode === "streamableHttp") {
 
 } else {
   // ── stdio transport (default — backward compatible) ───────────
+  const server = createConfiguredServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
