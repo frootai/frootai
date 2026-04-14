@@ -5,80 +5,183 @@ description: 'Scaffolds a complete FAI solution play with DevKit, TuneKit, SpecK
 
 # FAI Play Initializer
 
-Initialize a new FAI solution play with the complete FAI Protocol structure. This skill generates all required files and folders for a production-ready solution play.
+Scaffold a complete FAI solution play following the Play 101 golden template. Every play is a self-contained Copilot workspace with agent orchestration, tunable config, infrastructure-as-code, evaluation pipeline, and FAI Protocol wiring.
 
-## Parameters
+## Play Folder Structure
 
-- **Play Number**: ${PLAY_NUMBER="21|22|23|24|25|26|27|28|29|30"}
-- **Play Name**: The kebab-case name for this play (e.g., `agentic-rag`, `multi-agent-swarm`)
-- **Primary WAF Pillars**: ${WAF_PILLARS="security,reliability|security,cost-optimization|all-six-pillars"}
-- **Infrastructure**: ${INFRA_TARGET="azure-bicep|terraform|docker-only|kubernetes"}
-- **Knowledge Modules**: Which FROOT modules this play depends on (e.g., R2-RAG-Architecture, O3-MCP-Tools)
-
-## Generated Structure
-
-Create the following directory structure at `solution-plays/{PLAY_NUMBER}-{PLAY_NAME}/`:
+The canonical layout — every directory has a purpose, nothing optional:
 
 ```
-{PLAY_NUMBER}-{PLAY_NAME}/
-├── .github/                          ← DevKit
+solution-plays/NN-play-name/
+├── agent.md                        # Root orchestrator — Copilot loads this first
+├── .github/
+│   ├── copilot-instructions.md     # Knowledge-only, <150 lines, <1500 tokens
 │   ├── agents/
-│   │   └── {play-name}-agent.agent.md
+│   │   ├── builder.agent.md        # Implements the solution
+│   │   ├── reviewer.agent.md       # Security + quality review
+│   │   └── tuner.agent.md          # Config validation + eval thresholds
 │   ├── instructions/
-│   │   └── {play-name}.instructions.md
-│   └── prompts/
-│       └── {play-name}-init.prompt.md
-├── config/                           ← TuneKit
-│   ├── openai.json                   # Model config, temperature, max_tokens
-│   ├── guardrails.json               # Quality thresholds
-│   └── evaluation/
-│       └── metrics.json              # Groundedness, coherence, relevance targets
-├── spec/                             ← SpecKit
-│   ├── architecture.json             # Component diagram reference
-│   └── waf-alignment.json            # WAF pillar compliance matrix
-├── infra/                            ← Infrastructure
-│   ├── main.bicep                    # Primary Bicep template
-│   └── parameters.json               # Environment-specific params
-├── fai-manifest.json                 ← THE FAI PROTOCOL GLUE
-├── froot.json                        ← Play metadata
-├── plugin.json                       ← Plugin packaging
-├── README.md                         ← Play documentation
-└── CHANGELOG.md                      ← Version history
+│   │   └── {domain}.instructions.md
+│   ├── prompts/
+│   │   ├── test.prompt.md
+│   │   └── evaluate.prompt.md
+│   ├── skills/{action}-{domain}/SKILL.md
+│   ├── hooks/
+│   │   └── guardrails.json         # SessionStart only — never PreToolUse
+│   └── workflows/build.yml
+├── .vscode/
+│   ├── mcp.json                    # MCP server wiring
+│   └── settings.json               # Copilot model + tool config
+├── config/                         # TuneKit — customer-tunable AI params
+│   ├── openai.json
+│   └── guardrails.json
+├── infra/                          # Azure Bicep (AVM modules preferred)
+│   ├── main.bicep
+│   └── main.bicepparam
+├── evaluation/                     # AI quality pipeline
+│   ├── evaluate.py
+│   └── test-cases.jsonl
+├── spec/                           # SpecKit — metadata + docs
+│   └── waf-alignment.json
+├── fai-manifest.json               # FAI Protocol glue — REQUIRED
+└── README.md
 ```
 
-## File Content Guidelines
+## Scaffolding Script
 
-### fai-manifest.json
-Generate with:
-- `play`: `"{PLAY_NUMBER}-{PLAY_NAME}"`
-- `version`: `"1.0.0"`
-- `context.knowledge`: Array of FROOT module references
-- `context.waf`: Selected WAF pillars
-- `primitives.guardrails`: `{ "groundedness": 0.95, "coherence": 0.90, "safety": 0 }`
+Run from repo root. Creates all files with real content, not placeholders:
 
-### config/guardrails.json
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+NN="${1:?Usage: init-play.sh NN play-name}"
+NAME="${2:?Usage: init-play.sh NN play-name}"
+DIR="solution-plays/${NN}-${NAME}"
+
+mkdir -p "$DIR"/{.github/{agents,instructions,prompts,skills,hooks,workflows},.vscode,config,infra,evaluation,spec}
+
+# agent.md — root orchestrator (Copilot loads this first)
+cat > "$DIR/agent.md" <<'EOF'
+---
+description: "Root orchestrator for this solution play"
+tools: ["codebase", "terminal", "github"]
+model: ["gpt-4o", "gpt-4o-mini"]
+---
+Route tasks: @builder for implementation, @reviewer for security + quality, @tuner for config validation.
+EOF
+
+# copilot-instructions.md — knowledge ONLY, <150 lines, no behavioral overrides
+cat > "$DIR/.github/copilot-instructions.md" <<'EOF'
+# Play ${NN} — ${NAME}
+## Architecture
+- Component A → Component B → Component C
+## Key Decisions
+- Model: gpt-4o (temperature 0.1), Embedding: text-embedding-3-large (3072d)
+## Domain Rules
+- All responses include citation sources, token budget: 4000/request
+EOF
+
+# Agent triad: builder (gpt-4o), reviewer + tuner (gpt-4o-mini)
+for role in builder reviewer tuner; do
+  cat > "$DIR/.github/agents/${role}.agent.md" <<EOF
+---
+description: "${role^} agent for play ${NN}"
+tools: ["codebase"$([ "$role" = "builder" ] && echo ', "terminal", "github"')]
+model: ["$([ "$role" = "builder" ] && echo 'gpt-4o' || echo 'gpt-4o-mini')"]
+---
+EOF
+done
+
+# Hooks — SessionStart ONLY (PreToolUse = 5s delay per tool call, never use it)
+cat > "$DIR/.github/hooks/guardrails.json" <<'EOF'
+{"version":1,"hooks":[{"event":"SessionStart","command":"echo FAI guardrails active"}]}
+EOF
+
+# MCP + VS Code settings
+cat > "$DIR/.vscode/mcp.json" <<'EOF'
+{"servers":{"frootai":{"command":"npx","args":["frootai-mcp@latest"],"env":{}}}}
+EOF
+cat > "$DIR/.vscode/settings.json" <<'EOF'
+{"chat.agent.model":"gpt-4o","github.copilot.chat.codeGeneration.instructions":[{"file":".github/copilot-instructions.md"}]}
+EOF
+```
+
+## Config Files (TuneKit)
+
+The only files customers edit. Everything else is DevKit (agent-managed).
+
+```json
+// config/openai.json — model parameters
+{"model":"gpt-4o","api_version":"2024-12-01-preview","temperature":0.1,
+ "max_tokens":4000,"seed":42,"response_format":{"type":"json_object"},
+ "fallback":{"model":"gpt-4o-mini","max_tokens":2000}}
+```
+
+```json
+// config/guardrails.json — quality thresholds + actions
+{"groundedness":{"threshold":0.95,"action":"retry","max_retries":2},
+ "coherence":{"threshold":0.90,"action":"retry"},
+ "relevance":{"threshold":0.85,"action":"warn"},
+ "safety":{"max_violations":0,"action":"block"},
+ "cost":{"max_per_query_usd":0.02,"monthly_budget_usd":500}}
+```
+
+## fai-manifest.json
+
+The FAI Protocol glue — what makes a folder a play:
+
 ```json
 {
-  "groundedness": { "threshold": 0.95, "action": "retry" },
-  "coherence": { "threshold": 0.90, "action": "retry" },
-  "relevance": { "threshold": 0.85, "action": "warn" },
-  "safety": { "maxViolations": 0, "action": "block" },
-  "cost": { "maxPerQuery": 0.01, "budgetAlert": 0.80 }
+  "play": "NN-play-name",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture", "O4-Azure-AI-Services"],
+    "waf": ["security", "reliability", "cost-optimization"],
+    "compatible_plays": []
+  },
+  "primitives": {
+    "agents": [".github/agents/builder.agent.md", ".github/agents/reviewer.agent.md"],
+    "instructions": [".github/instructions/*.instructions.md"],
+    "skills": [".github/skills/*/SKILL.md"],
+    "hooks": [".github/hooks/guardrails.json"]
+  },
+  "toolkit": {
+    "tunekit": "config/",
+    "speckit": "spec/",
+    "infra": "infra/"
+  },
+  "guardrails": {
+    "groundedness": 0.95,
+    "coherence": 0.90,
+    "safety": 0
+  }
 }
 ```
 
-### README.md
-Include: play description, architecture diagram placeholder, prerequisites, quick start, WAF alignment table, evaluation metrics, and contributing guide.
+## README Template
 
-## Verification Steps
+README must include: one-line description, architecture diagram (Mermaid), quick start (3 steps: open in VS Code → Copilot loads agent.md → ask to initialize), WAF alignment table (Security/Reliability/Cost rows minimum), config section pointing to `config/openai.json` + `config/guardrails.json`, and evaluation command `python evaluation/evaluate.py`.
 
-After scaffolding:
-1. Run `node scripts/validate-primitives.js` — all files must pass
-2. Verify `fai-manifest.json` parses correctly
-3. Verify `plugin.json` follows plugin schema
-4. Check all WAF pillars referenced in manifest match spec/waf-alignment.json
+## Validation Checklist
 
-## Notes
-- Every play MUST have a `fai-manifest.json` — this is what makes it a FAI play, not just a folder
-- The `froot.json` contains play-specific metadata (title, description, tags, difficulty level)
-- Infrastructure templates use Azure Verified Modules (AVM) from the Bicep registry where available
+Run after scaffolding — every item must pass before the play ships:
+
+1. **Structure**: 12+ directories exist (`.github/agents`, `.vscode`, `config`, `infra`, `evaluation`, `spec`)
+2. **agent.md**: YAML frontmatter with `description`, `tools`, `model`
+3. **copilot-instructions.md**: <150 lines, knowledge only, no behavioral overrides
+4. **Agent triad**: `builder.agent.md`, `reviewer.agent.md`, `tuner.agent.md` with frontmatter
+5. **Config**: `openai.json` + `guardrails.json` parse as valid JSON
+6. **fai-manifest.json**: Has `play`, `version`, `context.waf[]`, `primitives`, `guardrails`
+7. **Hooks**: Only `SessionStart` events — zero `PreToolUse`
+8. **MCP**: `.vscode/mcp.json` uses `npx`, no hardcoded secrets
+9. **Secrets**: `grep -rE "sk-|api[_-]key|password" $DIR` returns empty
+10. **CI**: `node scripts/validate-primitives.js` passes with 0 errors
+
+## Anti-Patterns
+
+- **No PreToolUse hooks** — spawns a process per tool call, 5s delay each
+- **No behavioral instructions in copilot-instructions.md** — knowledge only, the model handles behavior
+- **No hardcoded API keys in mcp.json** — use `inputs` for secrets or `envFile` for `.env`
+- **No placeholder files** — every file must have real, functional content
+- **No vendor lock-in in config/** — TuneKit files must be model-agnostic where possible
