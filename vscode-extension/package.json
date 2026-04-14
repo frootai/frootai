@@ -1,11 +1,11 @@
 {
   "name": "frootai-vscode",
-  "displayName": "FrootAI — From the Roots to the Fruits",
-  "description": "101 solution plays + 45 MCP tools + 830+ primitives for building production AI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click. Works standalone from any workspace.",
-  "version": "5.0.6",
+  "displayName": "FrootAI — AI Architecture Knowledge Engine",
+  "description": "45 MCP tools · 100 solution plays · 830+ primitives · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
+  "version": "5.0.7",
   "publisher": "frootai",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.95.0"
   },
   "categories": [
     "AI",
@@ -24,7 +24,10 @@
     "frootai",
     "solution-plays",
     "devkit",
-    "tunekit"
+    "tunekit",
+    "fai-protocol",
+    "llm",
+    "genai"
   ],
   "repository": {
     "type": "git",
@@ -36,11 +39,21 @@
   },
   "license": "MIT",
   "icon": "media/frootai-mark.png",
+  "galleryBanner": {
+    "color": "#0a0a0f",
+    "theme": "dark"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
   "main": "./src/extension.js",
   "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "frootai",
+        "label": "FrootAI MCP Server"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -66,7 +79,7 @@
         },
         {
           "id": "frootai.mcpTools",
-          "name": "FAI MCP Tools (25)"
+          "name": "FAI MCP Tools (45)"
         }
       ]
     },
@@ -242,6 +255,26 @@
           "type": "string",
           "default": "",
           "description": "Path to the solution-plays directory. Leave empty for auto-detect."
+        },
+        "frootai.mcpAutoRegister": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically register the FrootAI MCP server so it appears in VS Code's @mcp gallery and is ready to use in Copilot Agent mode without manual configuration."
+        },
+        "frootai.mcpTransport": {
+          "type": "string",
+          "default": "stdio",
+          "enum": ["stdio", "http"],
+          "enumDescriptions": [
+            "Run MCP server as a local process (recommended for most users)",
+            "Connect to a remote MCP server over HTTP (requires a hosted endpoint)"
+          ],
+          "description": "Transport protocol for the FrootAI MCP server."
+        },
+        "frootai.mcpHttpUrl": {
+          "type": "string",
+          "default": "https://mcp.frootai.dev/mcp",
+          "description": "URL of the remote FrootAI MCP server (only used when mcpTransport is 'http')."
         }
       }
     }
@@ -252,7 +285,8 @@
     "publish": "vsce publish"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
+    "@types/vscode": "^1.95.0",
     "@vscode/vsce": "^2.22.0"
   }
 }
+

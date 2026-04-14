@@ -6,7 +6,7 @@ const https = require("https");
 // ════════════════════════════════════════════════════════════════════
 // FrootAI VS Code Extension v1.0 — Standalone Engine
 // From the Roots to the Fruits. The Open Glue for GenAI.
-// 25 MCP tools · 18 modules · 200+ terms · 101 solution plays
+// 45 MCP tools · 18 modules · 200+ terms · 100 solution plays
 // Works from ANY workspace — no clone needed.
 // ════════════════════════════════════════════════════════════════════
 
@@ -713,11 +713,13 @@ class McpToolProvider {
   getTreeItem(element) { return element; }
   getChildren(element) {
     const groups = [
-      { label: "Static (6)", type: "static", icon: "database", desc: "Offline knowledge lookups" },
+      { label: "Knowledge (6)", type: "static", icon: "database", desc: "Offline knowledge lookups" },
       { label: "Live (4)", type: "live", icon: "cloud", desc: "Azure + GitHub API calls" },
       { label: "Agent Chain (3)", type: "chain", icon: "link", desc: "Build → Review → Tune workflow" },
-      { label: "Ecosystem (3)", type: "ecosystem", icon: "globe", desc: "Model catalog + pricing" },
-      { label: "Compute (6)", type: "compute", icon: "beaker", desc: "Cost estimation + validation" },
+      { label: "Ecosystem (10)", type: "ecosystem", icon: "globe", desc: "Model catalog, pricing, compare, embed" },
+      { label: "Engine (6)", type: "engine", icon: "circuit-board", desc: "FAI Engine bridge tools" },
+      { label: "Scaffold (3)", type: "scaffold", icon: "file-add", desc: "Play + primitive scaffolding" },
+      { label: "Marketplace (13)", type: "marketplace", icon: "extensions", desc: "Plugin install, compose, publish" },
     ];
     if (!element) {
       return groups.map(g => {
@@ -1468,7 +1470,7 @@ function activate(context) {
         const terminal = vscode.window.createTerminal("FrootAI MCP Docker");
         terminal.sendText("docker run -i ghcr.io/frootai/frootai-mcp");
         terminal.show();
-        vscode.window.showInformationMessage("🐳 Starting FrootAI MCP via Docker. 25 tools ready.");
+        vscode.window.showInformationMessage("🐳 Starting FrootAI MCP via Docker. 45 tools ready.");
         autoCreateMcpJson();
       } else if (choice.value === "pip") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Python");
@@ -1502,7 +1504,7 @@ function activate(context) {
       const terminal = vscode.window.createTerminal("FrootAI MCP Server");
       terminal.sendText("npx --yes frootai-mcp@latest");
       terminal.show();
-      vscode.window.showInformationMessage("🔌 FrootAI MCP Server starting... 25 tools (6 static + 4 live + 3 chain + 9 ecosystem + 3 compute).");
+      vscode.window.showInformationMessage("🔌 FrootAI MCP Server starting... 45 tools (6 knowledge + 4 live + 3 chain + 10 ecosystem + 6 engine + 3 scaffold + 13 marketplace).");
     })
   );
 
@@ -1564,7 +1566,7 @@ function activate(context) {
         <div class="install">
           <strong>Install:</strong> <code>npx frootai-mcp@latest</code> | <code>pip install frootai-mcp</code> | <code>docker run -i ghcr.io/frootai/frootai-mcp</code>
         </div>
-        <div class="footer">Part of <strong>frootai-mcp</strong> - 23 tools | <a href="https://frootai.dev/mcp-tooling">frootai.dev/mcp-tooling</a> | <a href="https://www.npmjs.com/package/frootai-mcp">npm</a> | <a href="https://pypi.org/project/frootai-mcp/">PyPI</a></div>
+        <div class="footer">Part of <strong>frootai-mcp</strong> - 45 tools | <a href="https://frootai.dev/mcp-tooling">frootai.dev/mcp-tooling</a> | <a href="https://www.npmjs.com/package/frootai-mcp">npm</a> | <a href="https://pypi.org/project/frootai-mcp/">PyPI</a></div>
       </body></html>`;
     })
   );
@@ -2024,10 +2026,71 @@ function activate(context) {
     })
   );
 
-  // ── Status Bar ──
+  // ── Register MCP Server Definition Provider (VS Code @mcp gallery) ──
+  // This is what makes FrootAI appear in VS Code's Extensions view under @mcp.
+  // Users can install it with one click and get 45 tools in Copilot Agent mode.
+  if (vscode.lm?.registerMcpServerDefinitionProvider) {
+    const config = vscode.workspace.getConfiguration("frootai");
+    const autoRegister = config.get("mcpAutoRegister", true);
+    const transport = config.get("mcpTransport", "stdio");
+    const httpUrl = config.get("mcpHttpUrl", "https://mcp.frootai.dev/mcp");
+
+    if (autoRegister) {
+      const changeEmitter = new vscode.EventEmitter();
+
+      const provider = {
+        onDidChangeMcpServerDefinitions: changeEmitter.event,
+
+        provideMcpServerDefinitions: async () => {
+          const cfg = vscode.workspace.getConfiguration("frootai");
+          const t = cfg.get("mcpTransport", "stdio");
+          const url = cfg.get("mcpHttpUrl", "https://mcp.frootai.dev/mcp");
+          const localPath = cfg.get("mcpServerPath", "");
+
+          if (t === "http") {
+            return [
+              new vscode.McpHttpServerDefinition(
+                "frootai",
+                vscode.Uri.parse(url),
+                {}
+              )
+            ];
+          }
+
+          // stdio mode: use local path if configured, otherwise npx
+          const serverDef = localPath
+            ? new vscode.McpStdioServerDefinition("frootai", "node", [localPath], {})
+            : new vscode.McpStdioServerDefinition("frootai", "npx", ["frootai-mcp@latest"], {});
+
+          return [serverDef];
+        },
+
+        resolveMcpServerDefinition: async (def) => {
+          // Passthrough — no additional resolution (no auth required for FrootAI)
+          return def;
+        },
+      };
+
+      const reg = vscode.lm.registerMcpServerDefinitionProvider("frootai", provider);
+      context.subscriptions.push(reg);
+      context.subscriptions.push(changeEmitter);
+
+      // Re-provide when user changes transport settings
+      context.subscriptions.push(
+        vscode.workspace.onDidChangeConfiguration((e) => {
+          if (e.affectsConfiguration("frootai.mcpTransport") ||
+              e.affectsConfiguration("frootai.mcpServerPath") ||
+              e.affectsConfiguration("frootai.mcpHttpUrl")) {
+            changeEmitter.fire();
+          }
+        })
+      );
+    }
+  }
+
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBar.text = "$(tree-view-icon) FrootAI";
-  statusBar.tooltip = `FrootAI — From the Roots to the Fruits\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 23 MCP tools` : "Knowledge loading..."}`;
+  statusBar.tooltip = `FrootAI — AI Architecture Knowledge Engine\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 45 MCP tools` : "Knowledge loading..."}`;
   statusBar.command = "frootai.browseSolutionPlays";
   statusBar.show();
   context.subscriptions.push(statusBar);
