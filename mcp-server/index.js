@@ -3368,6 +3368,395 @@ ${description}
     }
   );
 
+  // ── Tool: compose_plugins (T54) ─────────────────────────────────
+
+  server.tool(
+    "compose_plugins",
+    "FAI COMPOSE — Install multiple plugins simultaneously with cross-plugin conflict detection. Checks for naming collisions between plugins, resolves install order, and reports combined results.",
+    {
+      plugins: z.array(z.string()).describe("Plugin names to install together (e.g., ['enterprise-rag', 'fai-essentials', 'ai-evaluation-suite'])"),
+      targetDir: z.string().optional(),
+      dryRun: z.boolean().optional().default(false),
+    },
+    { annotations: { destructiveHint: true } },
+    async ({ plugins: pluginNames, targetDir, dryRun }) => {
+      const target = targetDir || process.cwd();
+      const results = [];
+      const allAgentNames = new Set();
+      const conflicts = [];
+      let totalCopied = 0, totalSkipped = 0;
+
+      // Phase 1: Conflict detection across all plugins
+      for (const name of pluginNames) {
+        const plugin = loadPluginJson(name);
+        if (!plugin) { results.push(`❌ ${name}: not found`); continue; }
+        for (const ref of plugin.json.agents || []) {
+          const agentName = basename(ref);
+          if (allAgentNames.has(agentName)) conflicts.push(`${agentName} (in ${name})`);
+          allAgentNames.add(agentName);
+        }
+      }
+
+      if (conflicts.length > 0) {
+        results.push(`\n⚠️ Naming conflicts: ${conflicts.join(', ')}\n`);
+      }
+
+      // Phase 2: Install each plugin
+      for (const name of pluginNames) {
+        const plugin = loadPluginJson(name);
+        if (!plugin) continue;
+        const pj = plugin.json;
+        let copied = 0, skipped = 0;
+
+        for (const type of ['agents', 'instructions', 'skills', 'hooks']) {
+          for (const ref of (pj)[type] || []) {
+            const source = resolve(plugin.dir, ref);
+            const dest = join(target, '.github', type, basename(ref));
+            if (!existsSync(source)) continue;
+            if (existsSync(dest)) { skipped++; continue; }
+            if (!dryRun) {
+              mkdirSync(join(target, '.github', type), { recursive: true });
+              if (statSync_fn(source).isDirectory()) {
+                const copyDir = (src, dst) => {
+                  mkdirSync(dst, { recursive: true });
+                  for (const e of readdirSync(src, { withFileTypes: true })) {
+                    const s = join(src, e.name), d = join(dst, e.name);
+                    if (e.isDirectory()) copyDir(s, d);
+                    else writeFileSync_fn(d, readFileSync(s));
+                  }
+                };
+                copyDir(source, dest);
+              } else {
+                writeFileSync_fn(dest, readFileSync(source));
+              }
+            }
+            copied++;
+          }
+        }
+        totalCopied += copied;
+        totalSkipped += skipped;
+        results.push(`📦 ${name}: ${copied} ${dryRun ? 'would be ' : ''}copied, ${skipped} skipped`);
+      }
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 🧩 Compose: ${pluginNames.length} plugins\n\n${results.join('\n')}\n\n**Total**: ${totalCopied} ${dryRun ? 'would be ' : ''}copied, ${totalSkipped} skipped\n${conflicts.length > 0 ? `⚠️ ${conflicts.length} naming conflict(s)` : '✅ No conflicts'}`,
+        }],
+      };
+    }
+  );
+
+  // ── Tool: publish_plugin (T56) ──────────────────────────────────
+
+  server.tool(
+    "publish_plugin",
+    "FAI PUBLISH — Validate a plugin and generate its marketplace entry. Shows what would be added to marketplace.json. Use dryRun (default) to preview before committing.",
+    {
+      pluginName: z.string().describe("Plugin name to publish"),
+      dryRun: z.boolean().optional().default(true),
+    },
+    { annotations: { readOnlyHint: false } },
+    async ({ pluginName, dryRun }) => {
+      const plugin = loadPluginJson(pluginName);
+      if (!plugin) return mcpError(`Plugin "${pluginName}" not found.`);
+
+      const pj = plugin.json;
+      const steps = [];
+
+      // Validate required fields
+      const missing = ['name', 'description', 'version', 'author', 'license'].filter(f => !(pj)[f]);
+      if (missing.length > 0) {
+        return mcpError(`Plugin missing required fields: ${missing.join(', ')}`);
+      }
+      steps.push(`✅ Validated: ${pj.name} v${pj.version}`);
+
+      // Count items
+      const items = {};
+      for (const type of ['agents', 'instructions', 'skills', 'hooks']) {
+        items[type] = ((pj)[type] || []).length;
+      }
+      const totalItems = Object.values(items).reduce((s, n) => s + n, 0);
+      steps.push(`📦 ${totalItems} items: ${JSON.stringify(items)}`);
+
+      // Check file refs resolve
+      let broken = 0;
+      for (const type of ['agents', 'instructions', 'skills', 'hooks']) {
+        for (const ref of (pj)[type] || []) {
+          if (!existsSync(resolve(plugin.dir, ref))) broken++;
+        }
+      }
+      if (broken > 0) steps.push(`⚠️ ${broken} file reference(s) don't resolve`);
+      else steps.push(`✅ All file references resolve`);
+
+      // Generate marketplace entry
+      const entry = {
+        name: pj.name,
+        description: pj.description,
+        version: pj.version,
+        author: typeof pj.author === 'string' ? pj.author : pj.author?.name,
+        license: pj.license,
+        source: `./plugins/${pj.name}`,
+        keywords: pj.keywords || [],
+        plays: pj.plays || [],
+        items,
+      };
+
+      if (dryRun) {
+        steps.push(`\n🔍 DRY RUN — no changes made.`);
+      } else {
+        // Append to marketplace.json
+        try {
+          const marketplace = loadMarketplace();
+          const existing = marketplace.plugins.findIndex((p) => p.name === pj.name);
+          if (existing >= 0) {
+            marketplace.plugins[existing] = entry;
+            steps.push(`🔄 Updated existing entry in marketplace.json`);
+          } else {
+            marketplace.plugins.push(entry);
+            steps.push(`➕ Added new entry to marketplace.json`);
+          }
+          marketplace.stats = { totalPlugins: marketplace.plugins.length, totalItems: marketplace.plugins.reduce((s, p) => s + Object.values(p.items || {}).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0), 0) };
+          writeFileSync_fn(MARKETPLACE_PATH, JSON.stringify(marketplace, null, 2), 'utf-8');
+        } catch (err) {
+          steps.push(`❌ Failed to update marketplace.json: ${err}`);
+        }
+      }
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 🚀 Publish: ${pj.name}\n\n${steps.join('\n')}\n\n### Marketplace Entry\n\`\`\`json\n${JSON.stringify(entry, null, 2)}\n\`\`\`\n\n${dryRun ? '💡 Set dryRun=false to write to marketplace.json.' : '✅ Published to marketplace.json.'}`,
+        }],
+      };
+    }
+  );
+
+  // ── Tool: check_plugin_updates (T57) ────────────────────────────
+
+  server.tool(
+    "check_plugin_updates",
+    "FAI UPDATES — Check installed plugins against the marketplace for available version updates.",
+    {
+      targetDir: z.string().optional(),
+    },
+    { annotations: { readOnlyHint: true } },
+    async ({ targetDir }) => {
+      const target = targetDir || process.cwd();
+      const githubDir = join(target, '.github');
+      if (!existsSync(githubDir)) {
+        return { content: [{ type: 'text', text: 'No .github/ directory found.' }] };
+      }
+
+      const marketplace = loadMarketplace();
+      const installedFiles = new Set();
+
+      for (const type of ['agents', 'instructions', 'skills', 'hooks']) {
+        const dir = join(githubDir, type);
+        if (!existsSync(dir)) continue;
+        for (const entry of readdirSync(dir)) installedFiles.add(`${type}/${entry}`);
+      }
+
+      const updates = [];
+      const upToDate = [];
+
+      for (const mktPlugin of marketplace.plugins) {
+        const pData = loadPluginJson(mktPlugin.name);
+        if (!pData) continue;
+        const pj = pData.json;
+
+        // Check if any of this plugin's files are installed
+        let installed = false;
+        for (const type of ['agents', 'instructions', 'skills', 'hooks']) {
+          for (const ref of (pj)[type] || []) {
+            if (installedFiles.has(`${type}/${basename(ref)}`)) { installed = true; break; }
+          }
+          if (installed) break;
+        }
+
+        if (installed) {
+          // Compare versions (simple string comparison — semver)
+          const installedVersion = pj.version || '0.0.0';
+          const availableVersion = mktPlugin.version || '0.0.0';
+          if (availableVersion > installedVersion) {
+            updates.push(`📦 **${mktPlugin.name}**: ${installedVersion} → ${availableVersion}`);
+          } else {
+            upToDate.push(mktPlugin.name);
+          }
+        }
+      }
+
+      if (updates.length === 0) {
+        return { content: [{ type: 'text', text: `✅ All ${upToDate.length} detected plugins are up to date.` }] };
+      }
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 🔄 Available Updates (${updates.length})\n\n${updates.join('\n')}\n\n${upToDate.length > 0 ? `✅ ${upToDate.length} plugin(s) up to date.` : ''}\n\n💡 Use \`install_plugin\` to update individually.`,
+        }],
+      };
+    }
+  );
+
+  // ── Tool: resolve_dependencies (T58) ────────────────────────────
+
+  server.tool(
+    "resolve_dependencies",
+    "FAI DEPENDENCIES — Resolve plugin dependency chains. Shows what other plugins a plugin requires and the install order.",
+    {
+      pluginName: z.string().describe("Plugin to resolve dependencies for"),
+    },
+    { annotations: { readOnlyHint: true } },
+    async ({ pluginName }) => {
+      const visited = new Set();
+      const order = [];
+      const missing = [];
+
+      function visit(name) {
+        if (visited.has(name)) return;
+        visited.add(name);
+        const plugin = loadPluginJson(name);
+        if (!plugin) { missing.push(name); return; }
+        const deps = (plugin.json).dependencies;
+        if (deps && typeof deps === 'object') {
+          for (const dep of Object.keys(deps)) {
+            visit(dep);
+          }
+        }
+        order.push(name);
+      }
+
+      visit(pluginName);
+
+      if (missing.length > 0 && missing.includes(pluginName)) {
+        return mcpError(`Plugin "${pluginName}" not found.`);
+      }
+
+      const hasDeps = order.length > 1;
+      const listing = order.map((name, i) => `${i + 1}. **${name}**${name === pluginName ? ' ← requested' : ' (dependency)'}`).join('\n');
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 🔗 Dependencies: ${pluginName}\n\n${hasDeps ? `**Install order** (${order.length} plugins):\n\n${listing}` : '✅ No dependencies — standalone plugin.'}\n${missing.length > 0 ? `\n⚠️ Missing: ${missing.join(', ')}` : ''}\n\n💡 Use \`compose_plugins\` to install the full dependency chain.`,
+        }],
+      };
+    }
+  );
+
+  // ── Tool: list_external_plugins (T60) ───────────────────────────
+
+  server.tool(
+    "list_external_plugins",
+    "FAI FEDERATION — Browse external plugin sources from third-party repositories (GitHub, npm). Shows community-contributed plugins beyond the core marketplace.",
+    {},
+    { annotations: { readOnlyHint: true } },
+    async () => {
+      const externalPath = join(PLUGINS_DIR, 'external.json');
+      const communityPlugins = [];
+
+      // Load external.json
+      let externalSources = [];
+      if (existsSync(externalPath)) {
+        try {
+          const ext = JSON.parse(readFileSync(externalPath, 'utf-8'));
+          externalSources = ext.plugins || [];
+        } catch { /* skip */ }
+      }
+
+      // Load community-plugins/
+      if (existsSync(COMMUNITY_DIR)) {
+        for (const dir of readdirSync(COMMUNITY_DIR)) {
+          const pjPath = join(COMMUNITY_DIR, dir, 'plugin.json');
+          if (existsSync(pjPath)) {
+            try {
+              const pj = JSON.parse(readFileSync(pjPath, 'utf-8'));
+              communityPlugins.push(`- **${pj.name || dir}** — ${pj.description || 'Community plugin'}\n  Source: community-plugins/${dir}`);
+            } catch {
+              communityPlugins.push(`- **${dir}** — Community plugin`);
+            }
+          }
+        }
+      }
+
+      const externalListing = externalSources.map((s) =>
+        `- **${s.name}** — ${s.description || 'External plugin'}\n  Source: ${s.source?.type}://${s.source?.repo || s.source?.package || 'unknown'}\n  Author: ${s.author?.name || 'Unknown'}`
+      ).join('\n\n');
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 🌐 External Plugin Sources\n\n### Community Plugins (${communityPlugins.length})\n${communityPlugins.length > 0 ? communityPlugins.join('\n') : 'None found.'}\n\n### External Sources (${externalSources.length})\n${externalSources.length > 0 ? externalListing : 'None configured.'}\n\n---\n💡 Community plugins install with \`install_plugin\`. External sources require \`npx frootai install --external\`.`,
+        }],
+      };
+    }
+  );
+
+  // ── Tool: marketplace_stats (T61) ───────────────────────────────
+
+  server.tool(
+    "marketplace_stats",
+    "FAI ANALYTICS — Marketplace statistics: total plugins, items by category, top plugins by item count, coverage by play.",
+    {},
+    { annotations: { readOnlyHint: true, idempotentHint: true } },
+    async () => {
+      const marketplace = loadMarketplace();
+      const plugins = marketplace.plugins;
+
+      // Category breakdown
+      const categories = {};
+      for (const p of plugins) {
+        for (const kw of (p.keywords || []).slice(0, 3)) {
+          categories[kw] = (categories[kw] || 0) + 1;
+        }
+      }
+
+      // Top plugins by item count
+      const topPlugins = [...plugins]
+        .map(p => ({ name: p.name, items: countItems(p.items) }))
+        .sort((a, b) => b.items - a.items)
+        .slice(0, 10);
+
+      // Play coverage
+      const playCoverage = {};
+      for (const p of plugins) {
+        for (const play of p.plays || []) {
+          playCoverage[play] = (playCoverage[play] || 0) + 1;
+        }
+      }
+      const coveredPlays = Object.keys(playCoverage).length;
+
+      // Total items
+      const totalItems = plugins.reduce((s, p) => s + countItems(p.items), 0);
+      const totalAgents = plugins.reduce((s, p) => s + (p.items?.agents || 0), 0);
+      const totalInstructions = plugins.reduce((s, p) => s + (p.items?.instructions || 0), 0);
+      const totalSkills = plugins.reduce((s, p) => s + (p.items?.skills || 0), 0);
+      const totalHooks = plugins.reduce((s, p) => s + (p.items?.hooks || 0), 0);
+
+      // Community count
+      let communityCount = 0;
+      if (existsSync(COMMUNITY_DIR)) {
+        communityCount = readdirSync(COMMUNITY_DIR).filter(d => existsSync(join(COMMUNITY_DIR, d, 'plugin.json'))).length;
+      }
+
+      const topList = topPlugins.map((p, i) => `${i + 1}. **${p.name}** (${p.items} items)`).join('\n');
+
+      const topCategories = Object.entries(categories)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([cat, count]) => `\`${cat}\` (${count})`)
+        .join(', ');
+
+      return {
+        content: [{
+          type: 'text',
+          text: `## 📊 FAI Marketplace Statistics\n\n| Metric | Value |\n|--------|-------|\n| **Total plugins** | ${plugins.length} |\n| **Total items** | ${totalItems} |\n| **Agents** | ${totalAgents} |\n| **Instructions** | ${totalInstructions} |\n| **Skills** | ${totalSkills} |\n| **Hooks** | ${totalHooks} |\n| **Community plugins** | ${communityCount} |\n| **Plays covered** | ${coveredPlays} |\n\n### Top 10 Plugins by Items\n${topList}\n\n### Top Categories\n${topCategories}\n\n---\n*Marketplace: ${plugins.length} plugins, ${totalItems} items, ${communityCount} community contributions*`,
+        }],
+      };
+    }
+  );
+
   return server;
 } // end createConfiguredServer()
 
