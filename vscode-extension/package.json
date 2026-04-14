@@ -1,7 +1,7 @@
 {
   "name": "frootai-vscode",
   "displayName": "FrootAI — AI Architecture Knowledge Engine",
-  "description": "45 MCP tools · 100 solution plays · 830+ primitives · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
+  "description": "45 MCP tools · 101 solution plays · 830+ primitives · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
   "version": "5.0.7",
   "publisher": "frootai",
   "engines": {
@@ -264,7 +264,10 @@
         "frootai.mcpTransport": {
           "type": "string",
           "default": "stdio",
-          "enum": ["stdio", "http"],
+          "enum": [
+            "stdio",
+            "http"
+          ],
           "enumDescriptions": [
             "Run MCP server as a local process (recommended for most users)",
             "Connect to a remote MCP server over HTTP (requires a hosted endpoint)"
@@ -289,4 +292,3 @@
     "@vscode/vsce": "^2.22.0"
   }
 }
-
