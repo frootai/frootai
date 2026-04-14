@@ -46,7 +46,7 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./src/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "mcpServerDefinitionProviders": [
       {
@@ -283,12 +283,20 @@
     }
   },
   "scripts": {
-    "compile": "node src/extension.js",
-    "package": "vsce package",
-    "publish": "vsce publish"
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && node esbuild.config.mjs",
+    "check-types": "tsc --noEmit",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "npm run check-types && node esbuild.config.mjs --production",
+    "lint": "eslint src/",
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish"
   },
   "devDependencies": {
     "@types/vscode": "^1.95.0",
-    "@vscode/vsce": "^2.22.0"
+    "@types/node": "^22.0.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0"
   }
 }

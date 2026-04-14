@@ -1,0 +1,189 @@
+import * as vscode from "vscode";
+
+interface ProtocolChild {
+  label: string;
+  desc: string;
+  icon: string;
+}
+
+interface ProtocolLayer {
+  label: string;
+  icon: string;
+  desc: string;
+  children: ProtocolChild[];
+}
+
+interface ProtocolLayerItem extends vscode.TreeItem {
+  _children?: ProtocolChild[];
+}
+
+const LAYERS: ProtocolLayer[] = [
+  {
+    label: "FAI Protocol",
+    icon: "json",
+    desc: "fai-manifest.json — the specification",
+    children: [
+      {
+        label: "fai-manifest.json",
+        desc: "Full play wiring: context + primitives + infra + toolkit",
+        icon: "file-code",
+      },
+      {
+        label: "fai-context.json",
+        desc: "Lightweight LEGO block context reference",
+        icon: "file",
+      },
+      {
+        label: "7 JSON schemas",
+        desc: "agent, instruction, skill, hook, plugin, manifest, context",
+        icon: "symbol-structure",
+      },
+      {
+        label: "Auto-wiring",
+        desc: "Shared context propagates to all primitives in a play",
+        icon: "link",
+      },
+    ],
+  },
+  {
+    label: "FAI Layer",
+    icon: "layers",
+    desc: "The conceptual binding glue",
+    children: [
+      {
+        label: "Context Wiring",
+        desc: "Knowledge modules + WAF pillars + compatible plays",
+        icon: "git-merge",
+      },
+      {
+        label: "WAF Alignment",
+        desc: "6 pillars: security, reliability, cost, ops, perf, RAI",
+        icon: "shield",
+      },
+      {
+        label: "Standalone → Wired",
+        desc: "LEGO blocks auto-wire when placed in a play",
+        icon: "plug",
+      },
+    ],
+  },
+  {
+    label: "FAI Engine",
+    icon: "server-process",
+    desc: "The runtime — 7 modules, 42 tests",
+    children: [
+      {
+        label: "manifest-reader",
+        desc: "Loads and validates fai-manifest.json",
+        icon: "file-code",
+      },
+      {
+        label: "context-resolver",
+        desc: "Resolves shared context chain",
+        icon: "search",
+      },
+      {
+        label: "primitive-wirer",
+        desc: "Connects agents, instructions, skills, hooks",
+        icon: "link",
+      },
+      {
+        label: "hook-runner",
+        desc: "Executes hooks at lifecycle events",
+        icon: "play",
+      },
+      {
+        label: "evaluator",
+        desc: "Runs quality metrics (groundedness, coherence)",
+        icon: "graph",
+      },
+      {
+        label: "mcp-bridge",
+        desc: "Bridges to MCP protocol",
+        icon: "cloud",
+      },
+    ],
+  },
+  {
+    label: "FAI Factory",
+    icon: "rocket",
+    desc: "CI/CD — build, test, publish",
+    children: [
+      {
+        label: "validate-primitives.js",
+        desc: "2,800+ checks across all primitives",
+        icon: "check-all",
+      },
+      {
+        label: "GitHub Actions (15)",
+        desc: "Automated CI/CD workflows",
+        icon: "github-action",
+      },
+      {
+        label: "npm publish",
+        desc: "frootai-mcp on npm registry",
+        icon: "package",
+      },
+    ],
+  },
+  {
+    label: "FAI Marketplace",
+    icon: "store",
+    desc: "77 plugins, 1,008 items",
+    children: [
+      {
+        label: "npx frootai install",
+        desc: "One-command plugin installation",
+        icon: "terminal",
+      },
+      {
+        label: "npx frootai list",
+        desc: "Browse all 77 plugins",
+        icon: "list-flat",
+      },
+      {
+        label: "frootai.dev/marketplace",
+        desc: "Web-based marketplace with modals",
+        icon: "globe",
+      },
+    ],
+  },
+];
+
+export class FaiProtocolProvider
+  implements vscode.TreeDataProvider<vscode.TreeItem>
+{
+  getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+    return element;
+  }
+
+  getChildren(element?: vscode.TreeItem): vscode.TreeItem[] {
+    if (!element) {
+      return LAYERS.map((layer) => {
+        const item: ProtocolLayerItem = new vscode.TreeItem(
+          layer.label,
+          vscode.TreeItemCollapsibleState.Collapsed
+        );
+        item.description = layer.desc;
+        item.iconPath = new vscode.ThemeIcon(layer.icon);
+        item._children = layer.children;
+        return item;
+      });
+    }
+
+    const layerItem = element as ProtocolLayerItem;
+    if (layerItem._children) {
+      return layerItem._children.map((child) => {
+        const item = new vscode.TreeItem(
+          child.label,
+          vscode.TreeItemCollapsibleState.None
+        );
+        item.description = child.desc;
+        item.iconPath = new vscode.ThemeIcon(child.icon);
+        item.tooltip = child.desc;
+        return item;
+      });
+    }
+    return [];
+  }
+}
