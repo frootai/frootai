@@ -787,11 +787,12 @@ function activate(context) {
   // Optional: find local repo if available (enhances but not required)
   const root = findFrootAIRoot();
 
-  // Register tree views (4 panels: Plays + Primitives + Protocol + MCP)
-  vscode.window.registerTreeDataProvider("frootai.solutionPlays", new SolutionPlayProvider());
-  vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", new PrimitivesCatalogProvider());
-  vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
-  vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
+  // Tree views replaced by React sidebar webview (registered in extension.ts)
+  // Legacy tree providers kept as fallback but no longer registered
+  // vscode.window.registerTreeDataProvider("frootai.solutionPlays", new SolutionPlayProvider());
+  // vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", new PrimitivesCatalogProvider());
+  // vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
+  // vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
 
   // ── Command: Open Solution Play (action picker) ──
   context.subscriptions.push(
