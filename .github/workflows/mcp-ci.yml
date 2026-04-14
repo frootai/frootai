@@ -20,12 +20,19 @@ jobs:
       - name: Install dependencies
         run: cd mcp-server && npm ci
       - name: TypeScript check
-        run: cd mcp-server && npx tsc --noEmit
+        run: cd mcp-server && npm run typecheck
+      - name: Compile TypeScript
+        run: cd mcp-server && npm run build:ts
+      - name: Verify dist/server.js exports
+        run: node -e "import('./mcp-server/dist/server.js').then(m => { if (typeof m.getServerInfo !== 'function') throw new Error('getServerInfo missing'); console.log('Types OK:', m.getServerInfo().toolCount, 'tools'); })"
+      - name: Build BM25 search index
+        run: cd mcp-server && node build-search-index.js
       - name: Run tests
-        run: cd mcp-server && npx vitest run
+        run: cd mcp-server && npm test
       - name: Engine tests
         run: node engine/test.js
       - name: Server starts (stdio)
         run: |
           timeout 5 node mcp-server/index.js || true
           echo "Server startup verified"
+

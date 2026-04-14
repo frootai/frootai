@@ -3,6 +3,19 @@
   "version": "5.0.1",
   "description": "FrootAI™ MCP Server v5 — The open glue for the GenAI ecosystem. 45 tools: knowledge (6) + live (4) + agent chain (3) + ecosystem (10) + FAI engine (6) + scaffold (3) + marketplace (13). 16 modules, 200+ terms, 101 solution plays, 830+ primitives. HTTP transport, TypeScript, OpenTelemetry.",
   "main": "index.js",
+  "types": "dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "default": "./dist/server.js"
+    }
+  },
   "type": "module",
   "bin": {
     "frootai-mcp": "./index.js",
@@ -12,18 +25,22 @@
     "index.js",
     "cli.js",
     "knowledge.json",
+    "search-index.json",
+    "dist/",
     "README.md"
   ],
   "scripts": {
     "start": "node index.js",
     "start:http": "node index.js http",
-    "build": "node build-knowledge.js && tsc --noEmit",
-    "build:ts": "tsc",
+    "build": "node build-knowledge.js && npm run build:search && node_modules/.bin/tsc",
+    "build:search": "node build-search-index.js",
+    "build:ts": "node_modules/.bin/tsc",
+    "build:knowledge": "node build-knowledge.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "node build-knowledge.js"
+    "typecheck": "node_modules/.bin/tsc --noEmit",
+    "prepublishOnly": "node build-knowledge.js && node build-search-index.js"
   },
   "keywords": [
     "mcp",
