@@ -78,26 +78,46 @@ results = evaluator.check_thresholds(scores)
 ### CLI
 
 ```bash
-frootai plays                    # List solution plays
-frootai search "embeddings"      # Search knowledge
+frootai plays                    # List all 101 solution plays
+frootai search "embeddings"      # BM25 search across knowledge
 frootai modules                  # List FROOT modules
 frootai glossary temperature     # Look up a term
 frootai cost 01-enterprise-rag   # Azure cost estimate
+frootai scaffold 01 --dry-run    # Preview scaffold output
+frootai wire 01                  # Generate fai-manifest.json
+frootai validate manifest.json   # Validate FAI manifest
+frootai evaluate groundedness=4.5 relevance=3.8  # Run quality check
+frootai waf security             # WAF pillar guidance
+frootai primitives               # Browse 830+ primitives
+frootai learning-path rag        # Curated learning path
 ```
 
 ---
 
 ### Features
 
-- **Knowledge Search**  full-text search across all FROOT modules, offline
-- **Solution Plays**  browse and filter pre-tuned deployable solutions
-- **AI Glossary**  comprehensive AI/ML term definitions
-- **Cost Estimation**  Azure cost estimates per solution play and scale
-- **Evaluation Framework**  quality scoring with configurable thresholds
-- **A/B Testing**  prompt experiments with real model callbacks
-- **Zero Dependencies**  pure Python stdlib, works anywhere
+| Feature | Description |
+|---------|-------------|
+| **BM25 Search** | Full-text search (358 docs × 8,627 terms), falls back to keyword |
+| **101 Solution Plays** | Pre-architected Azure AI patterns with filtering |
+| **FAI Protocol** | Wire, validate, inspect fai-manifest.json |
+| **Scaffold** | Bootstrap projects with DevKit structure |
+| **WAF Guidance** | 6-pillar Well-Architected Framework advice |
+| **Evaluation** | Threshold-based quality gates with JSON export |
+| **A/B Testing** | Prompt experiment framework with scoring |
+| **Agentic Loop** | Ralph Loop — autonomous task execution |
+| **Cost Estimation** | Itemized Azure cost estimates by play |
+| **AI Glossary** | 200+ terms extracted from knowledge modules |
+| **CLI** | 13 commands for browsing, searching, scaffolding |
+| **Zero Dependencies** | Pure Python stdlib, works anywhere |
 
-> The FrootAI ecosystem is growing. New modules, plays, and capabilities with every release.
+### Testing
+
+```bash
+pip install pytest
+python -m pytest tests/ -v
+# 44 tests across 9 test classes
+```
 
 ---
 

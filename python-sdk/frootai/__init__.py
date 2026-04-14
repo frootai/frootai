@@ -6,11 +6,13 @@ Usage:
     from frootai import FrootAI, SolutionPlay, Evaluator
 
     client = FrootAI()
-    results = client.search("RAG architecture")
+    results = client.search("RAG architecture")   # BM25 search
     module = client.get_module("R2")
-    cost = client.estimate_cost("01-enterprise-rag", scale="dev")
+    manifest = client.wire_play("01")              # FAI Protocol
+    scaffold = client.scaffold_play("01")          # DevKit bootstrap
+    waf = client.get_waf_guidance("security")      # WAF guidance
 
-    plays = SolutionPlay.all()
+    plays = SolutionPlay.all()                     # 101 plays
     play = SolutionPlay.get("03")
 
     evaluator = Evaluator()
@@ -25,7 +27,7 @@ Usage:
     from frootai.agentic_loop import AgenticLoop, Task, run_plan
 """
 
-__version__ = "3.3.0"
+__version__ = "5.1.0"
 __author__ = "Pavleen Bali"
 
 from frootai.client import FrootAI

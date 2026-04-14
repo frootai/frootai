@@ -153,3 +153,27 @@ class SolutionPlay:
     def ready() -> list["SolutionPlay"]:
         """Get all production-ready plays."""
         return SolutionPlay.by_status("Ready")
+
+    @staticmethod
+    def search(query: str) -> list["SolutionPlay"]:
+        """Search plays by keyword in name, description, or infra."""
+        q = query.lower()
+        return [SolutionPlay(**p) for p in _PLAYS_DATA
+                if q in p["name"].lower() or q in p["description"].lower() or q in " ".join(p["infra"]).lower()]
+
+    def __repr__(self) -> str:
+        return f"SolutionPlay(id='{self.id}', name='{self.name}', complexity='{self.complexity}')"
+
+    def __str__(self) -> str:
+        return f"[{self.id}] {self.name} ({self.complexity})"
+
+    def to_dict(self) -> dict:
+        """Serialize to dictionary."""
+        return {"id": self.id, "name": self.name, "description": self.description,
+                "complexity": self.complexity, "status": self.status, "layer": self.layer,
+                "infra": self.infra, "tuning": self.tuning, "modules": self.modules}
+
+    def to_json(self) -> str:
+        """Serialize to JSON string."""
+        import json
+        return json.dumps(self.to_dict(), indent=2)

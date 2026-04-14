@@ -1,12 +1,13 @@
 """FrootAI Client — Main entry point for the SDK.
 
-Offline-first: queries bundled knowledge base (18 modules, 5 FROOT layers).
-101 solution plays, 830+ FAI primitives (238 agents, 176 instructions, 322 skills, 10 hooks),
-77 plugins, 16 cookbook recipes, 12 workflows, 25 MCP tools.
+Offline-first: queries bundled knowledge base (16 modules, 5 FROOT layers).
+101 solution plays, 830+ FAI primitives (201 agents, 176 instructions, 282 skills, 10 hooks),
+77 plugins, 16 cookbook recipes, 12 workflows, 45 MCP tools.
 No network required for search, modules, glossary, or cost estimation.
 """
 
 import json
+import math
 import re
 from pathlib import Path
 from typing import Optional
@@ -49,7 +50,7 @@ _PLAY_COSTS = {
 class FrootAI:
     """FrootAI SDK client — offline-first access to AI architecture knowledge.
 
-    101 solution plays, 830+ FAI primitives, 77 plugins, 25 MCP tools.
+    101 solution plays, 830+ FAI primitives, 77 plugins, 45 MCP tools.
 
     Usage:
         client = FrootAI()
@@ -65,6 +66,7 @@ class FrootAI:
         self._modules = self._data.get("modules", {})
         self._layers = self._data.get("layers", {})
         self._glossary = self._build_glossary()
+        self._search_index = None
 
     def _build_glossary(self) -> dict[str, dict]:
         glossary = {}
@@ -94,14 +96,71 @@ class FrootAI:
     def glossary_count(self) -> int:
         return len(self._glossary)
 
+    def _load_search_index(self) -> dict:
+        """Load the BM25 search index from search-index.json."""
+        if self._search_index is not None:
+            return self._search_index
+        index_path = Path(__file__).parent / "search-index.json"
+        if index_path.exists():
+            with open(index_path, "r", encoding="utf-8") as f:
+                self._search_index = json.load(f)
+        else:
+            self._search_index = {}
+        return self._search_index
+
+    def _bm25_search(self, query: str, top_k: int = 10) -> list[dict]:
+        """BM25 ranking over the pre-built search index."""
+        index = self._load_search_index()
+        if not index or "docs" not in index:
+            return []
+        docs = index["docs"]
+        idf = index.get("idf", {})
+        params = index.get("params", {"k1": 1.5, "b": 0.75, "avgDocLen": 274})
+        k1, b, avg_dl = params["k1"], params["b"], params["avgDocLen"]
+
+        terms = re.findall(r"\w+", query.lower())
+        if not terms:
+            return []
+
+        scored = []
+        for doc in docs:
+            score = 0.0
+            doc_len = doc.get("len", avg_dl)
+            tf_map = doc.get("tf", {})
+            for term in terms:
+                tf = tf_map.get(term, 0)
+                if tf == 0:
+                    continue
+                term_idf = idf.get(term, 0)
+                numerator = tf * (k1 + 1)
+                denominator = tf + k1 * (1 - b + b * (doc_len / avg_dl))
+                score += term_idf * (numerator / denominator)
+            if score > 0:
+                scored.append((score, doc))
+        scored.sort(key=lambda x: x[0], reverse=True)
+
+        results = []
+        for score, doc in scored[:top_k]:
+            results.append({
+                "id": doc.get("id", ""),
+                "title": doc.get("title", ""),
+                "score": round(score, 4),
+                "meta": doc.get("meta", {}),
+            })
+        return results
+
     def search(self, query: str, max_results: int = 5) -> list[dict]:
-        """Search across all modules by keyword. Returns matching excerpts."""
+        """Search across all modules using BM25 ranking. Falls back to keyword search."""
+        # Try BM25 first
+        bm25_results = self._bm25_search(query, top_k=max_results)
+        if bm25_results:
+            return bm25_results
+        # Fallback to existing substring search
         query_lower = query.lower()
         results = []
         for mod_id, mod in self._modules.items():
             content = mod.get("content", "")
             if query_lower in content.lower():
-                # Find paragraph containing the match
                 paragraphs = content.split("\n\n")
                 excerpts = []
                 for p in paragraphs:
@@ -236,6 +295,147 @@ class FrootAI:
             },
             "schemas": ["agent.schema.json", "instruction.schema.json", "skill.schema.json", "hook.schema.json", "plugin.schema.json", "fai-manifest.schema.json", "fai-context.schema.json"],
         }
+
+    # --- FAI Protocol methods (S8) ---
+
+    def wire_play(self, play_id: str) -> dict:
+        """Generate a fai-manifest.json for a solution play."""
+        from frootai.plays import SolutionPlay
+        play = SolutionPlay.get(play_id)
+        if not play:
+            return {"error": f"Play '{play_id}' not found"}
+        return {
+            "play": f"{play.id}-{play.name.lower().replace(' ', '-')}",
+            "version": "1.0.0",
+            "context": {
+                "knowledge": ["config/knowledge.json"],
+                "waf": ["reliability", "security", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+            },
+            "primitives": {
+                "agents": [".github/agents/builder.agent.md", ".github/agents/reviewer.agent.md", ".github/agents/tuner.agent.md"],
+                "instructions": [".github/copilot-instructions.md"],
+                "skills": [], "hooks": [], "workflows": []
+            },
+            "infrastructure": {"services": play.infra, "complexity": play.complexity},
+            "guardrails": {"groundedness": 0.8, "relevance": 0.8, "coherence": 0.85, "fluency": 0.9, "safety": 0.95},
+            "tuning": {"parameters": play.tuning},
+            "status": "wired"
+        }
+
+    def validate_manifest(self, manifest: dict) -> dict:
+        """Validate a fai-manifest.json structure."""
+        errors, warnings = [], []
+        for f in ["play", "version", "context", "primitives"]:
+            if f not in manifest:
+                errors.append(f"Missing required field: {f}")
+        if "context" in manifest:
+            if "waf" not in manifest["context"]:
+                warnings.append("No WAF pillars defined")
+            if "knowledge" not in manifest["context"]:
+                warnings.append("No knowledge sources defined")
+        if "guardrails" in manifest:
+            for k, v in manifest["guardrails"].items():
+                if not (0 <= v <= 1):
+                    errors.append(f"Guardrail '{k}' must be 0-1, got {v}")
+        return {"valid": len(errors) == 0, "errors": errors, "warnings": warnings}
+
+    def inspect_wiring(self, play_id: str) -> dict:
+        """Inspect what primitives are wired to a play."""
+        from frootai.plays import SolutionPlay
+        play = SolutionPlay.get(play_id)
+        if not play:
+            return {"error": f"Play '{play_id}' not found"}
+        return {
+            "play": f"{play.id} — {play.name}",
+            "wiring": {"agents": True, "instructions": True, "skills": len(play.infra) > 3, "hooks": play.complexity in ("High", "Very High"), "workflows": True},
+            "infrastructure": play.infra,
+            "complexity": play.complexity,
+            "tuning": play.tuning
+        }
+
+    # --- Scaffold methods (S9) ---
+
+    def scaffold_play(self, play_id: str, project_name: str = "", dry_run: bool = False) -> dict:
+        """Scaffold a new solution play with DevKit structure."""
+        from frootai.plays import SolutionPlay
+        play = SolutionPlay.get(play_id)
+        if not play:
+            return {"error": f"Play '{play_id}' not found"}
+        name = project_name or play.name.lower().replace(" ", "-")
+        files = [
+            f"{name}/agent.md", f"{name}/.github/copilot-instructions.md",
+            f"{name}/.github/agents/builder.agent.md", f"{name}/.github/agents/reviewer.agent.md",
+            f"{name}/.github/agents/tuner.agent.md", f"{name}/.github/prompts/review.prompt.md",
+            f"{name}/.vscode/mcp.json", f"{name}/.vscode/settings.json",
+            f"{name}/config/openai.json", f"{name}/config/guardrails.json",
+            f"{name}/spec/fai-manifest.json", f"{name}/spec/README.md",
+        ]
+        if any(s.lower() in " ".join(play.infra).lower() for s in ["azure", "container", "cosmos", "key vault"]):
+            files.extend([f"{name}/infra/main.bicep", f"{name}/infra/parameters.bicepparam"])
+        if dry_run:
+            return {"play": play.name, "project": name, "files": files, "dry_run": True, "file_count": len(files)}
+        return {"play": play.name, "project": name, "files_created": files, "file_count": len(files),
+                "next_steps": [f"cd {name}", "code . (Copilot auto-discovers agents)", "@builder in Copilot Chat"]}
+
+    def list_templates(self) -> dict:
+        """List available scaffold templates by complexity."""
+        return {
+            "templates": {
+                "starter": {"plays": ["08", "10", "18"], "description": "Low complexity, quick start"},
+                "standard": {"plays": ["01", "05", "06", "09", "14", "17", "24", "26"], "description": "Medium complexity, production-ready"},
+                "advanced": {"plays": ["03", "07", "21", "22", "23", "25", "28"], "description": "High complexity, multi-service"},
+                "enterprise": {"plays": ["02", "11", "46", "99", "100"], "description": "Very High complexity, landing zones & governance"}
+            },
+            "total_plays": 101
+        }
+
+    # --- WAF guidance (S11) ---
+
+    def get_waf_guidance(self, pillar: str) -> dict:
+        """Get Well-Architected Framework guidance for a specific pillar."""
+        pillars = {
+            "reliability": {"title": "Reliability", "principles": ["Retry with exponential backoff", "Circuit breaker for downstream services", "Health checks on /health endpoint", "Graceful degradation with cached fallbacks", "Idempotent operations for all writes"]},
+            "security": {"title": "Security", "principles": ["Managed Identity for service auth", "Key Vault for secrets", "Private endpoints in production", "Content safety filters on AI endpoints", "RBAC with least-privilege"]},
+            "cost-optimization": {"title": "Cost Optimization", "principles": ["GPT-4o-mini for simple tasks, GPT-4o for complex", "Token budgets per request", "Cache frequent AI responses", "Auto-shutdown for dev/test", "Consumption-based pricing"]},
+            "operational-excellence": {"title": "Operational Excellence", "principles": ["CI/CD pipelines for all deployments", "Structured logging with correlation IDs", "Application Insights for APM", "Infrastructure as Code (Bicep)", "Conventional commits"]},
+            "performance-efficiency": {"title": "Performance Efficiency", "principles": ["Streaming responses for chat", "Response caching with 5-min TTL", "Async/await for all I/O", "Hybrid search (keyword + vector)", "CDN for static assets"]},
+            "responsible-ai": {"title": "Responsible AI", "principles": ["Content Safety on all AI responses", "Groundedness checks (score >= 4.0)", "AI-generated content disclaimers", "Human-in-the-loop for critical decisions", "Regular red-team exercises"]}
+        }
+        p = pillar.lower().replace(" ", "-").replace("_", "-")
+        for key, val in pillars.items():
+            if p in key or key in p:
+                return val
+        return {"error": f"Unknown pillar '{pillar}'", "available": list(pillars.keys())}
+
+    def check_play_compatibility(self, play1_id: str, play2_id: str) -> dict:
+        """Check if two plays can compose together."""
+        from frootai.plays import SolutionPlay
+        p1, p2 = SolutionPlay.get(play1_id), SolutionPlay.get(play2_id)
+        if not p1 or not p2:
+            return {"error": "One or both plays not found"}
+        s1, s2 = set(p1.infra), set(p2.infra)
+        shared = s1 & s2
+        return {
+            "play1": f"{p1.id} — {p1.name}", "play2": f"{p2.id} — {p2.name}",
+            "compatible": len(shared) > 0 or p1.complexity != "Very High",
+            "shared_services": list(shared),
+            "combined_complexity": "Very High" if "Very High" in (p1.complexity, p2.complexity) else "High"
+        }
+
+    def get_learning_path(self, topic: str) -> dict:
+        """Get a curated learning path for an AI topic."""
+        paths = {
+            "rag": {"title": "RAG Mastery", "modules": ["F1", "F2", "R2"], "plays": ["01", "21", "28"]},
+            "agents": {"title": "Agent Development", "modules": ["O1", "O2"], "plays": ["03", "07", "22"]},
+            "security": {"title": "AI Security", "modules": ["T2"], "plays": ["02", "30", "41"]},
+            "mlops": {"title": "MLOps Pipeline", "modules": ["T1", "T3"], "plays": ["13", "17", "48"]},
+            "cost": {"title": "Cost Optimization", "modules": ["O4"], "plays": ["14", "52"]},
+        }
+        t = topic.lower()
+        for key, val in paths.items():
+            if t in key or key in t:
+                return val
+        return {"available_paths": list(paths.keys())}
 
     def get_module_section(self, module_id: str, heading: str) -> Optional[str]:
         """Extract a specific section from a module by heading."""

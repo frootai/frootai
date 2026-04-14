@@ -14,6 +14,9 @@ class EvalResult:
     threshold: float
     passed: bool
 
+    def to_dict(self) -> dict:
+        return {"metric": self.metric, "score": self.score, "threshold": self.threshold, "passed": self.passed}
+
 
 @dataclass
 class Evaluator:
@@ -56,6 +59,15 @@ class Evaluator:
     def all_passed(self, scores: dict[str, float]) -> bool:
         """Check if all metrics pass their thresholds."""
         return all(r.passed for r in self.check_thresholds(scores))
+
+    def results_to_json(self, scores: dict[str, float]) -> str:
+        """Export evaluation results as JSON."""
+        import json
+        results = self.check_thresholds(scores)
+        return json.dumps({
+            "overall": "PASS" if self.all_passed(scores) else "FAIL",
+            "metrics": [r.to_dict() for r in results]
+        }, indent=2)
 
     def summary(self, scores: dict[str, float]) -> str:
         """Get a human-readable summary."""
