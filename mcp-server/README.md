@@ -124,7 +124,7 @@ pip install frootai-mcp                      # Python
 **Live** — network-enabled, graceful offline fallback
 - `fetch_azure_docs`  search Microsoft Learn for Azure docs
 - `fetch_external_mcp`  discover MCP servers from public registries
-- `list_community_plays`  browse 100 solution plays from GitHub
+- `list_community_plays`  browse 101 solution plays from GitHub
 - `get_github_agentic_os`  .github Agentic OS 7-primitive guide
 
 **Agent Chain** — build → review → tune
@@ -256,7 +256,7 @@ Chat with Agent FAI  grounded in FrootAI knowledge: [frootai.dev/chatbot](https:
 
 ### What Ships Inside
 
-- **FROOT Knowledge Modules** — 18 modules across Foundations, Reasoning, Orchestration, Operations, Transformation
+- **FROOT Knowledge Modules** — 16 modules across Foundations, Reasoning, Orchestration, Operations, Transformation
 - **AI Glossary** — 200+ AI/ML term definitions
 - **100 Solution Plays** — pre-tuned deployable solutions with .github Agentic OS
 - **830+ Primitives** — agents, instructions, skills, hooks, plugins, workflows
