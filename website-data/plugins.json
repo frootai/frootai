@@ -743,7 +743,7 @@
     "folder": "plugins/frontend-web-development/"
   },
   {
-    "id": "frootai-discovery",
+    "id": "fai-discovery",
     "description": "FrootAI Discovery — meta-plugin for exploring and recommending agents, instructions, skills, hooks, and plugins. Suggests the right primitives for your task based on project context and WAF alignment.",
     "version": "1.0.0",
     "keywords": [
@@ -758,10 +758,10 @@
     ],
     "plays": [],
     "items": 13,
-    "folder": "plugins/frootai-discovery/"
+    "folder": "plugins/fai-discovery/"
   },
   {
-    "id": "frootai-essentials",
+    "id": "fai-essentials",
     "description": "The essential FrootAI toolkit — WAF-aligned agents (security reviewer, cost optimizer, architect), cross-cutting instructions (OWASP, agent-safety, testing), and security hooks (secrets scanner, tool guardian, governance audit). The recommended starting plugin for every FrootAI project.",
     "version": "1.0.0",
     "keywords": [
@@ -777,7 +777,7 @@
     ],
     "plays": [],
     "items": 14,
-    "folder": "plugins/frootai-essentials/"
+    "folder": "plugins/fai-essentials/"
   },
   {
     "id": "go-development",

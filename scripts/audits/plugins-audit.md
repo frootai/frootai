@@ -50,18 +50,31 @@
 
 ---
 
-## Phase 3: Distribution Channels
+## Phase 3: Distribution Channels — Deep Audit (April 14, 2026)
 
-| Channel | Status | Verified |
+| Channel | Check | Result | Fix Applied |
+|---------|-------|--------|-------------|
+| VS Code extension `knowledge.json` | Plugin mentions, stale refs | 154 mentions, 0 real stale | ✅ Clean |
+| VS Code `package.json` | Plugin refs | 2 mentions, clean | ✅ Clean |
+| MCP server `knowledge.json` | Plugin mentions, stale refs | 164 mentions, 1 stale (`frootai-enterprise-rag`) | ✅ Fixed → `enterprise-rag` |
+| MCP server `index.js` | Plugin count | Shows "77 Plugins" | ✅ Correct |
+| Python MCP `knowledge.json` | Stale refs | 0 stale | ✅ Clean |
+| Python SDK | Plugin refs | 0 mentions (not plugin-aware) | ✅ N/A |
+| AGENTS.md | Plugin refs, stale | 1 mention, 0 stale | ✅ Clean |
+| Root README.md | Plugin count | 8 mentions, no hardcoded count | ✅ Clean |
+| `copilot-instructions.md` | Plugin count | Shows "77 plugins" | ✅ Correct |
+| `agent-card.json` | Plugin refs | 0 mentions | ✅ N/A |
+| Website `plugins.json` | Count, descriptions, stale | 77 entries, 0 over 155ch, 0 stale | ✅ Synced |
+| `website-data/plugins.json` | Stale folder names | 4 stale (`frootai-discovery/essentials`) | ✅ Fixed → `fai-*` |
+| Docker | Inherits MCP server | Auto-synced on publish | ✅ Clean |
+
+### Fixes Applied During Phase 3 Audit
+| Fix | File | Details |
+|-----|------|---------|
+| `frootai-enterprise-rag` → `enterprise-rag` | `mcp-server/knowledge.json` | Plugin name in example |
+| `frootai-discovery` → `fai-discovery` | `website-data/plugins.json` | Folder name refs (2 hits) |
+| `frootai-essentials` → `fai-essentials` | `website-data/plugins.json` | Folder name refs (2 hits) |
 |---------|--------|----------|
-| GitHub `plugins/` (77) | ✅ PASS | Apr 14, 2026 |
-| GitHub `community-plugins/` (8) | ✅ PASS | Apr 14, 2026 |
-| Website `plugins.json` (77) | ✅ PASS | Descriptions synced, count matches |
-| VS Code extension | ✅ PASS | No plugin-specific refs |
-| MCP server | ✅ PASS | No plugin-specific refs |
-| AGENTS.md | ✅ PASS | No stale plugin refs |
-| README.md | ✅ PASS | No stale plugin refs |
-
 ---
 
 ## Phase 4: Website
