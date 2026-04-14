@@ -195,6 +195,12 @@
         "title": "FrootAI: Open Setup Guide",
         "icon": "$(book)",
         "shortTitle": "Docs"
+      },
+      {
+        "command": "frootai.searchAll",
+        "title": "FrootAI: Search Everything",
+        "icon": "$(search)",
+        "shortTitle": "Search"
       }
     ],
     "menus": {
@@ -280,7 +286,46 @@
           "description": "URL of the remote FrootAI MCP server (only used when mcpTransport is 'http')."
         }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "frootai.gettingStarted",
+        "title": "Get Started with FrootAI",
+        "description": "Learn how to use FrootAI to build production AI solutions on Azure",
+        "steps": [
+          {
+            "id": "explore",
+            "title": "Browse 101 Solution Plays",
+            "description": "Explore pre-architected AI solutions in the sidebar.\n\n[Open Solution Plays](command:frootai.browseSolutionPlays)",
+            "media": { "markdown": "media/walkthrough-explore.md" }
+          },
+          {
+            "id": "search",
+            "title": "Search Across Everything",
+            "description": "Search plays, MCP tools, and glossary terms.\n\n[Search FrootAI](command:frootai.searchAll)",
+            "media": { "markdown": "media/walkthrough-search.md" }
+          },
+          {
+            "id": "initDevKit",
+            "title": "Initialize Your First Play",
+            "description": "Scaffold a solution play with DevKit — agents, instructions, skills, and MCP config.\n\n[Init DevKit](command:frootai.initDevKit)",
+            "media": { "markdown": "media/walkthrough-init.md" }
+          },
+          {
+            "id": "mcp",
+            "title": "Connect MCP Server",
+            "description": "Set up the FrootAI MCP server for 45 AI architecture tools.\n\n[Setup MCP](command:frootai.installMcpServer)",
+            "media": { "markdown": "media/walkthrough-mcp.md" }
+          },
+          {
+            "id": "evaluate",
+            "title": "Run Your First Evaluation",
+            "description": "Validate AI quality with groundedness, relevance, coherence, and fluency checks.\n\n[Run Evaluation](command:frootai.runEvaluation)",
+            "media": { "markdown": "media/walkthrough-evaluate.md" }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

@@ -12,6 +12,8 @@ interface ToolGroupItem extends vscode.TreeItem {
   _groupType?: string;
 }
 
+const READ_ONLY_TYPES = new Set(["static", "live", "ecosystem"]);
+
 const GROUPS: ToolGroup[] = [
   {
     label: "Knowledge (6)",
@@ -32,15 +34,21 @@ const GROUPS: ToolGroup[] = [
     desc: "Build → Review → Tune workflow",
   },
   {
-    label: "Ecosystem (10)",
+    label: "Ecosystem (3)",
     type: "ecosystem",
     icon: "globe",
-    desc: "Model catalog, pricing, compare, embed",
+    desc: "Model catalog, pricing, compare",
+  },
+  {
+    label: "Compute (10)",
+    type: "compute",
+    icon: "circuit-board",
+    desc: "Search, cost, eval, diagrams, embeddings",
   },
   {
     label: "Engine (6)",
     type: "engine",
-    icon: "circuit-board",
+    icon: "zap",
     desc: "FAI Engine bridge tools",
   },
   {
@@ -63,6 +71,9 @@ const TYPE_ICONS: Record<string, string> = {
   chain: "debug-disconnect",
   ecosystem: "graph-scatter",
   compute: "symbol-ruler",
+  engine: "zap",
+  scaffold: "new-file",
+  marketplace: "extensions",
 };
 
 export class McpToolProvider
@@ -75,8 +86,9 @@ export class McpToolProvider
   getChildren(element?: vscode.TreeItem): vscode.TreeItem[] {
     if (!element) {
       return GROUPS.map((g) => {
+        const count = MCP_TOOLS.filter((t) => t.type === g.type).length;
         const item: ToolGroupItem = new vscode.TreeItem(
-          g.label,
+          count > 0 ? `${g.label.replace(/\(\d+\)/, `(${count})`)}` : g.label,
           vscode.TreeItemCollapsibleState.Collapsed
         );
         item.description = g.desc;
@@ -94,12 +106,15 @@ export class McpToolProvider
     if (groupType) {
       return MCP_TOOLS.filter((t: McpTool) => t.type === groupType).map(
         (t: McpTool) => {
+          const readOnly = READ_ONLY_TYPES.has(t.type);
           const item = new vscode.TreeItem(
             t.name,
             vscode.TreeItemCollapsibleState.None
           );
-          item.description = t.desc;
-          item.tooltip = `${t.name}\n${t.desc}\n\nType: ${t.type}\n\nClick to view documentation`;
+          item.description = readOnly ? "read-only" : "read-write";
+          item.tooltip = new vscode.MarkdownString(
+            `**${t.name}**\n\n${t.desc}\n\nType: \`${t.type}\` · ${readOnly ? "Read-only" : "Read-write"}\n\n_Click to view documentation_`
+          );
           item.iconPath = new vscode.ThemeIcon(
             TYPE_ICONS[t.type] || "symbol-method"
           );

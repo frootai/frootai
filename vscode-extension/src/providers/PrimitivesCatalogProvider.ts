@@ -9,6 +9,7 @@ interface PrimitiveChild {
 interface PrimitiveCategory {
   label: string;
   icon: string;
+  count: number;
   children: PrimitiveChild[];
 }
 
@@ -18,8 +19,9 @@ interface PrimitiveCategoryItem extends vscode.TreeItem {
 
 const CATEGORIES: PrimitiveCategory[] = [
   {
-    label: "Agents (238)",
+    label: "Agents",
     icon: "hubot",
+    count: 201,
     children: [
       {
         label: "Install agent via VS Code",
@@ -39,8 +41,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Instructions (176)",
+    label: "Instructions",
     icon: "file-text",
+    count: 176,
     children: [
       {
         label: "Auto-apply via applyTo globs",
@@ -60,8 +63,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Skills (282)",
-    icon: "tools",
+    label: "Skills",
+    icon: "wand",
+    count: 282,
     children: [
       {
         label: "SKILL.md folder structure",
@@ -81,8 +85,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Hooks (10)",
+    label: "Hooks",
     icon: "shield",
+    count: 10,
     children: [
       {
         label: "secrets-scanner",
@@ -137,8 +142,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Plugins (77)",
-    icon: "package",
+    label: "Plugins",
+    icon: "extensions",
+    count: 77,
     children: [
       {
         label: "npx frootai install <plugin>",
@@ -158,8 +164,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Workflows (12)",
-    icon: "git-branch",
+    label: "Workflows",
+    icon: "git-merge",
+    count: 12,
     children: [
       {
         label: "Agentic workflows with safe-outputs",
@@ -174,8 +181,9 @@ const CATEGORIES: PrimitiveCategory[] = [
     ],
   },
   {
-    label: "Cookbook (16)",
-    icon: "book",
+    label: "Cookbook",
+    icon: "beaker",
+    count: 16,
     children: [
       {
         label: "Step-by-step recipes",
@@ -205,6 +213,7 @@ export class PrimitivesCatalogProvider
           cat.label,
           vscode.TreeItemCollapsibleState.Collapsed
         );
+        item.description = `${cat.count} primitives`;
         item.iconPath = new vscode.ThemeIcon(cat.icon);
         item.contextValue = "primitiveCategory";
         item._children = cat.children;
