@@ -24,7 +24,7 @@
     "../../agents/fai-deterministic-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-03-deterministic-agent-patterns.instructions.md",
+    "../../instructions/deterministic-agent-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
     "../../instructions/agent-safety.instructions.md"
   ],

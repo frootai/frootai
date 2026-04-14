@@ -25,8 +25,8 @@
     "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-18-prompt-management-patterns.instructions.md",
-    "../../instructions/froot-r1-prompt-patterns.instructions.md",
+    "../../instructions/prompt-management-patterns.instructions.md",
+    "../../instructions/prompt-engineering.instructions.md",
     "../../instructions/python-waf.instructions.md"
   ],
   "skills": [

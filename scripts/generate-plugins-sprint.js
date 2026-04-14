@@ -144,7 +144,7 @@ const playPlugins = [
     slug: 'it-ticket-resolution',
     num: '05',
     extraAgents: [agentRef('rag-expert'), agentRef('semantic-kernel-expert')],
-    extraInstr: [instrRef('python-waf'), instrRef('froot-o1-semantic-kernel')],
+    extraInstr: [instrRef('python-waf'), instrRef('semantic-kernel')],
     extraSkills: [skillRef('build-genai-rag'), skillRef('contextual-rag')],
     hooks: [...CORE_HOOKS, hookRef('pii-redactor')]
   },
@@ -170,7 +170,7 @@ const playPlugins = [
     slug: 'multi-agent-service',
     num: '07',
     extraAgents: [agentRef('swarm-supervisor'), agentRef('semantic-kernel-expert')],
-    extraInstr: [instrRef('python-waf'), instrRef('froot-o2-agent-coding')],
+    extraInstr: [instrRef('python-waf'), instrRef('agent-coding-patterns')],
     extraSkills: [skillRef('build-agentic-loops'), skillRef('human-in-the-loop')],
     hooks: FULL_HOOKS
   },
@@ -248,7 +248,7 @@ const playPlugins = [
     slug: 'fine-tuning-workflow',
     num: '13',
     extraAgents: [agentRef('fine-tuning-expert'), agentRef('ml-engineer')],
-    extraInstr: [instrRef('python-waf'), instrRef('froot-t1-fine-tuning-data')],
+    extraInstr: [instrRef('python-waf'), instrRef('fine-tuning-data')],
     extraSkills: [skillRef('fine-tune-llm'), skillRef('build-llm-evaluator')],
     hooks: [...CORE_HOOKS, hookRef('cost-tracker')]
   },
@@ -287,7 +287,7 @@ const playPlugins = [
     slug: 'copilot-teams-extension',
     num: '16',
     extraAgents: [agentRef('copilot-ecosystem-expert')],
-    extraInstr: [instrRef('typescript-waf'), instrRef('froot-o6-copilot-extend')],
+    extraInstr: [instrRef('typescript-waf'), instrRef('copilot-extensibility')],
     extraSkills: [skillRef('copilot-sdk-integration')],
     hooks: SECURITY_HOOKS
   },
@@ -313,7 +313,7 @@ const playPlugins = [
     slug: 'prompt-management',
     num: '18',
     extraAgents: [agentRef('prompt-engineer'), agentRef('semantic-kernel-expert')],
-    extraInstr: [instrRef('froot-r1-prompt-patterns'), instrRef('python-waf')],
+    extraInstr: [instrRef('prompt-engineering'), instrRef('python-waf')],
     extraSkills: [skillRef('prompt-builder'), skillRef('dynamic-prompt'), skillRef('basic-prompt-optimization')],
     hooks: [...CORE_HOOKS, hookRef('output-validator')]
   },
@@ -562,7 +562,7 @@ const aiPlugins = [
     desc: 'AI Evaluation Suite — groundedness, coherence, relevance, fluency, and safety scoring. Build evaluation pipelines with Azure AI Evaluation SDK, custom metrics, regression tracking, and CI/CD integration.',
     keywords: ['evaluation', 'groundedness', 'coherence', 'relevance', 'safety', 'metrics', 'regression', 'ci-cd', 'quality'],
     agents: [agentRef('responsible-ai-reviewer'), agentRef('content-safety-expert')],
-    instructions: [instrRef('rai-content-safety'), instrRef('rai-bias-testing'), instrRef('froot-t2-responsible-ai')],
+    instructions: [instrRef('rai-content-safety'), instrRef('rai-bias-testing'), instrRef('responsible-ai-coding')],
     skills: [skillRef('eval-runner'), skillRef('evaluation-framework'), skillRef('build-llm-evaluator'), skillRef('agentic-eval'), skillRef('eval-driven-dev')],
     hooks: [...CORE_HOOKS, hookRef('output-validator')]
   },
@@ -571,7 +571,7 @@ const aiPlugins = [
     desc: 'Prompt Engineering — chain-of-thought, few-shot, tree-of-thought, and meta-prompting patterns. Template management, dynamic prompt assembly, safety guardrails, and evaluation-driven prompt optimization.',
     keywords: ['prompt-engineering', 'chain-of-thought', 'few-shot', 'templates', 'safety', 'optimization', 'meta-prompting'],
     agents: [agentRef('prompt-engineer'), agentRef('genai-foundations-expert')],
-    instructions: [instrRef('froot-r1-prompt-patterns'), instrRef('ai-prompt-safety-waf'), instrRef('froot-f1-genai-foundations')],
+    instructions: [instrRef('prompt-engineering'), instrRef('ai-prompt-safety-waf'), instrRef('genai-foundations')],
     skills: [skillRef('prompt-builder'), skillRef('dynamic-prompt'), skillRef('basic-prompt-optimization'), skillRef('boost-prompt'), skillRef('tldr-prompt'), skillRef('finalize-agent-prompt'), skillRef('build-prompting-system')],
     hooks: [...CORE_HOOKS, hookRef('output-validator'), hookRef('token-budget-enforcer')]
   },
@@ -580,7 +580,7 @@ const aiPlugins = [
     desc: 'Responsible AI — content safety, bias testing, fairness metrics, transparency cards, and human-in-the-loop review. Build ethical AI systems aligned with Microsoft Responsible AI Standard and EU AI Act requirements.',
     keywords: ['responsible-ai', 'content-safety', 'bias', 'fairness', 'transparency', 'human-in-the-loop', 'eu-ai-act', 'ethics'],
     agents: [agentRef('responsible-ai-reviewer'), agentRef('content-safety-expert'), agentRef('red-team-expert')],
-    instructions: [instrRef('rai-content-safety'), instrRef('rai-bias-testing'), instrRef('froot-t2-responsible-ai'), instrRef('agent-safety')],
+    instructions: [instrRef('rai-content-safety'), instrRef('rai-bias-testing'), instrRef('responsible-ai-coding'), instrRef('agent-safety')],
     skills: [skillRef('content-safety-review'), skillRef('human-in-the-loop'), skillRef('guardrails-policy'), skillRef('gdpr-compliance')],
     hooks: [...CORE_HOOKS, hookRef('pii-redactor'), hookRef('output-validator')]
   },
@@ -589,7 +589,7 @@ const aiPlugins = [
     desc: 'Fine-Tuning & MLOps — dataset curation, model training, hyperparameter optimization, model registry, and deployment pipelines. End-to-end ML lifecycle with Azure AI Foundry, MLflow, and evaluation gates.',
     keywords: ['fine-tuning', 'mlops', 'model-training', 'dataset', 'hyperparameter', 'mlflow', 'model-registry', 'azure-ai-foundry'],
     agents: [agentRef('fine-tuning-expert'), agentRef('ml-engineer'), agentRef('data-engineer')],
-    instructions: [instrRef('froot-t1-fine-tuning-data'), instrRef('python-waf')],
+    instructions: [instrRef('fine-tuning-data'), instrRef('python-waf')],
     skills: [skillRef('fine-tune-llm'), skillRef('build-llm-evaluator'), skillRef('model-recommendation'), skillRef('inference-optimization'), skillRef('build-tokenizer')],
     hooks: [...CORE_HOOKS, hookRef('cost-tracker')]
   },
@@ -768,7 +768,7 @@ const metaPlugins = [
     desc: 'FAI Protocol Starter — quickstart for the FAI Protocol ecosystem. Scaffold fai-manifest.json, fai-context.json, and connect primitives into wired solution plays. The entry point for building FAI Protocol compliant solutions.',
     keywords: ['fai-protocol', 'fai-manifest', 'fai-context', 'scaffold', 'quickstart', 'wiring', 'solution-play'],
     agents: [agentRef('architect'), agentRef('play-dispatcher')],
-    instructions: [instrRef('froot-o3-mcp-patterns'), instrRef('froot-o4-foundry-config')],
+    instructions: [instrRef('mcp-integration-patterns'), instrRef('azure-ai-foundry')],
     skills: [skillRef('play-initializer'), skillRef('skill-template'), skillRef('folder-structure'), skillRef('copilot-instructions-generator')],
     hooks: SECURITY_HOOKS
   },

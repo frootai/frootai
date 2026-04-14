@@ -23,7 +23,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-red-team-expert` | Red team expert specialist |
 | Instruction | `rai-content-safety` | Rai content safety standards |
 | Instruction | `rai-bias-testing` | Rai bias testing standards |
-| Instruction | `froot-t2-responsible-ai` | T2 responsible ai standards |
+| Instruction | `responsible-ai-coding` | T2 responsible ai standards |
 | Instruction | `agent-safety` | Agent safety standards |
 | Skill | `frootai-content-safety-review` | Content safety review capability |
 | Skill | `frootai-human-in-the-loop` | Human in the loop capability |

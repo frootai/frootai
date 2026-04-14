@@ -22,9 +22,9 @@
     "../../agents/fai-genai-foundations-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/froot-r1-prompt-patterns.instructions.md",
+    "../../instructions/prompt-engineering.instructions.md",
     "../../instructions/ai-prompt-safety-waf.instructions.md",
-    "../../instructions/froot-f1-genai-foundations.instructions.md"
+    "../../instructions/genai-foundations.instructions.md"
   ],
   "skills": [
     "../../skills/fai-prompt-builder/",

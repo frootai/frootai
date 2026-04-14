@@ -26,7 +26,7 @@
     "../../agents/fai-performance-profiler.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-17-ai-observability-patterns.instructions.md",
+    "../../instructions/ai-observability-patterns.instructions.md",
     "../../instructions/opex-monitoring.instructions.md",
     "../../instructions/python-waf.instructions.md"
   ],

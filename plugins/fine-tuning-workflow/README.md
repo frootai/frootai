@@ -25,7 +25,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-ml-engineer` | Ml engineer specialist |
 | Instruction | `play-13-fine-tuning-workflow-patterns` | Play 13 fine tuning workflow patterns standards |
 | Instruction | `python-waf` | Python waf standards |
-| Instruction | `froot-t1-fine-tuning-data` | T1 fine tuning data standards |
+| Instruction | `fine-tuning-data` | T1 fine tuning data standards |
 | Skill | `frootai-deploy-13-fine-tuning-workflow` | Deploy 13 fine tuning workflow capability |
 | Skill | `frootai-evaluate-13-fine-tuning-workflow` | Evaluate 13 fine tuning workflow capability |
 | Skill | `frootai-tune-13-fine-tuning-workflow` | Tune 13 fine tuning workflow capability |

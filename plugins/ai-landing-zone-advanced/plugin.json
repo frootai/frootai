@@ -27,7 +27,7 @@
     "../../agents/fai-compliance-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-11-ai-landing-zone-advanced-patterns.instructions.md",
+    "../../instructions/ai-landing-zone-advanced-patterns.instructions.md",
     "../../instructions/bicep-waf.instructions.md",
     "../../instructions/security-bicep.instructions.md",
     "../../instructions/azure-front-door-waf.instructions.md"

@@ -24,7 +24,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-prompt-engineer` | Prompt engineer specialist |
 | Agent | `frootai-semantic-kernel-expert` | Semantic kernel expert specialist |
 | Instruction | `play-18-prompt-management-patterns` | Play 18 prompt management patterns standards |
-| Instruction | `froot-r1-prompt-patterns` | R1 prompt patterns standards |
+| Instruction | `prompt-engineering` | R1 prompt patterns standards |
 | Instruction | `python-waf` | Python waf standards |
 | Skill | `frootai-deploy-18-prompt-management` | Deploy 18 prompt management capability |
 | Skill | `frootai-evaluate-18-prompt-management` | Evaluate 18 prompt management capability |

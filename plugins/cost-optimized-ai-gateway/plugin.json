@@ -27,7 +27,7 @@
     "../../agents/fai-azure-apim-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-14-cost-optimized-ai-gateway-patterns.instructions.md",
+    "../../instructions/cost-optimized-ai-gateway-patterns.instructions.md",
     "../../instructions/cost-python.instructions.md",
     "../../instructions/cost-typescript.instructions.md"
   ],

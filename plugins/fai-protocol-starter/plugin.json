@@ -22,8 +22,8 @@
     "../../agents/fai-play-dispatcher.agent.md"
   ],
   "instructions": [
-    "../../instructions/froot-o3-mcp-patterns.instructions.md",
-    "../../instructions/froot-o4-foundry-config.instructions.md"
+    "../../instructions/mcp-integration-patterns.instructions.md",
+    "../../instructions/azure-ai-foundry.instructions.md"
   ],
   "skills": [
     "../../skills/fai-play-initializer/",

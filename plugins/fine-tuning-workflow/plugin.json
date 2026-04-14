@@ -25,9 +25,9 @@
     "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-13-fine-tuning-workflow-patterns.instructions.md",
+    "../../instructions/fine-tuning-workflow-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
-    "../../instructions/froot-t1-fine-tuning-data.instructions.md"
+    "../../instructions/fine-tuning-data.instructions.md"
   ],
   "skills": [
     "../../skills/fai-deploy-13-fine-tuning-workflow/",

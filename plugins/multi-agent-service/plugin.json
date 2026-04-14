@@ -25,9 +25,9 @@
     "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-07-multi-agent-service-patterns.instructions.md",
+    "../../instructions/multi-agent-service-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
-    "../../instructions/froot-o2-agent-coding.instructions.md"
+    "../../instructions/agent-coding-patterns.instructions.md"
   ],
   "skills": [
     "../../skills/fai-deploy-07-multi-agent-service/",

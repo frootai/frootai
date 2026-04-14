@@ -24,7 +24,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-copilot-ecosystem-expert` | Copilot ecosystem expert specialist |
 | Instruction | `play-16-copilot-teams-extension-patterns` | Play 16 copilot teams extension patterns standards |
 | Instruction | `typescript-waf` | Typescript waf standards |
-| Instruction | `froot-o6-copilot-extend` | O6 copilot extend standards |
+| Instruction | `copilot-extensibility` | O6 copilot extend standards |
 | Skill | `frootai-deploy-16-copilot-teams-extension` | Deploy 16 copilot teams extension capability |
 | Skill | `frootai-evaluate-16-copilot-teams-extension` | Evaluate 16 copilot teams extension capability |
 | Skill | `frootai-tune-16-copilot-teams-extension` | Tune 16 copilot teams extension capability |

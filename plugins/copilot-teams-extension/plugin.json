@@ -24,9 +24,9 @@
     "../../agents/fai-copilot-ecosystem-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-16-copilot-teams-extension-patterns.instructions.md",
+    "../../instructions/copilot-teams-extension-patterns.instructions.md",
     "../../instructions/typescript-waf.instructions.md",
-    "../../instructions/froot-o6-copilot-extend.instructions.md"
+    "../../instructions/copilot-extensibility.instructions.md"
   ],
   "skills": [
     "../../skills/fai-deploy-16-copilot-teams-extension/",

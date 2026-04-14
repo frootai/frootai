@@ -26,7 +26,7 @@
     "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-20-anomaly-detection-patterns.instructions.md",
+    "../../instructions/anomaly-detection-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
     "../../instructions/opex-monitoring.instructions.md"
   ],

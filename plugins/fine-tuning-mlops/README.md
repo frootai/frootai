@@ -21,7 +21,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-fine-tuning-expert` | Fine tuning expert specialist |
 | Agent | `frootai-ml-engineer` | Ml engineer specialist |
 | Agent | `frootai-data-engineer` | Data engineer specialist |
-| Instruction | `froot-t1-fine-tuning-data` | T1 fine tuning data standards |
+| Instruction | `fine-tuning-data` | T1 fine tuning data standards |
 | Instruction | `python-waf` | Python waf standards |
 | Skill | `frootai-fine-tune-llm` | Fine tune llm capability |
 | Skill | `frootai-build-llm-evaluator` | Build llm evaluator capability |

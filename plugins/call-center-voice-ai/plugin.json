@@ -24,7 +24,7 @@
     "../../agents/fai-streaming-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-04-call-center-voice-ai-patterns.instructions.md",
+    "../../instructions/call-center-voice-ai-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
     "../../instructions/rai-content-safety.instructions.md"
   ],

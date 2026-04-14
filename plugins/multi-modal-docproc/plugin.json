@@ -25,7 +25,7 @@
     "../../agents/fai-data-engineer.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-15-multi-modal-docproc-patterns.instructions.md",
+    "../../instructions/multi-modal-docproc-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
     "../../instructions/azure-ai-vision-waf.instructions.md",
     "../../instructions/azure-ai-speech-waf.instructions.md"

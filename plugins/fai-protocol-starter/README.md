@@ -20,8 +20,8 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 |------|------|---------|
 | Agent | `frootai-architect` | Architect specialist |
 | Agent | `frootai-play-dispatcher` | Play dispatcher specialist |
-| Instruction | `froot-o3-mcp-patterns` | O3 mcp patterns standards |
-| Instruction | `froot-o4-foundry-config` | O4 foundry config standards |
+| Instruction | `mcp-integration-patterns` | O3 mcp patterns standards |
+| Instruction | `azure-ai-foundry` | O4 foundry config standards |
 | Skill | `frootai-play-initializer` | Play initializer capability |
 | Skill | `frootai-skill-template` | Skill template capability |
 | Skill | `frootai-folder-structure` | Folder structure capability |

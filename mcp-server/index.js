@@ -475,6 +475,11 @@ server.tool(
       .describe("Maximum number of matching sections to return (default: 5)"),
   },
   async ({ query, max_results = 5 }) => {
+    // Check cache first
+    const cacheKey = `search:${query}:${max_results}`;
+    const cached = searchCache.get(cacheKey);
+    if (cached) return cached;
+
     const queryLower = query.toLowerCase();
     const queryWords = queryLower.split(/\s+/).filter((w) => w.length > 2);
 
@@ -536,7 +541,7 @@ server.tool(
       )
       .join("\n\n---\n\n");
 
-    return {
+    const response = {
       content: [
         {
           type: "text",
@@ -544,6 +549,10 @@ server.tool(
         },
       ],
     };
+
+    // Cache the result
+    searchCache.set(cacheKey, response);
+    return response;
   }
 );
 
@@ -867,6 +876,16 @@ server.tool(
     service: z.string().describe("Azure service name or topic (e.g., 'azure-openai', 'ai-search', 'container-apps', 'ai-foundry', 'content-safety')"),
   },
   async ({ service }) => {
+    // Rate limiting + caching for live tools
+    if (!liveLimiter.allow('fetch_azure_docs')) {
+      const cached = azureDocsCache.get(`azure:${service}`);
+      if (cached) return cached;
+      return mcpError("Rate limited", "Too many requests to Azure docs API. Try again in a few seconds.");
+    }
+
+    const cachedResult = azureDocsCache.get(`azure:${service}`);
+    if (cachedResult) return cachedResult;
+
     const searchTerm = encodeURIComponent(`Azure ${service} documentation`);
     const url = `https://learn.microsoft.com/api/search?search=${searchTerm}&locale=en-us&%24top=5&facet=category`;
 
@@ -879,12 +898,14 @@ server.tool(
           const formatted = results.map((r, i) =>
             `${i + 1}. **${r.title}**\n   ${r.description || 'No description'}\n   🔗 ${r.url}`
           ).join("\n\n");
-          return {
+          const response = {
             content: [{
               type: "text",
               text: `## Azure Documentation: ${service}\n*Live from Microsoft Learn*\n\n${formatted}\n\n---\n*Fetched live. For deeper architecture guidance, use get_module or get_architecture_pattern.*`,
             }],
           };
+          azureDocsCache.set(`azure:${service}`, response);
+          return response;
         }
       } catch { /* fall through to static */ }
     }
@@ -914,6 +935,16 @@ server.tool(
     query: z.string().describe("What kind of MCP server you're looking for (e.g., 'github', 'database', 'slack', 'jira', 'azure')"),
   },
   async ({ query }) => {
+    // Rate limiting + caching
+    if (!liveLimiter.allow('fetch_external_mcp')) {
+      const cached = mcpRegistryCache.get(`mcp:${query}`);
+      if (cached) return cached;
+      return mcpError("Rate limited", "Too many requests to MCP registry. Try again in a few seconds.");
+    }
+
+    const cachedResult = mcpRegistryCache.get(`mcp:${query}`);
+    if (cachedResult) return cachedResult;
+
     // Try mcp.so registry
     const searchUrl = `https://api.mcp.so/api/servers?q=${encodeURIComponent(query)}&limit=8`;
     const body = await safeFetch(searchUrl);
@@ -2877,7 +2908,236 @@ ${description}
 
 } // end if (faiEngine.available)
 
-// ─── Start Server ──────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════
+// TRANSPORT & STARTUP — Phase 4: stdio + Streamable HTTP
+// ════════════════════════════════════════════════════════════════════
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+import { randomUUID } from "crypto";
+import http from "http";
+
+// ── MCP Logging ───────────────────────────────────────────────────
+
+const LOG_LEVELS = ["debug", "info", "notice", "warning", "error", "critical", "alert", "emergency"];
+let minLogLevel = "info";
+
+function mcpLog(level, logger, data) {
+  if (LOG_LEVELS.indexOf(level) < LOG_LEVELS.indexOf(minLogLevel)) return;
+  try {
+    server.server.sendLoggingMessage({ level, logger, data });
+  } catch { /* client may not support logging */ }
+}
+
+// ── Session Manager (for HTTP transport) ──────────────────────────
+
+class SessionManager {
+  constructor(maxSessions = 100, ttlMs = 3600_000) {
+    this.sessions = new Map();
+    this.maxSessions = maxSessions;
+    this.ttl = ttlMs;
+    this.cleanupTimer = setInterval(() => this._cleanup(), 60_000);
+  }
+
+  create(clientName, clientVersion) {
+    if (this.sessions.size >= this.maxSessions) this._evictOldest();
+    const session = {
+      id: randomUUID(),
+      createdAt: new Date(),
+      lastActiveAt: new Date(),
+      clientName, clientVersion,
+    };
+    this.sessions.set(session.id, session);
+    return session;
+  }
+
+  touch(id) {
+    const s = this.sessions.get(id);
+    if (!s) return null;
+    if (Date.now() - s.lastActiveAt.getTime() > this.ttl) { this.sessions.delete(id); return null; }
+    s.lastActiveAt = new Date();
+    return s;
+  }
+
+  terminate(id) { return this.sessions.delete(id); }
+
+  stats() {
+    return { active: this.sessions.size, max: this.maxSessions, ttlMin: Math.round(this.ttl / 60_000) };
+  }
+
+  _cleanup() {
+    const now = Date.now();
+    for (const [id, s] of this.sessions) {
+      if (now - s.lastActiveAt.getTime() > this.ttl) this.sessions.delete(id);
+    }
+  }
+
+  _evictOldest() {
+    let oldest = null;
+    for (const s of this.sessions.values()) {
+      if (!oldest || s.lastActiveAt < oldest.lastActiveAt) oldest = s;
+    }
+    if (oldest) this.sessions.delete(oldest.id);
+  }
+
+  destroy() { clearInterval(this.cleanupTimer); }
+}
+
+// ── Authentication Middleware ─────────────────────────────────────
+
+function createAuthMiddleware() {
+  const mode = process.env.FAI_AUTH_MODE || "none";
+  const validKeys = new Set((process.env.FAI_API_KEYS || "").split(",").filter(Boolean));
+
+  return (req) => {
+    if (mode === "none") return { allowed: true, identity: "anonymous" };
+
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return { allowed: false, reason: "Missing Authorization header" };
+
+    const [scheme, token] = authHeader.split(" ");
+    if (scheme?.toLowerCase() !== "bearer" || !token) {
+      return { allowed: false, reason: "Use: Authorization: Bearer <api-key>" };
+    }
+
+    if (mode === "apikey" && validKeys.size > 0) {
+      if (validKeys.has(token)) return { allowed: true, identity: `apikey:${token.substring(0, 8)}...` };
+      return { allowed: false, reason: "Invalid API key" };
+    }
+
+    return { allowed: true, identity: "default" };
+  };
+}
+
+// ── Transport Selection ───────────────────────────────────────────
+
+const transportMode = process.argv[2] || "stdio";
+
+if (transportMode === "http" || transportMode === "streamableHttp") {
+  // ── Streamable HTTP Transport ─────────────────────────────────
+  const { StreamableHTTPServerTransport } = await import("@modelcontextprotocol/sdk/server/streamableHttp.js");
+
+  const PORT = parseInt(process.env.PORT || "3000");
+  const HOST = process.env.HOST || "127.0.0.1";
+  const MCP_PATH = process.env.MCP_PATH || "/mcp";
+  const sessionMgr = new SessionManager();
+  const authCheck = createAuthMiddleware();
+
+  // Track transports per session for multi-client
+  const sessionTransports = new Map();
+
+  const httpServer = http.createServer(async (req, res) => {
+    // ── CORS ────────────────────────────────────────────────
+    const origin = req.headers.origin || "";
+    const allowedOrigins = (process.env.CORS_ORIGINS || "*").split(",");
+    if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin || "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, Mcp-Session-Id, Authorization, MCP-Protocol-Version");
+    }
+    if (req.method === "OPTIONS") { res.writeHead(204); res.end(); return; }
+
+    // ── Health endpoints ────────────────────────────────────
+    if (req.url === "/healthz" || req.url === "/health") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        status: "healthy",
+        version: PKG_VERSION,
+        uptime: Math.round(process.uptime()),
+        transport: "http",
+        engine: faiEngine?.available ? "connected" : "unavailable",
+      }));
+      return;
+    }
+
+    if (req.url === "/readyz" || req.url === "/ready") {
+      const ready = Object.keys(modules).length > 0;
+      res.writeHead(ready ? 200 : 503, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        status: ready ? "ready" : "not ready",
+        knowledge: { modules: Object.keys(modules).length, terms: Object.keys(glossary).length },
+        engine: { available: faiEngine?.available || false },
+        sessions: sessionMgr.stats(),
+        cache: { search: searchCache.stats(), azureDocs: azureDocsCache.stats() },
+      }));
+      return;
+    }
+
+    // ── Only MCP path below ─────────────────────────────────
+    if (!req.url?.startsWith(MCP_PATH)) { res.writeHead(404); res.end("Not found"); return; }
+
+    // ── DNS rebinding protection (MCP spec) ─────────────────
+    if (origin && !allowedOrigins.includes("*") && !allowedOrigins.includes(origin)) {
+      res.writeHead(403); res.end("Origin not allowed"); return;
+    }
+
+    // ── Authentication ──────────────────────────────────────
+    const authResult = authCheck(req);
+    if (!authResult.allowed) {
+      res.writeHead(401, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: authResult.reason }));
+      return;
+    }
+
+    // ── Session handling ────────────────────────────────────
+    const sessionId = req.headers["mcp-session-id"];
+
+    if (req.method === "DELETE") {
+      // Client terminating session
+      if (sessionId && sessionTransports.has(sessionId)) {
+        const t = sessionTransports.get(sessionId);
+        await t.close();
+        sessionTransports.delete(sessionId);
+        sessionMgr.terminate(sessionId);
+        mcpLog("info", "session", { event: "terminated", sessionId });
+      }
+      res.writeHead(200); res.end(); return;
+    }
+
+    // For new connections (no session), create transport + session
+    if (!sessionId) {
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => {
+          const session = sessionMgr.create(authResult.identity);
+          return session.id;
+        },
+      });
+
+      transport.onclose = () => {
+        const sid = transport.sessionId;
+        if (sid) { sessionTransports.delete(sid); sessionMgr.terminate(sid); }
+      };
+
+      await server.connect(transport);
+      sessionTransports.set(transport.sessionId, transport);
+      mcpLog("info", "session", { event: "created", sessionId: transport.sessionId, identity: authResult.identity });
+      await transport.handleRequest(req, res);
+      return;
+    }
+
+    // Existing session
+    const transport = sessionTransports.get(sessionId);
+    if (!transport) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Session not found. Send new InitializeRequest." }));
+      return;
+    }
+
+    sessionMgr.touch(sessionId);
+    await transport.handleRequest(req, res);
+  });
+
+  httpServer.listen(PORT, HOST, () => {
+    console.error(`🍊 FrootAI MCP Server v${PKG_VERSION}`);
+    console.error(`   Transport:  Streamable HTTP`);
+    console.error(`   Endpoint:   http://${HOST}:${PORT}${MCP_PATH}`);
+    console.error(`   Health:     http://${HOST}:${PORT}/healthz`);
+    console.error(`   Readiness:  http://${HOST}:${PORT}/readyz`);
+    console.error(`   Auth:       ${process.env.FAI_AUTH_MODE || "none"}`);
+    console.error(`   Engine:     ${faiEngine?.available ? "connected" : "not available"}`);
+    console.error(`   Tools:      ${Object.keys(modules).length > 0 ? "ready" : "loading..."}`);
+  });
+
+} else {
+  // ── stdio transport (default — backward compatible) ───────────
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}

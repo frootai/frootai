@@ -28,7 +28,7 @@
     "../../agents/fai-ml-engineer.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-12-model-serving-aks-patterns.instructions.md",
+    "../../instructions/model-serving-aks-patterns.instructions.md",
     "../../instructions/kubernetes-waf.instructions.md",
     "../../instructions/docker-waf.instructions.md"
   ],

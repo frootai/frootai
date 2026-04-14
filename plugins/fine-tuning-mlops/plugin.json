@@ -24,7 +24,7 @@
     "../../agents/fai-data-engineer.agent.md"
   ],
   "instructions": [
-    "../../instructions/froot-t1-fine-tuning-data.instructions.md",
+    "../../instructions/fine-tuning-data.instructions.md",
     "../../instructions/python-waf.instructions.md"
   ],
   "skills": [

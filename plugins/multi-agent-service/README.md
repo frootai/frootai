@@ -25,7 +25,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-semantic-kernel-expert` | Semantic kernel expert specialist |
 | Instruction | `play-07-multi-agent-service-patterns` | Play 07 multi agent service patterns standards |
 | Instruction | `python-waf` | Python waf standards |
-| Instruction | `froot-o2-agent-coding` | O2 agent coding standards |
+| Instruction | `agent-coding-patterns` | O2 agent coding standards |
 | Skill | `frootai-deploy-07-multi-agent-service` | Deploy 07 multi agent service capability |
 | Skill | `frootai-evaluate-07-multi-agent-service` | Evaluate 07 multi agent service capability |
 | Skill | `frootai-tune-07-multi-agent-service` | Tune 07 multi agent service capability |

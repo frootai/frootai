@@ -22,7 +22,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-content-safety-expert` | Content safety expert specialist |
 | Instruction | `rai-content-safety` | Rai content safety standards |
 | Instruction | `rai-bias-testing` | Rai bias testing standards |
-| Instruction | `froot-t2-responsible-ai` | T2 responsible ai standards |
+| Instruction | `responsible-ai-coding` | T2 responsible ai standards |
 | Skill | `frootai-eval-runner` | Eval runner capability |
 | Skill | `frootai-evaluation-framework` | Evaluation framework capability |
 | Skill | `frootai-build-llm-evaluator` | Build llm evaluator capability |

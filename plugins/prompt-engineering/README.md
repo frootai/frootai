@@ -20,9 +20,9 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 |------|------|---------|
 | Agent | `frootai-prompt-engineer` | Prompt engineer specialist |
 | Agent | `frootai-genai-foundations-expert` | Genai foundations expert specialist |
-| Instruction | `froot-r1-prompt-patterns` | R1 prompt patterns standards |
+| Instruction | `prompt-engineering` | R1 prompt patterns standards |
 | Instruction | `ai-prompt-safety-waf` | Ai prompt safety waf standards |
-| Instruction | `froot-f1-genai-foundations` | F1 genai foundations standards |
+| Instruction | `genai-foundations` | F1 genai foundations standards |
 | Skill | `frootai-prompt-builder` | Prompt builder capability |
 | Skill | `frootai-dynamic-prompt` | Dynamic prompt capability |
 | Skill | `frootai-basic-prompt-optimization` | Basic prompt optimization capability |

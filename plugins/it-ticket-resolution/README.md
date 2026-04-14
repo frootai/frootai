@@ -25,7 +25,7 @@ Or manually copy the referenced primitives from the FrootAI repository into your
 | Agent | `frootai-semantic-kernel-expert` | Semantic kernel expert specialist |
 | Instruction | `play-05-it-ticket-resolution-patterns` | Play 05 it ticket resolution patterns standards |
 | Instruction | `python-waf` | Python waf standards |
-| Instruction | `froot-o1-semantic-kernel` | O1 semantic kernel standards |
+| Instruction | `semantic-kernel` | O1 semantic kernel standards |
 | Skill | `frootai-deploy-05-it-ticket-resolution` | Deploy 05 it ticket resolution capability |
 | Skill | `frootai-evaluate-05-it-ticket-resolution` | Evaluate 05 it ticket resolution capability |
 | Skill | `frootai-tune-05-it-ticket-resolution` | Tune 05 it ticket resolution capability |

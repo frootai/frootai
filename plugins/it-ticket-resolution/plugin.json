@@ -25,9 +25,9 @@
     "../../agents/fai-semantic-kernel-expert.agent.md"
   ],
   "instructions": [
-    "../../instructions/play-05-it-ticket-resolution-patterns.instructions.md",
+    "../../instructions/it-ticket-resolution-patterns.instructions.md",
     "../../instructions/python-waf.instructions.md",
-    "../../instructions/froot-o1-semantic-kernel.instructions.md"
+    "../../instructions/semantic-kernel.instructions.md"
   ],
   "skills": [
     "../../skills/fai-deploy-05-it-ticket-resolution/",

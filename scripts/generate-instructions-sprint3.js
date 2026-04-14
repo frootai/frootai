@@ -12,22 +12,22 @@ function mk(n,d,a,w) {
 }
 
 // Per-FROOT-module coding standards
-mk('froot-f1-genai-foundations','GenAI foundations coding — token counting, model parameter configuration, inference optimization.','**/*.py, **/*.ts',['performance-efficiency','cost-optimization']);
-mk('froot-f2-llm-selection','LLM selection standards — model routing config, benchmark-driven selection, cost/quality tradeoffs.','**/*.json, **/*.py',['cost-optimization','performance-efficiency']);
-mk('froot-f3-ai-glossary','AI glossary consistency — use standard FrootAI terminology, avoid ambiguous AI terms in code comments.','**',['operational-excellence']);
-mk('froot-f4-agentic-os','Agentic OS standards — .github folder structure, 7 primitives, 4 layers, plugin packaging.','**/.github/**',['operational-excellence']);
-mk('froot-r1-prompt-patterns','Prompt engineering standards — system message structure, few-shot patterns, output format enforcement.','**/*.py, **/*.ts, **/*.md',['reliability','responsible-ai']);
-mk('froot-r2-rag-coding','RAG coding standards — chunking config, embedding batch calls, reranker integration, citation injection.','**/*.py, **/*.ts',['reliability','performance-efficiency']);
-mk('froot-r3-determinism','Determinism standards — temperature=0+seed, structured output, validation pipeline, grounding checks.','**/*.py, **/*.ts, **/*.json',['reliability','responsible-ai']);
-mk('froot-o1-semantic-kernel','Semantic Kernel standards — kernel config, plugin design, filter pipeline, memory store integration.','**/*.cs, **/*.py',['reliability','operational-excellence']);
-mk('froot-o2-agent-coding','Agent coding standards — ReAct loop, tool selection, memory management, circuit breaker on tools.','**/*.py, **/*.ts, **/*.cs',['reliability','security']);
-mk('froot-o3-mcp-patterns','MCP integration patterns — tool description quality, parameter design, error handling, transport selection.','**/*.py, **/*.ts, **/*.cs',['reliability','security']);
-mk('froot-o4-foundry-config','Azure AI Foundry config — Hub/Project RBAC, deployment types, evaluation pipeline, content filter config.','**/*.bicep, **/*.json',['security','operational-excellence']);
-mk('froot-o5-gpu-infra','GPU infrastructure standards — VRAM sizing, quantization selection, serving framework config, scaling rules.','**/*.yaml, **/*.py',['performance-efficiency','cost-optimization']);
-mk('froot-o6-copilot-extend','Copilot extensibility — Graph connectors, plugin manifest, action design, M365 integration patterns.','**/*.json, **/*.ts',['operational-excellence']);
-mk('froot-t1-fine-tuning-data','Fine-tuning data standards — JSONL format, quality validation, class balance, edge case inclusion.','**/*.jsonl, **/*.py',['reliability','operational-excellence']);
-mk('froot-t2-responsible-ai','Responsible AI coding — content safety integration, red team test coverage, bias metric collection.','**/*.py, **/*.ts',['responsible-ai','security']);
-mk('froot-t3-production-deploy','Production deployment standards — blue-green, canary rollout, health probes, rollback criteria.','**/*.yaml, **/*.bicep',['reliability','operational-excellence']);
+mk('genai-foundations','GenAI foundations coding — token counting, model parameter configuration, inference optimization.','**/*.py, **/*.ts',['performance-efficiency','cost-optimization']);
+mk('llm-model-selection','LLM selection standards — model routing config, benchmark-driven selection, cost/quality tradeoffs.','**/*.json, **/*.py',['cost-optimization','performance-efficiency']);
+mk('ai-glossary','AI glossary consistency — use standard FrootAI terminology, avoid ambiguous AI terms in code comments.','**',['operational-excellence']);
+mk('agentic-os-customization','Agentic OS standards — .github folder structure, 7 primitives, 4 layers, plugin packaging.','**/.github/**',['operational-excellence']);
+mk('prompt-engineering','Prompt engineering standards — system message structure, few-shot patterns, output format enforcement.','**/*.py, **/*.ts, **/*.md',['reliability','responsible-ai']);
+mk('rag-coding-patterns','RAG coding standards — chunking config, embedding batch calls, reranker integration, citation injection.','**/*.py, **/*.ts',['reliability','performance-efficiency']);
+mk('deterministic-ai','Determinism standards — temperature=0+seed, structured output, validation pipeline, grounding checks.','**/*.py, **/*.ts, **/*.json',['reliability','responsible-ai']);
+mk('semantic-kernel','Semantic Kernel standards — kernel config, plugin design, filter pipeline, memory store integration.','**/*.cs, **/*.py',['reliability','operational-excellence']);
+mk('agent-coding-patterns','Agent coding standards — ReAct loop, tool selection, memory management, circuit breaker on tools.','**/*.py, **/*.ts, **/*.cs',['reliability','security']);
+mk('mcp-integration-patterns','MCP integration patterns — tool description quality, parameter design, error handling, transport selection.','**/*.py, **/*.ts, **/*.cs',['reliability','security']);
+mk('azure-ai-foundry','Azure AI Foundry config — Hub/Project RBAC, deployment types, evaluation pipeline, content filter config.','**/*.bicep, **/*.json',['security','operational-excellence']);
+mk('gpu-infrastructure','GPU infrastructure standards — VRAM sizing, quantization selection, serving framework config, scaling rules.','**/*.yaml, **/*.py',['performance-efficiency','cost-optimization']);
+mk('copilot-extensibility','Copilot extensibility — Graph connectors, plugin manifest, action design, M365 integration patterns.','**/*.json, **/*.ts',['operational-excellence']);
+mk('fine-tuning-data','Fine-tuning data standards — JSONL format, quality validation, class balance, edge case inclusion.','**/*.jsonl, **/*.py',['reliability','operational-excellence']);
+mk('responsible-ai-coding','Responsible AI coding — content safety integration, red team test coverage, bias metric collection.','**/*.py, **/*.ts',['responsible-ai','security']);
+mk('production-deployment','Production deployment standards — blue-green, canary rollout, health probes, rollback criteria.','**/*.yaml, **/*.bicep',['reliability','operational-excellence']);
 
 // Additional .NET ecosystem
 mk('dotnet-architecture-waf','.NET architecture standards — DDD, SOLID, clean architecture, CQRS, event sourcing.','**/*.cs',['reliability','operational-excellence']);
