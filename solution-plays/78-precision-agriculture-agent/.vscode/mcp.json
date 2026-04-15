@@ -5,22 +5,7 @@
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "inputs": [
-                {
-                    "type": "promptString",
-                    "id": "azure-openai-key",
-                    "description": "Azure OpenAI API Key for agronomic recommendations (leave blank if using Managed Identity)",
-                    "password": true
-                },
-                {
-                    "type": "promptString",
-                    "id": "azure-maps-key",
-                    "description": "Azure Maps API Key for field boundary and weather data",
-                    "password": true
-                }
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

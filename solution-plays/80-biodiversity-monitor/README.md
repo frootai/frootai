@@ -13,14 +13,72 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure Custom Vision | Species image classification from camera traps |
-| Azure ML | Bioacoustic species ID (BirdNET-style) + population models |
-| Azure IoT Hub | Camera trap + audio sensor telemetry |
-| Azure OpenAI (gpt-4o) | Conservation report generation |
-| Azure Maps | Species range maps, habitat boundaries |
-| Cosmos DB (Serverless) | Observations, species records, population data |
+
+```mermaid
+graph TB
+    subgraph Field Sensors
+        Devices[Camera Traps · Acoustic Sensors<br/>Drones · GPS Collars · Weather Stations]
+    end
+
+    subgraph IoT Layer
+        IoTHub[Azure IoT Hub<br/>Device Management · Telemetry · Edge Connectivity]
+    end
+
+    subgraph Vision
+        AIVision[Azure AI Vision<br/>Species ID · Camera Trap Analysis · Drone Imagery · Custom Models]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Ecological Analysis · Population Trends · Conservation Reports]
+    end
+
+    subgraph Processing
+        Func[Azure Functions<br/>Image Pipeline · Acoustic Analysis · Alert Dispatch · Aggregation]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Biodiversity API · Species Catalog · Habitat Dashboard · Reports]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Observations · Population Counts · Habitats · Geospatial Index]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Device Certs · API Keys · Location Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Sensor Uptime · Detection Accuracy · Alert Response]
+    end
+
+    Devices -->|Images / Audio / Telemetry| IoTHub
+    IoTHub -->|Trigger| Func
+    Func -->|Classify| AIVision
+    AIVision -->|Species Results| Func
+    Func -->|Store Observations| Cosmos
+    Func -->|Alerts| API
+    API -->|Ecological Analysis| OpenAI
+    OpenAI -->|Insights & Reports| API
+    API <-->|Query / Update| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Devices fill:#22c55e,color:#fff,stroke:#16a34a
+    style IoTHub fill:#06b6d4,color:#fff,stroke:#0891b2
+    style AIVision fill:#ec4899,color:#fff,stroke:#db2777
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Func fill:#f97316,color:#fff,stroke:#ea580c
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Image: 0.75 confidence · empty frame filter 0.90 · ONNX batch processing
@@ -38,10 +96,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly (per site) |
-|-------------|---------|
-| Dev/Test | $50–85 |
-| Production (5 sites) | $250–400 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure AI Vision | $0 | $200 | $600 |
+| Azure OpenAI | $25 | $300 | $1,200 |
+| Azure IoT Hub | $0 | $25 | $250 |
+| Cosmos DB | $3 | $75 | $300 |
+| Azure Functions | $0 | $30 | $180 |
+| Container Apps | $10 | $120 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$39** | **$785** | **$2,995** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 78 (Precision Agriculture Agent)
 | Aspect | Play 78 | Play 80 |

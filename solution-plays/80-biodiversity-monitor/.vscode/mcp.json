@@ -5,22 +5,7 @@
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "inputs": [
-                {
-                    "type": "promptString",
-                    "id": "azure-custom-vision-key",
-                    "description": "Azure Custom Vision API Key for species image classification (leave blank if using Managed Identity)",
-                    "password": true
-                },
-                {
-                    "type": "promptString",
-                    "id": "azure-openai-key",
-                    "description": "Azure OpenAI API Key for conservation report generation",
-                    "password": true
-                }
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

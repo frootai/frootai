@@ -1,0 +1,199 @@
+{
+  "play": "75",
+  "name": "Exam Generation Engine",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for question generation, distractor creation, rubric authoring, answer key generation, and difficulty calibration",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 200,
+          "note": "~800K tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "Pay-As-You-Go",
+          "cost": 600,
+          "note": "~2.5M tokens/day, batch exam generation"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Question bank, exam templates, generated exams, rubrics, answer keys, difficulty metadata, usage analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (800 RU/s)",
+          "cost": 50,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Multi-region, analytical store for item analysis"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Source materials (textbooks, syllabi), generated exam PDFs, answer sheets, rubric documents, media assets",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~10GB documents"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 15,
+          "note": "~150GB, lifecycle management"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 40,
+          "note": "~500GB, geo-redundant, versioned"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Serverless exam generation pipeline — question creation, difficulty calibration, PDF rendering, batch processing",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 30,
+          "note": "~500K executions/month, 5-min timeout"
+        },
+        "enterprise": {
+          "sku": "Premium EP1",
+          "cost": 150,
+          "note": "Pre-warmed, VNet, no cold start"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Screen generated questions for bias, inappropriate content, cultural sensitivity, and age-appropriateness",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "5K transactions/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "~40K checks/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 60,
+          "note": "~150K checks/month, custom policies"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search across curriculum standards, question banks, and source materials for aligned question generation",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Basic",
+          "cost": 75,
+          "note": "2GB storage, 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB, semantic ranker, vector search"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, encryption keys for exam content, signing certificates for answer keys, OAuth secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, exam integrity compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Generation quality metrics, difficulty distribution accuracy, bias detection rates, pipeline performance",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~20GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~100GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 31,
+    "prod": 408,
+    "enterprise": 1340
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for multiple-choice distractor generation and simple recall questions, reserve GPT-4o for complex essay prompts and rubric authoring — saves 65% on AI costs",
+    "Cache generated questions by topic-difficulty-type key — reuse across exam variants instead of regenerating from scratch",
+    "Batch exam generation during off-peak hours — Functions consumption plan charges only for execution time, zero cost when idle",
+    "Pre-index curriculum standards (Common Core, AP, IB) in AI Search — standards change annually, not daily",
+    "Use Blob Storage lifecycle policies to move generated exams older than 1 year to cool storage — reduces ongoing storage costs by 50%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

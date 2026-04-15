@@ -13,13 +13,69 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o) | Question + distractor + rubric generation |
-| Azure Document Intelligence | Extract content from PDF/DOCX materials |
-| Azure AI Search (Basic) | Learning material indexing + retrieval |
-| Cosmos DB (Serverless) | Question bank, exam records, IRT parameters |
-| Container Apps | Exam generation API |
+
+```mermaid
+graph TB
+    subgraph Educator Interface
+        Portal[Web Portal<br/>Exam Builder · Template Manager · Question Bank · Preview]
+    end
+
+    subgraph Knowledge Base
+        Search[Azure AI Search<br/>Curriculum Standards · Question Bank · Source Materials]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Question Generation · Distractors · Rubrics · Answer Keys]
+    end
+
+    subgraph Content Safety
+        Safety[Azure AI Content Safety<br/>Bias Detection · Cultural Sensitivity · Age-Appropriate]
+    end
+
+    subgraph Processing
+        Functions[Azure Functions<br/>Exam Pipeline · Difficulty Calibrator · PDF Renderer · Batch Jobs]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Question Bank · Exams · Rubrics · Answer Keys · Analytics]
+        Blob[Blob Storage<br/>Source Materials · Generated PDFs · Answer Sheets · Media]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Exam Encryption · Signing Certs]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Quality Metrics · Difficulty Distribution · Pipeline Performance]
+    end
+
+    Portal -->|Exam Spec| Functions
+    Functions -->|Curriculum Query| Search
+    Search -->|Standards + Existing Items| Functions
+    Functions -->|Generation Prompt| OpenAI
+    OpenAI -->|Questions + Rubrics| Functions
+    Functions -->|Screen Output| Safety
+    Safety -->|Approved Content| Functions
+    Functions -->|Store Exam| Cosmos
+    Functions -->|Export PDF| Blob
+    Functions -->|Auth| MI
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+
+    style Portal fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Search fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Safety fill:#ef4444,color:#fff,stroke:#dc2626
+    style Functions fill:#f97316,color:#fff,stroke:#ea580c
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#64748b,color:#fff,stroke:#475569
+    style KV fill:#ec4899,color:#fff,stroke:#db2777
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Bloom's: Remember 15% · Understand 25% · Apply 30% · Analyze 20% · Evaluate 7% · Create 3%
@@ -37,10 +93,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $95–120 |
-| Production (100 exams) | $200–350 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $25 | $200 | $600 |
+| Cosmos DB | $3 | $50 | $180 |
+| Blob Storage | $2 | $15 | $40 |
+| Azure Functions | $0 | $30 | $150 |
+| Azure AI Content Safety | $0 | $20 | $60 |
+| Azure AI Search | $0 | $75 | $250 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $15 | $50 |
+| **Total** | **$31** | **$408** | **$1,340** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 74 (AI Tutoring Agent)
 | Aspect | Play 74 | Play 75 |

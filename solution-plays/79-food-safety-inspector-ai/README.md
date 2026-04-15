@@ -13,14 +13,69 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure IoT Hub | Temperature/humidity sensors at each CCP |
-| Azure Event Hubs | Real-time HACCP violation streaming |
-| Azure OpenAI (gpt-4o) | Pattern analysis + inspection report generation |
-| Cosmos DB (Serverless) | HACCP records, inspection history, lot tracking |
-| Azure Functions | Event-driven CCP violation alerts |
-| Container Apps | Inspection API + dashboard |
+
+```mermaid
+graph TB
+    subgraph Inspector Interface
+        UI[Inspection Portal<br/>HACCP Review · Compliance Dashboard · Traceability Map · Reports]
+    end
+
+    subgraph Document Processing
+        DocAI[Document Intelligence<br/>HACCP Plans · Lab Certs · Audit Reports · Checklists]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>HACCP Analysis · Risk Scoring · Corrective Actions · Reports]
+    end
+
+    subgraph IoT & Streaming
+        IoTHub[Azure IoT Hub<br/>Cold Chain Sensors · Facility Monitors · Line Status]
+        EventHub[Event Hubs<br/>Contamination Alerts · Temperature Breaches · Line Events]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Food Safety API · HACCP Engine · Traceability Service · Compliance Tracker]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Inspections · HACCP Plans · Traceability Chain · Lab Results]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Device Certs · API Keys · Record Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Inspection Metrics · Extraction Accuracy · Alert Response]
+    end
+
+    UI -->|Inspection Request| API
+    API -->|Extract Documents| DocAI
+    DocAI -->|Structured Data| API
+    API -->|Analyze HACCP| OpenAI
+    OpenAI -->|Risk & Actions| API
+    API -->|Response| UI
+    IoTHub -->|Temperature Stream| EventHub
+    EventHub -->|Alerts| API
+    API <-->|Traceability Data| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style DocAI fill:#ec4899,color:#fff,stroke:#db2777
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style IoTHub fill:#22c55e,color:#fff,stroke:#16a34a
+    style EventHub fill:#a855f7,color:#fff,stroke:#9333ea
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - HACCP: 5 CCPs (receiving, storage, cooking, cooling, hot holding) with FDA limits
@@ -38,10 +93,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly (per facility) |
-|-------------|---------|
-| Dev/Test | $45–65 |
-| Production | $60–100 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure Document Intelligence | $0 | $120 | $400 |
+| Azure OpenAI | $30 | $350 | $1,400 |
+| Cosmos DB | $3 | $75 | $300 |
+| Azure Event Hubs | $5 | $50 | $250 |
+| Azure IoT Hub | $0 | $25 | $250 |
+| Container Apps | $10 | $150 | $400 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$49** | **$805** | **$3,115** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 78 (Precision Agriculture Agent)
 | Aspect | Play 78 | Play 79 |

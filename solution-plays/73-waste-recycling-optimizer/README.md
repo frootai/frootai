@@ -13,14 +13,75 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure Custom Vision | Train waste material classifier (9-class) |
-| Azure IoT Hub | Fill-level sensor data from bins |
-| Azure Maps | Collection route optimization |
-| Azure OpenAI (gpt-4o-mini) | Analytics narratives + anomaly reporting |
-| Cosmos DB (Serverless) | Collection records, classification logs |
-| Container Apps | Classification API + route optimizer |
+
+```mermaid
+graph TB
+    subgraph Edge Devices
+        Bins[Smart Bins<br/>Fill-Level Sensors · Cameras · GPS]
+        Trucks[Collection Trucks<br/>GPS · Weight Sensors · Route Devices]
+    end
+
+    subgraph Ingestion
+        IoTHub[Azure IoT Hub<br/>Bin Telemetry · Truck GPS · Equipment Status]
+    end
+
+    subgraph Vision
+        AIVision[Azure AI Vision<br/>Waste Classification · Material ID · Contamination Detection]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Contamination Analysis · Route Narration · Citizen Education]
+    end
+
+    subgraph Routing
+        Maps[Azure Maps<br/>Traffic-Aware Routes · Service Areas · Fleet Tracking]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Recycling API · Route Optimizer · Fleet Dashboard · Citizen Portal]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Fill Levels · Routes · Classifications · Contamination Events]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>IoT Creds · API Keys · Maps Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Classification Accuracy · Route Efficiency · System Health]
+    end
+
+    Bins -->|Fill + Images| IoTHub
+    Trucks -->|GPS + Weight| IoTHub
+    IoTHub -->|Bin Images| AIVision
+    IoTHub -->|Telemetry| API
+    AIVision -->|Classification| API
+    API -->|Analysis Context| OpenAI
+    OpenAI -->|Insights + Reports| API
+    API -->|Route Requests| Maps
+    Maps -->|Optimized Routes| API
+    API <-->|State| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Bins fill:#22c55e,color:#fff,stroke:#16a34a
+    style Trucks fill:#f97316,color:#fff,stroke:#ea580c
+    style IoTHub fill:#06b6d4,color:#fff,stroke:#0891b2
+    style AIVision fill:#ec4899,color:#fff,stroke:#db2777
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Maps fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#ef4444,color:#fff,stroke:#dc2626
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Classification: 9 categories · confidence threshold 0.75 · ONNX < 100ms
@@ -38,10 +99,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $55–75 |
-| Production | $200–400 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure AI Vision | $0 | $150 | $500 |
+| Azure OpenAI | $20 | $150 | $500 |
+| Azure IoT Hub | $0 | $25 | $250 |
+| Container Apps | $10 | $100 | $280 |
+| Cosmos DB | $3 | $50 | $180 |
+| Azure Maps | $5 | $60 | $200 |
+| Key Vault | $1 | $3 | $5 |
+| Application Insights | $0 | $20 | $80 |
+| **Total** | **$39** | **$558** | **$1,995** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 69 (Carbon Footprint Tracker)
 | Aspect | Play 69 | Play 73 |

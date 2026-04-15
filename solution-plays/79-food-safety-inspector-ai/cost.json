@@ -1,0 +1,199 @@
+{
+  "play": "79",
+  "name": "Food Safety Inspector AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Document Intelligence",
+      "category": "AI Services",
+      "purpose": "Extract structured data from HACCP plans, inspection reports, lab certificates, supplier audits, and food safety checklists",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "500 pages/month, prebuilt models"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 120,
+          "note": "~8K pages/month, custom extraction models"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 400,
+          "note": "~30K pages/month, composed models, add-ons"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for HACCP compliance analysis, contamination risk scoring, corrective action generation, regulatory gap identification, and inspector report drafting",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~1.2M tokens/day, gpt-4o for analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1400,
+          "note": "Provisioned throughput, fleet-wide inspection"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Inspection records, HACCP plan versions, corrective actions, supplier compliance history, traceability chain, lab results",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1200 RU/s)",
+          "cost": 75,
+          "note": "Dedicated throughput, session consistency"
+        },
+        "enterprise": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 300,
+          "note": "Multi-region, analytical store for trends"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Hubs",
+      "category": "Messaging",
+      "purpose": "Real-time event streaming from IoT temperature sensors in cold chain, processing line monitors, and contamination alert systems",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "1 throughput unit, 1 consumer group"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 50,
+          "note": "4 throughput units, 20 consumer groups"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 250,
+          "note": "16 PU, zone redundancy, geo-DR"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Ingest cold chain temperature sensors, humidity monitors, processing line status, and facility environment readings",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 25,
+          "note": "400K messages/day per unit"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, 10K+ sensors"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Food safety API — inspection workflow engine, HACCP analyzer, traceability service, corrective action tracker, compliance dashboard",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "2 vCPU, 4GB, min 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, IoT device certificates, regulatory system credentials, encryption keys for inspection records",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, tamper-evident records"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Inspection pipeline latency, document extraction accuracy, compliance scoring trends, cold chain alert response times",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 49,
+    "prod": 805,
+    "enterprise": 3115
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine checklist verification and status reports, reserve GPT-4o for complex HACCP analysis and corrective action generation — saves 60% on AI costs",
+    "Pre-build Document Intelligence custom models for standard FDA and USDA form layouts — custom models extract 3x faster than general prebuilt at same cost per page",
+    "Cache regulatory requirement lookups with 24-hour TTL — food safety regulations change infrequently and repeated lookups for the same facility type return identical results",
+    "Use IoT Hub message routing to filter temperature readings within normal range at ingestion — only process and store out-of-range events to reduce downstream costs by 70%",
+    "Batch inspection report generation during off-peak hours — consolidate multiple facility checks into single synthesis calls to minimize GPT-4o invocations",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

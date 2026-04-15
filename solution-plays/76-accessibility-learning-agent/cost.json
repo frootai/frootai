@@ -1,0 +1,199 @@
+{
+  "play": "76",
+  "name": "Accessibility Learning Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Speech",
+      "category": "AI Services",
+      "purpose": "Text-to-speech for screen reader content, speech-to-text for voice input, custom neural voices for consistent learning experience",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "5 audio hours/month STT, 500K chars TTS"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "~200 audio hours STT, ~10M chars TTS, neural voices"
+        },
+        "enterprise": {
+          "sku": "Standard + Custom",
+          "cost": 700,
+          "note": "~800 audio hours, custom neural voice, real-time"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for adaptive content simplification, dyslexia-aware text rewriting, multi-modal explanations, and personalized pacing",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1.2M tokens/day, gpt-4o for multi-modal"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, 5K+ concurrent learners"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Image description for visually impaired learners, diagram interpretation, math equation OCR, document accessibility scanning",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "20 transactions/min, 5K/month"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 80,
+          "note": "~80K analyses/month, custom models"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "~300K analyses/month, real-time"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Accessibility API — content adapter, speech pipeline, multi-modal renderer, learner profile engine, WCAG compliance layer",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "2 vCPU, 4GB, min 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Learner accessibility profiles, adaptation preferences, session history, content transformations, progress tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1200 RU/s)",
+          "cost": 75,
+          "note": "Dedicated throughput, session-level consistency"
+        },
+        "enterprise": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 300,
+          "note": "Multi-region, analytical store for accessibility analytics"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Content moderation for vulnerable learner population — enhanced protections for disability-related interactions",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "5K transactions/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 30,
+          "note": "~60K checks/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 100,
+          "note": "~250K checks/month, custom blocklists"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, encryption keys for disability-related PII, OAuth secrets, accessibility profile encryption",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, ADA/IDEA compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Accessibility effectiveness, speech recognition accuracy, content adaptation quality, learner engagement by modality",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 44,
+    "prod": 870,
+    "enterprise": 3065
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine text simplification and formatting, reserve GPT-4o for complex multi-modal explanations and dyslexia-aware rewriting — saves 65% on AI costs",
+    "Cache TTS audio for common curriculum phrases and instructions — avoids regenerating identical speech segments across sessions",
+    "Pre-generate image descriptions for standard curriculum diagrams and store in AI Search — reduces real-time Vision API calls by 80%",
+    "Use speech recognition confidence thresholds to avoid unnecessary re-processing — accept high-confidence transcriptions without verification",
+    "Batch accessibility scans for new curriculum content during upload — avoid per-request scanning for previously cleared materials",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

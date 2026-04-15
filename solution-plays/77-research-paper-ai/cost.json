@@ -1,0 +1,177 @@
+{
+  "play": "77",
+  "name": "Research Paper AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for literature synthesis, methodology critique, research gap identification, abstract summarization, and citation context analysis",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 40,
+          "note": "~80K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~2M tokens/day, gpt-4o for deep analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2000,
+          "note": "Provisioned throughput, 10K+ concurrent researchers"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search over paper corpus — full-text, citation graph traversal, methodology matching, cross-discipline discovery",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, 3 indexes, 10K documents"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB+ index, multi-million paper corpus, replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Paper metadata, citation networks as graph queries, researcher profiles, review sessions, annotation history",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1500 RU/s)",
+          "cost": 90,
+          "note": "Dedicated throughput, Gremlin API for citation graph"
+        },
+        "enterprise": {
+          "sku": "Provisioned (6000 RU/s)",
+          "cost": 350,
+          "note": "Multi-region, analytical store, graph + SQL API"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Paper ingestion pipeline — PDF parsing, citation extraction, metadata enrichment, embedding generation, graph edge creation",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 40,
+          "note": "~500K executions/month, batch ingestion"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 200,
+          "note": "Pre-warmed, VNET, high-throughput ingestion"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Research API — literature review engine, gap analysis, methodology critique, citation network explorer, collaboration hub",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "2 vCPU, 4GB, min 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, publisher API credentials, institutional authentication secrets, encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, research data compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search quality metrics, synthesis accuracy, citation graph coverage, researcher engagement, query latency",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 54,
+    "prod": 1065,
+    "enterprise": 4065
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for abstract summarization and metadata extraction, reserve GPT-4o for deep methodology critique and gap analysis — saves 60% on AI costs",
+    "Cache citation graph traversals for frequently referenced landmark papers — avoids repeated Cosmos DB graph queries for high-degree nodes",
+    "Pre-compute embeddings during paper ingestion rather than at query time — batch processing is 70% cheaper than real-time embedding generation",
+    "Use AI Search semantic cache with 15-minute TTL for popular research topics — reduces duplicate searches across concurrent researchers",
+    "Index only abstracts, introductions, and conclusions for initial search — defer full-text indexing to reduce AI Search storage costs by 60%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

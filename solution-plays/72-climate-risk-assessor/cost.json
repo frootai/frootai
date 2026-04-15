@@ -1,0 +1,199 @@
+{
+  "play": "72",
+  "name": "Climate Risk Assessor",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for climate scenario narration, risk factor reasoning, portfolio impact analysis, and regulatory report generation",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 35,
+          "note": "~70K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1.2M tokens/day, gpt-4o for scenario analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, real-time portfolio stress testing"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Climate risk models — physical risk scoring, transition risk modeling, carbon price trajectories, catastrophe probability",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free workspace, small compute clusters"
+        },
+        "prod": {
+          "sku": "Standard + Compute",
+          "cost": 350,
+          "note": "D4s_v3 cluster, scheduled retraining, model endpoints"
+        },
+        "enterprise": {
+          "sku": "Standard + GPU",
+          "cost": 1200,
+          "note": "NC6s_v3 GPU cluster, ensemble models, hourly retraining"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Portfolio holdings, risk scores, scenario results, regulatory submissions, historical climate data indices",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1200 RU/s)",
+          "cost": 75,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 300,
+          "note": "Multi-region, analytical store for time-series"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search across TCFD/NGFS/IPCC frameworks, climate research papers, regulatory guidance, and precedent filings",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB storage, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB, multi-replica HA, private endpoint"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Risk API — scenario runner, portfolio analyzer, stress test engine, report generator, dashboard backend",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 120,
+          "note": "2 vCPU, 4GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 350,
+          "note": "4 vCPU, 8GB, multi-region, 4+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Climate datasets (IPCC, NOAA), scenario output archives, generated TCFD reports, audit-ready submissions",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 3,
+          "note": "~15GB datasets"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 30,
+          "note": "~300GB, lifecycle management"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 80,
+          "note": "~1.5TB, geo-redundant, immutable for regulatory"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, data provider credentials, signing certificates for regulatory filings, encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, financial regulatory compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Model accuracy tracking, scenario execution latency, API performance, risk score drift detection",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 52,
+    "prod": 1160,
+    "enterprise": 3765
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for standard risk summaries and data formatting, reserve GPT-4o for complex multi-scenario narrative analysis — saves 65% on AI costs",
+    "Pre-compute physical risk scores for common geographies and cache results — avoids re-running ML inference for repeated portfolio locations",
+    "Schedule ML model retraining during off-peak hours (weekends) — spot pricing reduces compute costs by 60-80%",
+    "Partition scenario results by time horizon (short/medium/long) in Cosmos DB — enables targeted TTL and avoids storing redundant intermediate results",
+    "Index TCFD/NGFS framework text once in AI Search and version-stamp — regulatory frameworks change annually, not daily",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

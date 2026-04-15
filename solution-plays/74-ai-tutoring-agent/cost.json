@@ -1,0 +1,199 @@
+{
+  "play": "74",
+  "name": "AI Tutoring Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for Socratic dialogue, adaptive explanations, hint generation, misconception detection, and progress feedback",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~1.5M tokens/day, gpt-4o primary, concurrent sessions"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput, 10K+ concurrent learners"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Learner profiles, mastery maps, conversation history, progress analytics, curriculum state, assessment results",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1500 RU/s)",
+          "cost": 95,
+          "note": "Dedicated throughput, session-level consistency"
+        },
+        "enterprise": {
+          "sku": "Provisioned (6000 RU/s)",
+          "cost": 360,
+          "note": "Multi-region, analytical store for learning analytics"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search across curriculum content, textbook passages, worked examples, and prerequisite concept graph",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB storage, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB, multi-replica HA, private endpoint"
+        }
+      }
+    },
+    {
+      "name": "Static Web Apps",
+      "category": "Compute",
+      "purpose": "Learner-facing tutoring UI — chat interface, whiteboard, progress dashboard, parent/teacher portal",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "100GB bandwidth, 2 custom domains"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 9,
+          "note": "Custom auth, staging environments"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 9,
+          "note": "Multiple environments, SLA-backed"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Tutoring API — session manager, adaptive difficulty engine, mastery tracker, Socratic dialogue orchestrator",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 120,
+          "note": "2 vCPU, 4GB, min 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 350,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Content moderation for learner interactions — age-appropriate filtering, prompt injection defense for minors",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "5K transactions/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 40,
+          "note": "~80K checks/month, all severity categories"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 120,
+          "note": "~300K checks/month, custom blocklists"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, OAuth client secrets, encryption keys for learner PII, COPPA compliance credentials",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, COPPA/FERPA compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Session engagement, mastery progression rates, hint effectiveness, response latency, pedagogical quality metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 44,
+    "prod": 897,
+    "enterprise": 2949
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine hints, encouragement, and simple Q&A — reserve GPT-4o for Socratic dialogue and misconception analysis — saves 65% on AI costs",
+    "Cache curriculum content and worked examples in AI Search — avoids regenerating standard explanations for common topics",
+    "Implement session token budgets per learner (e.g., 4K tokens/session for K-8, 8K for high school) — prevents runaway costs from unfocused conversations",
+    "Pre-compute mastery maps for standard curricula — only re-assess when learner performance triggers threshold changes",
+    "Use Static Web Apps free tier for frontend, only pay for API compute — frontend costs near-zero regardless of scale",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

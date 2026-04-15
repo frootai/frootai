@@ -1,0 +1,199 @@
+{
+  "play": "80",
+  "name": "Biodiversity Monitor",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Species identification from camera trap images, drone aerial surveys, and underwater cameras — custom models for local fauna classification",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "20 transactions/min, 5K/month"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 200,
+          "note": "~200K analyses/month, custom species models"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 600,
+          "note": "~800K analyses/month, real-time drone feeds"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for ecological analysis — population trend interpretation, habitat health assessment, conservation priority scoring, and natural language survey reports",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1M tokens/day, gpt-4o for multi-modal"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, multi-reserve monitoring"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Ingest data from camera traps, acoustic sensors, weather stations, water quality monitors, and GPS wildlife collars",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 25,
+          "note": "400K messages/day per unit, 2 units"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, multi-reserve sensor networks"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Species observation records, population counts, habitat assessments, sensor metadata, conservation action logs, geospatial sighting data",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1200 RU/s)",
+          "cost": 75,
+          "note": "Dedicated throughput, geospatial indexes"
+        },
+        "enterprise": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 300,
+          "note": "Multi-region, analytical store for trend analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Camera trap image processing pipeline, acoustic file analysis trigger, sensor data aggregation, conservation alert dispatcher",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 30,
+          "note": "~300K executions/month, image batch processing"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, VNET, high-throughput ingestion"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Biodiversity API — species catalog, population analytics, habitat dashboard, conservation planning, reporting engine",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 120,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 350,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "IoT device certificates, API keys, satellite provider credentials, endangered species location data encryption",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, endangered species data protection"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Sensor uptime, species detection accuracy, camera trap battery levels, pipeline latency, conservation alert response times",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~45GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 39,
+    "prod": 785,
+    "enterprise": 2995
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine species observation logging and status summaries, reserve GPT-4o for complex multi-source ecological analysis and conservation planning — saves 65% on AI costs",
+    "Process camera trap images in batch during nightly uploads rather than real-time — batch processing is 50% cheaper and camera traps typically upload via satellite at scheduled intervals",
+    "Train custom Vision models for site-specific species — smaller regional models are faster and cheaper than general-purpose classification across all fauna",
+    "Use IoT Hub message routing to deduplicate and filter sensor readings at ingestion — acoustic sensors produce high volumes but only segments with animal calls need AI analysis",
+    "Store raw camera trap images in cool/archive storage after species classification — only keep classified metadata in hot storage to reduce Cosmos DB costs by 40%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

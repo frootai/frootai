@@ -13,14 +13,72 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o) | Scenario analysis + TCFD narrative generation |
-| Azure AI Search | Climate risk knowledge base retrieval |
-| Cosmos DB (Serverless) | Company profiles + assessment history |
-| Azure Maps | Geospatial physical risk queries (lat/lon → hazard) |
-| Azure Storage | Climate data layers (GeoTIFF, NetCDF) |
-| Container Apps | Risk assessment API |
+
+```mermaid
+graph TB
+    subgraph Data Sources
+        Climate[Climate Datasets<br/>IPCC · NOAA · ERA5 · Carbon Prices]
+        Portfolio[Portfolio Holdings<br/>Assets · Geographies · Sectors · Exposures]
+    end
+
+    subgraph Knowledge Base
+        Search[Azure AI Search<br/>TCFD · NGFS · IPCC Frameworks · Precedent Filings]
+    end
+
+    subgraph ML Platform
+        AML[Azure Machine Learning<br/>Physical Risk Models · Transition Risk · Catastrophe Probability]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Scenario Narration · Impact Analysis · Report Generation]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Risk API · Scenario Runner · Stress Test Engine · Dashboard]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Risk Scores · Scenario Results · Submissions · Audit History]
+        Blob[Blob Storage<br/>Climate Datasets · Reports · Regulatory Archives]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Data Provider Creds · Signing Certs · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Model Accuracy · Scenario Latency · Score Drift]
+    end
+
+    Climate -->|Ingest| Blob
+    Portfolio -->|Holdings| API
+    Blob -->|Training Data| AML
+    AML -->|Risk Scores| API
+    API -->|Scenario Context| OpenAI
+    API -->|Framework Lookup| Search
+    Search -->|Regulatory Guidance| API
+    OpenAI -->|Narration + Reports| API
+    API <-->|Results| Cosmos
+    API -->|Reports| Blob
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Climate fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Portfolio fill:#f97316,color:#fff,stroke:#ea580c
+    style Search fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style AML fill:#ec4899,color:#fff,stroke:#db2777
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#64748b,color:#fff,stroke:#475569
+    style KV fill:#ef4444,color:#fff,stroke:#dc2626
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Scenarios: Orderly / Disorderly / Hot House (NGFS v4)
@@ -38,10 +96,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $25–50 |
-| Production | $200–500 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $35 | $300 | $1,200 |
+| Azure Machine Learning | $0 | $350 | $1,200 |
+| Cosmos DB | $3 | $75 | $300 |
+| Azure AI Search | $0 | $250 | $500 |
+| Container Apps | $10 | $120 | $350 |
+| Blob Storage | $3 | $30 | $80 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $120 |
+| **Total** | **$52** | **$1,160** | **$3,765** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 70 (ESG Compliance Agent)
 | Aspect | Play 70 | Play 72 |

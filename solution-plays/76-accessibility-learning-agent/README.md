@@ -13,12 +13,74 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o + Vision) | Cognitive analysis + alt-text generation |
-| Playwright + axe-core | Automated WCAG 2.2 AA compliance checks |
-| Cosmos DB (Serverless) | Audit history, remediation tracking |
-| Container Apps | Accessibility audit API |
+
+```mermaid
+graph TB
+    subgraph Learner Interface
+        Screen[Accessible UI<br/>Screen Reader-First · High Contrast · Keyboard Nav · Voice Control]
+    end
+
+    subgraph Speech Services
+        Speech[Azure AI Speech<br/>Neural TTS · STT · Custom Voice · Pronunciation Assessment]
+    end
+
+    subgraph Vision Services
+        Vision[Azure AI Vision<br/>Image Descriptions · Diagram OCR · Math Equation Recognition]
+    end
+
+    subgraph Content Safety
+        Safety[Azure AI Content Safety<br/>Enhanced Protections · Vulnerability-Aware Moderation]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Content Adaptation · Dyslexia Rewriting · Multi-Modal Generation]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Accessibility API · Content Adapter · Profile Engine · WCAG Layer]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Accessibility Profiles · Adaptations · Sessions · Progress]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>PII Encryption · OAuth Secrets · Profile Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Accessibility Metrics · Speech Accuracy · Engagement by Modality]
+    end
+
+    Screen -->|Voice / Text Input| API
+    API -->|STT / TTS| Speech
+    Speech -->|Transcription / Audio| API
+    API -->|Image Analysis| Vision
+    Vision -->|Descriptions / OCR| API
+    API -->|Content Check| Safety
+    Safety -->|Approved| API
+    API -->|Adapt Content| OpenAI
+    OpenAI -->|Accessible Content| API
+    API -->|Response| Screen
+    API <-->|Learner State| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Screen fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Speech fill:#22c55e,color:#fff,stroke:#16a34a
+    style Vision fill:#ec4899,color:#fff,stroke:#db2777
+    style Safety fill:#ef4444,color:#fff,stroke:#dc2626
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - WCAG: 2.2 AA target · 4 principles (POUR) · crawl depth 3
@@ -36,10 +98,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $20–40 |
-| Production (500 audits) | $180–250 |
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure AI Speech | $0 | $200 | $700 |
+| Azure OpenAI | $30 | $300 | $1,200 |
+| Azure AI Vision | $0 | $80 | $250 |
+| Container Apps | $10 | $150 | $400 |
+| Cosmos DB | $3 | $75 | $300 |
+| Azure AI Content Safety | $0 | $30 | $100 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$44** | **$870** | **$3,065** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 74 (AI Tutoring Agent)
 | Aspect | Play 74 | Play 76 |

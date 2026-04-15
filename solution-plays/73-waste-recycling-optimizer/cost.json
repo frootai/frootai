@@ -1,0 +1,199 @@
+{
+  "play": "73",
+  "name": "Waste Recycling Optimizer",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Waste classification from bin cameras — recyclable vs contaminated vs landfill, material type identification",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "20 transactions/min, 5K/month"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 150,
+          "note": "~150K images/month, custom vision models"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 500,
+          "note": "~600K images/month, real-time sorting lines"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for contamination analysis reasoning, route optimization narration, citizen education, and operational reports",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 20,
+          "note": "~40K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 150,
+          "note": "~600K tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~2M tokens/day, multi-region fleet"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Smart bin fill-level sensors, truck GPS telemetry, sorting facility equipment monitoring",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 25,
+          "note": "400K messages/day, 5K+ bins"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, 50K+ bins city-wide"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Recycling API — waste classifier, route optimizer, contamination detector, fleet dashboard, citizen portal",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 100,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 280,
+          "note": "2 vCPU, 4GB, multi-zone, 4+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Bin fill levels, route history, classification results, contamination events, fleet telemetry, recycling metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (800 RU/s)",
+          "cost": 50,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Multi-region, analytical store for reporting"
+        }
+      }
+    },
+    {
+      "name": "Azure Maps",
+      "category": "Location",
+      "purpose": "Route optimization for collection trucks — traffic-aware routing, service area coverage, fleet tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Gen2 S0",
+          "cost": 5,
+          "note": "~5K route queries/month"
+        },
+        "prod": {
+          "sku": "Gen2 S1",
+          "cost": 60,
+          "note": "~100K route queries/month, traffic overlay"
+        },
+        "enterprise": {
+          "sku": "Gen2 S1",
+          "cost": 200,
+          "note": "~500K queries/month, real-time fleet tracking"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "IoT device credentials, API keys, Maps subscription keys, encryption keys for operational data",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~50K operations/month"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Classification accuracy, route efficiency metrics, contamination rates, system health, fleet performance",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~30GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 39,
+    "prod": 558,
+    "enterprise": 1995
+  },
+  "optimization_tips": [
+    "Use edge AI on sorting facility cameras for initial waste classification, only send ambiguous items to cloud Vision API — reduces API calls by 70%",
+    "Use GPT-4o-mini for routine contamination reports and citizen queries, reserve GPT-4o for complex route optimization reasoning — saves 65% on AI costs",
+    "Batch IoT fill-level reports at 15-minute intervals instead of real-time — bins don't fill that fast and reduces IoT Hub message costs by 90%",
+    "Cache optimal routes and only re-calculate when bin fill levels cross threshold (e.g., 75%) — avoids redundant Maps API calls",
+    "Archive classification images older than 30 days to cool/archive storage — reduces Vision processing backlog and storage costs",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

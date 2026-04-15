@@ -5,22 +5,7 @@
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "inputs": [
-                {
-                    "type": "promptString",
-                    "id": "azure-custom-vision-key",
-                    "description": "Azure Custom Vision API Key for waste material classification (leave blank if using Managed Identity)",
-                    "password": true
-                },
-                {
-                    "type": "promptString",
-                    "id": "azure-maps-key",
-                    "description": "Azure Maps API Key for collection route optimization",
-                    "password": true
-                }
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }
