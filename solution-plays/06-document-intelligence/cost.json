@@ -1,0 +1,103 @@
+{
+  "play": "06",
+  "name": "Document Intelligence",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Document Intelligence",
+      "category": "AI Services",
+      "purpose": "OCR extraction, layout analysis, key-value pairs, table detection, custom models",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "500 pages/month, prebuilt models" },
+        "prod": { "sku": "Standard S0", "cost": 100, "note": "~10K pages/month, prebuilt + custom" },
+        "enterprise": { "sku": "Standard S0", "cost": 400, "note": "~50K pages/month, custom composed models" }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for document summarization, entity extraction, and classification",
+      "tiers": {
+        "dev": { "sku": "Pay-As-You-Go", "cost": 40, "note": "~80K tokens/day, document analysis" },
+        "prod": { "sku": "Pay-As-You-Go", "cost": 250, "note": "~800K tokens/day, gpt-4o primary" },
+        "enterprise": { "sku": "PTU Reserved", "cost": 900, "note": "Provisioned throughput, batch + real-time" }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Document intake — PDFs, images, scanned documents, processed output storage",
+      "tiers": {
+        "dev": { "sku": "Hot LRS", "cost": 2, "note": "~10GB documents" },
+        "prod": { "sku": "Hot LRS", "cost": 25, "note": "~500GB documents, lifecycle tiering" },
+        "enterprise": { "sku": "Hot GRS", "cost": 80, "note": "~2TB, geo-redundant, immutable storage" }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Document processing pipeline — intake, OCR, enrichment, output orchestration",
+      "tiers": {
+        "dev": { "sku": "Consumption", "cost": 10, "note": "0.25 vCPU, 0.5GB, scale-to-zero" },
+        "prod": { "sku": "Dedicated", "cost": 80, "note": "1 vCPU, 2GB, min 2 replicas" },
+        "enterprise": { "sku": "Dedicated HA", "cost": 250, "note": "2 vCPU, 4GB, multi-zone, 3+ replicas" }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Storage",
+      "purpose": "Extracted document metadata, entity store, classification results",
+      "tiers": {
+        "dev": { "sku": "Serverless", "cost": 5, "note": "~10K RU/s burst, <1GB" },
+        "prod": { "sku": "Autoscale 400-4000 RU/s", "cost": 50, "note": "~50GB, document index" },
+        "enterprise": { "sku": "Autoscale 4000-40000 RU/s", "cost": 200, "note": "Multi-region, 500GB" }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, storage connection strings, Document Intelligence credentials",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 1, "note": "~1K operations/month" },
+        "prod": { "sku": "Standard", "cost": 3, "note": "~50K operations/month" },
+        "enterprise": { "sku": "Premium HSM", "cost": 10, "note": "HSM-backed keys, compliance" }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Processing pipeline tracing, extraction accuracy metrics, throughput dashboards",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "5GB/month data cap" },
+        "prod": { "sku": "Pay-per-GB", "cost": 25, "note": "~50GB/month ingestion" },
+        "enterprise": { "sku": "Pay-per-GB", "cost": 80, "note": "~150GB/month, 90-day retention" }
+      }
+    },
+    {
+      "name": "Event Grid",
+      "category": "Compute",
+      "purpose": "Blob-triggered processing — new document upload events to processing pipeline",
+      "tiers": {
+        "dev": { "sku": "Basic", "cost": 0, "note": "~1K events/month, free tier" },
+        "prod": { "sku": "Basic", "cost": 2, "note": "~500K events/month" },
+        "enterprise": { "sku": "Basic", "cost": 10, "note": "~5M events/month, dead-lettering" }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 58,
+    "prod": 535,
+    "enterprise": 1930
+  },
+  "optimization_tips": [
+    "Use Document Intelligence prebuilt models first — custom models cost more and need training data",
+    "Batch documents for processing during off-peak hours to leverage lower compute costs",
+    "Use GPT-4o-mini for simple entity extraction, GPT-4o only for complex classification",
+    "Implement blob lifecycle management to tier old documents to Cool/Archive storage",
+    "Use Event Grid instead of polling for new documents — eliminates unnecessary compute",
+    "Cache extraction results in Cosmos DB to avoid re-processing unchanged documents"
+  ]
+}

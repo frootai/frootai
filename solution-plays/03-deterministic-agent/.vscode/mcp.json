@@ -1,20 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key (leave blank if using Managed Identity)",
-            "password": true
-        }
-    ],
-    "servers": {
-        "frootai": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
-        }
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "frootai-mcp@latest"
+      ]
     }
+  }
 }

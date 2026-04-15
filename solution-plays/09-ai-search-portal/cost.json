@@ -1,0 +1,199 @@
+{
+  "play": "09",
+  "name": "AI Search Portal",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Enterprise search index — BM25 + vector + semantic reranking with faceted navigation",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 75,
+          "note": "1 replica, 2GB storage, 15K docs, semantic ranker"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "50 indexes, 160GB, 2 replicas, semantic ranker"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "200 indexes, 1TB, 3 replicas, HA with geo-replication"
+        }
+      }
+    },
+    {
+      "name": "App Service",
+      "category": "Compute",
+      "purpose": "Search portal web app — React frontend + API backend with authentication",
+      "tiers": {
+        "dev": {
+          "sku": "B1",
+          "cost": 13,
+          "note": "1 vCPU, 1.75GB, custom domain, SSL"
+        },
+        "prod": {
+          "sku": "P1v3",
+          "cost": 100,
+          "note": "2 vCPU, 8GB, auto-scale 2-5 instances, staging slots"
+        },
+        "enterprise": {
+          "sku": "P2v3",
+          "cost": 200,
+          "note": "4 vCPU, 16GB, multi-region, 5-10 instances"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for natural language query understanding and answer summarization",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 40,
+          "note": "~80K tokens/day, query rewriting + answer summaries"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~1M tokens/day, GPT-4o for summaries"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1000,
+          "note": "Provisioned throughput, sub-second response times"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Source documents — PDFs, Office docs, HTML — indexed by AI Search",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~10GB documents"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 20,
+          "note": "~1TB documents, lifecycle policies"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 60,
+          "note": "~5TB, geo-redundant, immutable storage"
+        }
+      }
+    },
+    {
+      "name": "Azure Front Door",
+      "category": "Networking",
+      "purpose": "Global load balancing, WAF protection, CDN caching for static assets",
+      "tiers": {
+        "dev": {
+          "sku": "Not used",
+          "cost": 0,
+          "note": "Direct App Service access for dev"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 35,
+          "note": "WAF rules, SSL offloading, CDN"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 100,
+          "note": "Bot protection, custom WAF rules, Private Link origin"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Search admin keys, OpenAI API keys, app secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed keys, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search analytics — query latency, click-through rates, zero-result queries",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month, search dashboards"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized logging — App Service, AI Search diagnostics, KQL",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500MB/day, 7-day retention"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~10GB/day, 30-day retention"
+        },
+        "enterprise": {
+          "sku": "Commitment tier",
+          "cost": 50,
+          "note": "100GB/day, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 131,
+    "prod": 698,
+    "enterprise": 2500
+  },
+  "optimization_tips": [
+    "Use AI Search Basic tier for dev — Standard S1 is 3x the cost with features you don't need yet",
+    "Enable query result caching to reduce AI Search and OpenAI calls by 30-50%",
+    "Use GPT-4o-mini for query rewriting, reserve GPT-4o for answer summarization — saves 60%",
+    "Start with App Service B1 for dev — scale to P1v3 only when traffic justifies it",
+    "Track zero-result queries to improve index coverage — reduces wasted AI Search capacity",
+    "Use Azure Front Door CDN for static assets — reduces App Service load and latency"
+  ]
+}

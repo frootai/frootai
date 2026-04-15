@@ -11,14 +11,6 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for Bicep, @reviewer for security audit, @tuner for cost
 ```
 
-## Architecture
-| Service | Purpose |
-|---------|---------|
-| VNet + Private Endpoints | Network isolation for all AI services |
-| RBAC + Managed Identity | Zero-secret authentication |
-| Key Vault | Secret management for what must be stored |
-| GPU Quota Management | Capacity planning for AI workloads |
-
 ## DevKit
 | Primitive | What It Does |
 |-----------|-------------|
@@ -26,9 +18,88 @@ code .  # Use @builder for Bicep, @reviewer for security audit, @tuner for cost
 | 3 skills | Deploy (161 lines), Evaluate (170 lines), Tune (227 lines) |
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` |
 
-## Cost
-| Dev | Prod |
-|-----|------|
-| $10–50/mo | Included in dependent services |
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Hub["Hub VNet — Network Core"]
+        FW[Azure Firewall<br/>Egress filtering + IDPS]
+        BAS[Azure Bastion<br/>Secure management access]
+        DNS[Private DNS Zones<br/>Name resolution]
+    end
+
+    subgraph Spoke["Spoke VNet — AI Workloads"]
+        PE_AOI[Private Endpoint<br/>Azure OpenAI]
+        PE_SEARCH[Private Endpoint<br/>AI Search]
+        PE_STOR[Private Endpoint<br/>Storage]
+        PE_KV[Private Endpoint<br/>Key Vault]
+    end
+
+    subgraph Identity["Identity & Governance"]
+        ENTRA[Microsoft Entra ID<br/>Authentication]
+        RBAC[RBAC Assignments<br/>Least-privilege access]
+        POLICY[Azure Policy<br/>Compliance guardrails]
+    end
+
+    subgraph Security["Secrets & Protection"]
+        KV[Key Vault<br/>Centralized secrets]
+        DEF[Defender for Cloud<br/>Threat protection]
+    end
+
+    subgraph Monitoring["Observability"]
+        LA[Log Analytics<br/>Centralized logging]
+        DIAG[Diagnostic Settings<br/>Resource telemetry]
+    end
+
+    Hub -->|peering| Spoke
+    FW -->|filtered traffic| PE_AOI
+    FW -->|filtered traffic| PE_SEARCH
+    FW -->|filtered traffic| PE_STOR
+    BAS -->|secure access| Spoke
+    DNS -->|resolution| PE_AOI
+    DNS -->|resolution| PE_KV
+    ENTRA -->|tokens| RBAC
+    RBAC -->|access control| KV
+    RBAC -->|access control| Spoke
+    POLICY -->|enforce| Spoke
+    DEF -->|monitor| Spoke
+    KV -->|secrets| PE_AOI
+    LA -->|collect| DIAG
+    DIAG -->|telemetry| Hub
+    DIAG -->|telemetry| Spoke
+
+    style FW fill:#7c3aed,color:#fff
+    style BAS fill:#7c3aed,color:#fff
+    style DNS fill:#7c3aed,color:#fff
+    style PE_AOI fill:#10b981,color:#fff
+    style PE_SEARCH fill:#10b981,color:#fff
+    style PE_STOR fill:#f59e0b,color:#fff
+    style PE_KV fill:#7c3aed,color:#fff
+    style ENTRA fill:#7c3aed,color:#fff
+    style RBAC fill:#7c3aed,color:#fff
+    style POLICY fill:#7c3aed,color:#fff
+    style KV fill:#7c3aed,color:#fff
+    style DEF fill:#7c3aed,color:#fff
+    style LA fill:#0ea5e9,color:#fff
+    style DIAG fill:#0ea5e9,color:#fff
+```
+
+> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|---------|-----------|------------|
+| Virtual Network | $0 (Standard) | $25 (Standard) | $80 (Standard) |
+| Private Endpoints | $8 (Standard) | $40 (Standard) | $120 (Standard) |
+| Azure Firewall | $250 (Basic) | $900 (Standard) | $1,800 (Premium) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Azure Policy | $0 (Free) | $0 (Free) | $0 (Free) |
+| Log Analytics | $0 (Free) | $30 (Pay-per-GB) | $100 (Commitment) |
+| Defender for Cloud | $0 (Free) | $50 (Defender CSPM) | $200 (Defender P2) |
+| Azure Bastion | $0 (Developer) | $140 (Basic) | $330 (Standard) |
+| **Total** | **$259/mo** | **$1,190/mo** | **$2,645/mo** |
+
+> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
 
 📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/02-ai-landing-zone](https://frootai.dev/solution-plays/02-ai-landing-zone)

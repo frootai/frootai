@@ -1,0 +1,83 @@
+{
+  "play": "03",
+  "name": "Deterministic Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o with temperature=0, seed pinning, and structured JSON output",
+      "tiers": {
+        "dev": { "sku": "Pay-As-You-Go", "cost": 40, "note": "~80K tokens/day, deterministic config" },
+        "prod": { "sku": "Pay-As-You-Go", "cost": 250, "note": "~800K tokens/day, gpt-4o primary" },
+        "enterprise": { "sku": "PTU Reserved", "cost": 1000, "note": "Provisioned throughput, guaranteed latency" }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Agent runtime with structured output validation and retry orchestration",
+      "tiers": {
+        "dev": { "sku": "Consumption", "cost": 10, "note": "0.25 vCPU, 0.5GB, scale-to-zero" },
+        "prod": { "sku": "Dedicated", "cost": 80, "note": "1 vCPU, 2GB, min 2 replicas" },
+        "enterprise": { "sku": "Dedicated HA", "cost": 250, "note": "2 vCPU, 4GB, multi-zone, 3+ replicas" }
+      }
+    },
+    {
+      "name": "Content Safety",
+      "category": "AI Services",
+      "purpose": "Input/output guardrails — prompt injection detection, content filtering",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "1K transactions/month" },
+        "prod": { "sku": "Standard", "cost": 20, "note": "~150K transactions/month" },
+        "enterprise": { "sku": "Standard", "cost": 75, "note": "~1.5M transactions/month" }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, connection strings, agent configuration secrets",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 1, "note": "~1K operations/month" },
+        "prod": { "sku": "Standard", "cost": 3, "note": "~50K operations/month" },
+        "enterprise": { "sku": "Premium HSM", "cost": 10, "note": "HSM-backed keys, compliance" }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Agent execution tracing, determinism scoring, output consistency tracking",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "5GB/month data cap" },
+        "prod": { "sku": "Pay-per-GB", "cost": 25, "note": "~50GB/month ingestion" },
+        "enterprise": { "sku": "Pay-per-GB", "cost": 80, "note": "~150GB/month, 90-day retention" }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized logging — structured output validation results, guardrail triggers",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "500MB/day, 7-day retention" },
+        "prod": { "sku": "Pay-per-GB", "cost": 15, "note": "~10GB/day, 30-day retention" },
+        "enterprise": { "sku": "Commitment tier", "cost": 50, "note": "100GB/day, 90-day retention" }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 51,
+    "prod": 393,
+    "enterprise": 1465
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini with temperature=0 for simple structured tasks — 90% cheaper than GPT-4o",
+    "Cache deterministic outputs for identical inputs — same seed + temp=0 = same result",
+    "Use Container Apps Consumption plan for dev — scale-to-zero eliminates idle costs",
+    "Batch validation requests to Content Safety API to reduce per-transaction costs",
+    "Set max_tokens conservatively for structured JSON output — prevents token waste",
+    "Use response_format: json_object to avoid retry costs from malformed outputs"
+  ]
+}

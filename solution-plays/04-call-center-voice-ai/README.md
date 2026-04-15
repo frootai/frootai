@@ -11,14 +11,6 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for voice pipeline, @reviewer for latency audit, @tuner for cost
 ```
 
-## Architecture
-| Service | Purpose |
-|---------|---------|
-| Communication Services | Call handling, WebSocket audio streaming |
-| AI Speech (STT + TTS) | Real-time speech recognition + neural voice synthesis |
-| Azure OpenAI (gpt-4o) | Intent detection + response generation |
-| Content Safety | Filter inappropriate responses |
-
 ## Key Metrics
 - Intent accuracy: ≥95% · Response latency: <2s · Resolution rate: ≥70%
 
@@ -28,9 +20,97 @@ code .  # Use @builder for voice pipeline, @reviewer for latency audit, @tuner f
 | 3 agents | Builder (STT/TTS pipelines), Reviewer (latency/compliance), Tuner (response time/cost) |
 | 3 skills | Deploy (107 lines), Evaluate (102 lines), Tune (114 lines) |
 
-## Cost
-| Dev | Prod |
-|-----|------|
-| $200–400/mo | $2.5K–10K/mo |
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Caller["Caller"]
+        PHONE[Phone / PSTN<br/>Inbound call]
+    end
+
+    subgraph Telephony["Telephony Layer"]
+        ACS[Communication Services<br/>Call routing & recording]
+        SIP[SIP Trunk<br/>Enterprise PBX bridge]
+    end
+
+    subgraph Speech["Speech Processing"]
+        STT[Azure AI Speech STT<br/>Real-time recognition]
+        TTS[Azure AI Speech TTS<br/>Neural voice synthesis]
+    end
+
+    subgraph AI["AI Reasoning"]
+        AOAI[Azure OpenAI GPT-4o<br/>Intent + response gen]
+        PROMPT[Prompt Templates<br/>Domain-specific context]
+    end
+
+    subgraph Pipeline["Orchestration"]
+        ORCH[Container Apps<br/>Streaming pipeline]
+        QUEUE[Event Queue<br/>Async processing]
+    end
+
+    subgraph Storage["Data Layer"]
+        BLOB[Blob Storage<br/>Call recordings]
+        HIST[Conversation History<br/>Context window]
+    end
+
+    subgraph Security["Security"]
+        KV[Key Vault<br/>Credentials & keys]
+        MI[Managed Identity<br/>Service auth]
+    end
+
+    subgraph Monitoring["Observability"]
+        AI_INS[Application Insights<br/>Call quality metrics]
+    end
+
+    PHONE -->|PSTN call| ACS
+    ACS -->|audio stream| STT
+    SIP -->|enterprise| ACS
+    STT -->|transcript| ORCH
+    ORCH -->|text + context| AOAI
+    AOAI -->|response text| ORCH
+    ORCH -->|text| TTS
+    TTS -->|audio stream| ACS
+    ACS -->|voice response| PHONE
+    ORCH -->|load| PROMPT
+    ORCH -->|read/write| HIST
+    ACS -->|recording| BLOB
+    ORCH -->|async tasks| QUEUE
+    MI -->|auth| AOAI
+    MI -->|auth| KV
+    KV -->|secrets| ORCH
+    ORCH -->|telemetry| AI_INS
+
+    style PHONE fill:#3b82f6,color:#fff
+    style ACS fill:#3b82f6,color:#fff
+    style SIP fill:#3b82f6,color:#fff
+    style STT fill:#10b981,color:#fff
+    style TTS fill:#10b981,color:#fff
+    style AOAI fill:#10b981,color:#fff
+    style PROMPT fill:#10b981,color:#fff
+    style ORCH fill:#3b82f6,color:#fff
+    style QUEUE fill:#3b82f6,color:#fff
+    style BLOB fill:#f59e0b,color:#fff
+    style HIST fill:#f59e0b,color:#fff
+    style KV fill:#7c3aed,color:#fff
+    style MI fill:#7c3aed,color:#fff
+    style AI_INS fill:#0ea5e9,color:#fff
+```
+
+> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|---------|-----------|------------|
+| Communication Services | $15 (PAYG) | $150 (PAYG) | $600 (PAYG) |
+| Azure AI Speech | $0 (Free) | $120 (Standard) | $450 (Custom Neural Voice) |
+| Azure OpenAI | $30 (PAYG) | $200 (PAYG) | $800 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $100 (Dedicated) | $300 (Dedicated HA) |
+| Blob Storage | $2 (Hot LRS) | $20 (Hot LRS) | $80 (Hot GRS) |
+| Key Vault | $1 (Standard) | $3 (Standard) | $10 (Premium HSM) |
+| Application Insights | $0 (Free) | $30 (Pay-per-GB) | $100 (Pay-per-GB) |
+| **Total** | **$58/mo** | **$623/mo** | **$2,340/mo** |
+
+> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
 
 📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/04-call-center-voice-ai](https://frootai.dev/solution-plays/04-call-center-voice-ai)

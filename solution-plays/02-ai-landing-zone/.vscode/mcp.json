@@ -1,20 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-subscription-id",
-            "description": "Azure Subscription ID for Landing Zone deployment",
-            "password": false
-        }
-    ],
-    "servers": {
-        "frootai": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
-        }
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "frootai-mcp@latest"
+      ]
     }
+  }
 }

@@ -1,0 +1,93 @@
+{
+  "play": "04",
+  "name": "Call Center Voice AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Communication Services",
+      "category": "Compute",
+      "purpose": "Telephony — inbound/outbound PSTN calling, call routing, recording",
+      "tiers": {
+        "dev": { "sku": "Pay-As-You-Go", "cost": 15, "note": "~500 minutes/month, 1 phone number" },
+        "prod": { "sku": "Pay-As-You-Go", "cost": 150, "note": "~10K minutes/month, 10 numbers" },
+        "enterprise": { "sku": "Pay-As-You-Go", "cost": 600, "note": "~50K minutes/month, 100 numbers, SIP trunk" }
+      }
+    },
+    {
+      "name": "Azure AI Speech",
+      "category": "AI Services",
+      "purpose": "Real-time STT and TTS — speech recognition and voice synthesis pipeline",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "5 hours STT + 500K chars TTS/month" },
+        "prod": { "sku": "Standard", "cost": 120, "note": "~500 hours STT + 5M chars TTS/month" },
+        "enterprise": { "sku": "Custom Neural Voice", "cost": 450, "note": "~2K hours STT, custom voice model" }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for conversational understanding, intent extraction, and response generation",
+      "tiers": {
+        "dev": { "sku": "Pay-As-You-Go", "cost": 30, "note": "~50K tokens/day, low concurrency" },
+        "prod": { "sku": "Pay-As-You-Go", "cost": 200, "note": "~500K tokens/day, gpt-4o-mini routing" },
+        "enterprise": { "sku": "PTU Reserved", "cost": 800, "note": "Provisioned throughput for low latency" }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Voice pipeline orchestrator — STT→LLM→TTS streaming coordination",
+      "tiers": {
+        "dev": { "sku": "Consumption", "cost": 10, "note": "0.25 vCPU, 0.5GB, scale-to-zero" },
+        "prod": { "sku": "Dedicated", "cost": 100, "note": "1 vCPU, 2GB, min 3 replicas for concurrency" },
+        "enterprise": { "sku": "Dedicated HA", "cost": 300, "note": "2 vCPU, 4GB, multi-zone, 5+ replicas" }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Call recordings, transcription logs, conversation history archive",
+      "tiers": {
+        "dev": { "sku": "Hot LRS", "cost": 2, "note": "~5GB recordings" },
+        "prod": { "sku": "Hot LRS", "cost": 20, "note": "~200GB recordings, lifecycle tiering" },
+        "enterprise": { "sku": "Hot GRS", "cost": 80, "note": "~1TB, geo-redundant, compliance retention" }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, SIP credentials, Communication Services connection strings",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 1, "note": "~1K operations/month" },
+        "prod": { "sku": "Standard", "cost": 3, "note": "~50K operations/month" },
+        "enterprise": { "sku": "Premium HSM", "cost": 10, "note": "HSM-backed keys, compliance" }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Call quality metrics, latency tracing, STT/TTS accuracy dashboards",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "5GB/month data cap" },
+        "prod": { "sku": "Pay-per-GB", "cost": 30, "note": "~60GB/month ingestion" },
+        "enterprise": { "sku": "Pay-per-GB", "cost": 100, "note": "~200GB/month, 90-day retention" }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 58,
+    "prod": 623,
+    "enterprise": 2340
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for simple intent classification before escalating to GPT-4o — saves 70% on AI",
+    "Pre-cache common responses as audio (TTS) to avoid per-call synthesis costs",
+    "Use Azure AI Speech batch transcription for post-call analytics — 50% cheaper than real-time",
+    "Route simple IVR flows without LLM involvement — DTMF + rules costs nothing extra",
+    "Enable call recording only for compliance-required calls — reduces storage costs significantly",
+    "Use Container Apps scale-to-zero during off-hours if call center has defined operating hours"
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "play": "11",
+  "name": "AI Landing Zone — Advanced",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on region, reserved instances, enterprise agreements, and network traffic. This is a platform play — costs are shared across all AI workloads deployed into the landing zone.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Virtual Network (Multi-Region)",
+      "category": "Networking",
+      "purpose": "Hub-spoke topology — regional hubs with peered spoke VNets for AI workloads",
+      "tiers": {
+        "dev": {
+          "sku": "Single region",
+          "cost": 0,
+          "note": "1 hub + 2 spokes, minimal peering traffic"
+        },
+        "prod": {
+          "sku": "Dual region",
+          "cost": 50,
+          "note": "2 hubs + 4 spokes, cross-region peering, ~500GB egress"
+        },
+        "enterprise": {
+          "sku": "Multi-region (3+)",
+          "cost": 200,
+          "note": "3+ hubs, global peering, ~2TB egress, ExpressRoute"
+        }
+      }
+    },
+    {
+      "name": "Azure Firewall",
+      "category": "Security",
+      "purpose": "Centralized egress filtering, FQDN rules, threat intelligence, TLS inspection",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 250,
+          "note": "Single hub, FQDN filtering, ~100GB processed"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 650,
+          "note": "Threat intel, IDPS in alert mode, ~1TB processed"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 1300,
+          "note": "TLS inspection, IDPS deny mode, multi-hub, ~5TB processed"
+        }
+      }
+    },
+    {
+      "name": "Azure Policy",
+      "category": "Governance",
+      "purpose": "Guardrails — enforce AI service SKUs, regions, network rules, tagging standards",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Built-in policies, audit mode"
+        },
+        "prod": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Custom policy definitions, deny mode, remediation tasks"
+        },
+        "enterprise": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Policy-as-code, initiative bundles, compliance dashboard"
+        }
+      }
+    },
+    {
+      "name": "Azure RBAC + Entra ID",
+      "category": "Security",
+      "purpose": "Identity governance — custom roles, PIM, access reviews for AI resources",
+      "tiers": {
+        "dev": {
+          "sku": "Entra ID Free",
+          "cost": 0,
+          "note": "Built-in roles, basic access control"
+        },
+        "prod": {
+          "sku": "Entra ID P1",
+          "cost": 60,
+          "note": "~10 users, conditional access, group-based licensing"
+        },
+        "enterprise": {
+          "sku": "Entra ID P2",
+          "cost": 250,
+          "note": "~25 users, PIM, access reviews, identity governance"
+        }
+      }
+    },
+    {
+      "name": "Azure Private DNS Zones",
+      "category": "Networking",
+      "purpose": "Private endpoint DNS resolution for AI services, storage, databases",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~5 zones (OpenAI, Search, Storage, KV, ACR)"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 8,
+          "note": "~15 zones, cross-region linked VNets"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "~40 zones, hub-linked, multi-region resolution"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor + Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized platform monitoring — network flows, policy compliance, security alerts",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500MB/day, 7-day retention"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~30GB/day, 30-day retention, NSG flow logs"
+        },
+        "enterprise": {
+          "sku": "Commitment tier",
+          "cost": 200,
+          "note": "~200GB/day, 90-day retention, Sentinel integration"
+        }
+      }
+    },
+    {
+      "name": "Microsoft Defender for Cloud",
+      "category": "Security",
+      "purpose": "Cloud security posture — vulnerability assessment, threat protection, compliance scoring",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic CSPM, security recommendations"
+        },
+        "prod": {
+          "sku": "Defender CSPM",
+          "cost": 50,
+          "note": "Enhanced posture, attack path analysis"
+        },
+        "enterprise": {
+          "sku": "Defender for all resources",
+          "cost": 200,
+          "note": "Full CWP, servers, containers, databases, DNS"
+        }
+      }
+    },
+    {
+      "name": "Key Vault (Platform)",
+      "category": "Security",
+      "purpose": "Platform secrets — firewall certs, Entra app registrations, shared keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~50K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, multi-region, compliance"
+        }
+      }
+    },
+    {
+      "name": "Azure Bastion",
+      "category": "Management",
+      "purpose": "Secure RDP/SSH access to VMs in the landing zone — no public IPs required",
+      "tiers": {
+        "dev": {
+          "sku": "Developer",
+          "cost": 0,
+          "note": "Free tier, single connection"
+        },
+        "prod": {
+          "sku": "Basic",
+          "cost": 140,
+          "note": "2 instances, native client support"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 280,
+          "note": "Shareable links, IP-based connections, scaling"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 254,
+    "prod": 1013,
+    "enterprise": 2465
+  },
+  "optimization_tips": [
+    "Use Azure Firewall Basic for dev — saves $400/month vs Standard with sufficient dev features",
+    "Azure Policy is always free — invest time in policy definitions before buying security tools",
+    "Use Entra ID Free tier for dev — upgrade to P1/P2 only for conditional access and PIM",
+    "Deploy Azure Bastion Developer SKU for dev — free alternative to Basic ($140/month)",
+    "Consolidate Log Analytics workspaces per region — avoid duplicate ingestion costs",
+    "Use Defender for Cloud free tier for dev — CSPM recommendations are free",
+    "Share platform landing zone costs across all AI workloads — amortize per team/project",
+    "Use Azure Reserved Instances for Firewall in production — saves 20-30% on always-on services"
+  ]
+}

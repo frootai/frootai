@@ -1,0 +1,177 @@
+{
+  "play": "08",
+  "name": "Copilot Studio Bot",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure and Microsoft 365 retail pricing. Actual costs depend on usage, licensing, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Microsoft Copilot Studio",
+      "category": "Platform",
+      "purpose": "Low-code bot builder with generative AI, topic management, and channel publishing",
+      "tiers": {
+        "dev": {
+          "sku": "Trial",
+          "cost": 0,
+          "note": "Trial license, limited sessions, single environment"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "~25K sessions/month, generative AI answers"
+        },
+        "enterprise": {
+          "sku": "Standard + Capacity Packs",
+          "cost": 800,
+          "note": "~100K sessions/month, multi-environment, analytics"
+        }
+      }
+    },
+    {
+      "name": "Dataverse",
+      "category": "Data",
+      "purpose": "Structured data storage — knowledge base, conversation logs, entity records",
+      "tiers": {
+        "dev": {
+          "sku": "Included with Copilot Studio",
+          "cost": 0,
+          "note": "1GB database, 2GB file storage"
+        },
+        "prod": {
+          "sku": "Additional capacity",
+          "cost": 40,
+          "note": "10GB database, 20GB file, ~50K records"
+        },
+        "enterprise": {
+          "sku": "Enterprise capacity",
+          "cost": 120,
+          "note": "100GB database, 100GB file, audit logging"
+        }
+      }
+    },
+    {
+      "name": "SharePoint Online",
+      "category": "Data",
+      "purpose": "Document knowledge source — bot retrieves answers from SharePoint libraries",
+      "tiers": {
+        "dev": {
+          "sku": "Included with M365",
+          "cost": 0,
+          "note": "Existing M365 license, single site collection"
+        },
+        "prod": {
+          "sku": "Included with M365",
+          "cost": 0,
+          "note": "Multiple site collections, managed metadata"
+        },
+        "enterprise": {
+          "sku": "SharePoint Advanced Management",
+          "cost": 30,
+          "note": "Advanced governance, access reviews, sensitivity labels"
+        }
+      }
+    },
+    {
+      "name": "Power Automate",
+      "category": "Integration",
+      "purpose": "Workflow automation — ticket creation, approval flows, CRM updates triggered by bot",
+      "tiers": {
+        "dev": {
+          "sku": "Included with Copilot Studio",
+          "cost": 0,
+          "note": "Standard connectors, ~500 runs/month"
+        },
+        "prod": {
+          "sku": "Per-flow plan",
+          "cost": 100,
+          "note": "Premium connectors, ~10K runs/month, 5 flows"
+        },
+        "enterprise": {
+          "sku": "Per-user plan",
+          "cost": 300,
+          "note": "Unlimited flows, premium connectors, RPA"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI (via Copilot Studio)",
+      "category": "AI Services",
+      "purpose": "Generative answers — fallback for unmatched topics using enterprise knowledge",
+      "tiers": {
+        "dev": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Included in Copilot Studio session quota"
+        },
+        "prod": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Consumed from Copilot Studio session capacity"
+        },
+        "enterprise": {
+          "sku": "Bring-your-own AOAI",
+          "cost": 200,
+          "note": "Custom GPT-4o deployment for advanced scenarios"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Bot analytics — session metrics, topic completion rates, user satisfaction",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~30GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~100GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Connector credentials, external API keys, certificate storage",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~500 operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 2,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed keys, compliance"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 1,
+    "prod": 357,
+    "enterprise": 1510
+  },
+  "optimization_tips": [
+    "Start with Copilot Studio trial to validate bot design before purchasing licenses",
+    "Use SharePoint as primary knowledge source — no extra cost with existing M365 licenses",
+    "Design high-quality topics for common queries to reduce generative AI session consumption",
+    "Use Power Automate standard connectors where possible — avoid per-flow plan costs",
+    "Monitor session analytics to identify and fix low-completion topics — reduces wasted sessions",
+    "Leverage Dataverse included capacity before purchasing additional storage packs"
+  ]
+}

@@ -11,14 +11,6 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for classification, @reviewer for SLA audit, @tuner for routing
 ```
 
-## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o-mini) | Ticket classification + auto-resolution |
-| Azure AI Search | Knowledge base for auto-resolve answers |
-| Logic Apps / Service Bus | Event-driven ticket processing |
-| Key Vault | ITSM API credentials |
-
 ## Key Metrics
 - Classification accuracy: ≥92% · Auto-resolution: ≥60% · SLA compliance: ≥95%
 
@@ -28,9 +20,81 @@ code .  # Use @builder for classification, @reviewer for SLA audit, @tuner for r
 | 3 agents | Builder (classification/routing), Reviewer (SLA/PII audit), Tuner (thresholds/cost) |
 | 3 skills | Deploy (106 lines), Evaluate (109 lines), Tune (104 lines) |
 
-## Cost
-| Dev | Prod |
-|-----|------|
-| $50–150/mo | $800–2K/mo |
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Sources["Ticket Sources"]
+        SNOW[ServiceNow<br/>ITSM connector]
+        JIRA[Jira SM<br/>Webhook intake]
+        EMAIL[Email<br/>Shared mailbox]
+    end
+
+    subgraph Orchestration["Processing Pipeline"]
+        LA_APP[Logic Apps<br/>Workflow orchestration]
+        CA[Container Apps<br/>Classification API]
+    end
+
+    subgraph AI["AI Services"]
+        AOAI[Azure OpenAI<br/>GPT-4o-mini classification]
+    end
+
+    subgraph Data["State & Knowledge"]
+        COSMOS[Cosmos DB<br/>Ticket state store]
+    end
+
+    subgraph Security["Security"]
+        KV[Key Vault<br/>ITSM credentials]
+        MI[Managed Identity<br/>Service auth]
+    end
+
+    subgraph Monitoring["Observability"]
+        AI_INS[Application Insights<br/>Ticket metrics]
+        LOG[Log Analytics<br/>Audit logs]
+    end
+
+    SNOW -->|webhook| LA_APP
+    JIRA -->|webhook| LA_APP
+    EMAIL -->|trigger| LA_APP
+    LA_APP -->|classify| CA
+    CA -->|inference| AOAI
+    AOAI -->|classification| CA
+    CA -->|store| COSMOS
+    LA_APP -->|update| SNOW
+    MI -->|auth| AOAI
+    MI -->|auth| KV
+    KV -->|secrets| CA
+    CA -->|telemetry| AI_INS
+    LA_APP -->|logs| LOG
+
+    style SNOW fill:#3b82f6,color:#fff
+    style JIRA fill:#3b82f6,color:#fff
+    style EMAIL fill:#3b82f6,color:#fff
+    style LA_APP fill:#3b82f6,color:#fff
+    style CA fill:#3b82f6,color:#fff
+    style AOAI fill:#10b981,color:#fff
+    style COSMOS fill:#f59e0b,color:#fff
+    style KV fill:#7c3aed,color:#fff
+    style MI fill:#7c3aed,color:#fff
+    style AI_INS fill:#0ea5e9,color:#fff
+    style LOG fill:#0ea5e9,color:#fff
+```
+
+> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|---------|-----------|------------|
+| Azure OpenAI | $30 (PAYG) | $180 (PAYG) | $700 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $80 (Dedicated) | $250 (Dedicated HA) |
+| Logic Apps | $5 (Consumption) | $40 (Consumption) | $150 (Standard) |
+| Cosmos DB | $5 (Serverless) | $50 (Autoscale) | $200 (Autoscale) |
+| Key Vault | $1 (Standard) | $3 (Standard) | $10 (Premium HSM) |
+| Application Insights | $0 (Free) | $25 (Pay-per-GB) | $80 (Pay-per-GB) |
+| Log Analytics | $0 (Free) | $15 (Pay-per-GB) | $50 (Commitment) |
+| **Total** | **$51/mo** | **$393/mo** | **$1,440/mo** |
+
+> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
 
 📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/05-it-ticket-resolution](https://frootai.dev/solution-plays/05-it-ticket-resolution)

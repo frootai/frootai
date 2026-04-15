@@ -1,0 +1,199 @@
+{
+  "play": "07",
+  "name": "Multi-Agent Service",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Container Apps",
+      "category": "Compute",
+      "purpose": "Supervisor + specialist agent hosting with Dapr sidecar injection",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 15,
+          "note": "0.5 vCPU, 1GB per agent, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "1 vCPU, 2GB per agent, 3 agent containers, min 2 replicas each"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 450,
+          "note": "2 vCPU, 4GB per agent, 5+ agents, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for supervisor routing + specialist agent reasoning",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~200K tokens/day, multi-turn agent conversations"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~2M tokens/day, GPT-4o primary + GPT-4o-mini for routing"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1800,
+          "note": "Provisioned throughput, guaranteed latency for all agents"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Data",
+      "purpose": "Agent state persistence, conversation history, task coordination",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RUs, auto-scale, minimal storage"
+        },
+        "prod": {
+          "sku": "Provisioned 400 RU/s",
+          "cost": 50,
+          "note": "Multi-partition, 50GB storage, session consistency"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 250,
+          "note": "Multi-region writes, 500GB, strong consistency"
+        }
+      }
+    },
+    {
+      "name": "Dapr (via Container Apps)",
+      "category": "Platform",
+      "purpose": "Service invocation, pub/sub messaging, state management between agents",
+      "tiers": {
+        "dev": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Built into Container Apps, no extra charge"
+        },
+        "prod": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Sidecar injection at no additional cost"
+        },
+        "enterprise": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Enterprise features via Container Apps plan"
+        }
+      }
+    },
+    {
+      "name": "Azure Service Bus",
+      "category": "Messaging",
+      "purpose": "Reliable async messaging between supervisor and specialist agents",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "Queues only, ~10K messages/day"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 25,
+          "note": "Topics + subscriptions, ~500K messages/day"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 100,
+          "note": "Dedicated capacity, VNet integration, ~5M messages/day"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, agent credentials, managed identity secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~50K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed keys, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Distributed tracing across agent calls, latency per agent, token usage",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month, correlation across agents"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized logging for all agent containers — KQL queries, alerts",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500MB/day, 7-day retention"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~15GB/day, 30-day retention"
+        },
+        "enterprise": {
+          "sku": "Commitment tier",
+          "cost": 60,
+          "note": "100GB/day, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 106,
+    "prod": 778,
+    "enterprise": 2790
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for the supervisor routing layer — saves 80% on routing decisions",
+    "Enable Dapr pub/sub instead of Service Bus for dev — zero cost inter-agent messaging",
+    "Use Cosmos DB serverless for dev/staging — pay only for consumed RUs",
+    "Scale specialist agents to zero when idle — Container Apps Consumption plan handles this",
+    "Implement agent result caching in Cosmos DB to avoid redundant LLM calls",
+    "Set per-agent token budgets to prevent runaway multi-turn costs"
+  ]
+}

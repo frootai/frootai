@@ -5,7 +5,7 @@ name: AI Deploy
 on:
   push:
     branches: [main]
-    paths: ['solution-plays/01-enterprise-rag/infra/**']
+    paths: ['solution-plays/09-ai-search-portal/infra/**']
 
 permissions:
   contents: read
@@ -14,36 +14,38 @@ permissions:
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     # environment: staging  # Configure in your repo Settings > Environments
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Azure Login
-        uses: azure/login@v2
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Validate Bicep
-        run: az bicep build --file solution-plays/01-enterprise-rag/infra/main.bicep
+        run: az bicep build --file solution-plays/09-ai-search-portal/infra/main.bicep
 
       - name: Deploy to Staging
         run: |
           az deployment group create \
             --resource-group rg-enterprise-rag-staging \
-            --template-file solution-plays/01-enterprise-rag/infra/main.bicep \
-            --parameters solution-plays/01-enterprise-rag/infra/parameters.json
+            --template-file solution-plays/09-ai-search-portal/infra/main.bicep \
+            --parameters solution-plays/09-ai-search-portal/infra/parameters.json
 
   deploy-production:
     needs: deploy-staging
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     # environment: production  # Configure in your repo Settings > Environments
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Azure Login
-        uses: azure/login@v2
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -53,5 +55,5 @@ jobs:
         run: |
           az deployment group create \
             --resource-group rg-enterprise-rag \
-            --template-file solution-plays/01-enterprise-rag/infra/main.bicep \
-            --parameters solution-plays/01-enterprise-rag/infra/parameters.json
+            --template-file solution-plays/09-ai-search-portal/infra/main.bicep \
+            --parameters solution-plays/09-ai-search-portal/infra/parameters.json

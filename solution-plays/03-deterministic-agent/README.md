@@ -11,13 +11,6 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for pipelines, @reviewer for determinism audit, @tuner for thresholds
 ```
 
-## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o, temp=0) | Deterministic generation with seed pinning |
-| Container Apps | API hosting |
-| Content Safety | Output filtering |
-
 ## Pre-Tuned Defaults
 - Temperature: 0.0 · Seed: 42 · Structured JSON output
 - Confidence threshold: ≥0.7 (abstain below)
@@ -29,9 +22,85 @@ code .  # Use @builder for pipelines, @reviewer for determinism audit, @tuner fo
 | 3 agents | Builder (zero-temp pipelines), Reviewer (reproducibility audit), Tuner (confidence thresholds) |
 | 3 skills | Deploy (106 lines), Evaluate (152 lines), Tune (153 lines) |
 
-## Cost
-| Dev | Prod |
-|-----|------|
-| $100–250/mo | $1.5K–6K/mo |
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Client["Client Layer"]
+        API[API Consumer<br/>REST / gRPC]
+    end
+
+    subgraph Orchestration["Agent Runtime"]
+        ORCH[Orchestrator<br/>Container Apps]
+        VAL[Schema Validator<br/>JSON output check]
+        RETRY[Retry Handler<br/>Exponential backoff]
+    end
+
+    subgraph AI["AI Services"]
+        AOAI[Azure OpenAI<br/>GPT-4o temp=0 + seed]
+        CS[Content Safety<br/>Prompt Shields + filters]
+    end
+
+    subgraph Data["State & Config"]
+        CONFIG[Config Store<br/>Guardrail rules]
+        CACHE[Response Cache<br/>Deterministic dedup]
+    end
+
+    subgraph Security["Security"]
+        KV[Key Vault<br/>API keys & secrets]
+        MI[Managed Identity<br/>Zero-credential auth]
+    end
+
+    subgraph Monitoring["Observability"]
+        AI_INS[Application Insights<br/>Tracing & metrics]
+        LA[Log Analytics<br/>Audit logs]
+    end
+
+    API -->|request| ORCH
+    ORCH -->|validate input| CS
+    CS -->|safe input| AOAI
+    AOAI -->|structured JSON| VAL
+    VAL -->|valid| ORCH
+    VAL -->|invalid| RETRY
+    RETRY -->|retry| AOAI
+    ORCH -->|response| API
+    ORCH -->|check cache| CACHE
+    ORCH -->|load rules| CONFIG
+    MI -->|authenticate| AOAI
+    MI -->|authenticate| KV
+    KV -->|secrets| ORCH
+    ORCH -->|telemetry| AI_INS
+    CS -->|blocked events| LA
+    VAL -->|validation logs| LA
+
+    style API fill:#3b82f6,color:#fff
+    style ORCH fill:#3b82f6,color:#fff
+    style VAL fill:#3b82f6,color:#fff
+    style RETRY fill:#3b82f6,color:#fff
+    style AOAI fill:#10b981,color:#fff
+    style CS fill:#10b981,color:#fff
+    style CONFIG fill:#f59e0b,color:#fff
+    style CACHE fill:#f59e0b,color:#fff
+    style KV fill:#7c3aed,color:#fff
+    style MI fill:#7c3aed,color:#fff
+    style AI_INS fill:#0ea5e9,color:#fff
+    style LA fill:#0ea5e9,color:#fff
+```
+
+> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|---------|-----------|------------|
+| Azure OpenAI | $40 (PAYG) | $250 (PAYG) | $1,000 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $80 (Dedicated) | $250 (Dedicated HA) |
+| Content Safety | $0 (Free) | $20 (Standard) | $75 (Standard) |
+| Key Vault | $1 (Standard) | $3 (Standard) | $10 (Premium HSM) |
+| Application Insights | $0 (Free) | $25 (Pay-per-GB) | $80 (Pay-per-GB) |
+| Log Analytics | $0 (Free) | $15 (Pay-per-GB) | $50 (Commitment) |
+| **Total** | **$51/mo** | **$393/mo** | **$1,465/mo** |
+
+> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
 
 📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/03-deterministic-agent](https://frootai.dev/solution-plays/03-deterministic-agent)

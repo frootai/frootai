@@ -1,0 +1,199 @@
+{
+  "play": "10",
+  "name": "Content Moderation",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Multi-category moderation — hate, violence, self-harm, sexual content + Prompt Shields",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5K transactions/month, text + image moderation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 75,
+          "note": "~500K transactions/month, all categories + Prompt Shields"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 300,
+          "note": "~5M transactions/month, custom blocklists, Groundedness Detection"
+        }
+      }
+    },
+    {
+      "name": "Azure API Management",
+      "category": "Compute",
+      "purpose": "API gateway — rate limiting, authentication, request routing, analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 5,
+          "note": "First 1M calls free, then $3.50/100K"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "Built-in cache, 1 scale unit, developer portal"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 700,
+          "note": "Multi-region, VNet integration, custom CA, 2+ scale units"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Moderation pipeline — pre-processing, scoring, routing, custom blocklist checks",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "First 1M executions free, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 20,
+          "note": "~2M executions/month, 128MB memory"
+        },
+        "enterprise": {
+          "sku": "Premium EP1",
+          "cost": 100,
+          "note": "Pre-warmed instances, VNet, no cold starts"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Moderation results store — audit trail, severity scores, appeal records",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RUs, auto-scale, minimal storage"
+        },
+        "prod": {
+          "sku": "Provisioned 400 RU/s",
+          "cost": 45,
+          "note": "Multi-partition, 30-day TTL on raw content"
+        },
+        "enterprise": {
+          "sku": "Provisioned 2000 RU/s",
+          "cost": 200,
+          "note": "Multi-region reads, 200GB, compliance retention"
+        }
+      }
+    },
+    {
+      "name": "Azure Service Bus",
+      "category": "Messaging",
+      "purpose": "Async moderation queue — decouple submission from processing for high throughput",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "Queues only, ~10K messages/day"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "Topics + dead-letter, ~200K messages/day"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 80,
+          "note": "Dedicated capacity, VNet, ~2M messages/day"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Content Safety API keys, APIM certificates, managed identity secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed keys, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Moderation metrics — block rates, severity distribution, latency, false positive tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~40GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Audit logging — all moderation decisions logged for compliance, KQL analysis",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500MB/day, 7-day retention"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~10GB/day, 30-day retention"
+        },
+        "enterprise": {
+          "sku": "Commitment tier",
+          "cost": 50,
+          "note": "100GB/day, 1-year retention for compliance"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 14,
+    "prod": 348,
+    "enterprise": 1520
+  },
+  "optimization_tips": [
+    "Use Content Safety free tier for dev — 5K transactions/month is sufficient for testing",
+    "Use API Management Consumption tier for dev — avoids $150/month Standard tier cost",
+    "Batch moderation requests where possible — reduces per-transaction overhead",
+    "Use Service Bus dead-letter queues to reprocess failed moderations — avoids lost requests",
+    "Set TTL on Cosmos DB raw content (30 days) — keep only metadata long-term for compliance",
+    "Use custom blocklists to fast-reject known-bad content before calling AI — saves API costs"
+  ]
+}

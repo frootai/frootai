@@ -1,0 +1,93 @@
+{
+  "play": "05",
+  "name": "IT Ticket Resolution",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Ticket classification, priority inference, resolution suggestion generation",
+      "tiers": {
+        "dev": { "sku": "Pay-As-You-Go", "cost": 30, "note": "~50K tokens/day, gpt-4o-mini primary" },
+        "prod": { "sku": "Pay-As-You-Go", "cost": 180, "note": "~500K tokens/day, gpt-4o for complex" },
+        "enterprise": { "sku": "PTU Reserved", "cost": 700, "note": "Provisioned throughput, SLA-backed latency" }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Ticket processing API — classification, routing, and resolution pipeline",
+      "tiers": {
+        "dev": { "sku": "Consumption", "cost": 10, "note": "0.25 vCPU, 0.5GB, scale-to-zero" },
+        "prod": { "sku": "Dedicated", "cost": 80, "note": "1 vCPU, 2GB, min 2 replicas" },
+        "enterprise": { "sku": "Dedicated HA", "cost": 250, "note": "2 vCPU, 4GB, multi-zone, 3+ replicas" }
+      }
+    },
+    {
+      "name": "Logic Apps",
+      "category": "Compute",
+      "purpose": "Workflow orchestration — ticket intake, ITSM connector, escalation rules",
+      "tiers": {
+        "dev": { "sku": "Consumption", "cost": 5, "note": "~1K executions/month" },
+        "prod": { "sku": "Consumption", "cost": 40, "note": "~50K executions/month" },
+        "enterprise": { "sku": "Standard", "cost": 150, "note": "ISE-grade, VNet-integrated, ~500K executions" }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Storage",
+      "purpose": "Ticket state store — classification history, resolution knowledge base",
+      "tiers": {
+        "dev": { "sku": "Serverless", "cost": 5, "note": "~10K RU/s burst, <1GB" },
+        "prod": { "sku": "Autoscale 400-4000 RU/s", "cost": 50, "note": "~50GB, global consistency" },
+        "enterprise": { "sku": "Autoscale 4000-40000 RU/s", "cost": 200, "note": "Multi-region writes, 500GB" }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "ITSM API keys, ServiceNow credentials, Azure OpenAI connection strings",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 1, "note": "~1K operations/month" },
+        "prod": { "sku": "Standard", "cost": 3, "note": "~50K operations/month" },
+        "enterprise": { "sku": "Premium HSM", "cost": 10, "note": "HSM-backed keys, compliance" }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Ticket processing metrics, classification accuracy, resolution time tracking",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "5GB/month data cap" },
+        "prod": { "sku": "Pay-per-GB", "cost": 25, "note": "~50GB/month ingestion" },
+        "enterprise": { "sku": "Pay-per-GB", "cost": 80, "note": "~150GB/month, 90-day retention" }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized logging — workflow executions, classification audits, escalation logs",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "500MB/day, 7-day retention" },
+        "prod": { "sku": "Pay-per-GB", "cost": 15, "note": "~10GB/day, 30-day retention" },
+        "enterprise": { "sku": "Commitment tier", "cost": 50, "note": "100GB/day, 90-day retention" }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 51,
+    "prod": 393,
+    "enterprise": 1440
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for ticket classification (90%+ accuracy) — route only ambiguous tickets to GPT-4o",
+    "Cache common resolution templates in Cosmos DB to reduce AI API calls by 40-60%",
+    "Use Logic Apps Consumption plan for dev — costs pennies vs Standard fixed pricing",
+    "Batch similar tickets for bulk classification instead of processing one-by-one",
+    "Use Cosmos DB serverless for dev/test — eliminates minimum RU provisioning cost",
+    "Set up auto-resolution for known ticket patterns — eliminates AI cost for repetitive issues"
+  ]
+}

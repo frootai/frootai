@@ -1,0 +1,103 @@
+{
+  "play": "02",
+  "name": "AI Landing Zone",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Virtual Network",
+      "category": "Security",
+      "purpose": "Hub-spoke topology with subnets for AI, data, and management tiers",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 0, "note": "VNet itself is free, peering minimal" },
+        "prod": { "sku": "Standard", "cost": 25, "note": "Hub-spoke peering, ~500GB egress" },
+        "enterprise": { "sku": "Standard", "cost": 80, "note": "Multi-region peering, ~2TB egress" }
+      }
+    },
+    {
+      "name": "Private Endpoints",
+      "category": "Security",
+      "purpose": "Private connectivity to Azure OpenAI, Key Vault, Storage, and AI Search",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 8, "note": "~3 endpoints, minimal data" },
+        "prod": { "sku": "Standard", "cost": 40, "note": "~10 endpoints, moderate traffic" },
+        "enterprise": { "sku": "Standard", "cost": 120, "note": "~30 endpoints, high throughput" }
+      }
+    },
+    {
+      "name": "Azure Firewall",
+      "category": "Security",
+      "purpose": "Centralized network security — egress filtering, threat intelligence, IDPS",
+      "tiers": {
+        "dev": { "sku": "Basic", "cost": 250, "note": "Basic SKU, dev traffic only" },
+        "prod": { "sku": "Standard", "cost": 900, "note": "Standard SKU, ~1TB processed" },
+        "enterprise": { "sku": "Premium", "cost": 1800, "note": "Premium with IDPS, TLS inspection" }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Centralized secrets, certificates, and encryption keys for all AI services",
+      "tiers": {
+        "dev": { "sku": "Standard", "cost": 1, "note": "~1K operations/month" },
+        "prod": { "sku": "Standard", "cost": 5, "note": "~100K operations/month" },
+        "enterprise": { "sku": "Premium HSM", "cost": 15, "note": "HSM-backed keys, compliance" }
+      }
+    },
+    {
+      "name": "Azure Policy",
+      "category": "Security",
+      "purpose": "Governance — enforce tagging, allowed regions, SKU restrictions, RBAC compliance",
+      "tiers": {
+        "dev": { "sku": "Free", "cost": 0, "note": "Built-in policies only" },
+        "prod": { "sku": "Free", "cost": 0, "note": "Custom + built-in policies" },
+        "enterprise": { "sku": "Free", "cost": 0, "note": "Regulatory compliance initiatives" }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized logging, diagnostics, and KQL alerting for all landing zone resources",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "500MB/day, 7-day retention" },
+        "prod": { "sku": "Pay-per-GB", "cost": 30, "note": "~20GB/day, 30-day retention" },
+        "enterprise": { "sku": "Commitment tier", "cost": 100, "note": "100GB/day, 90-day retention" }
+      }
+    },
+    {
+      "name": "Microsoft Defender for Cloud",
+      "category": "Security",
+      "purpose": "Threat protection, vulnerability scanning, security posture management",
+      "tiers": {
+        "dev": { "sku": "Free tier", "cost": 0, "note": "Basic CSPM, recommendations only" },
+        "prod": { "sku": "Defender CSPM", "cost": 50, "note": "Enhanced posture, attack paths" },
+        "enterprise": { "sku": "Defender for Servers P2", "cost": 200, "note": "Full workload protection" }
+      }
+    },
+    {
+      "name": "Azure Bastion",
+      "category": "Security",
+      "purpose": "Secure RDP/SSH access to VMs without public IPs for management operations",
+      "tiers": {
+        "dev": { "sku": "Developer", "cost": 0, "note": "Developer SKU, free preview" },
+        "prod": { "sku": "Basic", "cost": 140, "note": "2 instances, ~10 concurrent sessions" },
+        "enterprise": { "sku": "Standard", "cost": 330, "note": "Multi-scale, native client, shareable" }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 259,
+    "prod": 1190,
+    "enterprise": 2645
+  },
+  "optimization_tips": [
+    "Use Azure Firewall Basic SKU for dev/test — saves ~$650/month vs Standard",
+    "Share a single hub VNet across multiple spoke landing zones to amortize firewall cost",
+    "Use Azure Policy deny effects to prevent accidental expensive resource creation",
+    "Enable Defender for Cloud only on production subscriptions — dev can use free tier",
+    "Use VNet service endpoints instead of private endpoints where compliance allows — free alternative",
+    "Set Log Analytics daily caps in dev environments to avoid surprise ingestion costs"
+  ]
+}
