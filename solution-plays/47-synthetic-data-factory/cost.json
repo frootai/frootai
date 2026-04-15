@@ -1,0 +1,177 @@
+{
+  "play": "47",
+  "name": "Synthetic Data Factory",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Synthetic data generation — privacy-preserving record synthesis, schema-aware tabular generation, natural-language text synthesis, statistical distribution matching, and edge-case amplification for underrepresented classes",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 60,
+          "note": "~60K tokens/day, small-batch generation testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~500K tokens/day, production dataset synthesis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1800,
+          "note": "Provisioned throughput for large-scale batch generation runs"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Statistical validation pipeline — distribution comparison (KS test, chi-squared), privacy metrics (k-anonymity, differential privacy ε), utility scoring, and bias detection across generated datasets",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier, small compute for validation scripts"
+        },
+        "prod": {
+          "sku": "Standard DS3v2",
+          "cost": 200,
+          "note": "Managed compute for validation pipelines, ~50 runs/day"
+        },
+        "enterprise": {
+          "sku": "Standard NC6s v3 (GPU)",
+          "cost": 800,
+          "note": "GPU compute for GAN/VAE-based generation, ~200 runs/day"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Dataset storage — source schema snapshots, generated synthetic datasets (Parquet/CSV/JSONL), validation reports, lineage metadata, and versioned dataset catalogs",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 5,
+          "note": "~50GB, sample datasets and test outputs"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 40,
+          "note": "~500GB, production datasets with zone redundancy"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot",
+          "cost": 150,
+          "note": "~2TB, geo-redundant, immutable retention policies"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Orchestration layer — generation job dispatch, schema parsing, privacy constraint enforcement, batch chunking, validation trigger, and dataset publishing workflow",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M executions free, event-driven generation triggers"
+        },
+        "prod": {
+          "sku": "Premium EP1",
+          "cost": 120,
+          "note": "Always-warm, ~5M executions/month, VNET integration"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 350,
+          "note": "High-memory for large schema processing, ~20M executions/month"
+        }
+      }
+    },
+    {
+      "name": "Azure Data Factory",
+      "category": "Integration",
+      "purpose": "Pipeline orchestration — source data profiling, schema extraction, generation job scheduling, validation pipeline chaining, and output dataset delivery to downstream consumers",
+      "tiers": {
+        "dev": {
+          "sku": "Self-hosted IR",
+          "cost": 10,
+          "note": "~100 pipeline runs/month, basic orchestration"
+        },
+        "prod": {
+          "sku": "Managed VNET IR",
+          "cost": 100,
+          "note": "~1K pipeline runs/month, data flow transforms"
+        },
+        "enterprise": {
+          "sku": "Managed VNET IR",
+          "cost": 300,
+          "note": "~10K pipeline runs/month, cross-region, change data capture"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Source database credentials, Azure OpenAI keys, ML workspace secrets, storage access keys, and encryption keys for sensitive schema metadata",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Generation pipeline observability — records generated per run, privacy score distribution, validation pass rates, generation latency, token consumption tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, pipeline dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 76,
+    "prod": 990,
+    "enterprise": 3495
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for simple tabular row generation (names, addresses, IDs) and reserve GPT-4o for complex correlated record synthesis (medical histories, financial transactions) — reduces AI costs by 50-70%",
+    "Generate synthetic data in large batches during off-peak hours — Azure OpenAI has lower contention at night, and batch jobs can use lower-priority compute in Azure ML",
+    "Cache schema analysis results — source schemas rarely change, so a 24-hour cache avoids redundant profiling runs that consume ML compute",
+    "Use differential privacy noise injection post-generation instead of per-record privacy checks — validates privacy guarantees at the dataset level in a single pass rather than per-row evaluation",
+    "Store generated datasets as Parquet instead of CSV — 60-70% smaller storage footprint and faster downstream consumption for ML training pipelines",
+    "Implement generation deduplication — detect near-duplicate synthetic records and regenerate only unique variants, reducing redundant OpenAI token consumption"
+  ]
+}

@@ -14,6 +14,73 @@ AI-powered video generation and editing — text-to-video, image-to-video, async
 | Orchestrator | Azure Container Apps | Async generation, polling, watermarking |
 | Secrets | Azure Key Vault | API keys, connection strings |
 
+```mermaid
+graph TB
+    subgraph User Layer
+        Creator[Content Creator]
+        Portal[Video Portal<br/>Prompt Input · Preview · Download · History]
+    end
+
+    subgraph Orchestration
+        SB[Service Bus<br/>Job Queue · Stage Sequencing · Dead-letter · Retry]
+    end
+
+    subgraph AI Pipeline
+        AOAI[Azure OpenAI<br/>Script Generation · Scene Planning · Quality Assessment]
+        Render[Container Apps — GPU<br/>Frame Generation · Video Encoding · Post-processing]
+    end
+
+    subgraph Safety Gate
+        ContentSafety[AI Content Safety<br/>Prompt Screening · Frame Analysis · NSFW Detection · Blocklists]
+    end
+
+    subgraph Storage & Delivery
+        Blob[Blob Storage<br/>Frames · Videos · Thumbnails · Audio · Storyboards]
+        CDN[Azure CDN<br/>Global Delivery · Streaming · Adaptive Bitrate]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · SAS Tokens · DRM Certs]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Render Duration · Queue Depth · Rejection Rate · GPU Util]
+    end
+
+    Creator -->|Text Prompt| Portal
+    Portal -->|Submit Job| SB
+    SB -->|1. Screen Prompt| ContentSafety
+    ContentSafety -->|Approved| SB
+    SB -->|2. Generate Script| AOAI
+    AOAI -->|Storyboard| SB
+    SB -->|3. Render Frames| Render
+    Render -->|Raw Frames| Blob
+    SB -->|4. Safety Review| ContentSafety
+    ContentSafety -->|Approved Frames| SB
+    SB -->|5. Encode Video| Render
+    Render -->|Final Video| Blob
+    Blob -->|Serve| CDN
+    CDN -->|Stream| Portal
+    MI -->|Secrets| KV
+    Render -->|Traces| AppInsights
+    SB -->|Metrics| AppInsights
+
+    style Creator fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Portal fill:#3b82f6,color:#fff,stroke:#2563eb
+    style SB fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style Render fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ContentSafety fill:#10b981,color:#fff,stroke:#059669
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style CDN fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 36 (Multimodal Agent) | **Play 43 (Video Generation)** | Play 49 (Creative AI) |
@@ -84,6 +151,24 @@ AI-powered video generation and editing — text-to-video, image-to-video, async
 | Generation Latency (5s) | < 60s | Time from request to video ready |
 | Cost per 5s/1080p | < $0.50 | API + safety + storage |
 | Queue Throughput | > 20/hr | Videos generated per hour |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $50 | $350 | $1,200 |
+| Azure Container Apps (GPU) | $60 | $500 | $1,800 |
+| Blob Storage | $5 | $60 | $200 |
+| Azure AI Content Safety | $0 | $80 | $250 |
+| Service Bus | $0 | $10 | $80 |
+| Azure CDN | $5 | $40 | $150 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $25 | $80 |
+| **Total** | **$121** | **$1,070** | **$3,775** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

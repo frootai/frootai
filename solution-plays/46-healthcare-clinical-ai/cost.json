@@ -1,0 +1,199 @@
+{
+  "play": "46",
+  "name": "Healthcare Clinical AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Clinical decision support — evidence-based treatment recommendations, differential diagnosis generation, lab result interpretation, medication interaction checks, and clinical note summarization",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~50K tokens/day, clinical scenario testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~500K tokens/day, real-time clinical decision support"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput for hospital-wide deployment, guaranteed SLA"
+        }
+      }
+    },
+    {
+      "name": "Azure Health Data Services (FHIR)",
+      "category": "Data",
+      "purpose": "Clinical data layer — FHIR R4 patient records, observations, conditions, medications, allergies, procedures, diagnostic reports, and care plans",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 30,
+          "note": "~10K FHIR resources, single data store"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "~1M FHIR resources, import/export, audit logging"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 500,
+          "note": "~10M FHIR resources, multi-region, availability zones"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Clinical knowledge retrieval — semantic search over medical literature, clinical guidelines, drug databases, formularies, and institutional protocols for evidence-based recommendations",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "50MB index, 3 indexes, manual ingestion"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, ~50K queries/day"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 800,
+          "note": "100GB index, availability zones, ~200K queries/day"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Clinical output safety — ensures AI recommendations don't contain harmful guidance, validates clinical appropriateness, detects hallucinated medical facts, and blocks dangerous medication suggestions",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5K transactions/month, sample output checks"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 60,
+          "note": "~60K evaluations/month, every clinical recommendation screened"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 200,
+          "note": "~250K evaluations/month, custom medical safety blocklists"
+        }
+      }
+    },
+    {
+      "name": "Azure App Service",
+      "category": "Compute",
+      "purpose": "Clinical decision support application — clinician-facing web portal, patient context viewer, recommendation display, human-in-the-loop approval workflow, and audit dashboard",
+      "tiers": {
+        "dev": {
+          "sku": "B1",
+          "cost": 15,
+          "note": "1 instance, basic SSL, dev/test"
+        },
+        "prod": {
+          "sku": "P1v3",
+          "cost": 80,
+          "note": "2 instances, auto-scale, deployment slots"
+        },
+        "enterprise": {
+          "sku": "P2v3",
+          "cost": 250,
+          "note": "4 instances, zone-redundant, App Service Environment"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Decision audit trail — every AI recommendation, clinician action (accept/reject/modify), patient context snapshot, evidence citations, and compliance audit records",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, audit log prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, immutable audit"
+        },
+        "enterprise": {
+          "sku": "Provisioned 5000 RU/s",
+          "cost": 400,
+          "note": "Multi-region, 500GB, 7-year retention for compliance"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "PHI encryption keys, FHIR API credentials, OpenAI keys, Content Safety keys, SSL certificates, SMART on FHIR client secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed PHI encryption, ~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 25,
+          "note": "Double-key encryption, HIPAA audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Clinical AI observability — recommendation acceptance rate, response latency, safety rejection rates, evidence citation accuracy, clinician feedback metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month, no PHI in traces"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, compliance dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 101,
+    "prod": 1055,
+    "enterprise": 3775
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine tasks (clinical note summarization, lab value normalization) and reserve GPT-4o for complex differential diagnosis and multi-factor treatment recommendations — reduces AI costs by 60%",
+    "Cache clinical guideline lookups by condition code (ICD-10) — guidelines change infrequently, so a 24-hour cache eliminates redundant AI Search queries for the same conditions",
+    "Implement FHIR resource caching at the application layer — patient demographics and active medication lists are read 100x more than written, so a 5-minute cache reduces FHIR API costs significantly",
+    "Use AI Search semantic ranker only for complex medical queries — simple keyword lookups (drug names, ICD codes) can use basic search at zero semantic ranker cost",
+    "Batch Content Safety evaluations for non-urgent recommendations — real-time screening for acute care, batched hourly for routine wellness recommendations",
+    "Use Cosmos DB serverless for dev/staging and provisioned only for production — clinical audit data is write-heavy but read-infrequent except during compliance audits"
+  ]
+}

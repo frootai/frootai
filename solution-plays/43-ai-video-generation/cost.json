@@ -1,0 +1,199 @@
+{
+  "play": "43",
+  "name": "AI Video Generation",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Video generation orchestration — script creation from text prompts, scene planning, style transfer guidance, storyboard generation, and quality assessment of generated frames",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~80K tokens/day, script generation and frame quality checks"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~500K tokens/day, parallel scene planning, quality assessment"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput for high-volume video pipeline"
+        }
+      }
+    },
+    {
+      "name": "Azure Container Apps",
+      "category": "Compute",
+      "purpose": "Video rendering pipeline — GPU-enabled containers for frame generation, video encoding, post-processing, format conversion, and thumbnail extraction",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption GPU",
+          "cost": 60,
+          "note": "1 GPU container, ~10 videos/day, short clips"
+        },
+        "prod": {
+          "sku": "Dedicated GPU D4",
+          "cost": 500,
+          "note": "4 GPU containers, ~100 videos/day, 1080p rendering"
+        },
+        "enterprise": {
+          "sku": "Dedicated GPU D8",
+          "cost": 1800,
+          "note": "16+ GPU containers, ~500 videos/day, 4K rendering"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Video asset storage — generated videos, intermediate frames, audio tracks, thumbnails, storyboard images, and source prompt archives",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 5,
+          "note": "~25GB, short video clips"
+        },
+        "prod": {
+          "sku": "Hot LRS + Cool tier",
+          "cost": 60,
+          "note": "~1TB, lifecycle policy (hot 7d → cool 30d → archive)"
+        },
+        "enterprise": {
+          "sku": "Hot GRS + Cool tier",
+          "cost": 200,
+          "note": "~5TB, geo-redundant, CDN integration for delivery"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Video safety moderation — frame-by-frame analysis for harmful visual content, text overlay screening, audio transcript safety checks, NSFW detection",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5K transactions/month, sample frame checks"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 80,
+          "note": "~80K evaluations/month, every 10th frame + full audio"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 250,
+          "note": "~300K evaluations/month, every frame + custom blocklists"
+        }
+      }
+    },
+    {
+      "name": "Service Bus",
+      "category": "Integration",
+      "purpose": "Video pipeline orchestration — job queue for rendering tasks, scene sequencing, encoding stages, safety review gates, and delivery notifications",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Included queues, ~100 messages/day"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "Topics + subscriptions, ~10K messages/day, dead-letter handling"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 80,
+          "note": "Dedicated capacity, VNET, ~100K messages/day"
+        }
+      }
+    },
+    {
+      "name": "Azure CDN",
+      "category": "Networking",
+      "purpose": "Video delivery — global distribution of generated videos, adaptive bitrate streaming, thumbnail serving, and low-latency playback",
+      "tiers": {
+        "dev": {
+          "sku": "Standard Microsoft",
+          "cost": 5,
+          "note": "~50GB egress, dev preview delivery"
+        },
+        "prod": {
+          "sku": "Standard Verizon",
+          "cost": 40,
+          "note": "~500GB egress, streaming optimization"
+        },
+        "enterprise": {
+          "sku": "Premium Verizon",
+          "cost": 150,
+          "note": "~5TB egress, custom domains, DRM integration"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys for AI services, storage SAS tokens, CDN credentials, Content Safety keys, watermarking certificates",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~500 operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, DRM key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Pipeline telemetry — rendering duration, queue depth, safety rejection rates, GPU utilization, video quality scores, delivery latency",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, custom dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 121,
+    "prod": 1070,
+    "enterprise": 3775
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for initial storyboard generation and scene planning — reserve GPT-4o Vision for final frame quality assessment, reducing orchestration costs by 80%",
+    "Implement frame-level caching for common visual elements (backgrounds, transitions, logos) — reuse rendered assets across videos to reduce GPU rendering time by 40%",
+    "Use Container Apps scale-to-zero during off-hours — schedule rendering jobs during low-cost periods and batch process overnight for non-urgent video requests",
+    "Apply Content Safety checks on keyframes only (every 2 seconds) instead of every frame — interpolated frames between safe keyframes are statistically safe, reducing moderation costs by 90%",
+    "Implement tiered storage lifecycle — move completed videos to Cool storage after 7 days and Archive after 30 days, reducing storage costs by 70% for long-tail content",
+    "Use adaptive resolution rendering — generate 720p previews for approval, only render final 1080p/4K after client sign-off to avoid wasting GPU on rejected concepts"
+  ]
+}

@@ -13,6 +13,72 @@ On-device AI inference with Azure AI Foundry Local SDK — hardware-aware model 
 | Model Cache | Local disk (~2-8GB) | Cached models for instant offline inference |
 | Telemetry | Local JSONL logs | Track local vs cloud usage and costs |
 
+```mermaid
+graph TB
+    subgraph Edge Device
+        App[User Application<br/>Chat · Search · Assist · Translate]
+        Router[Confidence Router<br/>Complexity Scoring · Threshold Check · Fallback Logic]
+        FoundryLocal[Foundry Local Runtime<br/>Phi-4-mini · ONNX · GPU/NPU Acceleration]
+        Cache[Local Cache<br/>Response Cache · Embedding Cache · Model Artifacts]
+    end
+
+    subgraph Cloud Orchestration
+        IoTHub[Azure IoT Hub<br/>Fleet Management · Model Deployment · Telemetry · Health]
+        Functions[Azure Functions<br/>Escalation Router · Telemetry Aggregation · Update Scheduler]
+    end
+
+    subgraph Cloud AI
+        AOAI[Azure OpenAI — GPT-4o<br/>Complex Reasoning · Large Context · High-accuracy Tasks]
+    end
+
+    subgraph Model Registry
+        ACR[Container Registry<br/>Foundry Local Images · Multi-arch · ARM64/x86/GPU]
+        Blob[Blob Storage<br/>ONNX Models · Update Payloads · Telemetry Archives]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Device Certs · IoT Conn Strings · API Keys]
+        MI[Managed Identity<br/>Zero-secret Cloud Auth]
+    end
+
+    subgraph Monitoring
+        Monitor[Azure Monitor<br/>Fleet Health · Inference Latency · Escalation Rate · Battery Impact]
+    end
+
+    App -->|Query| Router
+    Router -->|Simple / High Confidence| FoundryLocal
+    FoundryLocal -->|Local Response| App
+    Router -->|Complex / Low Confidence| IoTHub
+    IoTHub -->|Route Escalation| Functions
+    Functions -->|Cloud Inference| AOAI
+    AOAI -->|Response| Functions
+    Functions -->|Return via IoT| IoTHub
+    IoTHub -->|Cloud Response| Router
+    Router -->|Response| App
+    FoundryLocal <-->|Cache Hit/Miss| Cache
+    IoTHub -->|Deploy Model| Blob
+    Blob -->|Model Package| FoundryLocal
+    ACR -->|Runtime Image| FoundryLocal
+    IoTHub -->|Telemetry| Monitor
+    MI -->|Secrets| KV
+    Functions -->|Traces| Monitor
+
+    style App fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Router fill:#3b82f6,color:#fff,stroke:#2563eb
+    style FoundryLocal fill:#10b981,color:#fff,stroke:#059669
+    style Cache fill:#f59e0b,color:#fff,stroke:#d97706
+    style IoTHub fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style ACR fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 19 (Edge AI) | **Play 44 (Foundry Local)** | Play 34 (Edge Deployment) |
@@ -83,6 +149,23 @@ On-device AI inference with Azure AI Foundry Local SDK — hardware-aware model 
 | Offline Success | > 95% | Queries answered without network |
 | Routing Accuracy | > 85% | Correct source for query complexity |
 | Cost Savings | > 50% | Reduction vs cloud-only inference |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $30 | $200 | $800 |
+| Azure IoT Hub | $0 | $25 | $250 |
+| Azure Monitor | $0 | $30 | $100 |
+| Blob Storage | $2 | $15 | $50 |
+| Azure Container Registry | $5 | $20 | $50 |
+| Key Vault | $1 | $5 | $15 |
+| Azure Functions | $0 | $10 | $120 |
+| **Total** | **$38** | **$305** | **$1,385** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

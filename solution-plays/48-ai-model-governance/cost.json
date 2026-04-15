@@ -1,0 +1,199 @@
+{
+  "play": "48",
+  "name": "AI Model Governance",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Model registry and lifecycle management — model versioning, metadata tracking, lineage graphs, A/B deployment orchestration, champion-challenger evaluation, and automated retraining triggers",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier workspace, model registry, basic compute"
+        },
+        "prod": {
+          "sku": "Standard DS3v2",
+          "cost": 250,
+          "note": "Managed compute for drift monitoring, ~100 evaluation runs/day"
+        },
+        "enterprise": {
+          "sku": "Standard NC6s v3 (GPU)",
+          "cost": 900,
+          "note": "GPU compute for retraining pipelines, ~500 evaluations/day"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Foundry",
+      "category": "AI Services",
+      "purpose": "Evaluation and prompt flow — automated model evaluation pipelines, prompt versioning, evaluation metric dashboards, red-team testing orchestration, and responsible AI assessments",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "Hub + project, basic evaluation runs"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 100,
+          "note": "Multi-project hub, scheduled evaluations, prompt flow hosting"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 300,
+          "note": "Multi-hub, cross-team governance, automated red-team pipelines"
+        }
+      }
+    },
+    {
+      "name": "Azure DevOps",
+      "category": "DevOps",
+      "purpose": "MLOps pipeline automation — CI/CD for model deployments, approval gates for production promotion, pipeline-as-code for training/evaluation/deployment, and release management with rollback",
+      "tiers": {
+        "dev": {
+          "sku": "Basic (free tier)",
+          "cost": 0,
+          "note": "5 users free, 1 parallel pipeline"
+        },
+        "prod": {
+          "sku": "Basic + Parallel Jobs",
+          "cost": 50,
+          "note": "10 users, 2 parallel pipelines, artifacts"
+        },
+        "enterprise": {
+          "sku": "Basic + Test Plans",
+          "cost": 150,
+          "note": "50 users, 5 parallel pipelines, advanced testing"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Governance metadata store — model cards, approval records, drift detection history, evaluation results, lineage graphs, compliance audit trail, and policy violation logs",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, governance metadata prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, change feed for downstream alerts"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, immutable audit records"
+        }
+      }
+    },
+    {
+      "name": "Azure Policy",
+      "category": "Governance",
+      "purpose": "Automated governance enforcement — policies requiring model cards before deployment, mandatory bias evaluation, drift monitoring activation, approved model registry checks, and deployment region restrictions",
+      "tiers": {
+        "dev": {
+          "sku": "Free (built-in)",
+          "cost": 0,
+          "note": "Built-in Azure service, basic policy assignments"
+        },
+        "prod": {
+          "sku": "Free (built-in)",
+          "cost": 0,
+          "note": "Custom policy definitions, compliance dashboards"
+        },
+        "enterprise": {
+          "sku": "Free (built-in)",
+          "cost": 0,
+          "note": "Initiative bundles, exemption management, remediation tasks"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Drift detection engine — scheduled statistical comparisons between training and production data distributions, feature drift alerts, prediction drift monitoring, and automated retraining triggers",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M executions free, timer-triggered drift checks"
+        },
+        "prod": {
+          "sku": "Premium EP1",
+          "cost": 120,
+          "note": "Always-warm, hourly drift checks, ~3M executions/month"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 350,
+          "note": "High-memory, real-time drift detection, ~15M executions/month"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "ML workspace secrets, model endpoint keys, Cosmos DB credentials, DevOps service principal secrets, and encryption keys for model artifacts",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Model observability — prediction latency, drift score trends, evaluation metric history, approval workflow duration, policy compliance rates, and retraining frequency tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, governance dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 26,
+    "prod": 630,
+    "enterprise": 2165
+  },
+  "optimization_tips": [
+    "Run drift detection on a sample (10-20%) of production data rather than the full stream — statistically valid for distribution comparison at a fraction of the compute cost",
+    "Use scheduled drift checks (hourly/daily) instead of real-time monitoring for non-critical models — reserve real-time drift detection for models with direct revenue or safety impact",
+    "Cache evaluation results by model version hash — re-evaluating the same model checkpoint against the same test set is wasteful and can be skipped with cached results",
+    "Use Azure DevOps free tier for dev/staging and add parallel jobs only for production pipelines — most governance workflows are sequential and don't benefit from parallelism",
+    "Implement model card templates that auto-populate from ML workspace metadata — reduces manual documentation overhead and ensures compliance without additional human cost",
+    "Use Cosmos DB serverless for dev/staging governance metadata — governance data is write-heavy during deployments but read-light between compliance audits"
+  ]
+}

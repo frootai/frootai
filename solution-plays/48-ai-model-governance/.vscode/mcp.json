@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-ml-workspace",
-            "description": "Azure ML workspace name for model registry",
-            "password": false
-        },
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for governance analysis",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

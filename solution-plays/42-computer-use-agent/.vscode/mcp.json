@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for GPT-4o Vision (screenshot analysis + action planning)",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "azure-vm-password",
-            "description": "Sandbox VM admin password for computer use agent",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

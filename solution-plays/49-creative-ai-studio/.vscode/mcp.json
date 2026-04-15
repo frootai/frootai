@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for text + image generation",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "azure-content-safety-key",
-            "description": "Azure Content Safety API Key for brand + image moderation",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

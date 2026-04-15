@@ -13,6 +13,81 @@ Autonomous issue-to-PR pipeline — analyzes GitHub issues, indexes codebase, cr
 | CI Integration | GitHub Actions | Test execution, lint verification |
 | Secrets | Azure Key Vault | GitHub PAT, OpenAI key |
 
+```mermaid
+graph TB
+    subgraph Task Sources
+        Issues[GitHub Issues<br/>Bug Reports · Feature Requests · Refactoring Tasks]
+        Manual[Manual Tasks<br/>Natural Language Instructions · Code Review Fixes]
+    end
+
+    subgraph Agent Runtime
+        ContainerApps[Azure Container Apps<br/>Agent Instances · Isolated Contexts · Auto-Scale · Session Management]
+        AgentLoop[Agent Reasoning Loop<br/>Plan → Code → Test → Observe → Iterate]
+    end
+
+    subgraph AI Engine
+        AOAI[Azure OpenAI<br/>Code Generation · Bug Diagnosis · Test Writing · Multi-Step Reasoning]
+    end
+
+    subgraph Execution Sandbox
+        GHActions[GitHub Actions<br/>Build · Lint · Test · Security Scan · Validation]
+        Repo[Git Repository<br/>Clone · Branch · Commit · Push · PR]
+    end
+
+    subgraph State & Storage
+        CosmosDB[Cosmos DB<br/>Task Queue · Session State · Reasoning Traces · Completion Analytics]
+        Blob[Azure Blob Storage<br/>Workspaces · Artifacts · Test Results · Diff Archives]
+    end
+
+    subgraph Output
+        PR[Pull Request<br/>Code Changes · Test Coverage · Agent Reasoning · Review Request]
+        HumanReview[Human Reviewer<br/>Approve · Request Changes · Merge]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>GitHub Tokens · API Keys · Agent Certificates]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Task Completion · Iterations · Token Usage · Test Pass Rate]
+    end
+
+    Issues -->|Task| ContainerApps
+    Manual -->|Instruction| ContainerApps
+    ContainerApps -->|Run Agent| AgentLoop
+    AgentLoop -->|Generate Code| AOAI
+    AOAI -->|Code + Tests| AgentLoop
+    AgentLoop -->|Commit & Push| Repo
+    Repo -->|Trigger CI| GHActions
+    GHActions -->|Results| AgentLoop
+    AgentLoop -->|Iterate if Failed| AOAI
+    AgentLoop -->|Submit PR| PR
+    PR -->|Review| HumanReview
+    AgentLoop -->|Save State| CosmosDB
+    AgentLoop -->|Store Artifacts| Blob
+    CosmosDB -->|Resume Session| AgentLoop
+    MI -->|Secrets| KV
+    ContainerApps -->|Traces| AppInsights
+
+    style Issues fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Manual fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ContainerApps fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AgentLoop fill:#10b981,color:#fff,stroke:#059669
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style GHActions fill:#f59e0b,color:#fff,stroke:#d97706
+    style Repo fill:#f59e0b,color:#fff,stroke:#d97706
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style PR fill:#3b82f6,color:#fff,stroke:#2563eb
+    style HumanReview fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 24 (Code Review) | **Play 51 (Autonomous Coding)** | Play 37 (AI DevOps) |
@@ -83,6 +158,23 @@ Autonomous issue-to-PR pipeline — analyzes GitHub issues, indexes codebase, cr
 | PR Acceptance | > 60% | PRs approved by human reviewer |
 | Avg Iterations | < 2.5 | Self-healing cycles |
 | Cost per PR | < $1.00 | API + compute cost |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $80 | $700 | $2,500 |
+| GitHub Actions | $0 | $80 | $300 |
+| Azure Container Apps | $10 | $100 | $400 |
+| Azure Blob Storage | $5 | $30 | $100 |
+| Cosmos DB | $5 | $75 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$101** | **$1,020** | **$3,765** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

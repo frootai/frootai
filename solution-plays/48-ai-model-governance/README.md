@@ -13,6 +13,76 @@ AI model governance platform — centralized model registry with semantic versio
 | Secrets | Azure Key Vault | ML workspace credentials, API keys |
 | Telemetry | Application Insights | Workflow timing, approval SLA tracking |
 
+```mermaid
+graph TB
+    subgraph Model Development
+        DataScientist[Data Scientist<br/>Training · Experimentation · Model Registration]
+        Notebook[ML Workspace<br/>Notebooks · Experiments · Compute]
+    end
+
+    subgraph Model Registry
+        AML[Azure Machine Learning<br/>Model Versioning · Lineage · Metadata · A/B Deploy]
+    end
+
+    subgraph Evaluation & Quality
+        Foundry[Azure AI Foundry<br/>Evaluation Pipelines · Prompt Flow · Red-Team · Responsible AI]
+    end
+
+    subgraph MLOps Pipeline
+        DevOps[Azure DevOps<br/>CI/CD · Approval Gates · Release Management · Rollback]
+    end
+
+    subgraph Governance Engine
+        Functions[Azure Functions<br/>Drift Detection · Retraining Triggers · Policy Checks · Alerts]
+        Policy[Azure Policy<br/>Model Card Required · Bias Eval Mandatory · Region Restrictions]
+    end
+
+    subgraph Governance Store
+        CosmosDB[Cosmos DB<br/>Model Cards · Approvals · Drift History · Audit Trail · Policy Violations]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>ML Secrets · Endpoint Keys · Service Principals]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Prediction Latency · Drift Scores · Eval Metrics · Compliance Rates]
+    end
+
+    DataScientist -->|Train & Register| AML
+    AML -->|Trigger Evaluation| Foundry
+    Foundry -->|Eval Results| CosmosDB
+    Foundry -->|Pass/Fail| DevOps
+    DevOps -->|Deploy if Approved| AML
+    DevOps -->|Approval Request| DataScientist
+    Functions -->|Monitor Production| AML
+    Functions -->|Drift Alert| DevOps
+    Functions -->|Retrain Trigger| AML
+    Policy -->|Enforce| AML
+    Policy -->|Block Non-compliant| DevOps
+    AML -->|Model Card| CosmosDB
+    DevOps -->|Deployment Record| CosmosDB
+    Functions -->|Drift Scores| CosmosDB
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+    AML -->|Metrics| AppInsights
+
+    style DataScientist fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Notebook fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AML fill:#10b981,color:#fff,stroke:#059669
+    style Foundry fill:#10b981,color:#fff,stroke:#059669
+    style DevOps fill:#f59e0b,color:#fff,stroke:#d97706
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Policy fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 13 (Fine-Tuning) | **Play 48 (Model Governance)** | Play 98 (Evaluation) |
@@ -84,6 +154,24 @@ AI model governance platform — centralized model registry with semantic versio
 | Rollback Speed | < 5 minutes | Detect → rollback time |
 | Model Card Completeness | 100% | All required fields present |
 | Governance Cost | < $50/month | Fixed infrastructure cost |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure Machine Learning | $0 | $250 | $900 |
+| Azure AI Foundry | $20 | $100 | $300 |
+| Azure DevOps | $0 | $50 | $150 |
+| Cosmos DB | $5 | $75 | $350 |
+| Azure Policy | $0 | $0 | $0 |
+| Azure Functions | $0 | $120 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$26** | **$630** | **$2,165** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

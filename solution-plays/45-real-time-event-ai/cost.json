@@ -1,0 +1,199 @@
+{
+  "play": "45",
+  "name": "Real-Time Event AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Event Hubs",
+      "category": "Integration",
+      "purpose": "High-throughput event ingestion — millions of events/second from IoT sensors, application logs, transaction streams, clickstreams, and telemetry feeds",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, 1 consumer group, ~1M events/day"
+        },
+        "prod": {
+          "sku": "Standard 4 TU",
+          "cost": 90,
+          "note": "4 throughput units, 20 consumer groups, ~50M events/day"
+        },
+        "enterprise": {
+          "sku": "Premium 4 PU",
+          "cost": 600,
+          "note": "4 processing units, dedicated capacity, ~500M events/day"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Event processing pipeline — real-time stream processing, feature extraction, anomaly detection dispatch, alert routing, and state machine management",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M executions free, Event Hub trigger"
+        },
+        "prod": {
+          "sku": "Premium EP1",
+          "cost": 120,
+          "note": "Always-warm, ~10M executions/month, low latency"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 350,
+          "note": "High-memory, ~100M executions/month, VNET integration"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "AI anomaly analysis — contextual interpretation of detected anomalies, root cause hypothesis generation, severity classification, and natural-language alert summaries",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~30K tokens/day, anomaly description generation"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~300K tokens/day, real-time anomaly interpretation"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 900,
+          "note": "Provisioned throughput for guaranteed sub-second analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Data",
+      "purpose": "Event state and anomaly store — sliding window aggregations, anomaly history, detection rules, baseline metrics, and alert tracking with sub-10ms reads",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, event state snapshots"
+        },
+        "prod": {
+          "sku": "Provisioned 2000 RU/s",
+          "cost": 140,
+          "note": "Multi-partition, 100GB, change feed for downstream"
+        },
+        "enterprise": {
+          "sku": "Provisioned 10000 RU/s",
+          "cost": 700,
+          "note": "Multi-region, 500GB, guaranteed low-latency reads"
+        }
+      }
+    },
+    {
+      "name": "Azure SignalR Service",
+      "category": "Integration",
+      "purpose": "Real-time push notifications — live dashboard updates, anomaly alerts to operators, event stream visualization, and WebSocket-based client communication",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "20 connections, 20K messages/day"
+        },
+        "prod": {
+          "sku": "Standard 1 unit",
+          "cost": 50,
+          "note": "1K concurrent connections, ~1M messages/day"
+        },
+        "enterprise": {
+          "sku": "Premium 5 units",
+          "cost": 250,
+          "note": "10K+ connections, ~50M messages/day, availability zones"
+        }
+      }
+    },
+    {
+      "name": "Azure Stream Analytics",
+      "category": "Compute",
+      "purpose": "Windowed aggregation engine — sliding/tumbling/hopping windows for baseline computation, statistical anomaly detection, pattern matching, and temporal joins",
+      "tiers": {
+        "dev": {
+          "sku": "Standard 1 SU",
+          "cost": 25,
+          "note": "1 streaming unit, basic windowed queries"
+        },
+        "prod": {
+          "sku": "Standard 6 SU",
+          "cost": 150,
+          "note": "6 streaming units, complex temporal queries"
+        },
+        "enterprise": {
+          "sku": "Standard 24 SU",
+          "cost": 600,
+          "note": "24 streaming units, multi-stream joins, reference data"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Event Hub connection strings, Azure OpenAI keys, Cosmos DB keys, SignalR connection strings, service principal secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~50K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Pipeline observability — event processing latency, anomaly detection accuracy, alert delivery time, throughput metrics, dead-letter monitoring",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, live metrics"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 73,
+    "prod": 835,
+    "enterprise": 3515
+  },
+  "optimization_tips": [
+    "Use Stream Analytics for statistical anomaly detection (Z-score, IQR) as the first pass — only escalate genuinely anomalous events to Azure OpenAI for contextual interpretation, keeping AI costs proportional to actual anomalies (typically <2% of events)",
+    "Auto-scale Event Hubs throughput units based on ingestion patterns — most workloads have predictable daily cycles, so scale down during off-peak hours to reduce costs by 40%",
+    "Use Cosmos DB change feed instead of polling for downstream consumers — eliminates redundant reads and provides exactly-once processing semantics at no additional RU cost",
+    "Implement anomaly deduplication with a 5-minute suppression window — prevent alert storms from generating repeated Azure OpenAI calls for the same ongoing anomaly",
+    "Use Functions Consumption plan for dev/staging and reserve Premium only for production — the cold start penalty (1-2s) is acceptable for non-real-time environments",
+    "Configure Event Hubs capture to Blob Storage for historical analysis — cheaper than keeping high TU counts for replay, and enables batch analytics without impacting real-time pipeline"
+  ]
+}

@@ -14,6 +14,68 @@ Privacy-safe synthetic data generation factory — LLM-based text generation, CT
 | Storage | Azure Blob Storage | Dataset output (CSV, Parquet, JSONL) |
 | Orchestrator | Azure Container Apps | Generation pipeline hosting |
 
+```mermaid
+graph TB
+    subgraph Source Definition
+        Schema[Source Schema<br/>Column Types · Distributions · Constraints · Relationships]
+        Profile[Statistical Profile<br/>Histograms · Correlations · Cardinality · Outliers]
+    end
+
+    subgraph Orchestration
+        ADF[Azure Data Factory<br/>Pipeline Scheduling · Schema Extraction · Job Chaining · Delivery]
+        Functions[Azure Functions<br/>Generation Dispatch · Batch Chunking · Privacy Enforcement]
+    end
+
+    subgraph Generation Engine
+        AOAI[Azure OpenAI<br/>Schema-Aware Synthesis · Correlated Records · Edge Cases · Text Generation]
+    end
+
+    subgraph Validation
+        AML[Azure Machine Learning<br/>KS Test · Chi-Squared · Privacy Metrics · Utility Scoring · Bias Detection]
+    end
+
+    subgraph Storage & Catalog
+        Blob[Azure Blob Storage<br/>Parquet Datasets · Validation Reports · Lineage Metadata · Version Catalog]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>DB Credentials · API Keys · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Records Generated · Privacy Scores · Validation Rates · Token Usage]
+    end
+
+    Schema -->|Define| ADF
+    Profile -->|Configure| ADF
+    ADF -->|Extract Schema| Functions
+    Functions -->|Generate Rows| AOAI
+    AOAI -->|Synthetic Records| Functions
+    Functions -->|Store Raw| Blob
+    ADF -->|Trigger Validation| AML
+    AML -->|Read Dataset| Blob
+    AML -->|Validation Report| Blob
+    AML -->|Pass/Fail| ADF
+    ADF -->|Publish Dataset| Blob
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+    AML -->|Metrics| AppInsights
+
+    style Schema fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Profile fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ADF fill:#f59e0b,color:#fff,stroke:#d97706
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#10b981,color:#fff,stroke:#059669
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 13 (Fine-Tuning) | **Play 47 (Synthetic Data)** | Play 46 (Healthcare AI) |
@@ -84,6 +146,23 @@ Privacy-safe synthetic data generation factory — LLM-based text generation, CT
 | Uniqueness Rate | > 95% | Low duplicate synthetic records |
 | TSTR Accuracy Parity | > 85% | ML model trained on synthetic ≈ real-trained |
 | Cost per 1K Records | < $0.30 | LLM generation + validation |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $60 | $500 | $1,800 |
+| Azure Machine Learning | $0 | $200 | $800 |
+| Azure Blob Storage | $5 | $40 | $150 |
+| Azure Functions | $0 | $120 | $350 |
+| Azure Data Factory | $10 | $100 | $300 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $25 | $80 |
+| **Total** | **$76** | **$990** | **$3,495** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

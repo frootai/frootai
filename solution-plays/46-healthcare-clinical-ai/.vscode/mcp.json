@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key (HIPAA-eligible deployment with BAA)",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "fhir-server-url",
-            "description": "Azure Health Data Services FHIR server URL",
-            "password": false
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

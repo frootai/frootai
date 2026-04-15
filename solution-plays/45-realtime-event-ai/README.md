@@ -15,6 +15,78 @@ Real-time event-driven AI processing — streaming ingestion via Event Hubs, rul
 | Alerting | Teams/Email/PagerDuty | Multi-channel anomaly notifications |
 | Secrets | Azure Key Vault | Connection strings, API keys |
 
+```mermaid
+graph TB
+    subgraph Event Sources
+        IoT[IoT Sensors<br/>Temperature · Pressure · Vibration · Flow]
+        Apps[Application Logs<br/>Errors · Latency · Throughput · User Events]
+        Tx[Transaction Streams<br/>Payments · Orders · Inventory · Fraud Signals]
+    end
+
+    subgraph Ingestion
+        EventHubs[Azure Event Hubs<br/>High-throughput Ingestion · Partitioned · Ordered · Buffered]
+    end
+
+    subgraph Stream Processing
+        ASA[Stream Analytics<br/>Sliding Windows · Z-score · IQR · Temporal Joins · Baselines]
+        Functions[Azure Functions<br/>Anomaly Dispatch · Alert Routing · State Updates · Enrichment]
+    end
+
+    subgraph AI Analysis
+        AOAI[Azure OpenAI<br/>Contextual Interpretation · Root Cause · Severity · Alert Summary]
+    end
+
+    subgraph State & History
+        CosmosDB[Cosmos DB<br/>Event State · Anomaly History · Baselines · Alert Tracking]
+    end
+
+    subgraph Real-Time Delivery
+        SignalR[Azure SignalR<br/>Live Dashboard · Anomaly Alerts · Stream Visualization]
+        Dashboard[Operator Dashboard<br/>Event Streams · Anomaly Map · Alert Queue · Trends]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Connection Strings · API Keys · Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Processing Latency · Throughput · Detection Accuracy · Alert SLA]
+    end
+
+    IoT -->|Events| EventHubs
+    Apps -->|Logs| EventHubs
+    Tx -->|Transactions| EventHubs
+    EventHubs -->|Stream| ASA
+    ASA -->|Statistical Anomalies| Functions
+    ASA -->|Aggregations| CosmosDB
+    Functions -->|Interpret Anomaly| AOAI
+    AOAI -->|Analysis + Severity| Functions
+    Functions -->|Store Finding| CosmosDB
+    Functions -->|Push Alert| SignalR
+    SignalR -->|Live Update| Dashboard
+    CosmosDB -->|Historical Context| Functions
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+    ASA -->|Metrics| AppInsights
+
+    style IoT fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Apps fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Tx fill:#3b82f6,color:#fff,stroke:#2563eb
+    style EventHubs fill:#f59e0b,color:#fff,stroke:#d97706
+    style ASA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style SignalR fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Dashboard fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](../45-real-time-event-ai/architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 20 (AIOps) | **Play 45 (Event AI)** | Play 37 (AI DevOps) |
@@ -85,6 +157,24 @@ Real-time event-driven AI processing — streaming ingestion via Event Hubs, rul
 | Enrichment Accuracy | > 92% | Combined rule + LLM classification |
 | LLM Usage Rate | < 10% | Events needing LLM (rest rule-based) |
 | Alert Precision | > 85% | Actionable alerts vs total |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure Event Hubs | $12 | $90 | $600 |
+| Azure Functions | $0 | $120 | $350 |
+| Azure OpenAI | $30 | $250 | $900 |
+| Azure Cosmos DB | $5 | $140 | $700 |
+| Azure SignalR Service | $0 | $50 | $250 |
+| Azure Stream Analytics | $25 | $150 | $600 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$73** | **$835** | **$3,515** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](../45-real-time-event-ai/cost.json)
 
 ## WAF Alignment
 

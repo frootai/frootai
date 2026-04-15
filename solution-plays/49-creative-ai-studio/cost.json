@@ -1,0 +1,199 @@
+{
+  "play": "49",
+  "name": "Creative AI Studio",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Creative content generation — brand-voice copywriting, marketing campaigns, product descriptions, social media posts, blog articles, email sequences, and multi-variant content A/B testing with tone and style consistency",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~50K tokens/day, brand-voice calibration and testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~400K tokens/day, production content generation"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput for high-volume campaign generation"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Asset management — brand guidelines, style guides, tone-of-voice documents, generated content versions, media assets, campaign archives, and template libraries",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 5,
+          "note": "~20GB, sample brand assets and test outputs"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 30,
+          "note": "~300GB, production content and media assets"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot",
+          "cost": 100,
+          "note": "~1TB, geo-redundant, full campaign archive"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Brand safety screening — ensures generated content meets brand guidelines, filters inappropriate language, detects potential trademark issues, and validates cultural sensitivity across target markets",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5K transactions/month, sample content checks"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 50,
+          "note": "~50K evaluations/month, every content piece screened"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 180,
+          "note": "~200K evaluations/month, custom brand safety blocklists"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Content pipeline orchestration — generation workflow management, multi-variant creation, A/B test dispatch, content scheduling, approval routing, and publishing automation to downstream channels",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M executions free, event-driven content triggers"
+        },
+        "prod": {
+          "sku": "Premium EP1",
+          "cost": 120,
+          "note": "Always-warm, ~5M executions/month, VNET integration"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 350,
+          "note": "High-memory for batch campaign generation, ~20M executions/month"
+        }
+      }
+    },
+    {
+      "name": "Azure CDN",
+      "category": "Networking",
+      "purpose": "Content delivery — published marketing assets, generated images, campaign landing pages, and downloadable content distributed globally with low latency for marketing teams and partners",
+      "tiers": {
+        "dev": {
+          "sku": "Standard Microsoft",
+          "cost": 5,
+          "note": "~50GB transfer/month, test content delivery"
+        },
+        "prod": {
+          "sku": "Standard Verizon",
+          "cost": 40,
+          "note": "~500GB transfer/month, global distribution"
+        },
+        "enterprise": {
+          "sku": "Premium Verizon",
+          "cost": 120,
+          "note": "~2TB transfer/month, custom rules, real-time analytics"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Content metadata store — brand voice profiles, campaign configurations, content versions with approval status, A/B test results, user feedback, and content performance analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, campaign metadata prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, real-time content queries"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, global content management"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, Content Safety credentials, storage access keys, CDN secrets, and publishing channel API tokens (social media, CMS integrations)",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Creative pipeline observability — content generation latency, brand-voice consistency scores, safety rejection rates, A/B variant performance, and content approval cycle time",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, campaign dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 66,
+    "prod": 745,
+    "enterprise": 2695
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for high-volume repetitive content (product descriptions, meta tags, social media variants) and reserve GPT-4o for long-form creative writing (blog posts, whitepapers, campaign narratives) — reduces AI costs by 60%",
+    "Cache brand-voice system prompts and style guide embeddings — these rarely change, so loading them once per session eliminates redundant token consumption on every generation request",
+    "Batch multi-variant generation into single API calls where possible — generating 5 headline variants in one prompt is cheaper and faster than 5 separate API calls",
+    "Use Content Safety screening only on final approved content, not intermediate drafts — draft iterations account for 80% of generations but never reach end users",
+    "Implement a content template library with pre-approved structures — templated content requires only fill-in generation, reducing per-piece token cost by 40%",
+    "Use CDN Standard tier for most workloads and Premium only for enterprise with custom WAF rules — Standard handles global distribution at 60% lower cost"
+  ]
+}

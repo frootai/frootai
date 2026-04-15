@@ -1,0 +1,199 @@
+{
+  "play": "42",
+  "name": "Computer Use Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI (GPT-4o Vision)",
+      "category": "AI Services",
+      "purpose": "Vision-based UI understanding — screenshot analysis, element detection, action planning, multi-step reasoning for desktop automation tasks",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~50 screenshot analyses/day, GPT-4o vision with low-res images"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 600,
+          "note": "~2K screenshot analyses/day, high-res vision, multi-turn reasoning"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2000,
+          "note": "Provisioned throughput for continuous automation across agent fleet"
+        }
+      }
+    },
+    {
+      "name": "Azure Container Apps",
+      "category": "Compute",
+      "purpose": "Agent execution environment — sandboxed desktop containers with browser/RDP sessions, action executor, screenshot capture loop, agent orchestrator",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 25,
+          "note": "1-2 agent containers, manual trigger, 4 vCPU / 8GB each"
+        },
+        "prod": {
+          "sku": "Dedicated D4",
+          "cost": 200,
+          "note": "5-10 concurrent agents, GPU-optional for faster rendering"
+        },
+        "enterprise": {
+          "sku": "Dedicated D8",
+          "cost": 800,
+          "note": "20+ concurrent agents, dedicated workload profiles, VNET isolation"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Screenshot archive — captured UI frames, action replay recordings, session transcripts, debug artifacts for failed automation runs",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 3,
+          "note": "~10GB screenshots and recordings"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 30,
+          "note": "~500GB, tiered lifecycle (hot → cool after 7 days)"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 80,
+          "note": "~2TB, geo-redundant, 90-day retention for audit"
+        }
+      }
+    },
+    {
+      "name": "Azure Container Registry",
+      "category": "Compute",
+      "purpose": "Agent container images — pre-configured desktop environments with browsers, Office apps, terminal tools, and automation SDKs",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "10GB storage, manual push"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "100GB, geo-replication, vulnerability scanning"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 50,
+          "note": "500GB, private endpoint, content trust"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Agent state and task management — automation task queue, action history, session state, execution logs, success/failure metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, task state tracking"
+        },
+        "prod": {
+          "sku": "Provisioned 800 RU/s",
+          "cost": 60,
+          "note": "Multi-partition, 30GB, real-time task orchestration"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 300,
+          "note": "Multi-region, 200GB, fleet-wide task coordination"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Agent credentials — target application passwords, API keys for automated services, Azure OpenAI keys, certificate management",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~500 operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month, secret rotation"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed keys, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Virtual Network",
+      "category": "Security",
+      "purpose": "Network isolation — agent containers sandboxed from production networks, controlled egress for target application access only",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Single subnet, no NAT gateway"
+        },
+        "prod": {
+          "sku": "Standard + NAT",
+          "cost": 35,
+          "note": "NAT gateway for controlled egress, NSG rules"
+        },
+        "enterprise": {
+          "sku": "Standard + Firewall",
+          "cost": 150,
+          "note": "Azure Firewall, UDR, full egress inspection"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Agent telemetry — screenshot-to-action latency, task success rates, vision model accuracy, error classification, session replay metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, custom dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 119,
+    "prod": 975,
+    "enterprise": 3475
+  },
+  "optimization_tips": [
+    "Use low-resolution screenshots (768px) for initial UI analysis — only escalate to high-res when the agent needs to read small text or identify precise click targets, reducing vision token costs by 60%",
+    "Cache UI element maps per application — once a desktop layout is analyzed, store the element tree so subsequent actions skip full-screenshot analysis and use targeted region crops",
+    "Implement action batching — plan 3-5 sequential actions from a single screenshot analysis instead of re-capturing after every click, reducing GPT-4o Vision calls by 70%",
+    "Use Container Apps scale-to-zero for dev/staging — agent containers only run during active automation tasks, eliminating idle compute costs",
+    "Move screenshot archives to Cool storage after 24 hours — most debugging happens within the first day, and historical screenshots are rarely accessed",
+    "Share container images across agent instances — use a single base image with application-specific overlays to reduce ACR storage and pull costs"
+  ]
+}

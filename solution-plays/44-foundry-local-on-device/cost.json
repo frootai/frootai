@@ -1,0 +1,177 @@
+{
+  "play": "44",
+  "name": "Foundry Local On-Device AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Cloud escalation endpoint — handles complex queries that exceed on-device model capabilities, multi-step reasoning, large context windows, and high-accuracy requirements",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~30K tokens/day, escalation testing and model comparison"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 200,
+          "note": "~200K tokens/day, ~20% of queries escalated to cloud"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 800,
+          "note": "Provisioned throughput for guaranteed cloud escalation SLA"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Device fleet management — model deployment to edge devices, telemetry collection, device health monitoring, OTA model updates, escalation routing",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500 devices, 8K messages/day, manual updates"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 25,
+          "note": "~10K devices, 400K messages/day, scheduled deployments"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 250,
+          "note": "~100K devices, 30M messages/day, real-time fleet orchestration"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor",
+      "category": "Monitoring",
+      "purpose": "Fleet observability — device health metrics, on-device inference latency, escalation rates, model accuracy tracking, battery/resource impact",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic metrics, 5GB logs, manual monitoring"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month, alerting, custom dashboards"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, fleet-wide analytics"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Model registry and distribution — on-device model packages (ONNX, GGUF), update payloads, telemetry archives, escalation logs",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~5GB, 2-3 model versions"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 15,
+          "note": "~100GB, model versions + telemetry archives"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 50,
+          "note": "~500GB, geo-redundant, multi-model multi-version"
+        }
+      }
+    },
+    {
+      "name": "Azure Container Registry",
+      "category": "Compute",
+      "purpose": "Edge runtime images — Foundry Local runtime containers, model serving layers, device-specific optimizations (ARM64, x86, GPU variants)",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "10GB, 2-3 runtime images"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "100GB, multi-arch images, vulnerability scanning"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 50,
+          "note": "500GB, geo-replication for global edge deployment"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Device provisioning secrets — IoT Hub connection strings, model signing certificates, cloud escalation API keys, device attestation keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~500 operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~20K operations/month, certificate rotation"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, device attestation, compliance audit"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Cloud-side orchestration — escalation routing logic, model update scheduling, telemetry aggregation, anomaly detection on fleet health",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M executions free, manual triggers"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "~2M executions/month, event-driven routing"
+        },
+        "enterprise": {
+          "sku": "Premium EP1",
+          "cost": 120,
+          "note": "Always-warm, VNET integration, parallel processing"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 38,
+    "prod": 305,
+    "enterprise": 1385
+  },
+  "optimization_tips": [
+    "Keep 80-90% of inference on-device using Phi-4-mini or similar SLMs — only escalate to cloud GPT-4o for queries exceeding local model confidence thresholds, keeping cloud costs proportional to complexity",
+    "Use delta model updates via IoT Hub instead of full model re-downloads — diff-based ONNX updates reduce bandwidth costs by 85% and minimize device downtime",
+    "Batch telemetry uploads to IoT Hub — aggregate device metrics locally every 5 minutes instead of per-inference streaming, reducing message counts by 90%",
+    "Implement on-device response caching with semantic similarity matching — cache frequent query responses locally to avoid repeated inference for similar prompts",
+    "Use Azure Monitor basic metrics (free tier) for device health and reserve pay-per-GB for detailed inference logs — most fleet monitoring needs are met with standard IoT Hub metrics",
+    "Schedule model deployments during off-peak network hours — stagger updates across device fleet to avoid bandwidth spikes and reduce CDN/egress costs"
+  ]
+}

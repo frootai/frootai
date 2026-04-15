@@ -14,6 +14,73 @@ HIPAA-compliant clinical AI — PHI de-identification with Presidio, ICD-10/CPT 
 | Secrets | Azure Key Vault (CMK encryption) | API keys, FHIR credentials |
 | Audit Trail | Immutable Blob Storage | HIPAA-compliant access logging |
 
+```mermaid
+graph TB
+    subgraph Clinician Layer
+        Clinician[Clinician / Physician]
+        Portal[Clinical Decision Portal<br/>Patient Context · AI Recommendations · Evidence · Approval Workflow]
+    end
+
+    subgraph Application
+        AppService[App Service<br/>Clinical UI · HITL Workflow · Audit Dashboard · SMART on FHIR Auth]
+    end
+
+    subgraph AI Engine
+        AOAI[Azure OpenAI<br/>Differential Diagnosis · Treatment Recommendations · Note Summarization]
+        AISearch[Azure AI Search<br/>Medical Literature · Guidelines · Drug Database · Formulary]
+        ContentSafety[AI Content Safety<br/>Clinical Safety · Hallucination Check · Dangerous Rx Block]
+    end
+
+    subgraph Clinical Data
+        FHIR[Health Data Services — FHIR R4<br/>Patients · Conditions · Medications · Labs · Allergies · Plans]
+        CosmosDB[Cosmos DB<br/>Decision Audit Trail · Clinician Actions · Evidence Citations · Compliance]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>PHI Encryption Keys · FHIR Creds · SMART Secrets · Certificates]
+        MI[Managed Identity<br/>Zero-secret Auth]
+        VNET[Private Endpoints<br/>FHIR · Cosmos DB · AI Search — No Public Access]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Acceptance Rate · Latency · Safety Rejections · Citation Accuracy]
+    end
+
+    Clinician -->|Interact| Portal
+    Portal -->|Request| AppService
+    AppService -->|Fetch Patient| FHIR
+    FHIR -->|Patient Context| AppService
+    AppService -->|Retrieve Evidence| AISearch
+    AISearch -->|Citations + Guidelines| AppService
+    AppService -->|Generate Recommendation| AOAI
+    AOAI -->|Clinical Insight| AppService
+    AppService -->|Safety Screen| ContentSafety
+    ContentSafety -->|Approved / Blocked| AppService
+    AppService -->|Present to Clinician| Portal
+    Clinician -->|Accept / Reject / Modify| Portal
+    Portal -->|Record Decision| AppService
+    AppService -->|Audit Trail| CosmosDB
+    MI -->|Secrets| KV
+    VNET -->|Private Access| FHIR
+    VNET -->|Private Access| CosmosDB
+    AppService -->|Traces| AppInsights
+
+    style Clinician fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Portal fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AppService fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style AISearch fill:#10b981,color:#fff,stroke:#059669
+    style ContentSafety fill:#10b981,color:#fff,stroke:#059669
+    style FHIR fill:#f59e0b,color:#fff,stroke:#d97706
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style VNET fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 35 (Compliance Engine) | **Play 46 (Healthcare Clinical AI)** | Play 01 (Enterprise RAG) |
@@ -84,6 +151,24 @@ HIPAA-compliant clinical AI — PHI de-identification with Presidio, ICD-10/CPT 
 | Hallucination Rate | < 1% | Made-up clinical information |
 | Harmful Advice Rate | 0% | Clinically dangerous recommendations (non-negotiable) |
 | HIPAA Audit Coverage | 100% | All queries logged (de-identified) |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $50 | $400 | $1,500 |
+| Azure Health Data Services (FHIR) | $30 | $150 | $500 |
+| Azure AI Search | $0 | $250 | $800 |
+| Azure AI Content Safety | $0 | $60 | $200 |
+| Azure App Service | $15 | $80 | $250 |
+| Cosmos DB | $5 | $75 | $400 |
+| Key Vault | $1 | $10 | $25 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$101** | **$1,055** | **$3,775** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

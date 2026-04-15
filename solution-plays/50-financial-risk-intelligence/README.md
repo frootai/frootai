@@ -14,6 +14,82 @@ AI-powered financial risk platform — explainable credit risk scoring (ECOA/GDP
 | Risk Engine | Azure Container Apps | Scoring API with auto-scaling |
 | Secrets | Azure Key Vault | API keys, connection strings |
 
+```mermaid
+graph TB
+    subgraph Market Data Sources
+        PriceFeed[Price Feeds<br/>Equities · FX · Fixed Income · Commodities]
+        TradeEvents[Trade Events<br/>Executions · Orders · Settlements · Fails]
+        NewsWire[News & Regulatory<br/>Wire Alerts · SEC Filings · ESMA · Central Banks]
+    end
+
+    subgraph Ingestion
+        EventHubs[Azure Event Hubs<br/>Market Data Ingestion · Partitioned · Low-Latency · Buffered]
+    end
+
+    subgraph Real-Time Processing
+        StreamAnalytics[Stream Analytics<br/>VaR Windows · Exposure Aggregation · Concentration · Liquidity]
+        Functions[Azure Functions<br/>Risk Dispatch · Alert Routing · Report Generation · Reg Submission]
+    end
+
+    subgraph AI Risk Engine
+        AOAI[Azure OpenAI<br/>Risk Interpretation · Scenario Analysis · Regulatory Context · Briefings]
+        AISearch[Azure AI Search<br/>Regulatory Filings · Basel III · IFRS 9 · Market Research · Incidents]
+    end
+
+    subgraph Risk Store
+        CosmosDB[Cosmos DB<br/>Counterparty Profiles · Exposures · Alerts · Scenarios · Compliance]
+    end
+
+    subgraph Risk Consumers
+        Dashboard[Risk Dashboard<br/>Real-Time Positions · VaR · Alerts · Heatmaps · Stress Tests]
+        RiskOfficer[Risk Officers<br/>Briefings · Approvals · Escalations]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Feed Creds · API Keys · Certificates · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Calc Latency · Alert SLA · Feed Health · Model Accuracy]
+    end
+
+    PriceFeed -->|Prices| EventHubs
+    TradeEvents -->|Trades| EventHubs
+    NewsWire -->|Alerts| EventHubs
+    EventHubs -->|Stream| StreamAnalytics
+    StreamAnalytics -->|Risk Metrics| Functions
+    StreamAnalytics -->|Aggregations| CosmosDB
+    Functions -->|Retrieve Evidence| AISearch
+    AISearch -->|Regulatory Context| Functions
+    Functions -->|Analyze Risk| AOAI
+    AOAI -->|Risk Narrative| Functions
+    Functions -->|Store Assessment| CosmosDB
+    Functions -->|Push Alert| Dashboard
+    Functions -->|Escalate| RiskOfficer
+    CosmosDB -->|Historical Context| Functions
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+    StreamAnalytics -->|Metrics| AppInsights
+
+    style PriceFeed fill:#3b82f6,color:#fff,stroke:#2563eb
+    style TradeEvents fill:#3b82f6,color:#fff,stroke:#2563eb
+    style NewsWire fill:#3b82f6,color:#fff,stroke:#2563eb
+    style EventHubs fill:#f59e0b,color:#fff,stroke:#d97706
+    style StreamAnalytics fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style AISearch fill:#10b981,color:#fff,stroke:#059669
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style Dashboard fill:#3b82f6,color:#fff,stroke:#2563eb
+    style RiskOfficer fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 35 (Compliance Engine) | **Play 50 (Financial Risk)** | Play 45 (Event AI) |
@@ -85,6 +161,24 @@ AI-powered financial risk platform — explainable credit risk scoring (ECOA/GDP
 | Disparate Impact | > 0.80 | Fair lending 4/5 rule compliance |
 | Adverse Action Notice | 100% | ECOA mandatory on declines |
 | Fraud Detection Latency | < 100ms | Rules + ML tiers combined |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $60 | $600 | $2,200 |
+| Azure AI Search | $0 | $250 | $800 |
+| Cosmos DB | $5 | $200 | $700 |
+| Azure Event Hubs | $12 | $90 | $1,200 |
+| Azure Functions | $0 | $200 | $600 |
+| Azure Stream Analytics | $25 | $150 | $600 |
+| Key Vault | $1 | $10 | $25 |
+| Application Insights | $0 | $40 | $120 |
+| **Total** | **$103** | **$1,540** | **$6,245** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

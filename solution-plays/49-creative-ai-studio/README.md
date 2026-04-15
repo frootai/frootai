@@ -13,6 +13,74 @@ Multi-modal creative content generation platform — brand voice-consistent text
 | Studio API | Azure Container Apps | Content pipeline orchestration |
 | Secrets | Azure Key Vault | API keys, brand configs |
 
+```mermaid
+graph TB
+    subgraph Content Creators
+        Creator[Marketing Team<br/>Content Briefs · Tone Direction · Campaign Goals]
+        Studio[Creative Studio UI<br/>Brand Voice Editor · Content Generator · A/B Variants · Approval]
+    end
+
+    subgraph Generation Engine
+        AOAI[Azure OpenAI<br/>Brand-Voice Copy · Multi-Variant · Tone Calibration · Long-Form]
+        ContentSafety[AI Content Safety<br/>Brand Safety · Language Filter · Cultural Sensitivity · Trademark]
+    end
+
+    subgraph Pipeline
+        Functions[Azure Functions<br/>Generation Workflow · Safety Screen · Approval Routing · Publishing]
+    end
+
+    subgraph Data & Assets
+        CosmosDB[Cosmos DB<br/>Brand Profiles · Campaigns · Content Versions · A/B Results · Analytics]
+        Blob[Azure Blob Storage<br/>Brand Guidelines · Media Assets · Templates · Archives]
+    end
+
+    subgraph Distribution
+        CDN[Azure CDN<br/>Published Assets · Landing Pages · Media Delivery]
+        Channels[Publishing Channels<br/>CMS · Social Media · Email · Ads]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Channel Tokens · CDN Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Generation Latency · Voice Consistency · Safety Rejections · A/B Results]
+    end
+
+    Creator -->|Brief| Studio
+    Studio -->|Generate Request| Functions
+    Functions -->|Brand Voice + Brief| AOAI
+    AOAI -->|Content Variants| Functions
+    Functions -->|Safety Screen| ContentSafety
+    ContentSafety -->|Approved / Flagged| Functions
+    Functions -->|Store Version| CosmosDB
+    Functions -->|Present for Review| Studio
+    Creator -->|Approve / Refine| Studio
+    Studio -->|Publish| Functions
+    Functions -->|Deliver Assets| CDN
+    Functions -->|Push Content| Channels
+    Functions -->|Read Brand Profile| CosmosDB
+    Functions -->|Read Assets| Blob
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+
+    style Creator fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Studio fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style ContentSafety fill:#10b981,color:#fff,stroke:#059669
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style CDN fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Channels fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 36 (Multimodal Agent) | **Play 49 (Creative AI Studio)** | Play 43 (Video Generation) |
@@ -84,6 +152,24 @@ Multi-modal creative content generation platform — brand voice-consistent text
 | Variation Diversity | < 0.7 similarity | Meaningfully different variations |
 | Platform Compliance | 100% | Character limits, hashtags, tone |
 | Cost per Campaign | < $0.50 | Text + images + adaptation |
+
+## Estimated Cost
+
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $50 | $400 | $1,500 |
+| Azure Blob Storage | $5 | $30 | $100 |
+| Azure AI Content Safety | $0 | $50 | $180 |
+| Azure Functions | $0 | $120 | $350 |
+| Azure CDN | $5 | $40 | $120 |
+| Cosmos DB | $5 | $75 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $25 | $80 |
+| **Total** | **$66** | **$745** | **$2,695** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

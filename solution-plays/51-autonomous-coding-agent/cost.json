@@ -1,0 +1,177 @@
+{
+  "play": "51",
+  "name": "Autonomous Coding Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Code generation and reasoning engine — task decomposition, code synthesis, bug diagnosis, refactoring plans, test generation, code review, and multi-step agentic reasoning loops with tool-use capabilities",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~80K tokens/day, agent loop prototyping and testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 700,
+          "note": "~700K tokens/day, production coding tasks with multi-step reasoning"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2500,
+          "note": "Provisioned throughput for team-wide autonomous coding at scale"
+        }
+      }
+    },
+    {
+      "name": "GitHub Actions",
+      "category": "DevOps",
+      "purpose": "Execution sandbox — isolated CI/CD environments for running agent-generated code, executing test suites, performing builds, linting, security scanning, and validating code changes before PR submission",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "2,000 minutes/month, basic test runs"
+        },
+        "prod": {
+          "sku": "Team plan",
+          "cost": 80,
+          "note": "3,000 minutes/month, concurrent runners, larger VMs"
+        },
+        "enterprise": {
+          "sku": "Enterprise + Larger Runners",
+          "cost": 300,
+          "note": "50,000 minutes/month, GPU runners, self-hosted options"
+        }
+      }
+    },
+    {
+      "name": "Azure Container Apps",
+      "category": "Compute",
+      "purpose": "Agent runtime environment — hosts the autonomous coding agent service, manages agent sessions, provides isolated execution contexts per task, and handles concurrent agent instances with auto-scaling",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "~50 vCPU-hours/month, single agent instance"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 100,
+          "note": "~500 vCPU-hours/month, 3-5 concurrent agents"
+        },
+        "enterprise": {
+          "sku": "Dedicated",
+          "cost": 400,
+          "note": "~2000 vCPU-hours/month, 20+ concurrent agents, VNET"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Agent workspace persistence — repository clones, intermediate code artifacts, test results, build outputs, agent session logs, and code diff archives for audit and replay",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 5,
+          "note": "~30GB, agent workspace and test artifacts"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 30,
+          "note": "~300GB, production workspaces with zone redundancy"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot",
+          "cost": 100,
+          "note": "~1TB, geo-redundant, full audit archive"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Agent state and task management — task queue, agent session state, reasoning trace history, code change records, review feedback, and task completion analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, task state prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, real-time task tracking"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, team-wide task coordination"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, GitHub tokens (PAT/App), Container Apps secrets, storage keys, and agent authentication certificates",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Agent observability — task completion rate, reasoning loop iterations, token consumption per task, test pass rate, code quality metrics, agent session duration, and error diagnosis tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, agent performance dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 101,
+    "prod": 1020,
+    "enterprise": 3765
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine tasks (formatting, simple refactors, boilerplate generation, test scaffolding) and reserve GPT-4o for complex reasoning (architecture decisions, bug diagnosis, multi-file refactoring) — reduces AI costs by 50-60%",
+    "Implement reasoning loop budgets — cap the maximum number of agent iterations per task (e.g., 10 loops) to prevent runaway token consumption on tasks the agent cannot resolve",
+    "Cache repository file contents during an agent session — avoid re-reading unchanged files on each reasoning loop iteration, which can account for 30-40% of input tokens",
+    "Use GitHub Actions free tier minutes for dev/staging and scale runners only for production workloads — most test validation runs complete in under 5 minutes",
+    "Implement task difficulty estimation before dispatching to the agent — route simple tasks (typo fixes, dependency bumps) to lightweight processing without full agentic loops",
+    "Use Container Apps Consumption plan with scale-to-zero for non-business-hours — agent instances only running when tasks are queued, eliminating idle compute costs overnight and weekends"
+  ]
+}
