@@ -140,7 +140,7 @@ pip install frootai-mcp                      # Python
 **Live** — network-enabled, graceful offline fallback
 - `fetch_azure_docs`  search Microsoft Learn for Azure docs
 - `fetch_external_mcp`  discover MCP servers from public registries
-- `list_community_plays`  browse 103 solution plays from GitHub
+- `list_community_plays`  browse 104 solution plays from GitHub
 - `get_github_agentic_os`  .github Agentic OS 7-primitive guide
 
 **Agent Chain** — build → review → tune
@@ -406,7 +406,7 @@ Health probes (Kubernetes / Container Apps):
 <summary><b>🔎 BM25 Search Engine</b></summary>
 <br>
 
-All search tools use a pre-built BM25 index (Robertson IDF, k1=1.5, b=0.75) over 358 documents. Far more accurate than keyword matching — finds "voice AI call center" → Play 04 with high relevance. The index covers all 103 solution plays, 16 knowledge modules, and the glossary.
+All search tools use a pre-built BM25 index (Robertson IDF, k1=1.5, b=0.75) over 358 documents. Far more accurate than keyword matching — finds "voice AI call center" → Play 04 with high relevance. The index covers all 104 solution plays, 16 knowledge modules, and the glossary.
 </details>
 
 <details>
