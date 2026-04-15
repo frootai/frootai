@@ -34,8 +34,26 @@ export function createReactPanel(
 
   const webviewDir = vscode.Uri.joinPath(extensionUri, "out", "webview");
   const mainJs = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "main.js"));
-  const mainCss = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "index.css"));
+  const mainCss = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "style.css"));
   const nonce = getNonce();
+
+  // Discover chunk files (React shared code) — load them before main.js
+  const fs = require("fs");
+  const path = require("path");
+  const webviewPath = vscode.Uri.joinPath(extensionUri, "out", "webview").fsPath;
+  const chunkFiles: string[] = [];
+  try {
+    const files = fs.readdirSync(webviewPath) as string[];
+    for (const f of files) {
+      if (f.endsWith("-chunk.js")) {
+        chunkFiles.push(f);
+      }
+    }
+  } catch { /* no chunks — fine */ }
+
+  const chunkScripts = chunkFiles
+    .map(f => `<script nonce="${nonce}" src="${panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, f))}"></script>`)
+    .join("\n  ");
 
   panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
@@ -51,6 +69,7 @@ export function createReactPanel(
   <script nonce="${nonce}">
     window.panelData = ${JSON.stringify(panelData)};
   </script>
+  ${chunkScripts}
   <script nonce="${nonce}" src="${mainJs}"></script>
 </body>
 </html>`;

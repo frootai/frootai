@@ -6,6 +6,7 @@ export default defineConfig({
   build: {
     outDir: "../out/webview",
     emptyOutDir: true,
+    cssCodeSplit: false,
     rollupOptions: {
       input: {
         main: "index.html",
@@ -13,7 +14,7 @@ export default defineConfig({
       },
       output: {
         entryFileNames: "[name].js",
-        chunkFileNames: "[name].js",
+        chunkFileNames: "[name]-chunk.js",
         assetFileNames: "[name].[ext]",
       },
     },
