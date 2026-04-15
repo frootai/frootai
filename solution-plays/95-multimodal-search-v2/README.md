@@ -13,6 +13,75 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Content Sources
+        Text[Text Content<br/>Documents · Articles · Wikis · PDFs]
+        Images[Image Content<br/>Photos · Diagrams · Charts · Screenshots]
+        Code[Code Content<br/>Repositories · Snippets · Notebooks · APIs]
+        Audio[Audio Content<br/>Meetings · Podcasts · Lectures · Calls]
+    end
+
+    subgraph Indexing Pipeline
+        Vision[Azure AI Vision<br/>Embeddings · Object Detection · OCR · Captioning · VQA]
+        Speech[Azure AI Speech<br/>Transcription · Diarization · Timestamps · Language ID]
+        ACA[Container Apps<br/>Query Engine · Indexing Workers · Embedding Gen · Result Fusion]
+    end
+
+    subgraph Unified Index
+        Search[Azure AI Search<br/>Hybrid Vector + Keyword · Cross-Modal Rank · Semantic Rerank · Facets]
+    end
+
+    subgraph Reasoning Layer
+        OpenAI[Azure OpenAI — GPT-4o<br/>Query Understanding · Cross-Modal Synthesis · Expansion · Refinement]
+    end
+
+    subgraph Storage
+        Blob[Blob Storage<br/>Source Files · Embeddings · Thumbnails · Transcripts · Queue Artifacts]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>AI Creds · Search Keys · Storage Keys · Source Tokens]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Query Latency · Relevance (MRR/NDCG) · Embedding Throughput · Cache Hits]
+    end
+
+    Text --> ACA
+    Images --> Vision
+    Code --> ACA
+    Audio --> Speech
+    Vision -->|Image Embeddings + Metadata| ACA
+    Speech -->|Transcripts + Timestamps| ACA
+    ACA -->|Index Documents| Search
+    ACA -->|Cross-Modal Reasoning| OpenAI
+    OpenAI -->|Enhanced Results| ACA
+    Search -->|Search Results| ACA
+    ACA <-->|Content Store| Blob
+    ACA -->|Auth| MI
+    MI -->|Secrets| KV
+    ACA -->|Traces| AppInsights
+
+    style Text fill:#6366f1,color:#fff,stroke:#4f46e5
+    style Images fill:#ec4899,color:#fff,stroke:#db2777
+    style Code fill:#14b8a6,color:#fff,stroke:#0d9488
+    style Audio fill:#f43f5e,color:#fff,stroke:#e11d48
+    style Vision fill:#a855f7,color:#fff,stroke:#9333ea
+    style Speech fill:#f97316,color:#fff,stroke:#ea580c
+    style ACA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Search fill:#10b981,color:#fff,stroke:#059669
+    style OpenAI fill:#22c55e,color:#fff,stroke:#16a34a
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#ef4444,color:#fff,stroke:#dc2626
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI | Text embedding + CLIP visual encoding |
@@ -38,10 +107,19 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $60–100 |
-| Production (100K docs, 50K queries) | $350–450 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure AI Search | $75 (Basic) | $500 (Standard S2) | $2,000 (Standard S3) |
+| Azure AI Vision | $5 (Free tier) | $200 (Standard S1) | $600 (Standard S1) |
+| Azure AI Speech | $5 (Free tier) | $150 (Standard) | $500 (Standard + Custom) |
+| Azure OpenAI | $25 (PAYG) | $350 (PAYG) | $1,200 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $200 (Dedicated) | $600 (Dedicated HA) |
+| Blob Storage | $5 (Hot LRS) | $80 (Hot LRS) | $250 (Hot GRS) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $45 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$126** | **$1,530** | **$5,315** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 88 (Visual Product Search)
 | Aspect | Play 88 | Play 95 |

@@ -1,0 +1,178 @@
+{
+  "play": "99",
+  "name": "Enterprise AI Governance Hub",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure API Management",
+      "category": "Integration",
+      "purpose": "AI governance gateway — centralized proxy for all AI model and agent API calls across the enterprise, policy enforcement (rate limits, content filtering, usage quotas), approval gate workflows for new model deployments, API versioning and deprecation management, developer portal for AI consumers, real-time usage analytics and chargeback metering",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 5,
+          "note": "~50K calls/month, pay-per-call"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 700,
+          "note": "Dedicated gateway, custom domains, policy engine"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 2800,
+          "note": "Multi-region, VNET, 99.99% SLA, self-hosted gateways"
+        }
+      }
+    },
+    {
+      "name": "Azure Policy",
+      "category": "Governance",
+      "purpose": "Compliance enforcement — built-in and custom policy definitions for AI resource configurations, deny/audit/modify effects for non-compliant deployments, initiative assignments for regulatory frameworks (EU AI Act, NIST AI RMF, ISO 42001), compliance state tracking, remediation task automation",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with Azure subscription"
+        },
+        "prod": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with Azure subscription"
+        },
+        "enterprise": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with Azure subscription, custom initiatives"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor",
+      "category": "Monitoring",
+      "purpose": "AI observability — centralized logging for all AI model invocations, token usage tracking per model/team/project, latency and error rate monitoring, cost attribution dashboards, compliance audit log aggregation, alert rules for policy violations and anomalous usage patterns",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 5,
+          "note": "Basic metrics, 5GB log ingestion"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 200,
+          "note": "~150GB/month log ingestion, 30-day retention"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB + Commitment",
+          "cost": 600,
+          "note": "~500GB/month, 90-day retention, cross-workspace queries"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Database",
+      "purpose": "Governance registry — AI model catalog (versions, capabilities, risk tiers, owners), agent registry with deployment status, approval workflow state machines, compliance assessment records, policy violation history, team entitlements and quota allocations, audit trail with immutable change history",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 280,
+          "note": "Dedicated throughput, low-latency registry queries"
+        },
+        "enterprise": {
+          "sku": "Provisioned (15000 RU/s)",
+          "cost": 750,
+          "note": "Multi-region writes, global distribution for hub-and-spoke governance"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Model management — centralized model registry with risk classification, model card generation and maintenance, evaluation pipeline integration for pre-deployment gates, responsible AI dashboards (fairness, interpretability, error analysis), deployment tracking across environments",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier, shared compute"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 350,
+          "note": "Dedicated compute, managed endpoints, model registry"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 1000,
+          "note": "Multi-workspace, cross-region registry, automated evaluation"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Governance secrets — AI service API keys under centralized management, model endpoint credentials, approval workflow signing keys, integration tokens for compliance tools, encryption keys for audit logs",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "~50K operations/month, high rotation frequency"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 40,
+          "note": "HSM-backed, FIPS 140-2 Level 3, regulatory compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Governance hub KPIs — approval workflow latency, policy compliance rates, model registry query performance, API gateway throughput, governance portal user engagement, compliance report generation times",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~70GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 160,
+          "note": "~350GB/month, 90-day retention, cross-component correlation"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 16,
+    "prod": 1590,
+    "enterprise": 5350
+  },
+  "optimization_tips": [
+    "Use Azure Policy's free tier strategically — built-in AI governance policies (deny unapproved model deployments, audit content safety configuration, enforce managed identity) cost nothing and provide immediate compliance value before investing in custom policies",
+    "Implement tiered monitoring — log full request/response bodies only for high-risk AI models (GPT-4o, custom fine-tuned models) and log only metadata (tokens, latency, status) for low-risk models (embeddings, text-ada); reduces log ingestion volume by 70%",
+    "Use API Management consumption tier for dev/test governance gateways — production governance gateway needs dedicated capacity for reliability, but development environments rarely exceed 100K calls/month",
+    "Centralize Key Vault for AI keys — instead of each team managing their own AI service keys, use a shared governance Key Vault with RBAC; reduces Key Vault instances and operations costs while improving security posture",
+    "Schedule compliance reports generation during off-peak hours — aggregate compliance data from Cosmos DB change feed and generate reports via scheduled Azure Functions instead of real-time computation; batch processing is 80% cheaper than on-demand queries",
+    "Implement model registry caching — cache model catalog and compliance status in API Management's built-in cache; governance portal users repeatedly query the same model metadata, and a 5-minute cache TTL eliminates redundant Cosmos DB reads",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "play": "100",
+  "name": "FAI Meta-Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Meta-agent intelligence — GPT-4o for high-level reasoning: play selection from 100-play catalog based on natural language requirements, infrastructure planning and Bicep template generation, multi-step orchestration planning with dependency resolution; GPT-4o-mini for sub-tasks: requirement parsing, documentation generation, status summarization, user communication; structured output for deterministic play configuration and infra provisioning commands",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~150K tokens/day, gpt-4o for reasoning + gpt-4o-mini for sub-tasks"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 800,
+          "note": "~5M tokens/day, concurrent orchestration sessions"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2500,
+          "note": "Provisioned throughput, <100ms inference for real-time orchestration"
+        }
+      }
+    },
+    {
+      "name": "MCP Server",
+      "category": "Integration",
+      "purpose": "Tool orchestration layer — 25+ FAI MCP tools for play discovery (semantic search, filtering, comparison), architecture generation (Mermaid diagrams, service role tables), cost estimation (per-play pricing at dev/prod/enterprise scale), knowledge base queries (modules, glossary, best practices), evaluation scoring (quality gates, threshold checks), and infrastructure provisioning commands; MCP protocol enables the meta-agent to compose any combination of tools dynamically based on user intent",
+      "tiers": {
+        "dev": {
+          "sku": "Container Apps Consumption",
+          "cost": 10,
+          "note": "Scale-to-zero, ~500 tool calls/day"
+        },
+        "prod": {
+          "sku": "Container Apps Dedicated",
+          "cost": 200,
+          "note": "2 vCPU, 4GB, always-ready for sub-second tool response"
+        },
+        "enterprise": {
+          "sku": "Container Apps HA",
+          "cost": 600,
+          "note": "4 vCPU, 8GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Meta-agent runtime — orchestration engine managing multi-step workflows (requirement analysis → play selection → architecture design → infra provisioning → deployment → evaluation), session management for long-running provisioning tasks, WebSocket interface for real-time status streaming, sub-agent coordination for parallel infrastructure deployments, retry and rollback management for failed provisioning steps",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 15,
+          "note": "0.5 vCPU, 1GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, min 3 replicas, persistent WebSocket sessions"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 1200,
+          "note": "8 vCPU, 16GB, multi-region, 10+ replicas, dedicated orchestration pool"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Database",
+      "purpose": "Orchestration state — active session state machines (requirement → planning → provisioning → deploying → evaluating → complete), provisioned infrastructure inventory, play execution history with full audit trail, user preference profiles, cost tracking per orchestration session, rollback checkpoints, cached play analysis results for faster re-runs",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 280,
+          "note": "Dedicated throughput, sub-10ms state machine transitions"
+        },
+        "enterprise": {
+          "sku": "Provisioned (15000 RU/s)",
+          "cost": 750,
+          "note": "Multi-region writes, global session consistency"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Play knowledge retrieval — semantic search across 100 play architectures, 830+ primitives, 17 knowledge modules, and 200+ glossary terms; hybrid search (keyword + vector) for precise play matching against user requirements; faceted filtering by complexity, services, industry, WAF pillars; powers the meta-agent's contextual understanding of the entire FAI ecosystem",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, 3 indexes, 10K documents"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, 1 replica"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB index, 3 replicas, high availability"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Orchestration secrets — Azure OpenAI API keys, infrastructure provisioning credentials (service principal for Bicep deployments), MCP tool authentication tokens, AI Search admin keys, user session encryption keys, rollback authorization tokens",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~2K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "~50K operations/month, high rotation frequency"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 40,
+          "note": "HSM-backed, infra provisioning signing keys"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Meta-agent KPIs — end-to-end orchestration latency (requirement to production), play selection accuracy (user satisfaction with recommendations), provisioning success rate, tool invocation patterns, cost per orchestration session, user engagement and retention metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 60,
+          "note": "~80GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 200,
+          "note": "~400GB/month, 90-day retention, real-time orchestration dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 81,
+    "prod": 2000,
+    "enterprise": 6290
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for initial requirement parsing and play filtering (80% of queries match well-known patterns) — reserve GPT-4o for complex multi-play compositions, ambiguous requirements, and architecture reasoning; tiered model routing saves 65% on inference costs",
+    "Cache play analysis results in Cosmos DB — when users request similar architectures, serve cached play recommendations and cost estimates instead of re-computing; cache hit rates of 40-60% are typical for common enterprise patterns like 'build a RAG chatbot' or 'deploy an AI gateway'",
+    "Implement progressive orchestration — generate architecture plan first (cheap) and require user confirmation before triggering infrastructure provisioning (expensive); prevents wasted provisioning costs from misunderstood requirements",
+    "Use AI Search free tier for development — the FAI knowledge base fits within the 50MB free index limit; only upgrade to Standard when production traffic requires semantic ranker and higher query throughput",
+    "Schedule infrastructure teardown for dev/test environments — meta-agent provisions full stacks for testing that are often forgotten; implement automatic teardown after 72 hours of inactivity to prevent runaway infrastructure costs",
+    "Implement tool call batching in MCP — combine related tool calls (play detail + cost estimate + architecture diagram) into single batched requests instead of sequential calls; reduces Container Apps compute time and improves response latency by 40%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

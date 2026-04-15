@@ -1,0 +1,200 @@
+{
+  "play": "95",
+  "name": "Multimodal Search Engine V2",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Unified multimodal index — hybrid vector + keyword search across text, image embeddings, code snippets, and audio transcriptions; cross-modal ranking, semantic reranking, faceted filtering by modality, and federated result merging",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 75,
+          "note": "2GB storage, 3 indexes, vector search"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB storage, semantic ranker, 12 indexes, replicas"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 2000,
+          "note": "400GB+ storage, high-density mode, multi-replica HA"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Image understanding pipeline — visual embedding generation for similarity search, object detection and scene classification, OCR for text-in-image extraction, image captioning for text-based retrieval, visual question answering for cross-modal reasoning",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 5,
+          "note": "20 calls/min, ~5K images/month"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 200,
+          "note": "~500K images/month, batch processing"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 600,
+          "note": "~2M images/month, custom models, high throughput"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Speech",
+      "category": "AI Services",
+      "purpose": "Audio-to-text pipeline — speech recognition for audio/video content indexing, speaker diarization for multi-speaker segments, timestamp-aligned transcriptions for audio search, language identification for multilingual content",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 5,
+          "note": "5 hours/month free, testing audio indexing"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "~500 hours/month transcription, batch + real-time"
+        },
+        "enterprise": {
+          "sku": "Standard + Custom",
+          "cost": 500,
+          "note": "~2000 hours/month, custom speech models, diarization"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for cross-modal reasoning — natural language query understanding, cross-modal result synthesis (combining image + text + code results into coherent answers), query expansion across modalities, conversational search refinement, result summarization",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~1.5M tokens/day, gpt-4o for multimodal reasoning"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, high-concurrency search reasoning"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Search API and processing — query orchestration engine, modality-specific indexing pipelines, embedding generation workers, result ranking and fusion, search UI backend, cross-modal reasoning API",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.5 vCPU, 1GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 200,
+          "note": "2 vCPU, 4GB, min 3 replicas, GPU for embeddings"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 600,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas, GPU pool"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Multimodal content store — source images, audio files, code repositories, document archives, generated embeddings, thumbnail cache, indexing queue artifacts",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 5,
+          "note": "~20GB mixed content"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 80,
+          "note": "~1TB mixed content, lifecycle tiering"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 250,
+          "note": "~5TB, geo-redundant, multi-format archive"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "AI service credentials, search admin keys, storage account keys, content source API tokens, embedding model signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, enterprise key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search quality metrics — query latency by modality, cross-modal relevance scores (MRR, NDCG), embedding generation throughput, indexing pipeline health, cache hit rates, user engagement and click-through",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 45,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, search quality dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 126,
+    "prod": 1530,
+    "enterprise": 5315
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine query expansion and simple result summarization — reserve GPT-4o for complex cross-modal reasoning (combining image + text + code results into coherent answers), saving 65% on AI costs",
+    "Implement embedding caching — once an image, audio file, or code snippet is embedded, store the vector in AI Search; re-embedding on content change only, not on every query; this eliminates 95% of Vision/Speech API calls",
+    "Use AI Search semantic ranker selectively — enable for natural language queries requiring deep understanding; disable for exact-match queries (code search, image ID lookup) where BM25 is sufficient and cheaper",
+    "Right-size Container Apps by modality — text search workers need CPU only while image embedding workers need GPU; use separate workload profiles to avoid paying for GPU on text-only queries",
+    "Implement progressive loading — return text results first (fastest), then image results, then audio results; users often find answers in the first modality returned, reducing unnecessary cross-modal processing",
+    "Use Blob Storage lifecycle management — move source content older than 90 days to cool tier; embeddings and index data stay in hot tier since they're actively queried regardless of content age",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

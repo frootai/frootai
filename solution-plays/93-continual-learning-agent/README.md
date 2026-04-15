@@ -13,6 +13,70 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph User Interaction
+        UI[Agent Interface<br/>Multi-Turn Chat · Task Execution · Feedback · Session History]
+    end
+
+    subgraph Working Memory
+        Redis[Azure Cache for Redis<br/>Active Context · Hot Knowledge · Skill Cache · Session State]
+    end
+
+    subgraph Reasoning Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Reasoning · Reflection · Synthesis · Self-Critique · Meta-Cognition]
+    end
+
+    subgraph Semantic Memory
+        Search[Azure AI Search<br/>Past Sessions · Failure Patterns · Strategy Retrieval · Cross-Session Insights]
+    end
+
+    subgraph Episodic Memory
+        Cosmos[Cosmos DB<br/>Transcripts · Outcomes · Reflections · Strategies · Skill Scores · Knowledge Graph]
+    end
+
+    subgraph Learning Lifecycle
+        Func[Azure Functions<br/>Reflection Triggers · Memory Consolidation · Graph Updates · Proficiency Recalc]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>User Keys · Agent Creds · Tool Secrets · Memory Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Success Rate Trends · Retrieval Relevance · Failure Recurrence · Learning Velocity]
+    end
+
+    UI -->|User Message| OpenAI
+    OpenAI -->|Context Lookup| Redis
+    OpenAI -->|Memory Query| Search
+    Search -->|Relevant Memories| OpenAI
+    OpenAI -->|Response| UI
+    OpenAI -->|Session Record| Cosmos
+    Func -->|Reflection & Consolidation| Cosmos
+    Func -->|Index Updates| Search
+    Func -->|Cache Refresh| Redis
+    Cosmos -->|Change Feed| Func
+    OpenAI -->|Auth| MI
+    MI -->|Secrets| KV
+    OpenAI -->|Traces| AppInsights
+    Func -->|Metrics| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Redis fill:#ef4444,color:#fff,stroke:#dc2626
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Search fill:#a855f7,color:#fff,stroke:#9333ea
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Func fill:#14b8a6,color:#fff,stroke:#0d9488
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI (gpt-4o) | Reasoning + reflection + distillation |
@@ -36,10 +100,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $30–60 |
-| Production (500 tasks) | $280–350 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $30 (PAYG) | $400 (PAYG) | $1,400 (PTU Reserved) |
+| Cosmos DB | $5 (Serverless) | $180 (3000 RU/s) | $600 (10000 RU/s) |
+| Azure AI Search | $0 (Free) | $250 (Standard S1) | $1,000 (Standard S2) |
+| Azure Cache for Redis | $15 (Basic C0) | $150 (Standard C2) | $450 (Premium P2) |
+| Azure Functions | $0 (Consumption) | $180 (Premium EP2) | $450 (Premium EP3) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $40 (Pay-per-GB) | $130 (Pay-per-GB) |
+| **Total** | **$51** | **$1,205** | **$4,045** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 07 (Multi-Agent Service)
 | Aspect | Play 07 | Play 93 |

@@ -1,0 +1,178 @@
+{
+  "play": "96",
+  "name": "Real-Time Voice Agent V2",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Voice Live",
+      "category": "AI Services",
+      "purpose": "Bidirectional voice streaming — sub-200ms end-to-end latency, real-time speech-to-speech pipeline, barge-in detection for natural interruptions, voice activity detection, echo cancellation, noise suppression, multi-language real-time switching",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~100 hours/month voice sessions for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~2000 hours/month, concurrent sessions"
+        },
+        "enterprise": {
+          "sku": "Committed",
+          "cost": 1500,
+          "note": "~10,000 hours/month, reserved capacity, SLA guarantee"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o Realtime for conversational intelligence — function calling for MCP tool invocation, multi-turn dialogue management, context-aware responses, personality and tone control, dynamic intent classification, knowledge base grounding",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 35,
+          "note": "~80K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~2.5M tokens/day, gpt-4o-realtime for voice"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1800,
+          "note": "Provisioned throughput, <100ms inference latency"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Voice agent runtime — WebSocket session management, MCP tool server hosting, avatar rendering pipeline, session state machine, voice activity detection processing, multi-agent routing, real-time audio mixing",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 15,
+          "note": "0.5 vCPU, 1GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 300,
+          "note": "4 vCPU, 8GB, min 3 replicas, GPU for avatar"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 900,
+          "note": "8 vCPU, 16GB, GPU pool, multi-region, 10+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "MCP tool execution — external API integrations (CRM, calendar, payments, booking), database lookups, knowledge base retrieval, webhook processing, session event triggers, post-call summarization and analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 200,
+          "note": "Pre-warmed, VNET, sub-100ms tool response"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 500,
+          "note": "8 vCPU, dedicated compute, always-ready for low latency"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Session and conversation state — active session context, conversation history, user profiles, tool execution results, call recordings metadata, analytics aggregates, agent configuration, knowledge base cache",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 280,
+          "note": "Dedicated throughput, low-latency session reads"
+        },
+        "enterprise": {
+          "sku": "Provisioned (15000 RU/s)",
+          "cost": 750,
+          "note": "Multi-region writes, <10ms session state access"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Voice service credentials, OpenAI API keys, MCP tool secrets, CRM/payment integration tokens, session encryption keys, avatar rendering certificates",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 20,
+          "note": "HSM-backed, call recording encryption keys"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Voice agent KPIs — end-to-end latency (target <200ms), barge-in success rate, tool invocation latency, conversation completion rate, user satisfaction score, avatar rendering FPS, concurrent session metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~70GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 160,
+          "note": "~350GB/month, 90-day retention, real-time latency dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 86,
+    "prod": 1735,
+    "enterprise": 5630
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for simple tool dispatch (calendar lookup, FAQ retrieval) and reserve GPT-4o-realtime for complex multi-turn reasoning, negotiation, and emotionally sensitive conversations — saving 60% on AI costs for routine calls",
+    "Implement session pooling in Container Apps — pre-warm WebSocket connections and reuse session infrastructure across sequential calls; cold-starting a full voice session adds 2-3 seconds of latency",
+    "Cache frequently accessed knowledge base responses in Cosmos DB with 1-hour TTL — common questions (business hours, pricing, return policy) don't need real-time AI inference; pre-computed responses reduce latency to <50ms",
+    "Right-size avatar rendering — use lightweight 2D avatar for voice-only calls and reserve GPU-accelerated 3D avatar rendering for video-enabled sessions; most voice agent interactions don't need visual avatars",
+    "Use Functions consumption plan for post-call analytics (summarization, sentiment analysis, CRM updates) — these are not latency-sensitive; batch processing after call completion saves 80% vs. premium plan",
+    "Implement intelligent silence detection — during long user pauses, reduce GPU and inference resource allocation; resume full resources when voice activity resumes, saving 30% on compute costs",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

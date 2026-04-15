@@ -1,0 +1,177 @@
+{
+  "play": "94",
+  "name": "AI Podcast Generator",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Speech",
+      "category": "AI Services",
+      "purpose": "Multi-speaker voice synthesis — distinct neural voices per host/guest, SSML prosody control for natural conversation flow, emotion injection (excitement, curiosity, emphasis), pronunciation lexicons for domain terminology, audio output in broadcast-quality 48kHz WAV",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 5,
+          "note": "5M characters/month free, ~10 test episodes"
+        },
+        "prod": {
+          "sku": "Standard Neural",
+          "cost": 250,
+          "note": "~50M characters/month, multiple neural voices"
+        },
+        "enterprise": {
+          "sku": "Custom Neural Voice",
+          "cost": 800,
+          "note": "Custom voice clones, 200M+ characters/month, brand voices"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for podcast content generation — article-to-conversation transformation, multi-speaker dialogue scripting with natural banter, segment transition writing, show notes and chapter summaries, audience Q&A segment generation, topic research synthesis",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 20,
+          "note": "~40K tokens/day, gpt-4o-mini for draft scripts"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 280,
+          "note": "~1M tokens/day, gpt-4o for broadcast-quality scripts"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1000,
+          "note": "Provisioned throughput, high-volume content production"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Audio asset management — generated episode audio files (WAV/MP3/AAC), music transition clips, intro/outro jingles, speaker voice profiles, raw and mastered audio tracks, podcast RSS feed media files",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~10GB, test episodes and audio assets"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 40,
+          "note": "~500GB, episode archive with lifecycle tiering"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 150,
+          "note": "~2TB, geo-redundant, multi-format archive"
+        }
+      }
+    },
+    {
+      "name": "Azure CDN",
+      "category": "Networking",
+      "purpose": "Global podcast distribution — low-latency audio file delivery to podcast players worldwide, RSS feed caching, episode download acceleration, bandwidth optimization for streaming playback",
+      "tiers": {
+        "dev": {
+          "sku": "Standard Microsoft",
+          "cost": 5,
+          "note": "~50GB transfer/month, basic caching"
+        },
+        "prod": {
+          "sku": "Standard Verizon",
+          "cost": 120,
+          "note": "~2TB transfer/month, global POPs, analytics"
+        },
+        "enterprise": {
+          "sku": "Premium Verizon",
+          "cost": 400,
+          "note": "~10TB transfer/month, advanced rules, real-time analytics"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Podcast production pipeline — content ingestion and preprocessing, script generation orchestration, multi-speaker audio synthesis coordination, audio post-processing (mixing, transitions, normalization), RSS feed generation, chapter marker embedding",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, 4 vCPU for audio processing"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 450,
+          "note": "8 vCPU, dedicated compute, parallel episode production"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Speech service keys, OpenAI API credentials, CDN management secrets, storage account keys, podcast platform API tokens (Apple Podcasts, Spotify)",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "~50K operations/month, rotation policies"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Production pipeline health — episode generation latency, voice synthesis quality scores, audio processing throughput, CDN cache hit rates, download analytics, listener engagement metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~30GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~150GB/month, 90-day retention, production analytics"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 33,
+    "prod": 900,
+    "enterprise": 2890
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for initial script drafts and show notes generation — reserve GPT-4o for final dialogue polish, natural banter injection, and complex multi-speaker conversation flow, saving 60% on AI content costs",
+    "Implement audio asset caching in Blob Storage — music transitions, intro/outro jingles, and speaker voice profiles are reused across episodes; cache synthesized audio segments for common phrases to avoid re-synthesis",
+    "Use Blob Storage lifecycle management — move episodes older than 90 days to cool tier and older than 1 year to archive tier; most podcast downloads occur within the first 30 days of release",
+    "Optimize CDN costs with intelligent caching rules — set 7-day TTL for recent episodes (high download volume) and 30-day TTL for archive episodes; compress audio with appropriate bitrate (128kbps MP3 for standard, 256kbps for premium)",
+    "Batch episode production during off-peak hours — voice synthesis and audio mixing are not time-sensitive for scheduled podcasts; nightly batch processing on Functions consumption plan saves 80% vs. premium plan",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

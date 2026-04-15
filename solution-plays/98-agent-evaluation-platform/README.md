@@ -13,6 +13,71 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Users
+        Dev[AI Engineers<br/>Submit Agents · Configure Benchmarks · Review Results]
+        Annotator[Human Annotators<br/>Score Responses · Provide Feedback · Resolve Ties]
+    end
+
+    subgraph Evaluation Engine
+        ACA[Container Apps<br/>Benchmark Runner · Agent Sandbox · A/B Splitter · Leaderboard API · Scoring UI]
+    end
+
+    subgraph AI Scoring
+        OpenAI[Azure OpenAI<br/>LLM-as-Judge · Baseline Agent · Test Synthesis · Prompt Variations]
+    end
+
+    subgraph Eval Pipelines
+        AML[Azure Machine Learning<br/>Batch Eval · Dataset Mgmt · Metric Computation · Drift Detection]
+    end
+
+    subgraph Eval Store
+        Cosmos[Cosmos DB<br/>Benchmarks · Results · Rankings · Annotations · A/B Outcomes · Lineage]
+    end
+
+    subgraph Workflow Engine
+        Func[Azure Functions<br/>Scheduling · CI/CD Gates · Task Distribution · Notifications · Reports]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Agent Creds · Webhook Secrets · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Eval Latency · Agent Response Time · Scoring Consistency · Query Perf]
+    end
+
+    Dev -->|Submit & Configure| ACA
+    Annotator -->|Score & Feedback| ACA
+    ACA -->|Execute Agents| OpenAI
+    ACA -->|LLM-Judge Scoring| OpenAI
+    ACA -->|Batch Eval Jobs| AML
+    AML -->|Metric Results| ACA
+    ACA <-->|Read/Write| Cosmos
+    Func -->|Trigger Evals| ACA
+    Func -->|Schedule & Notify| Cosmos
+    ACA -->|Auth| MI
+    MI -->|Secrets| KV
+    ACA -->|Traces| AppInsights
+    AML -->|Pipeline Metrics| AppInsights
+
+    style Dev fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style Annotator fill:#06b6d4,color:#fff,stroke:#0891b2
+    style ACA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#14b8a6,color:#fff,stroke:#0d9488
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Func fill:#f97316,color:#fff,stroke:#ea580c
+    style KV fill:#ec4899,color:#fff,stroke:#db2777
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI (gpt-4o) | LLM-as-judge + test case generation |
@@ -36,10 +101,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $30–50 |
-| Production (12 eval runs) | $190–250 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $40 (PAYG) | $600 (PAYG) | $2,000 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $350 (Dedicated) | $1,000 (Dedicated HA) |
+| Azure Cosmos DB | $5 (Serverless) | $280 (5000 RU/s) | $750 (15000 RU/s) |
+| Azure Machine Learning | $0 (Basic) | $300 (Standard) | $900 (Standard HA) |
+| Azure Functions | $0 (Consumption) | $200 (Premium EP2) | $500 (Premium EP3) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $20 (Premium HSM) |
+| Application Insights | $0 (Free) | $45 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$56** | **$1,780** | **$5,320** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 32 (Testing Expert)
 | Aspect | Play 32 | Play 98 |

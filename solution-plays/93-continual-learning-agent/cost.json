@@ -1,0 +1,177 @@
+{
+  "play": "93",
+  "name": "Continual Learning Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for agent reasoning — multi-turn conversation, failure reflection and root cause analysis, knowledge synthesis from past sessions, strategy adaptation, self-critique and improvement planning, meta-cognitive reasoning about learning progress",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~2M tokens/day, gpt-4o for complex reasoning chains"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1400,
+          "note": "Provisioned throughput, continuous learning cycles at scale"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Episodic memory store — session transcripts, task outcomes (success/failure/partial), failure reflections with root cause tags, learned strategies, skill proficiency scores, knowledge graph edges, user preference profiles, temporal learning trajectories",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~8K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Dedicated throughput, change feed for memory consolidation"
+        },
+        "enterprise": {
+          "sku": "Provisioned (10000 RU/s)",
+          "cost": 600,
+          "note": "Multi-region, analytical store for learning analytics"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic memory retrieval — past session similarity search, failure pattern matching, strategy retrieval by task type, learned procedure lookup, knowledge base semantic search, cross-session insight discovery",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB storage, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB storage, high-volume retrieval, replicas for concurrency"
+        }
+      }
+    },
+    {
+      "name": "Azure Cache for Redis",
+      "category": "Cache",
+      "purpose": "Working memory and session state — active conversation context, recently retrieved memories, skill proficiency cache, hot knowledge facts, learning momentum indicators, cross-session continuation state",
+      "tiers": {
+        "dev": {
+          "sku": "Basic C0",
+          "cost": 15,
+          "note": "250MB cache, single node"
+        },
+        "prod": {
+          "sku": "Standard C2",
+          "cost": 150,
+          "note": "6GB cache, replication, session clustering"
+        },
+        "enterprise": {
+          "sku": "Premium P2",
+          "cost": 450,
+          "note": "13GB cache, persistence, zone redundancy, active geo-replication"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Learning lifecycle orchestration — session end reflection triggers, memory consolidation scheduling, knowledge graph updates, failure pattern aggregation, skill proficiency recalculation, periodic memory compaction and forgetting curves",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, VNET, background learning jobs"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 450,
+          "note": "8 vCPU, dedicated compute, continuous consolidation"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "User data encryption keys, agent identity credentials, external tool API keys, memory store encryption keys, learning analytics signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, user memory encryption compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Learning effectiveness metrics — task success rate improvement over sessions, knowledge retrieval relevance, failure recurrence reduction, memory retrieval latency, agent reasoning chain quality, skill acquisition velocity",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~55GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 130,
+          "note": "~280GB/month, 90-day retention, learning analytics dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 51,
+    "prod": 1205,
+    "enterprise": 4045
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine memory retrieval queries and session summarization — reserve GPT-4o for complex failure reflection, multi-step reasoning chains, and meta-cognitive self-improvement analysis, saving 65% on AI costs",
+    "Implement memory compaction with forgetting curves — consolidate low-value episodic memories into semantic summaries after 30 days; not every session detail needs full-fidelity retention, reducing Cosmos DB storage 60%",
+    "Cache frequently retrieved memories and skill proficiencies in Redis with adaptive TTL — hot knowledge (used in last 5 sessions) gets 1-hour TTL while cold knowledge stays in AI Search, saving retrieval costs",
+    "Batch memory consolidation jobs during off-peak hours — failure reflection and knowledge graph updates are not time-critical; nightly consolidation via Functions consumption plan costs 90% less than real-time processing",
+    "Use AI Search free tier for development and scale to S1 only when episodic memory exceeds 50MB — most dev/test scenarios need fewer than 1000 memory entries",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

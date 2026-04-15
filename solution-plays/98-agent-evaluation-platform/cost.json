@@ -1,0 +1,178 @@
+{
+  "play": "98",
+  "name": "Agent Evaluation Platform",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Evaluation inference — LLM-as-judge scoring for groundedness, relevance, coherence, fluency, and safety; baseline agent execution for benchmark comparisons; prompt variation generation for A/B testing; automated test case synthesis from evaluation criteria",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 40,
+          "note": "~100K tokens/day, gpt-4o-mini for evaluation scoring"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 600,
+          "note": "~3M tokens/day, gpt-4o for judge + gpt-4o-mini for synthesis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2000,
+          "note": "Provisioned throughput for high-volume batch evaluations"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Evaluation runtime — benchmark execution engine, agent sandboxing for isolated test runs, A/B test traffic splitting, leaderboard API, human scoring UI backend, evaluation pipeline orchestration, result aggregation workers",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.5 vCPU, 1GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 350,
+          "note": "4 vCPU, 8GB, min 3 replicas for concurrent evals"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 1000,
+          "note": "8 vCPU, 16GB, multi-region, 10+ replicas, GPU for embedding evals"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Database",
+      "purpose": "Evaluation store — benchmark definitions and test suites, evaluation run results with per-metric scores, agent configurations and versions, leaderboard rankings with historical tracking, human scoring annotations, A/B test configurations and outcomes, evaluation metadata and lineage",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (5000 RU/s)",
+          "cost": 280,
+          "note": "Dedicated throughput, low-latency leaderboard queries"
+        },
+        "enterprise": {
+          "sku": "Provisioned (15000 RU/s)",
+          "cost": 750,
+          "note": "Multi-region writes, real-time leaderboard updates"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Evaluation pipelines — batch evaluation orchestration, dataset management for test suites, statistical analysis of evaluation results, metric computation (BLEU, ROUGE, BERTScore, custom metrics), drift detection across evaluation runs",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier, shared compute for pipeline development"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 300,
+          "note": "Dedicated compute clusters for batch evaluations"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 900,
+          "note": "Multi-cluster, auto-scaling, parallel evaluation pipelines"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Evaluation triggers — scheduled benchmark runs, webhook integrations for CI/CD pipeline evaluation gates, human scoring task distribution, leaderboard recalculation, notification delivery (Slack, Teams, email), evaluation report generation",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 200,
+          "note": "Pre-warmed, VNET, reliable webhook processing"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 500,
+          "note": "Dedicated compute, high-throughput event processing"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, agent endpoint credentials, CI/CD webhook secrets, notification service tokens, evaluation dataset encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 20,
+          "note": "HSM-backed, compliance-grade key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Platform KPIs — evaluation pipeline latency, agent response times under test, scoring consistency metrics, human annotator inter-rater reliability, leaderboard query performance, A/B test statistical significance tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 45,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, real-time eval dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 56,
+    "prod": 1780,
+    "enterprise": 5320
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini as LLM-judge for initial screening passes (coherence, fluency, format compliance) and reserve GPT-4o for nuanced evaluations (groundedness, safety, reasoning quality) — saving 70% on evaluation inference costs for routine benchmarks",
+    "Batch evaluation runs during off-peak hours — schedule nightly evaluation pipelines when Azure OpenAI quota utilization is lowest; most evaluation results don't need real-time processing, and batch mode reduces per-token costs",
+    "Cache evaluation results in Cosmos DB with composite keys (agent_version + benchmark_id + test_case_hash) — identical agent versions evaluated against the same benchmark don't need re-evaluation; invalidate cache only when agent or benchmark changes",
+    "Implement progressive evaluation — run cheap metrics first (format compliance, response length, keyword presence) and only advance passing candidates to expensive LLM-judge scoring; eliminates 40-60% of costly evaluations for clearly failing agents",
+    "Use Container Apps scale-to-zero for evaluation workers — evaluation workloads are bursty (nightly runs, CI/CD triggers); consumption plan eliminates idle compute costs between evaluation windows",
+    "Downsample test suites for development iterations — run full benchmark suites only for release candidates; use statistically representative 10% samples during development for fast feedback at 90% cost reduction",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

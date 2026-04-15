@@ -13,6 +13,75 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Publishers
+        Pub[Data Publishers<br/>Upload · Schema · Pricing · Privacy Config]
+    end
+
+    subgraph Consumers
+        Con[Data Consumers<br/>Browse · Purchase · Download · Integrate]
+    end
+
+    subgraph API Gateway
+        APIM[API Management<br/>Discovery · Purchase · Metering · Developer Portal · Rate Limits]
+    end
+
+    subgraph Privacy Engine
+        AML[Azure Machine Learning<br/>DP Synthesis · Anonymization · Quality Scoring · Privacy Budget]
+    end
+
+    subgraph Dataset Repository
+        Blob[Blob Storage<br/>Raw · Anonymized · Synthetic · Previews · Versioned Snapshots]
+    end
+
+    subgraph Catalog & State
+        Cosmos[Cosmos DB<br/>Metadata · Publishers · Subscriptions · Transactions · Reviews]
+    end
+
+    subgraph Workflow Engine
+        Func[Azure Functions<br/>Ingestion · Fulfillment · Metering · Notifications · Scheduling]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Dataset Keys · SAS Signing · Publisher Creds · Payment Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>API Latency · Downloads · Pipeline Duration · Conversions]
+    end
+
+    Pub -->|Upload Datasets| APIM
+    Con -->|Browse & Purchase| APIM
+    APIM -->|Catalog Queries| Cosmos
+    APIM -->|Trigger Pipelines| Func
+    Func -->|Orchestrate| AML
+    AML -->|Read Raw| Blob
+    AML -->|Write Anonymized| Blob
+    Func -->|Generate SAS Tokens| Blob
+    Con -->|Download| Blob
+    Func -->|Update State| Cosmos
+    Func -->|Auth| MI
+    MI -->|Secrets| KV
+    APIM -->|Traces| AppInsights
+    AML -->|Pipeline Metrics| AppInsights
+
+    style Pub fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style Con fill:#06b6d4,color:#fff,stroke:#0891b2
+    style APIM fill:#f59e0b,color:#fff,stroke:#d97706
+    style AML fill:#10b981,color:#fff,stroke:#059669
+    style Blob fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f97316,color:#fff,stroke:#ea580c
+    style Func fill:#14b8a6,color:#fff,stroke:#0d9488
+    style KV fill:#ec4899,color:#fff,stroke:#db2777
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI (gpt-4o) | Dataset description + semantic search |
@@ -38,10 +107,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $110–150 |
-| Production | $380–500 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure Machine Learning | $0 (Basic) | $450 (Standard) | $1,400 (Standard HA) |
+| Azure Blob Storage | $5 (LRS Hot) | $120 (ZRS Hot + Cool) | $400 (GRS Hot + Cool + Archive) |
+| Azure API Management | $5 (Consumption) | $700 (Standard) | $2,800 (Premium) |
+| Azure Cosmos DB | $5 (Serverless) | $230 (4000 RU/s) | $700 (12000 RU/s) |
+| Azure Functions | $0 (Consumption) | $200 (Premium EP2) | $500 (Premium EP3) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $20 (Premium HSM) |
+| Application Insights | $0 (Free) | $40 (Pay-per-GB) | $120 (Pay-per-GB) |
+| **Total** | **$16** | **$1,745** | **$5,940** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 62 (Federated Learning Pipeline)
 | Aspect | Play 62 | Play 97 |

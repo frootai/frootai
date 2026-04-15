@@ -5,16 +5,7 @@
       "command": "npx",
       "args": [
         "frootai-mcp@latest"
-      ],
-      "inputs": [
-        {
-          "type": "promptString",
-          "id": "azure-openai-key",
-          "description": "Azure OpenAI API Key for test generation assistance (leave blank if using Managed Identity)",
-          "password": true
-        }
-      ],
-      "envFile": "${workspaceFolder}/.env"
+      ]
     }
   }
 }

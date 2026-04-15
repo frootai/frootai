@@ -12,6 +12,48 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Developer
+        Dev[PowerShell Developer<br/>Submit Module · Review Tests · Configure Coverage]
+    end
+
+    subgraph AI Test Generator
+        OpenAI[Azure OpenAI<br/>Module Analysis · Test Generation · Mock Scaffolding · Coverage Optimization]
+    end
+
+    subgraph CI/CD Pipeline
+        ADO[Azure DevOps<br/>Pipeline Tasks · Test Execution · Coverage Reports · PR Gates · Artifacts]
+    end
+
+    subgraph Artifact Store
+        Storage[Azure Storage<br/>Test Files · XML Reports · Coverage HTML · Execution Logs · Baselines]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Gen Latency · Quality Scores · Pipeline Duration · Coverage Trends]
+    end
+
+    Dev -->|Submit Module for Analysis| OpenAI
+    OpenAI -->|Generated .Tests.ps1| Dev
+    Dev -->|Commit Tests| ADO
+    ADO -->|Run Pester| ADO
+    ADO -->|Publish Results| Storage
+    ADO -->|PR Gate Decision| Dev
+    OpenAI -->|Token Usage| AppInsights
+    ADO -->|Pipeline Metrics| AppInsights
+    Storage -->|Historical Reports| Dev
+
+    style Dev fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style ADO fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Storage fill:#f59e0b,color:#fff,stroke:#d97706
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Component | Purpose |
 |-----------|---------|
 | PowerShell AST | Parse source code to identify testable functions |
@@ -40,6 +82,16 @@ Play 101 is special — it was the **first v2 play** and established the pattern
 - Model differentiation (gpt-4o for builder, gpt-4o-mini for reviewer/tuner)
 - 4 agent-routed prompts
 - Skills with 100+ lines of domain procedures
-- MCP inputs + envFile pattern
+
+## Cost Estimate
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $15 (PAYG) | $150 (PAYG) | $400 (PAYG) |
+| Azure DevOps | $0 (Free tier) | $40 (Basic) | $120 (Basic + Hosted) |
+| Azure Storage | $1 (LRS Hot) | $10 (LRS Hot) | $30 (ZRS Hot) |
+| Application Insights | $0 (Free) | $15 (Pay-per-GB) | $40 (Pay-per-GB) |
+| **Total** | **$16** | **$215** | **$590** |
+
+💰 [Full cost breakdown](cost.json)
 
 📖 [Full documentation](spec/README.md) · 🌐 [frootai.dev/solution-plays/101-pester-test-development](https://frootai.dev/solution-plays/101-pester-test-development) · 📦 [FAI Protocol](spec/fai-manifest.json)

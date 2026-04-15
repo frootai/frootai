@@ -13,6 +13,75 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Signaling Sources
+        CDR[CDR Feeds<br/>Call Records · SMS Logs · Data Sessions · Roaming Events]
+        SIM[SIM Management<br/>SIM Swap Requests · IMSI Changes · Device Bindings]
+        SS7[Signaling Network<br/>SS7/Diameter · MAP/CAP · Roaming Agreements]
+    end
+
+    subgraph Event Ingestion
+        EH[Azure Event Hubs<br/>CDR Streams · SIM Events · Signaling Logs · Billing Triggers]
+    end
+
+    subgraph Real-Time Detection
+        ASA[Azure Stream Analytics<br/>SIM Swap Velocity · Wangiri Patterns · Toll Burst · IRSF Routes · Geo-Velocity]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Fraud Explanation · False Positive Triage · Ring Analysis · Regulatory Reports]
+    end
+
+    subgraph Action Layer
+        Func[Azure Functions<br/>SIM Block · Callback Suppress · Circuit Kill · Carrier Notify · Subscriber Alert]
+    end
+
+    subgraph Fraud Store
+        Cosmos[Cosmos DB<br/>Risk Profiles · Verdicts · Baselines · Watchlists · Audit Trail]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Carrier Creds · Gateway Keys · SMSC Secrets · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Detection Latency · False Positive Rate · Blocked Value · Throughput]
+    end
+
+    CDR --> EH
+    SIM --> EH
+    SS7 --> EH
+    EH -->|Streaming Events| ASA
+    ASA -->|Fraud Signals| Func
+    ASA -->|Enrichment Requests| OpenAI
+    OpenAI -->|Fraud Narratives| Func
+    Func -->|Verdicts & Actions| Cosmos
+    Func -->|Blocking Commands| CDR
+    Func <-->|Risk Lookups| Cosmos
+    ASA <-->|Baseline Lookups| Cosmos
+    Func -->|Auth| MI
+    MI -->|Secrets| KV
+    ASA -->|Metrics| AppInsights
+    Func -->|Traces| AppInsights
+
+    style CDR fill:#6366f1,color:#fff,stroke:#4f46e5
+    style SIM fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style SS7 fill:#a78bfa,color:#fff,stroke:#8b5cf6
+    style EH fill:#ec4899,color:#fff,stroke:#db2777
+    style ASA fill:#f43f5e,color:#fff,stroke:#e11d48
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Func fill:#14b8a6,color:#fff,stroke:#0d9488
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Event Hubs (Standard) | Real-time CDR ingestion (millions/sec) |
@@ -38,10 +107,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $150–250 |
-| Production | $600–800 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure Event Hubs | $12 (Basic) | $250 (Standard 8 TU) | $900 (Premium 16 PU) |
+| Azure Stream Analytics | $80 (Standard 1 SU) | $480 (Standard 6 SU) | $1,920 (Standard 24 SU) |
+| Azure OpenAI | $20 (PAYG) | $350 (PAYG) | $1,200 (PTU Reserved) |
+| Cosmos DB | $5 (Serverless) | $230 (4000 RU/s) | $950 (20000 RU/s) |
+| Azure Functions | $0 (Consumption) | $200 (Premium EP2) | $500 (Premium EP3) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $20 (Premium HSM) |
+| Application Insights | $0 (Free) | $45 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$118** | **$1,560** | **$5,640** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 63 (Fraud Detection Agent)
 | Aspect | Play 63 | Play 92 |

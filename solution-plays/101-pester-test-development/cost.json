@@ -1,0 +1,112 @@
+{
+  "play": "101",
+  "name": "Pester Test Development",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "AI-assisted test generation — GPT-4o for analyzing PowerShell modules and generating comprehensive Pester 5.x test suites with Describe/Context/It blocks, Should assertions, mock definitions, TestDrive usage, BeforeAll/AfterAll lifecycle hooks; GPT-4o-mini for simpler tasks: test boilerplate generation, assertion suggestions, test naming conventions, documentation comments",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 15,
+          "note": "~40K tokens/day, gpt-4o-mini for most generation tasks"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 150,
+          "note": "~500K tokens/day, gpt-4o for complex module analysis"
+        },
+        "enterprise": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~1.5M tokens/day, high-volume test generation across large codebases"
+        }
+      }
+    },
+    {
+      "name": "Azure DevOps",
+      "category": "DevOps",
+      "purpose": "CI/CD pipeline integration — pipeline tasks for running Pester tests, test result publishing (NUnit XML format), code coverage reporting, PR gates requiring minimum test coverage, pipeline templates for standardized test execution across repositories, artifact publishing for test reports",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5 free parallel jobs, 1800 minutes/month"
+        },
+        "prod": {
+          "sku": "Basic",
+          "cost": 40,
+          "note": "1 paid parallel job, unlimited minutes"
+        },
+        "enterprise": {
+          "sku": "Basic + Hosted",
+          "cost": 120,
+          "note": "3 parallel jobs, premium agents with PowerShell 7"
+        }
+      }
+    },
+    {
+      "name": "Azure Storage",
+      "category": "Storage",
+      "purpose": "Test artifacts — generated test files, Pester output XML reports, code coverage HTML reports, test execution logs, PowerShell module snapshots for regression testing, golden test output baselines for comparison",
+      "tiers": {
+        "dev": {
+          "sku": "LRS Hot",
+          "cost": 1,
+          "note": "~5GB storage, minimal transactions"
+        },
+        "prod": {
+          "sku": "LRS Hot",
+          "cost": 10,
+          "note": "~50GB storage, test artifact retention"
+        },
+        "enterprise": {
+          "sku": "ZRS Hot",
+          "cost": 30,
+          "note": "~200GB, long-term retention, compliance archiving"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Test platform KPIs — test generation latency, generation quality scores (compilation success rate, assertion coverage), pipeline execution duration, test pass/fail trends, code coverage trends, AI token usage per module",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~20GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~80GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 16,
+    "prod": 215,
+    "enterprise": 590
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for 90% of test generation tasks — standard Pester test boilerplate, simple Should assertions, and mock scaffolding are well within mini's capabilities; reserve GPT-4o for complex modules with intricate parameter sets, pipeline functions, and custom class hierarchies",
+    "Cache generated test templates — PowerShell modules with similar patterns (CRUD operations, REST API wrappers, Azure resource management) produce structurally identical tests; cache test templates by module pattern and customize only parameter-specific details, reducing AI calls by 60%",
+    "Use Azure DevOps free tier for small teams — 5 free parallel jobs with 1800 minutes/month is sufficient for teams with <20 repositories; only upgrade when parallel job contention causes pipeline queuing delays",
+    "Implement incremental test generation — only generate tests for new or modified functions (detected via git diff) instead of regenerating the entire test suite; reduces AI token consumption by 80% for iterative development",
+    "Batch test generation requests — when analyzing a full PowerShell module, send all function signatures in a single prompt with structured output rather than generating tests function-by-function; single-prompt batch generation is 50% cheaper and produces more coherent test suites",
+    "Archive old test execution reports to cool storage after 30 days — test artifacts are primarily accessed within the first week for debugging failures; lifecycle policies automatically reduce storage costs by 60%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

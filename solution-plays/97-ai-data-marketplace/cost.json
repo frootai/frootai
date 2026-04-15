@@ -1,0 +1,178 @@
+{
+  "play": "97",
+  "name": "AI Data Marketplace",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Differential privacy pipelines — synthetic data generation with privacy guarantees, anonymization workflows, statistical disclosure control, dataset quality scoring, privacy budget tracking (epsilon/delta), federated data processing without exposing raw data",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier, shared compute for pipeline development"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 450,
+          "note": "Dedicated compute clusters, GPU for synthetic data generation"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 1400,
+          "note": "Multi-cluster, auto-scaling, managed endpoints for data APIs"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Storage",
+      "purpose": "Dataset repository — raw dataset ingestion staging, anonymized dataset storage, synthetic dataset output, versioned dataset snapshots, preview samples, dataset documentation and schema files, audit trail logs",
+      "tiers": {
+        "dev": {
+          "sku": "LRS Hot",
+          "cost": 5,
+          "note": "~100GB storage, minimal transactions"
+        },
+        "prod": {
+          "sku": "ZRS Hot + Cool",
+          "cost": 120,
+          "note": "~5TB hot + 20TB cool, lifecycle policies"
+        },
+        "enterprise": {
+          "sku": "GRS Hot + Cool + Archive",
+          "cost": 400,
+          "note": "~20TB hot + 100TB cool + archive, geo-redundant"
+        }
+      }
+    },
+    {
+      "name": "Azure API Management",
+      "category": "Integration",
+      "purpose": "Marketplace API gateway — dataset discovery APIs, purchase and licensing workflows, download token management, usage metering and billing integration, rate limiting per subscription tier, developer portal for data consumers",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 5,
+          "note": "~50K calls/month, pay-per-call"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 700,
+          "note": "Dedicated gateway, custom domains, analytics"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 2800,
+          "note": "Multi-region, VNET, 99.99% SLA"
+        }
+      }
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "category": "Database",
+      "purpose": "Marketplace catalog — dataset metadata (schema, lineage, quality scores), publisher profiles, consumer subscriptions, transaction records, access control policies, usage analytics, review and rating data",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (4000 RU/s)",
+          "cost": 230,
+          "note": "Dedicated throughput, low-latency catalog queries"
+        },
+        "enterprise": {
+          "sku": "Provisioned (12000 RU/s)",
+          "cost": 700,
+          "note": "Multi-region writes, global distribution"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Marketplace workflows — dataset ingestion triggers, anonymization pipeline orchestration, purchase fulfillment (generate SAS tokens), usage metering, webhook notifications to publishers, scheduled quality re-scoring, license expiry enforcement",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 200,
+          "note": "Pre-warmed, VNET integration"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 500,
+          "note": "Dedicated compute, always-ready instances"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Encryption keys for datasets at rest, SAS token signing keys, publisher API credentials, payment gateway secrets, differential privacy parameter storage",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 20,
+          "note": "HSM-backed, customer-managed keys for dataset encryption"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Marketplace KPIs — API latency, dataset download throughput, anonymization pipeline duration, purchase conversion rates, publisher activity, consumer engagement, privacy budget utilization",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 16,
+    "prod": 1745,
+    "enterprise": 5940
+  },
+  "optimization_tips": [
+    "Use lifecycle management policies on Blob Storage — move datasets not accessed for 30 days to Cool tier and 90 days to Archive; most marketplace datasets are downloaded shortly after purchase with long tail of inactivity, saving 60% on storage",
+    "Implement dataset preview sampling — serve lightweight statistical summaries and sample rows from Cosmos DB cache instead of generating full previews from Blob Storage; reduces egress and compute costs by 80% for browsing users",
+    "Use Azure ML pipeline caching — anonymization and synthetic generation steps produce deterministic output for the same input + privacy parameters; cache intermediate results to avoid re-processing when only downstream steps change",
+    "Right-size API Management — use Consumption tier for dev/test and scale to Standard only when marketplace traffic exceeds 1M calls/month; most early-stage marketplaces see <100K calls/month",
+    "Batch anonymization jobs during off-peak hours — schedule differential privacy pipelines for evenings/weekends when compute costs are lower and cluster utilization is minimal; dataset publishing is rarely time-sensitive",
+    "Implement download throttling and resumable downloads — reduce peak bandwidth costs by spreading large dataset downloads over time; use CDN for popular datasets accessed from multiple regions",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

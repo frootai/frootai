@@ -13,6 +13,66 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Users
+        User[User<br/>Natural Language Requirements · Chat Interface · Real-Time Status]
+    end
+
+    subgraph Meta-Agent Intelligence
+        OpenAI[Azure OpenAI<br/>GPT-4o Reasoning · Play Selection · Infra Planning · Deployment Decisions]
+    end
+
+    subgraph Tool Layer
+        MCP[MCP Server<br/>25+ FAI Tools · Play Discovery · Cost Estimation · Architecture Gen · Eval Scoring]
+    end
+
+    subgraph Orchestration Runtime
+        ACA[Container Apps<br/>Workflow Engine · Session Mgmt · WebSocket · Sub-Agent Coord · Rollback]
+    end
+
+    subgraph Knowledge Index
+        Search[Azure AI Search<br/>100 Plays · 830+ Primitives · 17 Modules · 200+ Terms · Hybrid Search]
+    end
+
+    subgraph Orchestration State
+        Cosmos[Cosmos DB<br/>Session State · Infra Inventory · Execution History · Preferences · Checkpoints]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>OpenAI Keys · Infra Creds · MCP Tokens · Search Keys · Session Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Orchestration Latency · Play Accuracy · Provisioning Rate · Tool Patterns]
+    end
+
+    User <-->|Chat + Status Stream| ACA
+    ACA <-->|Reasoning + Decisions| OpenAI
+    OpenAI -->|Tool Calls| MCP
+    MCP -->|Knowledge Queries| Search
+    MCP -->|Tool Results| OpenAI
+    ACA <-->|State Machines| Cosmos
+    ACA -->|Provision Infra| MI
+    MI -->|Secrets| KV
+    ACA -->|Traces| AppInsights
+    MCP -->|Tool Metrics| AppInsights
+
+    style User fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style MCP fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style ACA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Search fill:#f59e0b,color:#fff,stroke:#d97706
+    style Cosmos fill:#f97316,color:#fff,stroke:#ea580c
+    style KV fill:#ec4899,color:#fff,stroke:#db2777
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI (gpt-4o) | Intent classification + routing rationale |
@@ -36,10 +96,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $30–50 |
-| Production (1K routing queries) | $100–150 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure OpenAI | $50 (PAYG) | $800 (PAYG) | $2,500 (PTU Reserved) |
+| MCP Server | $10 (Consumption) | $200 (Dedicated) | $600 (HA) |
+| Container Apps | $15 (Consumption) | $400 (Dedicated) | $1,200 (Dedicated HA) |
+| Azure Cosmos DB | $5 (Serverless) | $280 (5000 RU/s) | $750 (15000 RU/s) |
+| Azure AI Search | $0 (Free) | $250 (Standard S1) | $1,000 (Standard S2) |
+| Key Vault | $1 (Standard) | $10 (Standard) | $40 (Premium HSM) |
+| Application Insights | $0 (Free) | $60 (Pay-per-GB) | $200 (Pay-per-GB) |
+| **Total** | **$81** | **$2,000** | **$6,290** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## The Capstone
 Play 100 is unique — it's the only play that:

@@ -1,0 +1,177 @@
+{
+  "play": "92",
+  "name": "Telecom Fraud Shield",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Event Hubs",
+      "category": "Messaging",
+      "purpose": "Real-time CDR and signaling ingestion — call detail records, SIM swap events, SMSC routing logs, SS7/Diameter signaling, billing trigger events, roaming activity streams, number portability notifications",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, ~1K events/sec for testing"
+        },
+        "prod": {
+          "sku": "Standard (8 TU)",
+          "cost": 250,
+          "note": "8 throughput units, 7-day retention, 32 partitions"
+        },
+        "enterprise": {
+          "sku": "Premium (16 PU)",
+          "cost": 900,
+          "note": "16 processing units, zone-redundant, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Azure Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time fraud pattern detection — SIM swap velocity checks, Wangiri callback pattern matching, toll fraud burst detection, revenue share fraud IRSF routing analysis, simultaneous call anomaly detection, geo-velocity impossible travel",
+      "tiers": {
+        "dev": {
+          "sku": "Standard (1 SU)",
+          "cost": 80,
+          "note": "1 streaming unit, basic windowed queries"
+        },
+        "prod": {
+          "sku": "Standard (6 SU)",
+          "cost": 480,
+          "note": "6 streaming units, complex temporal pattern matching"
+        },
+        "enterprise": {
+          "sku": "Standard (24 SU)",
+          "cost": 1920,
+          "note": "24 streaming units, sub-second latency, multi-region"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for fraud intelligence — novel fraud pattern explanation, false positive disambiguation, fraud ring narrative generation, regulatory report drafting, operator alert enrichment with human-readable context",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 20,
+          "note": "~40K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~1.5M tokens/day, gpt-4o for complex fraud analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, real-time fraud narrative generation"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Fraud case store — subscriber risk profiles, SIM swap history, call pattern baselines, fraud verdicts, blocked number registry, IRSF destination watchlists, investigation audit trail",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~10K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (4000 RU/s)",
+          "cost": 230,
+          "note": "Dedicated throughput, change feed for real-time blocking"
+        },
+        "enterprise": {
+          "sku": "Provisioned (20000 RU/s)",
+          "cost": 950,
+          "note": "Multi-region writes, analytical store for fraud trend mining"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Fraud action orchestration — SIM swap block execution, Wangiri callback suppression, toll fraud circuit termination, regulatory reporting triggers, carrier interconnect notification, subscriber alerting",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 200,
+          "note": "Pre-warmed, VNET integrated, sub-second cold start"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 500,
+          "note": "8 vCPU, dedicated compute, always-ready instances"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Carrier interconnect credentials, SS7/Diameter gateway keys, SMSC API secrets, fraud database encryption keys, regulatory reporting signing certificates",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 20,
+          "note": "HSM-backed, regulatory-grade key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Fraud detection KPIs — detection latency (target <500ms), false positive rate, blocked fraud value, SIM swap interception rate, Wangiri suppression rate, system throughput metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 45,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, fraud ops dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 118,
+    "prod": 1560,
+    "enterprise": 5640
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine fraud alert summaries and standard blocking notifications — reserve GPT-4o for complex fraud ring analysis and novel pattern investigation, saving 70% on AI costs",
+    "Implement tiered Stream Analytics complexity — simple threshold rules (SIM swap velocity, call burst limits) run on fewer SUs while complex temporal pattern matching (IRSF routing graphs, Wangiri callback chains) uses dedicated SU pools",
+    "Use Cosmos DB change feed with Functions instead of polling — fraud verdicts trigger blocking actions in real-time without expensive continuous queries against the fraud case store",
+    "Archive resolved fraud cases older than 90 days to cool storage — active fraud detection only needs recent subscriber baselines and current watchlists, not historical investigation archives",
+    "Right-size Event Hubs throughput units based on actual CDR volume — most operators see 3-5x traffic variation between peak and off-peak; auto-inflate handles spikes without over-provisioning",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

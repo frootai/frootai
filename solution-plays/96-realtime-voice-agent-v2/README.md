@@ -13,6 +13,68 @@ code .
 ```
 
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph Client
+        User[Voice Client<br/>Phone · WebRTC · Mobile App · Smart Speaker · Video Call]
+    end
+
+    subgraph Voice Streaming
+        VoiceLive[Azure AI Voice Live<br/>Bidirectional Audio · Barge-In · VAD · Echo Cancel · Noise Suppress]
+    end
+
+    subgraph Conversational AI
+        OpenAI[Azure OpenAI — GPT-4o Realtime<br/>Dialogue · Function Calling · Intent · Personality · Grounding]
+    end
+
+    subgraph Agent Runtime
+        ACA[Container Apps<br/>WebSocket Manager · MCP Server · Avatar Render · State Machine · Audio Mix]
+    end
+
+    subgraph Tool Execution
+        Func[Azure Functions<br/>CRM · Calendar · Payments · Booking · DB Queries · Webhooks · Post-Call]
+    end
+
+    subgraph Session Store
+        Cosmos[Cosmos DB<br/>Session State · History · Profiles · Tool Results · Recordings · Analytics]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Voice Creds · OpenAI Keys · MCP Secrets · Integration Tokens · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>E2E Latency · Barge-In Rate · Tool Latency · Completion Rate · CSAT · FPS]
+    end
+
+    User <-->|Bidirectional Audio| VoiceLive
+    VoiceLive <-->|Speech Stream| ACA
+    ACA <-->|Inference + Functions| OpenAI
+    OpenAI -->|Tool Calls| ACA
+    ACA -->|Execute Tools| Func
+    Func -->|Tool Results| ACA
+    ACA <-->|Session State| Cosmos
+    ACA -->|Avatar Video| User
+    ACA -->|Auth| MI
+    MI -->|Secrets| KV
+    ACA -->|Traces| AppInsights
+    VoiceLive -->|Audio Metrics| AppInsights
+
+    style User fill:#06b6d4,color:#fff,stroke:#0891b2
+    style VoiceLive fill:#ec4899,color:#fff,stroke:#db2777
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style ACA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Func fill:#14b8a6,color:#fff,stroke:#0d9488
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 | Service | Purpose |
 |---------|---------|
 | Azure OpenAI (Realtime) | GPT-4o Realtime API for streaming conversation |
@@ -38,10 +100,18 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $80–120 |
-| Production (10K calls) | $4,500–5,500 |
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure AI Voice Live | $30 (PAYG) | $400 (PAYG) | $1,500 (Committed) |
+| Azure OpenAI | $35 (PAYG) | $500 (PAYG) | $1,800 (PTU Reserved) |
+| Container Apps | $15 (Consumption) | $300 (Dedicated) | $900 (Dedicated HA) |
+| Azure Functions | $0 (Consumption) | $200 (Premium EP2) | $500 (Premium EP3) |
+| Cosmos DB | $5 (Serverless) | $280 (5000 RU/s) | $750 (15000 RU/s) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $20 (Premium HSM) |
+| Application Insights | $0 (Free) | $50 (Pay-per-GB) | $160 (Pay-per-GB) |
+| **Total** | **$86** | **$1,735** | **$5,630** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 04 (Call Center Voice AI)
 | Aspect | Play 04 | Play 96 |
