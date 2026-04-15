@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for content generation and assessment creation",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "cosmos-connection",
-            "description": "Cosmos DB connection string for learner profiles and progress",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

@@ -13,6 +13,66 @@ AI-powered sales enablement — CRM-grounded lead scoring (ICP match + engagemen
 | Sales API | Azure Container Apps | Scoring + email + intel endpoint |
 | Secrets | Azure Key Vault | CRM credentials, OpenAI key |
 
+```mermaid
+graph TB
+    subgraph User Layer
+        Rep[Sales Representative<br/>Web App · Teams · Mobile]
+    end
+
+    subgraph Sales API
+        API[Container Apps<br/>Lead Scoring · Outreach Engine · Coach]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Scoring · Drafting · Conversation Analysis]
+        Search[Azure AI Search<br/>Products · Pricing · Case Studies · Competitors]
+        Safety[Content Safety<br/>Outreach Moderation]
+    end
+
+    subgraph Data Integration
+        Graph[Microsoft Graph API<br/>CRM Sync · Calendar · Email · Org Insights]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Lead Profiles · Interactions · Pipeline State]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Graph Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Conversion Tracking · AI Quality]
+    end
+
+    Rep -->|Query / Action| API
+    API -->|Score & Draft| OpenAI
+    API -->|Knowledge Retrieval| Search
+    OpenAI -->|Grounded Response| API
+    API -->|Moderate| Safety
+    API -->|CRM Data| Graph
+    Graph -->|Leads & Insights| API
+    API <-->|Read/Write| Cosmos
+    API -->|Response| Rep
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Rep fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Search fill:#10b981,color:#fff,stroke:#059669
+    style Safety fill:#10b981,color:#fff,stroke:#059669
+    style Graph fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+🏗️ [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 54 (Customer Support V2) | **Play 64 (Sales Assistant)** |
@@ -33,6 +93,24 @@ AI-powered sales enablement — CRM-grounded lead scoring (ICP match + engagemen
 | CRM Grounding | 100% | No hallucinated company data |
 | Talk Track Relevance | > 4.0/5.0 | Personalized, actionable |
 | Cost per Lead | < $0.10 | Score + email + talk track |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $30 | $200 | $800 |
+| Cosmos DB | $3 | $50 | $200 |
+| Microsoft Graph API | $0 | $15 | $50 |
+| Azure AI Search | $75 | $250 | $750 |
+| Container Apps | $10 | $80 | $200 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $20 | $80 |
+| Content Safety | $0 | $10 | $30 |
+| **Total** | **$119/mo** | **$628/mo** | **$2,120/mo** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

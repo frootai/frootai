@@ -1,0 +1,199 @@
+{
+  "play": "70",
+  "name": "ESG Compliance Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for ESG framework mapping, compliance gap analysis, regulatory interpretation, and report generation",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~1M tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 900,
+          "note": "Provisioned throughput, complex multi-framework analysis"
+        }
+      }
+    },
+    {
+      "name": "Document Intelligence",
+      "category": "AI Services",
+      "purpose": "Extract structured data from ESG reports, sustainability disclosures, audit documents, and regulatory filings",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "500 pages/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 50,
+          "note": "~30K pages/month, custom models"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "~150K pages/month, custom extractors"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Compliance state, framework mappings, disclosure responses, evidence artifacts, audit history",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (800 RU/s)",
+          "cost": 50,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Multi-region, analytical store for reporting"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search across regulatory frameworks, past disclosures, and compliance knowledge base",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB storage, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB, multi-replica HA, private endpoint"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Compliance API — framework mapping engine, gap analysis, report generator, evidence manager",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 80,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 220,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Regulatory framework documents, evidence artifacts, generated reports, audit archives",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~10GB documents"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 20,
+          "note": "~200GB, lifecycle management"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 60,
+          "note": "~1TB, geo-redundant, immutable for audit"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, signing certificates for reports, encryption keys for sensitive disclosures",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Compliance coverage metrics, extraction accuracy, report generation latency, agent performance",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~30GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 70,
+          "note": "~120GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 46,
+    "prod": 723,
+    "enterprise": 2140
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine disclosure lookups and simple mappings, reserve GPT-4o for complex multi-framework gap analysis — saves 65% on AI costs",
+    "Pre-index regulatory framework text (GRI, SASB, TCFD, CSRD) in AI Search — avoids real-time document parsing for known frameworks",
+    "Cache framework-to-framework cross-mappings — GRI → SASB → TCFD mappings are static and can be cached indefinitely",
+    "Use Document Intelligence pre-built models for standard ESG report formats — custom models only for proprietary layouts",
+    "Batch compliance checks by framework — process all GRI disclosures together to maximize context window efficiency",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

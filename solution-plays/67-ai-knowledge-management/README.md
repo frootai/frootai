@@ -13,6 +13,70 @@ Organizational knowledge platform — auto-capture from Teams/SharePoint/Service
 | Source Connectors | Microsoft Graph + APIs | Teams, SharePoint, ServiceNow, Jira |
 | KM API | Azure Container Apps | Capture, search, expert finder |
 
+```mermaid
+graph TB
+    subgraph User Layer
+        Employee[Knowledge Worker<br/>Web Portal · Teams Bot · API]
+    end
+
+    subgraph Knowledge API
+        API[Container Apps<br/>Retrieval Orchestrator · Ingestion Pipeline]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Contextual Synthesis · Q&A · Summarization]
+    end
+
+    subgraph Search & Retrieval
+        Search[Azure AI Search<br/>Hybrid Vector + Keyword · Semantic Ranker]
+    end
+
+    subgraph Content Sources
+        Graph[Microsoft Graph<br/>SharePoint · Teams · OneDrive · Outlook]
+        Blob[Blob Storage<br/>PDFs · Office Docs · Wiki Exports]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Knowledge Graph · Metadata · Access Patterns]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Graph Creds · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Search Quality · Retrieval Accuracy · Latency]
+    end
+
+    Employee -->|Natural Language Query| API
+    API -->|Semantic Search| Search
+    API -->|Synthesize Answer| OpenAI
+    OpenAI -->|Cited Response| API
+    Search -->|Ranked Documents| API
+    API -->|Ingest Content| Graph
+    API -->|Store Documents| Blob
+    Blob -->|Indexer| Search
+    API <-->|Knowledge Graph| Cosmos
+    API -->|Response| Employee
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Employee fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Search fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style Graph fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 01 (Enterprise RAG) | **Play 67 (Knowledge Management)** | Play 25 (Conversation Memory) |
@@ -33,6 +97,24 @@ Organizational knowledge platform — auto-capture from Teams/SharePoint/Service
 | Expert Relevance | > 80% | Found person knows the topic |
 | Stale Content | < 10% | Items past TTL |
 | NDCG@5 | > 0.70 | Search result quality |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $35 | $300 | $1,200 |
+| Azure AI Search | $0 | $250 | $500 |
+| Cosmos DB | $3 | $50 | $180 |
+| Microsoft Graph | $0 | $0 | $0 |
+| Container Apps | $10 | $100 | $280 |
+| Blob Storage | $3 | $25 | $80 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $25 | $90 |
+| **Total** | **$52/mo** | **$753/mo** | **$2,340/mo** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

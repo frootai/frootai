@@ -1,0 +1,199 @@
+{
+  "play": "65",
+  "name": "AI Training Curriculum",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for adaptive content generation, difficulty calibration, and learner feedback analysis",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 150,
+          "note": "~600K tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 600,
+          "note": "Provisioned throughput, multi-model routing"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Learner profiles, progress tracking, curriculum state, assessment history",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (600 RU/s)",
+          "cost": 40,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 130,
+          "note": "Multi-region, automatic failover"
+        }
+      }
+    },
+    {
+      "name": "Static Web Apps",
+      "category": "Compute",
+      "purpose": "Learner-facing training portal — course catalog, progress dashboard, assessments",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Custom domain, 100GB bandwidth"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 9,
+          "note": "Custom auth, 2 environments, SLA"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 9,
+          "note": "Multiple environments, Entra ID auth"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Curriculum API — adaptive engine, assessment grading, content recommendation",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 60,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 180,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Course content — videos, PDFs, interactive modules, assessment media",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 3,
+          "note": "~15GB course content"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 20,
+          "note": "~200GB, CDN-optimized delivery"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 60,
+          "note": "~1TB, geo-redundant, versioned"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, auth secrets, content encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~100K operations/month"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Learning analytics — completion rates, difficulty calibration accuracy, engagement",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 15,
+          "note": "~20GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 60,
+          "note": "~100GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Content Safety",
+      "category": "AI Services",
+      "purpose": "Moderate AI-generated training content and assessment feedback",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "1K transactions/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 8,
+          "note": "~60K transactions/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 25,
+          "note": "~300K transactions/month"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 42,
+    "prod": 305,
+    "enterprise": 1069
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for quiz generation and simple feedback, reserve GPT-4o for complex adaptive content — saves 70% on AI costs",
+    "Pre-generate and cache common course modules — reduces real-time AI calls by 50%",
+    "Use Static Web Apps free tier for dev and pilot — standard is only $9/month for production",
+    "Enable Cosmos DB serverless for dev — eliminates idle throughput charges for low-traffic testing",
+    "Serve static course assets via CDN — reduces Blob Storage egress costs by 60%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "play": "66",
+  "name": "AI Infrastructure Optimizer",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for infrastructure analysis, optimization reasoning, and natural language cost reports",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 35,
+          "note": "~70K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~1M tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 900,
+          "note": "Provisioned throughput, complex multi-step analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor",
+      "category": "Monitoring",
+      "purpose": "Resource metrics collection — CPU, memory, network, disk utilization across subscriptions",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic metrics, 1-min granularity"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "Custom metrics, 30-day retention, alerts"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 200,
+          "note": "Multi-subscription, 90-day retention, Grafana"
+        }
+      }
+    },
+    {
+      "name": "Azure Advisor",
+      "category": "Management",
+      "purpose": "Built-in optimization recommendations — right-sizing, reserved instances, idle resources",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with subscription"
+        },
+        "prod": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with subscription"
+        },
+        "enterprise": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Included with subscription"
+        }
+      }
+    },
+    {
+      "name": "Cost Management",
+      "category": "Management",
+      "purpose": "Cost data export, budget tracking, anomaly detection, forecast APIs",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Basic cost analysis and budgets"
+        },
+        "prod": {
+          "sku": "Free + Export",
+          "cost": 5,
+          "note": "Scheduled exports to storage, API access"
+        },
+        "enterprise": {
+          "sku": "Free + Export",
+          "cost": 15,
+          "note": "Multi-scope exports, EA/MCA integration"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Optimizer API — analysis orchestrator, recommendation engine, report generator",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 100,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 280,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Optimization history, recommendation tracking, baseline snapshots, trend data",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (600 RU/s)",
+          "cost": 40,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 130,
+          "note": "Multi-region reads, automatic failover"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, subscription credentials, management API secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Optimizer performance, recommendation accuracy, savings tracking dashboards",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~40GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 90,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 49,
+    "prod": 473,
+    "enterprise": 1625
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine cost summaries, reserve GPT-4o for complex multi-resource optimization analysis — saves 65% on AI costs",
+    "Schedule deep optimization scans during off-peak hours — reduces compute contention and costs",
+    "Cache Azure Advisor recommendations with 1-hour TTL — API calls are free but latency improves with caching",
+    "Use Cost Management scheduled exports instead of real-time API calls — reduces API overhead",
+    "The optimizer should identify savings that exceed its own cost — target 10x ROI on optimizer spend",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

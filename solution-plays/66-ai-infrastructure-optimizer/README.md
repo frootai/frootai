@@ -12,6 +12,65 @@ FinOps for AI workloads — Azure Monitor metrics collection, GPU utilization an
 | Optimizer API | Azure Container Apps | Analysis endpoint, dashboard API |
 | Secrets | Azure Key Vault | Subscription credentials |
 
+```mermaid
+graph TB
+    subgraph User Layer
+        Admin[Platform Engineer<br/>Web Dashboard · CLI · Teams Bot]
+    end
+
+    subgraph Optimizer API
+        API[Container Apps<br/>Analysis Orchestrator · Recommendation Engine]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Cost Reasoning · Optimization Planning · NL Reports]
+    end
+
+    subgraph Azure Management
+        Monitor[Azure Monitor<br/>Resource Metrics · Utilization Data]
+        Advisor[Azure Advisor<br/>Right-Sizing · Reserved Instances · Idle Detection]
+        CostMgmt[Cost Management<br/>Spend Data · Budgets · Forecasts · Anomalies]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Optimization History · Baselines · Trend Data]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Management API Keys · Subscription Creds]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Optimizer Performance · Savings Tracking]
+    end
+
+    Admin -->|Request Analysis| API
+    API -->|Fetch Metrics| Monitor
+    API -->|Fetch Recommendations| Advisor
+    API -->|Fetch Cost Data| CostMgmt
+    API -->|Analyze & Reason| OpenAI
+    OpenAI -->|Optimization Plan| API
+    API <-->|History & Baselines| Cosmos
+    API -->|Report| Admin
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Admin fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Advisor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style CostMgmt fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+🏗️ [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 14 (Cost-Optimized Gateway) | **Play 66 (Infrastructure Optimizer)** |
@@ -33,6 +92,24 @@ FinOps for AI workloads — Azure Monitor metrics collection, GPU utilization an
 | Anomaly Detection | > 90% | Cost spikes caught |
 | No Perf Degradation | 100% | P95 latency unchanged after resize |
 | ROI | > 10x | Savings / optimizer cost |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $35 | $250 | $900 |
+| Azure Monitor | $0 | $50 | $200 |
+| Azure Advisor | $0 | $0 | $0 |
+| Cost Management | $0 | $5 | $15 |
+| Container Apps | $10 | $100 | $280 |
+| Cosmos DB | $3 | $40 | $130 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $25 | $90 |
+| **Total** | **$49/mo** | **$473/mo** | **$1,625/mo** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

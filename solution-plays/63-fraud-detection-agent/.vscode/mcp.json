@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for fraud explanation generation",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "cosmos-gremlin-endpoint",
-            "description": "Cosmos DB Gremlin endpoint for fraud network graph analysis",
-            "password": false
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

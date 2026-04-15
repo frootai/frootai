@@ -13,6 +13,68 @@ Industrial predictive maintenance — IoT sensor telemetry (vibration, temperatu
 | Scheduler | Custom | Condition-based work order generation |
 | Prediction API | Azure Container Apps | RUL endpoint + scheduling |
 
+```mermaid
+graph TB
+    subgraph Edge Layer
+        Sensors[IoT Sensors<br/>Vibration · Temperature · Pressure · RPM]
+    end
+
+    subgraph Ingestion
+        IoTHub[Azure IoT Hub<br/>Device Management · Telemetry Routing]
+    end
+
+    subgraph Stream Processing
+        Stream[Stream Analytics<br/>Windowed Aggregation · Threshold Alerts · Trend Detection]
+    end
+
+    subgraph AI Engine
+        ML[Azure Machine Learning<br/>Failure Prediction · RUL Estimation · Anomaly Models]
+        OpenAI[Azure OpenAI — GPT-4o<br/>Root Cause Analysis · NL Reports · Work Order Generation]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Maintenance API · Prediction Orchestrator · Dashboard]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Equipment Profiles · Maintenance History · Predictions]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>IoT Creds · API Keys · ML Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Prediction Accuracy · Model Drift · Alert Effectiveness]
+    end
+
+    Sensors -->|Telemetry| IoTHub
+    IoTHub -->|Real-time Stream| Stream
+    Stream -->|Anomaly Events| API
+    Stream -->|Aggregated Features| ML
+    ML -->|Predictions| API
+    API -->|Root Cause Analysis| OpenAI
+    OpenAI -->|NL Report + Work Order| API
+    API <-->|Equipment Data| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Sensors fill:#f97316,color:#fff,stroke:#ea580c
+    style IoTHub fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Stream fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style ML fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 58 (Digital Twin) | **Play 68 (Predictive Maintenance)** |
@@ -33,6 +95,24 @@ Industrial predictive maintenance — IoT sensor telemetry (vibration, temperatu
 | False Alarm Rate | < 10% | Healthy equipment incorrectly flagged |
 | Downtime Reduction | > 40% | vs reactive maintenance |
 | ROI | > 10x | Value delivered / system cost |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure IoT Hub | $0 | $25 | $2,500 |
+| Azure OpenAI | $25 | $200 | $800 |
+| Azure Machine Learning | $15 | $150 | $500 |
+| Stream Analytics | $80 | $240 | $960 |
+| Cosmos DB | $3 | $60 | $240 |
+| Container Apps | $10 | $100 | $280 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$134/mo** | **$808/mo** | **$5,390/mo** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 

@@ -1,0 +1,199 @@
+{
+  "play": "62",
+  "name": "Federated Learning Pipeline",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Federated learning orchestration — experiment tracking, model registry, FL SDK",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 0,
+          "note": "Free tier, 1 compute instance, local FL simulation"
+        },
+        "prod": {
+          "sku": "Enterprise",
+          "cost": 450,
+          "note": "Managed FL orchestrator, 5 silos, secure aggregation"
+        },
+        "enterprise": {
+          "sku": "Enterprise HA",
+          "cost": 1200,
+          "note": "Multi-region, 20+ silos, differential privacy, audit logging"
+        }
+      }
+    },
+    {
+      "name": "Confidential Computing",
+      "category": "Compute",
+      "purpose": "Trusted execution environments — secure aggregation and model training in enclaves",
+      "tiers": {
+        "dev": {
+          "sku": "DCsv3 (2 vCPU)",
+          "cost": 120,
+          "note": "Single SGX node for enclave testing"
+        },
+        "prod": {
+          "sku": "DCsv3 (8 vCPU)",
+          "cost": 550,
+          "note": "3-node cluster, secure aggregation server"
+        },
+        "enterprise": {
+          "sku": "DCdsv3 (32 vCPU)",
+          "cost": 1800,
+          "note": "Multi-node cluster, geo-distributed enclaves, HA"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Model artifacts, training checkpoints, aggregated model snapshots",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 5,
+          "note": "~20GB model artifacts"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 40,
+          "note": "~500GB, versioned model snapshots"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 120,
+          "note": "~2TB, geo-redundant, immutable audit trail"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Silo worker nodes — local model training and gradient computation",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 15,
+          "note": "2 silo workers, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 200,
+          "note": "5 silo workers, 2 vCPU each, persistent"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 600,
+          "note": "20+ silo workers, multi-region, GPU-enabled"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Encryption keys, attestation certificates, silo authentication secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed keys, attestation certs"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 40,
+          "note": "Dedicated HSM, CMK for all data"
+        }
+      }
+    },
+    {
+      "name": "Virtual Network",
+      "category": "Networking",
+      "purpose": "Private connectivity between silos — VPN gateways, private endpoints",
+      "tiers": {
+        "dev": {
+          "sku": "Basic VPN",
+          "cost": 30,
+          "note": "Single VNet, 2 private endpoints"
+        },
+        "prod": {
+          "sku": "Standard VPN",
+          "cost": 150,
+          "note": "Hub-spoke, 5 silo VNets, ExpressRoute"
+        },
+        "enterprise": {
+          "sku": "ExpressRoute",
+          "cost": 450,
+          "note": "Global reach, dedicated circuits per silo"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Training metrics, convergence tracking, silo health dashboards",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~30GB/month, training telemetry"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~150GB/month, 90-day retention, alerts"
+        }
+      }
+    },
+    {
+      "name": "Log Analytics",
+      "category": "Monitoring",
+      "purpose": "Centralized audit logs — silo participation, model updates, privacy budget tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "500MB/day, 7-day retention"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~10GB/day, 30-day retention"
+        },
+        "enterprise": {
+          "sku": "Commitment tier",
+          "cost": 60,
+          "note": "50GB/day, 90-day retention, compliance"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 171,
+    "prod": 1455,
+    "enterprise": 4370
+  },
+  "optimization_tips": [
+    "Use FL simulation mode in dev to avoid spinning up real silo workers — saves 80% on compute",
+    "Schedule training rounds during off-peak hours — spot pricing reduces confidential compute costs by 40%",
+    "Use differential privacy with tight epsilon budgets to reduce the number of required training rounds",
+    "Start with 3-5 silos in production — add silos incrementally as data partnerships mature",
+    "Use model compression (quantization, pruning) to reduce checkpoint storage costs by 60%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

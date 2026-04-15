@@ -1,0 +1,199 @@
+{
+  "play": "71",
+  "name": "Smart Energy Grid AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Smart meter and grid sensor telemetry ingestion — voltage, frequency, load, renewable generation",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, 10K+ meters"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 2500,
+          "note": "300M messages/day, 100K+ meters"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for demand pattern analysis, grid optimization reasoning, outage root cause, and operator reports",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~1M tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1000,
+          "note": "Provisioned throughput, real-time grid decisions"
+        }
+      }
+    },
+    {
+      "name": "Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time grid telemetry processing — load balancing signals, frequency deviation, renewable intermittency",
+      "tiers": {
+        "dev": {
+          "sku": "1 SU",
+          "cost": 80,
+          "note": "1 streaming unit, basic windowed queries"
+        },
+        "prod": {
+          "sku": "6 SU",
+          "cost": 480,
+          "note": "6 streaming units, multi-stream correlation"
+        },
+        "enterprise": {
+          "sku": "24 SU",
+          "cost": 1920,
+          "note": "24 streaming units, sub-second latency"
+        }
+      }
+    },
+    {
+      "name": "Azure Digital Twins",
+      "category": "IoT",
+      "purpose": "Grid topology digital twin — substations, transformers, feeders, DERs, real-time state synchronization",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 15,
+          "note": "~10K messages, ~100 twin instances"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "~1M messages, ~10K twin instances"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 600,
+          "note": "~50M messages, ~100K twin instances, geo-redundant"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Demand forecasts, grid state history, optimization decisions, outage records, maintenance logs",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 120,
+          "note": "Dedicated throughput, TTL for telemetry"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 480,
+          "note": "Multi-region, analytical store for time-series"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Grid API — demand forecasting, load balancing orchestrator, optimization engine, operator dashboard",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "2 vCPU, 4GB, min 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 5+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "IoT device certificates, SCADA credentials, API keys, encryption keys for critical infrastructure",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, critical infrastructure compliance"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 20,
+          "note": "Dedicated HSM, NERC CIP compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Forecast accuracy, grid optimization effectiveness, API latency, system reliability metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 139,
+    "prod": 1450,
+    "enterprise": 7070
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine grid status summaries, reserve GPT-4o for complex optimization decisions and outage analysis — saves 65% on AI costs",
+    "Downsample smart meter telemetry at the edge (15-min intervals for billing, 1-sec only during events) — reduces IoT Hub and Stream Analytics costs by 80%",
+    "Use Digital Twins query API for topology lookups instead of rebuilding graph in memory — reduces compute requirements",
+    "Partition Stream Analytics by grid zone — allows independent scaling per region and avoids over-provisioning",
+    "Archive historical grid telemetry older than 90 days to cool storage — keeps Cosmos DB costs predictable",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

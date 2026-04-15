@@ -1,0 +1,199 @@
+{
+  "play": "64",
+  "name": "AI Sales Assistant",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for lead scoring, personalized outreach drafting, and sales conversation analysis",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 200,
+          "note": "~800K tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 800,
+          "note": "Provisioned throughput, multi-model routing"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Lead profiles, interaction history, scoring models, pipeline state",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (800 RU/s)",
+          "cost": 50,
+          "note": "Dedicated throughput, single region"
+        },
+        "enterprise": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 200,
+          "note": "Multi-region writes, automatic failover"
+        }
+      }
+    },
+    {
+      "name": "Microsoft Graph API",
+      "category": "Integration",
+      "purpose": "CRM data sync, calendar integration, email tracking, organizational insights",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic API access, rate-limited"
+        },
+        "prod": {
+          "sku": "Metered",
+          "cost": 15,
+          "note": "~100K API calls/month, webhook subscriptions"
+        },
+        "enterprise": {
+          "sku": "Metered",
+          "cost": 50,
+          "note": "~1M API calls/month, batch operations"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search over sales knowledge base — products, pricing, case studies, competitors",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 75,
+          "note": "1 index, 2GB, ~15K documents"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "50 indexes, 160GB, semantic ranker"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 750,
+          "note": "200 indexes, 1TB, replicas for HA"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Sales assistant API — lead scoring, outreach generation, conversation coaching",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 80,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 200,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, Graph API secrets, CRM connection strings",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed keys, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Sales conversion tracking, AI response quality, lead score accuracy",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~30GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Content Safety",
+      "category": "AI Services",
+      "purpose": "Moderate AI-generated outreach emails and sales recommendations",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "1K transactions/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "~80K transactions/month"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 30,
+          "note": "~500K transactions/month"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 119,
+    "prod": 628,
+    "enterprise": 2120
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for lead scoring and email drafts, reserve GPT-4o for complex deal analysis — saves 65% on AI costs",
+    "Cache product knowledge and competitor info in AI Search — eliminates redundant AI calls for repeated queries",
+    "Use Cosmos DB serverless for dev and pilot deployments — eliminates idle throughput charges",
+    "Batch Graph API calls using $batch endpoint — reduces API call count by 80%",
+    "Enable response caching for common sales questions (product specs, pricing) — reduces AI costs by 30%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

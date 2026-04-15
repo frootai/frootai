@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for Scope 3 spend classification and reduction recommendations",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "cosmos-connection",
-            "description": "Cosmos DB connection string for emission data and audit trail",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

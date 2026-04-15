@@ -1,0 +1,199 @@
+{
+  "play": "67",
+  "name": "AI Knowledge Management",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for contextual retrieval, knowledge synthesis, expert Q&A, and content summarization",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 35,
+          "note": "~70K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1.2M tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, multi-model routing, high concurrency"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Semantic search across knowledge base — hybrid vector + keyword retrieval, faceted navigation",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB storage, semantic ranker, vector search"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB, multi-replica HA, private endpoint"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Knowledge articles, metadata, access patterns, version history, user interaction logs",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (800 RU/s)",
+          "cost": 50,
+          "note": "Dedicated throughput, single region, change feed"
+        },
+        "enterprise": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Multi-region writes, automatic failover, analytical store"
+        }
+      }
+    },
+    {
+      "name": "Microsoft Graph",
+      "category": "Integration",
+      "purpose": "SharePoint, Teams, OneDrive content ingestion — organizational knowledge graph traversal",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic API calls, dev tenant"
+        },
+        "prod": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Included with M365 license, throttling limits apply"
+        },
+        "enterprise": {
+          "sku": "Included",
+          "cost": 0,
+          "note": "Included with M365 E5, higher throttling limits"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Knowledge API — ingestion pipeline, retrieval orchestrator, content enrichment service",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 100,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 280,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Raw document storage — PDFs, Office docs, wiki exports, media files for processing",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 3,
+          "note": "~20GB documents"
+        },
+        "prod": {
+          "sku": "Hot LRS",
+          "cost": 25,
+          "note": "~500GB, lifecycle management"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 80,
+          "note": "~2TB, geo-redundant, versioned"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, Graph API credentials, encryption keys for sensitive knowledge content",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search quality metrics, retrieval accuracy, query latency, knowledge freshness tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~40GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 90,
+          "note": "~150GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 52,
+    "prod": 753,
+    "enterprise": 2340
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for simple knowledge lookups and summaries, reserve GPT-4o for complex synthesis and cross-document reasoning — saves 65% on AI costs",
+    "Cache frequently accessed knowledge articles in Redis or in-memory with 15-minute TTL — reduces AI Search and OpenAI calls",
+    "Use Azure AI Search semantic ranker only for natural language queries — keyword-only queries skip the semantic tier and cost less",
+    "Implement incremental indexing via Cosmos DB change feed — avoids expensive full re-index operations",
+    "Use Microsoft Graph change notifications instead of polling — reduces API calls and improves freshness detection",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

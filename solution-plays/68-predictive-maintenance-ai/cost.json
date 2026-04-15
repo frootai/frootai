@@ -1,0 +1,199 @@
+{
+  "play": "68",
+  "name": "Predictive Maintenance AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Sensor telemetry ingestion — vibration, temperature, pressure, RPM from industrial equipment",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 25,
+          "note": "400K messages/day per unit, 2 units"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 2500,
+          "note": "300M messages/day, 10K+ devices"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for anomaly interpretation, failure root cause analysis, and natural language maintenance reports",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 200,
+          "note": "~800K tokens/day, gpt-4o primary"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 800,
+          "note": "Provisioned throughput, real-time analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Custom ML models — failure prediction, remaining useful life estimation, anomaly detection",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "Compute instances for experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "Managed endpoints, model registry, pipelines"
+        },
+        "enterprise": {
+          "sku": "Standard HA",
+          "cost": 500,
+          "note": "Multi-model serving, A/B testing, GPU inference"
+        }
+      }
+    },
+    {
+      "name": "Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time telemetry processing — windowed aggregations, threshold alerts, trend detection",
+      "tiers": {
+        "dev": {
+          "sku": "1 SU",
+          "cost": 80,
+          "note": "1 streaming unit, basic windowed queries"
+        },
+        "prod": {
+          "sku": "3 SU",
+          "cost": 240,
+          "note": "3 streaming units, complex event processing"
+        },
+        "enterprise": {
+          "sku": "12 SU",
+          "cost": 960,
+          "note": "12 streaming units, multi-stream correlation"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Equipment profiles, maintenance history, prediction results, work order tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1000 RU/s)",
+          "cost": 60,
+          "note": "Dedicated throughput, TTL for telemetry"
+        },
+        "enterprise": {
+          "sku": "Provisioned (4000 RU/s)",
+          "cost": 240,
+          "note": "Multi-region, analytical store for time-series"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Maintenance API — prediction orchestrator, work order generator, dashboard backend",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 100,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 280,
+          "note": "2 vCPU, 4GB, multi-region, 3+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "IoT device credentials, API keys, ML endpoint secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Prediction accuracy, model drift detection, API latency, alert effectiveness tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 134,
+    "prod": 808,
+    "enterprise": 5390
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine status summaries, reserve GPT-4o for complex root cause analysis — saves 65% on AI costs",
+    "Downsample high-frequency telemetry (1s → 10s) for trend analysis — reduces Stream Analytics SU requirements by 60%",
+    "Use IoT Hub message routing to filter noise at the edge — only forward anomalous readings to Stream Analytics",
+    "Deploy lightweight anomaly detection models at the edge (IoT Edge) — reduces cloud ingestion and ML inference costs",
+    "Archive historical telemetry to cool/archive Blob Storage after 30 days — keeps Cosmos DB costs predictable",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

@@ -13,6 +13,68 @@ AI-powered carbon tracking — Scope 1 (direct fuel), Scope 2 (location + market
 | Dashboard | Azure Static Web Apps | Emission visualization |
 | Secrets | Azure Key Vault | API keys |
 
+```mermaid
+graph TB
+    subgraph User Layer
+        Analyst[Sustainability Analyst<br/>Dashboard · Reports · API]
+    end
+
+    subgraph Carbon API
+        API[Container Apps<br/>Emission Calculator · Report Generator · Supply Chain Aggregator]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Emission Factor Mapping · Supply Chain Analysis · NL Reports]
+    end
+
+    subgraph Event Ingestion
+        EventHubs[Event Hubs<br/>Energy Meters · Fleet GPS · Manufacturing · Cloud Usage]
+    end
+
+    subgraph Cloud Metrics
+        Monitor[Azure Monitor<br/>Compute · Storage · Network Utilization for Cloud Carbon]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Emission Ledger · Supplier Data · Offsets · Audit Trail]
+        Blob[Blob Storage<br/>Emission Factors · Supplier Docs · Audit Reports]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Third-Party Creds · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Calculation Accuracy · Data Freshness · API Latency]
+    end
+
+    Analyst -->|Query Emissions| API
+    EventHubs -->|Emission Events| API
+    Monitor -->|Cloud Utilization| API
+    API -->|Analyze & Synthesize| OpenAI
+    OpenAI -->|Sustainability Report| API
+    API <-->|Emission Records| Cosmos
+    API -->|Factor Lookup| Blob
+    API -->|Report| Analyst
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style Analyst fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#06b6d4,color:#fff,stroke:#0891b2
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style EventHubs fill:#f97316,color:#fff,stroke:#ea580c
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
 ## How It Differs from Related Plays
 
 | Aspect | Play 70 (ESG Compliance) | **Play 69 (Carbon Tracker)** |
@@ -33,6 +95,24 @@ AI-powered carbon tracking — Scope 1 (direct fuel), Scope 2 (location + market
 | Spend Classification | > 85% | Correct emission category |
 | GHG Protocol Compliance | 100% | All required sections |
 | Data Lineage | 100% | Every calculation traceable |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $25 | $180 | $700 |
+| Azure Monitor | $0 | $40 | $150 |
+| Cosmos DB | $3 | $50 | $180 |
+| Event Hubs | $11 | $22 | $90 |
+| Container Apps | $10 | $80 | $220 |
+| Blob Storage | $2 | $15 | $50 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $20 | $70 |
+| **Total** | **$52/mo** | **$410/mo** | **$1,470/mo** |
+
+> Estimates based on Azure retail pricing. Actual costs vary by region, usage, and enterprise agreements.
+
+💰 [Full cost breakdown](cost.json)
 
 ## WAF Alignment
 
