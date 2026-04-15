@@ -1,0 +1,199 @@
+{
+  "play": "88",
+  "name": "Visual Product Search",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Image analysis and visual feature extraction — product detection, color/texture/shape analysis, scene understanding, image embedding generation for visual similarity search",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "5K transactions/month free tier"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "~250K image analyses/month, custom vision models"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 800,
+          "note": "~1M+ image analyses/month, batch processing pipelines"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for visual understanding — image-to-text product descriptions, style recommendation narratives, cross-sell reasoning, natural language product queries, trend interpretation",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 350,
+          "note": "~1.2M tokens/day, gpt-4o with vision for image understanding"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, high-volume visual search"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Vector search over product image embeddings — visual similarity retrieval, hybrid text+image search, faceted filtering by visual attributes, semantic product ranking",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB storage, 3 indexes"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 500,
+          "note": "100GB storage, vector search, 500K+ product embeddings"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 1000,
+          "note": "200GB+, high-availability, multi-catalog indexes"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Visual search API — image upload processing, embedding generation, similarity search orchestration, recommendation engine, product detail enrichment",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 200,
+          "note": "2 vCPU, 4GB, min 3 replicas for low-latency search"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 500,
+          "note": "4 vCPU, 8GB, multi-region, 8+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Product catalog metadata, visual feature vectors, user search history, style preference profiles, recommendation feedback, click-through analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2500 RU/s)",
+          "cost": 150,
+          "note": "Dedicated throughput, product catalog queries"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 450,
+          "note": "Multi-region, analytical store for recommendation training"
+        }
+      }
+    },
+    {
+      "name": "Blob Storage",
+      "category": "Storage",
+      "purpose": "Product image storage — original uploads, resized variants, extracted thumbnails, user-uploaded search images, visual feature cache",
+      "tiers": {
+        "dev": {
+          "sku": "Hot LRS",
+          "cost": 2,
+          "note": "~10GB product images"
+        },
+        "prod": {
+          "sku": "Hot ZRS",
+          "cost": 50,
+          "note": "~500GB, CDN-backed, zone-redundant"
+        },
+        "enterprise": {
+          "sku": "Hot GRS",
+          "cost": 200,
+          "note": "~5TB, geo-redundant, lifecycle tiering"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Image processing API keys, catalog integration credentials, CDN signing keys, user data encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, customer-managed encryption keys"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search latency (image upload to results), visual match accuracy, recommendation click-through rates, API throughput, image processing pipeline timing",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention, conversion dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 41,
+    "prod": 1545,
+    "enterprise": 4285
+  },
+  "optimization_tips": [
+    "Use Azure AI Vision for initial image embedding extraction and GPT-4o only for complex style recommendations requiring natural language reasoning — Vision API is 90% cheaper per image than GPT-4o vision calls",
+    "Cache product image embeddings permanently in AI Search — product images rarely change; only re-embed when catalog images are updated, eliminating redundant Vision API calls",
+    "Implement progressive image loading — generate embeddings from resized thumbnails (256x256) for initial similarity search, only processing full-resolution images when users request detailed comparison",
+    "Use Blob Storage lifecycle management — move user-uploaded search images to Cool tier after 24 hours and Archive after 30 days; most search images are never accessed again",
+    "Batch product catalog indexing during off-peak hours — new product image embedding and indexing is not time-critical; schedule nightly batch jobs using consumption-based compute",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

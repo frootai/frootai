@@ -13,13 +13,72 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI (gpt-4o) | Pattern analysis + community report generation |
-| Azure Data Explorer | Incident time-series (KQL analytics) |
-| Azure Maps | Response routing + staging optimization |
-| Cosmos DB (Serverless) | Anonymized incident records, resource plans |
-| Container Apps | Analytics API + community dashboard |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Command Dashboard<br/>Hotspot Maps · Resource Deploy · Incident Feed · Community Pulse]
+    end
+
+    subgraph Event Ingestion
+        EH[Azure Event Hubs<br/>911 Dispatch · CAD Feeds · Sensor Alerts · Social Signals]
+    end
+
+    subgraph Stream Processing
+        ASA[Azure Stream Analytics<br/>Event Correlation · Anomaly Detection · Geospatial Clustering]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Pattern Narratives · Resource Reasoning · Sentiment Summary · Briefings]
+    end
+
+    subgraph ML Models
+        AML[Azure Machine Learning<br/>Hotspot Forecast · Temporal Patterns · Demand Prediction · Risk Scoring]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Safety API · Resource Optimizer · Community Dashboard · Inter-Agency Hub]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Incidents · Patterns · Deployments · Sentiment · Hotspots · Officers]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>CJIS Secrets · CAD Creds · Agency Keys · Identity Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>System Uptime · Processing Latency · Model Accuracy · Alert Delivery]
+    end
+
+    EH -->|Raw Events| ASA
+    ASA -->|Correlated Events| API
+    API -->|Predict Patterns| AML
+    AML -->|Forecasts & Scores| API
+    API -->|Generate Analysis| OpenAI
+    OpenAI -->|Narratives & Briefings| API
+    API -->|Alerts & Insights| UI
+    API <-->|Read/Write| Cosmos
+    ASA -->|Archive Events| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style EH fill:#f97316,color:#fff,stroke:#ea580c
+    style ASA fill:#14b8a6,color:#fff,stroke:#0d9488
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#a855f7,color:#fff,stroke:#9333ea
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Patterns: Temporal only (no geographic targeting) · source weighting (patrol 0.7×)
@@ -37,10 +96,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $160–200 |
-| Production (web dashboard) | $180–300 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure OpenAI | $25 (PAYG) | $300 (PAYG) | $1,200 (PTU Reserved) |
+| Azure Machine Learning | $15 (Basic) | $250 (Standard) | $800 (Standard GPU) |
+| Azure Event Hubs | $12 (Basic) | $150 (Standard) | $600 (Premium) |
+| Cosmos DB | $3 (Serverless) | $120 (2000 RU/s) | $450 (8000 RU/s) |
+| Azure Stream Analytics | $80 (Standard) | $320 (Standard) | $800 (Standard) |
+| Container Apps | $10 (Consumption) | $180 (Dedicated) | $500 (Dedicated HA) |
+| Key Vault | $1 (Standard) | $15 (Premium HSM) | $30 (Premium HSM) |
+| Application Insights | $0 (Free) | $50 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$146/mo** | **$1,385/mo** | **$4,530/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 84 (Citizen Services Chatbot)
 | Aspect | Play 84 | Play 86 |

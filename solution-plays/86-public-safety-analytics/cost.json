@@ -1,0 +1,199 @@
+{
+  "play": "86",
+  "name": "Public Safety Analytics",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for incident analysis — crime pattern narrative generation, resource allocation reasoning, community sentiment summarization, cross-agency intelligence briefings",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1M tokens/day, gpt-4o for complex analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, real-time incident processing"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Predictive models for crime pattern forecasting, resource demand prediction, hotspot identification, temporal trend analysis, and risk scoring",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "2 vCPU compute, model experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 250,
+          "note": "Managed endpoints, 4 vCPU, daily retraining"
+        },
+        "enterprise": {
+          "sku": "Standard GPU",
+          "cost": 800,
+          "note": "GPU compute, deep learning models, real-time inference"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Hubs",
+      "category": "Streaming",
+      "purpose": "Real-time ingestion of 911 dispatch events, CAD system feeds, sensor alerts, social media signals, traffic camera events, and inter-agency data streams",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, 1 consumer group"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "6 TUs, 20 consumer groups, 7-day retention"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 600,
+          "note": "20 PUs, zone-redundant, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Incident records, crime patterns, resource deployment history, community sentiment data, officer activity logs, geospatial hotspot data",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 120,
+          "note": "Dedicated throughput, geospatial indexes"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 450,
+          "note": "Multi-region, analytical store for historical analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time event correlation — pattern matching across 911 calls, sensor alerts, and dispatch events; sliding window anomaly detection; geospatial clustering",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 80,
+          "note": "1 streaming unit, basic windowing queries"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 320,
+          "note": "4 streaming units, complex event processing"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 800,
+          "note": "10 streaming units, multi-stream correlation"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Public safety API — incident analysis engine, resource optimizer, community dashboard backend, inter-agency data sharing, reporting engine",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 180,
+          "note": "2 vCPU, 4GB, min 3 replicas for availability"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 500,
+          "note": "4 vCPU, 8GB, multi-region, 8+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "CJIS-compliant secret management — CAD system credentials, inter-agency API keys, officer identity encryption, evidence chain-of-custody keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, CJIS-compliant key management"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 30,
+          "note": "Dedicated HSM, multi-agency key isolation"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "System uptime (mission-critical), event processing latency, model prediction accuracy, API availability, alert delivery timing",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~75GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, custom dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 146,
+    "prod": 1385,
+    "enterprise": 4530
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine daily incident summaries and shift briefing drafts — reserve GPT-4o for complex multi-source pattern analysis and cross-agency intelligence reports, saving 65% on AI costs",
+    "Right-size Stream Analytics streaming units based on actual event volume — most jurisdictions have predictable load patterns with peaks during evening hours; scale down during low-activity periods",
+    "Implement tiered retention in Cosmos DB — active incidents in hot storage (90 days), resolved cases archived to analytical store, historical aggregates retained indefinitely for trend analysis",
+    "Use Event Hubs capture to Azure Storage for raw event archival instead of keeping extended retention in Event Hubs — blob storage is 90% cheaper than Event Hubs retention",
+    "Schedule ML model retraining during weekly maintenance windows rather than daily — crime pattern models benefit from weekly aggregation and retraining more frequently adds cost without accuracy improvement",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

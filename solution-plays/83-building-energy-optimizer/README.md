@@ -13,14 +13,74 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure IoT Hub | BMS sensor data (temperature, humidity, occupancy) |
-| Azure Digital Twins | Building model (zones, HVAC units, sensors) |
-| Azure Data Explorer | 15-minute energy time-series analytics |
-| Azure ML | Occupancy prediction + energy forecasting |
-| Azure OpenAI (gpt-4o) | Sustainability reporting + anomaly explanation |
-| Azure Functions | Event-driven setpoint recommendation engine |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Energy Dashboard<br/>HVAC Control · Occupancy Maps · Energy Analytics · Sustainability KPIs]
+    end
+
+    subgraph IoT Layer
+        IoT[Azure IoT Hub<br/>BMS Sensors · Energy Meters · Occupancy · Weather · HVAC Valves]
+    end
+
+    subgraph Digital Twin
+        ADT[Azure Digital Twins<br/>Building Model · HVAC Zones · Thermal Simulation · What-If Scenarios]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Optimization Reasoning · Energy Reports · Comfort Analysis]
+    end
+
+    subgraph ML Models
+        AML[Azure Machine Learning<br/>Thermal Dynamics · Occupancy Forecast · Demand Prediction · Fault Detection]
+    end
+
+    subgraph Processing
+        Func[Azure Functions<br/>Sensor Normalization · Twin Sync · Anomaly Triggers · HVAC Commands]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Energy History · Optimization Logs · Occupancy Patterns · Sustainability KPIs]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>BMS Creds · BACnet Certs · Utility API Keys · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Twin Sync Latency · Savings Tracking · Sensor Health · Loop Timing]
+    end
+
+    IoT -->|Sensor Telemetry| Func
+    Func -->|Update State| ADT
+    ADT -->|Current State| Func
+    Func -->|Predict| AML
+    AML -->|Optimal Setpoints| Func
+    Func -->|Explain Decision| OpenAI
+    OpenAI -->|Reasoning Narrative| Func
+    Func -->|Control Commands| IoT
+    Func -->|Store Results| Cosmos
+    ADT -->|Twin Data| UI
+    Cosmos -->|Analytics| UI
+    Func -->|Auth| MI
+    MI -->|Secrets| KV
+    Func -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style IoT fill:#14b8a6,color:#fff,stroke:#0d9488
+    style ADT fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#a855f7,color:#fff,stroke:#9333ea
+    style Func fill:#f97316,color:#fff,stroke:#ea580c
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Comfort: ASHRAE 55 ranges · cooling 73-79°F · heating 68-76°F
@@ -38,10 +98,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly (per building) |
-|-------------|---------|
-| Dev/Test | $180–210 |
-| Production | $200–300 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure Digital Twins | $10 (Standard) | $150 (Standard) | $600 (Standard) |
+| Azure IoT Hub | $0 (Free) | $250 (Standard S2) | $1,250 (Standard S3) |
+| Azure OpenAI | $20 (PAYG) | $200 (PAYG) | $800 (PTU Reserved) |
+| Azure Functions | $0 (Consumption) | $180 (Premium EP2) | $450 (Premium EP3) |
+| Cosmos DB | $3 (Serverless) | $120 (2000 RU/s) | $450 (8000 RU/s) |
+| Azure Machine Learning | $15 (Basic) | $200 (Standard) | $700 (Standard GPU) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $40 (Pay-per-GB) | $120 (Pay-per-GB) |
+| **Total** | **$49/mo** | **$1,145/mo** | **$4,385/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 71 (Smart Energy Grid AI)
 | Aspect | Play 71 | Play 83 |

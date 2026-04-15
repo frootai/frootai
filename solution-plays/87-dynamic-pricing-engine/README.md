@@ -13,14 +13,73 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure ML | Elasticity model training + real-time serving |
-| Azure Data Explorer | Transaction time-series + demand analytics |
-| Azure OpenAI (gpt-4o) | Market analysis + pricing explanations |
-| Event Hubs | Real-time sales event streaming |
-| Azure Functions | Price calculation engine (event-driven) |
-| Cosmos DB (Serverless) | Price history, A/B results, audit log |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Pricing Dashboard<br/>Price Controls · Demand Curves · Competitor Monitor · Fairness Audit]
+    end
+
+    subgraph Event Ingestion
+        EH[Azure Event Hubs<br/>Transactions · Inventory · Competitor Feeds · Traffic · Cart Events]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Price Intelligence · Elasticity Reasoning · Fairness Evaluation · Strategy]
+    end
+
+    subgraph ML Models
+        AML[Azure Machine Learning<br/>Elasticity Models · Demand Forecast · Competitor Response · Lift Estimation]
+    end
+
+    subgraph Price Cache
+        Redis[Azure Cache for Redis<br/>Active Prices · Competitor Cache · Signal Aggregation · Rate Limits]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Pricing Engine · Demand Aggregator · Fairness Evaluator · A/B Orchestrator]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Prices · Demand Curves · Competitors · Elasticity · Fairness Logs · A/B Tests]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Credentials · Marketplace Keys · Algorithm Encryption · Audit Signing]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Decision Latency · Revenue Impact · Signal Freshness · Fairness Metrics]
+    end
+
+    EH -->|Demand Signals| API
+    API -->|Price Lookups| Redis
+    Redis -->|Cached Prices| API
+    API -->|Predict Demand| AML
+    AML -->|Elasticity & Forecasts| API
+    API -->|Evaluate Pricing| OpenAI
+    OpenAI -->|Recommendations| API
+    API -->|Publish Prices| Redis
+    API <-->|Read/Write| Cosmos
+    API -->|Price Updates & Insights| UI
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style EH fill:#f97316,color:#fff,stroke:#ea580c
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#a855f7,color:#fff,stroke:#9333ea
+    style Redis fill:#ef4444,color:#fff,stroke:#dc2626
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Constraints: 15% min margin · ±10% max daily change · 2× surge cap · no demographic pricing
@@ -38,10 +97,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $130–170 |
-| Production (1K products) | $240–350 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure OpenAI | $30 (PAYG) | $400 (PAYG) | $1,500 (PTU Reserved) |
+| Azure Event Hubs | $12 (Basic) | $200 (Standard) | $750 (Premium) |
+| Cosmos DB | $5 (Serverless) | $180 (3000 RU/s) | $600 (10000 RU/s) |
+| Azure Cache for Redis | $15 (Basic C0) | $150 (Standard C2) | $500 (Enterprise E10) |
+| Azure Machine Learning | $15 (Basic) | $300 (Standard) | $900 (Standard GPU) |
+| Container Apps | $10 (Consumption) | $200 (Dedicated) | $550 (Dedicated HA) |
+| Key Vault | $1 (Standard) | $8 (Standard) | $25 (Premium HSM) |
+| Application Insights | $0 (Free) | $45 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$88/mo** | **$1,483/mo** | **$4,975/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 14 (Cost-Optimized AI Gateway)
 | Aspect | Play 14 | Play 87 |

@@ -13,15 +13,71 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure Custom Vision | PPE detection model training |
-| Azure IoT Edge | On-site YOLOv8 inference (low-latency) |
-| Azure IoT Hub | Camera feed + edge device management |
-| Azure Event Hubs | Real-time safety alert streaming |
-| Azure OpenAI (gpt-4o) | Incident report + trend analysis |
-| Notification Hubs | Push alerts to supervisor mobile |
-| Cosmos DB (Serverless) | Incident records, compliance logs |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Safety Dashboard<br/>Live Feeds · Alerts · Compliance · Incident Reports]
+    end
+
+    subgraph IoT Layer
+        IoT[Azure IoT Hub<br/>Cameras · Wearables · Environmental Sensors · Equipment Telemetry]
+    end
+
+    subgraph Streaming
+        EH[Event Hubs<br/>Video Frame Buffering · Sensor Events · Alert Streams]
+    end
+
+    subgraph Vision Engine
+        Vision[Azure AI Vision<br/>PPE Detection · Hazard ID · Zone Intrusion · Custom Models]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Incident Analysis · Safety Reports · Root Cause · Briefings]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Safety API · Alert Router · Zone Enforcer · Compliance Engine]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Incidents · Violations · Worker Zones · Inspections · Telemetry]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Camera Creds · IoT Certs · OSHA API Keys · PII Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Alert Latency · Detection Accuracy · Camera Health · API Metrics]
+    end
+
+    IoT -->|Sensor Data| EH
+    EH -->|Buffered Frames| API
+    API -->|Analyze Frame| Vision
+    Vision -->|Detections| API
+    API -->|Generate Report| OpenAI
+    OpenAI -->|Incident Narrative| API
+    API -->|Alerts & Data| UI
+    API <-->|Read/Write| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style IoT fill:#14b8a6,color:#fff,stroke:#0d9488
+    style EH fill:#f97316,color:#fff,stroke:#ea580c
+    style Vision fill:#a855f7,color:#fff,stroke:#9333ea
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - PPE: 5 items (hard hat, vest, boots, gloves, glasses) · 0.80 confidence · temporal smoothing
@@ -39,10 +95,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly (per site) |
-|-------------|---------|
-| Dev/Test | $75–100 |
-| Production | $140–200 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure AI Vision | $0 (Free) | $350 (Standard S1) | $1,200 (Standard S1) |
+| Azure IoT Hub | $0 (Free) | $250 (Standard S2) | $1,250 (Standard S3) |
+| Azure OpenAI | $20 (PAYG) | $250 (PAYG) | $1,000 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $180 (Dedicated) | $500 (Dedicated HA) |
+| Cosmos DB | $3 (Serverless) | $90 (1500 RU/s) | $350 (6000 RU/s) |
+| Event Hubs | $12 (Basic) | $100 (Standard) | $400 (Premium) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $40 (Pay-per-GB) | $120 (Pay-per-GB) |
+| **Total** | **$46/mo** | **$1,265/mo** | **$4,835/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 79 (Food Safety Inspector AI)
 | Aspect | Play 79 | Play 82 |

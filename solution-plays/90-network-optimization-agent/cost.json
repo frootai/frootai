@@ -1,0 +1,199 @@
+{
+  "play": "90",
+  "name": "Network Optimization Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for network intelligence — anomaly root cause analysis narratives, capacity planning recommendations, self-healing action plan generation, performance degradation reasoning, SLA impact assessment",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~1.5M tokens/day, gpt-4o for complex network analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput, real-time network decision support"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Telemetry ingestion from 5G/LTE network equipment — cell tower KPIs, RAN metrics, core network health, antenna parameters, backhaul utilization, edge compute status",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, device twins, cloud-to-device"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 1250,
+          "note": "300M messages/day, dedicated compute, multi-region"
+        }
+      }
+    },
+    {
+      "name": "Azure Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time network telemetry processing — KPI threshold monitoring, anomaly detection on signal quality metrics, traffic pattern analysis, interference correlation, capacity utilization trending",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 80,
+          "note": "1 streaming unit, basic threshold queries"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 400,
+          "note": "5 streaming units, complex event processing"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 1200,
+          "note": "15 streaming units, multi-stream correlation, sub-second latency"
+        }
+      }
+    },
+    {
+      "name": "Azure Digital Twins",
+      "category": "IoT",
+      "purpose": "Network topology digital twin — cell site models, coverage area simulation, capacity planning scenarios, failure propagation modeling, upgrade impact prediction",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 20,
+          "note": "~10K operations/month, small network model"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "~500K operations/month, city-scale topology"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 800,
+          "note": "~5M operations/month, national-scale multi-technology network"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Network state records, anomaly events, capacity plans, self-healing action logs, cell site configuration history, SLA compliance tracking, incident correlation data",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~8K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Dedicated throughput, change feed for action triggers"
+        },
+        "enterprise": {
+          "sku": "Provisioned (12000 RU/s)",
+          "cost": 700,
+          "note": "Multi-region, analytical store for historical trend analysis"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Network optimization API — anomaly investigation engine, capacity planner, self-healing orchestrator, what-if simulator, NOC dashboard backend",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 250,
+          "note": "2 vCPU, 4GB, min 3 replicas for high availability"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 650,
+          "note": "4 vCPU, 8GB, multi-region, 10+ replicas, 99.99% SLA"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Network equipment credentials, SNMP community strings, OSS/BSS integration keys, cell site configuration encryption, audit trail signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, telecom-grade credential management"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 30,
+          "note": "Dedicated HSM, multi-vendor equipment isolation"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Platform uptime (mission-critical), anomaly detection latency, self-healing success rate, capacity prediction accuracy, API availability, action execution timing",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 60,
+          "note": "~90GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 200,
+          "note": "~400GB/month, 90-day retention, NOC dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 146,
+    "prod": 1755,
+    "enterprise": 6330
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine daily network health summaries and standard threshold alerts — reserve GPT-4o for complex multi-cell anomaly root cause analysis and capacity planning recommendations, saving 60% on AI costs",
+    "Aggregate IoT Hub telemetry at the edge before ingestion — pre-compute 1-minute KPI averages on cell site edge devices rather than sending raw per-second metrics, reducing message volume by 60x",
+    "Right-size Stream Analytics streaming units based on actual network size — most regional deployments process well within 3-5 SUs; monitor SU% utilization and scale down during maintenance windows",
+    "Use Digital Twins tiered update frequency — refresh live topology every 5 minutes for active monitoring, every hour for stable cells, and on-demand for capacity planning simulations",
+    "Implement Cosmos DB TTL for transient telemetry — raw KPI snapshots expire after 90 days; aggregated trends retained indefinitely; anomaly events retained for 2 years for pattern analysis",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

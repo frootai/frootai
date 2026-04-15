@@ -1,0 +1,199 @@
+{
+  "play": "83",
+  "name": "Building Energy Optimizer",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure Digital Twins",
+      "category": "IoT",
+      "purpose": "Digital twin models of building systems — HVAC zones, lighting circuits, occupancy patterns, energy meters, thermal dynamics for real-time simulation and optimization",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 10,
+          "note": "~50K operations/month, 5 twin models"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "~2M operations/month, 500+ twin instances"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 600,
+          "note": "~10M operations/month, 5K+ twins, multi-building"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Ingest BMS sensor data — temperature, humidity, CO2, occupancy counters, energy meters, HVAC valve positions, lighting levels, weather station feeds",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, 1K+ sensors per building"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 1250,
+          "note": "300M messages/day, campus-wide sensor network"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for energy optimization reasoning — HVAC schedule recommendations, anomaly explanation, occupant comfort trade-off analysis, sustainability report narratives",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 20,
+          "note": "~40K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 200,
+          "note": "~600K tokens/day, gpt-4o for complex optimization"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 800,
+          "note": "Provisioned throughput, real-time optimization loop"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Sensor data normalization, digital twin state updates, energy anomaly detection triggers, HVAC setpoint adjustment commands, scheduled optimization runs",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, VNET, high-frequency twin updates"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 450,
+          "note": "8 vCPU, dedicated compute, sub-second twin sync"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Energy consumption history, optimization decisions, occupancy patterns, comfort scores, equipment runtime logs, sustainability KPIs",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 120,
+          "note": "Dedicated throughput, time-series partitioning"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 450,
+          "note": "Multi-region, analytical store for energy trending"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Predictive models for thermal dynamics, occupancy forecasting, energy demand prediction, HVAC fault detection, and optimal setpoint calculation",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "2 vCPU compute, model experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "Managed endpoints, 4 vCPU, hourly retraining"
+        },
+        "enterprise": {
+          "sku": "Standard GPU",
+          "cost": 700,
+          "note": "GPU compute, deep learning thermal models, real-time inference"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "BMS integration credentials, BACnet gateway certificates, utility API keys, energy data encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, utility billing data protection"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Twin sync latency, optimization loop timing, sensor health, energy savings tracking, HVAC command success rates",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 49,
+    "prod": 1145,
+    "enterprise": 4385
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine daily energy summaries and occupant notifications, reserve GPT-4o for complex multi-system optimization reasoning and sustainability reports — saves 65% on AI costs",
+    "Reduce Digital Twins update frequency for stable systems — HVAC zones at thermal equilibrium need updates every 5 minutes, not every 30 seconds, cutting twin operation costs by 80%",
+    "Aggregate sensor readings at IoT Hub routing level — average temperature/humidity over 1-minute windows before twin updates rather than processing every raw reading",
+    "Schedule ML model retraining during off-peak hours (weekends/nights) using spot compute — thermal dynamics models only need daily retraining, not continuous",
+    "Implement tiered storage in Cosmos DB — keep 30 days of granular sensor data in hot storage, aggregate to hourly averages for archival, reducing storage costs by 60%",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "play": "82",
+  "name": "Construction Safety AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Vision",
+      "category": "AI Services",
+      "purpose": "Real-time PPE compliance detection (hard hats, vests, gloves), hazard identification, unauthorized zone intrusion alerts from site camera feeds",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "20 transactions/min, 5K/month"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 350,
+          "note": "~350K analyses/month, custom PPE models"
+        },
+        "enterprise": {
+          "sku": "Standard S1",
+          "cost": 1200,
+          "note": "~1.5M analyses/month, multi-site real-time feeds"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Ingest video streams, wearable sensor data (worker location, fall detection), environmental sensors (dust, noise, gas levels), equipment telemetry",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "8K messages/day, 500 devices"
+        },
+        "prod": {
+          "sku": "Standard S2",
+          "cost": 250,
+          "note": "6M messages/day, 100+ cameras and sensors"
+        },
+        "enterprise": {
+          "sku": "Standard S3",
+          "cost": 1250,
+          "note": "300M messages/day, multi-site sensor networks"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for incident analysis — root cause narratives, safety report generation, hazard pattern correlation, natural language safety briefings",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 20,
+          "note": "~40K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 250,
+          "note": "~800K tokens/day, gpt-4o for multi-modal"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1000,
+          "note": "Provisioned throughput, real-time alert narration"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Safety monitoring API — video frame analysis orchestration, alert routing, dashboard backend, compliance reporting engine",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 180,
+          "note": "2 vCPU, 4GB, min 3 replicas for low-latency"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 500,
+          "note": "4 vCPU, 8GB, multi-region, 8+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Safety incidents, PPE violation records, worker zone tracking, sensor readings, inspection logs, compliance audit trail",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (1500 RU/s)",
+          "cost": 90,
+          "note": "Dedicated throughput, TTL on sensor telemetry"
+        },
+        "enterprise": {
+          "sku": "Provisioned (6000 RU/s)",
+          "cost": 350,
+          "note": "Multi-region, analytical store for trend analysis"
+        }
+      }
+    },
+    {
+      "name": "Event Hubs",
+      "category": "Streaming",
+      "purpose": "High-throughput video frame and sensor event ingestion — buffering camera feeds for real-time processing with ordered partitioning by site zone",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, 1 consumer group"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 100,
+          "note": "4 TUs, 20 consumer groups, 7-day retention"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 400,
+          "note": "16 PUs, zone-redundant, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Camera credentials, IoT device certificates, OSHA reporting API keys, worker PII encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~25K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, worker biometric data protection"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Alert latency, detection accuracy, camera feed health, API throughput, model drift, false-positive rates",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 46,
+    "prod": 1265,
+    "enterprise": 4835
+  },
+  "optimization_tips": [
+    "Process video at 1-2 FPS instead of full frame rate — PPE detection doesn't require 30fps and reducing frame rate cuts Vision API costs by 90%",
+    "Use edge AI modules (Azure IoT Edge with custom Vision containers) for initial screening — only send flagged frames to cloud Vision for confirmation, reducing bandwidth and API calls by 70%",
+    "Use GPT-4o-mini for routine daily safety summaries, reserve GPT-4o for complex multi-incident root cause analysis and regulatory report generation — saves 65% on AI costs",
+    "Implement TTL policies on Cosmos DB sensor telemetry — raw readings expire after 30 days while aggregated safety metrics are retained long-term",
+    "Schedule non-critical analytics (trend reports, model retraining) during off-peak hours using Azure Functions consumption plan — construction sites have natural off-hours windows",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

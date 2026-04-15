@@ -13,14 +13,73 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure OpenAI | CLIP/Florence visual encoding + attribute extraction |
-| Azure AI Search (Standard) | Product vector index with HNSW |
-| Azure CDN | Image delivery with resize transforms |
-| Azure Content Safety | Moderate user-uploaded images |
-| Cosmos DB (Serverless) | Product metadata, click-through analytics |
-| Container Apps | Visual search API |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Visual Search UI<br/>Image Upload · Camera Capture · Similar Products · Style Recs]
+    end
+
+    subgraph Vision Processing
+        Vision[Azure AI Vision<br/>Product Detection · Color/Texture · Shape Analysis · Embeddings]
+    end
+
+    subgraph Knowledge Base
+        Search[Azure AI Search<br/>Vector Search · Visual Similarity · Hybrid Text+Image · Faceted Filters]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Visual Understanding · Style Recs · Product Descriptions · Trend Analysis]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Visual Search API · Embedding Pipeline · Recommendation Engine · Enrichment]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Product Catalog · Visual Features · Search History · Style Profiles · Feedback]
+    end
+
+    subgraph Image Storage
+        Blob[Blob Storage<br/>Product Images · Thumbnails · User Uploads · Feature Cache]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Catalog Creds · CDN Signing · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Search Latency · Match Accuracy · Click-Through · Pipeline Timing]
+    end
+
+    UI -->|Upload Image| API
+    API -->|Analyze Image| Vision
+    Vision -->|Features & Embeddings| API
+    API -->|Vector Search| Search
+    Search -->|Similar Products| API
+    API -->|Style Recommendations| OpenAI
+    OpenAI -->|Descriptions & Recs| API
+    API -->|Results| UI
+    API <-->|Read/Write| Cosmos
+    API -->|Store/Retrieve Images| Blob
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Vision fill:#ec4899,color:#fff,stroke:#db2777
+    style Search fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#64748b,color:#fff,stroke:#475569
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Encoding: CLIP ViT-L/14 · 768-dim · background removal · center crop
@@ -38,10 +97,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $30–60 |
-| Production (50K queries) | $280–350 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure AI Vision | $0 (Free) | $250 (Standard S1) | $800 (Standard S1) |
+| Azure OpenAI | $25 (PAYG) | $350 (PAYG) | $1,200 (PTU Reserved) |
+| Azure AI Search | $0 (Free) | $500 (Standard S2) | $1,000 (Standard S3) |
+| Container Apps | $10 (Consumption) | $200 (Dedicated) | $500 (Dedicated HA) |
+| Cosmos DB | $3 (Serverless) | $150 (2500 RU/s) | $450 (8000 RU/s) |
+| Blob Storage | $2 (Hot LRS) | $50 (Hot ZRS) | $200 (Hot GRS) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $40 (Pay-per-GB) | $120 (Pay-per-GB) |
+| **Total** | **$41/mo** | **$1,545/mo** | **$4,285/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 09 (AI Search Portal)
 | Aspect | Play 09 | Play 88 |

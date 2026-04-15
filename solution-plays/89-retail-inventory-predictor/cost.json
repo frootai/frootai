@@ -1,0 +1,199 @@
+{
+  "play": "89",
+  "name": "Retail Inventory Predictor",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for demand intelligence — weather impact narrative generation, social trend interpretation, economic indicator analysis, promotional impact reasoning, supply chain disruption assessment",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1M tokens/day, gpt-4o for complex demand analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1100,
+          "note": "Provisioned throughput, real-time replenishment decisions"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Demand forecasting models — time-series prediction, weather-demand correlation, promotional lift estimation, seasonal decomposition, stockout probability scoring, safety stock optimization",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "2 vCPU compute, model experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 350,
+          "note": "Managed endpoints, 4 vCPU, daily forecast refresh"
+        },
+        "enterprise": {
+          "sku": "Standard GPU",
+          "cost": 1000,
+          "note": "GPU compute, deep learning demand models, store-level granularity"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Inventory snapshots, demand forecasts, replenishment orders, weather correlation data, social trend signals, store-SKU performance history, supplier lead times",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 120,
+          "note": "Dedicated throughput, change feed for replenishment triggers"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 450,
+          "note": "Multi-region, analytical store for demand pattern analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Hubs",
+      "category": "Streaming",
+      "purpose": "Real-time signal ingestion — POS transaction streams, inventory level updates, weather data feeds, social media trend triggers, supplier status notifications, promotional event signals",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, 1 consumer group"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "6 TUs, 20 consumer groups, 7-day retention"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 600,
+          "note": "20 PUs, zone-redundant, 90-day retention"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Demand signal processing — weather API polling, social trend scraping, economic indicator ingestion, forecast-to-replenishment order conversion, supplier notification dispatch",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, VNET, multi-source data ingestion"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 450,
+          "note": "8 vCPU, dedicated compute, high-throughput processing"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Inventory prediction API — demand forecast engine, replenishment optimizer, safety stock calculator, what-if scenario engine, dashboard backend",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Weather API keys, social media API credentials, supplier system integration keys, ERP connection strings, inventory data encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, enterprise data protection"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Forecast accuracy (MAPE/WMAPE), signal freshness, replenishment order timing, stockout prediction success rate, API latency, pipeline health",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 35,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention, forecast accuracy dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 66,
+    "prod": 1290,
+    "enterprise": 4135
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine daily demand summaries and basic weather impact assessments — reserve GPT-4o for complex multi-signal demand interpretation and supply chain disruption analysis, saving 65% on AI costs",
+    "Cache weather forecast data with 3-hour TTL — weather forecasts update infrequently; avoid redundant API calls by caching responses from weather services at the region-granularity level",
+    "Implement tiered ML model inference — use lightweight statistical models (ARIMA/ETS) for stable-demand products and reserve GPU-powered deep learning models for products with high demand volatility",
+    "Use Event Hubs capture to Blob Storage for raw signal archival instead of extended Event Hubs retention — 90% cheaper for historical data that feeds model retraining pipelines",
+    "Schedule non-critical forecast refreshes (monthly trend reports, seasonal planning) during off-peak hours using Functions consumption plan — only store-level daily forecasts need real-time compute",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

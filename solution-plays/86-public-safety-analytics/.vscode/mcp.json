@@ -5,22 +5,7 @@
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "inputs": [
-                {
-                    "type": "promptString",
-                    "id": "azure-openai-key",
-                    "description": "Azure OpenAI API Key for pattern analysis and recommendation generation (leave blank if using Managed Identity)",
-                    "password": true
-                },
-                {
-                    "type": "promptString",
-                    "id": "azure-maps-key",
-                    "description": "Azure Maps API Key for response time routing and resource positioning",
-                    "password": true
-                }
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

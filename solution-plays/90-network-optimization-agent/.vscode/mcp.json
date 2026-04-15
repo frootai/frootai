@@ -5,22 +5,7 @@
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "inputs": [
-                {
-                    "type": "promptString",
-                    "id": "azure-openai-key",
-                    "description": "Azure OpenAI API Key for anomaly analysis and network reports (leave blank if using Managed Identity)",
-                    "password": true
-                },
-                {
-                    "type": "promptString",
-                    "id": "azure-iot-hub-connection",
-                    "description": "Azure IoT Hub connection string for network equipment telemetry",
-                    "password": true
-                }
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

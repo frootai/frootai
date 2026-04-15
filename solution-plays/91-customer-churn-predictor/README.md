@@ -13,14 +13,72 @@ code .
 ```
 
 ## Architecture
-| Service | Purpose |
-|---------|---------|
-| Azure ML | Churn model training + daily batch scoring |
-| Azure OpenAI (gpt-4o) | Retention message personalization |
-| Cosmos DB (Serverless) | Customer profiles, risk scores, action history |
-| Event Hubs | Real-time usage event streaming |
-| Azure Functions | Risk score triggers + retention orchestration |
-| Communication Services | Email/SMS retention campaign delivery |
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Retention Dashboard<br/>Churn Risk Map · Customer Health · Campaigns · Cohort Analysis]
+    end
+
+    subgraph Signal Processing
+        Func[Azure Functions<br/>Usage Aggregation · Sentiment Extraction · Billing Events · Campaign Triggers]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Pattern Interpretation · Retention Offers · Win-Back Messaging · Root Cause]
+    end
+
+    subgraph ML Models
+        AML[Azure Machine Learning<br/>Churn Scoring · Usage Trends · Engagement Decay · LTV · Offer ROI]
+    end
+
+    subgraph Campaign Delivery
+        ACS[Azure Communication Services<br/>SMS Offers · Email Sequences · Callback Scheduling · Agent Routing]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Churn API · Risk Scoring · Retention Engine · Campaign Optimizer · Health Dashboard]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Profiles · Risk Scores · Usage · Support · Billing · Campaigns · Win-Back]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>CRM Creds · Billing Keys · Comms Secrets · Encryption Keys · Model Signing]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Prediction Accuracy · Campaign Effectiveness · Pipeline Health · Delivery Rates]
+    end
+
+    Func -->|Processed Signals| API
+    API -->|Score Customers| AML
+    AML -->|Risk Scores & LTV| API
+    API -->|Generate Retention Content| OpenAI
+    OpenAI -->|Personalized Messaging| API
+    API -->|Send Campaigns| ACS
+    ACS -->|Delivery Status| API
+    API <-->|Read/Write| Cosmos
+    API -->|Insights & Actions| UI
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Func fill:#14b8a6,color:#fff,stroke:#0d9488
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#a855f7,color:#fff,stroke:#9333ea
+    style ACS fill:#ec4899,color:#fff,stroke:#db2777
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
 
 ## Pre-Tuned Defaults
 - Risk: High >0.70 · Medium 0.40-0.70 · Low <0.40 · daily scoring for high risk
@@ -38,10 +96,20 @@ code .
 | 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
 
 ## Cost Estimate
-| Environment | Monthly |
-|-------------|---------|
-| Dev/Test | $65–100 |
-| Production (10K customers) | $90–150 |
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure OpenAI | $25 (PAYG) | $300 (PAYG) | $1,100 (PTU Reserved) |
+| Azure Machine Learning | $15 (Basic) | $300 (Standard) | $900 (Standard GPU) |
+| Cosmos DB | $3 (Serverless) | $120 (2000 RU/s) | $450 (8000 RU/s) |
+| Azure Communication Services | $5 (PAYG) | $150 (PAYG) | $500 (PAYG) |
+| Azure Functions | $0 (Consumption) | $180 (Premium EP2) | $450 (Premium EP3) |
+| Container Apps | $10 (Consumption) | $150 (Dedicated) | $400 (Dedicated HA) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $35 (Pay-per-GB) | $120 (Pay-per-GB) |
+| **Total** | **$59/mo** | **$1,240/mo** | **$3,935/mo** |
+
+💰 [Full cost breakdown](cost.json)
 
 ## vs. Play 64 (AI Sales Assistant)
 | Aspect | Play 64 | Play 91 |

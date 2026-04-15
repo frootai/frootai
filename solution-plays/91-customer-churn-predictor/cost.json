@@ -1,0 +1,199 @@
+{
+  "play": "91",
+  "name": "Customer Churn Predictor",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for churn intelligence — usage pattern interpretation, support ticket sentiment synthesis, billing dispute analysis, personalized retention offer generation, win-back campaign narratives",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 25,
+          "note": "~50K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~1M tokens/day, gpt-4o for complex churn analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1100,
+          "note": "Provisioned throughput, real-time churn scoring at scale"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Churn prediction models — multi-signal scoring, usage trend analysis, engagement decay detection, lifetime value estimation, retention offer ROI optimization, segment-level risk profiling",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "2 vCPU compute, model experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 300,
+          "note": "Managed endpoints, 4 vCPU, daily churn score refresh"
+        },
+        "enterprise": {
+          "sku": "Standard GPU",
+          "cost": 900,
+          "note": "GPU compute, deep learning models, real-time scoring"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Customer profiles, churn risk scores, usage telemetry aggregates, support interaction history, billing records, retention campaign results, win-back tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 3,
+          "note": "~5K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (2000 RU/s)",
+          "cost": 120,
+          "note": "Dedicated throughput, change feed for score updates"
+        },
+        "enterprise": {
+          "sku": "Provisioned (8000 RU/s)",
+          "cost": 450,
+          "note": "Multi-region, analytical store for cohort analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Communication Services",
+      "category": "Communication",
+      "purpose": "Retention campaign delivery — personalized SMS offers, email win-back sequences, automated callback scheduling, agent-assisted retention calls, multi-channel outreach orchestration",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 5,
+          "note": "~200 SMS + 500 emails for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 150,
+          "note": "~10K SMS + 50K emails/month, callback scheduling"
+        },
+        "enterprise": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~100K SMS + 500K emails/month, omni-channel campaigns"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Churn signal processing — usage telemetry aggregation, support ticket sentiment extraction, billing event processing, retention campaign trigger evaluation, win-back workflow orchestration",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "1M free executions/month"
+        },
+        "prod": {
+          "sku": "Premium EP2",
+          "cost": 180,
+          "note": "Pre-warmed, VNET, multi-source signal processing"
+        },
+        "enterprise": {
+          "sku": "Premium EP3",
+          "cost": 450,
+          "note": "8 vCPU, dedicated compute, high-throughput scoring"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Churn prediction API — risk scoring engine, retention recommendation engine, campaign optimizer, customer health dashboard backend, cohort analysis API",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 150,
+          "note": "1 vCPU, 2GB, min 2 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 400,
+          "note": "4 vCPU, 8GB, multi-region, 6+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "CRM integration credentials, billing system API keys, communication service secrets, customer data encryption keys, ML model signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~20K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, PII data encryption key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Churn prediction accuracy (AUC/precision/recall), retention campaign effectiveness, API latency, signal processing pipeline health, campaign delivery rates",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 35,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention, retention ROI dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 59,
+    "prod": 1240,
+    "enterprise": 3935
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine daily churn summaries and standard retention message generation — reserve GPT-4o for complex multi-signal churn root cause analysis and personalized high-value retention strategies, saving 65% on AI costs",
+    "Implement tiered churn scoring frequency — score high-risk customers daily, medium-risk weekly, and low-risk monthly; most customers don't change risk bands frequently, saving 80% on ML inference costs",
+    "Batch Communication Services campaign delivery during off-peak hours — SMS and email delivery is not millisecond-sensitive; scheduling during low-traffic windows reduces per-message costs",
+    "Cache customer profile aggregates in Cosmos DB with 24-hour TTL — usage patterns and support history change slowly; avoid recomputing full feature vectors on every scoring run",
+    "Use Functions consumption plan for non-time-critical signal processing (weekly cohort analysis, monthly trend reports) and reserve Premium plan for real-time churn event triggers",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}

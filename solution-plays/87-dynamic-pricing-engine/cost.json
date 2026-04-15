@@ -1,0 +1,199 @@
+{
+  "play": "87",
+  "name": "Dynamic Pricing Engine",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "GPT-4o for pricing intelligence — demand signal interpretation, competitor price analysis narratives, price elasticity reasoning, fairness constraint evaluation, promotional strategy recommendations",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 30,
+          "note": "~60K tokens/day, gpt-4o-mini for testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~1.5M tokens/day, gpt-4o for real-time pricing decisions"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput, sub-second pricing decisions at scale"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Hubs",
+      "category": "Streaming",
+      "purpose": "Real-time ingestion of demand signals — transaction streams, inventory level changes, competitor price feeds, web traffic patterns, cart abandonment events, seasonal trend triggers",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 12,
+          "note": "1 TU, 1 consumer group"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 200,
+          "note": "8 TUs, 20 consumer groups, 7-day retention"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 750,
+          "note": "25 PUs, zone-redundant, 90-day retention, dedicated clusters"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Database",
+      "purpose": "Price records, demand curves, competitor snapshots, elasticity models, fairness audit logs, product catalog metadata, pricing rule configurations, A/B test results",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~8K RU burst, pay-per-request"
+        },
+        "prod": {
+          "sku": "Provisioned (3000 RU/s)",
+          "cost": 180,
+          "note": "Dedicated throughput, change feed for price propagation"
+        },
+        "enterprise": {
+          "sku": "Provisioned (10000 RU/s)",
+          "cost": 600,
+          "note": "Multi-region, analytical store for historical pricing analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Cache for Redis",
+      "category": "Caching",
+      "purpose": "Sub-millisecond price lookups — current active prices, competitor price cache, demand signal aggregations, rate limiting counters, session-based pricing consistency",
+      "tiers": {
+        "dev": {
+          "sku": "Basic C0",
+          "cost": 15,
+          "note": "250MB cache, non-clustered"
+        },
+        "prod": {
+          "sku": "Standard C2",
+          "cost": 150,
+          "note": "6GB cache, replication, persistence"
+        },
+        "enterprise": {
+          "sku": "Enterprise E10",
+          "cost": 500,
+          "note": "12GB, active geo-replication, RediSearch for price queries"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Price elasticity models, demand forecasting, competitor response prediction, optimal price point calculation, cannibalization analysis, promotional lift estimation",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 15,
+          "note": "2 vCPU compute, model experimentation"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 300,
+          "note": "Managed endpoints, 4 vCPU, hourly model refresh"
+        },
+        "enterprise": {
+          "sku": "Standard GPU",
+          "cost": 900,
+          "note": "GPU compute, deep learning demand models, real-time inference"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Pricing engine API — price calculation service, demand signal aggregator, fairness evaluator, competitor monitor, A/B price testing orchestrator",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "0.25 vCPU, 0.5GB, scale-to-zero"
+        },
+        "prod": {
+          "sku": "Dedicated",
+          "cost": 200,
+          "note": "2 vCPU, 4GB, min 3 replicas for low-latency pricing"
+        },
+        "enterprise": {
+          "sku": "Dedicated HA",
+          "cost": 550,
+          "note": "4 vCPU, 8GB, multi-region, 10+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Competitor API credentials, marketplace integration keys, pricing algorithm encryption keys, customer segment data encryption, audit trail signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 8,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 25,
+          "note": "HSM-backed, regulatory-compliant key management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Price decision latency, revenue impact tracking, demand signal freshness, model prediction accuracy, fairness metric compliance, A/B test performance",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 45,
+          "note": "~65GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, custom revenue dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 88,
+    "prod": 1483,
+    "enterprise": 4975
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for routine price recommendations on low-value items — reserve GPT-4o for high-value products requiring complex elasticity reasoning and fairness evaluation, saving 60% on AI costs",
+    "Implement Redis caching for competitor price lookups — competitor prices change at most hourly; cache with 30-minute TTL eliminates redundant API calls to scraping services",
+    "Use Cosmos DB change feed to propagate price updates reactively — only recalculate affected product prices when demand signals change, rather than batch-recomputing entire catalogs",
+    "Right-size Event Hubs throughput units based on actual transaction volume — most retail businesses have predictable daily patterns; scale down TUs during overnight hours with auto-inflate for peaks",
+    "Schedule ML model retraining during off-peak hours using spot compute — demand elasticity models need daily retraining but are not latency-sensitive for the training step itself",
+    "Set Azure Cost Management budgets with alerts at 50%, 80%, 100%"
+  ]
+}
