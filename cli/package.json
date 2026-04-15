@@ -1,12 +1,12 @@
 {
   "name": "frootai",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "FrootAI — AI Primitive Unification Ecosystem. CLI + MCP Server for 100 solution plays, 830+ primitives, and the FAI Protocol.",
   "bin": {
     "frootai": "./bin.js"
   },
   "dependencies": {
-    "frootai-mcp": "^5.1.2"
+    "frootai-mcp": "^5.1.3"
   },
   "keywords": [
     "frootai",
