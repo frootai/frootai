@@ -1,10 +1,14 @@
 export interface SolutionPlay {
   id: string;
   name: string;
-  icon: string;
-  status: string;
+  icon?: string;
+  codicon?: string;
+  status?: string;
   dir: string;
   layer: string;
+  desc?: string;
+  cx?: string;
+  infra?: string;
 }
 
 export interface McpTool {

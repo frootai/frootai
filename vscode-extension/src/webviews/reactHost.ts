@@ -3,10 +3,10 @@ import * as vscode from "vscode";
 /** Panel data passed to the React webview app. */
 export interface PanelData {
   panel: "playDetail" | "evaluation" | "scaffold" | "mcpExplorer";
-  play?: { id: string; name: string; icon: string; status: string; dir: string; layer: string };
+  play?: { id: string; name: string; icon?: string; codicon?: string; status: string; dir: string; layer: string; desc?: string; cx?: string; infra?: string };
   scores?: Record<string, number>;
   tools?: Array<{ name: string; description: string; category: string; readOnly: boolean }>;
-  plays?: Array<{ id: string; name: string; icon: string; status: string; dir: string; layer: string }>;
+  plays?: Array<{ id: string; name: string; icon?: string; codicon?: string; status: string; dir: string; layer: string; desc?: string; cx?: string; infra?: string }>;
 }
 
 /**
@@ -28,48 +28,35 @@ export function createReactPanel(
       retainContextWhenHidden: true,
       localResourceRoots: [
         vscode.Uri.joinPath(extensionUri, "out", "webview"),
+        vscode.Uri.joinPath(extensionUri, "media"),
       ],
     },
   );
 
   const webviewDir = vscode.Uri.joinPath(extensionUri, "out", "webview");
+  const mediaDir = vscode.Uri.joinPath(extensionUri, "media");
   const mainJs = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "main.js"));
-  const mainCss = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "style.css"));
+  const mainCss = panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, "main.css"));
+  const logoUri = panel.webview.asWebviewUri(vscode.Uri.joinPath(mediaDir, "frootai-mark.png"));
   const nonce = getNonce();
 
-  // Discover chunk files (React shared code) — load them before main.js
-  const fs = require("fs");
-  const path = require("path");
-  const webviewPath = vscode.Uri.joinPath(extensionUri, "out", "webview").fsPath;
-  const chunkFiles: string[] = [];
-  try {
-    const files = fs.readdirSync(webviewPath) as string[];
-    for (const f of files) {
-      if (f.endsWith("-chunk.js")) {
-        chunkFiles.push(f);
-      }
-    }
-  } catch { /* no chunks — fine */ }
-
-  const chunkScripts = chunkFiles
-    .map(f => `<script nonce="${nonce}" src="${panel.webview.asWebviewUri(vscode.Uri.joinPath(webviewDir, f))}"></script>`)
-    .join("\n  ");
+  // Add logoUri to panelData so React can use it
+  const dataWithLogo = { ...panelData, logoUri: logoUri.toString() };
 
   panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${panel.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; font-src ${panel.webview.cspSource};">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${panel.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${panel.webview.cspSource}; font-src ${panel.webview.cspSource};">
   <link rel="stylesheet" href="${mainCss}">
   <title>${title}</title>
 </head>
 <body>
   <div id="root"></div>
   <script nonce="${nonce}">
-    window.panelData = ${JSON.stringify(panelData)};
+    window.panelData = ${JSON.stringify(dataWithLogo)};
   </script>
-  ${chunkScripts}
   <script nonce="${nonce}" src="${mainJs}"></script>
 </body>
 </html>`;

@@ -3,7 +3,11 @@ import * as vscode from "vscode";
 interface PlayEntry {
   id: string;
   name: string;
-  icon: string;
+  icon?: string;
+  codicon?: string;
+  desc?: string;
+  cx?: string;
+  infra?: string;
 }
 
 const PLAYS: PlayEntry[] = Array.from({ length: 101 }, (_, i) => {

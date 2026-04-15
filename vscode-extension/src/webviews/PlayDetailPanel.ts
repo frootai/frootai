@@ -8,10 +8,14 @@ export class PlayDetailPanel {
   public static createOrShow(play: {
     id: string;
     name: string;
-    icon: string;
+    icon?: string;
+    codicon?: string;
     dir: string;
     layer: string;
     status?: string;
+    desc?: string;
+    cx?: string;
+    infra?: string;
   }): void {
     const column =
       vscode.window.activeTextEditor?.viewColumn ?? vscode.ViewColumn.One;
@@ -34,7 +38,7 @@ export class PlayDetailPanel {
 
   private constructor(
     panel: vscode.WebviewPanel,
-    play: { id: string; name: string; icon: string; dir: string; layer: string; status?: string }
+    play: { id: string; name: string; icon?: string; codicon?: string; dir: string; layer: string; status?: string; desc?: string; cx?: string; infra?: string }
   ) {
     this._panel = panel;
     this._update(play);
@@ -75,20 +79,20 @@ export class PlayDetailPanel {
   }
 
   private _update(play: {
-    id: string; name: string; icon: string; dir: string; layer: string; status?: string;
+    id: string; name: string; icon?: string; codicon?: string; dir: string; layer: string; status?: string; desc?: string; cx?: string; infra?: string;
   }): void {
     this._panel.title = `Play ${play.id} — ${play.name}`;
     this._panel.webview.html = this._getHtml(play);
   }
 
   private _getHtml(play: {
-    id: string; name: string; icon: string; dir: string; layer: string; status?: string;
+    id: string; name: string; icon?: string; codicon?: string; dir: string; layer: string; status?: string; desc?: string; cx?: string; infra?: string;
   }): string {
     const complexityColors: Record<string, string> = {
       Low: "#10b981", Medium: "#f59e0b", High: "#ef4444",
       "Very High": "#7c3aed", Foundation: "#0ea5e9",
     };
-    const complexity = play.layer === "F" ? "Foundation" : "Medium";
+    const complexity = play.cx || (play.layer === "F" ? "Foundation" : "Medium");
     const badgeColor = complexityColors[complexity] || "#6b7280";
 
     const wafPillars = [
@@ -127,12 +131,14 @@ export class PlayDetailPanel {
   .info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--vscode-widget-border)}
   .info-label{font-weight:600;opacity:0.7;font-size:13px}.info-value{font-size:13px}
 </style></head><body>
-  <div class="hero"><span class="icon">${play.icon}</span><h1>Play ${play.id} — ${play.name}</h1>
+  <div class="hero"><span class="icon">${play.icon || ""}</span><h1>Play ${play.id} — ${play.name}</h1>
     <span class="badge" style="background:${badgeColor}">${complexity}</span></div>
   <div class="section"><h2>📋 Details</h2>
+    ${play.desc ? `<div class="info-row"><span class="info-label">Description</span><span class="info-value">${play.desc}</span></div>` : ""}
     <div class="info-row"><span class="info-label">Play ID</span><span class="info-value">${play.id}</span></div>
     <div class="info-row"><span class="info-label">Directory</span><span class="info-value">${play.dir}</span></div>
     <div class="info-row"><span class="info-label">FROOT Layer</span><span class="info-value">${play.layer}</span></div>
+    ${play.infra ? `<div class="info-row"><span class="info-label">Infrastructure</span><span class="info-value">${play.infra}</span></div>` : ""}
     <div class="info-row"><span class="info-label">Status</span><span class="info-value">${play.status || "Ready"}</span></div></div>
   <div class="section"><h2>🏗️ WAF Alignment</h2><div class="pills">${pills}</div></div>
   <div class="section"><h2>⚡ Quick Actions</h2><div class="actions">

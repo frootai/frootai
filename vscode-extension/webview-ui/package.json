@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && VITE_ENTRY=main vite build && VITE_ENTRY=sidebar vite build",
+    "build:win": "tsc && set VITE_ENTRY=main&& vite build && set VITE_ENTRY=sidebar&& vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^1.8.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

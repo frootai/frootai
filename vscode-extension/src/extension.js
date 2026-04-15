@@ -1,4 +1,4 @@
-const vscode = require("vscode");
+﻿const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
 const https = require("https");
@@ -54,107 +54,107 @@ function loadBundledKnowledge() {
 // ─── Data ──────────────────────────────────────────────────────────
 
 const SOLUTION_PLAYS = [
-  { id: "01", name: "Enterprise RAG Q&A", icon: "🔍", status: "Ready", dir: "01-enterprise-rag", layer: "R" },
-  { id: "02", name: "AI Landing Zone", icon: "⛰️", status: "Ready", dir: "02-ai-landing-zone", layer: "F" },
-  { id: "03", name: "Deterministic Agent", icon: "🎯", status: "Ready", dir: "03-deterministic-agent", layer: "O" },
-  { id: "04", name: "Call Center Voice AI", icon: "📞", status: "Ready", dir: "04-call-center-voice-ai", layer: "O" },
-  { id: "05", name: "IT Ticket Resolution", icon: "🎫", status: "Ready", dir: "05-it-ticket-resolution", layer: "O" },
-  { id: "06", name: "Document Intelligence", icon: "📄", status: "Ready", dir: "06-document-intelligence", layer: "R" },
-  { id: "07", name: "Multi-Agent Service", icon: "🤖", status: "Ready", dir: "07-multi-agent-service", layer: "O" },
-  { id: "08", name: "Copilot Studio Bot", icon: "💬", status: "Ready", dir: "08-copilot-studio-bot", layer: "O" },
-  { id: "09", name: "AI Search Portal", icon: "🔎", status: "Ready", dir: "09-ai-search-portal", layer: "R" },
-  { id: "10", name: "Content Moderation", icon: "🛡️", status: "Ready", dir: "10-content-moderation", layer: "O" },
-  { id: "11", name: "Landing Zone Advanced", icon: "🏔️", status: "Ready", dir: "11-ai-landing-zone-advanced", layer: "F" },
-  { id: "12", name: "Model Serving AKS", icon: "⚙️", status: "Ready", dir: "12-model-serving-aks", layer: "T" },
-  { id: "13", name: "Fine-Tuning Workflow", icon: "🔬", status: "Ready", dir: "13-fine-tuning-workflow", layer: "T" },
-  { id: "14", name: "AI Gateway", icon: "🚪", status: "Ready", dir: "14-cost-optimized-ai-gateway", layer: "O" },
-  { id: "15", name: "Multi-Modal DocProc", icon: "🖼️", status: "Ready", dir: "15-multi-modal-docproc", layer: "R" },
-  { id: "16", name: "Copilot Teams Ext", icon: "👥", status: "Ready", dir: "16-copilot-teams-extension", layer: "O" },
-  { id: "17", name: "AI Observability", icon: "📊", status: "Ready", dir: "17-ai-observability", layer: "O" },
-  { id: "18", name: "Prompt Management", icon: "📝", status: "Ready", dir: "18-prompt-management", layer: "T" },
-  { id: "19", name: "Edge AI Phi-4", icon: "📱", status: "Ready", dir: "19-edge-ai-phi4", layer: "T" },
-  { id: "20", name: "Anomaly Detection", icon: "🚨", status: "Ready", dir: "20-anomaly-detection", layer: "O" },
-  { id: "21", name: "Agentic RAG", icon: "🧠", status: "Ready", dir: "21-agentic-rag", layer: "R" },
-  { id: "22", name: "Multi-Agent Swarm", icon: "👥", status: "Ready", dir: "22-multi-agent-swarm", layer: "O" },
-  { id: "23", name: "Browser Automation", icon: "🖥️", status: "Ready", dir: "23-browser-automation-agent", layer: "O" },
-  { id: "24", name: "AI Code Review", icon: "🔧", status: "Ready", dir: "24-ai-code-review-pipeline", layer: "O" },
-  { id: "25", name: "Conversation Memory", icon: "🧩", status: "Ready", dir: "25-conversation-memory-layer", layer: "O" },
-  { id: "26", name: "Semantic Search Engine", icon: "🔍", status: "Ready", dir: "26-semantic-search-engine", layer: "R" },
-  { id: "27", name: "AI Data Pipeline", icon: "🏭", status: "Ready", dir: "27-ai-data-pipeline", layer: "T" },
-  { id: "28", name: "Knowledge Graph RAG", icon: "⚡", status: "Ready", dir: "28-knowledge-graph-rag", layer: "R" },
-  { id: "29", name: "MCP Gateway", icon: "⚙️", status: "Ready", dir: "29-mcp-gateway", layer: "O" },
-  { id: "30", name: "AI Security Hardening", icon: "🛡️", status: "Ready", dir: "30-ai-security-hardening", layer: "O" },
-  { id: "31", name: "Low-Code AI Builder", icon: "🧱", status: "Ready", dir: "31-low-code-ai-builder", layer: "O" },
-  { id: "32", name: "AI-Powered Testing", icon: "🧪", status: "Ready", dir: "32-ai-powered-testing", layer: "O" },
-  { id: "33", name: "Voice AI Agent", icon: "🎙️", status: "Ready", dir: "33-voice-ai-agent", layer: "O" },
-  { id: "34", name: "Edge AI Deployment", icon: "📲", status: "Ready", dir: "34-edge-ai-deployment", layer: "T" },
-  { id: "35", name: "AI Compliance Engine", icon: "📋", status: "Ready", dir: "35-ai-compliance-engine", layer: "O" },
-  { id: "36", name: "Multimodal Agent", icon: "👁️", status: "Ready", dir: "36-multimodal-agent", layer: "O" },
-  { id: "37", name: "AI-Powered DevOps", icon: "🔄", status: "Ready", dir: "37-ai-powered-devops", layer: "O" },
-  { id: "38", name: "Document Understanding v2", icon: "📑", status: "Ready", dir: "38-document-understanding-v2", layer: "O" },
-  { id: "39", name: "AI Meeting Assistant", icon: "📅", status: "Ready", dir: "39-ai-meeting-assistant", layer: "O" },
-  { id: "40", name: "Copilot Studio Advanced", icon: "🤖", status: "Ready", dir: "40-copilot-studio-advanced", layer: "O" },
-  { id: "41", name: "AI Red Teaming", icon: "🎯", status: "Ready", dir: "41-ai-red-teaming", layer: "T" },
-  { id: "42", name: "Computer Use Agent", icon: "🖱️", status: "Ready", dir: "42-computer-use-agent", layer: "O" },
-  { id: "43", name: "AI Video Generation", icon: "🎬", status: "Ready", dir: "43-ai-video-generation", layer: "T" },
-  { id: "44", name: "Foundry Local On-Device", icon: "💻", status: "Ready", dir: "44-foundry-local-on-device", layer: "T" },
-  { id: "45", name: "Real-Time Event AI", icon: "⚡", status: "Ready", dir: "45-realtime-event-ai", layer: "O" },
-  { id: "46", name: "Healthcare Clinical AI", icon: "🏥", status: "Ready", dir: "46-healthcare-clinical-ai", layer: "O" },
-  { id: "47", name: "Synthetic Data Factory", icon: "🏭", status: "Ready", dir: "47-synthetic-data-factory", layer: "T" },
-  { id: "48", name: "AI Model Governance", icon: "📊", status: "Ready", dir: "48-ai-model-governance", layer: "T" },
-  { id: "49", name: "Creative AI Studio", icon: "🎨", status: "Ready", dir: "49-creative-ai-studio", layer: "O" },
-  { id: "50", name: "Financial Risk Intelligence", icon: "💰", status: "Ready", dir: "50-financial-risk-intelligence", layer: "O" },
-  { id: "51", name: "Autonomous Coding Agent", icon: "💻", status: "Ready", dir: "51-autonomous-coding-agent", layer: "O" },
-  { id: "52", name: "AI API Gateway v2", icon: "🌐", status: "Ready", dir: "52-ai-api-gateway-v2", layer: "O" },
-  { id: "53", name: "Legal Document AI", icon: "⚖️", status: "Ready", dir: "53-legal-document-ai", layer: "O" },
-  { id: "54", name: "AI Customer Support v2", icon: "🎧", status: "Ready", dir: "54-ai-customer-support-v2", layer: "O" },
-  { id: "55", name: "Supply Chain AI", icon: "🚛", status: "Ready", dir: "55-supply-chain-ai", layer: "O" },
-  { id: "56", name: "Semantic Code Search", icon: "🔎", status: "Ready", dir: "56-semantic-code-search", layer: "R" },
-  { id: "57", name: "AI Translation Engine", icon: "🌍", status: "Ready", dir: "57-ai-translation-engine", layer: "O" },
-  { id: "58", name: "Digital Twin Agent", icon: "📦", status: "Ready", dir: "58-digital-twin-agent", layer: "O" },
-  { id: "59", name: "AI Recruiter Agent", icon: "👤", status: "Ready", dir: "59-ai-recruiter-agent", layer: "O" },
-  { id: "60", name: "Responsible AI Dashboard", icon: "📊", status: "Ready", dir: "60-responsible-ai-dashboard", layer: "T" },
-  { id: "61", name: "Content Moderation v2", icon: "🔒", status: "Ready", dir: "61-content-moderation-v2", layer: "O" },
-  { id: "62", name: "Federated Learning", icon: "🔗", status: "Ready", dir: "62-federated-learning-pipeline", layer: "T" },
-  { id: "63", name: "Fraud Detection Agent", icon: "🔍", status: "Ready", dir: "63-fraud-detection-agent", layer: "O" },
-  { id: "64", name: "AI Sales Assistant", icon: "📈", status: "Ready", dir: "64-ai-sales-assistant", layer: "O" },
-  { id: "65", name: "AI Training Curriculum", icon: "🎓", status: "Ready", dir: "65-ai-training-curriculum", layer: "F" },
-  { id: "66", name: "AI Infra Optimizer", icon: "🖥️", status: "Ready", dir: "66-ai-infrastructure-optimizer", layer: "O" },
-  { id: "67", name: "AI Knowledge Management", icon: "📚", status: "Ready", dir: "67-ai-knowledge-management", layer: "R" },
-  { id: "68", name: "Predictive Maintenance", icon: "🔧", status: "Ready", dir: "68-predictive-maintenance-ai", layer: "O" },
-  { id: "69", name: "Carbon Footprint Tracker", icon: "🌿", status: "Ready", dir: "69-carbon-footprint-tracker", layer: "O" },
-  { id: "70", name: "ESG Compliance Agent", icon: "📋", status: "Ready", dir: "70-esg-compliance-agent", layer: "O" },
-  { id: "71", name: "Smart Energy Grid AI", icon: "⚡", status: "Ready", dir: "71-smart-energy-grid-ai", layer: "O" },
-  { id: "72", name: "Climate Risk Assessor", icon: "🌍", status: "Ready", dir: "72-climate-risk-assessor", layer: "O" },
-  { id: "73", name: "Waste & Recycling Optimizer", icon: "♻️", status: "Ready", dir: "73-waste-recycling-optimizer", layer: "O" },
-  { id: "74", name: "AI Tutoring Agent", icon: "🎓", status: "Ready", dir: "74-ai-tutoring-agent", layer: "O" },
-  { id: "75", name: "Exam Generation Engine", icon: "📖", status: "Ready", dir: "75-exam-generation-engine", layer: "O" },
-  { id: "76", name: "Accessibility Learning Agent", icon: "📚", status: "Ready", dir: "76-accessibility-learning-agent", layer: "O" },
-  { id: "77", name: "Research Paper AI", icon: "🔬", status: "Ready", dir: "77-research-paper-ai", layer: "R" },
-  { id: "78", name: "Precision Agriculture Agent", icon: "🌾", status: "Ready", dir: "78-precision-agriculture-agent", layer: "O" },
-  { id: "79", name: "Food Safety Inspector AI", icon: "🍎", status: "Ready", dir: "79-food-safety-inspector-ai", layer: "O" },
-  { id: "80", name: "Biodiversity Monitor", icon: "🦋", status: "Ready", dir: "80-biodiversity-monitor", layer: "O" },
-  { id: "81", name: "Property Valuation AI", icon: "🏠", status: "Ready", dir: "81-property-valuation-ai", layer: "O" },
-  { id: "82", name: "Construction Safety AI", icon: "🚧", status: "Ready", dir: "82-construction-safety-ai", layer: "O" },
-  { id: "83", name: "Building Energy Optimizer", icon: "🏢", status: "Ready", dir: "83-building-energy-optimizer", layer: "O" },
-  { id: "84", name: "Citizen Services Chatbot", icon: "🏛️", status: "Ready", dir: "84-citizen-services-chatbot", layer: "R" },
-  { id: "85", name: "Policy Impact Analyzer", icon: "📜", status: "Ready", dir: "85-policy-impact-analyzer", layer: "T" },
-  { id: "86", name: "Public Safety Analytics", icon: "🚔", status: "Ready", dir: "86-public-safety-analytics", layer: "T" },
-  { id: "87", name: "Dynamic Pricing Engine", icon: "💰", status: "Ready", dir: "87-dynamic-pricing-engine", layer: "T" },
-  { id: "88", name: "Visual Product Search", icon: "🔍", status: "Ready", dir: "88-visual-product-search", layer: "R" },
-  { id: "89", name: "Retail Inventory Predictor", icon: "📦", status: "Ready", dir: "89-retail-inventory-predictor", layer: "T" },
-  { id: "90", name: "Network Optimization Agent", icon: "📡", status: "Ready", dir: "90-network-optimization-agent", layer: "T" },
-  { id: "91", name: "Customer Churn Predictor", icon: "👥", status: "Ready", dir: "91-customer-churn-predictor", layer: "T" },
-  { id: "92", name: "Telecom Fraud Shield", icon: "🛡️", status: "Ready", dir: "92-telecom-fraud-shield", layer: "T" },
-  { id: "93", name: "Continual Learning Agent", icon: "🧠", status: "Ready", dir: "93-continual-learning-agent", layer: "T" },
-  { id: "94", name: "AI Podcast Generator", icon: "🎙️", status: "Ready", dir: "94-ai-podcast-generator", layer: "T" },
-  { id: "95", name: "Multimodal Search Engine v2", icon: "🔍", status: "Ready", dir: "95-multimodal-search-v2", layer: "R" },
-  { id: "96", name: "Real-Time Voice Agent v2", icon: "📞", status: "Ready", dir: "96-realtime-voice-agent-v2", layer: "O" },
-  { id: "97", name: "AI Data Marketplace", icon: "📊", status: "Ready", dir: "97-ai-data-marketplace", layer: "T" },
-  { id: "98", name: "Agent Evaluation Platform", icon: "🏛️", status: "Ready", dir: "98-agent-evaluation-platform", layer: "T" },
-  { id: "99", name: "Enterprise AI Governance Hub", icon: "⚡", status: "Ready", dir: "99-enterprise-ai-governance-hub", layer: "T" },
-  { id: "100", name: "FAI Meta-Agent", icon: "🌟", status: "Ready", dir: "100-fai-meta-agent", layer: "O" },
-  { id: "101", name: "Pester Test Development", icon: "🧪", status: "Ready", dir: "101-pester-test-development", layer: "T" },
+  { id: "01", name: "Enterprise RAG Q&A", icon: "🔍", codicon: "search", status: "Ready", dir: "01-enterprise-rag", layer: "R", desc: "Production RAG — AI Search + OpenAI + Container Apps", cx: "Medium", infra: "AI Search · Azure OpenAI · Container Apps · Blob" },
+  { id: "02", name: "AI Landing Zone", icon: "⛰️", codicon: "cloud", status: "Ready", dir: "02-ai-landing-zone", layer: "F", desc: "Foundation Azure infra — VNet, private endpoints, RBAC, GPU quotas", cx: "Foundation", infra: "VNet · Private Endpoints · RBAC · Managed Identity · Key Vault" },
+  { id: "03", name: "Deterministic Agent", icon: "🎯", codicon: "robot", status: "Ready", dir: "03-deterministic-agent", layer: "O", desc: "Reliable agent — temp=0, structured JSON, guardrails", cx: "Medium", infra: "Container Apps · Azure OpenAI · Content Safety" },
+  { id: "04", name: "Call Center Voice AI", icon: "📞", codicon: "mic", status: "Ready", dir: "04-call-center-voice-ai", layer: "O", desc: "Voice customer service — Communication Services + AI Speech", cx: "High", infra: "Communication Services · AI Speech · Azure OpenAI" },
+  { id: "05", name: "IT Ticket Resolution", icon: "🎫", codicon: "inbox", status: "Ready", dir: "05-it-ticket-resolution", layer: "O", desc: "Auto-classify, route, resolve IT tickets", cx: "Medium", infra: "Logic Apps · Azure OpenAI · ServiceNow MCP" },
+  { id: "06", name: "Document Intelligence", icon: "📄", codicon: "file-text", status: "Ready", dir: "06-document-intelligence", layer: "R", desc: "Extract, classify, structure document data", cx: "Medium", infra: "Blob · Document Intelligence · Azure OpenAI" },
+  { id: "07", name: "Multi-Agent Service", icon: "🤖", codicon: "organization", status: "Ready", dir: "07-multi-agent-service", layer: "O", desc: "Supervisor + specialist agents", cx: "High", infra: "Container Apps · Azure OpenAI · Cosmos DB · Dapr" },
+  { id: "08", name: "Copilot Studio Bot", icon: "💬", codicon: "comment-discussion", status: "Ready", dir: "08-copilot-studio-bot", layer: "O", desc: "Low-code enterprise bot", cx: "Low", infra: "Copilot Studio · Dataverse · SharePoint" },
+  { id: "09", name: "AI Search Portal", icon: "🔎", codicon: "search", status: "Ready", dir: "09-ai-search-portal", layer: "R", desc: "Enterprise search with semantic ranking", cx: "Medium", infra: "AI Search · App Service · Azure OpenAI" },
+  { id: "10", name: "Content Moderation", icon: "🛡️", codicon: "shield", status: "Ready", dir: "10-content-moderation", layer: "O", desc: "AI Content Safety + filtering", cx: "Low", infra: "Content Safety · API Management · Functions" },
+  { id: "11", name: "Landing Zone Advanced", icon: "🏔️", codicon: "cloud", status: "Ready", dir: "11-ai-landing-zone-advanced", layer: "F", desc: "Multi-region, policy-driven AI landing zone", cx: "High", infra: "Multi-region VNet · Azure Policy · RBAC" },
+  { id: "12", name: "Model Serving AKS", icon: "⚙️", codicon: "server", status: "Ready", dir: "12-model-serving-aks", layer: "T", desc: "GPU model serving on Kubernetes", cx: "High", infra: "AKS · GPU Nodes · Container Registry" },
+  { id: "13", name: "Fine-Tuning Workflow", icon: "🔬", codicon: "wrench", status: "Ready", dir: "13-fine-tuning-workflow", layer: "T", desc: "Custom model fine-tuning pipeline", cx: "High", infra: "OpenAI Fine-tuning · Blob Storage" },
+  { id: "14", name: "AI Gateway", icon: "🚪", codicon: "server", status: "Ready", dir: "14-cost-optimized-ai-gateway", layer: "O", desc: "API management + cost control for AI", cx: "Medium", infra: "API Management · Azure OpenAI · Functions" },
+  { id: "15", name: "Multi-Modal DocProc", icon: "🖼️", codicon: "file-text", status: "Ready", dir: "15-multi-modal-docproc", layer: "R", desc: "Vision + document processing", cx: "High", infra: "Document Intelligence · GPT-4o · Blob" },
+  { id: "16", name: "Copilot Teams Ext", icon: "👥", codicon: "comment-discussion", status: "Ready", dir: "16-copilot-teams-extension", layer: "O", desc: "Teams bot with AI capabilities", cx: "Medium", infra: "Teams · Bot Framework · Azure OpenAI" },
+  { id: "17", name: "AI Observability", icon: "📊", codicon: "eye", status: "Ready", dir: "17-ai-observability", layer: "O", desc: "Monitoring + tracing for AI workloads", cx: "Medium", infra: "App Insights · Log Analytics · Azure Monitor" },
+  { id: "18", name: "Prompt Management", icon: "📝", codicon: "wrench", status: "Ready", dir: "18-prompt-management", layer: "T", desc: "Version-controlled prompt library", cx: "Low", infra: "Blob Storage · Container Apps · Cosmos DB" },
+  { id: "19", name: "Edge AI Phi-4", icon: "📱", codicon: "desktop-download", status: "Ready", dir: "19-edge-ai-phi4", layer: "T", desc: "On-device AI with Phi models", cx: "High", infra: "ONNX Runtime · Phi-4-mini · Edge devices" },
+  { id: "20", name: "Anomaly Detection", icon: "🚨", codicon: "graph", status: "Ready", dir: "20-anomaly-detection", layer: "O", desc: "Real-time anomaly detection in streams", cx: "High", infra: "Event Hub · Stream Analytics · Azure OpenAI" },
+  { id: "21", name: "Agentic RAG", icon: "🧠", codicon: "search", status: "Ready", dir: "21-agentic-rag", layer: "R", desc: "Autonomous multi-step RAG with iterative retrieval", cx: "High", infra: "OpenAI · AI Search · Container Apps · Key Vault" },
+  { id: "22", name: "Multi-Agent Swarm", icon: "👥", codicon: "organization", status: "Ready", dir: "22-multi-agent-swarm", layer: "O", desc: "Swarm-based multi-agent with dynamic delegation", cx: "Very High", infra: "OpenAI · Container Apps · Service Bus · Cosmos DB" },
+  { id: "23", name: "Browser Automation", icon: "🖥️", codicon: "globe", status: "Ready", dir: "23-browser-automation-agent", layer: "O", desc: "AI-driven browser automation with vision models", cx: "High", infra: "OpenAI Vision · Container Apps · Playwright" },
+  { id: "24", name: "AI Code Review", icon: "🔧", codicon: "terminal", status: "Ready", dir: "24-ai-code-review-pipeline", layer: "O", desc: "Automated code review with LLM + CodeQL", cx: "Medium", infra: "OpenAI · GitHub Actions · CodeQL" },
+  { id: "25", name: "Conversation Memory", icon: "🧩", codicon: "database", status: "Ready", dir: "25-conversation-memory-layer", layer: "O", desc: "Tiered conversation memory across sessions", cx: "High", infra: "OpenAI · Cosmos DB · AI Search · Redis" },
+  { id: "26", name: "Semantic Search Engine", icon: "🔍", codicon: "search", status: "Ready", dir: "26-semantic-search-engine", layer: "R", desc: "Enterprise semantic search with hybrid retrieval", cx: "Medium", infra: "AI Search · OpenAI · Blob Storage" },
+  { id: "27", name: "AI Data Pipeline", icon: "🏭", codicon: "database", status: "Ready", dir: "27-ai-data-pipeline", layer: "T", desc: "LLM-powered data classification and enrichment", cx: "High", infra: "OpenAI mini · Data Factory · Cosmos DB · Event Hubs" },
+  { id: "28", name: "Knowledge Graph RAG", icon: "⚡", codicon: "database", status: "Ready", dir: "28-knowledge-graph-rag", layer: "R", desc: "Graph-enhanced RAG with knowledge graph traversal", cx: "High", infra: "OpenAI · Cosmos DB Gremlin · AI Search" },
+  { id: "29", name: "MCP Gateway", icon: "⚙️", codicon: "server", status: "Ready", dir: "29-mcp-gateway", layer: "O", desc: "Centralized MCP tool gateway with API management", cx: "Medium", infra: "APIM · Container Apps · Monitor" },
+  { id: "30", name: "AI Security Hardening", icon: "🛡️", codicon: "lock", status: "Ready", dir: "30-ai-security-hardening", layer: "O", desc: "AI security with content safety and red teaming", cx: "High", infra: "Content Safety · OpenAI · Container Apps" },
+  { id: "31", name: "Low-Code AI Builder", icon: "🧱", codicon: "lightbulb", status: "Ready", dir: "31-low-code-ai-builder", layer: "O", desc: "Visual AI pipeline builder with one-click deploy", cx: "Medium", infra: "OpenAI · Container Apps · Cosmos DB · Static Web Apps" },
+  { id: "32", name: "AI-Powered Testing", icon: "🧪", codicon: "beaker", status: "Ready", dir: "32-ai-powered-testing", layer: "O", desc: "AI test generation and mutation testing", cx: "Medium", infra: "OpenAI · GitHub Actions · Container Apps" },
+  { id: "33", name: "Voice AI Agent", icon: "🎙️", codicon: "mic", status: "Ready", dir: "33-voice-ai-agent", layer: "O", desc: "Conversational voice agent with real-time speech", cx: "High", infra: "AI Speech · OpenAI · Communication Services" },
+  { id: "34", name: "Edge AI Deployment", icon: "📲", codicon: "desktop-download", status: "Ready", dir: "34-edge-ai-deployment", layer: "T", desc: "Edge-optimized AI with quantization and cloud sync", cx: "High", infra: "IoT Hub · ONNX Runtime · Container Instances" },
+  { id: "35", name: "AI Compliance Engine", icon: "📋", codicon: "law", status: "Ready", dir: "35-ai-compliance-engine", layer: "O", desc: "Automated compliance checking and audit trails", cx: "High", infra: "OpenAI · Azure Policy · Key Vault · Cosmos DB" },
+  { id: "36", name: "Multimodal Agent", icon: "👁️", codicon: "robot", status: "Ready", dir: "36-multimodal-agent", layer: "O", desc: "Agent handling text, image, and audio inputs", cx: "Medium", infra: "OpenAI Vision · AI Vision · Blob Storage" },
+  { id: "37", name: "AI-Powered DevOps", icon: "🔄", codicon: "terminal", status: "Ready", dir: "37-ai-powered-devops", layer: "O", desc: "AIOps with incident detection and auto-remediation", cx: "Medium", infra: "OpenAI · Monitor · DevOps · GitHub Actions" },
+  { id: "38", name: "Document Understanding v2", icon: "📑", codicon: "file-text", status: "Ready", dir: "38-document-understanding-v2", layer: "O", desc: "Advanced document processing with custom schemas", cx: "High", infra: "Document Intelligence · OpenAI · Cosmos DB" },
+  { id: "39", name: "AI Meeting Assistant", icon: "📅", codicon: "comment-discussion", status: "Ready", dir: "39-ai-meeting-assistant", layer: "O", desc: "Meeting intelligence with transcription and actions", cx: "Medium", infra: "AI Speech · OpenAI · Graph · Container Apps" },
+  { id: "40", name: "Copilot Studio Advanced", icon: "🤖", codicon: "comment-discussion", status: "Ready", dir: "40-copilot-studio-advanced", layer: "O", desc: "Advanced Copilot Studio with custom agents", cx: "High", infra: "Copilot Studio · OpenAI · Dataverse · Graph" },
+  { id: "41", name: "AI Red Teaming", icon: "🎯", codicon: "lock", status: "Ready", dir: "41-ai-red-teaming", layer: "T", desc: "Systematic AI red teaming and safety evaluation", cx: "High", infra: "AI Foundry · Content Safety · OpenAI" },
+  { id: "42", name: "Computer Use Agent", icon: "🖱️", codicon: "robot", status: "Ready", dir: "42-computer-use-agent", layer: "O", desc: "Vision-based desktop automation agent", cx: "Very High", infra: "OpenAI Vision · Container Apps · Blob Storage" },
+  { id: "43", name: "AI Video Generation", icon: "🎬", codicon: "lightbulb", status: "Ready", dir: "43-ai-video-generation", layer: "T", desc: "AI video generation with safety and quality controls", cx: "Very High", infra: "OpenAI · Blob Storage · Content Safety · Service Bus" },
+  { id: "44", name: "Foundry Local On-Device", icon: "💻", codicon: "desktop-download", status: "Ready", dir: "44-foundry-local-on-device", layer: "T", desc: "On-device AI with Foundry Local and cloud escalation", cx: "High", infra: "OpenAI · IoT Hub · Monitor" },
+  { id: "45", name: "Real-Time Event AI", icon: "⚡", codicon: "broadcast", status: "Ready", dir: "45-realtime-event-ai", layer: "O", desc: "Real-time event processing with AI anomaly detection", cx: "Very High", infra: "Event Hubs · Functions · OpenAI · Cosmos DB · SignalR" },
+  { id: "46", name: "Healthcare Clinical AI", icon: "🏥", codicon: "heart", status: "Ready", dir: "46-healthcare-clinical-ai", layer: "O", desc: "Clinical decision support with human-in-the-loop", cx: "Very High", infra: "OpenAI · Health Data Services · AI Search · Content Safety" },
+  { id: "47", name: "Synthetic Data Factory", icon: "🏭", codicon: "beaker", status: "Ready", dir: "47-synthetic-data-factory", layer: "T", desc: "Privacy-preserving synthetic data generation", cx: "High", infra: "OpenAI · ML · Blob Storage" },
+  { id: "48", name: "AI Model Governance", icon: "📊", codicon: "law", status: "Ready", dir: "48-ai-model-governance", layer: "T", desc: "Model lifecycle governance with drift detection", cx: "High", infra: "ML · AI Foundry · DevOps · Cosmos DB · Policy" },
+  { id: "49", name: "Creative AI Studio", icon: "🎨", codicon: "lightbulb", status: "Ready", dir: "49-creative-ai-studio", layer: "O", desc: "Creative content generation with brand voice", cx: "High", infra: "OpenAI · Blob Storage · Content Safety · Functions · CDN" },
+  { id: "50", name: "Financial Risk Intelligence", icon: "💰", codicon: "graph", status: "Ready", dir: "50-financial-risk-intelligence", layer: "O", desc: "Financial risk analysis with real-time monitoring", cx: "Very High", infra: "OpenAI · AI Search · Cosmos DB · Event Hubs" },
+  { id: "51", name: "Autonomous Coding Agent", icon: "💻", codicon: "terminal", status: "Ready", dir: "51-autonomous-coding-agent", layer: "O", desc: "Self-directed coding agent with test validation", cx: "Very High", infra: "OpenAI · GitHub Actions · Container Apps" },
+  { id: "52", name: "AI API Gateway v2", icon: "🌐", codicon: "server", status: "Ready", dir: "52-ai-api-gateway-v2", layer: "O", desc: "Advanced AI gateway with semantic caching", cx: "High", infra: "APIM · OpenAI · Redis · Monitor" },
+  { id: "53", name: "Legal Document AI", icon: "⚖️", codicon: "law", status: "Ready", dir: "53-legal-document-ai", layer: "O", desc: "Legal document analysis with risk assessment", cx: "Very High", infra: "OpenAI · AI Search · Blob Storage · Cosmos DB" },
+  { id: "54", name: "AI Customer Support v2", icon: "🎧", codicon: "comment-discussion", status: "Ready", dir: "54-ai-customer-support-v2", layer: "O", desc: "Advanced AI support with sentiment and escalation", cx: "High", infra: "OpenAI · AI Search · Communication Services · Cosmos DB" },
+  { id: "55", name: "Supply Chain AI", icon: "🚛", codicon: "graph", status: "Ready", dir: "55-supply-chain-ai", layer: "O", desc: "Supply chain optimization with demand forecasting", cx: "Very High", infra: "OpenAI · Cosmos DB · Event Hubs · ML" },
+  { id: "56", name: "Semantic Code Search", icon: "🔎", codicon: "search", status: "Ready", dir: "56-semantic-code-search", layer: "R", desc: "Codebase semantic search with embedding retrieval", cx: "Medium", infra: "OpenAI · AI Search · Blob Storage" },
+  { id: "57", name: "AI Translation Engine", icon: "🌍", codicon: "globe", status: "Ready", dir: "57-ai-translation-engine", layer: "O", desc: "Neural translation with glossary and cultural adaptation", cx: "High", infra: "OpenAI · AI Translator · Cosmos DB · CDN" },
+  { id: "58", name: "Digital Twin Agent", icon: "📦", codicon: "robot", status: "Ready", dir: "58-digital-twin-agent", layer: "O", desc: "Digital twin with IoT and predictive simulation", cx: "Very High", infra: "IoT Hub · Digital Twins · OpenAI · Functions" },
+  { id: "59", name: "AI Recruiter Agent", icon: "👤", codicon: "robot", status: "Ready", dir: "59-ai-recruiter-agent", layer: "O", desc: "AI recruitment with matching and bias detection", cx: "High", infra: "OpenAI · AI Search · Cosmos DB · Graph" },
+  { id: "60", name: "Responsible AI Dashboard", icon: "📊", codicon: "eye", status: "Ready", dir: "60-responsible-ai-dashboard", layer: "T", desc: "Responsible AI monitoring with fairness metrics", cx: "High", infra: "OpenAI · ML · Monitor · Cosmos DB · Static Web Apps" },
+  { id: "61", name: "Content Moderation v2", icon: "🔒", codicon: "shield", status: "Ready", dir: "61-content-moderation-v2", layer: "O", desc: "Advanced content moderation with severity routing", cx: "High", infra: "Content Safety · OpenAI · Cosmos DB · Service Bus" },
+  { id: "62", name: "Federated Learning", icon: "🔗", codicon: "lock", status: "Ready", dir: "62-federated-learning-pipeline", layer: "T", desc: "Privacy-preserving federated learning", cx: "Very High", infra: "ML · Confidential Computing · Blob Storage" },
+  { id: "63", name: "Fraud Detection Agent", icon: "🔍", codicon: "graph", status: "Ready", dir: "63-fraud-detection-agent", layer: "O", desc: "Real-time fraud detection with streaming analysis", cx: "High", infra: "OpenAI · Event Hubs · Stream Analytics · Cosmos DB" },
+  { id: "64", name: "AI Sales Assistant", icon: "📈", codicon: "megaphone", status: "Ready", dir: "64-ai-sales-assistant", layer: "O", desc: "AI sales copilot with lead scoring and outreach", cx: "Medium", infra: "OpenAI · Cosmos DB · Graph · AI Search" },
+  { id: "65", name: "AI Training Curriculum", icon: "🎓", codicon: "book", status: "Ready", dir: "65-ai-training-curriculum", layer: "F", desc: "Adaptive AI training with difficulty scaling", cx: "Medium", infra: "OpenAI · Cosmos DB · Static Web Apps" },
+  { id: "66", name: "AI Infra Optimizer", icon: "🖥️", codicon: "wrench", status: "Ready", dir: "66-ai-infrastructure-optimizer", layer: "O", desc: "AI-driven infra optimization and cost analysis", cx: "High", infra: "OpenAI · Monitor · Advisor · Cost Management" },
+  { id: "67", name: "AI Knowledge Management", icon: "📚", codicon: "database", status: "Ready", dir: "67-ai-knowledge-management", layer: "R", desc: "Enterprise knowledge management with contextual retrieval", cx: "High", infra: "OpenAI · AI Search · Cosmos DB · Graph" },
+  { id: "68", name: "Predictive Maintenance", icon: "🔧", codicon: "wrench", status: "Ready", dir: "68-predictive-maintenance-ai", layer: "O", desc: "Predictive maintenance with IoT sensor analysis", cx: "High", infra: "IoT Hub · OpenAI · ML · Stream Analytics · Cosmos DB" },
+  { id: "69", name: "Carbon Footprint Tracker", icon: "🌿", codicon: "globe", status: "Ready", dir: "69-carbon-footprint-tracker", layer: "O", desc: "Real-time carbon accounting across cloud and supply chain", cx: "High", infra: "Azure Monitor · OpenAI · Cosmos DB · Event Hubs" },
+  { id: "70", name: "ESG Compliance Agent", icon: "📋", codicon: "law", status: "Ready", dir: "70-esg-compliance-agent", layer: "O", desc: "ESG reporting with GRI, SASB, TCFD, CSRD compliance", cx: "High", infra: "OpenAI · Document Intelligence · Cosmos DB · AI Search" },
+  { id: "71", name: "Smart Energy Grid AI", icon: "⚡", codicon: "broadcast", status: "Ready", dir: "71-smart-energy-grid-ai", layer: "O", desc: "Energy demand prediction and grid balancing via digital twin", cx: "Very High", infra: "IoT Hub · OpenAI · Stream Analytics · Digital Twins" },
+  { id: "72", name: "Climate Risk Assessor", icon: "🌍", codicon: "globe", status: "Ready", dir: "72-climate-risk-assessor", layer: "O", desc: "Climate scenario modeling for financial risk assessment", cx: "High", infra: "OpenAI · ML · Cosmos DB · AI Search" },
+  { id: "73", name: "Waste & Recycling Optimizer", icon: "♻️", codicon: "globe", status: "Ready", dir: "73-waste-recycling-optimizer", layer: "O", desc: "Waste classification, route optimization, contamination detection", cx: "Medium", infra: "AI Vision · OpenAI · IoT Hub · Container Apps" },
+  { id: "74", name: "AI Tutoring Agent", icon: "🎓", codicon: "book", status: "Ready", dir: "74-ai-tutoring-agent", layer: "O", desc: "1-on-1 personalized tutoring with Socratic method and adaptive difficulty", cx: "High", infra: "Azure OpenAI · Cosmos DB · AI Search · Static Web Apps" },
+  { id: "75", name: "Exam Generation Engine", icon: "📖", codicon: "book", status: "Ready", dir: "75-exam-generation-engine", layer: "O", desc: "Auto-generate exams with difficulty calibration, rubrics, and answer keys", cx: "Medium", infra: "Azure OpenAI · Blob Storage · Cosmos DB · Functions" },
+  { id: "76", name: "Accessibility Learning Agent", icon: "📚", codicon: "book", status: "Ready", dir: "76-accessibility-learning-agent", layer: "O", desc: "Screen reader-first, dyslexia-aware learning with multi-modal adaptation", cx: "High", infra: "AI Speech · Azure OpenAI · AI Vision · Container Apps · Cosmos DB" },
+  { id: "77", name: "Research Paper AI", icon: "🔬", codicon: "search", status: "Ready", dir: "77-research-paper-ai", layer: "R", desc: "Literature review, citation network, methodology critique, research gap analysis", cx: "Very High", infra: "Azure OpenAI · AI Search · Cosmos DB · Graph · Functions" },
+  { id: "78", name: "Precision Agriculture Agent", icon: "🌾", codicon: "graph", status: "Ready", dir: "78-precision-agriculture-agent", layer: "O", desc: "Satellite imagery + IoT sensor fusion for crop health, irrigation, yield prediction", cx: "Very High", infra: "Azure IoT Hub · AI Vision · Azure OpenAI · Digital Twins · ML" },
+  { id: "79", name: "Food Safety Inspector AI", icon: "🍎", codicon: "shield", status: "Ready", dir: "79-food-safety-inspector-ai", layer: "O", desc: "HACCP compliance, contamination detection, farm-to-fork traceability", cx: "High", infra: "Document Intelligence · Azure OpenAI · Cosmos DB · Event Hubs · IoT Hub" },
+  { id: "80", name: "Biodiversity Monitor", icon: "🦋", codicon: "eye", status: "Ready", dir: "80-biodiversity-monitor", layer: "O", desc: "Species identification from camera trap, drone, acoustic data with conservation alerts", cx: "High", infra: "AI Vision · Azure OpenAI · IoT Hub · Cosmos DB · Functions" },
+  { id: "81", name: "Property Valuation AI", icon: "🏠", codicon: "graph", status: "Ready", dir: "81-property-valuation-ai", layer: "O", desc: "Automated property appraisal with comparable sales and market trends", cx: "High", infra: "Azure OpenAI · AI Search · Cosmos DB · Machine Learning · Functions" },
+  { id: "82", name: "Construction Safety AI", icon: "🚧", codicon: "shield", status: "Ready", dir: "82-construction-safety-ai", layer: "O", desc: "Real-time site monitoring — PPE compliance, hazard detection, incident reporting", cx: "High", infra: "AI Vision · IoT Hub · Azure OpenAI · Container Apps · Cosmos DB" },
+  { id: "83", name: "Building Energy Optimizer", icon: "🏢", codicon: "wrench", status: "Ready", dir: "83-building-energy-optimizer", layer: "O", desc: "HVAC, lighting, occupancy optimization via digital twin", cx: "Very High", infra: "Digital Twins · IoT Hub · Azure OpenAI · Functions · Cosmos DB" },
+  { id: "84", name: "Citizen Services Chatbot", icon: "🏛️", codicon: "comment-discussion", status: "Ready", dir: "84-citizen-services-chatbot", layer: "R", desc: "Multi-language municipal AI assistant — forms, appointments, permits, FAQ", cx: "Medium", infra: "Azure OpenAI · AI Translator · Communication Services · AI Search · Cosmos DB" },
+  { id: "85", name: "Policy Impact Analyzer", icon: "📜", codicon: "law", status: "Ready", dir: "85-policy-impact-analyzer", layer: "T", desc: "Regulatory change detection with cross-sector impact and briefing generation", cx: "High", infra: "Azure OpenAI · AI Search · Document Intelligence · Cosmos DB · Functions" },
+  { id: "86", name: "Public Safety Analytics", icon: "🚔", codicon: "graph", status: "Ready", dir: "86-public-safety-analytics", layer: "T", desc: "Crime pattern prediction, resource allocation, community sentiment", cx: "Very High", infra: "Azure OpenAI · Machine Learning · Event Hubs · Cosmos DB · Stream Analytics" },
+  { id: "87", name: "Dynamic Pricing Engine", icon: "💰", codicon: "graph", status: "Ready", dir: "87-dynamic-pricing-engine", layer: "T", desc: "Real-time price optimization with demand signals and fairness guardrails", cx: "High", infra: "Azure OpenAI · Event Hubs · Cosmos DB · Redis Cache · Machine Learning" },
+  { id: "88", name: "Visual Product Search", icon: "🔍", codicon: "search", status: "Ready", dir: "88-visual-product-search", layer: "R", desc: "Image-based product discovery with visual similarity and recommendations", cx: "High", infra: "AI Vision · Azure OpenAI · AI Search · Container Apps · Cosmos DB" },
+  { id: "89", name: "Retail Inventory Predictor", icon: "📦", codicon: "graph", status: "Ready", dir: "89-retail-inventory-predictor", layer: "T", desc: "Demand forecasting with weather, social trends, automated reordering", cx: "High", infra: "Azure OpenAI · Machine Learning · Cosmos DB · Event Hubs · Functions" },
+  { id: "90", name: "Network Optimization Agent", icon: "📡", codicon: "broadcast", status: "Ready", dir: "90-network-optimization-agent", layer: "T", desc: "5G/LTE capacity planning with anomaly detection and self-healing", cx: "Very High", infra: "Azure IoT Hub · Stream Analytics · OpenAI · Digital Twins · Cosmos DB" },
+  { id: "91", name: "Customer Churn Predictor", icon: "👥", codicon: "graph", status: "Ready", dir: "91-customer-churn-predictor", layer: "T", desc: "Multi-signal churn scoring with retention campaigns", cx: "High", infra: "Azure OpenAI · Machine Learning · Cosmos DB · Communication Services · Functions" },
+  { id: "92", name: "Telecom Fraud Shield", icon: "🛡️", codicon: "shield", status: "Ready", dir: "92-telecom-fraud-shield", layer: "T", desc: "Real-time telecom fraud detection — SIM swap, toll fraud, sub-second blocking", cx: "High", infra: "Azure Event Hubs · Stream Analytics · OpenAI · Cosmos DB · Functions" },
+  { id: "93", name: "Continual Learning Agent", icon: "🧠", codicon: "robot", status: "Ready", dir: "93-continual-learning-agent", layer: "T", desc: "Agent that persists knowledge across sessions and starts smarter every time", cx: "Very High", infra: "Azure OpenAI · Cosmos DB · AI Search · Redis Cache · Functions" },
+  { id: "94", name: "AI Podcast Generator", icon: "🎙️", codicon: "mic", status: "Ready", dir: "94-ai-podcast-generator", layer: "T", desc: "Text-to-podcast with multi-speaker voice synthesis and chapter markers", cx: "High", infra: "Azure AI Speech · OpenAI · Blob Storage · CDN · Functions" },
+  { id: "95", name: "Multimodal Search Engine v2", icon: "🔍", codicon: "search", status: "Ready", dir: "95-multimodal-search-v2", layer: "R", desc: "Unified search across images, text, code, and audio with cross-modal reasoning", cx: "Very High", infra: "Azure AI Search · AI Vision · AI Speech · OpenAI · Container Apps" },
+  { id: "96", name: "Real-Time Voice Agent v2", icon: "📞", codicon: "mic", status: "Ready", dir: "96-realtime-voice-agent-v2", layer: "O", desc: "Next-gen bidirectional voice agent with sub-200ms latency and MCP tools", cx: "Very High", infra: "Azure AI Voice Live · OpenAI · Container Apps · Functions · Cosmos DB" },
+  { id: "97", name: "AI Data Marketplace", icon: "📊", codicon: "package", status: "Ready", dir: "97-ai-data-marketplace", layer: "T", desc: "Platform for publishing and monetizing synthetic datasets with differential privacy", cx: "High", infra: "Azure Machine Learning · Blob Storage · API Management · Cosmos DB · Functions" },
+  { id: "98", name: "Agent Evaluation Platform", icon: "🏛️", codicon: "beaker", status: "Ready", dir: "98-agent-evaluation-platform", layer: "T", desc: "Automated evaluation suite with benchmarks, A/B testing, and leaderboard", cx: "High", infra: "Azure OpenAI · Container Apps · Cosmos DB · Machine Learning · Functions" },
+  { id: "99", name: "Enterprise AI Governance Hub", icon: "⚡", codicon: "law", status: "Ready", dir: "99-enterprise-ai-governance-hub", layer: "T", desc: "Central control plane for AI models, agents, APIs — approval gates, policy", cx: "Very High", infra: "Azure API Management · Policy · Monitor · Cosmos DB · ML · Key Vault" },
+  { id: "100", name: "FAI Meta-Agent", icon: "🌟", codicon: "zap", status: "Ready", dir: "100-fai-meta-agent", layer: "O", desc: "Self-orchestrating super-agent that selects plays, provisions infra, delivers AI", cx: "Very High", infra: "Azure OpenAI · MCP Server · Container Apps · Cosmos DB · AI Search · Key Vault" },
+  { id: "101", name: "Pester Test Development", icon: "🧪", codicon: "beaker", status: "Ready", dir: "101-pester-test-development", layer: "T", desc: "PowerShell Pester test generation and validation", cx: "Low", infra: "PowerShell · Pester · GitHub Actions" },
 ];
 
 const FROOT_MODULES = [
@@ -469,15 +469,13 @@ class SolutionPlayProvider {
   getTreeItem(element) { return element; }
   getChildren(element) {
     if (!element) {
-      const layerColors = { F: "charts.yellow", R: "charts.green", O: "charts.blue", T: "charts.purple" };
       const layerNames = { F: "Foundations", R: "Reasoning", O: "Orchestration", T: "Transformation" };
-      const layerIcons = { F: "server-process", R: "lightbulb", O: "extensions", T: "rocket" };
       return SOLUTION_PLAYS.map((p) => {
         const item = new vscode.TreeItem(`${p.id} ${p.name}`, vscode.TreeItemCollapsibleState.None);
-        item.description = layerNames[p.layer] || p.layer;
-        item.tooltip = `${p.name}\nFROOT Layer: ${layerNames[p.layer] || p.layer}\nStatus: ${p.status}\n\nClick to open actions`;
+        item.description = `${layerNames[p.layer] || p.layer} · ${p.cx || ""}`;
+        item.tooltip = new vscode.MarkdownString(`**${p.name}**\n\n${p.desc || ""}\n\n---\n\n**Complexity:** ${p.cx || "N/A"}  \n**Infra:** ${p.infra || "N/A"}  \n**Layer:** ${layerNames[p.layer] || p.layer}  \n**Status:** ${p.status}\n\n*Click to open Control Center*`);
         item.contextValue = "solutionPlay";
-        item.iconPath = new vscode.ThemeIcon(layerIcons[p.layer] || "package", new vscode.ThemeColor(layerColors[p.layer] || "charts.blue"));
+        item.iconPath = new vscode.ThemeIcon(p.codicon || "symbol-method");
         item.command = { command: "frootai.openSolutionPlay", title: "Open", arguments: [p] };
         return item;
       });
@@ -564,27 +562,28 @@ class PrimitivesCatalogProvider {
     const categories = [
       {
         label: "Agents (238)", icon: "hubot", children: [
-          { label: "Install agent via VS Code", desc: "vscode://github.copilot-chat/createAgent", icon: "cloud-download" },
-          { label: "Browse on website", desc: "frootai.dev/primitives/agents", icon: "globe" },
+          { label: "Browse all agents", desc: "View 238 agents on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/agents" },
+          { label: "Install agent in VS Code", desc: "One-click agent install via VS Code protocol", icon: "cloud-download", url: "https://frootai.dev/primitives/agents" },
           { label: "WAF-aligned AI personas", desc: "Each agent has expertise + tools + WAF alignment", icon: "info" },
         ]
       },
       {
         label: "Instructions (176)", icon: "file-text", children: [
+          { label: "Browse all instructions", desc: "View 176 instructions on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/instructions" },
           { label: "Auto-apply via applyTo globs", desc: "Match file patterns like **/*.tsx", icon: "regex" },
-          { label: "Browse on website", desc: "frootai.dev/primitives/instructions", icon: "globe" },
           { label: "Scoped behavioral directives", desc: "Coding standards, security rules, best practices", icon: "info" },
         ]
       },
       {
-        label: "Skills (282)", icon: "tools", children: [
+        label: "Skills (322)", icon: "tools", children: [
+          { label: "Browse all skills", desc: "View 322 skills on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/skills" },
           { label: "SKILL.md folder structure", desc: "Parameters, steps, bundled assets", icon: "folder" },
-          { label: "Browse on website", desc: "frootai.dev/primitives/skills", icon: "globe" },
           { label: "Reusable LEGO blocks", desc: "Auto-wire inside solution plays", icon: "info" },
         ]
       },
       {
         label: "Hooks (10)", icon: "shield", children: [
+          { label: "Browse all hooks", desc: "View 10 hooks on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/hooks" },
           { label: "secrets-scanner", desc: "40+ secret patterns, entropy detection", icon: "lock" },
           { label: "tool-guardian", desc: "Allowlist/blocklist, rate limiting", icon: "shield" },
           { label: "governance-audit", desc: "OWASP LLM Top 10 checks", icon: "law" },
@@ -599,21 +598,21 @@ class PrimitivesCatalogProvider {
       },
       {
         label: "Plugins (77)", icon: "package", children: [
+          { label: "Browse marketplace", desc: "View 77 plugins on frootai.dev", icon: "globe", url: "https://frootai.dev/marketplace" },
           { label: "npx frootai install <plugin>", desc: "One-command installation", icon: "terminal" },
-          { label: "Browse marketplace", desc: "frootai.dev/marketplace", icon: "globe" },
           { label: "1,008 bundled items", desc: "Agents + instructions + skills + hooks per plugin", icon: "info" },
         ]
       },
       {
         label: "Workflows (12)", icon: "git-branch", children: [
+          { label: "Browse workflows", desc: "View 12 workflows on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives" },
           { label: "Agentic workflows with safe-outputs", desc: "GitHub Copilot engine", icon: "github-action" },
-          { label: "Browse on website", desc: "frootai.dev/workflows", icon: "globe" },
         ]
       },
       {
         label: "Cookbook (16)", icon: "book", children: [
+          { label: "Browse cookbook", desc: "View 16 recipes on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives" },
           { label: "Step-by-step recipes", desc: "From play init to production deployment", icon: "list-ordered" },
-          { label: "Browse on website", desc: "frootai.dev/cookbook", icon: "globe" },
         ]
       },
     ];
@@ -633,6 +632,9 @@ class PrimitivesCatalogProvider {
         item.description = child.desc;
         item.iconPath = new vscode.ThemeIcon(child.icon);
         item.tooltip = child.desc;
+        if (child.url) {
+          item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(child.url)] };
+        }
         return item;
       });
     }
@@ -647,23 +649,23 @@ class FaiProtocolProvider {
   getChildren(element) {
     const layers = [
       {
-        label: "FAI Protocol", icon: "json", desc: "fai-manifest.json — the specification", children: [
-          { label: "fai-manifest.json", desc: "Full play wiring: context + primitives + infra + toolkit", icon: "file-code" },
-          { label: "fai-context.json", desc: "Lightweight LEGO block context reference", icon: "file" },
-          { label: "7 JSON schemas", desc: "agent, instruction, skill, hook, plugin, manifest, context", icon: "symbol-structure" },
+        label: "FAI Protocol", icon: "symbol-namespace", desc: "fai-manifest.json — the specification", children: [
+          { label: "fai-manifest.json", desc: "Full play wiring: context + primitives + infra + toolkit", icon: "file-code", url: "https://frootai.dev/fai-protocol" },
+          { label: "fai-context.json", desc: "Lightweight LEGO block context reference", icon: "file", url: "https://frootai.dev/fai-protocol" },
+          { label: "7 JSON schemas", desc: "agent, instruction, skill, hook, plugin, manifest, context", icon: "symbol-structure", url: "https://github.com/frootai/frootai/tree/main/schemas" },
           { label: "Auto-wiring", desc: "Shared context propagates to all primitives in a play", icon: "link" },
         ]
       },
       {
-        label: "FAI Layer", icon: "layers", desc: "The conceptual binding glue", children: [
-          { label: "Context Wiring", desc: "Knowledge modules + WAF pillars + compatible plays", icon: "git-merge" },
-          { label: "WAF Alignment", desc: "6 pillars: security, reliability, cost, ops, perf, RAI", icon: "shield" },
+        label: "FAI Layer", icon: "symbol-class", desc: "The conceptual binding glue", children: [
+          { label: "Context Wiring", desc: "Knowledge modules + WAF pillars + compatible plays", icon: "git-merge", url: "https://frootai.dev/fai-protocol" },
+          { label: "WAF Alignment", desc: "6 pillars: security, reliability, cost, ops, perf, RAI", icon: "shield", url: "https://frootai.dev/learning-hub/waf-alignment" },
           { label: "Standalone → Wired", desc: "LEGO blocks auto-wire when placed in a play", icon: "plug" },
         ]
       },
       {
         label: "FAI Engine", icon: "server-process", desc: "The runtime — 7 modules, 42 tests", children: [
-          { label: "manifest-reader", desc: "Loads and validates fai-manifest.json", icon: "file-code" },
+          { label: "manifest-reader", desc: "Loads and validates fai-manifest.json", icon: "file-code", url: "https://github.com/frootai/frootai/tree/main/engine" },
           { label: "context-resolver", desc: "Resolves shared context chain", icon: "search" },
           { label: "primitive-wirer", desc: "Connects agents, instructions, skills, hooks", icon: "link" },
           { label: "hook-runner", desc: "Executes hooks at lifecycle events", icon: "play" },
@@ -673,16 +675,16 @@ class FaiProtocolProvider {
       },
       {
         label: "FAI Factory", icon: "rocket", desc: "CI/CD — build, test, publish", children: [
-          { label: "validate-primitives.js", desc: "2,800+ checks across all primitives", icon: "check-all" },
-          { label: "GitHub Actions (15)", desc: "Automated CI/CD workflows", icon: "github-action" },
-          { label: "npm publish", desc: "frootai-mcp on npm registry", icon: "package" },
+          { label: "validate-primitives.js", desc: "2,800+ checks across all primitives", icon: "check-all", url: "https://github.com/frootai/frootai/tree/main/scripts" },
+          { label: "GitHub Actions (15)", desc: "Automated CI/CD workflows", icon: "github-action", url: "https://github.com/frootai/frootai/actions" },
+          { label: "npm publish", desc: "frootai-mcp on npm registry", icon: "package", url: "https://www.npmjs.com/package/frootai-mcp" },
         ]
       },
       {
-        label: "FAI Marketplace", icon: "store", desc: "77 plugins, 1,008 items", children: [
+        label: "FAI Marketplace", icon: "extensions", desc: "77 plugins, 1,008 items", children: [
+          { label: "Browse marketplace", desc: "View plugins on frootai.dev", icon: "globe", url: "https://frootai.dev/marketplace" },
           { label: "npx frootai install", desc: "One-command plugin installation", icon: "terminal" },
           { label: "npx frootai list", desc: "Browse all 77 plugins", icon: "list-flat" },
-          { label: "frootai.dev/marketplace", desc: "Web-based marketplace with modals", icon: "globe" },
         ]
       },
     ];
@@ -702,6 +704,9 @@ class FaiProtocolProvider {
         item.description = child.desc;
         item.iconPath = new vscode.ThemeIcon(child.icon);
         item.tooltip = child.desc;
+        if (child.url) {
+          item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(child.url)] };
+        }
         return item;
       });
     }
@@ -731,9 +736,9 @@ class McpToolProvider {
         return item;
       });
     }
-    const groupType = groups.find(g => g.label === element.label)?._groupType || element._groupType;
+    const groupType = element._groupType;
     if (groupType) {
-      const typeIcons = { static: "book", live: "cloud-upload", chain: "debug-disconnect", ecosystem: "graph-scatter", compute: "symbol-ruler" };
+      const typeIcons = { static: "book", live: "cloud-upload", chain: "debug-disconnect", ecosystem: "graph-scatter", compute: "symbol-ruler", engine: "circuit-board", scaffold: "file-add", marketplace: "extensions" };
       return MCP_TOOLS.filter(t => t.type === groupType).map(t => {
         const item = new vscode.TreeItem(t.name, vscode.TreeItemCollapsibleState.None);
         item.description = t.desc;
@@ -773,7 +778,7 @@ function activate(context) {
   // Guard against double activation
   if (activate._done) return;
   activate._done = true;
-  
+
   console.log("FrootAI v6.1 activated");
 
   // B1: Initialize cache directory for offline downloaded plays
@@ -797,47 +802,11 @@ function activate(context) {
   vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
   vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
 
-  // ── Command: Open Solution Play (action picker) ──
+  // ── Command: Open Solution Play → Direct React Panel ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.openSolutionPlay", async (play) => {
-      // Show action picker
-      const action = await vscode.window.showQuickPick([
-        { label: "$(book) Read Documentation", description: "View solution play README in rich panel", value: "read" },
-        { label: "$(notebook) Read User Guide", description: `Step-by-step setup guide for ${play.name}`, value: "userguide" },
-        { label: "$(tools) Init DevKit", description: ".github Agentic OS (19 files) + agent.md + MCP", value: "devkit" },
-        { label: "$(settings-gear) Init TuneKit", description: "config/*.json + infra/main.bicep + evaluation/", value: "tunekit" },
-        { label: "$(compass) Init SpecKit", description: "spec/play-spec.json + WAF alignment + eval thresholds", value: "speckit" },
-        { label: "$(shield) Init Hooks", description: "guardrails.json (preToolUse policy gates)", value: "hooks" },
-        { label: "$(terminal) Init Prompts", description: "4 slash commands (/deploy, /test, /review, /evaluate)", value: "prompts" },
-        { label: "$(package) Install as Plugin", description: "Install this play as a community plugin", value: "plugin" },
-        { label: "$(graph) Run Evaluation", description: "Open evaluation dashboard for this play", value: "eval" },
-        { label: "$(github) Open on GitHub", description: `github.com/.../solution-plays/${play.dir}`, value: "github" },
-      ], { placeHolder: `${play.icon} ${play.name} — What would you like to do?` });
-
-      if (!action) return;
-
-      if (action.value === "read") {
-        // Read documentation — open on website
-        vscode.env.openExternal(vscode.Uri.parse(`https://frootai.dev/solution-plays/${play.dir}`));
-      } else if (action.value === "userguide") {
-        vscode.env.openExternal(vscode.Uri.parse(`https://frootai.dev/user-guide?play=${play.id}`));
-      } else if (action.value === "devkit") {
-        vscode.commands.executeCommand("frootai.initDevKit", play);
-      } else if (action.value === "tunekit") {
-        vscode.commands.executeCommand("frootai.initTuneKit", play);
-      } else if (action.value === "speckit") {
-        vscode.commands.executeCommand("frootai.initSpecKit", play);
-      } else if (action.value === "hooks") {
-        vscode.commands.executeCommand("frootai.initHooks", play);
-      } else if (action.value === "prompts") {
-        vscode.commands.executeCommand("frootai.initPrompts", play);
-      } else if (action.value === "plugin") {
-        vscode.commands.executeCommand("frootai.installPlugin");
-      } else if (action.value === "eval") {
-        vscode.commands.executeCommand("frootai.runEvaluation");
-      } else if (action.value === "github") {
-        vscode.env.openExternal(vscode.Uri.parse(`https://github.com/frootai/frootai/tree/main/solution-plays/${play.dir}`));
-      }
+      // Directly open the React Play Detail panel — no dropdown
+      vscode.commands.executeCommand("frootai.openPlayDetail", play);
     })
   );
 
@@ -1031,6 +1000,9 @@ function activate(context) {
         "agent.md",
         ".vscode/mcp.json",
         ".vscode/settings.json",
+        "spec/fai-manifest.json",
+        "infra/main.bicep",
+        "infra/parameters.json",
       ];
 
       // Dynamic discovery — scan the play's .github folder for all instruction/agent/prompt/skill files
@@ -1094,6 +1066,7 @@ function activate(context) {
         addWorkflowFiles(localPlayDir);
       } else {
         // Fallback: known patterns for GitHub download
+        const playSlug = selectedPlay.dir.replace(/^\d+-/, ""); // e.g. "enterprise-rag"
         dynamicFiles.push(
           ".github/instructions/azure-coding.instructions.md",
           ".github/instructions/security.instructions.md",
@@ -1105,17 +1078,15 @@ function activate(context) {
           ".github/prompts/test.prompt.md",
           ".github/prompts/review.prompt.md",
           ".github/prompts/evaluate.prompt.md",
-          // Skills (common across plays)
-          ".github/skills/generate-tests/SKILL.md",
-          ".github/skills/deploy-pester-test-development/SKILL.md",
-          ".github/skills/evaluate-pester-test-development/SKILL.md",
-          ".github/skills/tune-pester-test-development/SKILL.md",
+          // Skills (play-specific)
+          `.github/skills/deploy-${playSlug}/SKILL.md`,
+          `.github/skills/evaluate-${playSlug}/SKILL.md`,
+          `.github/skills/tune-${playSlug}/SKILL.md`,
           // Hooks
-          ".github/hooks/pester-guardrails.json",
           ".github/hooks/guardrails.json",
-          // Workflows
-          ".github/workflows/pester-ci-github.yml",
-          ".github/workflows/azure-pipelines.yml.template",
+          // Workflows (play-specific)
+          `.github/workflows/${playSlug}-ci-github.yml`,
+          `.github/workflows/${playSlug}-review-github.yml`,
         );
       }
 
@@ -1151,11 +1122,11 @@ function activate(context) {
           }
           vscode.window.showInformationMessage(`✅ DevKit initialized for ${selectedPlay.name}! ${copied} files from local repo.`);
           // Always ensure mcp.json uses npx (not local paths)
+          // Write the simple working mcp.json (always overwrite with known-good version)
           const mcpFixPath = path.join(wsFolder, ".vscode", "mcp.json");
-          const correctMcp = { servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp@latest"] } } };
           const mcpDir = path.join(wsFolder, ".vscode");
           if (!fs.existsSync(mcpDir)) fs.mkdirSync(mcpDir, { recursive: true });
-          fs.writeFileSync(mcpFixPath, JSON.stringify(correctMcp, null, 2), "utf-8");
+          fs.writeFileSync(mcpFixPath, JSON.stringify({ servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp@latest"] } } }, null, 2), "utf-8");
           return;
         }
       }
@@ -1183,12 +1154,11 @@ function activate(context) {
             `✅ DevKit downloaded for ${selectedPlay.name}! ${downloaded} files from GitHub.` +
             (failed > 0 ? ` (${failed} files not available)` : "")
           );
-          // Always ensure mcp.json uses npx (not whatever CDN served)
+          // Write the simple working mcp.json
           const mcpFixPath = path.join(wsFolder, ".vscode", "mcp.json");
-          const correctMcp = { servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp@latest"] } } };
           const mcpDir = path.join(wsFolder, ".vscode");
           if (!fs.existsSync(mcpDir)) fs.mkdirSync(mcpDir, { recursive: true });
-          fs.writeFileSync(mcpFixPath, JSON.stringify(correctMcp, null, 2), "utf-8");
+          fs.writeFileSync(mcpFixPath, JSON.stringify({ servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp@latest"] } } }, null, 2), "utf-8");
         }
       );
     })
@@ -1283,6 +1253,8 @@ function activate(context) {
         "config/guardrails.json",
         "config/agents.json",
         "config/model-comparison.json",
+        "config/search.json",
+        "config/chunking.json",
       ];
 
       // Dynamically discover config and evaluation files
@@ -1327,7 +1299,7 @@ function activate(context) {
       }
       vscode.window.showInformationMessage(
         `✅ TuneKit initialized for ${selectedPlay.name}! ${copied} files copied:\n` +
-        `• config/*.json (AI parameters)\n• infra/ (Bicep IaC)\n• evaluation/ (test set + scoring)`
+        `• config/*.json (AI parameters)\n• evaluation/ (test set + scoring)`
       );
     })
   );
@@ -1417,9 +1389,30 @@ function activate(context) {
         }
       }
 
+      // Download additional spec files from the play folder
+      const specFiles = ["spec/fai-manifest.json", "spec/plugin.json", "spec/CHANGELOG.md", "spec/README.md"];
+      for (const f of specFiles) {
+        const dstPath = path.join(wsFolder, f);
+        if (fs.existsSync(dstPath)) continue;
+        const localPath = root ? path.join(root, "solution-plays", selectedPlay.dir, f) : null;
+        if (localPath && fs.existsSync(localPath)) {
+          const dir = path.dirname(dstPath);
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+          fs.copyFileSync(localPath, dstPath);
+        } else {
+          try {
+            const content = await downloadFromGitHub(`solution-plays/${selectedPlay.dir}/${f}`);
+            const dir = path.dirname(dstPath);
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+            fs.writeFileSync(dstPath, content, "utf-8");
+          } catch { /* file may not exist for this play */ }
+        }
+      }
+
       vscode.window.showInformationMessage(
         `✅ SpecKit initialized for ${selectedPlay.name}!\n` +
         `• spec/play-spec.json (architecture + WAF alignment)\n` +
+        `• spec/fai-manifest.json, plugin.json, CHANGELOG.md, README.md\n` +
         `• ${wafCopied} WAF instruction files (.github/instructions/)\n` +
         `Run \`npx frootai validate --waf\` to check WAF scorecard.`
       );
@@ -2076,8 +2069,8 @@ function activate(context) {
       context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration((e) => {
           if (e.affectsConfiguration("frootai.mcpTransport") ||
-              e.affectsConfiguration("frootai.mcpServerPath") ||
-              e.affectsConfiguration("frootai.mcpHttpUrl")) {
+            e.affectsConfiguration("frootai.mcpServerPath") ||
+            e.affectsConfiguration("frootai.mcpHttpUrl")) {
             changeEmitter.fire();
           }
         })

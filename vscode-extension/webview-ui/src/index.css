@@ -37,10 +37,13 @@ body {
   transition: border-color 0.15s, transform 0.15s;
 }
 .card:hover {
+  border-color: var(--vscode-widget-border, #454545);
+}
+.card-clickable:hover {
   border-color: var(--vscode-focusBorder, #007fd4);
   transform: translateY(-1px);
+  cursor: pointer;
 }
-.card-clickable { cursor: pointer; }
 
 /* Hero */
 .hero {
