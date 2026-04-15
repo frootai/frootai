@@ -5,7 +5,7 @@
  * Commands:
  *   init                Interactive project scaffolding
  *   scaffold <play>     Scaffold a specific solution play
- *   install <plugin>    Install a FrootAI plugin
+ *   install <play>      Download a solution play from GitHub
  *   list [keyword]      List available plugins
  *   primitives [type]   Browse 830+ FAI primitives catalog
  *   protocol            View FAI Protocol overview
@@ -983,141 +983,185 @@ async function cmdScaffold(playArg) {
 // ═══════════════════════════════════════════════════
 // HELP
 // ═══════════════════════════════════════════════════
+// INSTALL — Download a solution play from GitHub
 // ═══════════════════════════════════════════════════
-// INSTALL — Install a FrootAI plugin into your project
-// ═══════════════════════════════════════════════════
-async function cmdInstall(pluginName, dryRun = false) {
+async function cmdInstall(playInput, dryRun = false) {
   banner();
 
-  if (!pluginName) {
-    console.log(`${c.red}  Error: Plugin name required.${c.reset}`);
-    console.log(`${c.dim}  Usage: frootai install <plugin-name> [--dry-run]${c.reset}`);
-    console.log(`${c.dim}  Run 'frootai list' to see available plugins.${c.reset}\n`);
+  if (!playInput) {
+    console.log(`${c.red}  Error: Play name or ID required.${c.reset}`);
+    console.log(`${c.dim}  Usage: frootai install <play-name|play-id> [--dry-run] [--kit devkit|tunekit|speckit]${c.reset}`);
+    console.log(`${c.dim}  Examples:${c.reset}`);
+    console.log(`    ${c.green}frootai install 01-enterprise-rag${c.reset}`);
+    console.log(`    ${c.green}frootai install 01${c.reset}`);
+    console.log(`    ${c.green}frootai install enterprise-rag${c.reset}`);
+    console.log(`    ${c.green}frootai install 01 --kit devkit${c.reset}\n`);
     process.exit(1);
   }
 
-  // Resolve the FrootAI repo root (where plugins/ lives)
-  const repoRoot = resolve(__dirname, '..');
-  const pluginDir = join(repoRoot, 'plugins', pluginName);
-  const pluginJsonPath = join(pluginDir, 'plugin.json');
+  // Resolve play directory name
+  const allPlays = [
+    '01-enterprise-rag', '02-ai-landing-zone', '03-deterministic-agent',
+    '04-call-center-voice-ai', '05-it-ticket-resolution', '06-document-intelligence',
+    '07-multi-agent-service', '08-copilot-studio-bot', '09-ai-search-portal',
+    '10-content-moderation', '11-ai-landing-zone-advanced', '12-model-serving-aks',
+    '13-fine-tuning-workflow', '14-cost-optimized-ai-gateway', '15-multi-modal-docproc',
+    '16-copilot-teams-extension', '17-ai-observability', '18-prompt-management',
+    '19-edge-ai-phi4', '20-anomaly-detection', '21-agentic-rag',
+    '22-multi-agent-swarm', '23-browser-automation-agent', '24-ai-code-review-pipeline',
+    '25-conversation-memory-layer', '26-semantic-search-engine', '27-ai-data-pipeline',
+    '28-knowledge-graph-rag', '29-mcp-gateway', '30-ai-security-hardening',
+    '31-low-code-ai-builder', '32-ai-powered-testing', '33-voice-ai-agent',
+    '34-edge-ai-deployment', '35-ai-compliance-engine', '36-multimodal-agent',
+    '37-ai-powered-devops', '38-document-understanding-v2', '39-ai-meeting-assistant',
+    '40-copilot-studio-advanced', '41-ai-red-teaming', '42-computer-use-agent',
+    '43-ai-video-generation', '44-foundry-local-on-device', '45-realtime-event-ai',
+    '46-healthcare-clinical-ai', '47-synthetic-data-factory', '48-ai-model-governance',
+    '49-creative-ai-studio', '50-financial-risk-intelligence', '51-autonomous-coding-agent',
+    '52-ai-api-gateway-v2', '53-legal-document-ai', '54-ai-customer-support-v2',
+    '55-supply-chain-ai', '56-semantic-code-search', '57-ai-translation-engine',
+    '58-digital-twin-agent', '59-ai-recruiter-agent', '60-responsible-ai-dashboard',
+    '61-content-moderation-v2', '62-federated-learning-pipeline', '63-fraud-detection-agent',
+    '64-ai-sales-assistant', '65-ai-training-curriculum', '66-ai-infrastructure-optimizer',
+    '67-ai-knowledge-management', '68-predictive-maintenance-ai', '69-carbon-footprint-tracker',
+    '70-esg-compliance-agent', '71-smart-energy-grid-ai', '72-climate-risk-assessor',
+    '73-waste-recycling-optimizer', '74-ai-tutoring-agent', '75-exam-generation-engine',
+    '76-accessibility-learning-agent', '77-research-paper-ai', '78-precision-agriculture-agent',
+    '79-food-safety-inspector-ai', '80-biodiversity-monitor', '81-property-valuation-ai',
+    '82-construction-safety-ai', '83-building-energy-optimizer', '84-citizen-services-chatbot',
+    '85-policy-impact-analyzer', '86-public-safety-analytics', '87-dynamic-pricing-engine',
+    '88-visual-product-search', '89-retail-inventory-predictor', '90-network-optimization-agent',
+    '91-customer-churn-predictor', '92-telecom-fraud-shield', '93-continual-learning-agent',
+    '94-ai-podcast-generator', '95-multimodal-search-v2', '96-realtime-voice-agent-v2',
+    '97-ai-data-marketplace', '98-agent-evaluation-platform', '99-enterprise-ai-governance-hub',
+    '100-fai-meta-agent', '101-pester-test-development',
+  ];
 
-  if (!existsSync(pluginJsonPath)) {
-    console.log(`${c.red}  Plugin not found: ${pluginName}${c.reset}`);
-    console.log(`${c.dim}  Available plugins: frootai list${c.reset}\n`);
-
-    // Fuzzy match suggestion
-    const allPlugins = readdirSync(join(repoRoot, 'plugins')).filter(f => {
-      try { return statSync(join(repoRoot, 'plugins', f)).isDirectory() && existsSync(join(repoRoot, 'plugins', f, 'plugin.json')); } catch { return false; }
-    });
-    const suggestions = allPlugins.filter(p => p.includes(pluginName) || pluginName.includes(p.replace(/-/g, '')));
-    if (suggestions.length > 0) {
-      console.log(`${c.yellow}  Did you mean?${c.reset}`);
-      suggestions.slice(0, 5).forEach(s => console.log(`    ${c.green}frootai install ${s}${c.reset}`));
-      console.log('');
-    }
-    process.exit(1);
-  }
-
-  const plugin = JSON.parse(readFileSync(pluginJsonPath, 'utf8'));
-  const targetDir = process.cwd();
-  const githubDir = join(targetDir, '.github');
-
-  console.log(`${c.cyan}  Installing plugin: ${c.bold}${plugin.name}${c.reset} v${plugin.version}`);
-  console.log(`${c.dim}  ${plugin.description}${c.reset}\n`);
-
-  if (dryRun) {
-    console.log(`${c.yellow}  DRY RUN — no files will be written${c.reset}\n`);
-  }
-
-  // Ensure .github directories exist
-  const dirs = ['agents', 'instructions', 'skills', 'hooks'];
-  for (const d of dirs) {
-    const dirPath = join(githubDir, d);
-    if (!existsSync(dirPath) && !dryRun) {
-      mkdirSync(dirPath, { recursive: true });
-    }
-  }
-
-  let installed = 0;
-  let skipped = 0;
-
-  // Install agents
-  for (const ref of (plugin.agents || [])) {
-    const srcPath = resolve(pluginDir, ref);
-    if (!existsSync(srcPath)) { skipped++; continue; }
-    const filename = srcPath.split(/[/\\]/).pop();
-    const destPath = join(githubDir, 'agents', filename);
-    if (existsSync(destPath)) {
-      console.log(`  ${c.dim}⏭  agents/${filename} (already exists)${c.reset}`);
-      skipped++;
+  let playDir = playInput;
+  // Resolve play: exact match, number prefix, or fuzzy name match
+  const exactMatch = allPlays.find(p => p === playDir);
+  if (exactMatch) {
+    playDir = exactMatch;
+  } else {
+    // Try matching by number prefix (e.g., "01" → "01-enterprise-rag")
+    const num = playInput.replace(/^play-?/i, '').replace(/^0*(\d+)/, (_, d) => d);
+    const padded = num.padStart(2, '0');
+    const numMatch = allPlays.find(p => p.startsWith(padded + '-'));
+    if (numMatch) {
+      playDir = numMatch;
     } else {
-      if (!dryRun) { copyFileSync(srcPath, destPath); }
-      console.log(`  ${c.green}✅ agents/${filename}${c.reset}`);
-      installed++;
+      // Try fuzzy match on name part (e.g., "enterprise-rag" → "01-enterprise-rag")
+      const slug = playInput.toLowerCase().replace(/\s+/g, '-');
+      const fuzzy = allPlays.find(p => p.includes(slug));
+      if (fuzzy) {
+        playDir = fuzzy;
+      } else {
+        console.log(`${c.red}  Play not found: ${playInput}${c.reset}`);
+        console.log(`${c.dim}  Try: frootai install 01 or frootai install enterprise-rag${c.reset}\n`);
+        process.exit(1);
+      }
     }
   }
 
-  // Install instructions
-  for (const ref of (plugin.instructions || [])) {
-    const srcPath = resolve(pluginDir, ref);
-    if (!existsSync(srcPath)) { skipped++; continue; }
-    const filename = srcPath.split(/[/\\]/).pop();
-    const destPath = join(githubDir, 'instructions', filename);
-    if (existsSync(destPath)) {
-      console.log(`  ${c.dim}⏭  instructions/${filename} (already exists)${c.reset}`);
-      skipped++;
-    } else {
-      if (!dryRun) { copyFileSync(srcPath, destPath); }
-      console.log(`  ${c.green}✅ instructions/${filename}${c.reset}`);
-      installed++;
-    }
+  // Determine which kit to install
+  const kitArg = process.argv.find(a => a.startsWith('--kit'));
+  const kitValue = kitArg ? process.argv[process.argv.indexOf(kitArg) + 1] : 'all';
+
+  // Define files per kit
+  const devkitFiles = [
+    'agent.md', '.github/copilot-instructions.md',
+    '.github/agents/builder.agent.md', '.github/agents/reviewer.agent.md', '.github/agents/tuner.agent.md',
+    '.github/hooks/guardrails.json',
+    '.github/prompts/deploy.prompt.md', '.github/prompts/test.prompt.md',
+    '.github/prompts/review.prompt.md', '.github/prompts/evaluate.prompt.md',
+    '.vscode/mcp.json', '.vscode/settings.json',
+    'spec/fai-manifest.json', 'infra/main.bicep', 'infra/parameters.json',
+  ];
+  const tunekitFiles = [
+    'config/openai.json', 'config/guardrails.json', 'config/search.json',
+    'config/chunking.json', 'config/agents.json', 'config/model-comparison.json',
+    'evaluation/eval.py', 'evaluation/test-set.jsonl',
+  ];
+  const speckitFiles = [
+    'spec/play-spec.json', 'spec/plugin.json', 'spec/CHANGELOG.md', 'spec/README.md', 'spec/fai-manifest.json',
+  ];
+
+  let filesToDownload = [];
+  if (kitValue === 'devkit') filesToDownload = devkitFiles;
+  else if (kitValue === 'tunekit') filesToDownload = tunekitFiles;
+  else if (kitValue === 'speckit') filesToDownload = speckitFiles;
+  else filesToDownload = [...new Set([...devkitFiles, ...tunekitFiles, ...speckitFiles])];
+
+  // Also try to discover play-specific instructions, skills, workflows from GitHub
+  const dynamicFiles = [];
+  const playSlug = playDir.replace(/^\d+-/, '');
+  dynamicFiles.push(
+    `.github/instructions/${playSlug}-patterns.instructions.md`,
+    `.github/instructions/azure-coding.instructions.md`,
+    `.github/instructions/security.instructions.md`,
+    `.github/skills/deploy-${playSlug}/SKILL.md`,
+    `.github/skills/evaluate-${playSlug}/SKILL.md`,
+    `.github/skills/tune-${playSlug}/SKILL.md`,
+    `.github/workflows/${playSlug}-ci-github.yml`,
+    `.github/workflows/${playSlug}-review-github.yml`,
+  );
+  if (kitValue === 'all' || kitValue === 'devkit') {
+    filesToDownload.push(...dynamicFiles);
   }
 
-  // Install skills (directories)
-  for (const ref of (plugin.skills || [])) {
-    const srcPath = resolve(pluginDir, ref.replace(/\/$/, ''));
-    if (!existsSync(srcPath)) { skipped++; continue; }
-    const folderName = srcPath.split(/[/\\]/).pop();
-    const destPath = join(githubDir, 'skills', folderName);
-    if (existsSync(destPath)) {
-      console.log(`  ${c.dim}⏭  skills/${folderName}/ (already exists)${c.reset}`);
-      skipped++;
-    } else {
-      if (!dryRun) { copyDirRecursive(srcPath, destPath); }
-      console.log(`  ${c.green}✅ skills/${folderName}/${c.reset}`);
-      installed++;
-    }
-  }
-
-  // Install hooks (directories)
-  for (const ref of (plugin.hooks || [])) {
-    const srcPath = resolve(pluginDir, ref.replace(/\/$/, ''));
-    if (!existsSync(srcPath)) { skipped++; continue; }
-    const folderName = srcPath.split(/[/\\]/).pop();
-    const destPath = join(githubDir, 'hooks', folderName);
-    if (existsSync(destPath)) {
-      console.log(`  ${c.dim}⏭  hooks/${folderName}/ (already exists)${c.reset}`);
-      skipped++;
-    } else {
-      if (!dryRun) { copyDirRecursive(srcPath, destPath); }
-      console.log(`  ${c.green}✅ hooks/${folderName}/${c.reset}`);
-      installed++;
-    }
-  }
-
-  // Summary
-  const total = installed + skipped;
-  console.log(`\n  ${c.bold}${c.green}Installed: ${installed}${c.reset} | ${c.dim}Skipped: ${skipped}${c.reset} | Total: ${total}`);
-
-  if (plugin.plays && plugin.plays.length > 0) {
-    console.log(`\n  ${c.cyan}Compatible plays:${c.reset} ${plugin.plays.join(', ')}`);
-  }
-
-  console.log(`\n  ${c.dim}Files installed to: ${githubDir}${c.reset}`);
-  if (dryRun) {
-    console.log(`  ${c.yellow}(dry run — run without --dry-run to install)${c.reset}`);
-  }
+  console.log(`${c.cyan}  Installing: ${c.bold}${playDir}${c.reset}`);
+  console.log(`${c.dim}  Kit: ${kitValue} | Files: ${filesToDownload.length}${c.reset}`);
+  if (dryRun) console.log(`${c.yellow}  DRY RUN — no files will be written${c.reset}`);
   console.log('');
+
+  const targetDir = process.cwd();
+  let downloaded = 0, skipped = 0, failed = 0;
+
+  for (const f of filesToDownload) {
+    const url = `https://raw.githubusercontent.com/frootai/frootai/main/solution-plays/${playDir}/${f}`;
+    const destPath = join(targetDir, f);
+
+    if (existsSync(destPath)) {
+      console.log(`  ${c.dim}⏭  ${f} (exists)${c.reset}`);
+      skipped++;
+      continue;
+    }
+
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': 'FrootAI-CLI' } });
+      if (!res.ok) { failed++; continue; }
+      const content = await res.text();
+
+      if (!dryRun) {
+        const dir = join(targetDir, f.split('/').slice(0, -1).join('/'));
+        if (dir !== targetDir && !existsSync(dir)) mkdirSync(dir, { recursive: true });
+        writeFileSync(destPath, content, 'utf-8');
+      }
+      console.log(`  ${c.green}✅ ${f}${c.reset}`);
+      downloaded++;
+    } catch {
+      failed++;
+    }
+  }
+
+  // Always write the simple working mcp.json
+  if (!dryRun && (kitValue === 'all' || kitValue === 'devkit')) {
+    const mcpPath = join(targetDir, '.vscode', 'mcp.json');
+    const mcpDir = join(targetDir, '.vscode');
+    if (!existsSync(mcpDir)) mkdirSync(mcpDir, { recursive: true });
+    writeFileSync(mcpPath, JSON.stringify({ servers: { frootai: { type: 'stdio', command: 'npx', args: ['frootai-mcp@latest'] } } }, null, 2), 'utf-8');
+  }
+
+  console.log(`\n  ${c.bold}${c.green}Downloaded: ${downloaded}${c.reset} | ${c.dim}Skipped: ${skipped} | Not found: ${failed}${c.reset}`);
+  console.log(`  ${c.dim}Files installed to: ${targetDir}${c.reset}`);
+
+  if (downloaded > 0 && !dryRun) {
+    console.log(`\n  ${c.cyan}Next steps:${c.reset}`);
+    console.log(`    1. ${c.dim}code .${c.reset}  — Open in VS Code (Copilot auto-reads agent.md)`);
+    console.log(`    2. ${c.dim}@builder${c.reset} in Copilot Chat to start implementing`);
+    console.log(`    3. ${c.dim}frootai validate --waf${c.reset} to check WAF alignment\n`);
+  }
+  if (dryRun) console.log(`\n  ${c.yellow}Run without --dry-run to install.${c.reset}\n`);
 }
 
 function copyDirRecursive(src, dest) {
@@ -1173,7 +1217,7 @@ function cmdListPlugins(category) {
     console.log(`    ${c.dim}${p.description.substring(0, 100)}${p.description.length > 100 ? '...' : ''}${c.reset}`);
   }
 
-  console.log(`\n  ${c.bold}Install:${c.reset} frootai install <plugin-name>`);
+  console.log(`\n  ${c.bold}Install:${c.reset} frootai install <play-name|play-id> [--kit devkit|tunekit|speckit]`);
   console.log(`  ${c.bold}Filter:${c.reset}  frootai list <keyword>\n`);
 }
 
@@ -1183,7 +1227,7 @@ function cmdHelp() {
   console.log(`${c.bold}  Commands:${c.reset}`);
   console.log(`    ${c.green}init${c.reset}              Interactive project scaffolding`);
   console.log(`    ${c.green}scaffold${c.reset} <play>    One-command play scaffold (e.g. play-01)`);
-  console.log(`    ${c.green}install${c.reset} <plugin>   Install a plugin (agents, skills, hooks → .github/)`);
+  console.log(`    ${c.green}install${c.reset} <play>     Download a solution play from GitHub`);
   console.log(`    ${c.green}list${c.reset} [keyword]     Browse all 77 plugins in the FAI Marketplace`);
   console.log(`    ${c.green}search${c.reset} <query>     Search FrootAI knowledge base`);
   console.log(`    ${c.green}cost${c.reset} [play]        Cost estimate (--scale dev|prod)`);
@@ -1194,8 +1238,9 @@ function cmdHelp() {
   console.log(`    ${c.green}help${c.reset}               Show this help\n`);
   console.log(`${c.bold}  Examples:${c.reset}`);
   console.log(`    ${c.dim}npx frootai init${c.reset}`);
-  console.log(`    ${c.dim}npx frootai install enterprise-rag${c.reset}`);
-  console.log(`    ${c.dim}npx frootai install frootai-essentials --dry-run${c.reset}`);
+  console.log(`    ${c.dim}npx frootai install 01-enterprise-rag${c.reset}`);
+  console.log(`    ${c.dim}npx frootai install 01 --kit devkit${c.reset}`);
+  console.log(`    ${c.dim}npx frootai install enterprise-rag --dry-run${c.reset}`);
   console.log(`    ${c.dim}npx frootai list azure${c.reset}`);
   console.log(`    ${c.dim}npx frootai scaffold 01-enterprise-rag${c.reset}`);
   console.log(`    ${c.dim}npx frootai search "RAG architecture"${c.reset}`);
@@ -1212,9 +1257,9 @@ function cmdHelp() {
 function cmdPrimitivesCatalog(filter) {
   banner();
   const catalog = [
-    { type: "Agents", count: 201, icon: "🤖", path: "agents/", ext: ".agent.md", install: "vscode://github.copilot-chat/createAgent?url=<raw>" },
+    { type: "Agents", count: 238, icon: "🤖", path: "agents/", ext: ".agent.md", install: "vscode://github.copilot-chat/createAgent?url=<raw>" },
     { type: "Instructions", count: 176, icon: "📝", path: "instructions/", ext: ".instructions.md", install: "Copy to .github/instructions/" },
-    { type: "Skills", count: 282, icon: "🔧", path: "skills/", ext: "/SKILL.md", install: "Copy folder to .github/skills/" },
+    { type: "Skills", count: 322, icon: "🔧", path: "skills/", ext: "/SKILL.md", install: "Copy folder to .github/skills/" },
     { type: "Hooks", count: 10, icon: "🛡️", path: "hooks/", ext: "/hooks.json", install: "Copy folder to .github/hooks/" },
     { type: "Plugins", count: 77, icon: "📦", path: "plugins/", ext: "/plugin.json", install: "npx frootai install <name>" },
     { type: "Workflows", count: 12, icon: "🔄", path: "workflows/", ext: ".md", install: "Copy to .github/workflows/" },
