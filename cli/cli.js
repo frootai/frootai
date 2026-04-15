@@ -137,6 +137,9 @@ switch (command) {
   case 'deploy':
     await cmdDeploy(args[1]);
     break;
+  case 'update':
+    await cmdUpdate();
+    break;
   case 'validate':
     cmdValidate();
     break;
@@ -153,7 +156,13 @@ switch (command) {
   case 'version':
   case '--version':
   case '-v':
-    console.log(`frootai v${VERSION}`);
+    console.log(`  frootai     v${VERSION}`);
+    try {
+      const mcpPkg = require('frootai-mcp/package.json');
+      console.log(`  frootai-mcp v${mcpPkg.version}`);
+    } catch { /* frootai-mcp not resolvable */ }
+    console.log(`  node        ${process.version}`);
+    console.log(`  platform    ${process.platform} ${process.arch}`);
     break;
   case 'help':
   case '--help':
@@ -595,10 +604,23 @@ function cmdDoctor() {
 
   // MCP server reachable (just check npm registry)
   try {
-    execSync('npm view frootai-mcp version', { encoding: 'utf8', timeout: 10000 });
-    console.log(`  ${c.green}✅${c.reset} frootai-mcp available on npm`);
+    const mcpLatest = execSync('npm view frootai-mcp version', { encoding: 'utf8', timeout: 10000 }).trim();
+    console.log(`  ${c.green}✅${c.reset} frootai-mcp@${mcpLatest} on npm`);
   } catch (e) {
     console.log(`  ${c.yellow}⚠️${c.reset}  Could not reach npm registry`);
+  }
+
+  // CLI package on npm
+  try {
+    const cliLatest = execSync('npm view frootai version', { encoding: 'utf8', timeout: 10000 }).trim();
+    const upToDate = cliLatest === VERSION;
+    if (upToDate) {
+      console.log(`  ${c.green}✅${c.reset} frootai@${VERSION} (latest)`);
+    } else {
+      console.log(`  ${c.yellow}⚠️${c.reset}  frootai@${VERSION} installed — ${cliLatest} available (run: npm i -g frootai@latest)`);
+    }
+  } catch (e) {
+    console.log(`  ${c.yellow}⚠️${c.reset}  Could not check frootai version on npm`);
   }
 
   console.log('');
@@ -1320,6 +1342,62 @@ async function cmdDeploy(playArg) {
   }
 }
 
+// ═══════════════════════════════════════════════════
+// UPDATE — Self-update + check for latest versions
+// ═══════════════════════════════════════════════════
+
+async function cmdUpdate() {
+  banner();
+  console.log(`  ${c.bold}Checking for updates...${c.reset}\n`);
+
+  // Check frootai CLI version
+  try {
+    const latest = execSync('npm view frootai version', { encoding: 'utf8', timeout: 10000 }).trim();
+    if (latest === VERSION) {
+      console.log(`  ${c.green}✅${c.reset} frootai@${VERSION} is up to date`);
+    } else {
+      console.log(`  ${c.yellow}⬆️${c.reset}  frootai ${VERSION} → ${latest} available`);
+      console.log(`     Run: ${c.cyan}npm i -g frootai@latest${c.reset}`);
+      console.log(`     Or:  ${c.cyan}npx frootai@latest <command>${c.reset}`);
+    }
+  } catch {
+    console.log(`  ${c.yellow}⚠️${c.reset}  Could not check frootai version`);
+  }
+
+  // Check frootai-mcp version
+  try {
+    const mcpPkg = require('frootai-mcp/package.json');
+    const mcpLatest = execSync('npm view frootai-mcp version', { encoding: 'utf8', timeout: 10000 }).trim();
+    if (mcpLatest === mcpPkg.version) {
+      console.log(`  ${c.green}✅${c.reset} frootai-mcp@${mcpPkg.version} is up to date`);
+    } else {
+      console.log(`  ${c.yellow}⬆️${c.reset}  frootai-mcp ${mcpPkg.version} → ${mcpLatest} available`);
+      console.log(`     Run: ${c.cyan}npm i -g frootai@latest${c.reset} (updates dependency)`);
+    }
+  } catch {
+    console.log(`  ${c.yellow}⚠️${c.reset}  Could not check frootai-mcp version`);
+  }
+
+  // Check Node.js version
+  const nodeVer = process.version.replace('v', '');
+  const nodeMajor = parseInt(nodeVer.split('.')[0]);
+  try {
+    const latestLts = execSync('npm view node version', { encoding: 'utf8', timeout: 10000 }).trim();
+    const ltsMajor = parseInt(latestLts.split('.')[0]);
+    if (nodeMajor >= ltsMajor) {
+      console.log(`  ${c.green}✅${c.reset} Node.js ${process.version} is current`);
+    } else if (nodeMajor >= 18) {
+      console.log(`  ${c.dim}ℹ️${c.reset}  Node.js ${process.version} (${latestLts} available)`);
+    } else {
+      console.log(`  ${c.red}❌${c.reset} Node.js ${process.version} — upgrade to 18+ required`);
+    }
+  } catch {
+    console.log(`  ${c.green}✅${c.reset} Node.js ${process.version}`);
+  }
+
+  console.log('');
+}
+
 function cmdHelp() {
   banner();
   console.log(`${c.bold}  Usage:${c.reset} frootai <command> [options]\n`);
@@ -1335,6 +1413,7 @@ function cmdHelp() {
   console.log(`    ${c.green}validate${c.reset}           Check project structure + configs`);
   console.log(`    ${c.green}validate --waf${c.reset}     WAF alignment scorecard (6 pillars)`);
   console.log(`    ${c.green}doctor${c.reset}             Health check for your setup`);
+  console.log(`    ${c.green}update${c.reset}             Check for latest versions`);
   console.log(`    ${c.green}version${c.reset}            Show version info`);
   console.log(`    ${c.green}help${c.reset}               Show this help\n`);
   console.log(`${c.bold}  Examples:${c.reset}`);
