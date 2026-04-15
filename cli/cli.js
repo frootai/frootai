@@ -54,6 +54,24 @@ const c = {
   red: '\x1b[31m',
 };
 
+// ─── String similarity (Levenshtein-based) ───
+function similarity(a, b) {
+  a = a.toLowerCase(); b = b.toLowerCase();
+  if (a === b) return 1;
+  const len = Math.max(a.length, b.length);
+  if (!len) return 1;
+  const d = Array.from({ length: a.length + 1 }, (_, i) => {
+    const row = Array(b.length + 1).fill(0);
+    row[0] = i;
+    return row;
+  });
+  for (let j = 0; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] !== b[j-1] ? 1 : 0));
+  return 1 - d[a.length][b.length] / len;
+}
+
 function banner() {
   console.log(`
 ${c.green}  🌳 FrootAI™ CLI v${VERSION}${c.reset}
@@ -137,6 +155,9 @@ switch (command) {
   case 'deploy':
     await cmdDeploy(args[1]);
     break;
+  case 'diff':
+    await cmdDiff();
+    break;
   case 'update':
     await cmdUpdate();
     break;
@@ -173,10 +194,19 @@ switch (command) {
   case undefined:
     cmdHelp();
     break;
-  default:
-    console.log(`${c.red}Unknown command: ${command}${c.reset}`);
-    cmdHelp();
+  default: {
+    const commands = ['init', 'scaffold', 'install', 'deploy', 'info', 'list', 'search', 'cost', 'validate', 'doctor', 'status', 'update', 'version', 'help', 'primitives', 'protocol', 'diff'];
+    const suggestion = commands
+      .map(cmd => ({ cmd, score: similarity(command, cmd) }))
+      .sort((a, b) => b.score - a.score)[0];
+    console.log(`\n  ${c.red}Unknown command: ${command}${c.reset}`);
+    if (suggestion.score > 0.4) {
+      console.log(`  ${c.dim}Did you mean ${c.cyan}frootai ${suggestion.cmd}${c.dim}?${c.reset}\n`);
+    } else {
+      console.log(`  ${c.dim}Run ${c.cyan}frootai help${c.dim} to see all commands.${c.reset}\n`);
+    }
     process.exit(1);
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -1346,6 +1376,111 @@ async function cmdDeploy(playArg) {
 }
 
 // ═══════════════════════════════════════════════════
+// DIFF — Compare local play files vs GitHub
+// ═══════════════════════════════════════════════════
+
+async function cmdDiff() {
+  banner();
+
+  // Detect play
+  let playId = null;
+  if (existsSync('spec/fai-manifest.json')) {
+    try {
+      const manifest = JSON.parse(readFileSync('spec/fai-manifest.json', 'utf8'));
+      playId = manifest.play;
+    } catch { /* ignore */ }
+  }
+  if (!playId) {
+    const dirName = resolve('.').split(/[\\/]/).pop();
+    const match = dirName.match(/^(\d{2,3}-.+)/);
+    if (match) playId = match[1];
+  }
+  if (!playId) {
+    console.log(`  ${c.red}✗${c.reset} No FrootAI play detected. Run from a play directory.\n`);
+    return;
+  }
+
+  const resolved = resolvePlay(playId);
+  if (!resolved) {
+    console.log(`  ${c.red}✗${c.reset} Unknown play: ${playId}\n`);
+    return;
+  }
+
+  const playName = resolved; // resolvePlay returns a string like "01-enterprise-rag"
+  const playNum = playName.replace(/-.*/, '');
+  const playTitle = playName.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+  console.log(`  ${c.bold}Drift Detection:${c.reset} Play ${playNum} — ${playTitle}\n`);
+
+  const ghBase = `https://raw.githubusercontent.com/frootai/frootai/main/solution-plays/${playName}`;
+  const filesToCheck = [];
+
+  // Scan local files in key directories
+  const dirs = ['.github', 'config', 'evaluation', 'spec', 'infra'];
+  for (const d of dirs) {
+    if (existsSync(d)) {
+      (function scan(base) {
+        for (const f of readdirSync(base)) {
+          const fp = join(base, f);
+          try {
+            if (statSync(fp).isDirectory()) scan(fp);
+            else filesToCheck.push(fp.replace(/\\/g, '/'));
+          } catch { /* skip */ }
+        }
+      })(d);
+    }
+  }
+  // Also check root files
+  for (const f of ['agent.md', 'README.md', 'architecture.md']) {
+    if (existsSync(f)) filesToCheck.push(f);
+  }
+
+  if (filesToCheck.length === 0) {
+    console.log(`  ${c.dim}No play files found to compare.${c.reset}\n`);
+    return;
+  }
+
+  let same = 0, changed = 0, localOnly = 0, errors = 0;
+
+  for (const file of filesToCheck) {
+    try {
+      const url = `${ghBase}/${file}`;
+      const res = await fetch(url, { headers: { 'User-Agent': 'FrootAI-CLI' } });
+      if (res.status === 404) {
+        localOnly++;
+        console.log(`  ${c.cyan}+${c.reset} ${file} ${c.dim}(local only)${c.reset}`);
+        continue;
+      }
+      if (!res.ok) { errors++; continue; }
+
+      const remote = await res.text();
+      const local = readFileSync(file, 'utf8');
+
+      if (local.trim() === remote.trim()) {
+        same++;
+      } else {
+        changed++;
+        const localLines = local.split('\n').length;
+        const remoteLines = remote.split('\n').length;
+        const diff = localLines - remoteLines;
+        const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+        console.log(`  ${c.yellow}~${c.reset} ${file} ${c.dim}(${diffStr} lines)${c.reset}`);
+      }
+    } catch {
+      errors++;
+    }
+  }
+
+  console.log(`\n  ${c.bold}Summary:${c.reset} ${same} identical, ${changed} modified, ${localOnly} local-only, ${errors} errors`);
+  if (changed === 0 && localOnly === 0) {
+    console.log(`  ${c.green}✅ Project is in sync with GitHub.${c.reset}`);
+  } else if (changed > 0) {
+    console.log(`  ${c.dim}Run ${c.cyan}npx frootai install ${playNum}${c.dim} to pull latest from GitHub.${c.reset}`);
+  }
+  console.log('');
+}
+
+// ═══════════════════════════════════════════════════
 // STATUS — Show current project context
 // ═══════════════════════════════════════════════════
 
@@ -1528,6 +1663,7 @@ function cmdHelp() {
   console.log(`    ${c.green}validate --waf${c.reset}     WAF alignment scorecard (6 pillars)`);
   console.log(`    ${c.green}doctor${c.reset}             Health check for your setup`);
   console.log(`    ${c.green}status${c.reset}             Show current project context`);
+  console.log(`    ${c.green}diff${c.reset}               Compare local vs GitHub (drift detection)`);
   console.log(`    ${c.green}update${c.reset}             Check for latest versions`);
   console.log(`    ${c.green}version${c.reset}            Show version info`);
   console.log(`    ${c.green}help${c.reset}               Show this help\n`);

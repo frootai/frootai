@@ -1,13 +1,19 @@
 {
   "name": "frootai",
-  "version": "5.2.2",
+  "version": "5.3.0",
   "description": "FrootAI™ CLI & SDK — AI Primitive Unification Ecosystem. 100 solution plays, 830+ primitives, FAI Protocol. Install plays, cost estimates, scaffold projects, deploy to Azure.",
   "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "frootai": "./cli.js"
   },
   "files": [
     "cli.js",
+    "index.js",
     "README.md"
   ],
   "dependencies": {

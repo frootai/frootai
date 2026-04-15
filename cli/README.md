@@ -42,6 +42,27 @@ frootai doctor                            # Health check for your setup
 ```
 
 ## MCP Server
+## SDK (Programmatic API)
+
+```javascript
+import { getPlay, searchKnowledge, getAllPlays, lookupTerm } from 'frootai';
+
+// Get a specific play
+const play = getPlay('01');
+console.log(play.title, play.services);
+
+// Search knowledge base
+const results = searchKnowledge('RAG architecture');
+results.forEach(r => console.log(r.title, r.score));
+
+// Browse all 100 plays
+const plays = getAllPlays();
+
+// Look up AI terms
+const def = lookupTerm('embeddings');
+```
+
+## MCP Server
 
 For the MCP server (AI agent integration), use the companion package:
 
@@ -54,7 +75,7 @@ npx frootai-mcp                           # Starts MCP server on stdin/stdout
   "mcpServers": {
     "frootai": {
       "command": "npx",
-      "args": ["frootai-mcp"]
+      "args": ["-y", "frootai-mcp"]
     }
   }
 }
