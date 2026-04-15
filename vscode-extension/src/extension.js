@@ -770,7 +770,11 @@ class GlossaryProvider {
 // ─── Activate ──────────────────────────────────────────────────────
 
 function activate(context) {
-  console.log("FrootAI v1.0 Standalone Engine activated");
+  // Guard against double activation
+  if (activate._done) return;
+  activate._done = true;
+  
+  console.log("FrootAI v6.1 activated");
 
   // B1: Initialize cache directory for offline downloaded plays
   _cacheDir = context.globalStorageUri.fsPath;
