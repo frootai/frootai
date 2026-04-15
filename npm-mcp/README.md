@@ -337,7 +337,7 @@ Step 3: install_plugin("enterprise-security", "01")       → Copies primitives,
 ```bash
 npx frootai help                              # Show all 21 commands
 npx frootai info 01                           # Play details + cost estimate
-npx frootai list                              # Browse 100 solution plays
+npx frootai list                              # Browse 104 solution plays
 npx frootai search "RAG architecture"         # BM25 ranked search
 npx frootai scaffold 01                       # Download play + generate templates
 npx frootai install 01 --kit devkit           # Install specific kit
