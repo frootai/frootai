@@ -22,7 +22,7 @@ const root = path.resolve(__dirname, '..');
 // Directories to search (exclude skills/, node_modules/, .git/, .internal/)
 const searchDirs = [
     'plugins', 'hooks', 'cookbook', 'website-data', 'docs',
-    'mcp-server', 'vscode-extension/src', 'python-sdk', 'config',
+    'npm-mcp', 'vscode-extension/src', 'python-sdk', 'config',
     'solution-plays', 'scripts', 'workshops'
 ];
 

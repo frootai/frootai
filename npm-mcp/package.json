@@ -66,7 +66,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/frootai/frootai"
+    "url": "https://github.com/frootai/frootai",
+    "directory": "npm-mcp"
   },
   "homepage": "https://frootai.dev",
   "dependencies": {

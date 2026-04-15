@@ -2155,7 +2155,7 @@ ${est.breakdown}
     async ({ play_number }) => {
       const fs = await import("fs");
       const path = await import("path");
-      // Try repo root (../solution-plays relative to mcp-server/) then cwd
+      // Try repo root (../solution-plays relative to npm-mcp/) then cwd
       const playsDir = fs.default.existsSync(path.default.join(__dirname, "..", "solution-plays"))
         ? path.default.join(__dirname, "..", "solution-plays")
         : path.default.join(process.cwd(), "solution-plays");

@@ -2,9 +2,9 @@ const fs = require("fs"), path = require("path");
 
 // G16: knowledge.json rebuilt
 console.log("=== G16: knowledge.json ===");
-const k = JSON.parse(fs.readFileSync("mcp-server/knowledge.json", "utf8"));
+const k = JSON.parse(fs.readFileSync("npm-mcp/knowledge.json", "utf8"));
 const modCount = Object.keys(k.modules || {}).length;
-const kbSize = Math.round(fs.statSync("mcp-server/knowledge.json").size / 1024);
+const kbSize = Math.round(fs.statSync("npm-mcp/knowledge.json").size / 1024);
 console.log("Modules: " + modCount);
 console.log("Version: " + k.version);
 console.log("Built: " + k.built);
@@ -13,7 +13,7 @@ console.log("G16: " + (modCount >= 16 ? "PASS" : "FAIL"));
 
 // G17: MCP tools 25/25 
 console.log("\n=== G17: MCP tools ===");
-const idx = fs.readFileSync("mcp-server/index.js", "utf8");
+const idx = fs.readFileSync("npm-mcp/index.js", "utf8");
 const toolMatches = idx.match(/server\.tool\(/g) || [];
 console.log("Tool registrations: " + toolMatches.length);
 

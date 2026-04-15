@@ -230,7 +230,7 @@ frootai/frootai
 ├── schemas/              7 JSON schemas validating all primitive types
 ├── engine/               FAI Engine v0.1 (7 modules — manifest reader → evaluator)
 ├── solution-plays/       50 deployable plays with DevKit+TuneKit+SpecKit+Bicep
-├── mcp-server/           MCP tools + knowledge.json (45 tools)
+├── npm-mcp/           MCP tools + knowledge.json (45 tools)
 ├── vscode-extension/     VS Code extension (31 commands)
 ├── python-sdk/           Python SDK — offline, zero deps
 ├── python-mcp/           Python MCP Server

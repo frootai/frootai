@@ -67,7 +67,7 @@ solution-plays/XX-your-solution/
 
 ### 4. Platform Features
 
-- MCP server tools (`mcp-server/index.js`)
+- MCP server tools (`npm-mcp/index.js`)
 - VS Code extension features (`vscode-extension/src/extension.js`)
 - Website improvements (`website/src/pages/*.tsx`)
 

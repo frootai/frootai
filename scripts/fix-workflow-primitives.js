@@ -88,7 +88,7 @@ console.log(`Phase 2: ${p2Fixed}/3 files fixed\n`);
 console.log('=== PHASE 3: Distribution verification ===');
 
 // Check knowledge.json
-const kp = 'c:/CodeSpace/frootai/mcp-server/knowledge.json';
+const kp = 'c:/CodeSpace/frootai/npm-mcp/knowledge.json';
 if (fs.existsSync(kp)) {
     const k = fs.readFileSync(kp, 'utf8');
     const hasWorkflows = k.includes('workflow');

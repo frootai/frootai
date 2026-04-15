@@ -4,9 +4,9 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'mcp-server/index.js'
-      - 'mcp-server/package.json'
-      - 'mcp-server/knowledge.json'
+      - 'npm-mcp/index.js'
+      - 'npm-mcp/package.json'
+      - 'npm-mcp/knowledge.json'
       - 'vscode-extension/package.json'
       - 'solution-plays/**'
       - 'README.md'
@@ -40,14 +40,14 @@ jobs:
           const read = (r) => { try { return readFileSync(join(ROOT,r),'utf8'); } catch { return null; } };
           const readJSON = (r) => { const c=read(r); return c ? JSON.parse(c) : null; };
           
-          const mcpPkg = readJSON('mcp-server/package.json');
+          const mcpPkg = readJSON('npm-mcp/package.json');
           const extPkg = readJSON('vscode-extension/package.json');
           const mcpVersion = mcpPkg?.version || '0.0.0';
           
-          const mcpIndex = read('mcp-server/index.js') || '';
+          const mcpIndex = read('npm-mcp/index.js') || '';
           const toolCount = (mcpIndex.match(/server\\.tool\\(/g) || []).length;
           
-          const knowledge = readJSON('mcp-server/knowledge.json');
+          const knowledge = readJSON('npm-mcp/knowledge.json');
           const moduleCount = knowledge?.modules ? Object.keys(knowledge.modules).length : 0;
           
           const playsDir = 'solution-plays';

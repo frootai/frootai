@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 
 const ROOT = join(__dirname, '..');
 const DOCS_DIR = join(ROOT, 'docs');
-const KNOWLEDGE_BUNDLE = join(ROOT, 'mcp-server', 'knowledge.json');
+const KNOWLEDGE_BUNDLE = join(ROOT, 'npm-mcp', 'knowledge.json');
 
 /** Map FROOT module IDs to filenames */
 const MODULE_MAP = {

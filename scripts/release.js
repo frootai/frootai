@@ -120,7 +120,7 @@ console.log(`  Chores:    ${chores.length}`);
 console.log(`  → Bump type: ${bumpType}${FORCE_BUMP ? ' (forced)' : ''}\n`);
 
 // ─── 5. Calculate new versions ───
-const mcpPkg = readJSON('mcp-server/package.json');
+const mcpPkg = readJSON('npm-mcp/package.json');
 const extPkg = readJSON('vscode-extension/package.json');
 const oldMcpVersion = mcpPkg.version;
 const oldExtVersion = extPkg.version;
@@ -141,8 +141,8 @@ console.log('\n📦 Updating versions...');
 
 if (TARGET === 'all' || TARGET === 'mcp') {
   mcpPkg.version = newMcpVersion;
-  writeJSON('mcp-server/package.json', mcpPkg);
-  console.log(`  ✅ mcp-server/package.json → ${newMcpVersion}`);
+  writeJSON('npm-mcp/package.json', mcpPkg);
+  console.log(`  ✅ npm-mcp/package.json → ${newMcpVersion}`);
 }
 
 if (TARGET === 'all' || TARGET === 'ext') {

@@ -5,8 +5,8 @@ on:
     branches: [main]
     paths:
       - '**/README.md'
-      - 'mcp-server/package.json'
-      - 'mcp-server/index.js'
+      - 'npm-mcp/package.json'
+      - 'npm-mcp/index.js'
       - 'vscode-extension/package.json'
   push:
     branches: [main]
@@ -34,14 +34,14 @@ jobs:
           node -e "
           const fs = require('fs');
 
-          const mcpPkg = JSON.parse(fs.readFileSync('mcp-server/package.json', 'utf8'));
+          const mcpPkg = JSON.parse(fs.readFileSync('npm-mcp/package.json', 'utf8'));
           const mcpVersion = mcpPkg.version;
-          const mcpIndex = fs.readFileSync('mcp-server/index.js', 'utf8');
+          const mcpIndex = fs.readFileSync('npm-mcp/index.js', 'utf8');
           const toolCount = (mcpIndex.match(/server\\.tool\\(/g) || []).length;
 
           const readmes = [
             'README.md',
-            'mcp-server/README.md',
+            'npm-mcp/README.md',
             'vscode-extension/README.md',
             'docs/README.md',
             'solution-plays/README.md'

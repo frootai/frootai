@@ -14,7 +14,7 @@ FROM base AS build
 WORKDIR /app
 
 # Copy package files first for layer caching
-COPY mcp-server/package.json mcp-server/package-lock.json ./mcp-server/
+COPY npm-mcp/package.json npm-mcp/package-lock.json ./npm-mcp/
 RUN cd mcp-server && npm ci --omit=dev --ignore-scripts 2>/dev/null || npm install --omit=dev 2>/dev/null || true
 
 # ── Production stage ──────────────────────────────────────
@@ -22,15 +22,15 @@ FROM base AS production
 WORKDIR /app
 
 # Copy dependencies from build stage
-COPY --from=build /app/mcp-server/node_modules ./mcp-server/node_modules
+COPY --from=build /app/npm-mcp/node_modules ./npm-mcp/node_modules
 
 # Copy MCP server files
-COPY mcp-server/package.json ./mcp-server/
-COPY mcp-server/index.js ./mcp-server/
-COPY mcp-server/cli.js ./mcp-server/
-COPY mcp-server/knowledge.json ./mcp-server/
-COPY mcp-server/agent-card.json ./mcp-server/
-COPY mcp-server/registry-entry.json ./mcp-server/
+COPY npm-mcp/package.json ./npm-mcp/
+COPY npm-mcp/index.js ./npm-mcp/
+COPY npm-mcp/cli.js ./npm-mcp/
+COPY npm-mcp/knowledge.json ./npm-mcp/
+COPY npm-mcp/agent-card.json ./npm-mcp/
+COPY npm-mcp/registry-entry.json ./npm-mcp/
 
 # Copy engine for FAI Protocol wiring
 COPY engine/ ./engine/
@@ -59,6 +59,6 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 EXPOSE 3000
 
 # Default: HTTP mode for container deployments
-# Override with: docker run frootai-mcp node mcp-server/index.js (stdio)
+# Override with: docker run frootai-mcp node npm-mcp/index.js (stdio)
 WORKDIR /app/mcp-server
 ENTRYPOINT ["node", "index.js", "http"]

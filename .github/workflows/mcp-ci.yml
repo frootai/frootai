@@ -2,9 +2,9 @@ name: MCP Server CI
 on:
   push:
     branches: [main]
-    paths: ['mcp-server/**', 'engine/**']
+    paths: ['npm-mcp/**', 'engine/**']
   pull_request:
-    paths: ['mcp-server/**', 'engine/**']
+    paths: ['npm-mcp/**', 'engine/**']
 
 jobs:
   test:
@@ -19,22 +19,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: cd mcp-server && npm ci
+        run: cd npm-mcp && npm ci
       - name: TypeScript check
-        run: cd mcp-server && npm run typecheck
+        run: cd npm-mcp && npm run typecheck
       - name: Compile TypeScript
-        run: cd mcp-server && npm run build:ts
+        run: cd npm-mcp && npm run build:ts
       - name: Verify dist/server.js exports
-        run: node -e "import('./mcp-server/dist/server.js').then(m => { if (typeof m.getServerInfo !== 'function') throw new Error('getServerInfo missing'); console.log('Types OK:', m.getServerInfo().toolCount, 'tools'); })"
+        run: node -e "import('./npm-mcp/dist/server.js').then(m => { if (typeof m.getServerInfo !== 'function') throw new Error('getServerInfo missing'); console.log('Types OK:', m.getServerInfo().toolCount, 'tools'); })"
       - name: Build BM25 search index
-        run: cd mcp-server && node build-search-index.js
+        run: cd npm-mcp && node build-search-index.js
       - name: Run tests
-        run: cd mcp-server && npm test
+        run: cd npm-mcp && npm test
       - name: Engine tests
         run: node engine/test.js
       - name: Server starts (stdio)
         run: |
-          timeout 5 node mcp-server/index.js || true
+          timeout 5 node npm-mcp/index.js || true
           echo "Server startup verified"
 
       - name: Summary

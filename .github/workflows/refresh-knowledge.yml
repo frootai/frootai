@@ -13,8 +13,8 @@ on:
       - 'skills/**/SKILL.md'
       - 'instructions/**/*.instructions.md'
       - 'plugins/**/plugin.json'
-      - 'mcp-server/build-knowledge.js'
-      - 'mcp-server/build-search-index.js'
+      - 'npm-mcp/build-knowledge.js'
+      - 'npm-mcp/build-search-index.js'
   workflow_dispatch:
     inputs:
       force_rebuild:
@@ -41,37 +41,37 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: mcp-server/package-lock.json
+          cache-dependency-path: npm-mcp/package-lock.json
 
       - name: Install MCP server dependencies
-        run: cd mcp-server && npm ci
+        run: cd npm-mcp && npm ci
 
       - name: Rebuild knowledge.json
         run: |
-          cd mcp-server
+          cd npm-mcp
           node build-knowledge.js
           echo "knowledge.json size: $(wc -c < knowledge.json) bytes"
 
       - name: Rebuild BM25 search index
         run: |
-          cd mcp-server
+          cd npm-mcp
           node build-search-index.js
           echo "search-index.json size: $(wc -c < search-index.json) bytes"
 
       - name: TypeScript check (post-rebuild)
-        run: cd mcp-server && npm run typecheck
+        run: cd npm-mcp && npm run typecheck
 
       - name: Compile TypeScript
-        run: cd mcp-server && npm run build:ts
+        run: cd npm-mcp && npm run build:ts
 
       - name: Run vitest tests
-        run: cd mcp-server && npm test
+        run: cd npm-mcp && npm test
 
       - name: Check for changes
         id: changes
         run: |
-          git diff --name-only mcp-server/knowledge.json mcp-server/search-index.json || true
-          if git diff --quiet mcp-server/knowledge.json mcp-server/search-index.json; then
+          git diff --name-only npm-mcp/knowledge.json npm-mcp/search-index.json || true
+          if git diff --quiet npm-mcp/knowledge.json npm-mcp/search-index.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No changes to knowledge files."
           else
@@ -84,7 +84,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add mcp-server/knowledge.json mcp-server/search-index.json
+          git add npm-mcp/knowledge.json npm-mcp/search-index.json
           git commit -m "chore(mcp): auto-refresh knowledge.json + BM25 index [skip ci]
 
           Weekly knowledge rebuild triggered by schedule.
@@ -97,6 +97,6 @@ jobs:
           echo "## Knowledge Refresh Summary" >> $GITHUB_STEP_SUMMARY
           echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| knowledge.json | $(du -sh mcp-server/knowledge.json | cut -f1) |" >> $GITHUB_STEP_SUMMARY
-          echo "| search-index.json | $(du -sh mcp-server/search-index.json | cut -f1) |" >> $GITHUB_STEP_SUMMARY
+          echo "| knowledge.json | $(du -sh npm-mcp/knowledge.json | cut -f1) |" >> $GITHUB_STEP_SUMMARY
+          echo "| search-index.json | $(du -sh npm-mcp/search-index.json | cut -f1) |" >> $GITHUB_STEP_SUMMARY
           echo "| Changed | ${{ steps.changes.outputs.changed }} |" >> $GITHUB_STEP_SUMMARY

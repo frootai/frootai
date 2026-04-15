@@ -10,14 +10,14 @@ This is the map that `sync-content.js` and `validate-consistency.js` use to keep
 
 | Data Point | Source of Truth | Referenced By |
 |-----------|----------------|---------------|
-| **MCP version** | `mcp-server/package.json` → `version` | README.md, functions/server.js, website, Docker tags |
+| **MCP version** | `npm-mcp/package.json` → `version` | README.md, functions/server.js, website, Docker tags |
 | **Extension version** | `vscode-extension/package.json` → `version` | functions/server.js, website |
-| **Tool count** | `mcp-server/index.js` → `server.tool()` calls | README.md, mcp-server/package.json description, vscode-extension/package.json description, vscode-extension sidebar view name, website /mcp-tooling page |
+| **Tool count** | `npm-mcp/index.js` → `server.tool()` calls | README.md, npm-mcp/package.json description, vscode-extension/package.json description, vscode-extension sidebar view name, website /mcp-tooling page |
 | **Command count** | `vscode-extension/package.json` → `contributes.commands[]` | README.md |
-| **Module count** | `mcp-server/knowledge.json` → `modules` keys | README.md, mcp-server/package.json description |
-| **Play count** | `solution-plays/` → directory count | README.md, mcp-server/package.json description |
-| **Homepage URL** | `https://frootai.dev` | mcp-server/package.json homepage, README.md |
-| **Repository URL** | `https://github.com/frootai/frootai` | mcp-server/package.json repository, README.md |
+| **Module count** | `npm-mcp/knowledge.json` → `modules` keys | README.md, npm-mcp/package.json description |
+| **Play count** | `solution-plays/` → directory count | README.md, npm-mcp/package.json description |
+| **Homepage URL** | `https://frootai.dev` | npm-mcp/package.json homepage, README.md |
+| **Repository URL** | `https://github.com/frootai/frootai` | npm-mcp/package.json repository, README.md |
 | **Copyright** | `LICENSE`, `NOTICE` | All published packages |
 
 ---
@@ -27,7 +27,7 @@ This is the map that `sync-content.js` and `validate-consistency.js` use to keep
 | File | What Gets Updated |
 |------|-------------------|
 | `README.md` | Version refs (`@X.Y.Z`), tool count, command count, module count, play count |
-| `mcp-server/package.json` | Description (tool count, module count, play count) |
+| `npm-mcp/package.json` | Description (tool count, module count, play count) |
 | `vscode-extension/package.json` | Description (tool count, module count, play count), sidebar view name |
 | `functions/server.js` | MCP version ref, extension version ref, tool count |
 

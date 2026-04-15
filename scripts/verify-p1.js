@@ -2,7 +2,7 @@ const fs = require("fs");
 // Version checks
 const pkgs = [
     ["vscode-extension/package.json", "2.1.0"],
-    ["mcp-server/package.json", "4.0.0"],
+    ["npm-mcp/package.json", "4.0.0"],
     ["python-sdk/pyproject.toml", "4.1.0"],
     ["python-mcp/pyproject.toml", "4.0.0"],
 ];
@@ -19,9 +19,9 @@ for (const [f, expected] of pkgs) {
 console.log("\n=== STALE PLAY COUNT CHECK ===");
 const files = [
     "vscode-extension/package.json",
-    "mcp-server/cli.js",
-    "mcp-server/index.js",
-    "mcp-server/Dockerfile",
+    "npm-mcp/cli.js",
+    "npm-mcp/index.js",
+    "npm-mcp/Dockerfile",
     "python-sdk/pyproject.toml",
     "python-sdk/frootai/plays.py",
     "python-mcp/pyproject.toml",
@@ -43,7 +43,7 @@ if (!staleFound) console.log("✅ No stale play counts found in any distribution
 
 // knowledge.json check
 console.log("\n=== KNOWLEDGE.JSON CHECK ===");
-const k = require("./mcp-server/knowledge.json");
+const k = require("./npm-mcp/knowledge.json");
 console.log(`Modules: ${k.modules ? Object.keys(k.modules).length : 'N/A'}`);
 console.log(`Version: ${k.version || 'N/A'}`);
 console.log(`Built: ${k.built || 'N/A'}`);

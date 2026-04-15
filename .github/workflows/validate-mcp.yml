@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'mcp-server/**'
+      - 'npm-mcp/**'
       - 'docs/**'
   pull_request:
     paths:
-      - 'mcp-server/**'
+      - 'npm-mcp/**'
       - 'docs/**'
   workflow_dispatch:
 
@@ -25,14 +25,14 @@ jobs:
         with:
           node-version: "20"
           cache: 'npm'
-          cache-dependency-path: mcp-server/package-lock.json
+          cache-dependency-path: npm-mcp/package-lock.json
 
       - name: Install MCP server dependencies
-        working-directory: mcp-server
+        working-directory: npm-mcp
         run: npm ci
 
       - name: Verify knowledge base
-        working-directory: mcp-server
+        working-directory: npm-mcp
         run: |
           echo "=== FrootAI MCP Server Verification ==="
           node -e "
@@ -47,7 +47,7 @@ jobs:
           "
 
       - name: Verify tool count
-        working-directory: mcp-server
+        working-directory: npm-mcp
         run: |
           TOOLS=$(grep -c '"name":' index.js || echo "0")
           echo "✅ Tools registered: $TOOLS"

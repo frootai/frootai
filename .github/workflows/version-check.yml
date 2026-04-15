@@ -18,7 +18,7 @@ jobs:
 
       - name: Check version consistency across files
         run: |
-          MCP_VERSION=$(node -p "require('./mcp-server/package.json').version")
+          MCP_VERSION=$(node -p "require('./npm-mcp/package.json').version")
           EXT_VERSION=$(node -p "require('./vscode-extension/package.json').version")
           
           echo "MCP Server version: $MCP_VERSION"
@@ -48,12 +48,12 @@ jobs:
           fi
 
           # Check tool count consistency
-          ACTUAL_TOOLS=$(grep -c 'server\.tool(' mcp-server/index.js || echo 0)
+          ACTUAL_TOOLS=$(grep -c 'server\.tool(' npm-mcp/index.js || echo 0)
           
-          if grep -qP "\d+ tools" mcp-server/package.json; then
-            DESC_TOOLS=$(grep -oP '(\d+) tools' mcp-server/package.json | head -1 | grep -oP '\d+')
+          if grep -qP "\d+ tools" npm-mcp/package.json; then
+            DESC_TOOLS=$(grep -oP '(\d+) tools' npm-mcp/package.json | head -1 | grep -oP '\d+')
             if [ "$DESC_TOOLS" != "$ACTUAL_TOOLS" ]; then
-              echo "::error file=mcp-server/package.json::npm description says ${DESC_TOOLS} tools but index.js has ${ACTUAL_TOOLS}"
+              echo "::error file=npm-mcp/package.json::npm description says ${DESC_TOOLS} tools but index.js has ${ACTUAL_TOOLS}"
               ERRORS=$((ERRORS+1))
             fi
           fi

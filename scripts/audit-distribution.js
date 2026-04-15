@@ -62,24 +62,24 @@ if (fs.existsSync("vscode-extension/src/extension.js")) {
 }
 
 // 2. Node MCP Server
-console.log("\n2. NODE MCP SERVER (mcp-server/)");
-checkFile("mcp-server/package.json", [...stalePatterns, ...currentPatterns], "package.json");
-const mcpPkg = JSON.parse(fs.readFileSync("mcp-server/package.json", "utf8"));
+console.log("\n2. NODE MCP SERVER (npm-mcp/)");
+checkFile("npm-mcp/package.json", [...stalePatterns, ...currentPatterns], "package.json");
+const mcpPkg = JSON.parse(fs.readFileSync("npm-mcp/package.json", "utf8"));
 console.log(`   Version: ${mcpPkg.version}`);
-console.log(`   Tool count: ${(fs.readFileSync("mcp-server/index.js", "utf8").match(/server\.tool\(/g) || []).length}`);
-checkFile("mcp-server/index.js", stalePatterns, "index.js");
-checkFile("mcp-server/cli.js", stalePatterns, "cli.js");
-checkFile("mcp-server/README.md", stalePatterns, "README.md");
+console.log(`   Tool count: ${(fs.readFileSync("npm-mcp/index.js", "utf8").match(/server\.tool\(/g) || []).length}`);
+checkFile("npm-mcp/index.js", stalePatterns, "index.js");
+checkFile("npm-mcp/cli.js", stalePatterns, "cli.js");
+checkFile("npm-mcp/README.md", stalePatterns, "README.md");
 
 // Check COMMUNITY_PLAYS array size
-const indexContent = fs.readFileSync("mcp-server/index.js", "utf8");
+const indexContent = fs.readFileSync("npm-mcp/index.js", "utf8");
 const staticPlaysMatch = indexContent.match(/staticPlays\s*=\s*\[/);
 console.log(`   staticPlays array: ${staticPlaysMatch ? 'exists' : 'not found'}`);
 
 // 3. CLI
-console.log("\n3. CLI (mcp-server/cli.js)");
-checkFile("mcp-server/cli.js", [...stalePatterns, ...currentPatterns], "cli.js");
-const cliContent = fs.readFileSync("mcp-server/cli.js", "utf8");
+console.log("\n3. CLI (npm-mcp/cli.js)");
+checkFile("npm-mcp/cli.js", [...stalePatterns, ...currentPatterns], "cli.js");
+const cliContent = fs.readFileSync("npm-mcp/cli.js", "utf8");
 const cliPlaysCount = (cliContent.match(/{ value:/g) || []).length;
 console.log(`   Play entries in picker: ~${cliPlaysCount}`);
 
@@ -108,26 +108,26 @@ const pyPlays = (serverContent.match(/"id":/g) || []).length || (serverContent.m
 console.log(`   Play data entries: ~${pyPlays}`);
 
 // 6. Docker
-console.log("\n6. DOCKER (mcp-server/Dockerfile)");
-checkFile("mcp-server/Dockerfile", [...stalePatterns, ...currentPatterns], "Dockerfile");
-const dockerfile = fs.readFileSync("mcp-server/Dockerfile", "utf8");
+console.log("\n6. DOCKER (npm-mcp/Dockerfile)");
+checkFile("npm-mcp/Dockerfile", [...stalePatterns, ...currentPatterns], "Dockerfile");
+const dockerfile = fs.readFileSync("npm-mcp/Dockerfile", "utf8");
 const dockerDesc = (dockerfile.match(/image\.description="([^"]+)"/) || [])[1];
 console.log(`   Image description: ${dockerDesc || 'not found'}`);
 
 // 7. Agent Card
-console.log("\n7. AGENT CARD (mcp-server/agent-card.json)");
-checkFile("mcp-server/agent-card.json", stalePatterns, "agent-card.json");
-const agentCard = JSON.parse(fs.readFileSync("mcp-server/agent-card.json", "utf8"));
+console.log("\n7. AGENT CARD (npm-mcp/agent-card.json)");
+checkFile("npm-mcp/agent-card.json", stalePatterns, "agent-card.json");
+const agentCard = JSON.parse(fs.readFileSync("npm-mcp/agent-card.json", "utf8"));
 console.log(`   Version: ${agentCard.version}`);
 console.log(`   MCP tools count: ${agentCard.tools?.mcp_tools || 'not found'}`);
 
 // 8. Knowledge.json
-console.log("\n8. KNOWLEDGE.JSON (mcp-server/knowledge.json)");
-const knowledge = JSON.parse(fs.readFileSync("mcp-server/knowledge.json", "utf8"));
+console.log("\n8. KNOWLEDGE.JSON (npm-mcp/knowledge.json)");
+const knowledge = JSON.parse(fs.readFileSync("npm-mcp/knowledge.json", "utf8"));
 console.log(`   Version: ${knowledge.version}`);
 console.log(`   Built: ${knowledge.built}`);
 console.log(`   Modules: ${Object.keys(knowledge.modules || {}).length}`);
-console.log(`   Size: ${Math.round(fs.statSync("mcp-server/knowledge.json").size / 1024)} KB`);
+console.log(`   Size: ${Math.round(fs.statSync("npm-mcp/knowledge.json").size / 1024)} KB`);
 
 // 9. Config files
 console.log("\n9. CONFIG FILES");
@@ -143,5 +143,5 @@ console.log(`  MCP Server (npm):  ${mcpPkg.version}`);
 console.log(`  Python SDK:        ${pyVer}`);
 console.log(`  Python MCP:        ${pyMcpVer}`);
 console.log(`  Docker:            ${mcpPkg.version} (same as MCP)`);
-console.log(`  MCP Tools:         ${(fs.readFileSync("mcp-server/index.js", "utf8").match(/server\.tool\(/g) || []).length}`);
+console.log(`  MCP Tools:         ${(fs.readFileSync("npm-mcp/index.js", "utf8").match(/server\.tool\(/g) || []).length}`);
 console.log("═══════════════════════════════════════════════════════════");

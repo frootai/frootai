@@ -37,7 +37,7 @@ jobs:
 
       - name: Extract version from package.json
         id: version
-        run: echo "version=$(node -p "require('./mcp-server/package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./npm-mcp/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Docker metadata
         id: meta

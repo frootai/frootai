@@ -26,7 +26,7 @@ jobs:
 
       - name: Check if version is newer than npm
         id: version_check
-        working-directory: mcp-server
+        working-directory: npm-mcp
         run: |
           LOCAL=$(node -p "require('./package.json').version")
           NPM=$(npm view frootai-mcp version 2>/dev/null || echo "0.0.0")
@@ -42,7 +42,7 @@ jobs:
 
       - name: Publish frootai-mcp to npm
         if: steps.version_check.outputs.skip != 'true'
-        working-directory: mcp-server
+        working-directory: npm-mcp
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Check if version is newer than npm
         id: cli_check
-        working-directory: cli
+        working-directory: npm-sdk
         run: |
           LOCAL=$(node -p "require('./package.json').version")
           NPM=$(npm view frootai version 2>/dev/null || echo "0.0.0")
@@ -88,7 +88,7 @@ jobs:
 
       - name: Publish frootai to npm
         if: steps.cli_check.outputs.skip != 'true'
-        working-directory: cli
+        working-directory: npm-sdk
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

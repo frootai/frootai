@@ -58,7 +58,7 @@ function section(title) {
 // ═══════════════════════════════════════════════════
 section('📦 VERSION CONSISTENCY');
 
-const mcpPkg = readJSON('mcp-server/package.json');
+const mcpPkg = readJSON('npm-mcp/package.json');
 const extPkg = readJSON('vscode-extension/package.json');
 const mcpVersion = mcpPkg?.version || 'MISSING';
 const extVersion = extPkg?.version || 'MISSING';
@@ -95,7 +95,7 @@ if (readme) {
 // ═══════════════════════════════════════════════════
 section('🔧 TOOL COUNT CONSISTENCY');
 
-const mcpIndex = read('mcp-server/index.js');
+const mcpIndex = read('npm-mcp/index.js');
 let actualToolCount = 0;
 if (mcpIndex) {
   const toolMatches = mcpIndex.match(/server\.tool\(/g);
@@ -106,7 +106,7 @@ console.log(`  Source of truth (index.js): ${actualToolCount} tools`);
 // npm description
 if (mcpPkg?.description) {
   const m = mcpPkg.description.match(/(\d+)\s*tools/);
-  if (m) check('npm description tool count', m[1], String(actualToolCount), 'mcp-server/package.json');
+  if (m) check('npm description tool count', m[1], String(actualToolCount), 'npm-mcp/package.json');
 }
 
 // Extension description
@@ -165,7 +165,7 @@ console.log(`  Source of truth (solution-plays/): ${actualPlayCount} plays`);
 
 if (mcpPkg?.description) {
   const m = mcpPkg.description.match(/(\d+)\s*solution plays/);
-  if (m) check('npm description play count', m[1], String(actualPlayCount), 'mcp-server/package.json');
+  if (m) check('npm description play count', m[1], String(actualPlayCount), 'npm-mcp/package.json');
 }
 
 if (readme) {
@@ -185,7 +185,7 @@ if (readme) {
 section('📚 MODULE COUNT');
 
 let actualModuleCount = 0;
-const knowledge = readJSON('mcp-server/knowledge.json');
+const knowledge = readJSON('npm-mcp/knowledge.json');
 if (knowledge?.modules) {
   actualModuleCount = Object.keys(knowledge.modules).length;
 }
@@ -193,7 +193,7 @@ console.log(`  Source of truth (knowledge.json): ${actualModuleCount} modules`);
 
 if (mcpPkg?.description) {
   const m = mcpPkg.description.match(/(\d+)\s*modules/);
-  if (m && actualModuleCount > 0) check('npm description module count', m[1], String(actualModuleCount), 'mcp-server/package.json');
+  if (m && actualModuleCount > 0) check('npm description module count', m[1], String(actualModuleCount), 'npm-mcp/package.json');
 }
 
 // ═══════════════════════════════════════════════════
@@ -218,11 +218,11 @@ for (const [name, url] of Object.entries(expectedURLs)) {
 }
 
 if (mcpPkg?.homepage !== 'https://frootai.dev') {
-  check('npm homepage', mcpPkg?.homepage || 'missing', 'https://frootai.dev', 'mcp-server/package.json');
+  check('npm homepage', mcpPkg?.homepage || 'missing', 'https://frootai.dev', 'npm-mcp/package.json');
 }
 
 if (mcpPkg?.repository?.url !== 'https://github.com/frootai/frootai') {
-  check('npm repository', mcpPkg?.repository?.url || 'missing', 'https://github.com/frootai/frootai', 'mcp-server/package.json');
+  check('npm repository', mcpPkg?.repository?.url || 'missing', 'https://github.com/frootai/frootai', 'npm-mcp/package.json');
 }
 
 // ═══════════════════════════════════════════════════
@@ -276,7 +276,7 @@ for (const play of playDirs) {
   const playMcp = join(ROOT, `solution-plays/${play}/.vscode/mcp.json`);
   if (existsSync(playMcp)) {
     const content = readFileSync(playMcp, 'utf8');
-    if (content.includes('npx') && !content.includes('mcp-server/index')) {
+    if (content.includes('npx') && !content.includes('npm-mcp/index')) {
       console.log(`  ✅ Play ${play} mcp.json uses npx`);
     } else {
       console.error(`  ❌ Play ${play} mcp.json has local path!`);

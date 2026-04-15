@@ -3,15 +3,15 @@
  * FrootAI Content Sync — Auto-update all downstream files from sources of truth.
  *
  * Sources of truth:
- *   - mcp-server/index.js         → tool count (server.tool() calls)
- *   - mcp-server/package.json     → MCP version, description
- *   - mcp-server/knowledge.json   → module count
+ *   - npm-mcp/index.js         → tool count (server.tool() calls)
+ *   - npm-mcp/package.json     → MCP version, description
+ *   - npm-mcp/knowledge.json   → module count
  *   - vscode-extension/package.json → extension version, command count
  *   - solution-plays/              → play count (directories)
  *
  * Downstream files updated:
  *   - README.md
- *   - mcp-server/package.json (description counts)
+ *   - npm-mcp/package.json (description counts)
  *   - vscode-extension/package.json (description counts)
  *   - functions/server.js (version refs)
  *
@@ -60,18 +60,18 @@ function updateFile(rel, replacer, label) {
 // ─── Gather sources of truth ───
 console.log('🔍 Reading sources of truth...\n');
 
-const mcpPkg = readJSON('mcp-server/package.json');
+const mcpPkg = readJSON('npm-mcp/package.json');
 const extPkg = readJSON('vscode-extension/package.json');
 const mcpVersion = mcpPkg?.version || '0.0.0';
 const extVersion = extPkg?.version || '0.0.0';
 
-const mcpIndex = read('mcp-server/index.js') || '';
+const mcpIndex = read('npm-mcp/index.js') || '';
 const toolMatches = mcpIndex.match(/server\.tool\(/g);
 const toolCount = toolMatches ? toolMatches.length : 0;
 
 const cmdCount = extPkg?.contributes?.commands?.length || 0;
 
-const knowledge = readJSON('mcp-server/knowledge.json');
+const knowledge = readJSON('npm-mcp/knowledge.json');
 const moduleCount = knowledge?.modules ? Object.keys(knowledge.modules).length : 0;
 
 const playsDir = join(ROOT, 'solution-plays');
@@ -123,7 +123,7 @@ updateFile('README.md', (content) => {
 }, 'Version + counts');
 
 // ─── 2. Sync MCP package.json description ───
-console.log('\n📦 Syncing mcp-server/package.json description...');
+console.log('\n📦 Syncing npm-mcp/package.json description...');
 
 if (mcpPkg) {
   let desc = mcpPkg.description;
@@ -133,7 +133,7 @@ if (mcpPkg) {
   desc = desc.replace(/\b\d+ solution plays/g, `${playCount} solution plays`);
   if (desc !== origDesc) {
     mcpPkg.description = desc;
-    writeJSON('mcp-server/package.json', mcpPkg);
+    writeJSON('npm-mcp/package.json', mcpPkg);
     console.log(`  ✏️  Updated description — ${toolCount} tools, ${moduleCount} modules, ${playCount} plays`);
     changes++;
   } else {
@@ -192,9 +192,9 @@ updateFile('functions/server.js', (content) => {
 }, 'Chatbot version refs');
 
 // ─── 5. Sync MCP server README ───
-console.log('\n📄 Syncing mcp-server/README.md...');
+console.log('\n📄 Syncing npm-mcp/README.md...');
 
-updateFile('mcp-server/README.md', (content) => {
+updateFile('npm-mcp/README.md', (content) => {
   content = content.replace(/\b\d+ tools\b/g, (match) => {
     const n = parseInt(match);
     return n > 10 ? `${toolCount} tools` : match;

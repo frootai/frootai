@@ -8,7 +8,7 @@
  * 
  *   Channel        │ Tag Prefix  │ Version File                         │ Example Tag
  *   ───────────────┼─────────────┼──────────────────────────────────────┼─────────────
- *   npm (MCP)      │ mcp-v       │ mcp-server/package.json              │ mcp-v5.0.2
+ *   npm (MCP)      │ mcp-v       │ npm-mcp/package.json              │ mcp-v5.0.2
  *   VS Code        │ ext-v       │ vscode-extension/package.json        │ ext-v5.0.2
  *   PyPI SDK       │ sdk-v       │ python-sdk/pyproject.toml            │ sdk-v5.0.2
  *   PyPI MCP       │ pymcp-v     │ python-mcp/pyproject.toml            │ pymcp-v5.0.2
@@ -109,23 +109,23 @@ function run(cmd) {
 const channels = {
     mcp: {
         name: "npm MCP Server + Docker",
-        file: "mcp-server/package.json",
-        read: () => readJsonVersion("mcp-server/package.json"),
-        write: (v) => writeJsonVersion("mcp-server/package.json", v),
+        file: "npm-mcp/package.json",
+        read: () => readJsonVersion("npm-mcp/package.json"),
+        write: (v) => writeJsonVersion("npm-mcp/package.json", v),
         tagPrefix: "mcp-v",
         serverRef: "FROOTAI_MCP_VERSION",
         serverFormat: (v) => `"@${v}"`,
     },
     cli: {
         name: "npm CLI & SDK (frootai)",
-        file: "cli/package.json",
-        read: () => readJsonVersion("cli/package.json"),
+        file: "npm-sdk/package.json",
+        read: () => readJsonVersion("npm-sdk/package.json"),
         write: (v) => {
-            writeJsonVersion("cli/package.json", v);
+            writeJsonVersion("npm-sdk/package.json", v);
             // Keep frootai-mcp dependency in sync
-            const content = fs.readFileSync("cli/package.json", "utf8");
+            const content = fs.readFileSync("npm-sdk/package.json", "utf8");
             const updated = content.replace(/"frootai-mcp":\s*"\^[^"]*"/, `"frootai-mcp": "^${v}"`);
-            fs.writeFileSync("cli/package.json", updated);
+            fs.writeFileSync("npm-sdk/package.json", updated);
         },
         tagPrefix: "cli-v",
         serverRef: "FROOTAI_CLI_VERSION",

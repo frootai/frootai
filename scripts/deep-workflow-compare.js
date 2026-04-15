@@ -48,7 +48,7 @@ for (const f of files) {
 
 console.log('\n--- DISTRIBUTION SYNC ---');
 // Check if workflows are referenced in knowledge.json, website data, etc.
-const kp = 'c:/CodeSpace/frootai/mcp-server/knowledge.json';
+const kp = 'c:/CodeSpace/frootai/npm-mcp/knowledge.json';
 if (fs.existsSync(kp)) {
     const k = fs.readFileSync(kp, 'utf8');
     const hasWf = k.includes('workflow') || k.includes('fai-contributors');
