@@ -1,5 +1,5 @@
 ---
-name: FAI-release-readiness
+name: fai-release-readiness
 description: "Pre-release compliance gate — validates version consistency, changelog, schema compliance, secrets scan, license audit, breaking change detection, build verification, and rollback planning. Blocks or approves publish to npm, PyPI, and VS Code Marketplace."
 on:
   workflow_dispatch:

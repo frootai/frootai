@@ -1,170 +1,102 @@
 ---
 name: fai-deploy-03-deterministic-agent
-description: 'Deploys Play 03-deterministic-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.'
+description: |
+  Deploy Deterministic Agent (Play 03) with structured output enforcement,
+  seed pinning, guardrail validation, and evaluation gates. Covers deployment
+  of zero-temperature agents with JSON schema compliance.
 ---
 
-# Fai Deploy 03 Deterministic Agent
+# Deploy Deterministic Agent (Play 03)
 
-Deploys Play 03-deterministic-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.
+Deploy agents with repeatable outputs, schema compliance, and safety guardrails.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys play 03-deterministic-agent to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying agents that must produce consistent structured output
+- Enforcing JSON schema compliance on LLM responses
+- Setting up evaluation gates for determinism verification
+- Configuring zero-temperature deployments with seed pinning
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys play 03-deterministic-agent to azure with bicep validation, what-if check, and post-deploy health verification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 07**
-- **Play 22**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-deploy-03-deterministic-agent
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Configuration
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-deploy-03-deterministic-agent/"]
-  }
+  "model": "gpt-4o",
+  "temperature": 0,
+  "seed": 42,
+  "response_format": { "type": "json_schema", "json_schema": {
+    "name": "analysis_result",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "enum": ["bug", "feature", "question"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "summary": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["category", "severity", "summary", "confidence"],
+      "additionalProperties": false
+    }
+  }}
 }
 ```
 
-### Via Agent Invocation
+## Deployment
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```bash
+# Deploy with structured output config
+az webapp deploy --resource-group rg-agent-prod \
+  --name app-agent-prod --src-path dist/agent.zip
 
-## Evaluation Pipeline
+# Verify determinism
+python tests/determinism/test_repeatable.py --seed 42 --runs 5
+```
 
-This skill integrates with the FAI evaluation framework:
+## Determinism Verification
 
 ```python
-from frootai.evaluation import SkillEvaluator
-
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
-
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
+def verify_determinism(prompt: str, model: str, seed: int, runs: int = 5) -> dict:
+    outputs = []
+    for _ in range(runs):
+        resp = client.chat.completions.create(
+            model=model, seed=seed, temperature=0,
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"},
+        )
+        outputs.append(resp.choices[0].message.content)
+    unique = len(set(outputs))
+    return {"deterministic": unique == 1, "unique_outputs": unique, "runs": runs}
 ```
 
-## Advanced Configuration
+## Guardrail Validation
 
-```json
-{
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
-}
+```python
+from pydantic import BaseModel, field_validator
+
+class AnalysisResult(BaseModel):
+    category: str
+    severity: str
+    summary: str
+    confidence: float
+
+    @field_validator("confidence")
+    @classmethod
+    def check_confidence(cls, v):
+        assert 0 <= v <= 1, f"Confidence {v} out of range"
+        return v
+
+def validate_output(raw: str) -> AnalysisResult:
+    return AnalysisResult.model_validate_json(raw)
 ```
 
-## Anti-Patterns
+## Troubleshooting
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Non-deterministic output | Missing seed or temp > 0 | Set seed + temperature=0 |
+| Schema validation fails | Model ignores strict schema | Use response_format with strict=true |
+| Guardrail bypass | No server-side validation | Always validate with Pydantic |
+| Different results per deploy | Model version changed | Pin model version in deployment |

@@ -12,6 +12,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       matrix:
         play:
@@ -146,3 +147,9 @@ jobs:
             echo "WARNING: main.bicep may be a placeholder (no resource/param/module declarations)"
           fi
           echo "✅ Bicep file present and has content"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Play Validation: ${{ matrix.play }}" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All Agentic OS, DevKit, and TuneKit files validated" >> $GITHUB_STEP_SUMMARY

@@ -1,161 +1,102 @@
 ---
 name: fai-postgresql-code-review
-description: 'Reviews PostgreSQL code for performance, security, extension usage, and connection management.'
+description: |
+  Review PostgreSQL code for performance, security, and maintainability with
+  query analysis, index recommendations, and anti-pattern detection. Use when
+  auditing SQL code or reviewing database PRs.
 ---
 
-# Fai Postgresql Code Review
+# PostgreSQL Code Review
 
-Reviews PostgreSQL code for performance, security, extension usage, and connection management.
+Review SQL code for performance, security, and correctness.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for reviews postgresql code for performance, security, extension usage, and connection management.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Reviewing PRs that include SQL changes
+- Auditing existing queries for performance
+- Detecting SQL anti-patterns and security issues
+- Recommending index improvements
 
-**Category:** Code Quality
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Performance Review
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```sql
+-- Anti-pattern: SELECT * (fetches unnecessary columns)
+-- Bad
+SELECT * FROM conversations WHERE user_id = 'user-42';
+-- Good
+SELECT id, title, status, created_at FROM conversations WHERE user_id = 'user-42';
 
-## Steps
+-- Anti-pattern: Missing index on filter column
+-- Check with EXPLAIN ANALYZE
+EXPLAIN ANALYZE SELECT id FROM messages WHERE conversation_id = 'conv-123';
+-- Look for "Seq Scan" → needs index
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+-- Fix
+CREATE INDEX idx_messages_conv_id ON messages(conversation_id);
 ```
 
-### Step 2: Load Configuration
+## Security Review
 
-Read settings from the FAI manifest and TuneKit config files.
+```sql
+-- Anti-pattern: String concatenation (SQL injection)
+-- Bad (Python)
+cursor.execute(f"SELECT * FROM users WHERE email = '{email}'")
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+-- Good (parameterized)
+cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+
+-- Anti-pattern: Overly permissive GRANT
+-- Bad
+GRANT ALL PRIVILEGES ON ALL TABLES TO app_user;
+-- Good
+GRANT SELECT, INSERT, UPDATE ON conversations, messages TO app_user;
 ```
 
-### Step 3: Execute Core Logic
+## Query Analysis Checklist
 
-Perform the primary operation: reviews postgresql code for performance, security, extension usage, and connection management..
+| Check | Look For | Fix |
+|-------|----------|-----|
+| Sequential scan | Seq Scan on large table | Add index on filter columns |
+| N+1 queries | Loop of SELECT per row | Use JOIN or batch query |
+| Missing WHERE | UPDATE/DELETE without filter | Always add WHERE clause |
+| Large result sets | No LIMIT on SELECT | Add LIMIT + pagination |
+| Implicit casting | Type mismatch in WHERE | Match column types |
+| Missing transactions | Multi-step changes | Wrap in BEGIN/COMMIT |
 
-### Step 4: Validate Results
+## Index Recommendations
 
-Verify the output meets quality thresholds and WAF compliance.
+```sql
+-- Find most expensive queries (pg_stat_statements)
+SELECT query, calls, mean_exec_time, rows
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 10;
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+-- Find unused indexes
+SELECT indexrelname, idx_scan
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0 AND indexrelname NOT LIKE 'pg_%'
+ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
-## Output
+## Migration Safety
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+```sql
+-- Safe: ADD COLUMN with NULL default (no table rewrite)
+ALTER TABLE users ADD COLUMN avatar_url TEXT;
 
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 24**
-- **Play 51**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-postgresql-code-review
+-- Unsafe: ADD COLUMN with NOT NULL default (rewrites table)
+ALTER TABLE users ADD COLUMN avatar_url TEXT NOT NULL DEFAULT '';
+-- Fix: Add nullable first, backfill, then add constraint
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-postgresql-code-review/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Code Quality category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow query | Missing index | Run EXPLAIN ANALYZE, add index |
+| SQL injection | String concatenation | Use parameterized queries |
+| Lock contention | Long transaction | Shorten transactions, use SKIP LOCKED |
+| Migration timeout | Table rewrite on large table | Use pg_repack or online migration |

@@ -1,160 +1,159 @@
 ---
 name: fai-dynamic-prompt
-description: 'Creates context-adaptive prompts that adjust based on query complexity and user profile.'
+description: 'Designs dynamic prompt construction workflows with context control and safety boundaries.'
 ---
 
-# Fai Dynamic Prompt
+# FAI Skill: Dynamic Prompt
 
-Creates context-adaptive prompts that adjust based on query complexity and user profile.
+## Purpose
 
-## Overview
+This skill defines a production-grade workflow for Template composition, context injection, and guardrail-aware prompt assembly. It applies full phase execution, explicit quality gates, and clear delivery evidence so outcomes remain repeatable.
 
-This skill provides a structured, repeatable procedure for creates context-adaptive prompts that adjust based on query complexity and user profile.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Inputs
 
-**Category:** Prompt Engineering
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Description |
+|---|---|
+| Core parameters | prompt_templates, context_sources, policy_rules, evaluation_metrics |
+| Environment | design, dev, staging, production |
+| Constraints | security, reliability, latency, cost, and governance requirements |
 
-## Parameters
+## Prerequisites
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+- Scope and success criteria are approved by owners.
+- Dependencies and affected systems are documented.
+- Validation and observability approaches are prepared.
+- Rollback or mitigation strategy is ready for high-risk changes.
 
-## Steps
+## Full Phases Coverage
 
-### Step 1: Validate Prerequisites
+### Phase 1: Discover
 
-Verify all required tools, credentials, and dependencies are available.
+- Clarify outcomes, constraints, and affected user/system journeys.
+- Identify risks, unknowns, and dependencies early.
+- Define measurable acceptance and release criteria.
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+### Phase 2: Design
 
-### Step 2: Load Configuration
+- Produce architecture/pattern options with tradeoff analysis.
+- Select an approach balancing quality, speed, and maintainability.
+- Encode accessibility, security, and compliance expectations.
 
-Read settings from the FAI manifest and TuneKit config files.
+### Phase 3: Implement
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+- Ship incrementally with focused, reviewable changes.
+- Keep interfaces, contracts, and config explicit.
+- Minimize hidden coupling and side effects.
 
-### Step 3: Execute Core Logic
+### Phase 4: Validate
 
-Perform the primary operation: creates context-adaptive prompts that adjust based on query complexity and user profile..
+- Run functional, edge-case, and regression validation.
+- Verify observability signals and operational readiness.
+- Capture evidence and unresolved risk notes.
 
-### Step 4: Validate Results
+### Phase 5: Deploy
 
-Verify the output meets quality thresholds and WAF compliance.
+- Roll out through controlled stages with stop conditions.
+- Confirm health/KPI checkpoints before progression.
+- Trigger rollback immediately when gates fail.
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
+### Phase 6: Operate
 
-## Output
+- Monitor live behavior and drift against baseline.
+- Resolve incidents with owner and SLA clarity.
+- Feed lessons learned into next iteration.
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+## WAF-Aligned Quality Gates
 
-## WAF Alignment
+### Reliability
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+- Core flows behave consistently under transient failures.
+- Health and fallback paths are documented and tested.
+- Error/empty/degraded states remain actionable.
 
-## Compatible Solution Plays
+### Security
 
-- **Play 18**
+- Secrets are externalized and access is least-privilege.
+- Input and output handling avoids unsafe data exposure.
+- Auditability exists for critical operations.
 
-## Error Handling
+### Cost Optimization
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+- Resource and model choices are right-sized to need.
+- High-cost paths are measured and optimized.
+- Budget thresholds and anomaly alerts are defined.
 
-## Usage
+### Operational Excellence
 
-### Standalone
+- CI/CD and validation gates are mandatory.
+- Runbooks and rollback instructions are versioned.
+- Telemetry supports troubleshooting and continuous improvement.
 
-```bash
-# Run this skill directly
-npx frootai skill run fai-dynamic-prompt
-```
+### Performance Efficiency
 
-### Inside a Solution Play
+- SLO targets are explicit and monitored.
+- Hot paths are benchmarked and tuned.
+- Payload, rendering, or compute footprints are controlled.
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+### Responsible AI
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-dynamic-prompt/"]
-  }
-}
-```
+- Safety and grounding checks are applied where AI exists.
+- User-facing AI outputs include transparency cues.
+- Human escalation exists for high-impact outcomes.
 
-### Via Agent Invocation
+## Deliverables
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Artifact | Purpose |
+|---|---|
+| Primary output | dynamic-prompt-spec.md, prompt assembly patterns, eval suite |
+| Validation dossier | Release-readiness evidence |
+| Rollback guide | Mitigation and reversal actions |
+| Operate handoff | Monitoring and ownership notes |
 
-## Configuration Reference
+## Completion Checklist
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+- [ ] Phase 1 discovery complete.
+- [ ] Phase 2 design approved.
+- [ ] Phase 3 implementation reviewed.
+- [ ] Phase 4 validation passed.
+- [ ] Phase 5 staged deployment completed.
+- [ ] Phase 6 operate handoff acknowledged.
+- [ ] Completion criteria met: prompt quality improves, policy compliance maintained, token use stays bounded.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+### Symptom: Outcomes are inconsistent across environments
 
-## Notes
+- Compare config, dependencies, and feature-flag parity.
+- Validate data shape and traffic assumptions.
+- Reproduce using representative scenarios.
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Prompt Engineering category in the FAI primitives catalog
+### Symptom: Performance or cost regresses after rollout
+
+- Profile hot paths and retry/caching behavior.
+- Rebalance routing, limits, and expensive operations.
+- Verify autoscaling and batching thresholds.
+
+### Symptom: Users fail to recover from failures
+
+- Improve clarity of recovery actions and messaging.
+- Add contextual diagnostics for support triage.
+- Validate escalation pathways end to end.
+
+## Example Commands
+
+```bash
+# Adapt to repository standards
+npm run lint
+npm test
+npm run build
+```
+
+## Definition of Done
+
+The skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce results without tribal knowledge.
+
+## Metadata
+
+- Category: Prompt Engineering
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly and after major architecture changes

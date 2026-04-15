@@ -1,155 +1,114 @@
 ---
 name: fai-build-github-workflow
-description: 'Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.'
+description: |
+  Design GitHub Actions workflows with quality gates, OIDC auth, matrix strategies,
+  reusable workflows, and staged deployment controls. Use when setting up CI/CD
+  for AI applications or infrastructure deployments.
 ---
 
-# Fai Build Github Workflow
+# GitHub Actions Workflow Patterns
 
-Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.
+Build CI/CD workflows with quality gates, secure auth, and staged deployments.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates github actions workflows with matrix testing, sha-pinned actions, and quality gates.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up CI/CD for a new AI application
+- Adding quality gates (lint, test, scan) before deployment
+- Implementing staged rollout (dev → staging → prod)
+- Using OIDC for keyless Azure authentication
 
-**Category:** Build Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Pattern 1: CI with Quality Gates
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```yaml
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: ruff check .
+      - run: pytest --cov=src --cov-report=xml
 ```
 
-### Step 2: Load Configuration
+## Pattern 2: OIDC Azure Deploy
 
-Read settings from the FAI manifest and TuneKit config files.
+```yaml
+name: Deploy
+on: { push: { branches: [main] } }
+permissions:
+  id-token: write
+  contents: read
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - run: az deployment group create -g rg-prod -f infra/main.bicep
 ```
 
-### Step 3: Execute Core Logic
+## Pattern 3: Reusable Workflow
 
-Perform the primary operation: creates github actions workflows with matrix testing, sha-pinned actions, and quality gates..
+```yaml
+# .github/workflows/deploy-template.yml
+on:
+  workflow_call:
+    inputs:
+      environment: { required: true, type: string }
+      resource-group: { required: true, type: string }
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: az deployment group create -g ${{ inputs.resource-group }} -f infra/main.bicep
 ```
 
-## Output
+## Pattern 4: Staged Deployment
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-github-workflow
+```yaml
+jobs:
+  deploy-dev:
+    uses: ./.github/workflows/deploy-template.yml
+    with: { environment: dev, resource-group: rg-dev }
+    secrets: inherit
+  deploy-prod:
+    needs: deploy-dev
+    uses: ./.github/workflows/deploy-template.yml
+    with: { environment: production, resource-group: rg-prod }
+    secrets: inherit
 ```
 
-### Inside a Solution Play
+## Security Checklist
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-github-workflow/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Check | Requirement |
+|-------|-------------|
+| Permissions | Least-privilege `permissions:` block |
+| Secrets | Use OIDC over stored credentials |
+| Action pinning | Pin by SHA, not tag |
+| Environments | Require approval for production |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Build Tooling category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| OIDC login fails | Federated credential missing | Configure in Entra ID app registration |
+| Secret not available | Wrong environment scope | Check secret is on correct environment |
+| Matrix too slow | Too many combinations | Limit to critical combos, use fail-fast |

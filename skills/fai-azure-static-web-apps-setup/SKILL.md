@@ -1,161 +1,117 @@
 ---
 name: fai-azure-static-web-apps-setup
-description: 'Deploys applications to Azure Static Web Apps with API integration and custom domains.'
+description: |
+  Set up Azure Static Web Apps with custom auth, staged preview environments, API
+  backend linking, and route-level access control. Use when deploying frontend apps
+  with serverless APIs, GitHub/Azure DevOps CI/CD, and role-based route protection.
 ---
 
-# Fai Azure Static Web Apps Setup
+# Azure Static Web Apps Setup
 
-Deploys applications to Azure Static Web Apps with API integration and custom domains.
+Deploy frontend apps with serverless APIs, preview environments, and role-based routing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys applications to azure static web apps with api integration and custom domains.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying React, Next.js, or other SPA frameworks to Azure
+- Setting up preview environments per pull request
+- Connecting Azure Functions as API backend
+- Configuring route-level auth with AAD or custom providers
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys applications to azure static web apps with api integration and custom domains..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-static-web-apps-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-static-web-apps-setup/"]
+```bicep
+resource swa 'Microsoft.Web/staticSites@2023-12-01' = {
+  name: swaName
+  location: location
+  sku: { name: 'Standard', tier: 'Standard' }
+  properties: {
+    repositoryUrl: repoUrl
+    branch: 'main'
+    buildProperties: {
+      appLocation: '/'
+      apiLocation: 'api'
+      outputLocation: 'out'
+    }
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
+## Route Configuration
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "routes": [
+    { "route": "/admin/*", "allowedRoles": ["admin"] },
+    { "route": "/api/*", "allowedRoles": ["authenticated"] },
+    { "route": "/*", "allowedRoles": ["anonymous"] }
+  ],
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": { "openIdIssuer": "https://login.microsoftonline.com/{tenant}/v2.0",
+          "clientIdSettingName": "AAD_CLIENT_ID" }
+      }
+    }
+  },
+  "responseOverrides": {
+    "401": { "redirect": "/.auth/login/aad", "statusCode": 302 },
+    "403": { "rewrite": "/unauthorized.html" }
+  },
+  "navigationFallback": { "rewrite": "/index.html",
+    "exclude": ["/api/*", "/images/*", "/*.{css,js,png,svg}"] }
 }
 ```
 
-## Monitoring
+## GitHub Actions Workflow
 
-Track skill execution metrics:
+```yaml
+name: Deploy SWA
+on:
+  push: { branches: [main] }
+  pull_request: { types: [opened, synchronize, closed], branches: [main] }
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: /
+          api_location: api
+          output_location: out
+```
+
+## Custom Domain + Edge Caching
+
+```bash
+# Add custom domain
+az staticwebapp hostname set --name $SWA --hostname app.example.com
+
+# Configure cache headers in staticwebapp.config.json
+# Already handled via globalHeaders
+```
+
+```json
+{
+  "globalHeaders": {
+    "Cache-Control": "public, max-age=300",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY"
+  }
+}
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Auth bypass on preview envs | Role rules not applied per route | Define routes in staticwebapp.config.json |
+| API returns 404 | api_location mismatch in build config | Verify apiLocation matches Functions folder |
+| Deploy fails on PR | Token not set for fork PRs | Use repository_dispatch or restrict to same-repo PRs |
+| Stale cache after deploy | Aggressive cache-control | Use versioned asset filenames, set short max-age for HTML |

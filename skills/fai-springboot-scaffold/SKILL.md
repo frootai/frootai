@@ -1,156 +1,125 @@
 ---
 name: fai-springboot-scaffold
-description: 'Scaffolds a Spring Boot Java project with DI, profiles, health checks, and test configuration.'
+description: |
+  Scaffold Spring Boot Java applications with REST controllers, JPA/Hibernate,
+  security configuration, and test setup. Use when building Java microservices
+  with Spring Boot.
 ---
 
-# Fai Springboot Scaffold
+# Spring Boot Java Scaffold
 
-Scaffolds a Spring Boot Java project with DI, profiles, health checks, and test configuration.
+Build Spring Boot services with REST, JPA, security, and testing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a spring boot java project with di, profiles, health checks, and test configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building Java REST APIs with Spring Boot
+- Setting up JPA/Hibernate data access
+- Configuring Spring Security with OAuth2/JWT
+- Creating test infrastructure with MockMvc
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Project Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+src/main/java/com/example/
+├── Application.java
+├── controller/
+│   └── ChatController.java
+├── service/
+│   └── ChatService.java
+├── model/
+│   ├── ChatRequest.java
+│   └── ChatResponse.java
+├── repository/
+│   └── ConversationRepository.java
+└── config/
+    └── SecurityConfig.java
 ```
 
-### Step 2: Load Configuration
+## Controller
 
-Read settings from the FAI manifest and TuneKit config files.
+```java
+@RestController
+@RequestMapping("/api")
+public class ChatController {
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+    private final ChatService chatService;
+
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
+    @PostMapping("/chat")
+    public ResponseEntity<ChatResponse> chat(@Valid @RequestBody ChatRequest request) {
+        var response = chatService.chat(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/health")
+    public Map<String, String> health() {
+        return Map.of("status", "healthy");
+    }
+}
+
+public record ChatRequest(
+    @NotBlank @Size(max = 4000) String message,
+    String model
+) {
+    public ChatRequest {
+        if (model == null) model = "gpt-4o-mini";
+    }
+}
+
+public record ChatResponse(String reply, int tokens) {}
 ```
 
-### Step 3: Execute Core Logic
+## JPA Repository
 
-Perform the primary operation: scaffolds a spring boot java project with di, profiles, health checks, and test configuration..
+```java
+@Entity
+@Table(name = "conversations")
+public class Conversation {
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String userId;
+    private String title;
+    @Column(name = "created_at")
+    private Instant createdAt = Instant.now();
+}
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-springboot-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-springboot-scaffold/"]
-  }
+public interface ConversationRepository extends JpaRepository<Conversation, UUID> {
+    List<Conversation> findByUserIdOrderByCreatedAtDesc(String userId);
 }
 ```
 
-### Via Agent Invocation
+## Test with MockMvc
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```java
+@WebMvcTest(ChatController.class)
+class ChatControllerTest {
 
-## Configuration Reference
+    @Autowired MockMvc mockMvc;
+    @MockBean ChatService chatService;
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+    @Test
+    void chat_returnsResponse() throws Exception {
+        when(chatService.chat(any())).thenReturn(new ChatResponse("Hello", 100));
+
+        mockMvc.perform(post("/api/chat")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"message": "Hi"}"""))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.reply").value("Hello"));
+    }
 }
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| 400 on valid request | Missing @Valid or wrong content type | Add @Valid + Content-Type header |
+| JPA entity not found | Missing @Entity annotation | Add annotation + table mapping |
+| DI circular reference | Constructor cycle | Use @Lazy or redesign dependencies |
+| Tests slow | Loading full context | Use @WebMvcTest for controller tests |

@@ -1,161 +1,156 @@
 ---
 name: fai-architecture-decision-record
-description: 'Generates Architecture Decision Records (ADRs) with context, decision, alternatives considered, and consequences.'
+description: |
+  Create Architecture Decision Records (ADRs) with decision context, alternatives analysis,
+  tradeoffs, and measurable acceptance criteria. Use when making significant technical
+  decisions that should be documented for future reference.
 ---
 
-# Fai Architecture Decision Record
+# Architecture Decision Record (ADR) Generator
 
-Generates Architecture Decision Records (ADRs) with context, decision, alternatives considered, and consequences.
+Create structured ADRs that capture the context, alternatives, and rationale behind technical decisions.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates architecture decision records (adrs) with context, decision, alternatives considered, and consequences.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Choosing between competing technologies or approaches
+- Changing established patterns or conventions
+- Making decisions with long-term consequences
+- Any decision where "why did we do this?" will be asked later
 
-**Category:** Architecture
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## ADR Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+# ADR-{NUMBER}: {TITLE}
 
-## Steps
+**Status:** Proposed | Accepted | Deprecated | Superseded by ADR-{N}
+**Date:** YYYY-MM-DD
+**Decision Makers:** {names}
+**Tags:** {architecture, security, infrastructure, ...}
 
-### Step 1: Validate Prerequisites
+## Context
 
-Verify all required tools, credentials, and dependencies are available.
+{What is the issue? What forces are at play? What constraints exist?}
+
+## Decision
+
+{What is the change being proposed or decided?}
+
+## Alternatives Considered
+
+### Option A: {Name}
+- **Pros:** {list}
+- **Cons:** {list}
+- **Cost:** {estimate}
+- **Risk:** {assessment}
+
+### Option B: {Name}
+- **Pros:** {list}
+- **Cons:** {list}
+- **Cost:** {estimate}
+- **Risk:** {assessment}
+
+## Tradeoffs
+
+| Dimension | Option A | Option B | Chosen |
+|-----------|----------|----------|--------|
+| Latency | Lower | Higher | A |
+| Cost | Higher | Lower | B |
+| Complexity | Higher | Lower | B |
+
+## Consequences
+
+- **Positive:** {what improves}
+- **Negative:** {what gets harder}
+- **Risks:** {what could go wrong}
+
+## Acceptance Criteria
+
+- [ ] {Measurable criterion 1}
+- [ ] {Measurable criterion 2}
+- [ ] {Measurable criterion 3}
+
+## Review Date
+
+{When should this decision be revisited? 6 months? 1 year?}
+```
+
+## Automation: Generate ADR from Code
+
+```python
+from pathlib import Path
+from datetime import date
+
+def create_adr(number: int, title: str, context: str,
+               decision: str, alternatives: list[dict],
+               output_dir: str = "docs/adr") -> str:
+    """Generate an ADR markdown file."""
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    filename = f"adr-{number:04d}-{title.lower().replace(' ', '-')}.md"
+    filepath = Path(output_dir) / filename
+
+    alt_sections = []
+    for alt in alternatives:
+        alt_sections.append(f"""### Option: {alt['name']}
+- **Pros:** {', '.join(alt.get('pros', []))}
+- **Cons:** {', '.join(alt.get('cons', []))}
+- **Risk:** {alt.get('risk', 'Unknown')}""")
+
+    content = f"""# ADR-{number:04d}: {title}
+
+**Status:** Proposed
+**Date:** {date.today().isoformat()}
+
+## Context
+
+{context}
+
+## Decision
+
+{decision}
+
+## Alternatives Considered
+
+{chr(10).join(alt_sections)}
+
+## Acceptance Criteria
+
+- [ ] Decision validated in dev environment
+- [ ] Performance impact measured
+- [ ] Security review completed
+
+## Review Date
+
+{date.today().year + 1}-{date.today().month:02d}-01
+"""
+    filepath.write_text(content)
+    return str(filepath)
+```
+
+## ADR Index Generator
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Generate ADR index from existing files
+echo "# Architecture Decision Records" > docs/adr/README.md
+echo "" >> docs/adr/README.md
+echo "| # | Title | Status | Date |" >> docs/adr/README.md
+echo "|---|-------|--------|------|" >> docs/adr/README.md
+for f in docs/adr/adr-*.md; do
+  num=$(head -1 "$f" | grep -oP 'ADR-\d+')
+  title=$(head -1 "$f" | sed 's/# ADR-[0-9]*: //')
+  status=$(grep -oP '(?<=\*\*Status:\*\* )\w+' "$f")
+  dt=$(grep -oP '(?<=\*\*Date:\*\* )\S+' "$f")
+  echo "| $num | [$title]($f) | $status | $dt |" >> docs/adr/README.md
+done
 ```
 
-### Step 2: Load Configuration
+## Best Practices
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates architecture decision records (adrs) with context, decision, alternatives considered, and consequences..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 11**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-architecture-decision-record
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-architecture-decision-record/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
-## Troubleshooting
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Architecture category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Always list alternatives | Forces honest comparison, prevents confirmation bias |
+| Include measurable criteria | Makes it clear when to revisit the decision |
+| Set review dates | Prevents stale decisions from persisting forever |
+| Link to evidence | Reference benchmarks, spikes, or prototypes |
+| Keep ADRs immutable | Supersede, don't edit — maintain decision history |

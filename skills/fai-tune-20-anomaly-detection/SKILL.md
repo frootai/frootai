@@ -1,156 +1,106 @@
 ---
 name: fai-tune-20-anomaly-detection
-description: 'Tunes configuration for Play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 20 anomaly detection with window sizing, seasonality handling, threshold calibration, and alert suppression."
 ---
 
-# Fai Tune 20 Anomaly Detection
+# FAI Tune - Play 20: Anomaly Detection
 
-Tunes configuration for Play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/20-anomaly-detection/config/
+├── detector.json
+├── windows.json
+├── thresholds.json
+└── alerts.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Step 1 - Validate Core Configuration
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```json
+// config/detector.json
+{
+  "algorithm": "spectral_residual",
+  "sensitivity": 0.85,
+  "lookback_window": 288,
+  "seasonality": "daily",
+  "min_anomaly_duration": 3,
+  "cooldown_minutes": 15
+}
 ```
 
-### Step 2: Load Configuration
+## Step 2 - Tune Critical Parameters
 
-Read settings from the FAI manifest and TuneKit config files.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `sensitivity` | 0.50-0.99 | 0.85 | Lower to reduce false positives. |
+| `lookback_window` | 24-10000 | 288 | Must cover seasonal pattern. |
+| `min_anomaly_duration` | 1-60 | 3 | Suppress spikes/noise. |
+| `cooldown_minutes` | 0-240 | 15 | Avoid repeated alerts for same event. |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-20-anomaly-detection
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-20-anomaly-detection/"]
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+```python
+import json
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-## Configuration Reference
+## Step 4 - Add Cost Controls
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
 }
 ```
 
-## Monitoring
+## Validation Checklist
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Check | Expected | Command |
+|-------|----------|---------|
+| Sensitivity | 0.50-0.99 | `jq '.sensitivity' config/detector.json` |
+| Lookback window | >= one season | `jq '.lookback_window' config/detector.json` |
+| Cooldown set | >= 5 minutes recommended | `jq '.cooldown_minutes' config/detector.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Too many alerts | Sensitivity too high | Reduce sensitivity and increase min_anomaly_duration. |
+| Missed incidents | Threshold too strict | Increase sensitivity by 0.03 and re-test. |
+| Duplicate notifications | No cooldown | Set cooldown_minutes to 15-30. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

@@ -1,156 +1,111 @@
 ---
 name: fai-implementation-plan-generator
-description: 'Creates structured implementation plans with phases, tasks, dependencies, and verification steps.'
+description: |
+  Generate implementation plans with milestones, dependencies, acceptance criteria,
+  risk assessment, and delivery governance. Use when planning multi-week projects
+  or creating IMPLEMENTATION_PLAN.md files for agentic workflows.
 ---
 
-# Fai Implementation Plan Generator
+# Implementation Plan Generator
 
-Creates structured implementation plans with phases, tasks, dependencies, and verification steps.
+Create structured implementation plans with milestones, dependencies, and governance.
+
+## When to Use
+
+- Planning a multi-week engineering project
+- Creating IMPLEMENTATION_PLAN.md for agentic loops (Ralph pattern)
+- Breaking epics into tracked milestones
+- Generating plans from PRDs or specs
+
+---
+
+## Plan Template
+
+```markdown
+# Implementation Plan — [Project Name]
 
 ## Overview
+**Goal:** [One-sentence description]
+**Timeline:** [Start] → [End]
+**Owner:** [Name]
 
-This skill provides a structured, repeatable procedure for creates structured implementation plans with phases, tasks, dependencies, and verification steps.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Milestones
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+### M1: Foundation (Week 1)
+- [ ] Set up repository with folder structure
+- [ ] Provision Azure infrastructure (Bicep)
+- [ ] Configure CI/CD pipeline
+- **Acceptance:** Infrastructure deployed, pipeline green
 
-## Parameters
+### M2: Core Feature (Week 2-3)
+- [ ] Implement [primary feature]
+- [ ] Add unit tests (>80% coverage)
+- [ ] Create evaluation dataset
+- **Acceptance:** Feature works end-to-end in dev
+- **Depends on:** M1
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### M3: Integration (Week 3-4)
+- [ ] Connect to external services
+- [ ] Integration tests pass
+- [ ] Performance benchmarks meet SLO
+- **Acceptance:** All services connected, SLOs met
+- **Depends on:** M2
 
-## Steps
+### M4: Production (Week 4-5)
+- [ ] Deploy to staging, run smoke tests
+- [ ] Security review complete
+- [ ] Deploy to production
+- **Acceptance:** Live with monitoring active
+- **Depends on:** M3
 
-### Step 1: Validate Prerequisites
+## Risks
 
-Verify all required tools, credentials, and dependencies are available.
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| API quota insufficient | Delays M2 | Request quota increase in Week 0 |
+| Integration complexity | Delays M3 | Spike in Week 1 |
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## Dependencies
+- Azure subscription with OpenAI provisioned
+- Access to customer data source
 ```
 
-### Step 2: Load Configuration
+## Auto-Generation
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+def generate_plan(spec: str, timeline_weeks: int = 4) -> str:
+    return llm(f"""Create an implementation plan from this spec.
+Use markdown with milestones, tasks, acceptance criteria, dependencies, and risks.
+Timeline: {timeline_weeks} weeks. Use checkboxes for tasks.
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+Spec:
+{spec}""")
 ```
 
-### Step 3: Execute Core Logic
+## Agentic Plan (for Ralph Loop)
 
-Perform the primary operation: creates structured implementation plans with phases, tasks, dependencies, and verification steps..
+```markdown
+# IMPLEMENTATION_PLAN.md
 
-### Step 4: Validate Results
+## Tasks (ordered by priority)
+- [ ] Set up FastAPI project structure
+- [ ] Add /chat endpoint with Pydantic models
+- [ ] Integrate Azure OpenAI with MI auth
+- [ ] Add health check endpoint
+- [ ] Write unit tests for chat endpoint
+- [ ] Add Dockerfile with multi-stage build
+- [ ] Configure CI pipeline
+- [ ] Deploy to Azure Container Apps
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+## Completed
+(Agent moves tasks here after implementation + test)
 ```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-implementation-plan-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-implementation-plan-generator/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Plan too vague | Generated from one-liner spec | Provide detailed spec or PRD |
+| Dependencies missed | No dependency analysis | Draw dependency graph before plan |
+| Milestones slip | No weekly checkpoint | Add "Acceptance" criteria per milestone |
+| Agent skips tasks | Plan not structured for parsing | Use checkboxes, clear task boundaries |

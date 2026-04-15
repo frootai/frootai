@@ -1,156 +1,100 @@
 ---
 name: fai-power-automate-flow
-description: 'Creates Power Automate flows with triggers, actions, error handling, and approval gates.'
+description: |
+  Build Power Automate flows for document processing, approval workflows,
+  and AI integration with error handling and monitoring. Use when creating
+  automated workflows on Microsoft Power Platform.
 ---
 
-# Fai Power Automate Flow
+# Power Automate Flow Patterns
 
-Creates Power Automate flows with triggers, actions, error handling, and approval gates.
+Build automated workflows with triggers, actions, error handling, and AI integration.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates power automate flows with triggers, actions, error handling, and approval gates.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Automating document processing workflows
+- Building approval chains with AI classification
+- Integrating Power Platform with Azure AI services
+- Creating scheduled data sync flows
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Document Processing Flow
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+Trigger: When file created in SharePoint
+  → Get file content
+  → Call Azure Document Intelligence (extract fields)
+  → Create Dataverse record with extracted data
+  → If confidence < 0.8: Send approval to reviewer
+  → Else: Auto-approve and notify submitter
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates power automate flows with triggers, actions, error handling, and approval gates..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-power-automate-flow
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## AI Classification Action
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-power-automate-flow/"]
+  "type": "Http",
+  "inputs": {
+    "method": "POST",
+    "uri": "@{variables('openai_endpoint')}/chat/completions",
+    "headers": { "Authorization": "Bearer @{variables('api_key')}" },
+    "body": {
+      "model": "gpt-4o-mini",
+      "messages": [
+        { "role": "system", "content": "Classify the document type: invoice, contract, report, other" },
+        { "role": "user", "content": "@{triggerBody()?['content']}" }
+      ],
+      "temperature": 0
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+## Error Handling Pattern
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```
+Main Scope (Try):
+  → Action 1
+  → Action 2
+  → Action 3
+Error Scope (Catch):
+  Configure: Run after → Main Scope has failed/timed out
+  → Log error to Application Insights
+  → Send notification to ops team
+  → Terminate with status: Failed
+Finally Scope:
+  Configure: Run after → Main Scope succeeded/failed
+  → Clean up temp files
 ```
 
-## Monitoring
+## Approval Pattern
 
-Track skill execution metrics:
+```
+→ Start and wait for approval (Approvals connector)
+  → Assigned to: manager@org.com
+  → Details: "AI classified as: @{body('Classify')}"
+  → If outcome = 'Approve': Process document
+  → If outcome = 'Reject': Notify submitter
+  → If timeout (48h): Escalate to director
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Best Practices
+
+| Practice | Why |
+|----------|-----|
+| Use environment variables | No hardcoded URLs/keys |
+| Add retry on HTTP actions | Handle transient failures |
+| Log to App Insights | Observability across flows |
+| Use child flows for reuse | DRY, testable logic |
+| Set timeout on approvals | Prevent stuck flows |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Flow fails silently | No error scope | Add Configure run after for Failed |
+| Approval stuck | No timeout | Add deadline; escalate after 48h |
+| HTTP 429 from OpenAI | No retry | Enable retry policy on HTTP action |
+| Large file fails | 100MB limit | Split large files or use chunking |
 
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog

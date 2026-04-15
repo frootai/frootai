@@ -1,156 +1,109 @@
 ---
 name: fai-gtm-enterprise-planning
-description: 'Creates enterprise account plans for AI solution adoption with stakeholder mapping.'
+description: |
+  Build enterprise GTM planning with account strategy, territory design,
+  pipeline forecasting, and milestone governance. Use when planning
+  enterprise sales motions for an AI platform.
 ---
 
-# Fai Gtm Enterprise Planning
+# Enterprise GTM Planning
 
-Creates enterprise account plans for AI solution adoption with stakeholder mapping.
+Plan enterprise sales with account strategy, territories, and pipeline governance.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates enterprise account plans for ai solution adoption with stakeholder mapping.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building enterprise sales plan for a new AI product
+- Designing territory and account assignment
+- Forecasting pipeline and revenue targets
+- Setting up quarterly business review cadence
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Account Tiering
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Tier | Criteria | Motion | Resources |
+|------|----------|--------|-----------|
+| Tier 1 | >$100K ARR potential, strategic | White-glove, dedicated SE | CSM + SE + PM |
+| Tier 2 | $25-100K potential | Guided self-serve + SE | Shared SE |
+| Tier 3 | <$25K potential | Self-serve + community | Docs + community |
 
-## Steps
+## Pipeline Stages
 
-### Step 1: Validate Prerequisites
+| Stage | Probability | Exit Criteria |
+|-------|------------|--------------|
+| Lead | 10% | Qualified interest, matches ICP |
+| Discovery | 20% | Pain identified, budget confirmed |
+| Evaluation | 40% | Technical POC approved |
+| Proposal | 60% | Commercial terms discussed |
+| Negotiation | 80% | Legal review in progress |
+| Closed Won | 100% | Contract signed |
 
-Verify all required tools, credentials, and dependencies are available.
+## Quarterly Planning Template
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```markdown
+## Q2 2026 Enterprise Plan
+
+### Targets
+- Pipeline: $500K new qualified pipeline
+- Revenue: $150K new ARR
+- Accounts: 5 new Tier 1 engaged
+
+### Territory
+| Territory | AE | Focus Segments |
+|-----------|-----|---------------|
+| East | [name] | Financial services, Healthcare |
+| West | [name] | Tech, Manufacturing |
+| EMEA | [name] | Government, Energy |
+
+### Key Initiatives
+1. AI Search POC program — run 10 POCs
+2. Partner channel activation — 3 SI partners
+3. Conference demos — 2 events
 ```
 
-### Step 2: Load Configuration
+## QBR Metrics
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates enterprise account plans for ai solution adoption with stakeholder mapping..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-gtm-enterprise-planning
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-gtm-enterprise-planning/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Metric | Target | Actual |
+|--------|--------|--------|
+| Pipeline coverage (3x) | $450K | — |
+| Win rate | 25% | — |
+| Average deal size | $50K | — |
+| Sales cycle (days) | 60 | — |
+| Expansion rate | 120% NRR | — |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Pipeline too thin | Not enough top-of-funnel | Increase outbound + content marketing |
+| Long sales cycles | No executive sponsor | Engage champions earlier |
+| Low win rate | Weak differentiation | Sharpen competitive positioning |
+| Tier 1 accounts stuck | POC not converting | Define clear POC success criteria upfront |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Measure everything | Can't improve what you can't measure |
+| Weekly review cadence | Catch issues before they compound |
+| Customer interviews monthly | Stay connected to real problems |
+| Competitor watch quarterly | Know the landscape, don't obsess |
+| Content before campaigns | Educate first, sell second |
+| Single owner per metric | Accountability drives results |
+
+## Key Metrics
+
+| Stage | Metric | Target |
+|-------|--------|--------|
+| Awareness | Website visits | 10K/month |
+| Interest | GitHub stars | 1000 |
+| Activation | First play deployed | 200 |
+| Retention | Monthly active | 50 |
+| Revenue | MRR | Track growth rate |
+
+## Related Skills
+
+- `fai-gtm-ai-strategy` — Overall GTM strategy
+- `fai-gtm-launch` — Launch execution
+- `fai-gtm-developer-ecosystem` — Community growth
+- `fai-gtm-operating-cadence` — Weekly rhythms

@@ -88,9 +88,9 @@ Code change (index.js, package.json, knowledge.json, solution-plays/)
 
 | Script | What It Generated |
 |--------|-------------------|
-| `generate-agents-sprint.js` + sprint2 + sprint3 | 201 agents |
+| `generate-agents-sprint.js` + sprint2 + sprint3 | 238 agents |
 | `generate-instructions-sprint.js` + sprint2 + sprint3 | 176 instructions |
-| `generate-skills-sprint.js` + sprint2 | 282 skills |
+| `generate-skills-sprint.js` + sprint2 | 322 skills |
 | `generate-plugins-sprint.js` | 77 plugins |
 
 ### Full Build Pipeline

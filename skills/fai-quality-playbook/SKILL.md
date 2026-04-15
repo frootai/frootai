@@ -1,155 +1,112 @@
 ---
 name: fai-quality-playbook
-description: 'Generates a quality playbook with testing strategy, coverage targets, and CI/CD integration.'
+description: |
+  Define engineering quality playbooks with code review standards, testing
+  requirements, release criteria, and incident response. Use when establishing
+  quality gates and engineering practices for a team.
 ---
 
-# Fai Quality Playbook
+# Engineering Quality Playbook
 
-Generates a quality playbook with testing strategy, coverage targets, and CI/CD integration.
+Define quality standards, testing requirements, and release criteria.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates a quality playbook with testing strategy, coverage targets, and ci/cd integration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Establishing engineering quality practices for a new team
+- Defining code review and testing standards
+- Creating release checklists and quality gates
+- Setting up incident response procedures
 
-**Category:** Play Management
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Code Quality Standards
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Dimension | Standard | Enforcement |
+|-----------|---------|-------------|
+| Lint | Zero warnings | CI gate (ruff/eslint) |
+| Test coverage | >= 80% lines | pytest --cov-fail-under=80 |
+| Type checking | No errors | mypy --strict / tsc --strict |
+| Security scan | No high/critical | CodeQL / Trivy in CI |
+| Dependency audit | No known CVEs | npm audit / pip-audit |
 
-## Steps
+## Code Review Checklist
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```markdown
+## Review Checklist
+- [ ] Logic: Does the code do what's intended?
+- [ ] Tests: Are happy + error paths covered?
+- [ ] Security: No secrets, injection points, or PII exposure?
+- [ ] Performance: No N+1, unbounded queries, or missing indexes?
+- [ ] Naming: Clear, descriptive names for functions and variables?
+- [ ] Error handling: All external calls have try/catch?
+- [ ] Documentation: Public APIs documented?
 ```
 
-### Step 2: Load Configuration
+## Release Criteria
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```markdown
+## Release Readiness Checklist
+- [ ] All CI checks pass (lint, test, security, build)
+- [ ] Coverage >= 80% with no decrease from main
+- [ ] No P1/P2 bugs open
+- [ ] Changelog updated
+- [ ] Smoke tests pass in staging
+- [ ] Rollback plan documented
+- [ ] Monitoring dashboards reviewed
 ```
 
-### Step 3: Execute Core Logic
+## Incident Response
 
-Perform the primary operation: generates a quality playbook with testing strategy, coverage targets, and ci/cd integration..
+```markdown
+## Incident Severity Levels
 
-### Step 4: Validate Results
+| Severity | Definition | Response Time | Example |
+|----------|-----------|--------------|---------|
+| P1 | Service down, all users affected | 15 min | API returns 500 for all |
+| P2 | Major feature degraded | 1 hour | Search returns wrong results |
+| P3 | Minor feature issue | 4 hours | Dashboard chart incorrect |
+| P4 | Cosmetic or low-impact | Next sprint | Typo in UI |
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+## Incident Process
+1. Detect: Alert fires or user report
+2. Acknowledge: On-call responds within SLA
+3. Mitigate: Apply quick fix or rollback
+4. Communicate: Update status page and stakeholders
+5. Resolve: Root cause fix deployed
+6. Review: Post-incident review within 48 hours
 ```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-quality-playbook
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-quality-playbook/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Quality standards ignored | No enforcement | Make all checks CI-blocking |
+| Review turnaround slow | No SLA | Set 24h review target |
+| Incidents repeat | No post-mortem | Require post-incident review |
+| Coverage declining | No ratchet | Fail CI if coverage < main branch |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Play Management category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

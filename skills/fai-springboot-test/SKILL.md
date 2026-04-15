@@ -1,160 +1,121 @@
 ---
 name: fai-springboot-test
-description: 'Generates Spring Boot integration tests with @SpringBootTest, MockMvc, and Testcontainers.'
+description: |
+  Write Spring Boot tests with MockMvc, TestContainers, slice testing, and
+  test profiles. Use when building comprehensive test suites for Spring
+  Boot applications.
 ---
 
-# Fai Springboot Test
+# Spring Boot Testing
 
-Generates Spring Boot integration tests with @SpringBootTest, MockMvc, and Testcontainers.
+Write unit, integration, and slice tests for Spring Boot applications.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates spring boot integration tests with @springboottest, mockmvc, and testcontainers.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Testing REST controllers with MockMvc
+- Integration testing with Testcontainers
+- Slice testing with @WebMvcTest, @DataJpaTest
+- Configuring test profiles and fixtures
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Controller Test (@WebMvcTest)
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```java
+@WebMvcTest(ChatController.class)
+class ChatControllerTest {
 
-## Steps
+    @Autowired MockMvc mockMvc;
+    @MockBean ChatService chatService;
 
-### Step 1: Validate Prerequisites
+    @Test
+    void chat_validInput_returns200() throws Exception {
+        when(chatService.chat(any())).thenReturn(new ChatResponse("Response", 150));
 
-Verify all required tools, credentials, and dependencies are available.
+        mockMvc.perform(post("/api/chat")
+                .contentType(APPLICATION_JSON)
+                .content("""{"message": "Hello"}"""))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.reply").value("Response"))
+            .andExpect(jsonPath("$.tokens").value(150));
+    }
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates spring boot integration tests with @springboottest, mockmvc, and testcontainers..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-springboot-test
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-springboot-test/"]
-  }
+    @Test
+    void chat_emptyMessage_returns400() throws Exception {
+        mockMvc.perform(post("/api/chat")
+                .contentType(APPLICATION_JSON)
+                .content("""{"message": ""}"""))
+            .andExpect(status().isBadRequest());
+    }
 }
 ```
 
-### Via Agent Invocation
+## Repository Test (@DataJpaTest)
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```java
+@DataJpaTest
+class ConversationRepositoryTest {
 
-## Configuration Reference
+    @Autowired ConversationRepository repo;
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+    @Test
+    void findByUserId_returnsOrdered() {
+        repo.save(new Conversation("user-1", "First"));
+        repo.save(new Conversation("user-1", "Second"));
+        repo.save(new Conversation("user-2", "Other"));
+
+        var results = repo.findByUserIdOrderByCreatedAtDesc("user-1");
+        assertThat(results).hasSize(2);
+        assertThat(results.get(0).getTitle()).isEqualTo("Second");
+    }
 }
 ```
 
-## Monitoring
+## Integration Test (Testcontainers)
 
-Track skill execution metrics:
+```java
+@SpringBootTest
+@Testcontainers
+class ChatIntegrationTest {
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16");
+
+    @DynamicPropertySource
+    static void props(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
+    @Autowired TestRestTemplate restTemplate;
+
+    @Test
+    void fullFlow_createAndRetrieve() {
+        var resp = restTemplate.postForEntity("/api/chat",
+            new ChatRequest("Hello"), ChatResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(resp.getBody().reply()).isNotBlank();
+    }
+}
+```
+
+## Test Profile
+
+```yaml
+# src/test/resources/application-test.yml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate.ddl-auto: create-drop
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Full context loads | Using @SpringBootTest for unit test | Use @WebMvcTest or @DataJpaTest |
+| Testcontainers slow | Starting per test class | Use @Container + reusable flag |
+| Mock not injected | Wrong annotation | Use @MockBean, not @Mock |
+| H2 SQL incompatible | PostgreSQL-specific syntax | Use Testcontainers for Postgres |

@@ -1,156 +1,112 @@
 ---
 name: fai-tune-15-multi-modal-docproc
-description: 'Tunes configuration for Play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 15 multi-modal document processing with OCR, vision model selection, extraction confidence, and fallback routing."
 ---
 
-# Fai Tune 15 Multi Modal Docproc
+# FAI Tune - Play 15: Multi-Modal Document Processing
 
-Tunes configuration for Play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/15-multi-modal-docproc/config/
+├── ocr.json
+├── vision.json
+├── extraction.json
+└── guardrails.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-15-multi-modal-docproc
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 - Validate Core Configuration
 
 ```json
+// config/vision.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-15-multi-modal-docproc/"]
+  "primary_model": "gpt-4o",
+  "fallback_model": "gpt-4o-mini",
+  "max_pages": 40,
+  "image_preprocessing": {
+    "deskew": true,
+    "denoise": true,
+    "dpi_min": 150
+  },
+  "extraction": {
+    "confidence_threshold": 0.82,
+    "human_review_threshold": 0.70
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2 - Tune Critical Parameters
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `confidence_threshold` | 0.60-0.95 | 0.82 | Increase to reduce false positives. |
+| `max_pages` | 1-200 | 40 | Lower for latency and cost. |
+| `dpi_min` | 100-300 | 150 | Higher improves OCR quality. |
+| `fallback_model` | gpt-4o-mini,gpt-4.1-mini | gpt-4o-mini | Choose lowest cost that passes quality. |
 
-## Configuration Reference
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
+  }
 }
 ```
 
-## Monitoring
+```python
+import json
 
-Track skill execution metrics:
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 4 - Add Cost Controls
+
+```json
+{
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Confidence threshold | 0.60-0.95 | `jq '.extraction.confidence_threshold' config/vision.json` |
+| Human review threshold | < confidence threshold | `jq '.extraction.human_review_threshold' config/vision.json` |
+| Max pages cap | <= 200 | `jq '.max_pages' config/vision.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Missing fields in output | Threshold too high | Reduce confidence_threshold by 0.05 and re-evaluate. |
+| High latency | Large documents and no fallback | Lower max_pages and enable lighter fallback model. |
+| High cost | All requests using premium model | Route low-complexity docs to fallback model. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

@@ -1,161 +1,122 @@
 ---
 name: fai-build-bicep-module
-description: 'Creates Bicep modules with AVM patterns, parameters, outputs, and deployment tests.'
+description: |
+  Create production-ready Bicep modules with security defaults, policy alignment,
+  conditional resources, and what-if testing. Use when building Azure infrastructure
+  modules for Key Vault, Cognitive Services, or other AI resources.
 ---
 
-# Fai Build Bicep Module
+# Build Bicep Module
 
-Creates Bicep modules with AVM patterns, parameters, outputs, and deployment tests.
+Create production Bicep modules with secure defaults, policy compliance, and testing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates bicep modules with avm patterns, parameters, outputs, and deployment tests.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building infrastructure modules for Azure AI resources
+- Standardizing resource provisioning with secure defaults
+- Modules need to pass organizational Azure Policy assignments
+- Publishing to a shared Bicep registry
 
-**Category:** Infrastructure as Code
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Module Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+modules/
+├── key-vault/
+│   ├── main.bicep           # Module definition
+│   ├── main.bicepparam       # Default parameters
+│   └── tests/
+│       └── main.test.bicep   # Deployment test
+├── cognitive-services/
+│   ├── main.bicep
+│   └── tests/
+│       └── main.test.bicep
+└── README.md
 ```
 
-### Step 2: Load Configuration
+## Key Vault Module Example
 
-Read settings from the FAI manifest and TuneKit config files.
+```bicep
+// modules/key-vault/main.bicep
+@description('Key Vault name')
+@minLength(3)
+@maxLength(24)
+param name string
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+@description('Azure region')
+param location string = resourceGroup().location
+
+@description('Enable RBAC authorization (recommended over access policies)')
+param enableRbacAuthorization bool = true
+
+@description('Disable public network access')
+param publicNetworkAccess bool = false
+
+@description('Soft delete retention in days')
+@minValue(7)
+@maxValue(90)
+param softDeleteRetentionInDays int = 90
+
+param tags object = {}
+
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: name
+  location: location
+  tags: tags
+  properties: {
+    sku: { family: 'A', name: 'standard' }
+    tenantId: subscription().tenantId
+    enableRbacAuthorization: enableRbacAuthorization
+    enableSoftDelete: true
+    softDeleteRetentionInDays: softDeleteRetentionInDays
+    enablePurgeProtection: true
+    publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
+  }
+}
+
+output id string = keyVault.id
+output name string = keyVault.name
+output uri string = keyVault.properties.vaultUri
 ```
 
-### Step 3: Execute Core Logic
+## Deployment Test
 
-Perform the primary operation: creates bicep modules with avm patterns, parameters, outputs, and deployment tests..
+```bicep
+// modules/key-vault/tests/main.test.bicep
+targetScope = 'resourceGroup'
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 11**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-bicep-module
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-bicep-module/"]
+module testDeployment '../main.bicep' = {
+  name: 'kv-test-${uniqueString(resourceGroup().id)}'
+  params: {
+    name: 'kv-test-${uniqueString(resourceGroup().id)}'
+    enableRbacAuthorization: true
+    publicNetworkAccess: false
+    tags: { env: 'test' }
   }
 }
 ```
 
-### Via Agent Invocation
+## Validation Pipeline
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```bash
+# Lint all modules
+az bicep lint --file modules/key-vault/main.bicep
 
-## Configuration Reference
+# Build (syntax check)
+az bicep build --file modules/key-vault/main.bicep --stdout > /dev/null
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+# What-if (dry run against real subscription)
+az deployment group what-if \
+  --resource-group rg-test \
+  --template-file modules/key-vault/tests/main.test.bicep
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Infrastructure as Code category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Policy denial on deploy | Defaults violate org policy | Align defaults: disable public access, enable RBAC |
+| What-if shows deletes | Conditional resources missing | Use `if` parameter for optional sub-resources |
+| Consumer compilation error | Breaking param change | Version modules, keep defaults backward-compatible |
+| Registry push auth error | Not logged into ACR | Run `az acr login` before `az bicep publish` |

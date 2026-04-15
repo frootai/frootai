@@ -1,156 +1,132 @@
 ---
 name: fai-refactor-complexity
-description: 'Reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting.'
+description: |
+  Reduce code complexity with cyclomatic analysis, extract method patterns,
+  and incremental refactoring strategies. Use when code has high complexity
+  scores or is difficult to understand and test.
 ---
 
-# Fai Refactor Complexity
+# Reduce Code Complexity
 
-Reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting.
+Identify and reduce complexity with extraction, simplification, and testing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Functions with cyclomatic complexity > 10
+- Deeply nested conditionals (> 3 levels)
+- Long methods (> 50 lines)
+- Code that's hard to test due to branching
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Measure Complexity
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Python: radon
+pip install radon
+radon cc src/ -a -nb  # Show average, skip low complexity
+
+# JavaScript: complexity-report
+npx complexity-report --format json src/
+
+# .NET: dotnet-sonarscanner (or build-in VS metrics)
 ```
 
-### Step 2: Load Configuration
+## Reduction Techniques
 
-Read settings from the FAI manifest and TuneKit config files.
+### 1. Extract Method
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```python
+# Before: complexity 8
+def process_order(order):
+    if not order.items:
+        raise ValueError("Empty order")
+    if not order.customer:
+        raise ValueError("No customer")
+    subtotal = sum(i.price * i.qty for i in order.items)
+    tax = subtotal * 0.08
+    total = subtotal + tax
+    if order.customer.is_vip:
+        total *= 0.9
+    order.total = total
+    db.save(order)
+    notify(order)
+    return total
+
+# After: complexity 3 (main) + 2 + 2 = lower per-function
+def process_order(order):
+    validate(order)
+    total = calculate_total(order)
+    finalize(order, total)
+    return total
+
+def validate(order):
+    if not order.items: raise ValueError("Empty")
+    if not order.customer: raise ValueError("No customer")
+
+def calculate_total(order):
+    subtotal = sum(i.price * i.qty for i in order.items)
+    total = subtotal * 1.08
+    return total * 0.9 if order.customer.is_vip else total
 ```
 
-### Step 3: Execute Core Logic
+### 2. Early Returns (Guard Clauses)
 
-Perform the primary operation: reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting..
+```python
+# Before: nested
+def get_discount(user, order):
+    if user:
+        if user.is_vip:
+            if order.total > 100:
+                return 0.2
+            else:
+                return 0.1
+        else:
+            return 0
+    return 0
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+# After: flat
+def get_discount(user, order):
+    if not user or not user.is_vip:
+        return 0
+    return 0.2 if order.total > 100 else 0.1
 ```
 
-## Output
+### 3. Replace Conditional with Polymorphism
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+```python
+# Before
+def calculate_price(product):
+    if product.type == "subscription":
+        return product.monthly * 12 * 0.8
+    elif product.type == "one_time":
+        return product.price
+    elif product.type == "usage":
+        return product.units * product.rate
 
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-refactor-complexity
+# After
+class Subscription:
+    def price(self): return self.monthly * 12 * 0.8
+class OneTime:
+    def price(self): return self._price
+class Usage:
+    def price(self): return self.units * self.rate
 ```
 
-### Inside a Solution Play
+## Complexity Targets
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-refactor-complexity/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Metric | Good | Warning | Refactor |
+|--------|------|---------|----------|
+| Cyclomatic per function | 1-5 | 6-10 | > 10 |
+| Nesting depth | 1-2 | 3 | > 3 |
+| Function length | < 30 lines | 30-50 | > 50 |
+| Parameters | 0-3 | 4-5 | > 5 |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Complexity still high | Only moved code, didn't simplify | Reduce branching, not just line count |
+| Tests break after refactor | Changed behavior | Refactor = same behavior, different structure |
+| Team resists refactoring | No time budgeted | Allocate 15-20% of sprint to tech debt |
+| New complexity introduced | No CI gate | Add complexity check to CI pipeline |

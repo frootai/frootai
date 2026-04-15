@@ -1,161 +1,140 @@
 ---
 name: fai-azure-openai-integration
-description: 'Integrates Azure OpenAI with deployment types, content filtering, and token management.'
+description: |
+  Integrate Azure OpenAI into applications with model routing, structured output,
+  content filtering, retry policies, and token tracking. Use when connecting apps
+  to GPT-4o, GPT-4o-mini, or embedding models via Azure OpenAI Service.
 ---
 
-# Fai Azure Openai Integration
+# Azure OpenAI Integration
 
-Integrates Azure OpenAI with deployment types, content filtering, and token management.
+Connect applications to Azure OpenAI with resilient patterns, safety, and cost control.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for integrates azure openai with deployment types, content filtering, and token management.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Adding LLM capabilities to an existing application
+- Implementing structured output with JSON mode or response_format
+- Setting up retry and fallback policies for production reliability
+- Tracking token consumption for cost management
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Python SDK Integration
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+import os
 
-## Steps
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
+)
 
-### Step 1: Validate Prerequisites
+client = AzureOpenAI(
+    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    azure_ad_token_provider=token_provider,
+    api_version="2024-10-21",
+    max_retries=3,
+    timeout=30.0,
+)
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain circuit breaker pattern"},
+    ],
+    temperature=0.3,
+    max_tokens=1024,
+)
+print(response.choices[0].message.content)
 ```
 
-### Step 2: Load Configuration
+## Structured Output
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+from pydantic import BaseModel
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+class ReviewResult(BaseModel):
+    category: str
+    severity: str
+    summary: str
+    recommendation: str
+
+response = client.beta.chat.completions.parse(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "Analyze code for security issues. Return structured JSON."},
+        {"role": "user", "content": code_to_review},
+    ],
+    response_format=ReviewResult,
+)
+result: ReviewResult = response.choices[0].message.parsed
+print(f"{result.severity}: {result.summary}")
 ```
 
-### Step 3: Execute Core Logic
+## .NET Integration
 
-Perform the primary operation: integrates azure openai with deployment types, content filtering, and token management..
+```csharp
+using Azure.AI.OpenAI;
+using Azure.Identity;
 
-### Step 4: Validate Results
+var client = new AzureOpenAIClient(
+    new Uri(Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")!),
+    new DefaultAzureCredential()
+);
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+var chatClient = client.GetChatClient("gpt-4o-mini");
+var response = await chatClient.CompleteChatAsync(
+    [new UserChatMessage("Explain retry patterns")],
+    new ChatCompletionOptions { Temperature = 0.3f, MaxOutputTokenCount = 1024 }
+);
+Console.WriteLine(response.Value.Content[0].Text);
 ```
 
-## Output
+## Token Tracking
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-openai-integration
+```python
+def call_with_tracking(prompt: str, model: str = "gpt-4o-mini") -> tuple[str, dict]:
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    usage = {
+        "model": model,
+        "prompt_tokens": response.usage.prompt_tokens,
+        "completion_tokens": response.usage.completion_tokens,
+        "total_tokens": response.usage.total_tokens,
+        "estimated_cost": (response.usage.prompt_tokens * 0.0025 +
+                          response.usage.completion_tokens * 0.01) / 1000,
+    }
+    return response.choices[0].message.content, usage
 ```
 
-### Inside a Solution Play
+## Retry with Fallback
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+```python
+import time
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-openai-integration/"]
-  }
-}
+def call_with_fallback(prompt: str, primary="gpt-4o", fallback="gpt-4o-mini"):
+    for model in [primary, fallback]:
+        try:
+            return client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+            )
+        except Exception as e:
+            if "429" in str(e) and model == primary:
+                time.sleep(1)
+                continue
+            raise
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| 429 Too Many Requests | Token rate limit exceeded | Enable retry with backoff, add model routing to mini |
+| 403 Forbidden | Missing Cognitive Services OpenAI User role | Grant RBAC to application MI |
+| Content filter blocking | Default filter too aggressive | Create custom content filter policy |
+| High latency on first call | Token cold start or DNS | Use connection pooling, warm up endpoint |

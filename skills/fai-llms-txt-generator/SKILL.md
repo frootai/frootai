@@ -1,156 +1,101 @@
 ---
 name: fai-llms-txt-generator
-description: 'Creates llms.txt files for AI-readable project documentation following the llms.txt specification.'
+description: |
+  Generate standards-compliant llms.txt files for AI agent discoverability.
+  Use when creating machine-readable site maps that help LLMs understand
+  your documentation, API, or product structure.
 ---
 
-# Fai Llms Txt Generator
+# llms.txt Generator
 
-Creates llms.txt files for AI-readable project documentation following the llms.txt specification.
+Create llms.txt files for AI agent discoverability and structured site navigation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates llms.txt files for ai-readable project documentation following the llms.txt specification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Making documentation discoverable by AI agents
+- Creating machine-readable site maps for LLMs
+- Helping coding assistants understand your project
+- Following the llms.txt open standard
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## llms.txt Format
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+# Project Name
 
-## Steps
+> Brief description of the project
 
-### Step 1: Validate Prerequisites
+## Docs
 
-Verify all required tools, credentials, and dependencies are available.
+- [Getting Started](https://example.com/docs/getting-started): Quick start guide
+- [API Reference](https://example.com/docs/api): REST API documentation
+- [Architecture](https://example.com/docs/architecture): System design overview
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## API
+
+- [Chat Endpoint](https://example.com/api/chat): POST /api/chat — send messages
+- [Health](https://example.com/api/health): GET /health — service health check
+
+## Resources
+
+- [GitHub](https://github.com/org/repo): Source code repository
+- [npm](https://npmjs.com/package/name): npm package
+- [VS Code](https://marketplace.visualstudio.com/items?itemName=name): Extension
 ```
 
-### Step 2: Load Configuration
+## Generator Script
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+def generate_llms_txt(project: dict) -> str:
+    lines = [f"# {project['name']}", "", f"> {project['description']}", ""]
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+    for section_name, entries in project["sections"].items():
+        lines.append(f"## {section_name}")
+        lines.append("")
+        for entry in entries:
+            lines.append(f"- [{entry['title']}]({entry['url']}): {entry['description']}")
+        lines.append("")
 
-### Step 3: Execute Core Logic
+    return "\n".join(lines)
 
-Perform the primary operation: creates llms.txt files for ai-readable project documentation following the llms.txt specification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-llms-txt-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-llms-txt-generator/"]
-  }
+# Usage
+project = {
+    "name": "FrootAI",
+    "description": "AI primitive unification — agents, skills, hooks, workflows wired into solution plays",
+    "sections": {
+        "Docs": [
+            {"title": "Getting Started", "url": "https://frootai.dev/docs", "description": "Quick start guide"},
+            {"title": "Solution Plays", "url": "https://frootai.dev/solution-plays", "description": "100 production-ready AI plays"},
+        ],
+        "Tools": [
+            {"title": "MCP Server", "url": "https://npmjs.com/package/frootai-mcp", "description": "25 AI tools via MCP"},
+            {"title": "VS Code Extension", "url": "https://marketplace.visualstudio.com/items?itemName=FrootAI.frootai-vscode", "description": "Skills + agents in VS Code"},
+        ],
+    },
 }
 ```
 
-### Via Agent Invocation
+## Validation
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```python
+def validate_llms_txt(content: str) -> dict:
+    lines = content.strip().split("\n")
+    issues = []
+    if not lines[0].startswith("# "):
+        issues.append("Missing project title (# heading)")
+    links = [l for l in lines if l.startswith("- [")]
+    broken = [l for l in links if "]()" in l or ": " not in l]
+    if broken:
+        issues.append(f"{len(broken)} links missing URL or description")
+    return {"valid": len(issues) == 0, "issues": issues, "link_count": len(links)}
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| AI can't find your docs | No llms.txt | Create and serve at /llms.txt |
+| Broken links in file | URLs changed | Validate links in CI |
+| Too many entries | Every page listed | Curate top 10-20 most important |
+| Wrong format | Not following spec | Use # title, > description, ## sections |

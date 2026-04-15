@@ -1,2256 +1,2256 @@
 [
   {
-    "id": "agent-chain-configure",
-    "name": "agent-chain-configure",
-    "description": "Configure builder→reviewer→tuner agent chain with handoff rules",
-    "folder": "skills/agent-chain-configure/",
-    "size": 2406
+    "id": "fai-agent-chain-configure",
+    "name": "fai-agent-chain-configure",
+    "description": "Configure builder→reviewer→tuner agent chain with handoff rules, model assignment, and evaluation gates.",
+    "folder": "skills/fai-agent-chain-configure/",
+    "size": 7246
   },
   {
-    "id": "api-rate-limit-configure",
-    "name": "api-rate-limit-configure",
-    "description": "Configure API rate limiting with Azure APIM policies and retry headers",
-    "folder": "skills/api-rate-limit-configure/",
-    "size": 2421
+    "id": "fai-agent-governance",
+    "name": "fai-agent-governance",
+    "description": "|",
+    "folder": "skills/fai-agent-governance/",
+    "size": 7544
   },
   {
-    "id": "app-insights-configure",
-    "name": "app-insights-configure",
-    "description": "Configure Application Insights with custom metrics, alerts, and dashboards",
-    "folder": "skills/app-insights-configure/",
-    "size": 2423
+    "id": "fai-agentic-eval",
+    "name": "fai-agentic-eval",
+    "description": "|",
+    "folder": "skills/fai-agentic-eval/",
+    "size": 6018
   },
   {
-    "id": "audit-log-implement",
-    "name": "audit-log-implement",
-    "description": "Implement immutable audit logging with Azure Blob Storage and Sentinel",
-    "folder": "skills/audit-log-implement/",
-    "size": 2406
+    "id": "fai-api-docs-generator",
+    "name": "fai-api-docs-generator",
+    "description": "|",
+    "folder": "skills/fai-api-docs-generator/",
+    "size": 5318
   },
   {
-    "id": "azure-openai-setup",
-    "name": "azure-openai-setup",
-    "description": "Set up Azure OpenAI Service with model deployments, RBAC, and monitoring",
-    "folder": "skills/azure-openai-setup/",
-    "size": 2407
+    "id": "fai-api-endpoint-generator",
+    "name": "fai-api-endpoint-generator",
+    "description": "|",
+    "folder": "skills/fai-api-endpoint-generator/",
+    "size": 4370
   },
   {
-    "id": "backup-restore-ai",
-    "name": "backup-restore-ai",
-    "description": "Set up backup and restore procedures for AI application data and configurations",
-    "folder": "skills/backup-restore-ai/",
-    "size": 2418
+    "id": "fai-api-rate-limit-configure",
+    "name": "fai-api-rate-limit-configure",
+    "description": "Configure API rate limiting with Azure APIM policies, throttling tiers, and retry headers.",
+    "folder": "skills/fai-api-rate-limit-configure/",
+    "size": 6744
   },
   {
-    "id": "bicep-module-create",
-    "name": "bicep-module-create",
-    "description": "Create a reusable Bicep module with parameters, outputs, and conditions",
-    "folder": "skills/bicep-module-create/",
-    "size": 2408
+    "id": "fai-app-insights-configure",
+    "name": "fai-app-insights-configure",
+    "description": "Configure Application Insights with custom AI metrics, anomaly alerts, and operational dashboards.",
+    "folder": "skills/fai-app-insights-configure/",
+    "size": 7053
   },
   {
-    "id": "canary-deploy-ai",
-    "name": "canary-deploy-ai",
-    "description": "Implement canary deployment for AI model updates with rollback on quality drop",
-    "folder": "skills/canary-deploy-ai/",
-    "size": 2413
+    "id": "fai-architecture-blueprint",
+    "name": "fai-architecture-blueprint",
+    "description": "|",
+    "folder": "skills/fai-architecture-blueprint/",
+    "size": 4627
   },
   {
-    "id": "circuit-breaker-add",
-    "name": "circuit-breaker-add",
-    "description": "Add circuit breaker pattern for Azure OpenAI calls with fallback behavior",
-    "folder": "skills/circuit-breaker-add/",
-    "size": 2412
+    "id": "fai-architecture-decision-record",
+    "name": "fai-architecture-decision-record",
+    "description": "|",
+    "folder": "skills/fai-architecture-decision-record/",
+    "size": 4228
   },
   {
-    "id": "compliance-audit-run",
-    "name": "compliance-audit-run",
-    "description": "Run a compliance audit against HIPAA/FedRAMP/SOC2 requirements for AI systems",
-    "folder": "skills/compliance-audit-run/",
-    "size": 2423
+    "id": "fai-aspire-orchestration",
+    "name": "fai-aspire-orchestration",
+    "description": "|",
+    "folder": "skills/fai-aspire-orchestration/",
+    "size": 3890
   },
   {
-    "id": "content-safety-configure",
-    "name": "content-safety-configure",
+    "id": "fai-aspnet-minimal-api",
+    "name": "fai-aspnet-minimal-api",
+    "description": "|",
+    "folder": "skills/fai-aspnet-minimal-api/",
+    "size": 4018
+  },
+  {
+    "id": "fai-audit-log-implement",
+    "name": "fai-audit-log-implement",
+    "description": "Implement immutable audit logging with Azure Blob Storage, Sentinel integration, and compliance evidence.",
+    "folder": "skills/fai-audit-log-implement/",
+    "size": 7165
+  },
+  {
+    "id": "fai-az-cost-optimize",
+    "name": "fai-az-cost-optimize",
+    "description": "|",
+    "folder": "skills/fai-az-cost-optimize/",
+    "size": 4878
+  },
+  {
+    "id": "fai-azure-ai-foundry-setup",
+    "name": "fai-azure-ai-foundry-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-ai-foundry-setup/",
+    "size": 4623
+  },
+  {
+    "id": "fai-azure-ai-search-index",
+    "name": "fai-azure-ai-search-index",
+    "description": "|",
+    "folder": "skills/fai-azure-ai-search-index/",
+    "size": 5101
+  },
+  {
+    "id": "fai-azure-app-config",
+    "name": "fai-azure-app-config",
+    "description": "|",
+    "folder": "skills/fai-azure-app-config/",
+    "size": 3553
+  },
+  {
+    "id": "fai-azure-architecture-review",
+    "name": "fai-azure-architecture-review",
+    "description": "|",
+    "folder": "skills/fai-azure-architecture-review/",
+    "size": 4419
+  },
+  {
+    "id": "fai-azure-blob-lifecycle",
+    "name": "fai-azure-blob-lifecycle",
+    "description": "|",
+    "folder": "skills/fai-azure-blob-lifecycle/",
+    "size": 3539
+  },
+  {
+    "id": "fai-azure-cognitive-services",
+    "name": "fai-azure-cognitive-services",
+    "description": "|",
+    "folder": "skills/fai-azure-cognitive-services/",
+    "size": 3622
+  },
+  {
+    "id": "fai-azure-container-registry",
+    "name": "fai-azure-container-registry",
+    "description": "|",
+    "folder": "skills/fai-azure-container-registry/",
+    "size": 3807
+  },
+  {
+    "id": "fai-azure-cosmos-modeling",
+    "name": "fai-azure-cosmos-modeling",
+    "description": "|",
+    "folder": "skills/fai-azure-cosmos-modeling/",
+    "size": 4218
+  },
+  {
+    "id": "fai-azure-data-explorer",
+    "name": "fai-azure-data-explorer",
+    "description": "|",
+    "folder": "skills/fai-azure-data-explorer/",
+    "size": 3521
+  },
+  {
+    "id": "fai-azure-event-grid-setup",
+    "name": "fai-azure-event-grid-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-event-grid-setup/",
+    "size": 3191
+  },
+  {
+    "id": "fai-azure-event-hubs-setup",
+    "name": "fai-azure-event-hubs-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-event-hubs-setup/",
+    "size": 4296
+  },
+  {
+    "id": "fai-azure-functions-setup",
+    "name": "fai-azure-functions-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-functions-setup/",
+    "size": 4684
+  },
+  {
+    "id": "fai-azure-key-vault-setup",
+    "name": "fai-azure-key-vault-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-key-vault-setup/",
+    "size": 4032
+  },
+  {
+    "id": "fai-azure-openai-integration",
+    "name": "fai-azure-openai-integration",
+    "description": "|",
+    "folder": "skills/fai-azure-openai-integration/",
+    "size": 4313
+  },
+  {
+    "id": "fai-azure-openai-setup",
+    "name": "fai-azure-openai-setup",
+    "description": "Set up Azure OpenAI Service with model deployments, RBAC, content filtering, and monitoring.",
+    "folder": "skills/fai-azure-openai-setup/",
+    "size": 6897
+  },
+  {
+    "id": "fai-azure-resource-graph",
+    "name": "fai-azure-resource-graph",
+    "description": "|",
+    "folder": "skills/fai-azure-resource-graph/",
+    "size": 3385
+  },
+  {
+    "id": "fai-azure-resource-health",
+    "name": "fai-azure-resource-health",
+    "description": "|",
+    "folder": "skills/fai-azure-resource-health/",
+    "size": 3805
+  },
+  {
+    "id": "fai-azure-resource-visualizer",
+    "name": "fai-azure-resource-visualizer",
+    "description": "|",
+    "folder": "skills/fai-azure-resource-visualizer/",
+    "size": 3395
+  },
+  {
+    "id": "fai-azure-role-selector",
+    "name": "fai-azure-role-selector",
+    "description": "|",
+    "folder": "skills/fai-azure-role-selector/",
+    "size": 4370
+  },
+  {
+    "id": "fai-azure-service-bus-setup",
+    "name": "fai-azure-service-bus-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-service-bus-setup/",
+    "size": 3896
+  },
+  {
+    "id": "fai-azure-sql-setup",
+    "name": "fai-azure-sql-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-sql-setup/",
+    "size": 4346
+  },
+  {
+    "id": "fai-azure-static-web-apps-setup",
+    "name": "fai-azure-static-web-apps-setup",
+    "description": "|",
+    "folder": "skills/fai-azure-static-web-apps-setup/",
+    "size": 3294
+  },
+  {
+    "id": "fai-azure-storage-patterns",
+    "name": "fai-azure-storage-patterns",
+    "description": "|",
+    "folder": "skills/fai-azure-storage-patterns/",
+    "size": 4051
+  },
+  {
+    "id": "fai-backup-restore-ai",
+    "name": "fai-backup-restore-ai",
+    "description": "Set up backup and restore procedures for AI application data, model configs, and index state.",
+    "folder": "skills/fai-backup-restore-ai/",
+    "size": 7050
+  },
+  {
+    "id": "fai-basic-prompt-optimization",
+    "name": "fai-basic-prompt-optimization",
+    "description": "|",
+    "folder": "skills/fai-basic-prompt-optimization/",
+    "size": 4459
+  },
+  {
+    "id": "fai-bicep-module-create",
+    "name": "fai-bicep-module-create",
+    "description": "Create a reusable Bicep module with typed parameters, conditions, outputs, and AVM alignment.",
+    "folder": "skills/fai-bicep-module-create/",
+    "size": 6923
+  },
+  {
+    "id": "fai-bicep-module-scaffold",
+    "name": "fai-bicep-module-scaffold",
+    "description": "|",
+    "folder": "skills/fai-bicep-module-scaffold/",
+    "size": 3389
+  },
+  {
+    "id": "fai-boost-prompt",
+    "name": "fai-boost-prompt",
+    "description": "|",
+    "folder": "skills/fai-boost-prompt/",
+    "size": 3763
+  },
+  {
+    "id": "fai-build-agentic-loops",
+    "name": "fai-build-agentic-loops",
+    "description": "|",
+    "folder": "skills/fai-build-agentic-loops/",
+    "size": 4492
+  },
+  {
+    "id": "fai-build-bicep-module",
+    "name": "fai-build-bicep-module",
+    "description": "|",
+    "folder": "skills/fai-build-bicep-module/",
+    "size": 3521
+  },
+  {
+    "id": "fai-build-data-lakehouse",
+    "name": "fai-build-data-lakehouse",
+    "description": "|",
+    "folder": "skills/fai-build-data-lakehouse/",
+    "size": 3852
+  },
+  {
+    "id": "fai-build-docker-image",
+    "name": "fai-build-docker-image",
+    "description": "|",
+    "folder": "skills/fai-build-docker-image/",
+    "size": 2961
+  },
+  {
+    "id": "fai-build-etl-pipeline",
+    "name": "fai-build-etl-pipeline",
+    "description": "|",
+    "folder": "skills/fai-build-etl-pipeline/",
+    "size": 4788
+  },
+  {
+    "id": "fai-build-genai-rag",
+    "name": "fai-build-genai-rag",
+    "description": "|",
+    "folder": "skills/fai-build-genai-rag/",
+    "size": 4037
+  },
+  {
+    "id": "fai-build-github-workflow",
+    "name": "fai-build-github-workflow",
+    "description": "|",
+    "folder": "skills/fai-build-github-workflow/",
+    "size": 3131
+  },
+  {
+    "id": "fai-build-integration-test",
+    "name": "fai-build-integration-test",
+    "description": "|",
+    "folder": "skills/fai-build-integration-test/",
+    "size": 3206
+  },
+  {
+    "id": "fai-build-kubernetes-manifest",
+    "name": "fai-build-kubernetes-manifest",
+    "description": "|",
+    "folder": "skills/fai-build-kubernetes-manifest/",
+    "size": 3355
+  },
+  {
+    "id": "fai-build-llm-evaluator",
+    "name": "fai-build-llm-evaluator",
+    "description": "|",
+    "folder": "skills/fai-build-llm-evaluator/",
+    "size": 4399
+  },
+  {
+    "id": "fai-build-nosql-data-model",
+    "name": "fai-build-nosql-data-model",
+    "description": "|",
+    "folder": "skills/fai-build-nosql-data-model/",
+    "size": 3217
+  },
+  {
+    "id": "fai-build-prompting-system",
+    "name": "fai-build-prompting-system",
+    "description": "|",
+    "folder": "skills/fai-build-prompting-system/",
+    "size": 2780
+  },
+  {
+    "id": "fai-build-semantic-search",
+    "name": "fai-build-semantic-search",
+    "description": "|",
+    "folder": "skills/fai-build-semantic-search/",
+    "size": 3577
+  },
+  {
+    "id": "fai-build-sql-migration",
+    "name": "fai-build-sql-migration",
+    "description": "|",
+    "folder": "skills/fai-build-sql-migration/",
+    "size": 3520
+  },
+  {
+    "id": "fai-build-terraform-module",
+    "name": "fai-build-terraform-module",
+    "description": "|",
+    "folder": "skills/fai-build-terraform-module/",
+    "size": 2935
+  },
+  {
+    "id": "fai-build-test-harness",
+    "name": "fai-build-test-harness",
+    "description": "|",
+    "folder": "skills/fai-build-test-harness/",
+    "size": 3014
+  },
+  {
+    "id": "fai-build-tokenizer",
+    "name": "fai-build-tokenizer",
+    "description": "|",
+    "folder": "skills/fai-build-tokenizer/",
+    "size": 2887
+  },
+  {
+    "id": "fai-build-unit-test",
+    "name": "fai-build-unit-test",
+    "description": "|",
+    "folder": "skills/fai-build-unit-test/",
+    "size": 2633
+  },
+  {
+    "id": "fai-build-vector-store",
+    "name": "fai-build-vector-store",
+    "description": "|",
+    "folder": "skills/fai-build-vector-store/",
+    "size": 3687
+  },
+  {
+    "id": "fai-canary-deploy-ai",
+    "name": "fai-canary-deploy-ai",
+    "description": "Implement canary deployment for AI model updates with traffic splitting and rollback on quality drop.",
+    "folder": "skills/fai-canary-deploy-ai/",
+    "size": 6674
+  },
+  {
+    "id": "fai-changelog-generator",
+    "name": "fai-changelog-generator",
+    "description": "|",
+    "folder": "skills/fai-changelog-generator/",
+    "size": 3468
+  },
+  {
+    "id": "fai-circuit-breaker-add",
+    "name": "fai-circuit-breaker-add",
+    "description": "Add circuit breaker pattern for Azure OpenAI calls with exponential backoff and fallback behavior.",
+    "folder": "skills/fai-circuit-breaker-add/",
+    "size": 7512
+  },
+  {
+    "id": "fai-cloud-design-patterns",
+    "name": "fai-cloud-design-patterns",
+    "description": "|",
+    "folder": "skills/fai-cloud-design-patterns/",
+    "size": 3776
+  },
+  {
+    "id": "fai-code-smell-detector",
+    "name": "fai-code-smell-detector",
+    "description": "|",
+    "folder": "skills/fai-code-smell-detector/",
+    "size": 3523
+  },
+  {
+    "id": "fai-codeql-setup",
+    "name": "fai-codeql-setup",
+    "description": "|",
+    "folder": "skills/fai-codeql-setup/",
+    "size": 3078
+  },
+  {
+    "id": "fai-comment-tutorial",
+    "name": "fai-comment-tutorial",
+    "description": "|",
+    "folder": "skills/fai-comment-tutorial/",
+    "size": 3174
+  },
+  {
+    "id": "fai-compliance-audit-run",
+    "name": "fai-compliance-audit-run",
+    "description": "Run a compliance audit against HIPAA, FedRAMP, SOC 2, and EU AI Act requirements for AI systems.",
+    "folder": "skills/fai-compliance-audit-run/",
+    "size": 6989
+  },
+  {
+    "id": "fai-component-docs",
+    "name": "fai-component-docs",
+    "description": "|",
+    "folder": "skills/fai-component-docs/",
+    "size": 2890
+  },
+  {
+    "id": "fai-containerize-aspnet",
+    "name": "fai-containerize-aspnet",
+    "description": "|",
+    "folder": "skills/fai-containerize-aspnet/",
+    "size": 3197
+  },
+  {
+    "id": "fai-containerize-aspnet-framework",
+    "name": "fai-containerize-aspnet-framework",
+    "description": "Containerizes legacy ASP.NET Framework applications with Windows containers.",
+    "folder": "skills/fai-containerize-aspnet-framework/",
+    "size": 4913
+  },
+  {
+    "id": "fai-content-safety-configure",
+    "name": "fai-content-safety-configure",
     "description": "Configure Azure Content Safety API with custom categories and thresholds",
-    "folder": "skills/content-safety-configure/",
-    "size": 2425
+    "folder": "skills/fai-content-safety-configure/",
+    "size": 10048
   },
   {
-    "id": "cost-dashboard-create",
-    "name": "cost-dashboard-create",
+    "id": "fai-content-safety-review",
+    "name": "fai-content-safety-review",
+    "description": "Reviews AI outputs against Azure Content Safety categories with threshold recommendations.",
+    "folder": "skills/fai-content-safety-review/",
+    "size": 4926
+  },
+  {
+    "id": "fai-context-map",
+    "name": "fai-context-map",
+    "description": "Creates domain-driven design context maps showing bounded contexts, relationships, and integration patterns.",
+    "folder": "skills/fai-context-map/",
+    "size": 4929
+  },
+  {
+    "id": "fai-contextual-rag",
+    "name": "fai-contextual-rag",
+    "description": "Builds contextual retrieval workflows that blend user profile, task state, and enterprise documents.",
+    "folder": "skills/fai-contextual-rag/",
+    "size": 4886
+  },
+  {
+    "id": "fai-conventional-commit",
+    "name": "fai-conventional-commit",
+    "description": "Enforces Conventional Commits with changelog-ready scopes and release discipline.",
+    "folder": "skills/fai-conventional-commit/",
+    "size": 4877
+  },
+  {
+    "id": "fai-copilot-cli-quickstart",
+    "name": "fai-copilot-cli-quickstart",
+    "description": "Bootstraps a productive GitHub Copilot CLI workflow for repository tasks.",
+    "folder": "skills/fai-copilot-cli-quickstart/",
+    "size": 4897
+  },
+  {
+    "id": "fai-copilot-instructions-generator",
+    "name": "fai-copilot-instructions-generator",
+    "description": "Generates high-signal Copilot instruction files tailored to project architecture and standards.",
+    "folder": "skills/fai-copilot-instructions-generator/",
+    "size": 4939
+  },
+  {
+    "id": "fai-copilot-sdk-integration",
+    "name": "fai-copilot-sdk-integration",
+    "description": "Implements GitHub Copilot SDK integration patterns for custom agent capabilities.",
+    "folder": "skills/fai-copilot-sdk-integration/",
+    "size": 4911
+  },
+  {
+    "id": "fai-copilot-spaces-setup",
+    "name": "fai-copilot-spaces-setup",
+    "description": "Configures Copilot Spaces for reusable team knowledge, prompts, and workflows.",
+    "folder": "skills/fai-copilot-spaces-setup/",
+    "size": 4881
+  },
+  {
+    "id": "fai-copilot-usage-metrics",
+    "name": "fai-copilot-usage-metrics",
+    "description": "Defines and operationalizes Copilot usage metrics tied to developer outcomes.",
+    "folder": "skills/fai-copilot-usage-metrics/",
+    "size": 4874
+  },
+  {
+    "id": "fai-cosmosdb-datamodeling",
+    "name": "fai-cosmosdb-datamodeling",
+    "description": "|",
+    "folder": "skills/fai-cosmosdb-datamodeling/",
+    "size": 3480
+  },
+  {
+    "id": "fai-cost-dashboard-create",
+    "name": "fai-cost-dashboard-create",
     "description": "Create a cost attribution dashboard for AI workloads with Azure Cost Management",
-    "folder": "skills/cost-dashboard-create/",
-    "size": 2430
+    "folder": "skills/fai-cost-dashboard-create/",
+    "size": 10021
   },
   {
-    "id": "data-chunking-optimize",
-    "name": "data-chunking-optimize",
+    "id": "fai-cost-estimator",
+    "name": "fai-cost-estimator",
+    "description": "|",
+    "folder": "skills/fai-cost-estimator/",
+    "size": 4056
+  },
+  {
+    "id": "fai-daily-prep",
+    "name": "fai-daily-prep",
+    "description": "|",
+    "folder": "skills/fai-daily-prep/",
+    "size": 3643
+  },
+  {
+    "id": "fai-data-chunking-optimize",
+    "name": "fai-data-chunking-optimize",
     "description": "Optimize document chunking strategy for RAG with semantic boundaries",
-    "folder": "skills/data-chunking-optimize/",
-    "size": 2411
+    "folder": "skills/fai-data-chunking-optimize/",
+    "size": 8654
   },
   {
-    "id": "database-migrate-ai",
-    "name": "database-migrate-ai",
+    "id": "fai-database-migrate-ai",
+    "name": "fai-database-migrate-ai",
     "description": "Migrate data and embeddings between vector databases with zero downtime",
-    "folder": "skills/database-migrate-ai/",
-    "size": 2408
+    "folder": "skills/fai-database-migrate-ai/",
+    "size": 9341
   },
   {
-    "id": "docker-containerize",
-    "name": "docker-containerize",
+    "id": "fai-database-schema-designer",
+    "name": "fai-database-schema-designer",
+    "description": "|",
+    "folder": "skills/fai-database-schema-designer/",
+    "size": 4060
+  },
+  {
+    "id": "fai-dead-code-removal",
+    "name": "fai-dead-code-removal",
+    "description": "|",
+    "folder": "skills/fai-dead-code-removal/",
+    "size": 3707
+  },
+  {
+    "id": "fai-deploy-01-enterprise-rag",
+    "name": "fai-deploy-01-enterprise-rag",
+    "description": "|",
+    "folder": "skills/fai-deploy-01-enterprise-rag/",
+    "size": 3282
+  },
+  {
+    "id": "fai-deploy-02-ai-landing-zone",
+    "name": "fai-deploy-02-ai-landing-zone",
+    "description": "|",
+    "folder": "skills/fai-deploy-02-ai-landing-zone/",
+    "size": 3608
+  },
+  {
+    "id": "fai-deploy-03-deterministic-agent",
+    "name": "fai-deploy-03-deterministic-agent",
+    "description": "|",
+    "folder": "skills/fai-deploy-03-deterministic-agent/",
+    "size": 3025
+  },
+  {
+    "id": "fai-deploy-04-call-center-voice-ai",
+    "name": "fai-deploy-04-call-center-voice-ai",
+    "description": "|",
+    "folder": "skills/fai-deploy-04-call-center-voice-ai/",
+    "size": 3240
+  },
+  {
+    "id": "fai-deploy-05-it-ticket-resolution",
+    "name": "fai-deploy-05-it-ticket-resolution",
+    "description": "|",
+    "folder": "skills/fai-deploy-05-it-ticket-resolution/",
+    "size": 3700
+  },
+  {
+    "id": "fai-deploy-06-document-intelligence",
+    "name": "fai-deploy-06-document-intelligence",
+    "description": "Executes production deployment workflow for Solution Play 06 Document Intelligence.",
+    "folder": "skills/fai-deploy-06-document-intelligence/",
+    "size": 5275
+  },
+  {
+    "id": "fai-deploy-07-multi-agent-service",
+    "name": "fai-deploy-07-multi-agent-service",
+    "description": "Executes production deployment workflow for Solution Play 07 Multi-Agent Service.",
+    "folder": "skills/fai-deploy-07-multi-agent-service/",
+    "size": 5279
+  },
+  {
+    "id": "fai-deploy-08-copilot-studio-bot",
+    "name": "fai-deploy-08-copilot-studio-bot",
+    "description": "Executes production deployment workflow for Solution Play 08 Copilot Studio Bot.",
+    "folder": "skills/fai-deploy-08-copilot-studio-bot/",
+    "size": 5245
+  },
+  {
+    "id": "fai-deploy-09-ai-search-portal",
+    "name": "fai-deploy-09-ai-search-portal",
+    "description": "Executes production deployment workflow for Solution Play 09 AI Search Portal.",
+    "folder": "skills/fai-deploy-09-ai-search-portal/",
+    "size": 5240
+  },
+  {
+    "id": "fai-deploy-10-content-moderation",
+    "name": "fai-deploy-10-content-moderation",
+    "description": "Executes production deployment workflow for Solution Play 10 Content Moderation.",
+    "folder": "skills/fai-deploy-10-content-moderation/",
+    "size": 5273
+  },
+  {
+    "id": "fai-deploy-11-ai-landing-zone-advanced",
+    "name": "fai-deploy-11-ai-landing-zone-advanced",
+    "description": "Executes production deployment workflow for Solution Play 11 AI Landing Zone Advanced.",
+    "folder": "skills/fai-deploy-11-ai-landing-zone-advanced/",
+    "size": 5291
+  },
+  {
+    "id": "fai-deploy-12-model-serving-aks",
+    "name": "fai-deploy-12-model-serving-aks",
+    "description": "Executes production deployment workflow for Solution Play 12 Model Serving on AKS.",
+    "folder": "skills/fai-deploy-12-model-serving-aks/",
+    "size": 5255
+  },
+  {
+    "id": "fai-deploy-13-fine-tuning-workflow",
+    "name": "fai-deploy-13-fine-tuning-workflow",
+    "description": "Executes production deployment workflow for Solution Play 13 Fine-Tuning Workflow.",
+    "folder": "skills/fai-deploy-13-fine-tuning-workflow/",
+    "size": 5243
+  },
+  {
+    "id": "fai-deploy-14-cost-optimized-ai-gateway",
+    "name": "fai-deploy-14-cost-optimized-ai-gateway",
+    "description": "Executes production deployment workflow for Solution Play 14 Cost-Optimized AI Gateway.",
+    "folder": "skills/fai-deploy-14-cost-optimized-ai-gateway/",
+    "size": 5286
+  },
+  {
+    "id": "fai-deploy-15-multi-modal-docproc",
+    "name": "fai-deploy-15-multi-modal-docproc",
+    "description": "Executes production deployment workflow for Solution Play 15 Multi-Modal Document Processing.",
+    "folder": "skills/fai-deploy-15-multi-modal-docproc/",
+    "size": 5277
+  },
+  {
+    "id": "fai-deploy-16-copilot-teams-extension",
+    "name": "fai-deploy-16-copilot-teams-extension",
+    "description": "Executes production deployment workflow for Solution Play 16 Copilot Teams Extension.",
+    "folder": "skills/fai-deploy-16-copilot-teams-extension/",
+    "size": 4841
+  },
+  {
+    "id": "fai-deploy-17-ai-observability",
+    "name": "fai-deploy-17-ai-observability",
+    "description": "Executes production deployment workflow for Solution Play 17 AI Observability.",
+    "folder": "skills/fai-deploy-17-ai-observability/",
+    "size": 4828
+  },
+  {
+    "id": "fai-deploy-18-prompt-management",
+    "name": "fai-deploy-18-prompt-management",
+    "description": "Executes production deployment workflow for Solution Play 18 Prompt Management.",
+    "folder": "skills/fai-deploy-18-prompt-management/",
+    "size": 4818
+  },
+  {
+    "id": "fai-deploy-19-edge-ai-phi4",
+    "name": "fai-deploy-19-edge-ai-phi4",
+    "description": "Executes production deployment workflow for Solution Play 19 Edge AI Phi-4.",
+    "folder": "skills/fai-deploy-19-edge-ai-phi4/",
+    "size": 4818
+  },
+  {
+    "id": "fai-deploy-20-anomaly-detection",
+    "name": "fai-deploy-20-anomaly-detection",
+    "description": "Executes production deployment workflow for Solution Play 20 Anomaly Detection.",
+    "folder": "skills/fai-deploy-20-anomaly-detection/",
+    "size": 4840
+  },
+  {
+    "id": "fai-deploy-21-agentic-rag",
+    "name": "fai-deploy-21-agentic-rag",
+    "description": "Executes production deployment workflow for Solution Play 21 Agentic RAG.",
+    "folder": "skills/fai-deploy-21-agentic-rag/",
+    "size": 4824
+  },
+  {
+    "id": "fai-deploy-22-multi-agent-swarm",
+    "name": "fai-deploy-22-multi-agent-swarm",
+    "description": "Executes production deployment workflow for Solution Play 22 Multi-Agent Swarm.",
+    "folder": "skills/fai-deploy-22-multi-agent-swarm/",
+    "size": 4864
+  },
+  {
+    "id": "fai-deploy-23-browser-automation-agent",
+    "name": "fai-deploy-23-browser-automation-agent",
+    "description": "Executes production deployment workflow for Solution Play 23 Browser Automation Agent.",
+    "folder": "skills/fai-deploy-23-browser-automation-agent/",
+    "size": 4871
+  },
+  {
+    "id": "fai-deploy-preflight",
+    "name": "fai-deploy-preflight",
+    "description": "Validates Bicep templates, checks Azure resource availability, verifies quota, and runs what-if deployment before any Azure infrastructure changes. A safety gate for all FAI play deployments.",
+    "folder": "skills/fai-deploy-preflight/",
+    "size": 4168
+  },
+  {
+    "id": "fai-design-accessibility",
+    "name": "fai-design-accessibility",
+    "description": "Applies accessibility-first design standards with measurable UX and compliance gates.",
+    "folder": "skills/fai-design-accessibility/",
+    "size": 4842
+  },
+  {
+    "id": "fai-design-animations",
+    "name": "fai-design-animations",
+    "description": "Designs purposeful interface animations with performance budgets and accessibility safeguards.",
+    "folder": "skills/fai-design-animations/",
+    "size": 4848
+  },
+  {
+    "id": "fai-design-data-visualization",
+    "name": "fai-design-data-visualization",
+    "description": "Designs data visualization systems with clarity, accessibility, and performance-aware rendering.",
+    "folder": "skills/fai-design-data-visualization/",
+    "size": 5315
+  },
+  {
+    "id": "fai-design-dialog-system",
+    "name": "fai-design-dialog-system",
+    "description": "Designs dialog and modal interaction patterns with consistent behavior and accessibility guarantees.",
+    "folder": "skills/fai-design-dialog-system/",
+    "size": 5313
+  },
+  {
+    "id": "fai-design-error-states",
+    "name": "fai-design-error-states",
+    "description": "Designs actionable error states that improve recovery, trust, and system transparency.",
+    "folder": "skills/fai-design-error-states/",
+    "size": 5279
+  },
+  {
+    "id": "fai-design-forms",
+    "name": "fai-design-forms",
+    "description": "Designs high-completion form experiences with robust validation and accessibility support.",
+    "folder": "skills/fai-design-forms/",
+    "size": 5300
+  },
+  {
+    "id": "fai-design-icon-system",
+    "name": "fai-design-icon-system",
+    "description": "Designs scalable icon systems with semantic consistency and implementation governance.",
+    "folder": "skills/fai-design-icon-system/",
+    "size": 5266
+  },
+  {
+    "id": "fai-design-layouts",
+    "name": "fai-design-layouts",
+    "description": "Designs adaptive layout systems with clear hierarchy, spacing rhythm, and predictable behavior.",
+    "folder": "skills/fai-design-layouts/",
+    "size": 5271
+  },
+  {
+    "id": "fai-design-loading-states",
+    "name": "fai-design-loading-states",
+    "description": "Designs loading state patterns that reduce uncertainty and perceived latency.",
+    "folder": "skills/fai-design-loading-states/",
+    "size": 5286
+  },
+  {
+    "id": "fai-design-onboarding",
+    "name": "fai-design-onboarding",
+    "description": "Designs onboarding flows that accelerate activation and reduce user drop-off.",
+    "folder": "skills/fai-design-onboarding/",
+    "size": 5258
+  },
+  {
+    "id": "fai-design-responsive",
+    "name": "fai-design-responsive",
+    "description": "Designs responsive behavior across devices with resilient content and interaction scaling.",
+    "folder": "skills/fai-design-responsive/",
+    "size": 5297
+  },
+  {
+    "id": "fai-design-state-management",
+    "name": "fai-design-state-management",
+    "description": "Designs UI state models for predictable behavior, traceability, and reduced complexity.",
+    "folder": "skills/fai-design-state-management/",
+    "size": 5308
+  },
+  {
+    "id": "fai-design-system-tokens",
+    "name": "fai-design-system-tokens",
+    "description": "Defines and governs design system tokens for scalable, consistent multi-platform UI delivery.",
+    "folder": "skills/fai-design-system-tokens/",
+    "size": 5055
+  },
+  {
+    "id": "fai-design-themes",
+    "name": "fai-design-themes",
+    "description": "Designs robust theming architecture with accessibility, brand consistency, and runtime flexibility.",
+    "folder": "skills/fai-design-themes/",
+    "size": 5028
+  },
+  {
+    "id": "fai-design-ui-components",
+    "name": "fai-design-ui-components",
+    "description": "Designs reusable UI components with strong contracts, accessibility, and implementation readiness.",
+    "folder": "skills/fai-design-ui-components/",
+    "size": 5050
+  },
+  {
+    "id": "fai-deterministic-agent-skill",
+    "name": "fai-deterministic-agent-skill",
+    "description": "Implements deterministic agent behavior patterns with strict output guarantees and reproducibility.",
+    "folder": "skills/fai-deterministic-agent-skill/",
+    "size": 5088
+  },
+  {
+    "id": "fai-docker-containerize",
+    "name": "fai-docker-containerize",
     "description": "Containerize an AI application with multi-stage Docker build and health checks",
-    "folder": "skills/docker-containerize/",
-    "size": 2422
+    "folder": "skills/fai-docker-containerize/",
+    "size": 8420
   },
   {
-    "id": "embedding-model-select",
-    "name": "embedding-model-select",
-    "description": "Select and configure the optimal embedding model for vector search",
-    "folder": "skills/embedding-model-select/",
-    "size": 2407
+    "id": "fai-documentation-writer",
+    "name": "fai-documentation-writer",
+    "description": "Generates documentation aligned with the FROOT knowledge framework — module-style docs with duration, audience, table of contents, mermaid diagrams, code examples, and key takeaways sections.",
+    "folder": "skills/fai-documentation-writer/",
+    "size": 11741
   },
   {
-    "id": "evaluation-pipeline-create",
-    "name": "evaluation-pipeline-create",
+    "id": "fai-domain-driven-design",
+    "name": "fai-domain-driven-design",
+    "description": "Applies domain-driven design to align bounded contexts, ownership, and integration contracts.",
+    "folder": "skills/fai-domain-driven-design/",
+    "size": 5058
+  },
+  {
+    "id": "fai-drawio-generator",
+    "name": "fai-drawio-generator",
+    "description": "Generates architecture-ready Draw.io diagrams with consistent notation and reviewable structure.",
+    "folder": "skills/fai-drawio-generator/",
+    "size": 5085
+  },
+  {
+    "id": "fai-dynamic-prompt",
+    "name": "fai-dynamic-prompt",
+    "description": "Designs dynamic prompt construction workflows with context control and safety boundaries.",
+    "folder": "skills/fai-dynamic-prompt/",
+    "size": 5053
+  },
+  {
+    "id": "fai-edge-case-generator",
+    "name": "fai-edge-case-generator",
+    "description": "Generates edge-case scenarios to harden systems against failure, ambiguity, and rare conditions.",
+    "folder": "skills/fai-edge-case-generator/",
+    "size": 5049
+  },
+  {
+    "id": "fai-editorconfig-setup",
+    "name": "fai-editorconfig-setup",
+    "description": "Establishes editor configuration standards for consistent formatting and cross-team collaboration.",
+    "folder": "skills/fai-editorconfig-setup/",
+    "size": 5067
+  },
+  {
+    "id": "fai-embedding-model-select",
+    "name": "fai-embedding-model-select",
+    "description": "|",
+    "folder": "skills/fai-embedding-model-select/",
+    "size": 5864
+  },
+  {
+    "id": "fai-epic-breakdown-arch",
+    "name": "fai-epic-breakdown-arch",
+    "description": "Breaks architecture initiatives into actionable epics with dependencies, risk, and sequencing.",
+    "folder": "skills/fai-epic-breakdown-arch/",
+    "size": 5055
+  },
+  {
+    "id": "fai-epic-breakdown-pm",
+    "name": "fai-epic-breakdown-pm",
+    "description": "Breaks product epics into execution-ready streams with dependency, risk, and delivery sequencing.",
+    "folder": "skills/fai-epic-breakdown-pm/",
+    "size": 5024
+  },
+  {
+    "id": "fai-eval-driven-dev",
+    "name": "fai-eval-driven-dev",
+    "description": "Implements evaluation-driven development loops so quality metrics steer implementation decisions.",
+    "folder": "skills/fai-eval-driven-dev/",
+    "size": 5064
+  },
+  {
+    "id": "fai-eval-runner",
+    "name": "fai-eval-runner",
+    "description": "Runs standardized evaluation pipelines with reproducible scoring and traceable outputs.",
+    "folder": "skills/fai-eval-runner/",
+    "size": 5003
+  },
+  {
+    "id": "fai-evaluate-01-enterprise-rag",
+    "name": "fai-evaluate-01-enterprise-rag",
+    "description": "Evaluates Solution Play 01 Enterprise RAG with groundedness, relevance, and citation quality gates.",
+    "folder": "skills/fai-evaluate-01-enterprise-rag/",
+    "size": 5055
+  },
+  {
+    "id": "fai-evaluate-02-ai-landing-zone",
+    "name": "fai-evaluate-02-ai-landing-zone",
+    "description": "Evaluates Solution Play 02 AI Landing Zone for policy compliance, reliability, and operational readiness.",
+    "folder": "skills/fai-evaluate-02-ai-landing-zone/",
+    "size": 5096
+  },
+  {
+    "id": "fai-evaluate-03-deterministic-agent",
+    "name": "fai-evaluate-03-deterministic-agent",
+    "description": "Evaluates Solution Play 03 Deterministic Agent for repeatability, schema conformance, and stability.",
+    "folder": "skills/fai-evaluate-03-deterministic-agent/",
+    "size": 5061
+  },
+  {
+    "id": "fai-evaluate-04-call-center-voice-ai",
+    "name": "fai-evaluate-04-call-center-voice-ai",
+    "description": "Evaluates Solution Play 04 Call Center Voice AI for latency, call quality, and safety compliance.",
+    "folder": "skills/fai-evaluate-04-call-center-voice-ai/",
+    "size": 5064
+  },
+  {
+    "id": "fai-evaluate-05-it-ticket-resolution",
+    "name": "fai-evaluate-05-it-ticket-resolution",
+    "description": "Evaluates Solution Play 05 IT Ticket Resolution for routing precision, escalation quality, and auditability.",
+    "folder": "skills/fai-evaluate-05-it-ticket-resolution/",
+    "size": 5080
+  },
+  {
+    "id": "fai-evaluate-06-document-intelligence",
+    "name": "fai-evaluate-06-document-intelligence",
+    "description": "Evaluates Solution Play 06 Document Intelligence for extraction accuracy, throughput, and robustness.",
+    "folder": "skills/fai-evaluate-06-document-intelligence/",
+    "size": 5086
+  },
+  {
+    "id": "fai-evaluate-07-multi-agent-service",
+    "name": "fai-evaluate-07-multi-agent-service",
+    "description": "Evaluates Solution Play 07 Multi-Agent Service for orchestration reliability and coordinated task quality.",
+    "folder": "skills/fai-evaluate-07-multi-agent-service/",
+    "size": 5106
+  },
+  {
+    "id": "fai-evaluate-08-copilot-studio-bot",
+    "name": "fai-evaluate-08-copilot-studio-bot",
+    "description": "Evaluates Solution Play 08 Copilot Studio Bot for conversation quality, channel stability, and safety compliance.",
+    "folder": "skills/fai-evaluate-08-copilot-studio-bot/",
+    "size": 4740
+  },
+  {
+    "id": "fai-evaluate-09-ai-search-portal",
+    "name": "fai-evaluate-09-ai-search-portal",
+    "description": "Evaluates Solution Play 09 AI Search Portal for relevance, latency, and retrieval robustness.",
+    "folder": "skills/fai-evaluate-09-ai-search-portal/",
+    "size": 4713
+  },
+  {
+    "id": "fai-evaluate-10-content-moderation",
+    "name": "fai-evaluate-10-content-moderation",
+    "description": "Evaluates Solution Play 10 Content Moderation for precision, recall, and escalation reliability.",
+    "folder": "skills/fai-evaluate-10-content-moderation/",
+    "size": 4735
+  },
+  {
+    "id": "fai-evaluate-11-ai-landing-zone-advanced",
+    "name": "fai-evaluate-11-ai-landing-zone-advanced",
+    "description": "Evaluates Solution Play 11 AI Landing Zone Advanced for governance, security, and operational readiness.",
+    "folder": "skills/fai-evaluate-11-ai-landing-zone-advanced/",
+    "size": 4741
+  },
+  {
+    "id": "fai-evaluate-12-model-serving-aks",
+    "name": "fai-evaluate-12-model-serving-aks",
+    "description": "Evaluates Solution Play 12 Model Serving on AKS for inference SLOs, autoscale behavior, and resilience.",
+    "folder": "skills/fai-evaluate-12-model-serving-aks/",
+    "size": 4717
+  },
+  {
+    "id": "fai-evaluate-13-fine-tuning-workflow",
+    "name": "fai-evaluate-13-fine-tuning-workflow",
+    "description": "Evaluates Solution Play 13 Fine-Tuning Workflow for model gains, safety regression, and promotion readiness.",
+    "folder": "skills/fai-evaluate-13-fine-tuning-workflow/",
+    "size": 4741
+  },
+  {
+    "id": "fai-evaluate-14-cost-optimized-ai-gateway",
+    "name": "fai-evaluate-14-cost-optimized-ai-gateway",
+    "description": "Evaluates Solution Play 14 Cost-Optimized AI Gateway for routing accuracy, budget adherence, and latency balance.",
+    "folder": "skills/fai-evaluate-14-cost-optimized-ai-gateway/",
+    "size": 4752
+  },
+  {
+    "id": "fai-evaluate-15-multi-modal-docproc",
+    "name": "fai-evaluate-15-multi-modal-docproc",
+    "description": "Evaluates Solution Play 15 Multi-Modal Document Processing for extraction quality, throughput, and compliance controls.",
+    "folder": "skills/fai-evaluate-15-multi-modal-docproc/",
+    "size": 4749
+  },
+  {
+    "id": "fai-evaluate-16-copilot-teams-extension",
+    "name": "fai-evaluate-16-copilot-teams-extension",
+    "description": "Evaluates Solution Play 16 Copilot Teams Extension for tenant readiness, response quality, and reliability.",
+    "folder": "skills/fai-evaluate-16-copilot-teams-extension/",
+    "size": 4763
+  },
+  {
+    "id": "fai-evaluate-17-ai-observability",
+    "name": "fai-evaluate-17-ai-observability",
+    "description": "Evaluates Solution Play 17 AI Observability for telemetry completeness, alert fidelity, and incident diagnostics.",
+    "folder": "skills/fai-evaluate-17-ai-observability/",
+    "size": 4733
+  },
+  {
+    "id": "fai-evaluate-18-prompt-management",
+    "name": "fai-evaluate-18-prompt-management",
+    "description": "|",
+    "folder": "skills/fai-evaluate-18-prompt-management/",
+    "size": 3780
+  },
+  {
+    "id": "fai-evaluate-19-edge-ai-phi4",
+    "name": "fai-evaluate-19-edge-ai-phi4",
+    "description": "|",
+    "folder": "skills/fai-evaluate-19-edge-ai-phi4/",
+    "size": 3558
+  },
+  {
+    "id": "fai-evaluate-20-anomaly-detection",
+    "name": "fai-evaluate-20-anomaly-detection",
+    "description": "|",
+    "folder": "skills/fai-evaluate-20-anomaly-detection/",
+    "size": 3828
+  },
+  {
+    "id": "fai-evaluate-21-agentic-rag",
+    "name": "fai-evaluate-21-agentic-rag",
+    "description": "|",
+    "folder": "skills/fai-evaluate-21-agentic-rag/",
+    "size": 3957
+  },
+  {
+    "id": "fai-evaluate-22-multi-agent-swarm",
+    "name": "fai-evaluate-22-multi-agent-swarm",
+    "description": "|",
+    "folder": "skills/fai-evaluate-22-multi-agent-swarm/",
+    "size": 4029
+  },
+  {
+    "id": "fai-evaluate-23-browser-automation-agent",
+    "name": "fai-evaluate-23-browser-automation-agent",
+    "description": "|",
+    "folder": "skills/fai-evaluate-23-browser-automation-agent/",
+    "size": 4044
+  },
+  {
+    "id": "fai-evaluation-framework",
+    "name": "fai-evaluation-framework",
+    "description": "|",
+    "folder": "skills/fai-evaluation-framework/",
+    "size": 3374
+  },
+  {
+    "id": "fai-evaluation-pipeline-create",
+    "name": "fai-evaluation-pipeline-create",
     "description": "Create an evaluation pipeline with Azure AI Evaluation SDK and CI gate logic",
-    "folder": "skills/evaluation-pipeline-create/",
-    "size": 2439
+    "folder": "skills/fai-evaluation-pipeline-create/",
+    "size": 11331
+  },
+  {
+    "id": "fai-excalidraw-generator",
+    "name": "fai-excalidraw-generator",
+    "description": "|",
+    "folder": "skills/fai-excalidraw-generator/",
+    "size": 2709
+  },
+  {
+    "id": "fai-fabric-lakehouse",
+    "name": "fai-fabric-lakehouse",
+    "description": "|",
+    "folder": "skills/fai-fabric-lakehouse/",
+    "size": 2947
+  },
+  {
+    "id": "fai-fastapi-scaffold",
+    "name": "fai-fastapi-scaffold",
+    "description": "|",
+    "folder": "skills/fai-fastapi-scaffold/",
+    "size": 4255
+  },
+  {
+    "id": "fai-feature-breakdown",
+    "name": "fai-feature-breakdown",
+    "description": "|",
+    "folder": "skills/fai-feature-breakdown/",
+    "size": 3504
+  },
+  {
+    "id": "fai-feature-flag-ai",
+    "name": "fai-feature-flag-ai",
+    "description": "",
+    "folder": "skills/fai-feature-flag-ai/",
+    "size": 3560
+  },
+  {
+    "id": "fai-finalize-agent-prompt",
+    "name": "fai-finalize-agent-prompt",
+    "description": "|",
+    "folder": "skills/fai-finalize-agent-prompt/",
+    "size": 3879
+  },
+  {
+    "id": "fai-fine-tune-llm",
+    "name": "fai-fine-tune-llm",
+    "description": "|",
+    "folder": "skills/fai-fine-tune-llm/",
+    "size": 3512
+  },
+  {
+    "id": "fai-first-ask",
+    "name": "fai-first-ask",
+    "description": "|",
+    "folder": "skills/fai-first-ask/",
+    "size": 3920
+  },
+  {
+    "id": "fai-flowstudio-design",
+    "name": "fai-flowstudio-design",
+    "description": "|",
+    "folder": "skills/fai-flowstudio-design/",
+    "size": 3311
+  },
+  {
+    "id": "fai-folder-structure",
+    "name": "fai-folder-structure",
+    "description": "|",
+    "folder": "skills/fai-folder-structure/",
+    "size": 4482
+  },
+  {
+    "id": "fai-gdpr-compliance",
+    "name": "fai-gdpr-compliance",
+    "description": "|",
+    "folder": "skills/fai-gdpr-compliance/",
+    "size": 4191
+  },
+  {
+    "id": "fai-gh-cli",
+    "name": "fai-gh-cli",
+    "description": "|",
+    "folder": "skills/fai-gh-cli/",
+    "size": 3373
+  },
+  {
+    "id": "fai-git-commit-best-practices",
+    "name": "fai-git-commit-best-practices",
+    "description": "|",
+    "folder": "skills/fai-git-commit-best-practices/",
+    "size": 2494
+  },
+  {
+    "id": "fai-git-flow-branch",
+    "name": "fai-git-flow-branch",
+    "description": "|",
+    "folder": "skills/fai-git-flow-branch/",
+    "size": 2922
+  },
+  {
+    "id": "fai-github-actions-ai-pipeline",
+    "name": "fai-github-actions-ai-pipeline",
+    "description": "",
+    "folder": "skills/fai-github-actions-ai-pipeline/",
+    "size": 3484
+  },
+  {
+    "id": "fai-github-issue-triage",
+    "name": "fai-github-issue-triage",
+    "description": "|",
+    "folder": "skills/fai-github-issue-triage/",
+    "size": 3136
+  },
+  {
+    "id": "fai-github-issues",
+    "name": "fai-github-issues",
+    "description": "|",
+    "folder": "skills/fai-github-issues/",
+    "size": 3022
+  },
+  {
+    "id": "fai-github-pr-review",
+    "name": "fai-github-pr-review",
+    "description": "|",
+    "folder": "skills/fai-github-pr-review/",
+    "size": 3789
+  },
+  {
+    "id": "fai-gtm-ai-strategy",
+    "name": "fai-gtm-ai-strategy",
+    "description": "|",
+    "folder": "skills/fai-gtm-ai-strategy/",
+    "size": 3595
+  },
+  {
+    "id": "fai-gtm-developer-ecosystem",
+    "name": "fai-gtm-developer-ecosystem",
+    "description": "|",
+    "folder": "skills/fai-gtm-developer-ecosystem/",
+    "size": 3680
+  },
+  {
+    "id": "fai-gtm-enterprise-onboarding",
+    "name": "fai-gtm-enterprise-onboarding",
+    "description": "|",
+    "folder": "skills/fai-gtm-enterprise-onboarding/",
+    "size": 3522
+  },
+  {
+    "id": "fai-gtm-enterprise-planning",
+    "name": "fai-gtm-enterprise-planning",
+    "description": "|",
+    "folder": "skills/fai-gtm-enterprise-planning/",
+    "size": 3400
+  },
+  {
+    "id": "fai-gtm-investor-comms",
+    "name": "fai-gtm-investor-comms",
+    "description": "|",
+    "folder": "skills/fai-gtm-investor-comms/",
+    "size": 3193
+  },
+  {
+    "id": "fai-gtm-launch",
+    "name": "fai-gtm-launch",
+    "description": "|",
+    "folder": "skills/fai-gtm-launch/",
+    "size": 3705
+  },
+  {
+    "id": "fai-gtm-operating-cadence",
+    "name": "fai-gtm-operating-cadence",
+    "description": "|",
+    "folder": "skills/fai-gtm-operating-cadence/",
+    "size": 3437
+  },
+  {
+    "id": "fai-gtm-partnerships",
+    "name": "fai-gtm-partnerships",
+    "description": "|",
+    "folder": "skills/fai-gtm-partnerships/",
+    "size": 3436
+  },
+  {
+    "id": "fai-gtm-positioning",
+    "name": "fai-gtm-positioning",
+    "description": "|",
+    "folder": "skills/fai-gtm-positioning/",
+    "size": 3946
+  },
+  {
+    "id": "fai-gtm-product-led-growth",
+    "name": "fai-gtm-product-led-growth",
+    "description": "|",
+    "folder": "skills/fai-gtm-product-led-growth/",
+    "size": 3877
+  },
+  {
+    "id": "fai-guardrails-policy",
+    "name": "fai-guardrails-policy",
+    "description": "|",
+    "folder": "skills/fai-guardrails-policy/",
+    "size": 3502
+  },
+  {
+    "id": "fai-health-check-implement",
+    "name": "fai-health-check-implement",
+    "description": "",
+    "folder": "skills/fai-health-check-implement/",
+    "size": 3541
+  },
+  {
+    "id": "fai-human-in-the-loop",
+    "name": "fai-human-in-the-loop",
+    "description": "|",
+    "folder": "skills/fai-human-in-the-loop/",
+    "size": 3463
+  },
+  {
+    "id": "fai-implementation-plan-generator",
+    "name": "fai-implementation-plan-generator",
+    "description": "|",
+    "folder": "skills/fai-implementation-plan-generator/",
+    "size": 3161
+  },
+  {
+    "id": "fai-import-iac",
+    "name": "fai-import-iac",
+    "description": "|",
+    "folder": "skills/fai-import-iac/",
+    "size": 3420
+  },
+  {
+    "id": "fai-incident-runbook-create",
+    "name": "fai-incident-runbook-create",
+    "description": "",
+    "folder": "skills/fai-incident-runbook-create/",
+    "size": 3746
+  },
+  {
+    "id": "fai-inference-optimization",
+    "name": "fai-inference-optimization",
+    "description": "|",
+    "folder": "skills/fai-inference-optimization/",
+    "size": 3309
+  },
+  {
+    "id": "fai-java-extract-method",
+    "name": "fai-java-extract-method",
+    "description": "|",
+    "folder": "skills/fai-java-extract-method/",
+    "size": 3278
+  },
+  {
+    "id": "fai-jest-test",
+    "name": "fai-jest-test",
+    "description": "|",
+    "folder": "skills/fai-jest-test/",
+    "size": 2966
+  },
+  {
+    "id": "fai-junit-test",
+    "name": "fai-junit-test",
+    "description": "|",
+    "folder": "skills/fai-junit-test/",
+    "size": 3538
+  },
+  {
+    "id": "fai-key-vault-integrate",
+    "name": "fai-key-vault-integrate",
+    "description": "",
+    "folder": "skills/fai-key-vault-integrate/",
+    "size": 3861
+  },
+  {
+    "id": "fai-langchain-integration",
+    "name": "fai-langchain-integration",
+    "description": "|",
+    "folder": "skills/fai-langchain-integration/",
+    "size": 3322
+  },
+  {
+    "id": "fai-llms-txt-generator",
+    "name": "fai-llms-txt-generator",
+    "description": "|",
+    "folder": "skills/fai-llms-txt-generator/",
+    "size": 3405
+  },
+  {
+    "id": "fai-load-test-ai-endpoint",
+    "name": "fai-load-test-ai-endpoint",
+    "description": "Load test an AI endpoint with k6/Locust for p95 latency and error rates",
+    "folder": "skills/fai-load-test-ai-endpoint/",
+    "size": 10609
+  },
+  {
+    "id": "fai-make-repo-contribution",
+    "name": "fai-make-repo-contribution",
+    "description": "|",
+    "folder": "skills/fai-make-repo-contribution/",
+    "size": 3536
+  },
+  {
+    "id": "fai-managed-identity-setup",
+    "name": "fai-managed-identity-setup",
+    "description": "|",
+    "folder": "skills/fai-managed-identity-setup/",
+    "size": 3087
   },
   {
     "id": "fai-manifest-create",
     "name": "fai-manifest-create",
-    "description": "Create an fai-manifest.json with context, primitives, infrastructure, and guardrails",
+    "description": "|",
     "folder": "skills/fai-manifest-create/",
-    "size": 2434
+    "size": 3471
   },
   {
-    "id": "feature-flag-ai",
-    "name": "feature-flag-ai",
-    "description": "Implement feature flags for AI capabilities with gradual rollout",
-    "folder": "skills/feature-flag-ai/",
-    "size": 2382
+    "id": "fai-mcp-csharp-generator",
+    "name": "fai-mcp-csharp-generator",
+    "description": "Scaffolds a complete C#/.NET MCP server project with ModelContextProtocol NuGet, dependency injection, [McpServerTool] attributes, IHostedService lifecycle, and Azure Managed Identity integration.",
+    "folder": "skills/fai-mcp-csharp-generator/",
+    "size": 3935
   },
   {
-    "id": "frootai-agent-governance",
-    "name": "frootai-agent-governance",
-    "description": "Reviews AI agent implementations for safety, budget controls, and human-in-the-loop patterns.",
-    "folder": "skills/frootai-agent-governance/",
-    "size": 4897
+    "id": "fai-mcp-csharp-scaffold",
+    "name": "fai-mcp-csharp-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-csharp-scaffold/",
+    "size": 2917
   },
   {
-    "id": "frootai-agentic-eval",
-    "name": "frootai-agentic-eval",
-    "description": "Runs evaluator-optimizer pipelines to iteratively improve agent performance.",
-    "folder": "skills/frootai-agentic-eval/",
-    "size": 4813
+    "id": "fai-mcp-go-scaffold",
+    "name": "fai-mcp-go-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-go-scaffold/",
+    "size": 2522
   },
   {
-    "id": "frootai-api-docs-generator",
-    "name": "frootai-api-docs-generator",
-    "description": "Generates API documentation from OpenAPI specs or code annotations with examples and error codes.",
-    "folder": "skills/frootai-api-docs-generator/",
-    "size": 4576
+    "id": "fai-mcp-java-scaffold",
+    "name": "fai-mcp-java-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-java-scaffold/",
+    "size": 3175
   },
   {
-    "id": "frootai-api-endpoint-generator",
-    "name": "frootai-api-endpoint-generator",
-    "description": "Generates REST API endpoints with input validation, error handling, and OpenAPI documentation.",
-    "folder": "skills/frootai-api-endpoint-generator/",
-    "size": 4580
+    "id": "fai-mcp-kotlin-scaffold",
+    "name": "fai-mcp-kotlin-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-kotlin-scaffold/",
+    "size": 3185
   },
   {
-    "id": "frootai-architecture-blueprint",
-    "name": "frootai-architecture-blueprint",
-    "description": "name: frootai-architecture-blueprint",
-    "folder": "skills/frootai-architecture-blueprint/",
-    "size": 4278
+    "id": "fai-mcp-php-scaffold",
+    "name": "fai-mcp-php-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-php-scaffold/",
+    "size": 3253
   },
   {
-    "id": "frootai-architecture-decision-record",
-    "name": "frootai-architecture-decision-record",
-    "description": "Generates Architecture Decision Records (ADRs) with context, decision, alternatives considered, and consequences.",
-    "folder": "skills/frootai-architecture-decision-record/",
-    "size": 4610
+    "id": "fai-mcp-python-generator",
+    "name": "fai-mcp-python-generator",
+    "description": "|",
+    "folder": "skills/fai-mcp-python-generator/",
+    "size": 2922
   },
   {
-    "id": "frootai-aspire-orchestration",
-    "name": "frootai-aspire-orchestration",
-    "description": "Sets up Azure Aspire for multi-container orchestration with service discovery.",
-    "folder": "skills/frootai-aspire-orchestration/",
-    "size": 4369
+    "id": "fai-mcp-python-scaffold",
+    "name": "fai-mcp-python-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-python-scaffold/",
+    "size": 2881
   },
   {
-    "id": "frootai-aspnet-minimal-api",
-    "name": "frootai-aspnet-minimal-api",
-    "description": "Scaffolds an ASP.NET Core Minimal API with DI, health checks, OpenAPI, and Azure integration.",
-    "folder": "skills/frootai-aspnet-minimal-api/",
-    "size": 4560
+    "id": "fai-mcp-ruby-scaffold",
+    "name": "fai-mcp-ruby-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-ruby-scaffold/",
+    "size": 2850
   },
   {
-    "id": "frootai-az-cost-optimize",
-    "name": "frootai-az-cost-optimize",
-    "description": "Analyzes Azure spending and recommends cost optimizations for AI workloads.",
-    "folder": "skills/frootai-az-cost-optimize/",
-    "size": 4326
+    "id": "fai-mcp-rust-scaffold",
+    "name": "fai-mcp-rust-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-rust-scaffold/",
+    "size": 2469
   },
   {
-    "id": "frootai-azure-ai-foundry-setup",
-    "name": "frootai-azure-ai-foundry-setup",
-    "description": "Sets up Azure AI Foundry Hub/Project with RBAC, networking, and connected services.",
-    "folder": "skills/frootai-azure-ai-foundry-setup/",
-    "size": 4468
+    "id": "fai-mcp-swift-scaffold",
+    "name": "fai-mcp-swift-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-swift-scaffold/",
+    "size": 3267
   },
   {
-    "id": "frootai-azure-ai-search-index",
-    "name": "frootai-azure-ai-search-index",
-    "description": "Creates and configures Azure AI Search vector indexes with HNSW and hybrid search.",
-    "folder": "skills/frootai-azure-ai-search-index/",
-    "size": 4603
+    "id": "fai-mcp-typescript-generator",
+    "name": "fai-mcp-typescript-generator",
+    "description": "|",
+    "folder": "skills/fai-mcp-typescript-generator/",
+    "size": 3534
   },
   {
-    "id": "frootai-azure-app-config",
-    "name": "frootai-azure-app-config",
-    "description": "Configures Azure App Configuration with feature flags, key-value settings, and refresh patterns.",
-    "folder": "skills/frootai-azure-app-config/",
+    "id": "fai-mcp-typescript-scaffold",
+    "name": "fai-mcp-typescript-scaffold",
+    "description": "|",
+    "folder": "skills/fai-mcp-typescript-scaffold/",
+    "size": 2944
+  },
+  {
+    "id": "fai-mermaid-generator",
+    "name": "fai-mermaid-generator",
+    "description": "|",
+    "folder": "skills/fai-mermaid-generator/",
+    "size": 3630
+  },
+  {
+    "id": "fai-model-comparison-benchmark",
+    "name": "fai-model-comparison-benchmark",
+    "description": "|",
+    "folder": "skills/fai-model-comparison-benchmark/",
+    "size": 4309
+  },
+  {
+    "id": "fai-model-recommendation",
+    "name": "fai-model-recommendation",
+    "description": "|",
+    "folder": "skills/fai-model-recommendation/",
+    "size": 4095
+  },
+  {
+    "id": "fai-mstest-test",
+    "name": "fai-mstest-test",
+    "description": "|",
+    "folder": "skills/fai-mstest-test/",
+    "size": 2667
+  },
+  {
+    "id": "fai-multi-model-routing",
+    "name": "fai-multi-model-routing",
+    "description": "Implement model routing logic: cheap model for simple, capable for complex tasks",
+    "folder": "skills/fai-multi-model-routing/",
+    "size": 10233
+  },
+  {
+    "id": "fai-multi-stage-docker",
+    "name": "fai-multi-stage-docker",
+    "description": "|",
+    "folder": "skills/fai-multi-stage-docker/",
+    "size": 2818
+  },
+  {
+    "id": "fai-nextjs-scaffold",
+    "name": "fai-nextjs-scaffold",
+    "description": "|",
+    "folder": "skills/fai-nextjs-scaffold/",
+    "size": 3000
+  },
+  {
+    "id": "fai-nunit-test",
+    "name": "fai-nunit-test",
+    "description": "|",
+    "folder": "skills/fai-nunit-test/",
+    "size": 2729
+  },
+  {
+    "id": "fai-observability-dashboard",
+    "name": "fai-observability-dashboard",
+    "description": "Create an observability dashboard with KQL queries for AI system health",
+    "folder": "skills/fai-observability-dashboard/",
+    "size": 10335
+  },
+  {
+    "id": "fai-openapi-to-app",
+    "name": "fai-openapi-to-app",
+    "description": "|",
+    "folder": "skills/fai-openapi-to-app/",
+    "size": 2639
+  },
+  {
+    "id": "fai-pii-detection-setup",
+    "name": "fai-pii-detection-setup",
+    "description": "Set up PII detection and masking with Azure AI Language service",
+    "folder": "skills/fai-pii-detection-setup/",
+    "size": 10440
+  },
+  {
+    "id": "fai-plan-breakdown",
+    "name": "fai-plan-breakdown",
+    "description": "|",
+    "folder": "skills/fai-plan-breakdown/",
+    "size": 2773
+  },
+  {
+    "id": "fai-plantuml-generator",
+    "name": "fai-plantuml-generator",
+    "description": "|",
+    "folder": "skills/fai-plantuml-generator/",
+    "size": 2659
+  },
+  {
+    "id": "fai-play-initializer",
+    "name": "fai-play-initializer",
+    "description": "Scaffolds a complete FAI solution play with DevKit, TuneKit, SpecKit, infrastructure templates, and fai-manifest.json — the full FAI Protocol structure ready for development.",
+    "folder": "skills/fai-play-initializer/",
+    "size": 7670
+  },
+  {
+    "id": "fai-playwright-dotnet-test",
+    "name": "fai-playwright-dotnet-test",
+    "description": "|",
+    "folder": "skills/fai-playwright-dotnet-test/",
+    "size": 3237
+  },
+  {
+    "id": "fai-playwright-python-test",
+    "name": "fai-playwright-python-test",
+    "description": "|",
+    "folder": "skills/fai-playwright-python-test/",
+    "size": 3305
+  },
+  {
+    "id": "fai-playwright-test",
+    "name": "fai-playwright-test",
+    "description": "|",
+    "folder": "skills/fai-playwright-test/",
+    "size": 2730
+  },
+  {
+    "id": "fai-polyglot-test",
+    "name": "fai-polyglot-test",
+    "description": "|",
+    "folder": "skills/fai-polyglot-test/",
+    "size": 3122
+  },
+  {
+    "id": "fai-postgresql-code-review",
+    "name": "fai-postgresql-code-review",
+    "description": "|",
+    "folder": "skills/fai-postgresql-code-review/",
+    "size": 3045
+  },
+  {
+    "id": "fai-postgresql-optimization",
+    "name": "fai-postgresql-optimization",
+    "description": "|",
+    "folder": "skills/fai-postgresql-optimization/",
+    "size": 3421
+  },
+  {
+    "id": "fai-power-apps-scaffold",
+    "name": "fai-power-apps-scaffold",
+    "description": "|",
+    "folder": "skills/fai-power-apps-scaffold/",
+    "size": 3918
+  },
+  {
+    "id": "fai-power-automate-flow",
+    "name": "fai-power-automate-flow",
+    "description": "|",
+    "folder": "skills/fai-power-automate-flow/",
+    "size": 2783
+  },
+  {
+    "id": "fai-power-bi-dashboard",
+    "name": "fai-power-bi-dashboard",
+    "description": "|",
+    "folder": "skills/fai-power-bi-dashboard/",
     "size": 4496
   },
   {
-    "id": "frootai-azure-architecture-review",
-    "name": "frootai-azure-architecture-review",
-    "description": "Conducts Azure Well-Architected Framework reviews with pillar scoring and recommendations.",
-    "folder": "skills/frootai-azure-architecture-review/",
-    "size": 4506
+    "id": "fai-power-bi-report",
+    "name": "fai-power-bi-report",
+    "description": "|",
+    "folder": "skills/fai-power-bi-report/",
+    "size": 3277
   },
   {
-    "id": "frootai-azure-blob-lifecycle",
-    "name": "frootai-azure-blob-lifecycle",
-    "description": "Designs Azure Blob Storage lifecycle management with tiering and retention policies.",
-    "folder": "skills/frootai-azure-blob-lifecycle/",
-    "size": 4464
+    "id": "fai-power-platform-connector",
+    "name": "fai-power-platform-connector",
+    "description": "|",
+    "folder": "skills/fai-power-platform-connector/",
+    "size": 3507
   },
   {
-    "id": "frootai-azure-cognitive-services",
-    "name": "frootai-azure-cognitive-services",
-    "description": "Integrates Azure Cognitive Services — Language, Speech, Vision, and Translator.",
-    "folder": "skills/frootai-azure-cognitive-services/",
-    "size": 4468
+    "id": "fai-powerbi-modeling",
+    "name": "fai-powerbi-modeling",
+    "description": "|",
+    "folder": "skills/fai-powerbi-modeling/",
+    "size": 3225
   },
   {
-    "id": "frootai-azure-container-registry",
-    "name": "frootai-azure-container-registry",
-    "description": "Configures Azure Container Registry with geo-replication, scanning, and Managed Identity access.",
-    "folder": "skills/frootai-azure-container-registry/",
-    "size": 4528
+    "id": "fai-prd-generator",
+    "name": "fai-prd-generator",
+    "description": "|",
+    "folder": "skills/fai-prd-generator/",
+    "size": 2864
   },
   {
-    "id": "frootai-azure-cosmos-modeling",
-    "name": "frootai-azure-cosmos-modeling",
-    "description": "Designs Cosmos DB data models with partition keys, RU estimation, and vector search.",
-    "folder": "skills/frootai-azure-cosmos-modeling/",
-    "size": 4468
+    "id": "fai-premium-frontend-ui",
+    "name": "fai-premium-frontend-ui",
+    "description": "|",
+    "folder": "skills/fai-premium-frontend-ui/",
+    "size": 3670
   },
   {
-    "id": "frootai-azure-data-explorer",
-    "name": "frootai-azure-data-explorer",
-    "description": "Configures Azure Data Explorer for telemetry with KQL queries and dashboards.",
-    "folder": "skills/frootai-azure-data-explorer/",
-    "size": 4432
+    "id": "fai-prompt-builder",
+    "name": "fai-prompt-builder",
+    "description": "|",
+    "folder": "skills/fai-prompt-builder/",
+    "size": 3020
   },
   {
-    "id": "frootai-azure-event-grid-setup",
-    "name": "frootai-azure-event-grid-setup",
-    "description": "Sets up Azure Event Grid for event-driven AI pipeline triggers and routing.",
-    "folder": "skills/frootai-azure-event-grid-setup/",
-    "size": 4436
+    "id": "fai-prompt-version-manage",
+    "name": "fai-prompt-version-manage",
+    "description": "|",
+    "folder": "skills/fai-prompt-version-manage/",
+    "size": 3006
   },
   {
-    "id": "frootai-azure-event-hubs-setup",
-    "name": "frootai-azure-event-hubs-setup",
-    "description": "Configures Azure Event Hubs for real-time streaming AI data ingestion.",
-    "folder": "skills/frootai-azure-event-hubs-setup/",
-    "size": 4416
+    "id": "fai-pytest-coverage",
+    "name": "fai-pytest-coverage",
+    "description": "|",
+    "folder": "skills/fai-pytest-coverage/",
+    "size": 2548
   },
   {
-    "id": "frootai-azure-functions-setup",
-    "name": "frootai-azure-functions-setup",
-    "description": "Creates Azure Functions apps with triggers, bindings, Managed Identity, and monitoring.",
-    "folder": "skills/frootai-azure-functions-setup/",
-    "size": 4480
+    "id": "fai-quality-playbook",
+    "name": "fai-quality-playbook",
+    "description": "|",
+    "folder": "skills/fai-quality-playbook/",
+    "size": 3709
   },
   {
-    "id": "frootai-azure-key-vault-setup",
-    "name": "frootai-azure-key-vault-setup",
-    "description": "Configures Azure Key Vault with RBAC, rotation, CMK, and application integration.",
-    "folder": "skills/frootai-azure-key-vault-setup/",
-    "size": 4456
+    "id": "fai-rag-pipeline-test",
+    "name": "fai-rag-pipeline-test",
+    "description": "Test a RAG pipeline end-to-end with relevance and groundedness metrics",
+    "folder": "skills/fai-rag-pipeline-test/",
+    "size": 11526
   },
   {
-    "id": "frootai-azure-openai-integration",
-    "name": "frootai-azure-openai-integration",
-    "description": "Integrates Azure OpenAI with deployment types, content filtering, and token management.",
-    "folder": "skills/frootai-azure-openai-integration/",
-    "size": 4492
+    "id": "fai-rbac-setup-play",
+    "name": "fai-rbac-setup-play",
+    "description": "Set up RBAC role assignments for a solution play's Azure resources",
+    "folder": "skills/fai-rbac-setup-play/",
+    "size": 9730
   },
   {
-    "id": "frootai-azure-resource-graph",
-    "name": "frootai-azure-resource-graph",
-    "description": "Writes Azure Resource Graph KQL queries for cross-subscription resource analysis.",
-    "folder": "skills/frootai-azure-resource-graph/",
-    "size": 4452
+    "id": "fai-react-component-scaffold",
+    "name": "fai-react-component-scaffold",
+    "description": "|",
+    "folder": "skills/fai-react-component-scaffold/",
+    "size": 3832
   },
   {
-    "id": "frootai-azure-resource-health",
-    "name": "frootai-azure-resource-health",
-    "description": "Diagnoses Azure resource health issues with metrics analysis and remediation steps.",
-    "folder": "skills/frootai-azure-resource-health/",
-    "size": 4464
+    "id": "fai-readme-generator",
+    "name": "fai-readme-generator",
+    "description": "|",
+    "folder": "skills/fai-readme-generator/",
+    "size": 2915
   },
   {
-    "id": "frootai-azure-resource-visualizer",
-    "name": "frootai-azure-resource-visualizer",
-    "description": "Generates visual diagrams of Azure resource topologies and dependencies.",
-    "folder": "skills/frootai-azure-resource-visualizer/",
-    "size": 4436
+    "id": "fai-refactor-complexity",
+    "name": "fai-refactor-complexity",
+    "description": "|",
+    "folder": "skills/fai-refactor-complexity/",
+    "size": 3429
   },
   {
-    "id": "frootai-azure-role-selector",
-    "name": "frootai-azure-role-selector",
-    "description": "Selects appropriate Azure RBAC roles for AI workloads following least privilege.",
-    "folder": "skills/frootai-azure-role-selector/",
-    "size": 4444
+    "id": "fai-refactor-plan",
+    "name": "fai-refactor-plan",
+    "description": "|",
+    "folder": "skills/fai-refactor-plan/",
+    "size": 3543
   },
   {
-    "id": "frootai-azure-service-bus-setup",
-    "name": "frootai-azure-service-bus-setup",
-    "description": "Configures Azure Service Bus with queues, topics, dead-letter, and session-based messaging.",
-    "folder": "skills/frootai-azure-service-bus-setup/",
-    "size": 4504
+    "id": "fai-refactor-skill",
+    "name": "fai-refactor-skill",
+    "description": "|",
+    "folder": "skills/fai-refactor-skill/",
+    "size": 3343
   },
   {
-    "id": "frootai-azure-sql-setup",
-    "name": "frootai-azure-sql-setup",
-    "description": "Configures Azure SQL Database with Hyperscale, geo-replication, and performance tuning.",
-    "folder": "skills/frootai-azure-sql-setup/",
-    "size": 4456
+    "id": "fai-remember",
+    "name": "fai-remember",
+    "description": "|",
+    "folder": "skills/fai-remember/",
+    "size": 3703
   },
   {
-    "id": "frootai-azure-static-web-apps-setup",
-    "name": "frootai-azure-static-web-apps-setup",
-    "description": "Deploys applications to Azure Static Web Apps with API integration and custom domains.",
-    "folder": "skills/frootai-azure-static-web-apps-setup/",
-    "size": 4500
+    "id": "fai-review-and-refactor",
+    "name": "fai-review-and-refactor",
+    "description": "|",
+    "folder": "skills/fai-review-and-refactor/",
+    "size": 3666
   },
   {
-    "id": "frootai-azure-storage-patterns",
-    "name": "frootai-azure-storage-patterns",
-    "description": "Implements cross-service Azure Storage patterns — Blob, Queue, Table, File.",
-    "folder": "skills/frootai-azure-storage-patterns/",
-    "size": 4587
+    "id": "fai-rollout-plan",
+    "name": "fai-rollout-plan",
+    "description": "|",
+    "folder": "skills/fai-rollout-plan/",
+    "size": 3540
   },
   {
-    "id": "frootai-basic-prompt-optimization",
-    "name": "frootai-basic-prompt-optimization",
-    "description": "Applies fundamental prompt engineering optimizations — clarity, specificity, format control.",
-    "folder": "skills/frootai-basic-prompt-optimization/",
-    "size": 4516
+    "id": "fai-scoutqa-test",
+    "name": "fai-scoutqa-test",
+    "description": "|",
+    "folder": "skills/fai-scoutqa-test/",
+    "size": 3246
   },
   {
-    "id": "frootai-bicep-module-scaffold",
-    "name": "frootai-bicep-module-scaffold",
-    "description": "Scaffolds a Bicep module with parameters, outputs, AVM patterns, and deployment test.",
-    "folder": "skills/frootai-bicep-module-scaffold/",
-    "size": 4473
+    "id": "fai-secret-scanning",
+    "name": "fai-secret-scanning",
+    "description": "|",
+    "folder": "skills/fai-secret-scanning/",
+    "size": 2685
   },
   {
-    "id": "frootai-boost-prompt",
-    "name": "frootai-boost-prompt",
-    "description": "Analyzes and improves prompt quality with specificity scoring and recommendation engine.",
-    "folder": "skills/frootai-boost-prompt/",
-    "size": 4440
+    "id": "fai-security-review-skill",
+    "name": "fai-security-review-skill",
+    "description": "|",
+    "folder": "skills/fai-security-review-skill/",
+    "size": 3266
   },
   {
-    "id": "frootai-build-agentic-loops",
-    "name": "frootai-build-agentic-loops",
-    "description": "Implements autonomous agent loops with ReAct pattern, tool calling, and termination conditions.",
-    "folder": "skills/frootai-build-agentic-loops/",
-    "size": 4917
+    "id": "fai-semantic-cache-implement",
+    "name": "fai-semantic-cache-implement",
+    "description": "Implement semantic caching for AI responses with Redis and embedding similarity",
+    "folder": "skills/fai-semantic-cache-implement/",
+    "size": 9896
   },
   {
-    "id": "frootai-build-bicep-module",
-    "name": "frootai-build-bicep-module",
-    "description": "Creates Bicep modules with AVM patterns, parameters, outputs, and deployment tests.",
-    "folder": "skills/frootai-build-bicep-module/",
-    "size": 4453
+    "id": "fai-semantic-kernel-integration",
+    "name": "fai-semantic-kernel-integration",
+    "description": "|",
+    "folder": "skills/fai-semantic-kernel-integration/",
+    "size": 3298
   },
   {
-    "id": "frootai-build-data-lakehouse",
-    "name": "frootai-build-data-lakehouse",
-    "description": "Designs data lakehouse architecture with medallion pattern (bronze/silver/gold).",
-    "folder": "skills/frootai-build-data-lakehouse/",
-    "size": 4445
+    "id": "fai-skill-template",
+    "name": "fai-skill-template",
+    "description": "|",
+    "folder": "skills/fai-skill-template/",
+    "size": 2742
   },
   {
-    "id": "frootai-build-docker-image",
-    "name": "frootai-build-docker-image",
-    "description": "Builds optimized Docker images with multi-stage, non-root, and AI model weight caching.",
-    "folder": "skills/frootai-build-docker-image/",
-    "size": 4466
+    "id": "fai-sla-monitor-setup",
+    "name": "fai-sla-monitor-setup",
+    "description": "Set up SLA monitoring with availability, latency, and quality metrics",
+    "folder": "skills/fai-sla-monitor-setup/",
+    "size": 9593
   },
   {
-    "id": "frootai-build-etl-pipeline",
-    "name": "frootai-build-etl-pipeline",
-    "description": "Creates ETL pipeline designs for AI data ingestion with quality checks and scheduling.",
-    "folder": "skills/frootai-build-etl-pipeline/",
-    "size": 4322
+    "id": "fai-specification-generator",
+    "name": "fai-specification-generator",
+    "description": "|",
+    "folder": "skills/fai-specification-generator/",
+    "size": 2739
   },
   {
-    "id": "frootai-build-genai-rag",
-    "name": "frootai-build-genai-rag",
-    "description": "Builds a complete RAG pipeline with embeddings, vector store, retrieval, and evaluation.",
-    "folder": "skills/frootai-build-genai-rag/",
-    "size": 4608
+    "id": "fai-springboot-kotlin-scaffold",
+    "name": "fai-springboot-kotlin-scaffold",
+    "description": "|",
+    "folder": "skills/fai-springboot-kotlin-scaffold/",
+    "size": 2659
   },
   {
-    "id": "frootai-build-github-workflow",
-    "name": "frootai-build-github-workflow",
-    "description": "Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.",
-    "folder": "skills/frootai-build-github-workflow/",
-    "size": 4358
+    "id": "fai-springboot-scaffold",
+    "name": "fai-springboot-scaffold",
+    "description": "|",
+    "folder": "skills/fai-springboot-scaffold/",
+    "size": 3191
   },
   {
-    "id": "frootai-build-integration-test",
-    "name": "frootai-build-integration-test",
-    "description": "Generates integration tests with real service connections, test containers, and cleanup.",
-    "folder": "skills/frootai-build-integration-test/",
-    "size": 4462
+    "id": "fai-springboot-test",
+    "name": "fai-springboot-test",
+    "description": "|",
+    "folder": "skills/fai-springboot-test/",
+    "size": 3401
   },
   {
-    "id": "frootai-build-kubernetes-manifest",
-    "name": "frootai-build-kubernetes-manifest",
-    "description": "Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.",
-    "folder": "skills/frootai-build-kubernetes-manifest/",
-    "size": 4338
+    "id": "fai-sql-code-review-skill",
+    "name": "fai-sql-code-review-skill",
+    "description": "|",
+    "folder": "skills/fai-sql-code-review-skill/",
+    "size": 3933
   },
   {
-    "id": "frootai-build-llm-evaluator",
-    "name": "frootai-build-llm-evaluator",
-    "description": "Builds custom LLM evaluation metrics for groundedness, coherence, and domain-specific quality.",
-    "folder": "skills/frootai-build-llm-evaluator/",
-    "size": 4919
+    "id": "fai-sql-optimization-skill",
+    "name": "fai-sql-optimization-skill",
+    "description": "|",
+    "folder": "skills/fai-sql-optimization-skill/",
+    "size": 2876
   },
   {
-    "id": "frootai-build-nosql-data-model",
-    "name": "frootai-build-nosql-data-model",
-    "description": "Designs NoSQL data models with access patterns, partition strategy, and consistency levels.",
-    "folder": "skills/frootai-build-nosql-data-model/",
-    "size": 4497
+    "id": "fai-ssl-cert-configure",
+    "name": "fai-ssl-cert-configure",
+    "description": "Configure SSL certificates for custom domains on Azure App Service/AKS",
+    "folder": "skills/fai-ssl-cert-configure/",
+    "size": 9355
   },
   {
-    "id": "frootai-build-prompting-system",
-    "name": "frootai-build-prompting-system",
-    "description": "Builds a multi-turn prompting system with template management and variable injection.",
-    "folder": "skills/frootai-build-prompting-system/",
-    "size": 4468
+    "id": "fai-streaming-response-implement",
+    "name": "fai-streaming-response-implement",
+    "description": "Implement streaming AI responses with Server-Sent Events (SSE)",
+    "folder": "skills/fai-streaming-response-implement/",
+    "size": 9140
   },
   {
-    "id": "frootai-build-semantic-search",
-    "name": "frootai-build-semantic-search",
-    "description": "Builds semantic similarity search with embedding generation and vector index.",
-    "folder": "skills/frootai-build-semantic-search/",
-    "size": 4441
+    "id": "fai-structured-output-enforce",
+    "name": "fai-structured-output-enforce",
+    "description": "Enforce structured JSON output from LLMs with schema validation",
+    "folder": "skills/fai-structured-output-enforce/",
+    "size": 10900
   },
   {
-    "id": "frootai-build-sql-migration",
-    "name": "frootai-build-sql-migration",
-    "description": "Creates database migration scripts with versioning, rollback, and data preservation.",
-    "folder": "skills/frootai-build-sql-migration/",
-    "size": 4318
+    "id": "fai-suggest-agents",
+    "name": "fai-suggest-agents",
+    "description": "|",
+    "folder": "skills/fai-suggest-agents/",
+    "size": 3783
   },
   {
-    "id": "frootai-build-terraform-module",
-    "name": "frootai-build-terraform-module",
-    "description": "Creates Terraform modules with variables, outputs, examples, and testing configuration.",
-    "folder": "skills/frootai-build-terraform-module/",
-    "size": 4342
+    "id": "fai-suggest-instructions",
+    "name": "fai-suggest-instructions",
+    "description": "|",
+    "folder": "skills/fai-suggest-instructions/",
+    "size": 3424
   },
   {
-    "id": "frootai-build-test-harness",
-    "name": "frootai-build-test-harness",
-    "description": "Creates test infrastructure with fixtures, factories, mocks, and test data generators.",
-    "folder": "skills/frootai-build-test-harness/",
+    "id": "fai-suggest-skills",
+    "name": "fai-suggest-skills",
+    "description": "|",
+    "folder": "skills/fai-suggest-skills/",
+    "size": 3829
+  },
+  {
+    "id": "fai-tech-stack-blueprint",
+    "name": "fai-tech-stack-blueprint",
+    "description": "|",
+    "folder": "skills/fai-tech-stack-blueprint/",
+    "size": 4045
+  },
+  {
+    "id": "fai-technical-spike",
+    "name": "fai-technical-spike",
+    "description": "|",
+    "folder": "skills/fai-technical-spike/",
+    "size": 3126
+  },
+  {
+    "id": "fai-terraform-module-scaffold",
+    "name": "fai-terraform-module-scaffold",
+    "description": "|",
+    "folder": "skills/fai-terraform-module-scaffold/",
+    "size": 2869
+  },
+  {
+    "id": "fai-threat-model",
+    "name": "fai-threat-model",
+    "description": "|",
+    "folder": "skills/fai-threat-model/",
+    "size": 5266
+  },
+  {
+    "id": "fai-tldr-prompt",
+    "name": "fai-tldr-prompt",
+    "description": "|",
+    "folder": "skills/fai-tldr-prompt/",
+    "size": 3620
+  },
+  {
+    "id": "fai-token-budget-enforce",
+    "name": "fai-token-budget-enforce",
+    "description": "Enforce token budgets per user/team with tracking and alerting",
+    "folder": "skills/fai-token-budget-enforce/",
+    "size": 10349
+  },
+  {
+    "id": "fai-tune-01-enterprise-rag",
+    "name": "fai-tune-01-enterprise-rag",
+    "description": "|",
+    "folder": "skills/fai-tune-01-enterprise-rag/",
+    "size": 3436
+  },
+  {
+    "id": "fai-tune-02-ai-landing-zone",
+    "name": "fai-tune-02-ai-landing-zone",
+    "description": "|",
+    "folder": "skills/fai-tune-02-ai-landing-zone/",
+    "size": 3474
+  },
+  {
+    "id": "fai-tune-03-deterministic-agent",
+    "name": "fai-tune-03-deterministic-agent",
+    "description": "|",
+    "folder": "skills/fai-tune-03-deterministic-agent/",
+    "size": 3051
+  },
+  {
+    "id": "fai-tune-04-call-center-voice-ai",
+    "name": "fai-tune-04-call-center-voice-ai",
+    "description": "|",
+    "folder": "skills/fai-tune-04-call-center-voice-ai/",
+    "size": 3447
+  },
+  {
+    "id": "fai-tune-05-it-ticket-resolution",
+    "name": "fai-tune-05-it-ticket-resolution",
+    "description": "Tune Play 05 (IT Ticket Resolution) classifier routing, priority scoring, SLA thresholds, and escalation model config.",
+    "folder": "skills/fai-tune-05-it-ticket-resolution/",
+    "size": 5098
+  },
+  {
+    "id": "fai-tune-06-document-intelligence",
+    "name": "fai-tune-06-document-intelligence",
+    "description": "|",
+    "folder": "skills/fai-tune-06-document-intelligence/",
+    "size": 4224
+  },
+  {
+    "id": "fai-tune-07-multi-agent-service",
+    "name": "fai-tune-07-multi-agent-service",
+    "description": "Tune Play 07 (Multi-Agent Service) agent orchestration, handoff rules, model routing, and inter-agent communication config.",
+    "folder": "skills/fai-tune-07-multi-agent-service/",
+    "size": 5090
+  },
+  {
+    "id": "fai-tune-08-copilot-studio-bot",
+    "name": "fai-tune-08-copilot-studio-bot",
+    "description": "Tune Play 08 (Copilot Studio Bot) topic routing, generative answers config, handoff triggers, and channel settings.",
+    "folder": "skills/fai-tune-08-copilot-studio-bot/",
+    "size": 4596
+  },
+  {
+    "id": "fai-tune-09-ai-search-portal",
+    "name": "fai-tune-09-ai-search-portal",
+    "description": "Tune Play 09 (AI Search Portal) semantic ranking, scoring profiles, suggesters, and index schema for optimal relevance.",
+    "folder": "skills/fai-tune-09-ai-search-portal/",
+    "size": 4568
+  },
+  {
+    "id": "fai-tune-10-content-moderation",
+    "name": "fai-tune-10-content-moderation",
+    "description": "Tune Play 10 (Content Moderation) severity thresholds, category blocklists, Prompt Shields config, and review workflows.",
+    "folder": "skills/fai-tune-10-content-moderation/",
     "size": 4438
   },
   {
-    "id": "frootai-build-tokenizer",
-    "name": "frootai-build-tokenizer",
-    "description": "Implements tokenization pipelines for LLM input preparation and token counting.",
-    "folder": "skills/frootai-build-tokenizer/",
-    "size": 4282
+    "id": "fai-tune-11-ai-landing-zone-advanced",
+    "name": "fai-tune-11-ai-landing-zone-advanced",
+    "description": "Tune Play 11 (AI Landing Zone Advanced) hub-spoke topology, private DNS, governance policies, and network segmentation.",
+    "folder": "skills/fai-tune-11-ai-landing-zone-advanced/",
+    "size": 4821
   },
   {
-    "id": "frootai-build-unit-test",
-    "name": "frootai-build-unit-test",
-    "description": "Generates unit tests for any language — detects framework and applies appropriate patterns.",
-    "folder": "skills/frootai-build-unit-test/",
-    "size": 4454
+    "id": "fai-tune-12-model-serving-aks",
+    "name": "fai-tune-12-model-serving-aks",
+    "description": "Tune Play 12 (Model Serving AKS) GPU node pools, vLLM configuration, autoscaling policies, and inference optimization.",
+    "folder": "skills/fai-tune-12-model-serving-aks/",
+    "size": 4616
   },
   {
-    "id": "frootai-build-vector-store",
-    "name": "frootai-build-vector-store",
-    "description": "Sets up and configures a vector database for embedding storage and similarity search.",
-    "folder": "skills/frootai-build-vector-store/",
-    "size": 4318
+    "id": "fai-tune-13-fine-tuning-workflow",
+    "name": "fai-tune-13-fine-tuning-workflow",
+    "description": "Tune Play 13 (Fine-Tuning Workflow) training hyperparameters, dataset validation, LoRA config, and evaluation metrics.",
+    "folder": "skills/fai-tune-13-fine-tuning-workflow/",
+    "size": 5605
   },
   {
-    "id": "frootai-changelog-generator",
-    "name": "frootai-changelog-generator",
-    "description": "Generates changelogs from git history following Keep a Changelog format with semantic versioning.",
-    "folder": "skills/frootai-changelog-generator/",
-    "size": 4441
+    "id": "fai-tune-14-cost-optimized-ai-gateway",
+    "name": "fai-tune-14-cost-optimized-ai-gateway",
+    "description": "Tune Play 14 (Cost-Optimized AI Gateway) model routing rules, token budgets, caching policies, and APIM rate limiting.",
+    "folder": "skills/fai-tune-14-cost-optimized-ai-gateway/",
+    "size": 5265
   },
   {
-    "id": "frootai-cloud-design-patterns",
-    "name": "frootai-cloud-design-patterns",
-    "description": "Applies cloud design patterns — circuit breaker, bulkhead, cache-aside, CQRS, event sourcing.",
-    "folder": "skills/frootai-cloud-design-patterns/",
-    "size": 4441
+    "id": "fai-tune-15-multi-modal-docproc",
+    "name": "fai-tune-15-multi-modal-docproc",
+    "description": "Tune Play 15 multi-modal document processing with OCR, vision model selection, extraction confidence, and fallback routing.",
+    "folder": "skills/fai-tune-15-multi-modal-docproc/",
+    "size": 3182
   },
   {
-    "id": "frootai-code-smell-detector",
-    "name": "frootai-code-smell-detector",
-    "description": "Identifies code smells and anti-patterns with refactoring recommendations.",
-    "folder": "skills/frootai-code-smell-detector/",
-    "size": 4401
+    "id": "fai-tune-16-copilot-teams-extension",
+    "name": "fai-tune-16-copilot-teams-extension",
+    "description": "Tune Play 16 Teams extension behavior with command routing, intent matching, adaptive card payloads, and auth flow.",
+    "folder": "skills/fai-tune-16-copilot-teams-extension/",
+    "size": 3017
   },
   {
-    "id": "frootai-codeql-setup",
-    "name": "frootai-codeql-setup",
-    "description": "Configures CodeQL analysis for security vulnerability detection in CI/CD pipelines.",
-    "folder": "skills/frootai-codeql-setup/",
-    "size": 4409
+    "id": "fai-tune-17-ai-observability",
+    "name": "fai-tune-17-ai-observability",
+    "description": "Tune Play 17 observability settings for traces, semantic metrics, alert thresholds, and log retention policy.",
+    "folder": "skills/fai-tune-17-ai-observability/",
+    "size": 3029
   },
   {
-    "id": "frootai-comment-tutorial",
-    "name": "frootai-comment-tutorial",
-    "description": "Generates educational code comments explaining complex logic for learning and onboarding.",
-    "folder": "skills/frootai-comment-tutorial/",
-    "size": 4397
+    "id": "fai-tune-18-prompt-management",
+    "name": "fai-tune-18-prompt-management",
+    "description": "Tune Play 18 prompt management with version gates, A/B split, rollback policy, and template lint checks.",
+    "folder": "skills/fai-tune-18-prompt-management/",
+    "size": 3086
   },
   {
-    "id": "frootai-component-docs",
-    "name": "frootai-component-docs",
-    "description": "Documents software components with interface contracts, usage examples, and dependency diagrams.",
-    "folder": "skills/frootai-component-docs/",
-    "size": 4346
+    "id": "fai-tune-19-edge-ai-phi4",
+    "name": "fai-tune-19-edge-ai-phi4",
+    "description": "Tune Play 19 edge deployment for Phi-4 with quantization, device constraints, and offline fallback behavior.",
+    "folder": "skills/fai-tune-19-edge-ai-phi4/",
+    "size": 2946
   },
   {
-    "id": "frootai-containerize-aspnet",
-    "name": "frootai-containerize-aspnet",
-    "description": "Containerizes ASP.NET Core applications with multi-stage builds and health probes.",
-    "folder": "skills/frootai-containerize-aspnet/",
-    "size": 4381
+    "id": "fai-tune-20-anomaly-detection",
+    "name": "fai-tune-20-anomaly-detection",
+    "description": "Tune Play 20 anomaly detection with window sizing, seasonality handling, threshold calibration, and alert suppression.",
+    "folder": "skills/fai-tune-20-anomaly-detection/",
+    "size": 2953
   },
   {
-    "id": "frootai-containerize-aspnet-framework",
-    "name": "frootai-containerize-aspnet-framework",
-    "description": "Containerizes legacy ASP.NET Framework applications with Windows containers.",
-    "folder": "skills/frootai-containerize-aspnet-framework/",
-    "size": 4397
+    "id": "fai-tune-21-agentic-rag",
+    "name": "fai-tune-21-agentic-rag",
+    "description": "Tune Play 21 agentic RAG with planner depth, retrieval fan-out, reranker policy, and citation strictness.",
+    "folder": "skills/fai-tune-21-agentic-rag/",
+    "size": 2905
   },
   {
-    "id": "frootai-content-safety-review",
-    "name": "frootai-content-safety-review",
-    "description": "Reviews AI outputs against Azure Content Safety categories with threshold recommendations.",
-    "folder": "skills/frootai-content-safety-review/",
-    "size": 4819
+    "id": "fai-tune-22-multi-agent-swarm",
+    "name": "fai-tune-22-multi-agent-swarm",
+    "description": "Tune Play 22 swarm behavior with role assignment, consensus thresholds, conflict policy, and budget controls.",
+    "folder": "skills/fai-tune-22-multi-agent-swarm/",
+    "size": 2918
   },
   {
-    "id": "frootai-context-map",
-    "name": "frootai-context-map",
-    "description": "Creates domain-driven design context maps showing bounded contexts, relationships, and integration patterns.",
-    "folder": "skills/frootai-context-map/",
-    "size": 4453
+    "id": "fai-tune-23-browser-automation-agent",
+    "name": "fai-tune-23-browser-automation-agent",
+    "description": "Tune Play 23 browser automation with selector strategy, retry policy, anti-flake waits, and safety restrictions.",
+    "folder": "skills/fai-tune-23-browser-automation-agent/",
+    "size": 3096
   },
   {
-    "id": "frootai-contextual-rag",
-    "name": "frootai-contextual-rag",
-    "description": "Builds context-aware RAG with query routing, multi-source retrieval, and result synthesis.",
-    "folder": "skills/frootai-contextual-rag/",
-    "size": 4612
+    "id": "fai-tutorial-generator",
+    "name": "fai-tutorial-generator",
+    "description": "Generate production-ready tutorials with prerequisites, runnable code, verification steps, and troubleshooting paths.",
+    "folder": "skills/fai-tutorial-generator/",
+    "size": 3586
   },
   {
-    "id": "frootai-conventional-commit",
-    "name": "frootai-conventional-commit",
-    "description": "Generates conventional commit messages following the Angular convention for changelogs.",
-    "folder": "skills/frootai-conventional-commit/",
-    "size": 4401
+    "id": "fai-update-avm-bicep",
+    "name": "fai-update-avm-bicep",
+    "description": "",
+    "folder": "skills/fai-update-avm-bicep/",
+    "size": 2817
   },
   {
-    "id": "frootai-copilot-cli-quickstart",
-    "name": "frootai-copilot-cli-quickstart",
-    "description": "Quick start guide for GitHub Copilot CLI setup and common usage patterns.",
-    "folder": "skills/frootai-copilot-cli-quickstart/",
-    "size": 4357
-  },
-  {
-    "id": "frootai-copilot-instructions-generator",
-    "name": "frootai-copilot-instructions-generator",
-    "description": "Generates customized copilot-instructions.md files based on project technology stack and conventions.",
-    "folder": "skills/frootai-copilot-instructions-generator/",
-    "size": 4501
-  },
-  {
-    "id": "frootai-copilot-sdk-integration",
-    "name": "frootai-copilot-sdk-integration",
-    "description": "Integrates Copilot SDK patterns for programmatic AI agent interactions.",
-    "folder": "skills/frootai-copilot-sdk-integration/",
-    "size": 4353
-  },
-  {
-    "id": "frootai-copilot-spaces-setup",
-    "name": "frootai-copilot-spaces-setup",
-    "description": "Configures Copilot Spaces for collaborative AI-assisted development environments.",
-    "folder": "skills/frootai-copilot-spaces-setup/",
-    "size": 4381
-  },
-  {
-    "id": "frootai-copilot-usage-metrics",
-    "name": "frootai-copilot-usage-metrics",
-    "description": "Generates Copilot usage analytics reports — adoption rates, acceptance rates, productivity impact.",
-    "folder": "skills/frootai-copilot-usage-metrics/",
-    "size": 4461
-  },
-  {
-    "id": "frootai-cosmosdb-datamodeling",
-    "name": "frootai-cosmosdb-datamodeling",
-    "description": "Designs Cosmos DB data models for AI workloads with partition key strategy and vector search.",
-    "folder": "skills/frootai-cosmosdb-datamodeling/",
-    "size": 4501
-  },
-  {
-    "id": "frootai-cost-estimator",
-    "name": "frootai-cost-estimator",
-    "description": "name: frootai-cost-estimator",
-    "folder": "skills/frootai-cost-estimator/",
-    "size": 4130
-  },
-  {
-    "id": "frootai-daily-prep",
-    "name": "frootai-daily-prep",
-    "description": "Daily preparation skill — summarizes yesterday, plans today, identifies blockers.",
-    "folder": "skills/frootai-daily-prep/",
-    "size": 4349
-  },
-  {
-    "id": "frootai-database-schema-designer",
-    "name": "frootai-database-schema-designer",
-    "description": "Designs relational database schemas with normalization, indexes, and referential integrity.",
-    "folder": "skills/frootai-database-schema-designer/",
-    "size": 4505
-  },
-  {
-    "id": "frootai-dead-code-removal",
-    "name": "frootai-dead-code-removal",
-    "description": "Identifies and safely removes dead code, unused imports, and unreachable branches.",
-    "folder": "skills/frootai-dead-code-removal/",
-    "size": 4425
-  },
-  {
-    "id": "frootai-deploy-01-enterprise-rag",
-    "name": "frootai-deploy-01-enterprise-rag",
-    "description": "Deploys Play 01-enterprise-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-01-enterprise-rag/",
-    "size": 4847
-  },
-  {
-    "id": "frootai-deploy-02-ai-landing-zone",
-    "name": "frootai-deploy-02-ai-landing-zone",
-    "description": "Deploys Play 02-ai-landing-zone to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-02-ai-landing-zone/",
-    "size": 4855
-  },
-  {
-    "id": "frootai-deploy-03-deterministic-agent",
-    "name": "frootai-deploy-03-deterministic-agent",
-    "description": "Deploys Play 03-deterministic-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-03-deterministic-agent/",
-    "size": 5053
-  },
-  {
-    "id": "frootai-deploy-04-call-center-voice-ai",
-    "name": "frootai-deploy-04-call-center-voice-ai",
-    "description": "Deploys Play 04-call-center-voice-ai to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-04-call-center-voice-ai/",
-    "size": 4895
-  },
-  {
-    "id": "frootai-deploy-05-it-ticket-resolution",
-    "name": "frootai-deploy-05-it-ticket-resolution",
-    "description": "Deploys Play 05-it-ticket-resolution to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-05-it-ticket-resolution/",
-    "size": 4895
-  },
-  {
-    "id": "frootai-deploy-06-document-intelligence",
-    "name": "frootai-deploy-06-document-intelligence",
-    "description": "Deploys Play 06-document-intelligence to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-06-document-intelligence/",
-    "size": 4903
-  },
-  {
-    "id": "frootai-deploy-07-multi-agent-service",
-    "name": "frootai-deploy-07-multi-agent-service",
-    "description": "Deploys Play 07-multi-agent-service to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-07-multi-agent-service/",
-    "size": 5053
-  },
-  {
-    "id": "frootai-deploy-08-copilot-studio-bot",
-    "name": "frootai-deploy-08-copilot-studio-bot",
-    "description": "Deploys Play 08-copilot-studio-bot to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-08-copilot-studio-bot/",
-    "size": 4879
-  },
-  {
-    "id": "frootai-deploy-09-ai-search-portal",
-    "name": "frootai-deploy-09-ai-search-portal",
-    "description": "Deploys Play 09-ai-search-portal to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-09-ai-search-portal/",
-    "size": 4863
-  },
-  {
-    "id": "frootai-deploy-10-content-moderation",
-    "name": "frootai-deploy-10-content-moderation",
-    "description": "Deploys Play 10-content-moderation to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-10-content-moderation/",
-    "size": 4879
-  },
-  {
-    "id": "frootai-deploy-11-ai-landing-zone-advanced",
-    "name": "frootai-deploy-11-ai-landing-zone-advanced",
-    "description": "Deploys Play 11-ai-landing-zone-advanced to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-11-ai-landing-zone-advanced/",
-    "size": 4927
-  },
-  {
-    "id": "frootai-deploy-12-model-serving-aks",
-    "name": "frootai-deploy-12-model-serving-aks",
-    "description": "Deploys Play 12-model-serving-aks to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-12-model-serving-aks/",
-    "size": 4871
-  },
-  {
-    "id": "frootai-deploy-13-fine-tuning-workflow",
-    "name": "frootai-deploy-13-fine-tuning-workflow",
-    "description": "Deploys Play 13-fine-tuning-workflow to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-13-fine-tuning-workflow/",
-    "size": 4895
-  },
-  {
-    "id": "frootai-deploy-14-cost-optimized-ai-gateway",
-    "name": "frootai-deploy-14-cost-optimized-ai-gateway",
-    "description": "Deploys Play 14-cost-optimized-ai-gateway to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-14-cost-optimized-ai-gateway/",
-    "size": 4935
-  },
-  {
-    "id": "frootai-deploy-15-multi-modal-docproc",
-    "name": "frootai-deploy-15-multi-modal-docproc",
-    "description": "Deploys Play 15-multi-modal-docproc to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-15-multi-modal-docproc/",
-    "size": 4887
-  },
-  {
-    "id": "frootai-deploy-16-copilot-teams-extension",
-    "name": "frootai-deploy-16-copilot-teams-extension",
-    "description": "Deploys Play 16-copilot-teams-extension to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-16-copilot-teams-extension/",
-    "size": 4919
-  },
-  {
-    "id": "frootai-deploy-17-ai-observability",
-    "name": "frootai-deploy-17-ai-observability",
-    "description": "Deploys Play 17-ai-observability to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-17-ai-observability/",
-    "size": 4863
-  },
-  {
-    "id": "frootai-deploy-18-prompt-management",
-    "name": "frootai-deploy-18-prompt-management",
-    "description": "Deploys Play 18-prompt-management to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-18-prompt-management/",
-    "size": 4871
-  },
-  {
-    "id": "frootai-deploy-19-edge-ai-phi4",
-    "name": "frootai-deploy-19-edge-ai-phi4",
-    "description": "Deploys Play 19-edge-ai-phi4 to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-19-edge-ai-phi4/",
-    "size": 4831
-  },
-  {
-    "id": "frootai-deploy-20-anomaly-detection",
-    "name": "frootai-deploy-20-anomaly-detection",
-    "description": "Deploys Play 20-anomaly-detection to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-20-anomaly-detection/",
-    "size": 4871
-  },
-  {
-    "id": "frootai-deploy-21-agentic-rag",
-    "name": "frootai-deploy-21-agentic-rag",
-    "description": "Deploys Play 21-agentic-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-21-agentic-rag/",
-    "size": 4989
-  },
-  {
-    "id": "frootai-deploy-22-multi-agent-swarm",
-    "name": "frootai-deploy-22-multi-agent-swarm",
-    "description": "Deploys Play 22-multi-agent-swarm to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-22-multi-agent-swarm/",
-    "size": 5037
-  },
-  {
-    "id": "frootai-deploy-23-browser-automation-agent",
-    "name": "frootai-deploy-23-browser-automation-agent",
-    "description": "Deploys Play 23-browser-automation-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.",
-    "folder": "skills/frootai-deploy-23-browser-automation-agent/",
-    "size": 5093
-  },
-  {
-    "id": "frootai-deploy-preflight",
-    "name": "frootai-deploy-preflight",
-    "description": "Validates Bicep templates, checks Azure resource availability, verifies quota, and runs what-if deployment before any Azure infrastructure changes. A safety gate for all FrootAI play deployments.",
-    "folder": "skills/frootai-deploy-preflight/",
-    "size": 2041
-  },
-  {
-    "id": "frootai-design-accessibility",
-    "name": "frootai-design-accessibility",
-    "description": "Audits and improves accessibility following WCAG 2.1 AA with actionable fixes.",
-    "folder": "skills/frootai-design-accessibility/",
-    "size": 4369
-  },
-  {
-    "id": "frootai-design-animations",
-    "name": "frootai-design-animations",
-    "description": "Creates UI animations with framer-motion, CSS transitions, and interaction design.",
-    "folder": "skills/frootai-design-animations/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-design-data-visualization",
-    "name": "frootai-design-data-visualization",
-    "description": "Designs data visualization components with charts, graphs, and interactive dashboards.",
-    "folder": "skills/frootai-design-data-visualization/",
-    "size": 4489
-  },
-  {
-    "id": "frootai-design-dialog-system",
-    "name": "frootai-design-dialog-system",
-    "description": "Creates modal/dialog systems with focus trapping, keyboard nav, and accessibility.",
-    "folder": "skills/frootai-design-dialog-system/",
-    "size": 4385
-  },
-  {
-    "id": "frootai-design-error-states",
-    "name": "frootai-design-error-states",
-    "description": "Designs error state UX with clear messages, recovery actions, and fallback content.",
-    "folder": "skills/frootai-design-error-states/",
-    "size": 4385
-  },
-  {
-    "id": "frootai-design-forms",
-    "name": "frootai-design-forms",
-    "description": "Designs form experiences with validation UX, error states, and progressive disclosure.",
-    "folder": "skills/frootai-design-forms/",
-    "size": 4369
-  },
-  {
-    "id": "frootai-design-icon-system",
-    "name": "frootai-design-icon-system",
-    "description": "Creates icon systems with SVG sprites, icon components, and size/color tokens.",
-    "folder": "skills/frootai-design-icon-system/",
-    "size": 4361
-  },
-  {
-    "id": "frootai-design-layouts",
-    "name": "frootai-design-layouts",
-    "description": "Creates responsive page layouts with grid systems, breakpoints, and visual hierarchy.",
-    "folder": "skills/frootai-design-layouts/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-design-loading-states",
-    "name": "frootai-design-loading-states",
-    "description": "Designs loading and skeleton states for async operations and streaming AI responses.",
-    "folder": "skills/frootai-design-loading-states/",
-    "size": 4397
-  },
-  {
-    "id": "frootai-design-onboarding",
-    "name": "frootai-design-onboarding",
-    "description": "Designs user onboarding flows with progressive disclosure and contextual help.",
-    "folder": "skills/frootai-design-onboarding/",
-    "size": 4357
-  },
-  {
-    "id": "frootai-design-responsive",
-    "name": "frootai-design-responsive",
-    "description": "Implements responsive design patterns for mobile, tablet, and desktop breakpoints.",
-    "folder": "skills/frootai-design-responsive/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-design-state-management",
-    "name": "frootai-design-state-management",
-    "description": "Designs client-side state management patterns appropriate for the framework.",
-    "folder": "skills/frootai-design-state-management/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-design-system-tokens",
-    "name": "frootai-design-system-tokens",
-    "description": "Creates design token systems for colors, spacing, typography, and shadows.",
-    "folder": "skills/frootai-design-system-tokens/",
-    "size": 4353
-  },
-  {
-    "id": "frootai-design-themes",
-    "name": "frootai-design-themes",
-    "description": "Designs theme systems with CSS custom properties, dark mode, and brand customization.",
-    "folder": "skills/frootai-design-themes/",
-    "size": 4369
-  },
-  {
-    "id": "frootai-design-ui-components",
-    "name": "frootai-design-ui-components",
-    "description": "Designs reusable UI component libraries with props, states, and accessibility.",
-    "folder": "skills/frootai-design-ui-components/",
-    "size": 4369
-  },
-  {
-    "id": "frootai-deterministic-agent-skill",
-    "name": "frootai-deterministic-agent-skill",
-    "description": "Builds deterministic AI agents with grounding, structured output, and evaluation gates.",
-    "folder": "skills/frootai-deterministic-agent-skill/",
-    "size": 4909
-  },
-  {
-    "id": "frootai-documentation-writer",
-    "name": "frootai-documentation-writer",
-    "description": "Generates documentation aligned with the FROOT knowledge framework — module-style docs with duration, audience, table of contents, mermaid diagrams, code examples, and key takeaways sections.",
-    "folder": "skills/frootai-documentation-writer/",
-    "size": 1712
-  },
-  {
-    "id": "frootai-domain-driven-design",
-    "name": "frootai-domain-driven-design",
-    "description": "Applies DDD patterns — aggregates, entities, value objects, repositories, and domain events.",
-    "folder": "skills/frootai-domain-driven-design/",
-    "size": 4433
-  },
-  {
-    "id": "frootai-drawio-generator",
-    "name": "frootai-drawio-generator",
-    "description": "Generates Draw.io architecture diagrams from natural language descriptions.",
-    "folder": "skills/frootai-drawio-generator/",
-    "size": 4341
-  },
-  {
-    "id": "frootai-dynamic-prompt",
-    "name": "frootai-dynamic-prompt",
-    "description": "Creates context-adaptive prompts that adjust based on query complexity and user profile.",
-    "folder": "skills/frootai-dynamic-prompt/",
-    "size": 4448
-  },
-  {
-    "id": "frootai-edge-case-generator",
-    "name": "frootai-edge-case-generator",
-    "description": "Generates edge case and boundary condition test scenarios for comprehensive coverage.",
-    "folder": "skills/frootai-edge-case-generator/",
-    "size": 4393
-  },
-  {
-    "id": "frootai-editorconfig-setup",
-    "name": "frootai-editorconfig-setup",
-    "description": "Generates .editorconfig files for consistent code formatting across editors and languages.",
-    "folder": "skills/frootai-editorconfig-setup/",
-    "size": 4409
-  },
-  {
-    "id": "frootai-epic-breakdown-arch",
-    "name": "frootai-epic-breakdown-arch",
-    "description": "Decomposes epics into implementable stories from an architecture perspective with dependency mapping.",
-    "folder": "skills/frootai-epic-breakdown-arch/",
-    "size": 4457
-  },
-  {
-    "id": "frootai-epic-breakdown-pm",
-    "name": "frootai-epic-breakdown-pm",
-    "description": "Decomposes epics into user stories from a product management perspective with acceptance criteria.",
-    "folder": "skills/frootai-epic-breakdown-pm/",
-    "size": 4437
-  },
-  {
-    "id": "frootai-eval-driven-dev",
-    "name": "frootai-eval-driven-dev",
-    "description": "Implements test-driven AI development — define eval metrics first, then build to pass them.",
-    "folder": "skills/frootai-eval-driven-dev/",
-    "size": 4899
-  },
-  {
-    "id": "frootai-eval-runner",
-    "name": "frootai-eval-runner",
-    "description": "name: frootai-eval-runner",
-    "folder": "skills/frootai-eval-runner/",
-    "size": 4611
-  },
-  {
-    "id": "frootai-evaluate-01-enterprise-rag",
-    "name": "frootai-evaluate-01-enterprise-rag",
-    "description": "Runs quality evaluation for Play 01-enterprise-rag against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-01-enterprise-rag/",
-    "size": 5067
-  },
-  {
-    "id": "frootai-evaluate-02-ai-landing-zone",
-    "name": "frootai-evaluate-02-ai-landing-zone",
-    "description": "Runs quality evaluation for Play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-02-ai-landing-zone/",
-    "size": 5075
-  },
-  {
-    "id": "frootai-evaluate-03-deterministic-agent",
-    "name": "frootai-evaluate-03-deterministic-agent",
-    "description": "Runs quality evaluation for Play 03-deterministic-agent against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-03-deterministic-agent/",
-    "size": 5101
-  },
-  {
-    "id": "frootai-evaluate-04-call-center-voice-ai",
-    "name": "frootai-evaluate-04-call-center-voice-ai",
-    "description": "Runs quality evaluation for Play 04-call-center-voice-ai against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-04-call-center-voice-ai/",
-    "size": 5115
-  },
-  {
-    "id": "frootai-evaluate-05-it-ticket-resolution",
-    "name": "frootai-evaluate-05-it-ticket-resolution",
-    "description": "Runs quality evaluation for Play 05-it-ticket-resolution against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-05-it-ticket-resolution/",
-    "size": 5115
-  },
-  {
-    "id": "frootai-evaluate-06-document-intelligence",
-    "name": "frootai-evaluate-06-document-intelligence",
-    "description": "Runs quality evaluation for Play 06-document-intelligence against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-06-document-intelligence/",
-    "size": 5123
-  },
-  {
-    "id": "frootai-evaluate-07-multi-agent-service",
-    "name": "frootai-evaluate-07-multi-agent-service",
-    "description": "Runs quality evaluation for Play 07-multi-agent-service against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-07-multi-agent-service/",
-    "size": 5101
-  },
-  {
-    "id": "frootai-evaluate-08-copilot-studio-bot",
-    "name": "frootai-evaluate-08-copilot-studio-bot",
-    "description": "Runs quality evaluation for Play 08-copilot-studio-bot against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-08-copilot-studio-bot/",
-    "size": 5099
-  },
-  {
-    "id": "frootai-evaluate-09-ai-search-portal",
-    "name": "frootai-evaluate-09-ai-search-portal",
-    "description": "Runs quality evaluation for Play 09-ai-search-portal against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-09-ai-search-portal/",
-    "size": 5083
-  },
-  {
-    "id": "frootai-evaluate-10-content-moderation",
-    "name": "frootai-evaluate-10-content-moderation",
-    "description": "Runs quality evaluation for Play 10-content-moderation against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-10-content-moderation/",
-    "size": 5099
-  },
-  {
-    "id": "frootai-evaluate-11-ai-landing-zone-advanced",
-    "name": "frootai-evaluate-11-ai-landing-zone-advanced",
-    "description": "Runs quality evaluation for Play 11-ai-landing-zone-advanced against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-11-ai-landing-zone-advanced/",
-    "size": 5147
-  },
-  {
-    "id": "frootai-evaluate-12-model-serving-aks",
-    "name": "frootai-evaluate-12-model-serving-aks",
-    "description": "Runs quality evaluation for Play 12-model-serving-aks against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-12-model-serving-aks/",
-    "size": 5091
-  },
-  {
-    "id": "frootai-evaluate-13-fine-tuning-workflow",
-    "name": "frootai-evaluate-13-fine-tuning-workflow",
-    "description": "Runs quality evaluation for Play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-13-fine-tuning-workflow/",
-    "size": 5115
-  },
-  {
-    "id": "frootai-evaluate-14-cost-optimized-ai-gateway",
-    "name": "frootai-evaluate-14-cost-optimized-ai-gateway",
-    "description": "Runs quality evaluation for Play 14-cost-optimized-ai-gateway against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-14-cost-optimized-ai-gateway/",
-    "size": 5155
-  },
-  {
-    "id": "frootai-evaluate-15-multi-modal-docproc",
-    "name": "frootai-evaluate-15-multi-modal-docproc",
-    "description": "Runs quality evaluation for Play 15-multi-modal-docproc against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-15-multi-modal-docproc/",
-    "size": 5107
-  },
-  {
-    "id": "frootai-evaluate-16-copilot-teams-extension",
-    "name": "frootai-evaluate-16-copilot-teams-extension",
-    "description": "Runs quality evaluation for Play 16-copilot-teams-extension against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-16-copilot-teams-extension/",
-    "size": 5139
-  },
-  {
-    "id": "frootai-evaluate-17-ai-observability",
-    "name": "frootai-evaluate-17-ai-observability",
-    "description": "Runs quality evaluation for Play 17-ai-observability against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-17-ai-observability/",
-    "size": 5083
-  },
-  {
-    "id": "frootai-evaluate-18-prompt-management",
-    "name": "frootai-evaluate-18-prompt-management",
-    "description": "Runs quality evaluation for Play 18-prompt-management against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-18-prompt-management/",
-    "size": 5091
-  },
-  {
-    "id": "frootai-evaluate-19-edge-ai-phi4",
-    "name": "frootai-evaluate-19-edge-ai-phi4",
-    "description": "Runs quality evaluation for Play 19-edge-ai-phi4 against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-19-edge-ai-phi4/",
-    "size": 5051
-  },
-  {
-    "id": "frootai-evaluate-20-anomaly-detection",
-    "name": "frootai-evaluate-20-anomaly-detection",
-    "description": "Runs quality evaluation for Play 20-anomaly-detection against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-20-anomaly-detection/",
-    "size": 5091
-  },
-  {
-    "id": "frootai-evaluate-21-agentic-rag",
-    "name": "frootai-evaluate-21-agentic-rag",
-    "description": "Runs quality evaluation for Play 21-agentic-rag against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-21-agentic-rag/",
-    "size": 5037
-  },
-  {
-    "id": "frootai-evaluate-22-multi-agent-swarm",
-    "name": "frootai-evaluate-22-multi-agent-swarm",
-    "description": "Runs quality evaluation for Play 22-multi-agent-swarm against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-22-multi-agent-swarm/",
-    "size": 5085
-  },
-  {
-    "id": "frootai-evaluate-23-browser-automation-agent",
-    "name": "frootai-evaluate-23-browser-automation-agent",
-    "description": "Runs quality evaluation for Play 23-browser-automation-agent against fai-manifest.json guardrails — groundedness, coherence, safety.",
-    "folder": "skills/frootai-evaluate-23-browser-automation-agent/",
-    "size": 5141
-  },
-  {
-    "id": "frootai-evaluation-framework",
-    "name": "frootai-evaluation-framework",
-    "description": "Sets up an AI evaluation framework with metrics, test sets, and CI/CD integration.",
-    "folder": "skills/frootai-evaluation-framework/",
-    "size": 4875
-  },
-  {
-    "id": "frootai-excalidraw-generator",
-    "name": "frootai-excalidraw-generator",
-    "description": "Generates Excalidraw whiteboard diagrams for informal architecture discussions.",
-    "folder": "skills/frootai-excalidraw-generator/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-fabric-lakehouse",
-    "name": "frootai-fabric-lakehouse",
-    "description": "Designs Microsoft Fabric lakehouse architecture with medallion pattern and notebooks.",
-    "folder": "skills/frootai-fabric-lakehouse/",
-    "size": 4381
-  },
-  {
-    "id": "frootai-fastapi-scaffold",
-    "name": "frootai-fastapi-scaffold",
-    "description": "Scaffolds a FastAPI Python project with Pydantic models, async endpoints, and pytest configuration.",
-    "folder": "skills/frootai-fastapi-scaffold/",
-    "size": 4576
-  },
-  {
-    "id": "frootai-feature-breakdown",
-    "name": "frootai-feature-breakdown",
-    "description": "Breaks down features into atomic implementation tasks with effort estimates and dependency order.",
-    "folder": "skills/frootai-feature-breakdown/",
-    "size": 4433
-  },
-  {
-    "id": "frootai-finalize-agent-prompt",
-    "name": "frootai-finalize-agent-prompt",
-    "description": "Finalizes agent system prompts with structured sections, guardrails, and few-shot examples.",
-    "folder": "skills/frootai-finalize-agent-prompt/",
-    "size": 4909
-  },
-  {
-    "id": "frootai-fine-tune-llm",
-    "name": "frootai-fine-tune-llm",
-    "description": "Guides LLM fine-tuning with data preparation, LoRA config, training, and evaluation.",
-    "folder": "skills/frootai-fine-tune-llm/",
-    "size": 4365
-  },
-  {
-    "id": "frootai-first-ask",
-    "name": "frootai-first-ask",
-    "description": "Context gathering skill — asks clarifying questions before proceeding with complex tasks.",
-    "folder": "skills/frootai-first-ask/",
-    "size": 4377
-  },
-  {
-    "id": "frootai-flowstudio-design",
-    "name": "frootai-flowstudio-design",
-    "description": "Designs Power Automate desktop flows with UI automation and data extraction.",
-    "folder": "skills/frootai-flowstudio-design/",
-    "size": 4349
-  },
-  {
-    "id": "frootai-folder-structure",
-    "name": "frootai-folder-structure",
-    "description": "Designs optimal project folder structure based on framework, team size, and complexity.",
-    "folder": "skills/frootai-folder-structure/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-gdpr-compliance",
-    "name": "frootai-gdpr-compliance",
-    "description": "Validates GDPR compliance in code — data handling, consent, right to deletion, privacy by design.",
-    "folder": "skills/frootai-gdpr-compliance/",
-    "size": 4433
-  },
-  {
-    "id": "frootai-gh-cli",
-    "name": "frootai-gh-cli",
-    "description": "Automates GitHub operations using gh CLI — issues, PRs, releases, and workflows.",
-    "folder": "skills/frootai-gh-cli/",
-    "size": 4329
-  },
-  {
-    "id": "frootai-git-commit-best-practices",
-    "name": "frootai-git-commit-best-practices",
-    "description": "Guides best practices for git commits — atomic changes, descriptive messages, signed commits.",
-    "folder": "skills/frootai-git-commit-best-practices/",
-    "size": 4457
-  },
-  {
-    "id": "frootai-git-flow-branch",
-    "name": "frootai-git-flow-branch",
-    "description": "Creates git branches following GitFlow or trunk-based development conventions.",
-    "folder": "skills/frootai-git-flow-branch/",
-    "size": 4349
-  },
-  {
-    "id": "frootai-github-issue-triage",
-    "name": "frootai-github-issue-triage",
-    "description": "Triages GitHub issues with priority, labels, assignment, and milestone recommendations.",
-    "folder": "skills/frootai-github-issue-triage/",
-    "size": 4401
-  },
-  {
-    "id": "frootai-github-issues",
-    "name": "frootai-github-issues",
-    "description": "Creates well-structured GitHub issues with reproduction steps, expected behavior, and labels.",
-    "folder": "skills/frootai-github-issues/",
-    "size": 4401
-  },
-  {
-    "id": "frootai-github-pr-review",
-    "name": "frootai-github-pr-review",
-    "description": "Reviews GitHub PRs with checklist-based assessment across security, quality, and WAF alignment.",
-    "folder": "skills/frootai-github-pr-review/",
-    "size": 4421
-  },
-  {
-    "id": "frootai-gtm-ai-strategy",
-    "name": "frootai-gtm-ai-strategy",
-    "description": "Develops AI go-to-market strategy with positioning, competitive analysis, and pricing models.",
-    "folder": "skills/frootai-gtm-ai-strategy/",
-    "size": 4409
-  },
-  {
-    "id": "frootai-gtm-developer-ecosystem",
-    "name": "frootai-gtm-developer-ecosystem",
-    "description": "Designs developer ecosystem strategy with SDK, docs, community, and partner programs.",
-    "folder": "skills/frootai-gtm-developer-ecosystem/",
-    "size": 4409
-  },
-  {
-    "id": "frootai-gtm-enterprise-onboarding",
-    "name": "frootai-gtm-enterprise-onboarding",
-    "description": "Designs enterprise customer onboarding workflows for AI platform adoption.",
-    "folder": "skills/frootai-gtm-enterprise-onboarding/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-gtm-enterprise-planning",
-    "name": "frootai-gtm-enterprise-planning",
-    "description": "Creates enterprise account plans for AI solution adoption with stakeholder mapping.",
-    "folder": "skills/frootai-gtm-enterprise-planning/",
-    "size": 4401
-  },
-  {
-    "id": "frootai-gtm-investor-comms",
-    "name": "frootai-gtm-investor-comms",
-    "description": "Prepares board and investor communications with AI initiative updates and ROI metrics.",
-    "folder": "skills/frootai-gtm-investor-comms/",
-    "size": 4393
-  },
-  {
-    "id": "frootai-gtm-launch",
-    "name": "frootai-gtm-launch",
-    "description": "Creates a go-to-market launch plan for AI products with timeline, channels, and metrics.",
-    "folder": "skills/frootai-gtm-launch/",
-    "size": 4369
-  },
-  {
-    "id": "frootai-gtm-operating-cadence",
-    "name": "frootai-gtm-operating-cadence",
-    "description": "Establishes operating cadence for AI product teams with ceremonies and metrics reviews.",
-    "folder": "skills/frootai-gtm-operating-cadence/",
-    "size": 4409
-  },
-  {
-    "id": "frootai-gtm-partnerships",
-    "name": "frootai-gtm-partnerships",
-    "description": "Designs partnership architecture for AI ecosystem collaboration and co-selling.",
-    "folder": "skills/frootai-gtm-partnerships/",
-    "size": 4357
-  },
-  {
-    "id": "frootai-gtm-positioning",
-    "name": "frootai-gtm-positioning",
-    "description": "Creates product positioning statements with messaging framework and competitive differentiation.",
-    "folder": "skills/frootai-gtm-positioning/",
-    "size": 4421
-  },
-  {
-    "id": "frootai-gtm-product-led-growth",
-    "name": "frootai-gtm-product-led-growth",
-    "description": "Designs product-led growth strategy for AI tools with activation, retention, and expansion metrics.",
-    "folder": "skills/frootai-gtm-product-led-growth/",
-    "size": 4461
-  },
-  {
-    "id": "frootai-guardrails-policy",
-    "name": "frootai-guardrails-policy",
-    "description": "Creates content policy guardrails for AI applications with blocked categories and severity thresholds.",
-    "folder": "skills/frootai-guardrails-policy/",
-    "size": 4453
-  },
-  {
-    "id": "frootai-human-in-the-loop",
-    "name": "frootai-human-in-the-loop",
-    "description": "Designs human-in-the-loop workflows for AI with escalation criteria and approval gates.",
-    "folder": "skills/frootai-human-in-the-loop/",
-    "size": 4393
-  },
-  {
-    "id": "frootai-implementation-plan-generator",
-    "name": "frootai-implementation-plan-generator",
-    "description": "Creates structured implementation plans with phases, tasks, dependencies, and verification steps.",
-    "folder": "skills/frootai-implementation-plan-generator/",
-    "size": 4481
-  },
-  {
-    "id": "frootai-import-iac",
-    "name": "frootai-import-iac",
-    "description": "Imports existing Azure resources into Bicep/Terraform Infrastructure as Code.",
-    "folder": "skills/frootai-import-iac/",
-    "size": 4325
-  },
-  {
-    "id": "frootai-inference-optimization",
-    "name": "frootai-inference-optimization",
-    "description": "Optimizes model inference with quantization, batching, caching, and serving framework selection.",
-    "folder": "skills/frootai-inference-optimization/",
-    "size": 4449
-  },
-  {
-    "id": "frootai-java-extract-method",
-    "name": "frootai-java-extract-method",
-    "description": "Applies Extract Method refactoring in Java with proper error handling and testing.",
-    "folder": "skills/frootai-java-extract-method/",
-    "size": 4381
-  },
-  {
-    "id": "frootai-jest-test",
-    "name": "frootai-jest-test",
-    "description": "Generates Jest/Vitest test suites for TypeScript/JavaScript with mocking and snapshots.",
-    "folder": "skills/frootai-jest-test/",
-    "size": 4406
-  },
-  {
-    "id": "frootai-junit-test",
-    "name": "frootai-junit-test",
-    "description": "Generates JUnit 5 test suites for Java with @Test, @ParameterizedTest, Mockito.",
-    "folder": "skills/frootai-junit-test/",
-    "size": 4378
-  },
-  {
-    "id": "frootai-langchain-integration",
-    "name": "frootai-langchain-integration",
-    "description": "Integrates LangChain with Azure OpenAI, vector stores, and retrieval patterns.",
-    "folder": "skills/frootai-langchain-integration/",
-    "size": 4373
-  },
-  {
-    "id": "frootai-llms-txt-generator",
-    "name": "frootai-llms-txt-generator",
-    "description": "Creates llms.txt files for AI-readable project documentation following the llms.txt specification.",
-    "folder": "skills/frootai-llms-txt-generator/",
-    "size": 4441
-  },
-  {
-    "id": "frootai-make-repo-contribution",
-    "name": "frootai-make-repo-contribution",
-    "description": "Guides making first contribution to a FrootAI repository following CONTRIBUTING.md.",
-    "folder": "skills/frootai-make-repo-contribution/",
-    "size": 4397
-  },
-  {
-    "id": "frootai-mcp-csharp-generator",
-    "name": "frootai-mcp-csharp-generator",
-    "description": "Scaffolds a complete C#/.NET MCP server project with ModelContextProtocol NuGet, dependency injection, [McpServerTool] attributes, IHostedService lifecycle, and Azure Managed Identity integration.",
-    "folder": "skills/frootai-mcp-csharp-generator/",
-    "size": 1579
-  },
-  {
-    "id": "frootai-mcp-csharp-scaffold",
-    "name": "frootai-mcp-csharp-scaffold",
-    "description": "Scaffolds a complete csharp MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-csharp-scaffold/",
-    "size": 4651
-  },
-  {
-    "id": "frootai-mcp-go-scaffold",
-    "name": "frootai-mcp-go-scaffold",
-    "description": "Scaffolds a complete go MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-go-scaffold/",
-    "size": 4619
-  },
-  {
-    "id": "frootai-mcp-java-scaffold",
-    "name": "frootai-mcp-java-scaffold",
-    "description": "Scaffolds a complete java MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-java-scaffold/",
-    "size": 4635
-  },
-  {
-    "id": "frootai-mcp-kotlin-scaffold",
-    "name": "frootai-mcp-kotlin-scaffold",
-    "description": "Scaffolds a complete kotlin MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-kotlin-scaffold/",
-    "size": 4651
-  },
-  {
-    "id": "frootai-mcp-php-scaffold",
-    "name": "frootai-mcp-php-scaffold",
-    "description": "Scaffolds a complete php MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-php-scaffold/",
-    "size": 4627
-  },
-  {
-    "id": "frootai-mcp-python-generator",
-    "name": "frootai-mcp-python-generator",
-    "description": "name: frootai-mcp-python-generator",
-    "folder": "skills/frootai-mcp-python-generator/",
-    "size": 4247
-  },
-  {
-    "id": "frootai-mcp-python-scaffold",
-    "name": "frootai-mcp-python-scaffold",
-    "description": "Scaffolds a complete python MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-python-scaffold/",
-    "size": 4651
-  },
-  {
-    "id": "frootai-mcp-ruby-scaffold",
-    "name": "frootai-mcp-ruby-scaffold",
-    "description": "Scaffolds a complete ruby MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-ruby-scaffold/",
-    "size": 4635
-  },
-  {
-    "id": "frootai-mcp-rust-scaffold",
-    "name": "frootai-mcp-rust-scaffold",
-    "description": "Scaffolds a complete rust MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-rust-scaffold/",
-    "size": 4635
-  },
-  {
-    "id": "frootai-mcp-swift-scaffold",
-    "name": "frootai-mcp-swift-scaffold",
-    "description": "Scaffolds a complete swift MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-swift-scaffold/",
-    "size": 4643
-  },
-  {
-    "id": "frootai-mcp-typescript-generator",
-    "name": "frootai-mcp-typescript-generator",
-    "description": "name: frootai-mcp-typescript-generator",
-    "folder": "skills/frootai-mcp-typescript-generator/",
-    "size": 4279
-  },
-  {
-    "id": "frootai-mcp-typescript-scaffold",
-    "name": "frootai-mcp-typescript-scaffold",
-    "description": "Scaffolds a complete typescript MCP server project with FrootAI patterns, tool definitions, resource handlers, and deployment configuration.",
-    "folder": "skills/frootai-mcp-typescript-scaffold/",
-    "size": 4683
-  },
-  {
-    "id": "frootai-mermaid-generator",
-    "name": "frootai-mermaid-generator",
-    "description": "Generates Mermaid diagrams (flowcharts, sequence, Gantt) from natural language.",
-    "folder": "skills/frootai-mermaid-generator/",
-    "size": 4361
-  },
-  {
-    "id": "frootai-model-recommendation",
-    "name": "frootai-model-recommendation",
-    "description": "Recommends optimal AI model based on task type, latency needs, cost budget, and quality requirements.",
-    "folder": "skills/frootai-model-recommendation/",
-    "size": 4461
-  },
-  {
-    "id": "frootai-mstest-test",
-    "name": "frootai-mstest-test",
-    "description": "Generates MSTest test suites for .NET projects with TestClass, TestMethod patterns.",
-    "folder": "skills/frootai-mstest-test/",
-    "size": 4398
-  },
-  {
-    "id": "frootai-multi-stage-docker",
-    "name": "frootai-multi-stage-docker",
-    "description": "Generates optimized multi-stage Dockerfiles with minimal runtime images.",
-    "folder": "skills/frootai-multi-stage-docker/",
-    "size": 4406
-  },
-  {
-    "id": "frootai-nextjs-scaffold",
-    "name": "frootai-nextjs-scaffold",
-    "description": "Scaffolds a Next.js 16 project with App Router, Tailwind, TypeScript, and static export.",
-    "folder": "skills/frootai-nextjs-scaffold/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-nunit-test",
-    "name": "frootai-nunit-test",
-    "description": "Generates NUnit test suites for .NET projects with TestFixture, Assert patterns.",
-    "folder": "skills/frootai-nunit-test/",
-    "size": 4382
-  },
-  {
-    "id": "frootai-openapi-to-app",
-    "name": "frootai-openapi-to-app",
-    "description": "Generates application code from OpenAPI specifications — routes, models, validation, and test stubs.",
-    "folder": "skills/frootai-openapi-to-app/",
-    "size": 4580
-  },
-  {
-    "id": "frootai-plan-breakdown",
-    "name": "frootai-plan-breakdown",
-    "description": "Decomposes high-level plans into actionable phases with milestones, deliverables, and risk assessment.",
-    "folder": "skills/frootai-plan-breakdown/",
-    "size": 4441
-  },
-  {
-    "id": "frootai-plantuml-generator",
-    "name": "frootai-plantuml-generator",
-    "description": "Generates PlantUML sequence and class diagrams from code or descriptions.",
-    "folder": "skills/frootai-plantuml-generator/",
-    "size": 4341
-  },
-  {
-    "id": "frootai-play-initializer",
-    "name": "frootai-play-initializer",
-    "description": "Scaffolds a complete FrootAI solution play with DevKit, TuneKit, SpecKit, infrastructure templates, and fai-manifest.json — the full FAI Protocol structure ready for development.",
-    "folder": "skills/frootai-play-initializer/",
-    "size": 3900
-  },
-  {
-    "id": "frootai-playwright-dotnet-test",
-    "name": "frootai-playwright-dotnet-test",
-    "description": "Generates Playwright tests in C#/.NET with MSTest or NUnit integration.",
-    "folder": "skills/frootai-playwright-dotnet-test/",
-    "size": 4394
-  },
-  {
-    "id": "frootai-playwright-python-test",
-    "name": "frootai-playwright-python-test",
-    "description": "Generates Playwright tests in Python with async patterns and pytest integration.",
-    "folder": "skills/frootai-playwright-python-test/",
-    "size": 4430
-  },
-  {
-    "id": "frootai-playwright-test",
-    "name": "frootai-playwright-test",
-    "description": "Generates Playwright E2E tests with role-based locators, page objects, and visual regression.",
-    "folder": "skills/frootai-playwright-test/",
-    "size": 4454
-  },
-  {
-    "id": "frootai-polyglot-test",
-    "name": "frootai-polyglot-test",
-    "description": "Generates tests across Python, TypeScript, C#, Java — detects language and applies appropriate framework.",
-    "folder": "skills/frootai-polyglot-test/",
-    "size": 4502
-  },
-  {
-    "id": "frootai-postgresql-code-review",
-    "name": "frootai-postgresql-code-review",
-    "description": "Reviews PostgreSQL code for performance, security, extension usage, and connection management.",
-    "folder": "skills/frootai-postgresql-code-review/",
-    "size": 4493
-  },
-  {
-    "id": "frootai-postgresql-optimization",
-    "name": "frootai-postgresql-optimization",
-    "description": "Optimizes PostgreSQL queries and configurations including pgvector for RAG workloads.",
-    "folder": "skills/frootai-postgresql-optimization/",
-    "size": 4409
-  },
-  {
-    "id": "frootai-power-apps-scaffold",
-    "name": "frootai-power-apps-scaffold",
-    "description": "Scaffolds Power Apps Canvas app with component library, data sources, and navigation.",
-    "folder": "skills/frootai-power-apps-scaffold/",
-    "size": 4393
-  },
-  {
-    "id": "frootai-power-automate-flow",
-    "name": "frootai-power-automate-flow",
-    "description": "Creates Power Automate flows with triggers, actions, error handling, and approval gates.",
-    "folder": "skills/frootai-power-automate-flow/",
-    "size": 4405
-  },
-  {
-    "id": "frootai-power-bi-dashboard",
-    "name": "frootai-power-bi-dashboard",
-    "description": "Designs Power BI dashboards with KPIs, drill-through, and real-time streaming.",
-    "folder": "skills/frootai-power-bi-dashboard/",
-    "size": 4361
-  },
-  {
-    "id": "frootai-power-bi-report",
-    "name": "frootai-power-bi-report",
-    "description": "Creates Power BI reports with DAX measures, data modeling, and performance optimization.",
-    "folder": "skills/frootai-power-bi-report/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-power-platform-connector",
-    "name": "frootai-power-platform-connector",
-    "description": "Builds custom Power Platform connectors from OpenAPI specs with authentication.",
-    "folder": "skills/frootai-power-platform-connector/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-powerbi-modeling",
-    "name": "frootai-powerbi-modeling",
-    "description": "Designs Power BI data models with star schema, relationships, and calculation groups.",
-    "folder": "skills/frootai-powerbi-modeling/",
-    "size": 4381
-  },
-  {
-    "id": "frootai-prd-generator",
-    "name": "frootai-prd-generator",
-    "description": "Generates Product Requirements Documents with user needs, success metrics, constraints, and AI-specific requirements.",
-    "folder": "skills/frootai-prd-generator/",
-    "size": 4497
-  },
-  {
-    "id": "frootai-premium-frontend-ui",
-    "name": "frootai-premium-frontend-ui",
-    "description": "Generates premium UI components with animations, glassmorphism, and dark mode support.",
-    "folder": "skills/frootai-premium-frontend-ui/",
-    "size": 4397
-  },
-  {
-    "id": "frootai-prompt-builder",
-    "name": "frootai-prompt-builder",
-    "description": "Builds prompts using the persona-context-task-format template with optimization suggestions.",
-    "folder": "skills/frootai-prompt-builder/",
-    "size": 4464
-  },
-  {
-    "id": "frootai-pytest-coverage",
-    "name": "frootai-pytest-coverage",
-    "description": "Generates pytest test suites with fixtures, parametrize, mocks, and coverage configuration.",
-    "folder": "skills/frootai-pytest-coverage/",
-    "size": 4589
-  },
-  {
-    "id": "frootai-quality-playbook",
-    "name": "frootai-quality-playbook",
-    "description": "Generates a quality playbook with testing strategy, coverage targets, and CI/CD integration.",
-    "folder": "skills/frootai-quality-playbook/",
-    "size": 4342
-  },
-  {
-    "id": "frootai-react-component-scaffold",
-    "name": "frootai-react-component-scaffold",
-    "description": "Scaffolds React components with TypeScript, Storybook stories, and test files.",
-    "folder": "skills/frootai-react-component-scaffold/",
-    "size": 4385
-  },
-  {
-    "id": "frootai-readme-generator",
-    "name": "frootai-readme-generator",
-    "description": "Generates comprehensive README.md files with badges, installation, usage, architecture, and contributing sections.",
-    "folder": "skills/frootai-readme-generator/",
-    "size": 4497
-  },
-  {
-    "id": "frootai-refactor-complexity",
-    "name": "frootai-refactor-complexity",
-    "description": "Reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting.",
-    "folder": "skills/frootai-refactor-complexity/",
-    "size": 4445
-  },
-  {
-    "id": "frootai-refactor-plan",
-    "name": "frootai-refactor-plan",
-    "description": "Creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy.",
-    "folder": "skills/frootai-refactor-plan/",
-    "size": 4401
-  },
-  {
-    "id": "frootai-refactor-skill",
-    "name": "frootai-refactor-skill",
-    "description": "Refactors code to improve readability, maintainability, and testability while preserving behavior.",
-    "folder": "skills/frootai-refactor-skill/",
-    "size": 4425
-  },
-  {
-    "id": "frootai-remember",
-    "name": "frootai-remember",
-    "description": "Persistent memory skill — saves and retrieves project context across AI sessions.",
-    "folder": "skills/frootai-remember/",
-    "size": 4341
-  },
-  {
-    "id": "frootai-review-and-refactor",
-    "name": "frootai-review-and-refactor",
-    "description": "Combined code review + refactor — identifies issues and applies fixes in one pass.",
-    "folder": "skills/frootai-review-and-refactor/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-rollout-plan",
-    "name": "frootai-rollout-plan",
-    "description": "name: frootai-rollout-plan",
-    "folder": "skills/frootai-rollout-plan/",
-    "size": 4129
-  },
-  {
-    "id": "frootai-scoutqa-test",
-    "name": "frootai-scoutqa-test",
-    "description": "Generates AI-powered test suggestions based on code changes and coverage gaps.",
-    "folder": "skills/frootai-scoutqa-test/",
-    "size": 4382
-  },
-  {
-    "id": "frootai-secret-scanning",
-    "name": "frootai-secret-scanning",
-    "description": "Scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens.",
-    "folder": "skills/frootai-secret-scanning/",
-    "size": 4389
-  },
-  {
-    "id": "frootai-security-review-skill",
-    "name": "frootai-security-review-skill",
-    "description": "Conducts security review following OWASP Top 10 + LLM Top 10 with severity ratings.",
-    "folder": "skills/frootai-security-review-skill/",
-    "size": 4779
-  },
-  {
-    "id": "frootai-semantic-kernel-integration",
-    "name": "frootai-semantic-kernel-integration",
-    "description": "Integrates Semantic Kernel with Azure OpenAI, plugins, memory stores, and agent framework.",
-    "folder": "skills/frootai-semantic-kernel-integration/",
-    "size": 4445
-  },
-  {
-    "id": "frootai-skill-template",
-    "name": "frootai-skill-template",
-    "description": "Generates a SKILL.md template with frontmatter, sections, template variables, and verification steps.",
-    "folder": "skills/frootai-skill-template/",
-    "size": 4437
-  },
-  {
-    "id": "frootai-specification-generator",
-    "name": "frootai-specification-generator",
-    "description": "name: frootai-specification-generator",
-    "folder": "skills/frootai-specification-generator/",
-    "size": 4217
-  },
-  {
-    "id": "frootai-springboot-kotlin-scaffold",
-    "name": "frootai-springboot-kotlin-scaffold",
-    "description": "Scaffolds a Spring Boot Kotlin project with coroutines, data classes, and Gradle config.",
-    "folder": "skills/frootai-springboot-kotlin-scaffold/",
-    "size": 4433
-  },
-  {
-    "id": "frootai-springboot-scaffold",
-    "name": "frootai-springboot-scaffold",
-    "description": "Scaffolds a Spring Boot Java project with DI, profiles, health checks, and test configuration.",
-    "folder": "skills/frootai-springboot-scaffold/",
-    "size": 4429
-  },
-  {
-    "id": "frootai-springboot-test",
-    "name": "frootai-springboot-test",
-    "description": "Generates Spring Boot integration tests with @SpringBootTest, MockMvc, and Testcontainers.",
-    "folder": "skills/frootai-springboot-test/",
-    "size": 4442
-  },
-  {
-    "id": "frootai-sql-code-review-skill",
-    "name": "frootai-sql-code-review-skill",
-    "description": "Reviews SQL code for performance, security (injection), and best practices.",
-    "folder": "skills/frootai-sql-code-review-skill/",
-    "size": 4413
-  },
-  {
-    "id": "frootai-sql-optimization-skill",
-    "name": "frootai-sql-optimization-skill",
-    "description": "Optimizes SQL queries with execution plan analysis, index recommendations, and rewrite suggestions.",
-    "folder": "skills/frootai-sql-optimization-skill/",
-    "size": 4461
-  },
-  {
-    "id": "frootai-suggest-agents",
-    "name": "frootai-suggest-agents",
-    "description": "Discovers and recommends relevant FrootAI agents based on user task description.",
-    "folder": "skills/frootai-suggest-agents/",
-    "size": 4837
-  },
-  {
-    "id": "frootai-suggest-instructions",
-    "name": "frootai-suggest-instructions",
-    "description": "Discovers and recommends relevant FrootAI instructions based on file type and project context.",
-    "folder": "skills/frootai-suggest-instructions/",
-    "size": 4433
-  },
-  {
-    "id": "frootai-suggest-skills",
-    "name": "frootai-suggest-skills",
-    "description": "Discovers and recommends relevant FrootAI skills based on user goal description.",
-    "folder": "skills/frootai-suggest-skills/",
-    "size": 4353
-  },
-  {
-    "id": "frootai-tech-stack-blueprint",
-    "name": "frootai-tech-stack-blueprint",
-    "description": "Generates technology stack documentation with component diagram, decision rationale, and alternatives.",
-    "folder": "skills/frootai-tech-stack-blueprint/",
-    "size": 4465
-  },
-  {
-    "id": "frootai-technical-spike",
-    "name": "frootai-technical-spike",
-    "description": "Conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation.",
-    "folder": "skills/frootai-technical-spike/",
-    "size": 4477
-  },
-  {
-    "id": "frootai-terraform-module-scaffold",
-    "name": "frootai-terraform-module-scaffold",
-    "description": "Scaffolds a Terraform module with variables, outputs, examples, and Terratest configuration.",
-    "folder": "skills/frootai-terraform-module-scaffold/",
-    "size": 4445
-  },
-  {
-    "id": "frootai-threat-model",
-    "name": "frootai-threat-model",
-    "description": "Creates threat models with STRIDE methodology, attack trees, and mitigation recommendations.",
-    "folder": "skills/frootai-threat-model/",
-    "size": 4393
-  },
-  {
-    "id": "frootai-tldr-prompt",
-    "name": "frootai-tldr-prompt",
-    "description": "Summarizes long conversations into concise action items and decisions.",
-    "folder": "skills/frootai-tldr-prompt/",
-    "size": 4364
-  },
-  {
-    "id": "frootai-tune-01-enterprise-rag",
-    "name": "frootai-tune-01-enterprise-rag",
-    "description": "Tunes configuration for Play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-01-enterprise-rag/",
-    "size": 4776
-  },
-  {
-    "id": "frootai-tune-02-ai-landing-zone",
-    "name": "frootai-tune-02-ai-landing-zone",
-    "description": "Tunes configuration for Play 02-ai-landing-zone — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-02-ai-landing-zone/",
-    "size": 4565
-  },
-  {
-    "id": "frootai-tune-03-deterministic-agent",
-    "name": "frootai-tune-03-deterministic-agent",
-    "description": "Tunes configuration for Play 03-deterministic-agent — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-03-deterministic-agent/",
-    "size": 5081
-  },
-  {
-    "id": "frootai-tune-04-call-center-voice-ai",
-    "name": "frootai-tune-04-call-center-voice-ai",
-    "description": "Tunes configuration for Play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-04-call-center-voice-ai/",
-    "size": 4605
-  },
-  {
-    "id": "frootai-tune-05-it-ticket-resolution",
-    "name": "frootai-tune-05-it-ticket-resolution",
-    "description": "Tunes configuration for Play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-05-it-ticket-resolution/",
-    "size": 4605
-  },
-  {
-    "id": "frootai-tune-06-document-intelligence",
-    "name": "frootai-tune-06-document-intelligence",
-    "description": "Tunes configuration for Play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-06-document-intelligence/",
-    "size": 4613
-  },
-  {
-    "id": "frootai-tune-07-multi-agent-service",
-    "name": "frootai-tune-07-multi-agent-service",
-    "description": "Tunes configuration for Play 07-multi-agent-service — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-07-multi-agent-service/",
-    "size": 5081
-  },
-  {
-    "id": "frootai-tune-08-copilot-studio-bot",
-    "name": "frootai-tune-08-copilot-studio-bot",
-    "description": "Tunes configuration for Play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-08-copilot-studio-bot/",
-    "size": 4589
-  },
-  {
-    "id": "frootai-tune-09-ai-search-portal",
-    "name": "frootai-tune-09-ai-search-portal",
-    "description": "Tunes configuration for Play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-09-ai-search-portal/",
-    "size": 4716
-  },
-  {
-    "id": "frootai-tune-10-content-moderation",
-    "name": "frootai-tune-10-content-moderation",
-    "description": "Tunes configuration for Play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-10-content-moderation/",
-    "size": 4648
-  },
-  {
-    "id": "frootai-tune-11-ai-landing-zone-advanced",
-    "name": "frootai-tune-11-ai-landing-zone-advanced",
-    "description": "Tunes configuration for Play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-11-ai-landing-zone-advanced/",
-    "size": 4637
-  },
-  {
-    "id": "frootai-tune-12-model-serving-aks",
-    "name": "frootai-tune-12-model-serving-aks",
-    "description": "Tunes configuration for Play 12-model-serving-aks — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-12-model-serving-aks/",
-    "size": 4581
-  },
-  {
-    "id": "frootai-tune-13-fine-tuning-workflow",
-    "name": "frootai-tune-13-fine-tuning-workflow",
-    "description": "Tunes configuration for Play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-13-fine-tuning-workflow/",
-    "size": 4674
-  },
-  {
-    "id": "frootai-tune-14-cost-optimized-ai-gateway",
-    "name": "frootai-tune-14-cost-optimized-ai-gateway",
-    "description": "Tunes configuration for Play 14-cost-optimized-ai-gateway — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-14-cost-optimized-ai-gateway/",
-    "size": 4630
-  },
-  {
-    "id": "frootai-tune-15-multi-modal-docproc",
-    "name": "frootai-tune-15-multi-modal-docproc",
-    "description": "Tunes configuration for Play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-15-multi-modal-docproc/",
-    "size": 4597
-  },
-  {
-    "id": "frootai-tune-16-copilot-teams-extension",
-    "name": "frootai-tune-16-copilot-teams-extension",
-    "description": "Tunes configuration for Play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-16-copilot-teams-extension/",
-    "size": 4629
-  },
-  {
-    "id": "frootai-tune-17-ai-observability",
-    "name": "frootai-tune-17-ai-observability",
-    "description": "Tunes configuration for Play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-17-ai-observability/",
-    "size": 4573
-  },
-  {
-    "id": "frootai-tune-18-prompt-management",
-    "name": "frootai-tune-18-prompt-management",
-    "description": "Tunes configuration for Play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-18-prompt-management/",
-    "size": 4644
-  },
-  {
-    "id": "frootai-tune-19-edge-ai-phi4",
-    "name": "frootai-tune-19-edge-ai-phi4",
-    "description": "Tunes configuration for Play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-19-edge-ai-phi4/",
-    "size": 4541
-  },
-  {
-    "id": "frootai-tune-20-anomaly-detection",
-    "name": "frootai-tune-20-anomaly-detection",
-    "description": "Tunes configuration for Play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-20-anomaly-detection/",
-    "size": 4581
-  },
-  {
-    "id": "frootai-tune-21-agentic-rag",
-    "name": "frootai-tune-21-agentic-rag",
-    "description": "Tunes configuration for Play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-21-agentic-rag/",
-    "size": 5017
-  },
-  {
-    "id": "frootai-tune-22-multi-agent-swarm",
-    "name": "frootai-tune-22-multi-agent-swarm",
-    "description": "Tunes configuration for Play 22-multi-agent-swarm — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-22-multi-agent-swarm/",
-    "size": 5065
-  },
-  {
-    "id": "frootai-tune-23-browser-automation-agent",
-    "name": "frootai-tune-23-browser-automation-agent",
-    "description": "Tunes configuration for Play 23-browser-automation-agent — model selection, token budgets, guardrail thresholds, cost optimization.",
-    "folder": "skills/frootai-tune-23-browser-automation-agent/",
-    "size": 5121
-  },
-  {
-    "id": "frootai-tutorial-generator",
-    "name": "frootai-tutorial-generator",
-    "description": "Creates step-by-step tutorials with code examples, screenshots, and verification steps.",
-    "folder": "skills/frootai-tutorial-generator/",
-    "size": 4397
-  },
-  {
-    "id": "frootai-update-avm-bicep",
-    "name": "frootai-update-avm-bicep",
-    "description": "Updates Azure Verified Module references in Bicep templates to latest versions.",
-    "folder": "skills/frootai-update-avm-bicep/",
-    "size": 4429
-  },
-  {
-    "id": "frootai-web-coder",
-    "name": "frootai-web-coder",
-    "description": "Generates web pages and components from natural language descriptions with responsive design.",
-    "folder": "skills/frootai-web-coder/",
-    "size": 4437
-  },
-  {
-    "id": "frootai-webapp-testing",
-    "name": "frootai-webapp-testing",
-    "description": "Generates web application test suites covering unit, integration, E2E, and accessibility.",
-    "folder": "skills/frootai-webapp-testing/",
-    "size": 4434
-  },
-  {
-    "id": "frootai-what-context-needed",
-    "name": "frootai-what-context-needed",
-    "description": "Analyzes a task and identifies what context the AI needs to produce high-quality output.",
-    "folder": "skills/frootai-what-context-needed/",
-    "size": 4405
-  },
-  {
-    "id": "frootai-xunit-test",
-    "name": "frootai-xunit-test",
-    "description": "Generates xUnit test suites with Fact/Theory, FluentAssertions, and WebApplicationFactory.",
-    "folder": "skills/frootai-xunit-test/",
-    "size": 4422
-  },
-  {
-    "id": "github-actions-ai-pipeline",
-    "name": "github-actions-ai-pipeline",
-    "description": "Create a GitHub Actions CI/CD pipeline with evaluation gates for AI apps",
-    "folder": "skills/github-actions-ai-pipeline/",
-    "size": 2431
-  },
-  {
-    "id": "health-check-implement",
-    "name": "health-check-implement",
-    "description": "Implement comprehensive health check endpoints for all AI service dependencies",
-    "folder": "skills/health-check-implement/",
-    "size": 2431
-  },
-  {
-    "id": "incident-runbook-create",
-    "name": "incident-runbook-create",
-    "description": "Create an incident response runbook for AI system failures",
-    "folder": "skills/incident-runbook-create/",
-    "size": 2394
-  },
-  {
-    "id": "key-vault-integrate",
-    "name": "key-vault-integrate",
-    "description": "Integrate Azure Key Vault for secret management with Managed Identity",
-    "folder": "skills/key-vault-integrate/",
-    "size": 2404
-  },
-  {
-    "id": "load-test-ai-endpoint",
-    "name": "load-test-ai-endpoint",
-    "description": "Load test an AI endpoint with k6/Locust for p95 latency and error rates",
-    "folder": "skills/load-test-ai-endpoint/",
-    "size": 2414
-  },
-  {
-    "id": "managed-identity-setup",
-    "name": "managed-identity-setup",
-    "description": "Set up Managed Identity with RBAC role assignments for Azure services",
-    "folder": "skills/managed-identity-setup/",
-    "size": 2413
-  },
-  {
-    "id": "model-comparison-benchmark",
-    "name": "model-comparison-benchmark",
-    "description": "Benchmark multiple AI models on cost, latency, quality for a specific task",
-    "folder": "skills/model-comparison-benchmark/",
-    "size": 2435
-  },
-  {
-    "id": "multi-model-routing",
-    "name": "multi-model-routing",
-    "description": "Implement model routing logic: cheap model for simple, capable for complex tasks",
-    "folder": "skills/multi-model-routing/",
-    "size": 2426
-  },
-  {
-    "id": "observability-dashboard",
-    "name": "observability-dashboard",
-    "description": "Create an observability dashboard with KQL queries for AI system health",
-    "folder": "skills/observability-dashboard/",
-    "size": 2420
-  },
-  {
-    "id": "pii-detection-setup",
-    "name": "pii-detection-setup",
-    "description": "Set up PII detection and masking with Azure AI Language service",
-    "folder": "skills/pii-detection-setup/",
-    "size": 2392
-  },
-  {
-    "id": "prompt-version-manage",
-    "name": "prompt-version-manage",
-    "description": "Version control prompts with A/B testing, rollback, and performance tracking",
-    "folder": "skills/prompt-version-manage/",
-    "size": 2424
-  },
-  {
-    "id": "rag-pipeline-test",
-    "name": "rag-pipeline-test",
-    "description": "Test a RAG pipeline end-to-end with relevance and groundedness metrics",
-    "folder": "skills/rag-pipeline-test/",
-    "size": 2400
-  },
-  {
-    "id": "rbac-setup-play",
-    "name": "rbac-setup-play",
-    "description": "Set up RBAC role assignments for a solution play's Azure resources",
-    "folder": "skills/rbac-setup-play/",
-    "size": 2386
-  },
-  {
-    "id": "semantic-cache-implement",
-    "name": "semantic-cache-implement",
-    "description": "Implement semantic caching for AI responses with Redis and embedding similarity",
-    "folder": "skills/semantic-cache-implement/",
-    "size": 2439
-  },
-  {
-    "id": "sla-monitor-setup",
-    "name": "sla-monitor-setup",
-    "description": "Set up SLA monitoring with availability, latency, and quality metrics",
-    "folder": "skills/sla-monitor-setup/",
-    "size": 2398
-  },
-  {
-    "id": "ssl-cert-configure",
-    "name": "ssl-cert-configure",
-    "description": "Configure SSL certificates for custom domains on Azure App Service/AKS",
-    "folder": "skills/ssl-cert-configure/",
-    "size": 2403
-  },
-  {
-    "id": "streaming-response-implement",
-    "name": "streaming-response-implement",
-    "description": "Implement streaming AI responses with Server-Sent Events (SSE)",
-    "folder": "skills/streaming-response-implement/",
-    "size": 2417
-  },
-  {
-    "id": "structured-output-enforce",
-    "name": "structured-output-enforce",
-    "description": "Enforce structured JSON output from LLMs with schema validation",
-    "folder": "skills/structured-output-enforce/",
-    "size": 2410
-  },
-  {
-    "id": "token-budget-enforce",
-    "name": "token-budget-enforce",
-    "description": "Enforce token budgets per user/team with tracking and alerting",
-    "folder": "skills/token-budget-enforce/",
-    "size": 2393
-  },
-  {
-    "id": "vector-index-create",
-    "name": "vector-index-create",
+    "id": "fai-vector-index-create",
+    "name": "fai-vector-index-create",
     "description": "Create and populate a vector search index in Azure AI Search or Cosmos DB",
-    "folder": "skills/vector-index-create/",
-    "size": 2412
+    "folder": "skills/fai-vector-index-create/",
+    "size": 9874
   },
   {
-    "id": "webhook-ai-event",
-    "name": "webhook-ai-event",
+    "id": "fai-web-coder",
+    "name": "fai-web-coder",
+    "description": "",
+    "folder": "skills/fai-web-coder/",
+    "size": 2630
+  },
+  {
+    "id": "fai-webapp-testing",
+    "name": "fai-webapp-testing",
+    "description": "",
+    "folder": "skills/fai-webapp-testing/",
+    "size": 3857
+  },
+  {
+    "id": "fai-webhook-ai-event",
+    "name": "fai-webhook-ai-event",
     "description": "Set up webhooks for AI system events: evaluation results, safety alerts, cost alerts",
-    "folder": "skills/webhook-ai-event/",
-    "size": 2425
+    "folder": "skills/fai-webhook-ai-event/",
+    "size": 8271
+  },
+  {
+    "id": "fai-what-context-needed",
+    "name": "fai-what-context-needed",
+    "description": "",
+    "folder": "skills/fai-what-context-needed/",
+    "size": 4014
+  },
+  {
+    "id": "fai-xunit-test",
+    "name": "fai-xunit-test",
+    "description": "",
+    "folder": "skills/fai-xunit-test/",
+    "size": 4175
   }
 ]

@@ -1,156 +1,124 @@
 ---
 name: fai-github-pr-review
-description: 'Reviews GitHub PRs with checklist-based assessment across security, quality, and WAF alignment.'
+description: |
+  Define pull request review practices with quality gates, review checklists,
+  security checks, and merge discipline. Use when standardizing code review
+  across teams or configuring branch protection.
 ---
 
-# Fai Github Pr Review
+# Pull Request Review Practices
 
-Reviews GitHub PRs with checklist-based assessment across security, quality, and WAF alignment.
+Standardize code review with quality gates, checklists, and merge policies.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for reviews github prs with checklist-based assessment across security, quality, and waf alignment.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up PR review conventions for a team
+- Configuring branch protection rules
+- Creating review checklists for AI code
+- Automating PR quality checks in CI
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## PR Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+## Description
+<!-- What does this PR do? -->
 
-## Steps
+## Type
+- [ ] Feature
+- [ ] Bug fix
+- [ ] Refactor
+- [ ] Documentation
+- [ ] Infrastructure
 
-### Step 1: Validate Prerequisites
+## Checklist
+- [ ] Tests added/updated
+- [ ] Documentation updated
+- [ ] No secrets or PII in code
+- [ ] Error handling covers failure paths
+- [ ] Backward compatible (or migration documented)
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## AI-Specific Checks (if applicable)
+- [ ] Prompt changes evaluated against test set
+- [ ] Token budget impact assessed
+- [ ] Guardrail thresholds validated
+- [ ] No hardcoded model versions (use config)
 ```
 
-### Step 2: Load Configuration
+## Automated Review Checks
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```yaml
+name: PR Quality
+on: [pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ruff check . --output-format=github
+      - run: pytest --tb=short
+      - name: Check for secrets
+        run: |
+          pip install detect-secrets
+          detect-secrets scan --all-files --exclude-files '\.lock$' \
+            | python -c "import sys,json; r=json.load(sys.stdin); sys.exit(1 if r['results'] else 0)"
 ```
 
-### Step 3: Execute Core Logic
+## Review Guidelines
 
-Perform the primary operation: reviews github prs with checklist-based assessment across security, quality, and waf alignment..
+| Category | Check | Severity |
+|----------|-------|----------|
+| Security | No hardcoded secrets | Blocking |
+| Security | Input validation on all endpoints | Blocking |
+| Quality | Tests cover happy + error paths | Required |
+| Quality | No TODO without issue link | Warning |
+| AI | Prompt changes have eval results | Required |
+| AI | Model version in config, not code | Required |
+| Style | Follows project conventions | Advisory |
 
-### Step 4: Validate Results
+## Merge Policies
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-github-pr-review
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-github-pr-review/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Policy | Setting |
+|--------|---------|
+| Require approvals | 1 reviewer minimum |
+| Require CI pass | All status checks green |
+| Squash merge | Default (clean history) |
+| Delete branch | Auto-delete after merge |
+| Conversation resolution | All comments resolved |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| PRs merged without review | No branch protection | Enable required reviews |
+| Large PRs (>500 lines) | No size guidance | Set PR size limit, encourage stacking |
+| Slow review turnaround | No review SLA | Set 24h review target |
+| Review comments ignored | No resolution requirement | Enable conversation resolution |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-review-and-refactor` — Combined review + fix workflow

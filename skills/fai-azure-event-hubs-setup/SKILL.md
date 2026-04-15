@@ -1,161 +1,135 @@
 ---
 name: fai-azure-event-hubs-setup
-description: 'Configures Azure Event Hubs for real-time streaming AI data ingestion.'
+description: |
+  Configure Azure Event Hubs with partition tuning, capture to storage, checkpointing,
+  and consumer group management. Use when building high-throughput streaming pipelines
+  for AI telemetry, real-time analytics, or event processing.
 ---
 
-# Fai Azure Event Hubs Setup
+# Azure Event Hubs Setup
 
-Configures Azure Event Hubs for real-time streaming AI data ingestion.
+Configure Event Hubs for high-throughput streaming with partitions, capture, and consumer groups.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure event hubs for real-time streaming ai data ingestion.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Ingesting high-volume telemetry from AI applications
+- Building real-time analytics pipelines with streaming data
+- Implementing event sourcing patterns
+- Connecting to Apache Kafka-compatible workloads
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: configures azure event hubs for real-time streaming ai data ingestion..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-event-hubs-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-event-hubs-setup/"]
+```bicep
+resource namespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
+  name: namespaceName
+  location: location
+  sku: { name: 'Standard', tier: 'Standard', capacity: 2 }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    publicNetworkAccess: 'Disabled'
+    minimumTlsVersion: '1.2'
   }
 }
-```
 
-### Via Agent Invocation
+resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
+  name: 'ai-telemetry'
+  parent: namespace
+  properties: {
+    partitionCount: 8
+    messageRetentionInDays: 7
+    captureDescription: {
+      enabled: true
+      encoding: 'Avro'
+      intervalInSeconds: 300
+      sizeLimitInBytes: 314572800  // 300 MB
+      destination: {
+        name: 'EventHubArchive.AzureBlockBlob'
+        properties: {
+          storageAccountResourceId: storageAccount.id
+          blobContainer: 'event-capture'
+          archiveNameFormat: '{Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}'
+        }
+      }
+    }
+  }
+}
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = {
+  name: 'analytics-processor'
+  parent: eventHub
 }
 ```
 
-## Monitoring
+## Python Producer
 
-Track skill execution metrics:
+```python
+from azure.eventhub import EventHubProducerClient, EventData
+from azure.identity import DefaultAzureCredential
+import json
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+producer = EventHubProducerClient(
+    fully_qualified_namespace="evh-prod.servicebus.windows.net",
+    eventhub_name="ai-telemetry",
+    credential=DefaultAzureCredential(),
+)
+
+async with producer:
+    batch = await producer.create_batch()
+    batch.add(EventData(json.dumps({
+        "model": "gpt-4o", "tokens": 1500,
+        "latency_ms": 800, "timestamp": "2026-04-15T10:30:00Z"
+    })))
+    await producer.send_batch(batch)
+```
+
+## Python Consumer with Checkpointing
+
+```python
+from azure.eventhub import EventHubConsumerClient
+from azure.eventhub.extensions.checkpointstoreblob import BlobCheckpointStore
+from azure.identity import DefaultAzureCredential
+
+checkpoint_store = BlobCheckpointStore(
+    blob_account_url="https://storage.blob.core.windows.net",
+    container_name="checkpoints",
+    credential=DefaultAzureCredential(),
+)
+
+consumer = EventHubConsumerClient(
+    fully_qualified_namespace="evh-prod.servicebus.windows.net",
+    eventhub_name="ai-telemetry",
+    consumer_group="analytics-processor",
+    credential=DefaultAzureCredential(),
+    checkpoint_store=checkpoint_store,
+)
+
+async def on_event(partition_context, event):
+    data = json.loads(event.body_as_str())
+    process_telemetry(data)
+    await partition_context.update_checkpoint(event)
+
+async with consumer:
+    await consumer.receive(on_event=on_event, starting_position="-1")
+```
+
+## Partition Sizing Guide
+
+| Throughput | Partitions | Notes |
+|-----------|-----------|-------|
+| < 1 MB/s | 2 | Minimum for HA |
+| 1-10 MB/s | 4-8 | Standard workloads |
+| 10-50 MB/s | 16-32 | High throughput |
+| > 50 MB/s | 32+ or Premium | Consider Dedicated tier |
+
+**Important:** Partition count cannot be changed after creation on Standard tier.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Consumer lag growing | Partitions too few or slow processing | Increase partitions (requires recreate) or optimize consumer |
+| Capture files missing | Capture interval not elapsed | Wait for interval or reduce intervalInSeconds |
+| Duplicate events | Missing checkpoint after processing | Always checkpoint after successful processing |
+| Throttling (429) | Throughput units exceeded | Scale up TU or switch to Premium/Dedicated |

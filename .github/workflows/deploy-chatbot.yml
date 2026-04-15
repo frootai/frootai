@@ -10,15 +10,20 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: deploy-chatbot-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       HAS_AZURE_SECRET: ${{ secrets.AZURE_CHATBOT_PUBLISH_PROFILE }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
 
@@ -34,7 +39,7 @@ jobs:
 
       - name: Deploy to Azure App Service
         if: env.HAS_AZURE_SECRET != ''
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@2fdd5c3ebb4b4b416744f0eafaec3ae24b4d0920 # v3.0.2
         with:
           app-name: frootai-chatbot-api
           package: deploy.zip
@@ -43,3 +48,12 @@ jobs:
       - name: Skip deploy (no secret configured)
         if: env.HAS_AZURE_SECRET == ''
         run: echo "⚠️ Skipping Azure deploy — AZURE_CHATBOT_PUBLISH_PROFILE secret not configured. Add it in repo Settings → Secrets."
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Chatbot Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| App | frootai-chatbot-api |" >> $GITHUB_STEP_SUMMARY
+          echo "| Status | ${{ job.status }} |" >> $GITHUB_STEP_SUMMARY

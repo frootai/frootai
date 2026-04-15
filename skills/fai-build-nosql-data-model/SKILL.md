@@ -1,161 +1,101 @@
 ---
 name: fai-build-nosql-data-model
-description: 'Designs NoSQL data models with access patterns, partition strategy, and consistency levels.'
+description: |
+  Design NoSQL data models with partition strategies, access patterns, denormalization,
+  and consistency tradeoffs. Use when modeling data for Cosmos DB, DynamoDB, or MongoDB.
 ---
 
-# Fai Build Nosql Data Model
+# NoSQL Data Modeling
 
-Designs NoSQL data models with access patterns, partition strategy, and consistency levels.
+Design document-store schemas optimized for query patterns and partition efficiency.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs nosql data models with access patterns, partition strategy, and consistency levels.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Designing Cosmos DB containers for AI application data
+- Modeling chat history, user profiles, or session state
+- Migrating from relational to document model
+- Optimizing for read-heavy or write-heavy patterns
 
-**Category:** Data Processing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Modeling Principles
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Principle | Relational | NoSQL |
+|-----------|-----------|-------|
+| Schema | Normalized tables | Denormalized documents |
+| Joins | SQL JOINs | Embed related data |
+| Partition | N/A | Partition key = query filter |
+| Consistency | Strong (ACID) | Tunable |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs nosql data models with access patterns, partition strategy, and consistency levels..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 27**
-- **Play 47**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-nosql-data-model
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Single-Table Design
 
 ```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-nosql-data-model/"]
-  }
-}
+{"pk": "USER#u123", "sk": "PROFILE", "name": "Alice", "email": "alice@org.com"}
+{"pk": "USER#u123", "sk": "SESSION#2026-04-15", "model": "gpt-4o", "tokens": 4500}
 ```
 
-### Via Agent Invocation
+## Cosmos DB Query
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+container.query_items(
+    query="SELECT * FROM c WHERE c.userId = @uid ORDER BY c.timestamp DESC",
+    parameters=[{"name": "@uid", "value": "user-123"}],
+    partition_key="user-123",
+)
+```
 
-## Configuration Reference
+## Partition Key Selection
+
+| Access Pattern | Good Key | Why |
+|---------------|----------|-----|
+| User data | userId | Scoped queries |
+| Chat sessions | sessionId | Co-locates messages |
+| Multi-tenant | tenantId | Natural isolation |
+| IoT | deviceId | High cardinality |
+| **Avoid** | status, country | Hot partitions |
+
+## Denormalization
 
 ```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+{"id": "order-456", "userId": "u123",
+  "items": [{"name": "Widget", "price": 29.99, "qty": 2}],
+  "total": 59.98, "customerName": "Alice"}
 ```
 
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+**Why embed?** One read vs three JOINs. **Tradeoff:** Name changes need propagation.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Hot partitions (429s) | Low-cardinality key | Choose high-cardinality key |
+| High RU cost | Cross-partition queries | Add partition key to WHERE |
+| Stale embedded data | No propagation | Use change feed |
+| Large documents | Unbounded arrays | Cap array size |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Data Processing category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Always use parameterized queries | Prevent SQL injection |
+| Index columns used in WHERE/JOIN | Query performance |
+| Use EXPLAIN ANALYZE for slow queries | Evidence-based optimization |
+| Test migrations with rollback | Safe schema evolution |
+| Monitor query performance | Catch regressions early |
+| Least-privilege database access | Security best practice |
+
+## Database Quality Checklist
+
+- [ ] All queries use parameterized inputs
+- [ ] Indexes exist for all filter/join columns
+- [ ] Migrations have rollback scripts
+- [ ] Connection uses Managed Identity
+- [ ] Query performance baselined
+- [ ] Backup and recovery tested
+
+## Related Skills
+
+- `fai-sql-optimization-skill` — Query performance tuning
+- `fai-sql-code-review-skill` — SQL code review
+- `fai-database-schema-designer` — Schema design
+- `fai-build-sql-migration` — Safe migration patterns

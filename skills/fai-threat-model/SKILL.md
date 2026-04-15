@@ -1,156 +1,113 @@
 ---
 name: fai-threat-model
-description: 'Creates threat models with STRIDE methodology, attack trees, and mitigation recommendations.'
+description: |
+  Conduct threat modeling for AI applications with STRIDE analysis, trust
+  boundaries, attack surface mapping, and mitigation priorities. Use when
+  assessing security risks before production deployment.
 ---
 
-# Fai Threat Model
+# AI Threat Modeling
 
-Creates threat models with STRIDE methodology, attack trees, and mitigation recommendations.
+Model threats for AI applications with STRIDE and trust boundary analysis.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates threat models with stride methodology, attack trees, and mitigation recommendations.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Before deploying an AI application to production
+- Assessing new features that change the attack surface
+- Compliance reviews requiring threat documentation
+- Training teams on AI-specific threat patterns
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## STRIDE for AI Applications
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Threat | AI Example | Mitigation |
+|--------|-----------|-----------|
+| **S**poofing | Fake user identity to access AI | OAuth2/MI auth, no anonymous access |
+| **T**ampering | Modify training data or prompts | Input validation, prompt integrity |
+| **R**epudiation | Deny AI-generated actions | Audit logging, immutable trails |
+| **I**nformation Disclosure | PII leaked via LLM output | PII filtering, output validation |
+| **D**enial of Service | Token exhaustion attack | Rate limiting, token budgets |
+| **E**levation of Privilege | Prompt injection to bypass controls | Input sanitization, guardrails |
 
-## Steps
+## Trust Boundary Diagram
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+┌─────────────────────────────────────────────┐
+│ UNTRUSTED: Internet                         │
+│  [User Browser] ──HTTPS──→ [WAF/CDN]       │
+└────────────────────────────┬────────────────┘
+                             │
+┌────────────────────────────▼────────────────┐
+│ DMZ: API Gateway (APIM)                     │
+│  - Rate limiting                            │
+│  - Auth validation                          │
+│  - Input sanitization                       │
+└────────────────────────────┬────────────────┘
+                             │ MI Auth
+┌────────────────────────────▼────────────────┐
+│ TRUSTED: Application VNet                   │
+│  [API] → [Azure OpenAI] (Private Endpoint)  │
+│  [API] → [AI Search] (Private Endpoint)     │
+│  [API] → [Cosmos DB] (Private Endpoint)     │
+│  [API] → [Key Vault] (Private Endpoint)     │
+└─────────────────────────────────────────────┘
 ```
 
-### Step 2: Load Configuration
+## AI-Specific Threats
 
-Read settings from the FAI manifest and TuneKit config files.
+| Threat | Description | Mitigation |
+|--------|------------|-----------|
+| Prompt injection | User manipulates system behavior | Input sanitization, system prompt protection |
+| Data exfiltration | LLM reveals training data | Content filtering, output validation |
+| Model abuse | Excessive API calls for non-intended use | Rate limiting, usage monitoring |
+| Supply chain | Compromised model or package | Pin versions, verify checksums |
+| Jailbreak | Bypassing safety guardrails | Multi-layer content safety, red teaming |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+## Threat Assessment Template
+
+```markdown
+| # | Threat | Category | Likelihood | Impact | Risk | Mitigation | Status |
+|---|--------|----------|-----------|--------|------|-----------|--------|
+| 1 | Prompt injection | Elevation | High | High | Critical | Input sanitization + guardrails | In progress |
+| 2 | PII in responses | Info Disc. | Medium | High | High | Output filtering | Done |
+| 3 | Token exhaustion | DoS | Medium | Medium | Medium | Rate limiting | Done |
+| 4 | Model version drift | Tampering | Low | Medium | Low | Pin model version | Planned |
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates threat models with stride methodology, attack trees, and mitigation recommendations..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-threat-model
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-threat-model/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Threats missed | No systematic approach | Use STRIDE for each component |
+| Risk overestimated | No likelihood assessment | Rate likelihood AND impact separately |
+| Model incomplete | Missing trust boundaries | Draw boundary diagram FIRST |
+| Mitigations not implemented | No tracking | Add status column to threat register |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Defense in depth | Multiple layers, not single point |
+| Least privilege always | Minimize blast radius |
+| Audit log everything | Evidence for compliance and debugging |
+| Automate scanning in CI | Catch issues before merge |
+| Rotate credentials regularly | Reduce exposure window |
+| Test security controls | Verify they actually work |
+
+## Security Review Checklist
+
+- [ ] No hardcoded secrets or credentials
+- [ ] Managed Identity used for all Azure services
+- [ ] Private endpoints for data-plane access
+- [ ] Input validation on all user-facing endpoints
+- [ ] Output filtering for PII and sensitive data
+- [ ] Rate limiting configured
+- [ ] Audit logging enabled
+
+## Related Skills
+
+- `fai-security-review-skill` — OWASP LLM Top 10 review
+- `fai-secret-scanning` — Pre-commit secret detection
+- `fai-threat-model` — STRIDE threat analysis
+- `fai-guardrails-policy` — AI safety guardrails

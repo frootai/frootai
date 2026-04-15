@@ -1,156 +1,108 @@
 ---
 name: fai-tech-stack-blueprint
-description: 'Generates technology stack documentation with component diagram, decision rationale, and alternatives.'
+description: |
+  Design technology stack blueprints with component selection, tradeoff analysis,
+  integration patterns, and upgrade paths. Use when selecting technologies for
+  new AI projects or evaluating stack changes.
 ---
 
-# Fai Tech Stack Blueprint
+# Tech Stack Blueprint
 
-Generates technology stack documentation with component diagram, decision rationale, and alternatives.
+Select and document technology stacks with tradeoff analysis.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates technology stack documentation with component diagram, decision rationale, and alternatives.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Starting a new AI project — choosing technologies
+- Evaluating alternatives for a specific component
+- Documenting stack decisions for the team
+- Planning technology upgrades or migrations
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## AI Application Stack Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+## Stack Blueprint — [Project Name]
 
-## Steps
+### Frontend
+| Component | Choice | Alternative | Why |
+|-----------|--------|------------|-----|
+| Framework | Next.js 15 | Astro | SSR + API routes, React ecosystem |
+| Styling | Tailwind CSS | CSS Modules | Utility-first, rapid prototyping |
+| State | React hooks | Zustand | Built-in, sufficient for chat UI |
 
-### Step 1: Validate Prerequisites
+### Backend
+| Component | Choice | Alternative | Why |
+|-----------|--------|------------|-----|
+| Runtime | Python 3.11 | .NET 8 | AI ecosystem, Azure SDK support |
+| Framework | FastAPI | Flask | Async, auto OpenAPI, Pydantic |
+| ORM | SQLAlchemy 2 | Raw SQL | Type-safe queries, migrations |
 
-Verify all required tools, credentials, and dependencies are available.
+### AI Services
+| Component | Choice | Alternative | Why |
+|-----------|--------|------------|-----|
+| LLM | Azure OpenAI (GPT-4o) | Anthropic Claude | Enterprise features, Azure integration |
+| Embeddings | text-embedding-3-small | ada-002 | 80% cheaper, comparable quality |
+| Search | Azure AI Search | Qdrant | Managed, hybrid + semantic |
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+### Infrastructure
+| Component | Choice | Alternative | Why |
+|-----------|--------|------------|-----|
+| IaC | Bicep | Terraform | Native Azure, type-safe |
+| Container | Azure Container Apps | AKS | Simpler, serverless scaling |
+| Database | Cosmos DB | PostgreSQL | Global distribution, flexible schema |
+| Secrets | Key Vault | App Config | Compliance, rotation policies |
+| CI/CD | GitHub Actions | Azure DevOps | OIDC, GitHub-native |
+
+### Observability
+| Component | Choice | Alternative | Why |
+|-----------|--------|------------|-----|
+| APM | Application Insights | Datadog | Native Azure, OpenTelemetry |
+| Logging | Log Analytics | Elastic | KQL, integrated dashboards |
+| Alerting | Azure Monitor | PagerDuty | Actionable alerts, action groups |
 ```
 
-### Step 2: Load Configuration
+## Decision Criteria
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates technology stack documentation with component diagram, decision rationale, and alternatives..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tech-stack-blueprint
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-tech-stack-blueprint/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Factor | Weight | How to Evaluate |
+|--------|--------|----------------|
+| Team expertise | High | What does the team already know? |
+| Ecosystem maturity | High | SDK quality, docs, community |
+| Azure integration | Medium | Native connectors, MI support |
+| Cost | Medium | Licensing, consumption pricing |
+| Lock-in risk | Low-Medium | Open standards, portability |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Paralysis of choice | Too many options | Default to Azure-native + Python/Next.js |
+| Stack too complex | Over-engineering | Start minimal, add complexity when needed |
+| Skills gap | Chose unfamiliar tech | Prioritize team expertise over novelty |
+| Vendor lock-in | All-in on one platform | Use open standards where feasible |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

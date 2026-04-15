@@ -1,161 +1,110 @@
 ---
 name: fai-build-docker-image
-description: 'Builds optimized Docker images with multi-stage, non-root, and AI model weight caching.'
+description: |
+  Build secure, optimized Docker images with multi-stage builds, non-root users,
+  SBOM generation, and vulnerability scanning. Use when containerizing AI
+  applications for Azure Container Apps, AKS, or local development.
 ---
 
-# Fai Build Docker Image
+# Docker Image Best Practices
 
-Builds optimized Docker images with multi-stage, non-root, and AI model weight caching.
+Build secure, reproducible, and optimized container images for AI workloads.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for builds optimized docker images with multi-stage, non-root, and ai model weight caching.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Containerizing Python AI applications (FastAPI, Flask)
+- Building .NET or Node.js service containers
+- Setting up CI/CD with image scanning and SBOM
+- Optimizing image size for faster cold starts
 
-**Category:** Containerization
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Multi-Stage Python Dockerfile
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```dockerfile
+# Stage 1: Build dependencies
+FROM python:3.11-slim AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir --target=/app/deps -r requirements.txt
 
-## Steps
+# Stage 2: Runtime
+FROM python:3.11-slim
+WORKDIR /app
 
-### Step 1: Validate Prerequisites
+# Security: non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -d /app appuser
+COPY --from=builder /app/deps /usr/local/lib/python3.11/site-packages
+COPY . .
+RUN chown -R appuser:appuser /app
+USER appuser
 
-Verify all required tools, credentials, and dependencies are available.
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:8000/health || exit 1
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+## .NET Multi-Stage
+
+```dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY *.csproj .
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+COPY --from=build /app/publish .
+USER appuser
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "MyApp.dll"]
+```
+
+## .dockerignore
+
+```
+.git
+.env
+__pycache__
+*.pyc
+node_modules
+.vscode
+tests/
+docs/
+*.md
+```
+
+## CI/CD Scanning
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Build with SBOM
+docker build -t myapp:latest --sbom=true .
+
+# Scan for vulnerabilities
+docker scout cves myapp:latest
+
+# Trivy scan (alternative)
+trivy image --severity HIGH,CRITICAL myapp:latest
 ```
 
-### Step 2: Load Configuration
+## Size Optimization
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: builds optimized docker images with multi-stage, non-root, and ai model weight caching..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 12**
-- **Play 34**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-docker-image
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-docker-image/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Technique | Savings | How |
+|-----------|---------|-----|
+| Multi-stage build | 40-70% | Separate build deps from runtime |
+| Slim base image | 50-80% | python:3.11-slim (150MB) vs python:3.11 (900MB) |
+| .dockerignore | 10-30% | Exclude tests, docs, .git |
+| Layer caching | Build time | COPY requirements.txt before COPY . |
+| Distroless base | 80-90% | No shell, minimal attack surface |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Containerization category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Large image (>1GB) | Single-stage or full base image | Multi-stage + slim/distroless base |
+| Permission denied | Running as root | Add non-root USER in Dockerfile |
+| Build cache invalidated | COPY . before pip install | Copy requirements.txt first, then COPY . |
+| CVE in base image | Stale base image tag | Pin to digest and update monthly |

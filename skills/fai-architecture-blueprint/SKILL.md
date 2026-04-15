@@ -1,161 +1,147 @@
 ---
 name: fai-architecture-blueprint
-description: 'name: fai-architecture-blueprint'
+description: |
+  Generate architecture blueprints with service boundaries, data flows, trust zones,
+  deployment topology, and cost profiles. Analyzes codebases to produce diagrams and
+  component documentation. Use when starting a new project, onboarding, or reviewing architecture.
 ---
 
-# Fai Architecture Blueprint
+# Architecture Blueprint Generator
 
-name: fai-architecture-blueprint
+Analyze codebases and produce comprehensive architecture documentation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for name: fai-architecture-blueprint. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Starting a new project — define the target architecture
+- Onboarding — document an existing system's architecture
+- Architecture review — identify gaps, single points of failure, security boundaries
+- Before major refactoring — capture current state for comparison
 
-**Category:** Architecture
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Step 1: Detect Technology Stack
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+Scan the repository for framework indicators:
 
-## Steps
+```python
+from pathlib import Path
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: name: fai-architecture-blueprint.
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 11**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-architecture-blueprint
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-architecture-blueprint/"]
-  }
+INDICATORS = {
+    "package.json": "Node.js",
+    "requirements.txt": "Python",
+    "pyproject.toml": "Python",
+    "*.csproj": ".NET",
+    "go.mod": "Go",
+    "Cargo.toml": "Rust",
+    "pom.xml": "Java (Maven)",
+    "build.gradle": "Java/Kotlin (Gradle)",
+    "main.bicep": "Azure IaC (Bicep)",
+    "main.tf": "Terraform",
+    "docker-compose.yml": "Docker Compose",
+    "azure.yaml": "Azure Developer CLI",
 }
+
+def detect_stack(root: Path) -> list[str]:
+    detected = []
+    for pattern, tech in INDICATORS.items():
+        if list(root.rglob(pattern)):
+            detected.append(tech)
+    return detected
 ```
 
-### Via Agent Invocation
+## Step 2: Map Service Boundaries
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+Identify microservices or modules from directory structure:
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```python
+def discover_services(root: Path) -> list[dict]:
+    """Find service boundaries by looking for entry points and Dockerfiles."""
+    services = []
+    for dockerfile in root.rglob("Dockerfile"):
+        svc_dir = dockerfile.parent
+        services.append({
+            "name": svc_dir.name,
+            "path": str(svc_dir.relative_to(root)),
+            "has_tests": bool(list(svc_dir.rglob("test*"))),
+            "has_infra": bool(list(svc_dir.rglob("*.bicep")))
+                         or bool(list(svc_dir.rglob("*.tf"))),
+            "endpoints": extract_routes(svc_dir),
+        })
+    return services
 ```
 
-## Monitoring
+## Step 3: Generate Architecture Diagram
 
-Track skill execution metrics:
+Produce Mermaid diagrams at multiple abstraction levels:
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+```python
+def generate_c4_context(services: list[dict], external: list[str]) -> str:
+    """Generate C4 Context diagram in Mermaid."""
+    lines = ["graph TB"]
+    lines.append('    User["👤 User"]')
+    for svc in services:
+        lines.append(f'    {svc["name"]}["{svc["name"]}"]')
+        lines.append(f'    User --> {svc["name"]}')
+    for ext in external:
+        lines.append(f'    {ext}[("{ext}")]')
+    return "\n".join(lines)
+```
+
+### Example Output
+
+```mermaid
+graph TB
+    User["👤 User"]
+    API["API Gateway"]
+    Worker["Background Worker"]
+    Search["Azure AI Search"]
+    OpenAI["Azure OpenAI"]
+    User --> API
+    API --> Worker
+    API --> Search
+    Worker --> OpenAI
+```
+
+## Step 4: Document Trust Zones
+
+```markdown
+## Trust Zones
+
+| Zone | Services | Network | Auth |
+|------|----------|---------|------|
+| Public | API Gateway, CDN | Internet-facing, WAF-protected | OAuth2 / API Key |
+| Application | API, Workers | Private VNet subnet | Managed Identity |
+| Data | SQL, Storage, Search | Private endpoints only | RBAC + Private Link |
+| Management | Bastion, Monitor | Hub VNet | AAD + MFA |
+```
+
+## Step 5: Cost Profile
+
+```markdown
+## Cost Estimate (Monthly)
+
+| Service | SKU | Est. Cost | Notes |
+|---------|-----|-----------|-------|
+| Azure OpenAI | S0 80K TPM | $X | PAYG, consider PTU if >60% util |
+| AI Search | Standard S1 | $X | 1 replica, 1 partition for dev |
+| App Service | P1v3 | $X | Auto-scale 1-4 instances |
+| SQL Database | S2 (50 DTU) | $X | Consider serverless for dev |
+| **Total** | | **$X/mo** | |
+```
+
+## Checklist
+
+- [ ] Technology stack detected and documented
+- [ ] Service boundaries mapped with entry points
+- [ ] C4 diagrams generated (Context, Container, Component)
+- [ ] Trust zones defined with network and auth controls
+- [ ] Data flow documented with sensitivity classification
+- [ ] Cost profile estimated per environment
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Architecture category in the FAI primitives catalog
+| Issue | Fix |
+|-------|-----|
+| Blueprint too abstract | Add specific SKUs, regions, SLAs, and policy constraints |
+| Missing services | Check for serverless functions and background jobs beyond Dockerfiles |
+| Stale diagrams | Generate diagrams from code in CI, not manually |

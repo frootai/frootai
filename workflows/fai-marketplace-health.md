@@ -1,5 +1,5 @@
 ---
-name: FAI-marketplace-health
+name: fai-marketplace-health
 description: "Weekly marketplace integrity check — validates all plugin.json files, verifies referenced primitives exist, detects orphaned plugins, and regenerates marketplace.json if needed."
 on:
   schedule:

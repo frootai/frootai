@@ -1,155 +1,113 @@
 ---
 name: fai-build-vector-store
-description: 'Sets up and configures a vector database for embedding storage and similarity search.'
+description: |
+  Build vector store pipelines with embedding generation, index sync, metadata
+  filtering, and retrieval quality controls. Use when setting up vector search
+  for RAG, recommendation, or similarity matching.
 ---
 
-# Fai Build Vector Store
+# Vector Store Pipeline
 
-Sets up and configures a vector database for embedding storage and similarity search.
+Build and manage vector indexes with embedding sync, filters, and quality controls.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for sets up and configures a vector database for embedding storage and similarity search.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up vector search for RAG pipelines
+- Syncing document embeddings to a vector store
+- Implementing metadata filtering on vector results
+- Evaluating retrieval quality with test queries
 
-**Category:** Build Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Embedding Generation
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```python
+def generate_embeddings(texts: list[str], model="text-embedding-3-small",
+                        batch_size: int = 16) -> list[list[float]]:
+    all_embeddings = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        resp = oai.embeddings.create(model=model, input=batch)
+        all_embeddings.extend([d.embedding for d in resp.data])
+    return all_embeddings
 ```
 
-### Step 2: Load Configuration
+## Index Sync Pattern
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```python
+def sync_to_index(documents: list[dict], search_client, embed_fn):
+    """Upsert documents with fresh embeddings to search index."""
+    texts = [d["content"] for d in documents]
+    embeddings = embed_fn(texts)
+    for doc, emb in zip(documents, embeddings):
+        doc["contentVector"] = emb
+    search_client.merge_or_upload_documents(documents)
 ```
 
-### Step 3: Execute Core Logic
+## Metadata Filtering
 
-Perform the primary operation: sets up and configures a vector database for embedding storage and similarity search..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+```python
+results = search_client.search(
+    search_text=None,
+    vector_queries=[{"kind": "text", "text": query,
+                     "fields": "contentVector", "k": 10}],
+    filter="category eq 'technical' and language eq 'en'",
+    select=["id", "title", "content", "category"],
+)
 ```
 
-## Output
+## Quality Evaluation
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-vector-store
+```python
+def eval_retrieval(test_pairs: list[dict], search_fn, k=5) -> dict:
+    hits = 0
+    for pair in test_pairs:
+        results = search_fn(pair["query"], top_k=k)
+        if pair["expected_id"] in [r["id"] for r in results]:
+            hits += 1
+    return {"recall_at_k": hits / len(test_pairs), "k": k}
 ```
 
-### Inside a Solution Play
+## Store Comparison
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-vector-store/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Store | Type | Best For |
+|-------|------|----------|
+| Azure AI Search | Managed | Enterprise RAG, hybrid search |
+| Qdrant | Self-hosted | High-performance, filtering |
+| ChromaDB | Embedded | Prototyping, local dev |
+| Pinecone | Managed | Serverless, auto-scaling |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Stale embeddings | No re-sync on content change | Use change detection trigger |
+| Wrong results with filter | Filter field not filterable | Mark field as filterable in schema |
+| High embedding costs | Re-embedding unchanged docs | Cache embeddings, only re-embed changed |
+| Dimension mismatch | Mixed models in same index | Standardize on one model per index |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Build Tooling category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

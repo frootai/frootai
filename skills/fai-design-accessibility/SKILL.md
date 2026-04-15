@@ -1,156 +1,159 @@
 ---
 name: fai-design-accessibility
-description: 'Audits and improves accessibility following WCAG 2.1 AA with actionable fixes.'
+description: 'Applies accessibility-first design standards with measurable UX and compliance gates.'
 ---
 
-# Fai Design Accessibility
+# FAI Skill: Design Accessibility
 
-Audits and improves accessibility following WCAG 2.1 AA with actionable fixes.
+## Purpose
 
-## Overview
+This skill provides a production-oriented workflow for Inclusive interface design, WCAG alignment, and assistive compatibility. It enforces explicit phase evidence, clear release gates, and repeatable handoff quality.
 
-This skill provides a structured, repeatable procedure for audits and improves accessibility following wcag 2.1 aa with actionable fixes.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Inputs
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Description |
+|---|---|
+| Core parameters | ui_scope, accessibility_targets, interaction_patterns, content_rules |
+| Environment | dev, staging, prod |
+| Constraints | security, reliability, cost, latency, and compliance requirements |
 
-## Parameters
+## Prerequisites
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+- CI pipeline is green and artifacts are versioned.
+- Ownership and approval chain are identified.
+- Secrets/config are externally managed and environment-scoped.
+- Monitoring and rollback procedures are prepared.
 
-## Steps
+## Full Phases Coverage
 
-### Step 1: Validate Prerequisites
+### Phase 1: Discover
 
-Verify all required tools, credentials, and dependencies are available.
+- Confirm objectives, risks, and affected systems.
+- Inventory dependencies and interface contracts.
+- Define measurable release success criteria.
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+### Phase 2: Design
 
-### Step 2: Load Configuration
+- Choose architecture and deployment boundaries.
+- Define controls for security, resilience, and privacy.
+- Document tradeoffs and fallback behavior.
 
-Read settings from the FAI manifest and TuneKit config files.
+### Phase 3: Implement
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+- Deliver incremental, reviewable changes.
+- Keep config explicit and source-controlled.
+- Avoid hidden coupling and unversioned runtime assumptions.
 
-### Step 3: Execute Core Logic
+### Phase 4: Validate
 
-Perform the primary operation: audits and improves accessibility following wcag 2.1 aa with actionable fixes..
+- Run lint, test, integration, and scenario gates.
+- Verify logs, traces, and alerts before production rollout.
+- Capture approval evidence and known risks.
 
-### Step 4: Validate Results
+### Phase 5: Deploy
 
-Verify the output meets quality thresholds and WAF compliance.
+- Use staged deployment with hold points.
+- Validate KPI and health checks between stages.
+- Stop and rollback when gates fail.
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
+### Phase 6: Operate
 
-## Output
+- Monitor post-release drift against baseline.
+- Triage incidents with defined owner/SLA.
+- Run post-release review and track improvements.
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+## WAF Quality Gates
 
-## WAF Alignment
+### Reliability
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+- Retry, timeout, and circuit-breaker behaviors are defined.
+- Health checks validate downstream dependencies.
+- Graceful degradation is tested in staging.
 
-## Error Handling
+### Security
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+- Least-privilege access is enforced.
+- Sensitive data is protected in transit and at rest.
+- AI inputs/outputs are validated where applicable.
 
-## Usage
+### Cost Optimization
 
-### Standalone
+- Sizing and routing decisions are evidence-based.
+- Budget alerts and anomaly checks are configured.
+- Non-critical workloads are rate-limited or scheduled.
 
-```bash
-# Run this skill directly
-npx frootai skill run fai-design-accessibility
-```
+### Operational Excellence
 
-### Inside a Solution Play
+- CI/CD is the only production path.
+- Runbooks and rollback instructions are current.
+- Observability includes correlation identifiers.
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+### Performance Efficiency
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-design-accessibility/"]
-  }
-}
-```
+- SLO targets are defined and measurable.
+- Hot paths are benchmarked and tuned.
+- Payload/query costs are tracked over time.
 
-### Via Agent Invocation
+### Responsible AI
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+- Safety controls and escalation are active.
+- Grounding and evaluation policies are enforced.
+- Human override exists for high-impact decisions.
 
-## Configuration Reference
+## Deliverables
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
+| Artifact | Purpose |
+|---|---|
+| Primary output | accessibility-design-spec.md, remediation checklist, test matrix |
+| Validation dossier | Evidence for release decision |
+| Rollback guide | Exact reversal steps and ownership |
+| Operate handoff | Monitoring and incident procedures |
 
-## Monitoring
+## Completion Checklist
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+- [ ] Phase 1 evidence captured.
+- [ ] Phase 2 design reviewed.
+- [ ] Phase 3 implementation approved.
+- [ ] Phase 4 validation passed.
+- [ ] Phase 5 staged deployment completed.
+- [ ] Phase 6 operations handoff accepted.
+- [ ] Completion criteria met: contrast and keyboard gates pass, screen-reader flow validated, critical issues resolved.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+### Symptom: Behavior diverges between staging and production
 
-## Notes
+- Compare environment config, data shape, and feature flags.
+- Validate runtime and dependency version parity.
+- Re-run representative production scenarios in pre-prod.
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+### Symptom: Cost or latency regression post-release
+
+- Review retries, cache hit rates, and scaling thresholds.
+- Identify expensive calls and adjust routing tiers.
+- Rebalance limits to protect SLO and budget.
+
+### Symptom: Excessive alert volume
+
+- Separate informational from paging alerts.
+- Add dimensions for service, tenant, and scenario.
+- Rebaseline thresholds with observed traffic.
+
+## Example Commands
+
+```bash
+# Adapt to repository standards
+npm run lint
+npm test
+npm run build
+```
+
+## Definition of Done
+
+The workflow is complete when all six phases have objective evidence, release risk is controlled, and the process is reproducible by another engineer.
+
+## Metadata
+
+- Category: Design
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly and after major architecture changes

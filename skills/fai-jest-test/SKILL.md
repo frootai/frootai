@@ -1,160 +1,120 @@
 ---
 name: fai-jest-test
-description: 'Generates Jest/Vitest test suites for TypeScript/JavaScript with mocking and snapshots.'
+description: |
+  Write Jest tests with reliable mocking, snapshot testing, async patterns,
+  and coverage reporting. Use when testing TypeScript/JavaScript applications
+  with Jest framework.
 ---
 
-# Fai Jest Test
+# Jest Testing Patterns
 
-Generates Jest/Vitest test suites for TypeScript/JavaScript with mocking and snapshots.
+Write reliable Jest tests with mocking, snapshots, and async handling.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates jest/vitest test suites for typescript/javascript with mocking and snapshots.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Testing TypeScript/JavaScript applications
+- Setting up Jest configuration and conventions
+- Mocking external dependencies (APIs, databases)
+- Configuring coverage thresholds in CI
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Basic Test Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```typescript
+describe('ChatService', () => {
+  let service: ChatService;
 
-## Steps
+  beforeEach(() => {
+    service = new ChatService(mockClient);
+  });
 
-### Step 1: Validate Prerequisites
+  it('should return response for valid prompt', async () => {
+    const result = await service.chat('Hello');
+    expect(result).toBeDefined();
+    expect(result.answer).toContain('Hello');
+  });
 
-Verify all required tools, credentials, and dependencies are available.
+  it('should throw on empty prompt', async () => {
+    await expect(service.chat('')).rejects.toThrow('Prompt required');
+  });
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+  it.each([
+    ['simple', 'gpt-4o-mini'],
+    ['complex analysis', 'gpt-4o'],
+  ])('routes "%s" to %s', async (prompt, expectedModel) => {
+    await service.chat(prompt);
+    expect(mockClient.create).toHaveBeenCalledWith(
+      expect.objectContaining({ model: expectedModel })
+    );
+  });
+});
 ```
 
-### Step 2: Load Configuration
+## Mocking
 
-Read settings from the FAI manifest and TuneKit config files.
+```typescript
+// Mock external module
+jest.mock('../services/openai', () => ({
+  createCompletion: jest.fn().mockResolvedValue({
+    choices: [{ message: { content: 'Mocked response' } }],
+    usage: { total_tokens: 100 },
+  }),
+}));
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+// Mock with implementation
+const mockFetch = jest.fn().mockImplementation((url: string) => {
+  if (url.includes('/health')) {
+    return Promise.resolve({ ok: true, json: () => ({ status: 'healthy' }) });
+  }
+  return Promise.reject(new Error('Not found'));
+});
 ```
 
-### Step 3: Execute Core Logic
+## Async Testing
 
-Perform the primary operation: generates jest/vitest test suites for typescript/javascript with mocking and snapshots..
+```typescript
+it('handles async errors', async () => {
+  mockClient.create.mockRejectedValueOnce(new Error('Rate limited'));
+  await expect(service.chat('test')).rejects.toThrow('Rate limited');
+});
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+it('waits for event', async () => {
+  const result = await new Promise<string>((resolve) => {
+    emitter.on('complete', resolve);
+    emitter.emit('complete', 'done');
+  });
+  expect(result).toBe('done');
+});
 ```
 
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-jest-test
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Coverage Configuration
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-jest-test/"]
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.ts", "!src/**/*.d.ts"],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```bash
+jest --coverage --ci
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Flaky async tests | Missing await | Always await async operations |
+| Mock not resetting | Shared state between tests | Use beforeEach + jest.clearAllMocks() |
+| Snapshot too large | Snapshotting full DOM | Snapshot only relevant subtree |
+| Coverage below threshold | Untested error paths | Add error case tests |

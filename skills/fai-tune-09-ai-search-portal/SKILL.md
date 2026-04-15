@@ -1,164 +1,145 @@
 ---
 name: fai-tune-09-ai-search-portal
-description: 'Tunes configuration for Play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 09 (AI Search Portal) semantic ranking, scoring profiles, suggesters, and index schema for optimal relevance."
 ---
 
-# Fai Tune 09 Ai Search Portal
+# FAI Tune — Play 09: AI Search Portal
 
-Tunes configuration for Play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
-
-This skill provides a structured, repeatable procedure for tunes configuration for play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/09-ai-search-portal/config/
+├── index.json            # Index schema and field definitions
+├── ranking.json          # Semantic ranking and scoring profiles
+├── suggester.json        # Autocomplete and suggestion config
+├── skillset.json         # AI enrichment pipeline config
+└── guardrails.json       # Quality and performance thresholds
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-09-ai-search-portal
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 — Validate Index Schema
 
 ```json
+// config/index.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-09-ai-search-portal/"]
+  "name": "search-portal-index",
+  "fields": [
+    { "name": "id", "type": "Edm.String", "key": true, "filterable": true },
+    { "name": "title", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "content", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "content_vector", "type": "Collection(Edm.Single)", "dimensions": 1536, "vectorSearchProfile": "hnsw-profile" },
+    { "name": "category", "type": "Edm.String", "filterable": true, "facetable": true },
+    { "name": "last_updated", "type": "Edm.DateTimeOffset", "sortable": true, "filterable": true }
+  ],
+  "vectorSearch": {
+    "algorithms": [{ "name": "hnsw", "kind": "hnsw", "parameters": { "m": 4, "efConstruction": 400, "efSearch": 500 } }],
+    "profiles": [{ "name": "hnsw-profile", "algorithm": "hnsw", "vectorizer": "text-embedding" }]
+  },
+  "semantic": {
+    "configurations": [{
+      "name": "semantic-config",
+      "prioritizedFields": {
+        "titleField": { "fieldName": "title" },
+        "contentFields": [{ "fieldName": "content" }]
+      }
+    }]
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## RAG Pipeline Reference
-
-| Stage | Tool | Config |
-|-------|------|--------|
-| Chunking | Semantic chunker | 512 tokens, 10% overlap |
-| Embedding | text-embedding-3-large | 3072 dimensions |
-| Indexing | Azure AI Search | Hybrid (vector + BM25) |
-| Retrieval | Hybrid search | 60% semantic, 40% keyword |
-| Reranking | Semantic reranker | Top 5 after rerank |
-| Generation | GPT-4o | temp=0.1, top_p=0.9 |
-
-## Chunking Strategy
-
-```python
-from azure.ai.formrecognizer import DocumentAnalysisClient
-
-# Semantic chunking preserves paragraph boundaries
-chunks = semantic_chunk(
-    text=document,
-    max_tokens=512,
-    overlap_tokens=50,
-    respect_boundaries=True  # Don't split mid-sentence
-)
-```
-
-## Search Configuration
+## Step 2 — Tune Semantic Ranking
 
 ```json
+// config/ranking.json
 {
-  "search_type": "hybrid",
-  "semantic_weight": 0.6,
-  "keyword_weight": 0.4,
-  "top_k": 5,
-  "min_score": 0.78,
-  "reranker": "semantic",
-  "filter": "category eq 'technical'"
+  "default_search_mode": "hybrid",
+  "semantic_reranker": true,
+  "semantic_configuration": "semantic-config",
+  "scoring_profiles": [
+    {
+      "name": "freshness-boost",
+      "functions": [
+        { "type": "freshness", "fieldName": "last_updated", "boost": 2.0, "parameters": { "boostingDuration": "P30D" } }
+      ]
+    },
+    {
+      "name": "category-boost",
+      "text": { "weights": { "title": 3.0, "content": 1.0 } }
+    }
+  ],
+  "top_k": 10,
+  "min_score_threshold": 0.5,
+  "vector_weight": 0.5,
+  "text_weight": 0.5
 }
 ```
 
-## Notes
+**Tuning checklist:**
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `top_k` | 5-50 | 10 | More results = better recall, slower response |
+| `vector_weight` | 0.0-1.0 | 0.5 | Higher for semantic similarity search |
+| `text_weight` | 0.0-1.0 | 0.5 | Higher for keyword/exact match search |
+| Freshness `boost` | 1.0-5.0 | 2.0 | Higher prioritizes recent documents |
+
+## Step 3 — Configure Suggesters
+
+```json
+// config/suggester.json
+{
+  "suggesters": [{
+    "name": "default-suggester",
+    "sourceFields": ["title", "category"],
+    "searchMode": "analyzingInfixMatching"
+  }],
+  "autocomplete": {
+    "enabled": true,
+    "min_characters": 3,
+    "max_suggestions": 5,
+    "highlight_matches": true,
+    "fuzzy_matching": true
+  }
+}
+```
+
+## Step 4 — Set Guardrails
+
+```json
+// config/guardrails.json
+{
+  "performance": {
+    "max_query_latency_ms": 500,
+    "max_indexing_latency_minutes": 15,
+    "cache_popular_queries": true,
+    "cache_ttl_minutes": 60
+  },
+  "quality": {
+    "min_ndcg_at_10": 0.75,
+    "min_precision_at_5": 0.80,
+    "zero_results_rate_max": 0.05
+  },
+  "cost": {
+    "max_search_units": 3,
+    "max_documents": 1000000,
+    "max_index_size_gb": 50
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Semantic reranker | true | `jq '.semantic_reranker' config/ranking.json` |
+| Search mode | hybrid | `jq '.default_search_mode' config/ranking.json` |
+| Query latency | <=500ms | Monitor via Application Insights |
+| NDCG@10 | >=0.75 | Run relevance evaluation |
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Irrelevant results | Text-only search | Enable semantic reranker and hybrid mode |
+| Slow queries | Large index, no caching | Enable `cache_popular_queries` and add scoring profiles |
+| Zero results | Strict matching | Enable fuzzy matching in suggester |
+| High costs | Over-provisioned SUs | Right-size search units based on QPS |

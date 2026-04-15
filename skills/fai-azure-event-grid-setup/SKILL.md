@@ -1,161 +1,101 @@
 ---
 name: fai-azure-event-grid-setup
-description: 'Sets up Azure Event Grid for event-driven AI pipeline triggers and routing.'
+description: |
+  Configure Azure Event Grid topics and subscriptions with dead-lettering, retry policies,
+  subject filters, and secure webhook delivery. Use when building event-driven architectures
+  for AI pipelines or system integration.
 ---
 
-# Fai Azure Event Grid Setup
+# Azure Event Grid Setup
 
-Sets up Azure Event Grid for event-driven AI pipeline triggers and routing.
+Configure Event Grid for reliable event-driven architecture with filtering, retries, and dead-letters.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for sets up azure event grid for event-driven ai pipeline triggers and routing.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building event-driven AI pipelines (document uploaded → process → index)
+- Integrating Azure services via events (Blob → Function → Search)
+- Implementing pub/sub patterns with filtering and fanout
+- Setting up dead-letter queues for failed event delivery
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource topic 'Microsoft.EventGrid/topics@2024-06-01-preview' = {
+  name: topicName
+  location: location
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    inputSchema: 'CloudEventSchemaV1_0'
+    publicNetworkAccess: 'Disabled'
+  }
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: sets up azure event grid for event-driven ai pipeline triggers and routing..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-event-grid-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-event-grid-setup/"]
+resource subscription 'Microsoft.EventGrid/topics/eventSubscriptions@2024-06-01-preview' = {
+  name: 'process-documents'
+  parent: topic
+  properties: {
+    destination: {
+      endpointType: 'AzureFunction'
+      properties: { resourceId: functionId }
+    }
+    filter: {
+      subjectBeginsWith: '/documents/'
+      subjectEndsWith: '.pdf'
+      advancedFilters: [{
+        operatorType: 'StringIn'
+        key: 'data.category'
+        values: ['invoice', 'contract', 'report']
+      }]
+    }
+    retryPolicy: { maxDeliveryAttempts: 30, eventTimeToLiveInMinutes: 1440 }
+    deadLetterDestination: {
+      endpointType: 'StorageBlob'
+      properties: {
+        resourceId: storageAccount.id
+        blobContainerName: 'dead-letters'
+      }
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+## Publishing Events
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+from azure.eventgrid import EventGridPublisherClient
+from azure.core.messaging import CloudEvent
+from azure.identity import DefaultAzureCredential
 
-## Configuration Reference
+client = EventGridPublisherClient(
+    endpoint="https://topic-prod.eastus-1.eventgrid.azure.net",
+    credential=DefaultAzureCredential()
+)
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+event = CloudEvent(
+    type="FrootAI.Documents.Uploaded",
+    source="/documents/invoices",
+    data={"blobUrl": "https://storage.blob.core.windows.net/docs/inv-001.pdf",
+          "category": "invoice", "pages": 5},
+)
+
+client.send([event])
 ```
 
-## Monitoring
+## Event-Driven Pipeline Pattern
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+```
+Blob Upload → Event Grid → Function (extract) → Event Grid → Function (embed) → AI Search
+                                                                                      ↓
+                                              Dead Letter ← retry failures ← Event Grid
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Dropped events | No dead-letter configured | Enable dead-letter destination on storage |
+| Events not matching | Filter too restrictive | Check subject/advanced filters, test with broad filter first |
+| Webhook 403 | Validation handshake failed | Implement CloudEvents validation endpoint |
+| Duplicate processing | No idempotency in handler | Use event ID for deduplication in consumer |

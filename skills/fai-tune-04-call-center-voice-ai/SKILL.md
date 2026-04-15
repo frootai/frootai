@@ -1,156 +1,104 @@
 ---
 name: fai-tune-04-call-center-voice-ai
-description: 'Tunes configuration for Play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: |
+  Tune Call Center Voice AI (Play 04) for voice latency, transcription accuracy,
+  TTS naturalness, and escalation sensitivity. Use when optimizing a deployed
+  voice AI pipeline for call quality.
 ---
 
-# Fai Tune 04 Call Center Voice Ai
+# Tune Call Center Voice AI (Play 04)
 
-Tunes configuration for Play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization.
+Optimize voice pipeline for latency, accuracy, and escalation quality.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- End-to-end voice latency exceeds 2s target
+- STT transcription accuracy below 95%
+- TTS voice sounds unnatural
+- Escalation triggers missing or false-firing
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Latency Budget
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Stage | Target | Tune When |
+|-------|--------|-----------|
+| STT | < 500ms | Switch to real-time recognition mode |
+| LLM | < 800ms | Use gpt-4o-mini, enable streaming, reduce max_tokens |
+| TTS | < 400ms | Use neural voice, pre-warm connection pool |
+| Network | < 300ms | Deploy in same region as telephony |
+| **Total** | **< 2000ms** | Measure each stage independently |
 
-## Steps
+## STT Accuracy Tuning
 
-### Step 1: Validate Prerequisites
+```python
+# Test transcription accuracy
+def eval_stt_accuracy(test_audio: list[dict]) -> dict:
+    correct = 0
+    for sample in test_audio:
+        transcript = transcribe(sample["audio_path"])
+        if normalize(transcript) == normalize(sample["expected_text"]):
+            correct += 1
+    return {"accuracy": correct / len(test_audio), "n": len(test_audio)}
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Tuning levers:
+# - Language: set speech_recognition_language precisely
+# - Noise: enable noise suppression
+# - Custom model: train on domain-specific vocabulary
 ```
 
-### Step 2: Load Configuration
+## TTS Voice Selection
 
-Read settings from the FAI manifest and TuneKit config files.
+| Voice | Style | Latency | Best For |
+|-------|-------|---------|----------|
+| en-US-JennyNeural | Conversational | Fast | General support |
+| en-US-AriaNeural | Professional | Fast | Enterprise |
+| en-US-GuyNeural | Casual | Fast | Informal |
+| Custom Neural Voice | Brand-specific | Medium | Brand consistency |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```python
+speech_config.speech_synthesis_voice_name = "en-US-JennyNeural"
 ```
 
-### Step 3: Execute Core Logic
+## Escalation Tuning
 
-Perform the primary operation: tunes configuration for play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization..
+```python
+ESCALATION_TRIGGERS = [
+    "speak to a human", "transfer me", "supervisor",
+    "this is urgent", "I want to complain", "real person",
+    "you're not helping", "I need help",
+]
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+# Tune: Add/remove phrases based on false positive/negative analysis
+def eval_escalation(test_transcripts: list[dict]) -> dict:
+    tp, fp, fn = 0, 0, 0
+    for t in test_transcripts:
+        predicted = should_escalate(t["transcript"])
+        if predicted and t["should_escalate"]: tp += 1
+        elif predicted and not t["should_escalate"]: fp += 1
+        elif not predicted and t["should_escalate"]: fn += 1
+    precision = tp / (tp + fp) if (tp + fp) else 0
+    recall = tp / (tp + fn) if (tp + fn) else 0
+    return {"precision": precision, "recall": recall}
 ```
 
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-04-call-center-voice-ai
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## LLM Response Tuning
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-04-call-center-voice-ai/"]
-  }
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "max_tokens": 150,
+  "system_prompt": "You are a helpful call center agent. Be concise — this is voice, not text. Keep responses under 3 sentences."
 }
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Latency > 3s | Wrong model or no streaming | Use mini + streaming + same region |
+| Low STT accuracy | Background noise or accent | Enable noise suppression, train custom model |
+| TTS sounds robotic | Using standard voice | Switch to neural voice |
+| False escalations | Keyword list too broad | Analyze FP cases, tighten triggers |
+| Missed escalations | Keyword list too narrow | Analyze FN cases, add trigger phrases |

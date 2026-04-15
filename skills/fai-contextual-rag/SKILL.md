@@ -1,170 +1,142 @@
 ---
 name: fai-contextual-rag
-description: 'Builds context-aware RAG with query routing, multi-source retrieval, and result synthesis.'
+description: 'Builds contextual retrieval workflows that blend user profile, task state, and enterprise documents.'
 ---
 
-# Fai Contextual Rag
+# FAI Skill: Contextual Rag
 
-Builds context-aware RAG with query routing, multi-source retrieval, and result synthesis.
+## Purpose
 
-## Overview
+This skill defines a production-oriented workflow for Context-aware retrieval and reranking. It is intended for builders and reviewers who need repeatable outcomes, explicit validation, and clear rollback guidance.
 
-This skill provides a structured, repeatable procedure for builds context-aware rag with query routing, multi-source retrieval, and result synthesis.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## When To Use
 
-**Category:** RAG & Search
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+- Use when the team needs a standardized implementation path for this capability.
+- Use when quality gates must be documented before rollout.
+- Use when architecture, security, and operational concerns must be captured in one artifact.
 
-## Parameters
+## Inputs
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Input | Description |
+|---|---|
+| Core parameters | index_name, profile_schema, session_state_source, grounding_rules |
+| Environment | dev, staging, prod |
+| Constraints | compliance, latency, budget, and ownership constraints |
 
-## Steps
+## Prerequisites
 
-### Step 1: Validate Prerequisites
+- Repository has documented build and test commands.
+- Owners are assigned for implementation and approval.
+- Required platform access is validated before execution.
+- A rollback plan exists for every production-facing change.
 
-Verify all required tools, credentials, and dependencies are available.
+## Execution Workflow
+
+### 1) Discover and Scope
+
+- Identify the minimum viable change for initial rollout.
+- List dependencies across code, config, infra, and docs.
+- Capture assumptions that can invalidate results.
+
+### 2) Design Decisions
+
+- Select patterns that favor reliability and clear observability.
+- Keep interfaces stable and versioned where possible.
+- Separate required behavior from optional enhancements.
+
+### 3) Implement in Small Steps
+
+- Make incremental changes with narrow blast radius.
+- Run local validation after each meaningful edit.
+- Document non-obvious tradeoffs near the implementation.
+
+### 4) Validate and Review
+
+- Run lint, unit, and integration checks for impacted areas.
+- Confirm expected behavior with representative scenarios.
+- Capture evidence in a concise review record.
+
+### 5) Release and Observe
+
+- Promote with staged rollout where practical.
+- Monitor key signals and set alert thresholds.
+- Prepare rollback trigger criteria and ownership.
+
+## Quality Gates
+
+- Correctness: behavior matches acceptance criteria.
+- Reliability: failure modes are handled with safe defaults.
+- Security: secrets are externalized and access is least-privilege.
+- Cost: implementation respects budget guardrails.
+- Operability: logs, metrics, and runbooks are available.
+
+## Deliverables
+
+| Artifact | Purpose |
+|---|---|
+| Primary output | retrieval-strategy.md, query-template set, eval plan |
+| Decision log | Captures architecture and tradeoff decisions |
+| Validation record | Stores test and review evidence |
+| Rollback note | Defines reversal steps and owner |
+
+## Verification Checklist
+
+- [ ] Scope and assumptions documented.
+- [ ] Implementation reviewed by responsible owner.
+- [ ] Validation evidence attached.
+- [ ] Operational monitors configured.
+- [ ] Rollback plan tested or rehearsed.
+- [ ] Completion criteria met: groundedness increase validated, latency under target, citation quality acceptable.
+
+## Troubleshooting
+
+### Symptom: Results differ between environments
+
+- Compare environment-specific configuration values.
+- Verify version parity for tools and dependencies.
+- Re-run with deterministic inputs and fixed sample data.
+
+### Symptom: Validation passes locally but fails in CI
+
+- Reproduce using CI-equivalent commands and versions.
+- Inspect generated artifacts and line-ending differences.
+- Check for timing/order assumptions in tests.
+
+### Symptom: Operational metrics are noisy
+
+- Tune thresholds based on baseline behavior.
+- Add dimensions to isolate source and impact.
+- Separate informational events from alerting signals.
+
+## Security and Compliance Notes
+
+- Avoid embedding secrets or tokens in docs and examples.
+- Prefer managed identity and centralized secret stores.
+- Record data handling boundaries and retention expectations.
+- Ensure auditability for critical decisions and approvals.
+
+## Performance and Cost Notes
+
+- Start with right-sized defaults; scale with evidence.
+- Cache expensive operations where consistency allows.
+- Track utilization trends and revisit thresholds monthly.
+- Stop non-essential background processing in low-traffic windows.
+
+## Example Command Set
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Adapt these commands to the repository conventions
+npm run lint
+npm test
+npm run build
 ```
 
-### Step 2: Load Configuration
+## Definition of Done
 
-Read settings from the FAI manifest and TuneKit config files.
+The skill execution is complete when implementation, validation, and operational handoff are all documented, approved, and reproducible by another engineer without tribal knowledge.
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+## Metadata
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: builds context-aware rag with query routing, multi-source retrieval, and result synthesis..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 01**
-- **Play 21**
-- **Play 26**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-contextual-rag
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-contextual-rag/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## RAG Pipeline Reference
-
-| Stage | Tool | Config |
-|-------|------|--------|
-| Chunking | Semantic chunker | 512 tokens, 10% overlap |
-| Embedding | text-embedding-3-large | 3072 dimensions |
-| Indexing | Azure AI Search | Hybrid (vector + BM25) |
-| Retrieval | Hybrid search | 60% semantic, 40% keyword |
-| Reranking | Semantic reranker | Top 5 after rerank |
-| Generation | GPT-4o | temp=0.1, top_p=0.9 |
-
-## Chunking Strategy
-
-```python
-from azure.ai.formrecognizer import DocumentAnalysisClient
-
-# Semantic chunking preserves paragraph boundaries
-chunks = semantic_chunk(
-    text=document,
-    max_tokens=512,
-    overlap_tokens=50,
-    respect_boundaries=True  # Don't split mid-sentence
-)
-```
-
-## Search Configuration
-
-```json
-{
-  "search_type": "hybrid",
-  "semantic_weight": 0.6,
-  "keyword_weight": 0.4,
-  "top_k": 5,
-  "min_score": 0.78,
-  "reranker": "semantic",
-  "filter": "category eq 'technical'"
-}
-```
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the RAG & Search category in the FAI primitives catalog
+- Category: RAG Engineering
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly or after major platform changes

@@ -1,160 +1,107 @@
 ---
 name: fai-mcp-python-scaffold
-description: 'Scaffolds a complete python MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.'
+description: |
+  Scaffold Python MCP servers with FastMCP, typed tools, resource endpoints,
+  and Docker deployment. Use when creating MCP servers for Python-based AI
+  tooling with production-ready structure.
 ---
 
-# Fai Mcp Python Scaffold
+# Python MCP Server Scaffold
 
-Scaffolds a complete python MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
+Scaffold production MCP servers in Python with FastMCP and typed tools.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a complete python mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating a new MCP server for Python-based tools
+- Exposing Python functions to AI agents via MCP protocol
+- Building MCP servers with resource and prompt capabilities
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Project Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+my-mcp-server/
+├── src/
+│   ├── __init__.py
+│   ├── server.py          # FastMCP server definition
+│   ├── tools/
+│   │   ├── __init__.py
+│   │   ├── search.py      # Search tool
+│   │   └── analyze.py     # Analysis tool
+│   └── resources/
+│       └── config.py      # MCP resources
+├── tests/
+│   └── test_tools.py
+├── pyproject.toml
+├── Dockerfile
+└── README.md
 ```
 
-### Step 2: Load Configuration
+## Server Definition
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+from mcp.server.fastmcp import FastMCP
+import json
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+mcp = FastMCP("my-tools", version="1.0.0")
+
+@mcp.tool()
+async def search_knowledge(query: str, limit: int = 5) -> str:
+    """Search the knowledge base for relevant documents.
+
+    Args:
+        query: Natural language search query
+        limit: Maximum results to return
+    """
+    results = await kb.search(query, top_k=limit)
+    return json.dumps([{"title": r.title, "snippet": r.content[:200]}
+                       for r in results])
+
+@mcp.resource("config://models")
+async def available_models() -> str:
+    """List available AI models and their capabilities."""
+    return json.dumps({"models": ["gpt-4o", "gpt-4o-mini"]})
+
+@mcp.prompt("summarize")
+async def summarize_prompt(text: str) -> str:
+    """Generate a summarization prompt for the given text."""
+    return f"Summarize the following in 3 bullet points:\n\n{text}"
 ```
 
-### Step 3: Execute Core Logic
+## Testing
 
-Perform the primary operation: scaffolds a complete python mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
+```python
+import pytest
+from src.server import search_knowledge
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+@pytest.mark.asyncio
+async def test_search_returns_results():
+    result = await search_knowledge("retry pattern", limit=3)
+    data = json.loads(result)
+    assert len(data) <= 3
+    assert all("title" in r for r in data)
 ```
 
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-python-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## VS Code MCP Config
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-mcp-python-scaffold/"]
+  "servers": {
+    "my-tools": {
+      "command": "python",
+      "args": ["-m", "src.server"],
+      "env": { "AZURE_OPENAI_ENDPOINT": "${input:endpoint}" }
+    }
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tool not found by agent | Missing @mcp.tool() | Add decorator with docstring |
+| Type error on arguments | Complex type annotations | Use str, int, float, bool only |
+| Server won't start | Import error | Check pyproject.toml dependencies |
+| Resource not loading | Missing @mcp.resource() | Add decorator with URI scheme |

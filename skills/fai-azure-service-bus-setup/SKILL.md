@@ -1,161 +1,121 @@
 ---
 name: fai-azure-service-bus-setup
-description: 'Configures Azure Service Bus with queues, topics, dead-letter, and session-based messaging.'
+description: |
+  Configure Azure Service Bus queues and topics with dead-letter handling, sessions,
+  retry policies, and throughput tuning. Use when building reliable messaging for
+  AI pipeline orchestration, async processing, or event-driven architectures.
 ---
 
-# Fai Azure Service Bus Setup
+# Azure Service Bus Setup
 
-Configures Azure Service Bus with queues, topics, dead-letter, and session-based messaging.
+Configure Service Bus for reliable async messaging with DLQ, sessions, and throughput tuning.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure service bus with queues, topics, dead-letter, and session-based messaging.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building async AI processing pipelines (submit → process → notify)
+- Implementing reliable task queues with at-least-once delivery
+- Ordering messages with sessions (e.g., per-user conversation history)
+- Handling poison messages with dead-letter queues
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource sbNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
+  name: sbName
+  location: location
+  sku: { name: 'Premium', tier: 'Premium', capacity: 1 }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    publicNetworkAccess: 'Disabled'
+    minimumTlsVersion: '1.2'
+    zoneRedundant: true
+  }
+}
 
-## Steps
+resource queue 'Microsoft.ServiceBus/namespaces/queues@2024-01-01' = {
+  name: 'ai-processing'
+  parent: sbNamespace
+  properties: {
+    maxDeliveryCount: 10
+    lockDuration: 'PT1M'
+    deadLetteringOnMessageExpiration: true
+    defaultMessageTimeToLive: 'P7D'
+    requiresSession: false
+    maxSizeInMegabytes: 5120
+  }
+}
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: configures azure service bus with queues, topics, dead-letter, and session-based messaging..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-service-bus-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-service-bus-setup/"]
+resource topic 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = {
+  name: 'ai-events'
+  parent: sbNamespace
+  properties: {
+    defaultMessageTimeToLive: 'P7D'
+    maxSizeInMegabytes: 5120
   }
 }
 ```
 
-### Via Agent Invocation
+## Python Producer
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+from azure.servicebus import ServiceBusClient, ServiceBusMessage
+from azure.identity import DefaultAzureCredential
+import json
 
-## Configuration Reference
+client = ServiceBusClient(
+    fully_qualified_namespace="sb-prod.servicebus.windows.net",
+    credential=DefaultAzureCredential(),
+)
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+with client.get_queue_sender("ai-processing") as sender:
+    message = ServiceBusMessage(
+        json.dumps({"task": "embed-document", "blob_url": "https://..."}),
+        content_type="application/json",
+        subject="embedding",
+        application_properties={"priority": "high"},
+    )
+    sender.send_messages(message)
 ```
 
-## Monitoring
+## Python Consumer with Error Handling
 
-Track skill execution metrics:
+```python
+with client.get_queue_receiver("ai-processing", max_wait_time=30) as receiver:
+    for msg in receiver:
+        try:
+            data = json.loads(str(msg))
+            process_task(data)
+            receiver.complete_message(msg)
+        except TransientError:
+            receiver.abandon_message(msg)  # Retry later
+        except PoisonMessageError:
+            receiver.dead_letter_message(msg, reason="Unprocessable",
+                error_description="Failed after max retries")
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Dead Letter Queue Processing
+
+```python
+# Process DLQ messages for investigation
+dlq_receiver = client.get_queue_receiver(
+    "ai-processing", sub_queue=ServiceBusSubQueue.DEAD_LETTER, max_wait_time=10
+)
+
+with dlq_receiver:
+    for msg in dlq_receiver:
+        print(f"DLQ reason: {msg.dead_letter_reason}")
+        print(f"DLQ error: {msg.dead_letter_error_description}")
+        # Log, alert, or resubmit after fixing
+        dlq_receiver.complete_message(msg)
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Messages stuck in DLQ | maxDeliveryCount too low or unhandled errors | Increase maxDeliveryCount, add error handling patterns |
+| Poison message loop | No dead-letter on unprocessable content | Add explicit dead_letter_message call for known-bad data |
+| Throughput bottleneck | Single consumer, lock contention | Add concurrent receivers, increase lock duration |
+| Session ordering broken | Messages sent without session ID | Set session_id on messages when requiresSession=true |

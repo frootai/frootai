@@ -1,160 +1,117 @@
 ---
 name: fai-mcp-typescript-scaffold
-description: 'Scaffolds a complete typescript MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.'
+description: |
+  Scaffold TypeScript MCP server projects with SDK integration, typed tools,
+  resource handlers, and deployment configuration. Use when creating MCP
+  servers with full project structure and build pipeline.
 ---
 
-# Fai Mcp Typescript Scaffold
+# TypeScript MCP Scaffold
 
-Scaffolds a complete typescript MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
+Scaffold complete MCP server projects with TypeScript, build pipeline, and deployment.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a complete typescript mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Starting a new MCP server project from scratch
+- Setting up project structure with tests and CI
+- Creating MCP servers with multiple tools and resources
+- Publishing to npm as an executable package
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Project Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+my-mcp-server/
+├── src/
+│   ├── index.ts           # Server entry + transport
+│   ├── tools/
+│   │   ├── search.ts      # Search tool
+│   │   └── analyze.ts     # Analysis tool
+│   └── resources/
+│       └── config.ts      # Resource handlers
+├── tests/
+│   └── tools.test.ts
+├── tsconfig.json
+├── package.json
+├── Dockerfile
+└── README.md
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a complete typescript mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-typescript-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## tsconfig.json
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-mcp-typescript-scaffold/"]
-  }
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "include": ["src"]
 }
 ```
 
-### Via Agent Invocation
+## Tool Module Pattern
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```typescript
+// src/tools/search.ts
+import { z } from "zod";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+export function registerSearchTools(server: McpServer) {
+  server.tool(
+    "search_docs",
+    "Search documentation by query",
+    { query: z.string(), limit: z.number().default(5) },
+    async ({ query, limit }) => {
+      const results = await doSearch(query, limit);
+      return { content: [{ type: "text", text: JSON.stringify(results) }] };
+    }
+  );
 }
 ```
 
-## Monitoring
+## Entry Point
 
-Track skill execution metrics:
+```typescript
+// src/index.ts
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { registerSearchTools } from "./tools/search.js";
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+const server = new McpServer({ name: "my-tools", version: "1.0.0" });
+registerSearchTools(server);
+
+await server.connect(new StdioServerTransport());
+```
+
+## Dockerfile
+
+```dockerfile
+FROM node:22-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-slim
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package*.json ./
+RUN npm ci --production
+ENTRYPOINT ["node", "dist/index.js"]
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Import errors | Wrong moduleResolution | Use NodeNext for ESM |
+| Build fails | Missing type declarations | Add "declaration": true |
+| Docker image large | Dev deps in production | Use npm ci --production |
+| Tool registration order | Tools added after connect | Register before server.connect() |

@@ -1,156 +1,101 @@
 ---
 name: fai-review-and-refactor
-description: 'Combined code review + refactor — identifies issues and applies fixes in one pass.'
+description: |
+  Combine code review with targeted refactoring in a single pass — identify
+  issues and fix them with behavior-preserving changes. Use when reviewing
+  code that needs both quality feedback and structural improvement.
 ---
 
-# Fai Review And Refactor
+# Review and Refactor
 
-Combined code review + refactor — identifies issues and applies fixes in one pass.
+Review code and apply targeted refactoring in a single disciplined pass.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for combined code review + refactor — identifies issues and applies fixes in one pass.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Reviewing PR code that has structural issues
+- Combining quality feedback with concrete fixes
+- Mentoring through review with example refactoring
+- Cleaning up code during review before merge
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Review Dimensions
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Dimension | What to Check |
+|-----------|--------------|
+| Correctness | Does it do what's intended? Edge cases handled? |
+| Security | Injection, secrets, auth bypasses? |
+| Performance | N+1 queries, missing indexes, unbounded loops? |
+| Readability | Clear names, reasonable length, low complexity? |
+| Testability | Can each function be tested in isolation? |
+| Error handling | All external calls have try/catch? |
 
-## Steps
+## Review-then-Refactor Workflow
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+1. Review: Read through, note issues (don't fix yet)
+2. Classify: Group issues by type (bug, readability, performance)
+3. Prioritize: Fix bugs first, then readability, then style
+4. Refactor: One fix per commit with tests passing
+5. Comment: Leave review with both issues found and fixes applied
 ```
 
-### Step 2: Load Configuration
+## Common Review → Refactor Pairs
 
-Read settings from the FAI manifest and TuneKit config files.
+| Review Finding | Refactoring |
+|---------------|-------------|
+| Long method (>50 lines) | Extract method |
+| Deeply nested conditionals | Guard clauses (early return) |
+| Duplicate code blocks | Extract shared function |
+| Magic numbers | Named constants |
+| God class | Split by responsibility |
+| No error handling | Add try/catch with specific types |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+## Review Comment Template
+
+```markdown
+**Issue:** [Category] — [Description]
+**Severity:** 🔴 Bug | 🟡 Improvement | 🟢 Suggestion
+**Suggestion:** [Concrete fix or code example]
+**Why:** [Impact if not fixed]
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: combined code review + refactor — identifies issues and applies fixes in one pass..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-review-and-refactor
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-review-and-refactor/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Review too long | Trying to fix everything | Focus on top 3-5 issues per review |
+| Refactoring introduces bugs | Changed behavior during refactor | Tests before AND after each change |
+| Author defensive | Suggestions feel like criticism | Frame as questions: "Have you considered...?" |
+| Review comments ignored | Too many minor nits | Separate blocking from non-blocking comments |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-github-pr-review` — PR review standards and merge policies
+
+## Definition of Done
+
+Review-and-refactor is complete when all blocking issues are fixed, tests pass before and after each change, and complexity metrics show measurable improvement.

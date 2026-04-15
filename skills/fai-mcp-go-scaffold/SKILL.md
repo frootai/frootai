@@ -1,160 +1,100 @@
 ---
 name: fai-mcp-go-scaffold
-description: 'Scaffolds a complete go MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.'
+description: |
+  Scaffold Go MCP servers with the mcp-go SDK, typed tool handlers, middleware,
+  and production deployment. Use when building high-performance MCP servers
+  in Go for AI agent tool access.
 ---
 
-# Fai Mcp Go Scaffold
+# Go MCP Server Scaffold
 
-Scaffolds a complete go MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
+Build high-performance MCP servers in Go with typed handlers and middleware.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a complete go mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building MCP servers needing low latency and high concurrency
+- Exposing Go services as AI agent tools
+- Creating MCP servers for infrastructure or DevOps tooling
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Project Setup
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+mkdir my-mcp-server && cd my-mcp-server
+go mod init github.com/org/my-mcp-server
+go get github.com/mark3labs/mcp-go
 ```
 
-### Step 2: Load Configuration
+## Tool Definition
 
-Read settings from the FAI manifest and TuneKit config files.
+```go
+package main
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+import (
+    "context"
+    "encoding/json"
+    "github.com/mark3labs/mcp-go/mcp"
+    "github.com/mark3labs/mcp-go/server"
+)
 
-### Step 3: Execute Core Logic
+func searchDocsTool() mcp.Tool {
+    return mcp.NewTool("search_documents",
+        mcp.WithDescription("Search knowledge base documents by query"),
+        mcp.WithString("query", mcp.Required(), mcp.Description("Search query")),
+        mcp.WithNumber("top_k", mcp.Description("Results to return")),
+    )
+}
 
-Perform the primary operation: scaffolds a complete go mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
+func searchDocsHandler(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+    query := req.Params.Arguments["query"].(string)
+    topK := int(req.Params.Arguments["top_k"].(float64))
+    if topK == 0 { topK = 5 }
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-go-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-mcp-go-scaffold/"]
-  }
+    results, err := searchService.Search(ctx, query, topK)
+    if err != nil {
+        return nil, err
+    }
+    data, _ := json.Marshal(results)
+    return mcp.NewToolResultText(string(data)), nil
 }
 ```
 
-### Via Agent Invocation
+## Server Setup
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```go
+func main() {
+    s := server.NewMCPServer("my-mcp-server", "1.0.0")
+    s.AddTool(searchDocsTool(), searchDocsHandler)
+    s.AddTool(calculateCostTool(), calculateCostHandler)
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+    if err := server.ServeStdio(s); err != nil {
+        log.Fatal(err)
+    }
 }
 ```
 
-## Monitoring
+## Dockerfile
 
-Track skill execution metrics:
+```dockerfile
+FROM golang:1.22 AS build
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /mcp-server .
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+FROM gcr.io/distroless/static
+COPY --from=build /mcp-server /mcp-server
+ENTRYPOINT ["/mcp-server"]
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tool not found | Not registered with AddTool | Register tool + handler pair |
+| Panic on type assertion | Missing parameter | Check for nil before asserting type |
+| High memory under load | No request limits | Add context timeout middleware |
+| Binary too large | CGO enabled | Build with CGO_ENABLED=0 |
 
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog

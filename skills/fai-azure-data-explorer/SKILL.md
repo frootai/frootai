@@ -1,161 +1,119 @@
 ---
 name: fai-azure-data-explorer
-description: 'Configures Azure Data Explorer for telemetry with KQL queries and dashboards.'
+description: |
+  Set up Azure Data Explorer (Kusto) with ingestion pipelines, retention policies,
+  materialized views, and KQL query optimization. Use when building real-time analytics
+  or telemetry platforms for AI observability.
 ---
 
-# Fai Azure Data Explorer
+# Azure Data Explorer Setup
 
-Configures Azure Data Explorer for telemetry with KQL queries and dashboards.
+Configure ADX for real-time analytics with ingestion, retention, and KQL optimization.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure data explorer for telemetry with kql queries and dashboards.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building real-time analytics dashboards for AI telemetry
+- Ingesting high-volume streaming data (logs, metrics, events)
+- Creating materialized views for pre-aggregated reporting
+- Querying large datasets with KQL for incident investigation
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Create Database and Table
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```kql
+// Create table for AI telemetry
+.create table AITelemetry (
+    Timestamp: datetime,
+    RequestId: string,
+    Model: string,
+    PromptTokens: int,
+    CompletionTokens: int,
+    LatencyMs: real,
+    StatusCode: int,
+    Groundedness: real,
+    UserId: string
+)
 
-## Steps
+// Set retention to 90 days, hot cache to 14 days
+.alter-merge table AITelemetry policy retention
+```{"SoftDeletePeriod": "90.00:00:00", "Recoverability": "Enabled"}```
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+.alter-merge table AITelemetry policy caching
+```{"DataHotSpan": "14.00:00:00"}```
 ```
 
-### Step 2: Load Configuration
+## Ingestion Pipeline
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+from azure.kusto.data import KustoConnectionStringBuilder
+from azure.kusto.ingest import QueuedIngestClient, IngestionProperties
+from azure.identity import DefaultAzureCredential
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+kcsb = KustoConnectionStringBuilder.with_azure_token_credential(
+    "https://adx-prod.eastus2.kusto.windows.net",
+    DefaultAzureCredential()
+)
+ingest_client = QueuedIngestClient(kcsb)
+
+props = IngestionProperties(
+    database="telemetry",
+    table="AITelemetry",
+    data_format="json",
+)
+
+# Ingest from blob
+ingest_client.ingest_from_blob(
+    "https://storage.blob.core.windows.net/events/batch-001.json",
+    ingestion_properties=props,
+)
 ```
 
-### Step 3: Execute Core Logic
+## Materialized Views
 
-Perform the primary operation: configures azure data explorer for telemetry with kql queries and dashboards..
+Pre-aggregate for dashboard queries:
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-data-explorer
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-data-explorer/"]
-  }
+```kql
+// Hourly model usage summary
+.create materialized-view ModelUsageHourly on table AITelemetry {
+    AITelemetry
+    | summarize
+        Requests = count(),
+        AvgLatencyMs = avg(LatencyMs),
+        TotalTokens = sum(PromptTokens + CompletionTokens),
+        P95Latency = percentile(LatencyMs, 95),
+        AvgGroundedness = avg(Groundedness)
+    by Model, bin(Timestamp, 1h)
 }
 ```
 
-### Via Agent Invocation
+## KQL Query Patterns
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```kql
+// Token burn rate by model (last 24h)
+AITelemetry
+| where Timestamp > ago(24h)
+| summarize TotalTokens = sum(PromptTokens + CompletionTokens) by Model, bin(Timestamp, 1h)
+| render timechart
 
-## Configuration Reference
+// Latency P95 with anomaly detection
+AITelemetry
+| where Timestamp > ago(7d)
+| summarize P95 = percentile(LatencyMs, 95) by bin(Timestamp, 15m)
+| extend anomaly = iff(P95 > 3000, "HIGH", "normal")
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+// Error rate by model
+AITelemetry
+| where Timestamp > ago(24h)
+| summarize Total = count(), Errors = countif(StatusCode >= 400) by Model
+| extend ErrorRate = round(todouble(Errors) / Total * 100, 2)
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow KQL queries | No materialized views, wide scans | Create materialized views and add time filters |
+| Ingestion lag | Batch interval too long | Reduce batching interval (default 5min → 30s) |
+| Hot cache misses | Cache too short for query range | Extend caching hot span |
+| High costs | Over-retention or over-ingestion | Reduce retention, add ingestion filters |

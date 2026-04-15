@@ -1,180 +1,100 @@
 ---
 name: fai-openapi-to-app
-description: 'Generates application code from OpenAPI specifications — routes, models, validation, and test stubs.'
+description: |
+  Generate application code from OpenAPI specifications with typed clients,
+  models, and validation. Use when bootstrapping APIs or clients from
+  existing OpenAPI/Swagger definitions.
 ---
 
-# Fai Openapi To App
+# OpenAPI to Application
 
-Generates application code from OpenAPI specifications — routes, models, validation, and test stubs.
+Generate typed code from OpenAPI specs for APIs and client SDKs.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates application code from openapi specifications — routes, models, validation, and test stubs.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Bootstrapping a new API from an existing OpenAPI spec
+- Generating typed client SDKs from API definitions
+- Creating request/response models from schemas
+- Validating API implementation against spec
 
-**Category:** API Development
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Code Generation Tools
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Tool | Language | Use Case |
+|------|----------|----------|
+| openapi-generator | Multi-language | Client SDKs, server stubs |
+| autorest | C#, TypeScript, Python | Azure SDK style clients |
+| oapi-codegen | Go | Go server + client |
+| openapi-typescript | TypeScript | Type definitions only |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Python: FastAPI from Spec
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Generate FastAPI server stub
+pip install openapi-generator-cli
+openapi-generator-cli generate \
+  -i openapi.yaml \
+  -g python-fastapi \
+  -o generated/
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
+## TypeScript: Typed Client
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+npx openapi-typescript openapi.yaml -o src/api-types.d.ts
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates application code from openapi specifications — routes, models, validation, and test stubs..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 14**
-- **Play 52**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-openapi-to-app
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-openapi-to-app/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## API Patterns
-
-### Request Validation
 
 ```typescript
-import { z } from "zod";
+import type { paths } from './api-types';
 
-const RequestSchema = z.object({
-  query: z.string().min(1).max(2000),
-  top_k: z.number().int().min(1).max(50).default(5),
-  filters: z.record(z.string()).optional(),
-});
-```
+type ChatRequest = paths['/api/chat']['post']['requestBody']['content']['application/json'];
+type ChatResponse = paths['/api/chat']['post']['responses']['200']['content']['application/json'];
 
-### Response Format
-
-```json
-{
-  "status": "success",
-  "data": { "results": [] },
-  "metadata": {
-    "duration_ms": 245,
-    "tokens_used": 150,
-    "model": "gpt-4o",
-    "cached": false
-  }
+async function chat(req: ChatRequest): Promise<ChatResponse> {
+  const resp = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+  return resp.json();
 }
 ```
 
-### Error Responses
+## C#: AutoRest Client
 
-```json
-{
-  "status": "error",
-  "error": {
-    "code": "RATE_LIMITED",
-    "message": "Too many requests. Retry after 30 seconds.",
-    "retry_after": 30
-  }
-}
+```bash
+npx autorest --input-file=openapi.yaml \
+  --csharp --output-folder=generated \
+  --namespace=MyApp.Client
 ```
 
-## Rate Limiting
+## Spec Validation
 
-| Tier | Requests/min | Tokens/min | Burst |
-|------|-------------|------------|-------|
-| Free | 10 | 5,000 | 20 |
-| Standard | 60 | 50,000 | 120 |
-| Enterprise | 300 | 500,000 | 600 |
+```bash
+# Validate spec syntax
+npx @redocly/cli lint openapi.yaml
 
-## Notes
+# Compare spec vs implementation
+npx @redocly/cli bundle openapi.yaml -o bundled.yaml
+```
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the API Development category in the FAI primitives catalog
+## Spec-First Workflow
+
+```
+1. Design → Write openapi.yaml
+2. Review → Lint + team review
+3. Generate → Server stubs + client types
+4. Implement → Fill in business logic
+5. Validate → Run spec compliance tests
+6. Document → Auto-generate API docs
+```
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Generated code outdated | Spec changed, no regen | Add codegen to CI pipeline |
+| Type mismatches | Spec inconsistent with impl | Run spec validation in CI |
+| Missing endpoints | Spec incomplete | Lint with Redocly for completeness |
+| Generator errors | Invalid spec | Validate with `openapi-generator validate` |

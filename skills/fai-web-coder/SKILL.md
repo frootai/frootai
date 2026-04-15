@@ -1,161 +1,104 @@
----
+﻿---
 name: fai-web-coder
-description: 'Generates web pages and components from natural language descriptions with responsive design.'
+description: "Generate production-ready web pages and components from natural language with responsive layout, accessibility, and test hooks."
 ---
 
-# Fai Web Coder
+# FAI Web Coder
 
-Generates web pages and components from natural language descriptions with responsive design.
+## Goal
 
-## Overview
+Translate product requirements into maintainable frontend code with predictable UX quality and implementation constraints.
 
-This skill provides a structured, repeatable procedure for generates web pages and components from natural language descriptions with responsive design.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Input Contract
 
-**Category:** Code Quality
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Required | Description |
+|------|----------|-------------|
+| feature_summary | Yes | What the page/component does |
+| framework | Yes | React, Next.js, Vue, plain HTML/CSS |
+| design_system | No | Existing tokens/components |
+| breakpoints | No | Mobile/tablet/desktop targets |
+| accessibility_level | No | WCAG AA by default |
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates web pages and components from natural language descriptions with responsive design..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 24**
-- **Play 51**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-web-coder
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 - Convert Requirement to UI Spec
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-web-coder/"]
+  "page": "Pricing",
+  "sections": ["Hero", "Plan Cards", "FAQ", "CTA"],
+  "states": ["loading", "empty", "error", "success"],
+  "actions": ["Select plan", "Contact sales"]
+}
+```
+
+## Step 2 - Scaffold Component Architecture
+
+```tsx
+export function PricingPage() {
+  return (
+    <main>
+      <HeroSection />
+      <PlanGrid />
+      <FaqSection />
+      <CtaBanner />
+    </main>
+  );
+}
+```
+
+## Step 3 - Apply Responsive and A11y Rules
+
+- Use semantic regions (main, section, nav, footer).
+- Keep keyboard flow and focus visibility.
+- Ensure contrast ratios meet WCAG AA.
+- Use aria-live for async status updates.
+
+```css
+:root {
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-8: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 4 - Add State Handling
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```tsx
+if (isLoading) return <SkeletonGrid />;
+if (error) return <ErrorState retry={refetch} />;
+if (!plans.length) return <EmptyState />;
 ```
 
-## Monitoring
+## Step 5 - Add Test Hooks
 
-Track skill execution metrics:
+```tsx
+<button data-testid="select-plan-pro">Choose Pro</button>
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Validation Checklist
+
+| Check | Pass Condition |
+|------|----------------|
+| Responsive layout | Works at all target breakpoints |
+| Accessibility | Keyboard nav + labels + contrast pass |
+| State coverage | Loading/empty/error/success present |
+| Testability | Stable test IDs or semantic selectors |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Code Quality category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|------|-------|-----|
+| Mobile overflow | Fixed-width container | Use fluid widths and minmax grids |
+| Focus lost on rerender | Re-mounting key elements | Preserve DOM identity and focus management |
+| Flaky E2E selectors | Styling-based selectors | Use role or data-testid selectors |

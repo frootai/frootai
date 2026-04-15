@@ -1,5 +1,5 @@
 ---
-name: FAI-knowledge-staleness
+name: fai-knowledge-staleness
 description: "Monthly check for stale FROOT knowledge modules — scores staleness across docs, plays, primitives, and schemas using a weighted multi-signal algorithm. Generates a freshness dashboard with automated update suggestions."
 on:
   schedule:
@@ -311,7 +311,7 @@ Create a comprehensive freshness dashboard issue:
 | 15 | Legacy Migration | 2025-11-20 | 137 | 0 | 🔴 Stale |
 | ... | ... | ... | ... | ... | ... |
 
-**Summary:** 45 active, 15 aging, 8 stale out of 68 plays
+**Summary:** 45 active, 15 aging, 8 stale out of all plays
 
 ## Primitive Freshness
 
@@ -319,7 +319,7 @@ Create a comprehensive freshness dashboard issue:
 |----------|-------|-------|-------|-------|-------|
 | Agents | 201 | 160 | 30 | 11 | 87% 🟢 |
 | Instructions | 176 | 140 | 25 | 11 | 87% 🟢 |
-| Skills | 282 | 210 | 50 | 22 | 83% 🟢 |
+| Skills | 322 | 210 | 50 | 22 | 83% 🟢 |
 | Schemas | 7 | 3 | 2 | 2 | 57% 🟠 |
 | Engine | 12 | 8 | 3 | 1 | 79% 🟡 |
 

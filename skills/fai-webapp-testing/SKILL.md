@@ -1,160 +1,129 @@
----
+﻿---
 name: fai-webapp-testing
-description: 'Generates web application test suites covering unit, integration, E2E, and accessibility.'
+description: "Design layered web app test strategy across unit, integration, E2E, accessibility, and performance baselines."
 ---
 
-# Fai Webapp Testing
+# FAI WebApp Testing
 
-Generates web application test suites covering unit, integration, E2E, and accessibility.
+## Purpose
 
-## Overview
+Build a complete test strategy for modern web apps with deterministic CI gates.
 
-This skill provides a structured, repeatable procedure for generates web application test suites covering unit, integration, e2e, and accessibility.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Test Pyramid
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Layer | Target | Example Tools |
+|------|--------|---------------|
+| Unit | Pure logic/components | Vitest, Jest |
+| Integration | API + component interactions | Testing Library, Playwright component |
+| E2E | User journeys | Playwright/Cypress |
+| Accessibility | WCAG checks | axe-core |
+| Performance | Core Web Vitals budget | Lighthouse CI |
 
-## Parameters
+## Step 1 - Unit Testing Baseline
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```ts
+import { describe, it, expect } from 'vitest';
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+describe('price formatter', () => {
+  it('formats USD values', () => {
+    expect(formatPrice(1999)).toBe('$19.99');
+  });
+});
 ```
 
-### Step 2: Load Configuration
+## Step 2 - Integration Testing
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```tsx
+render(<CheckoutPage />);
+await user.click(screen.getByRole('button', { name: /pay now/i }));
+expect(await screen.findByText(/payment successful/i)).toBeInTheDocument();
 ```
 
-### Step 3: Execute Core Logic
+## Step 3 - E2E Journey
 
-Perform the primary operation: generates web application test suites covering unit, integration, e2e, and accessibility..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+```ts
+test('user can complete checkout', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Pricing' }).click();
+  await page.getByTestId('select-plan-pro').click();
+  await expect(page.getByText('Order confirmed')).toBeVisible();
+});
 ```
 
-## Output
+## Step 4 - Accessibility Gate
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-webapp-testing
+```ts
+import AxeBuilder from '@axe-core/playwright';
+const results = await new AxeBuilder({ page }).analyze();
+expect(results.violations).toEqual([]);
 ```
 
-### Inside a Solution Play
+## Step 5 - CI Quality Gates
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+| Gate | Threshold |
+|------|-----------|
+| Unit coverage | >= 80% lines |
+| E2E critical flow pass | 100% |
+| Axe violations | 0 high/critical |
+| Lighthouse performance | >= 80 |
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|------|-------|-----|
+| Flaky E2E | Timing and unstable selectors | Add explicit waits + semantic selectors |
+| Slow test suite | Over-heavy E2E coverage | Shift non-critical checks to integration |
+| A11y regressions | Missing lint/a11y checks | Add pre-merge axe + ESLint plugin |
+
+## Advanced Implementation Notes
+
+### Operational Guardrails
+
+- Define measurable SLOs before rollout.
+- Capture baseline metrics and compare deltas post-change.
+- Add alert thresholds with explicit on-call ownership.
+- Use environment-specific overrides for dev/staging/prod.
+
+### CI/CD and Validation Expansion
+
+```bash
+# Example verification sequence
+npm run lint
+npm test
+npm run build
+```
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-webapp-testing/"]
+  "quality_gate": {
+    "required": true,
+    "min_score": 0.8,
+    "block_on_failure": true
   }
 }
 ```
 
-### Via Agent Invocation
+### Security and Compliance Checks
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Control | Requirement |
+|--------|-------------|
+| Secret handling | No plaintext secrets in repo |
+| Access model | Least privilege role assignments |
+| Logging | Redact sensitive data before persistence |
+| Auditability | Keep immutable trace of critical actions |
 
-## Configuration Reference
+### Performance and Cost Notes
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
+- Budget requests and tokens per endpoint/class of workload.
+- Profile p95 and p99 latency as separate objectives.
+- Add caching only where correctness is preserved.
+- Use periodic reports to catch drift in cost/quality.
 
-## Monitoring
+### Extended Troubleshooting
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
-## Troubleshooting
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Symptom | Likely Cause | Recommended Action |
+|--------|--------------|--------------------|
+| Validation gate failures | Threshold too strict or wrong baseline | Recalibrate using a fixed reference dataset |
+| Unexpected regressions | Missing scenario coverage | Add targeted regression tests and rerun |
+| Production-only issues | Environment mismatch | Diff environment config and identity settings |
+| Slow recovery during incidents | Unclear ownership/runbook steps | Add explicit owner and sequence in runbook |

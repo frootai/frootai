@@ -36,6 +36,7 @@ jobs:
   validate-primitives:
     name: Validate All Primitives
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - name: Checkout
@@ -167,6 +168,7 @@ jobs:
   secrets-scan:
     name: Secrets Scan (Primitives)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -204,6 +206,7 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: [validate-primitives, secrets-scan]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       pull-requests: write
     steps:

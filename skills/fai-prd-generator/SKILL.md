@@ -1,156 +1,104 @@
 ---
 name: fai-prd-generator
-description: 'Generates Product Requirements Documents with user needs, success metrics, constraints, and AI-specific requirements.'
+description: |
+  Generate Product Requirements Documents with user stories, acceptance
+  criteria, technical constraints, and success metrics. Use when defining
+  product features or preparing specs for engineering handoff.
 ---
 
-# Fai Prd Generator
+# PRD Generator
 
-Generates Product Requirements Documents with user needs, success metrics, constraints, and AI-specific requirements.
+Create structured PRDs with user stories, acceptance criteria, and success metrics.
+
+## When to Use
+
+- Defining a new product feature or capability
+- Preparing specifications for engineering handoff
+- Creating user stories with testable acceptance criteria
+- Aligning stakeholders on scope, constraints, and success
+
+---
+
+## PRD Template
+
+```markdown
+# PRD: [Feature Name]
 
 ## Overview
+**Author:** [name] | **Date:** [date] | **Status:** Draft/Review/Approved
 
-This skill provides a structured, repeatable procedure for generates product requirements documents with user needs, success metrics, constraints, and ai-specific requirements.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Problem Statement
+[What problem does this solve? Who has this problem? How big is it?]
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+## Proposed Solution
+[High-level description of what we're building]
 
-## Parameters
+## User Stories
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### US-1: [As a {role}, I want {action}, so that {benefit}]
+**Acceptance Criteria:**
+- [ ] Given [context], when [action], then [result]
+- [ ] Given [edge case], when [action], then [graceful handling]
+- [ ] Performance: [specific metric target]
 
-## Steps
+### US-2: [As a {role}, I want {action}, so that {benefit}]
+**Acceptance Criteria:**
+- [ ] [Criteria 1]
+- [ ] [Criteria 2]
 
-### Step 1: Validate Prerequisites
+## Technical Constraints
+- Must use [technology/service]
+- Must integrate with [existing system]
+- Must handle [scale requirement]
+- Must comply with [regulation]
 
-Verify all required tools, credentials, and dependencies are available.
+## Non-Goals (Out of Scope)
+- [Explicitly excluded feature 1]
+- [Explicitly excluded feature 2]
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## Success Metrics
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| [Adoption] | [X users in Y days] | [Dashboard/Analytics] |
+| [Performance] | [P95 < Xms] | [APM tool] |
+| [Quality] | [X% satisfaction] | [NPS survey] |
+
+## Dependencies
+- [Team/System 1]: [What we need from them]
+- [Team/System 2]: [What we need from them]
+
+## Timeline
+| Phase | Scope | Target Date |
+|-------|-------|-------------|
+| MVP | [US-1, US-2] | [Date] |
+| V1 | [+ US-3, US-4] | [Date] |
+
+## Open Questions
+- [ ] [Decision needed on X]
+- [ ] [Pending input from Y team]
 ```
 
-### Step 2: Load Configuration
+## Auto-Generation
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+def generate_prd(feature_description: str) -> str:
+    return llm(f"""Generate a PRD for this feature. Include:
+- Problem statement
+- 3-5 user stories with Given/When/Then acceptance criteria
+- Technical constraints
+- Non-goals
+- Success metrics with measurable targets
+- Dependencies
+- Timeline with MVP and V1 phases
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+Feature: {feature_description}""")
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates product requirements documents with user needs, success metrics, constraints, and ai-specific requirements..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-prd-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-prd-generator/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| PRD too vague | No acceptance criteria | Add Given/When/Then per story |
+| Scope creep | No non-goals section | Explicitly list what's excluded |
+| No alignment | Missing success metrics | Add measurable targets |
+| Too long | Including design details | Keep PRD to WHAT, not HOW |

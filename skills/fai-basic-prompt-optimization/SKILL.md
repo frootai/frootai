@@ -1,160 +1,128 @@
 ---
 name: fai-basic-prompt-optimization
-description: 'Applies fundamental prompt engineering optimizations — clarity, specificity, format control.'
+description: |
+  Optimize baseline prompts with role framing, output constraints, few-shot examples,
+  and deterministic output validation. Use when improving prompt quality, reducing
+  hallucinations, or standardizing LLM output format.
 ---
 
-# Fai Basic Prompt Optimization
+# Prompt Optimization Patterns
 
-Applies fundamental prompt engineering optimizations — clarity, specificity, format control.
+Techniques for improving prompt quality, consistency, and safety.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for applies fundamental prompt engineering optimizations — clarity, specificity, format control.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Prompts producing inconsistent or verbose output
+- LLM hallucinating facts not in the provided context
+- Need structured JSON/markdown output from free-form prompts
+- Setting up prompt evaluation baselines
 
-**Category:** Prompt Engineering
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Pattern 1: Role + Constraints + Format
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+SYSTEM_PROMPT = """You are a technical documentation assistant.
 
-## Steps
+Rules:
+- Answer ONLY from the provided context. If the answer is not in the context, say "I don't know."
+- Never fabricate URLs, citations, or code that isn't grounded in context.
+- Output valid JSON matching the schema below.
+- Keep responses under 200 words.
 
-### Step 1: Validate Prerequisites
+Output schema:
+{"answer": "string", "confidence": "high|medium|low", "sources": ["string"]}"""
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"},
+    ],
+    temperature=0.2,
+    response_format={"type": "json_object"},
+)
 ```
 
-### Step 2: Load Configuration
+## Pattern 2: Few-Shot Examples
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+FEW_SHOT = [
+    {"role": "user", "content": "Context: Azure Functions supports Python 3.11.\nQuestion: What Python versions are supported?"},
+    {"role": "assistant", "content": '{"answer": "Python 3.11", "confidence": "high", "sources": ["Azure Functions supports Python 3.11."]}'},
+    {"role": "user", "content": "Context: Azure SQL costs vary by tier.\nQuestion: How much does Azure SQL cost?"},
+    {"role": "assistant", "content": '{"answer": "Costs vary by tier. Check Azure pricing calculator for specifics.", "confidence": "medium", "sources": ["Azure SQL costs vary by tier."]}'},
+]
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+messages = [{"role": "system", "content": SYSTEM_PROMPT}] + FEW_SHOT + [
+    {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
+]
 ```
 
-### Step 3: Execute Core Logic
+## Pattern 3: Chain of Thought
 
-Perform the primary operation: applies fundamental prompt engineering optimizations — clarity, specificity, format control..
+```python
+COT_PROMPT = """Think step by step:
+1. Identify the key entities in the question
+2. Find relevant information in the context
+3. Formulate a grounded answer
+4. Rate your confidence
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+Wrap your reasoning in <thinking> tags, then provide the final answer as JSON."""
 ```
 
-## Output
+## Pattern 4: Output Validation
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+```python
+import json
+from pydantic import BaseModel, field_validator
 
-## WAF Alignment
+class PromptResponse(BaseModel):
+    answer: str
+    confidence: str
+    sources: list[str]
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+    @field_validator("confidence")
+    @classmethod
+    def validate_confidence(cls, v):
+        assert v in ("high", "medium", "low"), f"Invalid confidence: {v}"
+        return v
 
-## Compatible Solution Plays
-
-- **Play 18**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-basic-prompt-optimization
+def safe_parse(raw: str) -> PromptResponse | None:
+    try:
+        return PromptResponse.model_validate_json(raw)
+    except Exception:
+        return None
 ```
 
-### Inside a Solution Play
+## Temperature Guide
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+| Temperature | Use Case | Example |
+|-------------|----------|---------|
+| 0.0 | Deterministic extraction, classification | Entity extraction, sentiment |
+| 0.2 | Factual Q&A, documentation | RAG answers, code review |
+| 0.5 | Balanced creativity + accuracy | Email drafting, summaries |
+| 0.8-1.0 | Creative generation | Brainstorming, marketing copy |
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-basic-prompt-optimization/"]
-  }
-}
+## Evaluation Baseline
+
+```python
+def evaluate_prompt(prompt_fn, dataset: list[dict], threshold: float = 0.8) -> dict:
+    correct = 0
+    for row in dataset:
+        result = prompt_fn(row["context"], row["question"])
+        parsed = safe_parse(result)
+        if parsed and parsed.answer.strip() == row["expected"].strip():
+            correct += 1
+    accuracy = correct / len(dataset)
+    return {"accuracy": accuracy, "passed": accuracy >= threshold, "n": len(dataset)}
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Prompt Engineering category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Verbose/inconsistent output | No output constraints | Add word limit + JSON response_format |
+| Hallucinated facts | No grounding instruction | Add "answer ONLY from context" rule |
+| JSON parse failures | Model not following schema | Add few-shot examples + lower temperature |
+| Low accuracy on eval | Prompt too generic | Add domain-specific few-shot examples |

@@ -1,156 +1,116 @@
 ---
 name: fai-secret-scanning
-description: 'Scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens.'
+description: |
+  Detect and prevent secrets in code with pre-commit hooks, CI scanning,
+  and remediation workflows. Use when hardening repositories against
+  accidental credential exposure.
 ---
 
-# Fai Secret Scanning
+# Secret Scanning
 
-Scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens.
+Detect and prevent secrets in code with scanning and pre-commit hooks.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up secret detection for a repository
+- Configuring pre-commit hooks to catch secrets before push
+- Remediating leaked secrets
+- Integrating secret scanning into CI/CD
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Pre-Commit Hook (gitleaks)
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+```
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Install and run
+pip install pre-commit
+pre-commit install
+pre-commit run gitleaks --all-files
 ```
 
-### Step 2: Load Configuration
+## GitHub Secret Scanning
 
-Read settings from the FAI manifest and TuneKit config files.
+```yaml
+# Automatically enabled on public repos
+# For private repos: Settings → Code security → Secret scanning → Enable
+
+# Custom patterns
+# Settings → Code security → Secret scanning → Custom patterns
+# Pattern: "FROOTAI_[A-Za-z0-9]{32}"
+```
+
+## CI Integration
+
+```yaml
+name: Secret Scan
+on: [push, pull_request]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+## detect-secrets (Alternative)
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+pip install detect-secrets
+
+# Create baseline (existing false positives)
+detect-secrets scan --all-files > .secrets.baseline
+
+# Scan for new secrets
+detect-secrets scan --all-files --baseline .secrets.baseline
 ```
 
-### Step 3: Execute Core Logic
+## Remediation Workflow
 
-Perform the primary operation: scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens..
+```markdown
+## Secret Leak Remediation
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
+1. **Revoke immediately** — Rotate the leaked credential
+2. **Remove from history** — Use BFG or git-filter-repo
+3. **Scan for usage** — Check if credential was exploited
+4. **Prevent recurrence** — Add pre-commit hook + CI scan
+5. **Document** — Log incident and remediation steps
 
 ```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+# Remove secret from git history
+git filter-repo --invert-paths --path-match "config/secrets.json"
+# Force push (destructive — team must re-clone)
+git push --force --all
+```
 ```
 
-## Output
+## .gitignore Essentials
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-secret-scanning
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-secret-scanning/"]
-  }
-}
+.env
+.env.local
+*.pem
+*.key
+**/secrets/*
+**/credentials/*
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| False positive on test data | Test file contains fake keys | Add to .gitleaksignore |
+| Pre-commit too slow | Scanning all files | Use --staged-only flag |
+| Secret in git history | Committed before hook | Use git-filter-repo to rewrite history |
+| Custom pattern not matching | Regex wrong | Test with gitleaks --config=custom.toml |

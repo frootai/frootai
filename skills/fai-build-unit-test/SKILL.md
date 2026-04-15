@@ -1,160 +1,107 @@
 ---
 name: fai-build-unit-test
-description: 'Generates unit tests for any language — detects framework and applies appropriate patterns.'
+description: |
+  Generate unit tests with deterministic fixtures, boundary coverage, error path
+  testing, and stable CI behavior. Use when writing tests for Python, .NET, or
+  TypeScript code with pytest, xUnit, or Jest.
 ---
 
-# Fai Build Unit Test
+# Unit Test Patterns
 
-Generates unit tests for any language — detects framework and applies appropriate patterns.
+Write reliable unit tests with fixtures, boundary coverage, and CI stability.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates unit tests for any language — detects framework and applies appropriate patterns.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Writing tests for new code or untested modules
+- Improving coverage on error paths and edge cases
+- Making flaky tests deterministic
+- Setting up test conventions for a team
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Python (pytest)
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+import pytest
 
-## Steps
+def test_chunk_text_splits_correctly():
+    text = "Hello world. This is a test. Another sentence."
+    chunks = chunk_text(text, max_size=20)
+    assert len(chunks) >= 2
+    assert all(len(c) <= 20 for c in chunks)
 
-### Step 1: Validate Prerequisites
+def test_chunk_text_empty_input():
+    assert chunk_text("", max_size=100) == []
 
-Verify all required tools, credentials, and dependencies are available.
+def test_chunk_text_single_word():
+    assert chunk_text("Hello", max_size=100) == ["Hello"]
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+@pytest.mark.parametrize("input,expected", [
+    ("hello", "hello"),
+    ("HELLO", "hello"),
+    ("Hello World", "hello world"),
+])
+def test_normalize(input, expected):
+    assert normalize(input) == expected
 ```
 
-### Step 2: Load Configuration
+## .NET (xUnit)
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates unit tests for any language — detects framework and applies appropriate patterns..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-unit-test
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
+```csharp
+public class ChunkerTests
 {
-  "primitives": {
-    "skills": ["skills/fai-build-unit-test/"]
-  }
+    [Fact]
+    public void ChunkText_SplitsCorrectly()
+    {
+        var chunks = Chunker.Chunk("Hello world. Test.", maxSize: 15);
+        Assert.True(chunks.Count >= 2);
+        Assert.All(chunks, c => Assert.True(c.Length <= 15));
+    }
+
+    [Theory]
+    [InlineData("", 0)]
+    [InlineData("Hello", 1)]
+    public void ChunkText_EdgeCases(string input, int expectedCount)
+    {
+        Assert.Equal(expectedCount, Chunker.Chunk(input, 100).Count);
+    }
 }
 ```
 
-### Via Agent Invocation
+## TypeScript (Jest)
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```typescript
+describe('normalize', () => {
+  it.each([
+    ['hello', 'hello'],
+    ['HELLO', 'hello'],
+    ['Hello World', 'hello world'],
+  ])('normalizes %s to %s', (input, expected) => {
+    expect(normalize(input)).toBe(expected);
+  });
+});
 ```
 
-## Monitoring
+## Test Structure (AAA)
 
-Track skill execution metrics:
+```python
+def test_example():
+    # Arrange
+    input_data = {"name": "Test", "value": 42}
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+    # Act
+    result = process(input_data)
+
+    # Assert
+    assert result.status == "ok"
+    assert result.value == 42
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Flaky test | Time-dependent or external deps | Mock external calls, freeze time |
+| Low coverage | Only happy path tested | Add error path + boundary tests |
+| Slow tests | Real I/O in unit tests | Mock all I/O, use in-memory stores |
+| Test coupled to impl | Testing internal methods | Test public API behavior only |

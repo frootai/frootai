@@ -1,160 +1,141 @@
----
+﻿---
 name: fai-xunit-test
-description: 'Generates xUnit test suites with Fact/Theory, FluentAssertions, and WebApplicationFactory.'
+description: "Generate robust xUnit test suites with Fact/Theory patterns, fixtures, mocking, and deterministic assertions."
 ---
 
-# Fai Xunit Test
+# FAI xUnit Test
 
-Generates xUnit test suites with Fact/Theory, FluentAssertions, and WebApplicationFactory.
+## Objective
 
-## Overview
+Create maintainable .NET tests that balance speed, isolation, and behavioral confidence.
 
-This skill provides a structured, repeatable procedure for generates xunit test suites with fact/theory, fluentassertions, and webapplicationfactory.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Patterns
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Pattern | Use Case |
+|--------|----------|
+| Fact | Single deterministic scenario |
+| Theory + InlineData | Parameterized coverage |
+| Collection fixtures | Shared expensive setup |
+| WebApplicationFactory | API integration tests |
 
-## Parameters
+## Step 1 - Unit Test Example
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```csharp
+public class PriceServiceTests
+{
+    [Theory]
+    [InlineData(1000, 0.10, 900)]
+    [InlineData(2000, 0.25, 1500)]
+    public void ApplyDiscount_ReturnsExpectedValue(decimal amount, decimal rate, decimal expected)
+    {
+        var service = new PriceService();
+        var result = service.ApplyDiscount(amount, rate);
+        Assert.Equal(expected, result);
+    }
+}
 ```
 
-### Step 2: Load Configuration
+## Step 2 - Mock External Dependencies
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```csharp
+var repository = new Mock<IOrderRepository>();
+repository.Setup(r => r.GetByIdAsync("A1")).ReturnsAsync(new Order("A1"));
 ```
 
-### Step 3: Execute Core Logic
+## Step 3 - Integration Test with WebApplicationFactory
 
-Perform the primary operation: generates xunit test suites with fact/theory, fluentassertions, and webapplicationfactory..
+```csharp
+public class OrdersApiTests : IClassFixture<WebApplicationFactory<Program>>
+{
+    private readonly HttpClient _client;
 
-### Step 4: Validate Results
+    public OrdersApiTests(WebApplicationFactory<Program> factory)
+    {
+        _client = factory.CreateClient();
+    }
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+    [Fact]
+    public async Task GetOrder_Returns200()
+    {
+        var response = await _client.GetAsync("/api/orders/A1");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+}
 ```
 
-## Output
+## Step 4 - Test Quality Rules
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+- Prefer behavior assertions over implementation details.
+- Avoid sleeps; use deterministic clocks/fakes.
+- Isolate test data; no cross-test leakage.
+- Keep test names scenario-oriented.
 
-## WAF Alignment
+## Validation Checklist
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| Check | Pass Condition |
+|------|----------------|
+| Unit test speed | Fast local execution |
+| Determinism | No random/fuzzy timing failures |
+| Coverage | Critical paths covered |
+| Integration confidence | Key endpoints validated |
 
-## Compatible Solution Plays
+## Troubleshooting
 
-- **Play 32**
+| Issue | Cause | Fix |
+|------|-------|-----|
+| Flaky tests | Time/network dependence | Use fake clock and local test doubles |
+| Slow suite | Too many integration tests | Move logic checks to unit layer |
+| Brittle tests | Over-mocking internals | Assert outcomes, not internals |
 
-## Error Handling
+## Advanced Implementation Notes
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+### Operational Guardrails
 
-## Usage
+- Define measurable SLOs before rollout.
+- Capture baseline metrics and compare deltas post-change.
+- Add alert thresholds with explicit on-call ownership.
+- Use environment-specific overrides for dev/staging/prod.
 
-### Standalone
+### CI/CD and Validation Expansion
 
 ```bash
-# Run this skill directly
-npx frootai skill run fai-xunit-test
+# Example verification sequence
+npm run lint
+npm test
+npm run build
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-xunit-test/"]
+  "quality_gate": {
+    "required": true,
+    "min_score": 0.8,
+    "block_on_failure": true
   }
 }
 ```
 
-### Via Agent Invocation
+### Security and Compliance Checks
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Control | Requirement |
+|--------|-------------|
+| Secret handling | No plaintext secrets in repo |
+| Access model | Least privilege role assignments |
+| Logging | Redact sensitive data before persistence |
+| Auditability | Keep immutable trace of critical actions |
 
-## Configuration Reference
+### Performance and Cost Notes
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
+- Budget requests and tokens per endpoint/class of workload.
+- Profile p95 and p99 latency as separate objectives.
+- Add caching only where correctness is preserved.
+- Use periodic reports to catch drift in cost/quality.
 
-## Monitoring
+### Extended Troubleshooting
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
-## Troubleshooting
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Symptom | Likely Cause | Recommended Action |
+|--------|--------------|--------------------|
+| Validation gate failures | Threshold too strict or wrong baseline | Recalibrate using a fixed reference dataset |
+| Unexpected regressions | Missing scenario coverage | Add targeted regression tests and rerun |
+| Production-only issues | Environment mismatch | Diff environment config and identity settings |
+| Slow recovery during incidents | Unclear ownership/runbook steps | Add explicit owner and sequence in runbook |

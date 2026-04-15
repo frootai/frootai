@@ -1,161 +1,115 @@
 ---
 name: fai-azure-blob-lifecycle
-description: 'Designs Azure Blob Storage lifecycle management with tiering and retention policies.'
+description: |
+  Configure Azure Blob Storage lifecycle policies for automatic tiering, retention
+  enforcement, legal hold, and archival cost optimization. Use when managing large-scale
+  blob data with cost and compliance requirements.
 ---
 
-# Fai Azure Blob Lifecycle
+# Azure Blob Lifecycle Management
 
-Designs Azure Blob Storage lifecycle management with tiering and retention policies.
+Automate blob tiering, retention, and deletion with lifecycle management policies.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs azure blob storage lifecycle management with tiering and retention policies.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Managing large volumes of blob data (logs, documents, backups)
+- Reducing storage costs by tiering cold data to Cool/Archive
+- Enforcing retention policies for compliance (HIPAA, SOX, GDPR)
+- Setting up immutable storage for audit trails
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs azure blob storage lifecycle management with tiering and retention policies..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-blob-lifecycle
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Lifecycle Policy
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-azure-blob-lifecycle/"]
+  "rules": [
+    {
+      "name": "cool-after-30-days",
+      "type": "Lifecycle",
+      "definition": {
+        "filters": { "blobTypes": ["blockBlob"], "prefixMatch": ["documents/"] },
+        "actions": {
+          "baseBlob": { "tierToCool": { "daysAfterModificationGreaterThan": 30 } }
+        }
+      }
+    },
+    {
+      "name": "archive-after-90-days",
+      "type": "Lifecycle",
+      "definition": {
+        "filters": { "blobTypes": ["blockBlob"], "prefixMatch": ["documents/"] },
+        "actions": {
+          "baseBlob": { "tierToArchive": { "daysAfterModificationGreaterThan": 90 } }
+        }
+      }
+    },
+    {
+      "name": "delete-old-versions",
+      "type": "Lifecycle",
+      "definition": {
+        "filters": { "blobTypes": ["blockBlob"] },
+        "actions": {
+          "version": { "delete": { "daysAfterCreationGreaterThan": 365 } }
+        }
+      }
+    }
+  ]
+}
+```
+
+## Bicep Deployment
+
+```bicep
+resource lifecyclePolicy 'Microsoft.Storage/storageAccounts/managementPolicies@2023-05-01' = {
+  name: 'default'
+  parent: storageAccount
+  properties: {
+    policy: {
+      rules: [
+        {
+          name: 'cool-after-30'
+          type: 'Lifecycle'
+          definition: {
+            filters: { blobTypes: ['blockBlob'], prefixMatch: ['documents/'] }
+            actions: {
+              baseBlob: { tierToCool: { daysAfterModificationGreaterThan: 30 } }
+            }
+          }
+        }
+      ]
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+## Immutable Storage for Compliance
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```bash
+# Enable versioning (required for immutability)
+az storage account blob-service-properties update \
+  --account-name $ACCOUNT --enable-versioning true
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+# Set time-based immutability policy (7 years for SOX)
+az storage container immutability-policy create \
+  --account-name $ACCOUNT --container-name audit-logs \
+  --period 2556  # days (~7 years)
 ```
 
-## Monitoring
+## Cost Optimization Table
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Tier | Cost (per GB/mo) | Access Cost | Use Case |
+|------|-----------------|-------------|----------|
+| Hot | $$$ | Low | Active data, frequent reads |
+| Cool | $$ | Medium | Infrequent access (>30 days) |
+| Cold | $ | Higher | Rare access (>90 days) |
+| Archive | ¢ | Very High + rehydration delay | Compliance, long-term backup |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Unexpected data deletion | Aggressive delete rule | Increase retention days and add soft delete safety net |
+| Tiering not happening | Policy not applied or wrong prefix | Verify prefixMatch and check policy execution logs |
+| Stuck in archive tier | Rehydration not started | Use SetBlobTier with rehydration priority (Standard/High) |
+| Compliance audit failure | No immutability proof | Enable immutable storage with legal hold on audit containers |

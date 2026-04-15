@@ -1,0 +1,48 @@
+name: Check Line Endings
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.json'
+
+permissions:
+  contents: read
+
+jobs:
+  check-line-endings:
+    name: Reject CRLF in text files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check for CRLF line endings
+        run: |
+          echo "🔍 Scanning for CRLF line endings in markdown and config files..."
+          
+          CRLF_FILES=$(git ls-files '*.md' '*.yml' '*.yaml' '*.json' | while read f; do
+            if file "$f" | grep -q 'CRLF'; then
+              echo "  ❌ $f"
+            fi
+          done)
+          
+          if [ -n "$CRLF_FILES" ]; then
+            echo ""
+            echo "❌ Found CRLF line endings in the following files:"
+            echo "$CRLF_FILES"
+            echo ""
+            echo "Fix: Run 'git config core.autocrlf false' and convert files to LF."
+            echo "  sed -i 's/\r$//' <file>"
+            exit 1
+          fi
+          
+          echo "✅ All text files use LF line endings"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Line Endings Check" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All text files use LF line endings" >> $GITHUB_STEP_SUMMARY

@@ -1,160 +1,120 @@
 ---
 name: fai-tldr-prompt
-description: 'Summarizes long conversations into concise action items and decisions.'
+description: |
+  Generate concise TL;DR summaries from long documents, code reviews,
+  or conversation threads. Use when condensing lengthy content into
+  actionable summaries.
 ---
 
-# Fai Tldr Prompt
+# TL;DR Summary Generator
 
-Summarizes long conversations into concise action items and decisions.
+Generate concise, actionable summaries from long content.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for summarizes long conversations into concise action items and decisions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Summarizing long documents or reports
+- Creating executive summaries from technical content
+- Condensing PR reviews or discussion threads
+- Generating meeting notes from transcripts
 
-**Category:** Prompt Engineering
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Summary Prompts by Type
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### Document Summary
 
-## Steps
+```python
+def summarize_document(text: str, max_bullets: int = 5) -> str:
+    return llm(f"""Summarize in {max_bullets} bullet points.
+Rules:
+- Each bullet is one clear sentence
+- Focus on decisions, actions, and key facts
+- Skip background and filler
+- Include numbers and specifics where available
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+Document:
+{text}""")
 ```
 
-### Step 2: Load Configuration
+### Code Review Summary
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+def summarize_pr_review(comments: list[dict]) -> str:
+    formatted = "\n".join(f"- [{c['severity']}] {c['file']}:{c['line']}: {c['comment']}"
+                          for c in comments)
+    return llm(f"""Summarize this code review in 3-5 bullets.
+Group by: blocking issues, improvements, positive feedback.
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+Comments:
+{formatted}""")
 ```
 
-### Step 3: Execute Core Logic
+### Thread Summary
 
-Perform the primary operation: summarizes long conversations into concise action items and decisions..
+```python
+def summarize_thread(messages: list[dict]) -> str:
+    formatted = "\n".join(f"{m['author']}: {m['content']}" for m in messages)
+    return llm(f"""Summarize this discussion thread.
+Output:
+- Decision: [what was decided]
+- Action items: [who does what by when]
+- Open questions: [unresolved items]
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+Thread:
+{formatted}""")
 ```
 
-## Output
+## Summary Quality Checklist
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+| Check | Requirement |
+|-------|-------------|
+| Length | 3-5 bullets for short docs, 5-10 for long |
+| Specifics | Numbers, names, dates — not vague |
+| Actionable | Reader knows what to do next |
+| Accurate | No hallucinated details |
+| Self-contained | Makes sense without reading original |
 
-## WAF Alignment
+## Output Formats
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-
-## Compatible Solution Plays
-
-- **Play 18**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tldr-prompt
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-tldr-prompt/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Format | Template |
+|--------|---------|
+| Bullet | - Key point 1\n- Key point 2 |
+| Executive | ## Summary\n[paragraph]\n## Actions\n[list] |
+| One-liner | "[Subject] — [key decision] — [next step]" |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Summary too vague | No specifics rule | Add "include numbers and names" |
+| Important detail missed | Content too long | Chunk and summarize sections, then merge |
+| Hallucinated facts | Model fills gaps | Add "only include facts from the document" |
+| Too long | No length constraint | Set explicit bullet count limit |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Prompt Engineering category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Always include grounding rules | Prevents hallucination |
+| Set explicit output format | Consistent, parseable responses |
+| Use temperature 0-0.3 for factual tasks | Reduces randomness |
+| Add few-shot examples for complex formats | Shows model the expected pattern |
+| Test prompts with evaluation dataset | Measure quality objectively |
+| Version control all prompts | Track changes, enable rollback |
+
+## Prompt Quality Checklist
+
+- [ ] Role clearly defined
+- [ ] Output format specified (JSON schema, markdown, etc.)
+- [ ] Grounding rule: "Answer ONLY from context"
+- [ ] Safety rules: refuse harmful content
+- [ ] Length constraint specified
+- [ ] Few-shot examples for complex tasks
+- [ ] Tested against evaluation dataset
+
+## Related Skills
+
+- `fai-prompt-builder` — Structured prompt construction
+- `fai-boost-prompt` — Interactive prompt refinement
+- `fai-basic-prompt-optimization` — Prompt quality patterns
+- `fai-finalize-agent-prompt` — Production prompt validation

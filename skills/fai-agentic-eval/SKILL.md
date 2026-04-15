@@ -1,170 +1,180 @@
 ---
 name: fai-agentic-eval
-description: 'Runs evaluator-optimizer pipelines to iteratively improve agent performance.'
+description: |
+  Patterns for evaluating and improving AI agent outputs. Use this skill when:
+  - Implementing self-critique and reflection loops
+  - Building evaluator-optimizer pipelines for quality-critical generation
+  - Creating test-driven code refinement workflows
+  - Designing rubric-based or LLM-as-judge evaluation systems
+  - Measuring and improving agent response quality
 ---
 
-# Fai Agentic Eval
+# Agentic Evaluation Patterns
 
-Runs evaluator-optimizer pipelines to iteratively improve agent performance.
+Patterns for self-improvement through iterative evaluation and refinement.
 
 ## Overview
 
-This skill provides a structured, repeatable procedure for runs evaluator-optimizer pipelines to iteratively improve agent performance.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+Evaluation patterns enable agents to assess and improve their own outputs, moving beyond single-shot generation to iterative refinement loops.
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+Generate → Evaluate → Critique → Refine → Output
+    ↑                              │
+    └──────────────────────────────┘
 ```
 
-### Step 2: Load Configuration
+## When to Use
 
-Read settings from the FAI manifest and TuneKit config files.
+- **Quality-critical generation**: Code, reports, analysis requiring high accuracy
+- **Tasks with clear evaluation criteria**: Defined success metrics exist
+- **Content requiring specific standards**: Style guides, compliance, formatting
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+---
 
-### Step 3: Execute Core Logic
+## Pattern 1: Basic Reflection
 
-Perform the primary operation: runs evaluator-optimizer pipelines to iteratively improve agent performance..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 07**
-- **Play 22**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-agentic-eval
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-agentic-eval/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Evaluation Pipeline
-
-This skill integrates with the FAI evaluation framework:
+Agent evaluates and improves its own output through self-critique.
 
 ```python
-from frootai.evaluation import SkillEvaluator
+import json
 
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
+def reflect_and_refine(task: str, criteria: list[str], max_iterations: int = 3) -> str:
+    """Generate with reflection loop."""
+    output = llm(f"Complete this task:\n{task}")
 
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
+    for i in range(max_iterations):
+        critique = llm(f"""Evaluate against criteria: {criteria}
+Output: {output}
+Rate each PASS/FAIL with feedback as JSON.""")
+
+        data = json.loads(critique)
+        if all(c["status"] == "PASS" for c in data.values()):
+            return output
+
+        failed = {k: v["feedback"] for k, v in data.items() if v["status"] == "FAIL"}
+        output = llm(f"Improve to address: {failed}\nOriginal: {output}")
+
+    return output
 ```
 
-## Advanced Configuration
+---
 
-```json
-{
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
+## Pattern 2: Evaluator-Optimizer Split
+
+Separate generation and evaluation into distinct roles:
+
+```python
+class EvaluatorOptimizer:
+    def __init__(self, threshold: float = 0.8):
+        self.threshold = threshold
+
+    def generate(self, task: str) -> str:
+        return llm(f"Complete: {task}")
+
+    def evaluate(self, output: str, task: str) -> dict:
+        rubric = llm(f"""Score 0-1 on: accuracy, completeness, clarity.
+Task: {task}
+Output: {output}
+Return JSON: {{"accuracy": float, "completeness": float, "clarity": float}}""")
+        return json.loads(rubric)
+
+    def optimize(self, output: str, scores: dict, task: str) -> str:
+        weak = {k: v for k, v in scores.items() if v < self.threshold}
+        return llm(f"Improve these aspects: {weak}\nTask: {task}\nCurrent: {output}")
+
+    def run(self, task: str, max_rounds: int = 3) -> tuple[str, dict]:
+        output = self.generate(task)
+        for _ in range(max_rounds):
+            scores = self.evaluate(output, task)
+            if all(v >= self.threshold for v in scores.values()):
+                return output, scores
+            output = self.optimize(output, scores, task)
+        return output, scores
+```
+
+---
+
+## Pattern 3: LLM-as-Judge with Rubric
+
+Use a structured rubric for consistent evaluation:
+
+```python
+RUBRIC = {
+    "correctness": "Does the output accurately solve the task? (0-1)",
+    "completeness": "Are all requirements addressed? (0-1)",
+    "safety": "Is the output free of harmful content? (0-1)",
+    "groundedness": "Are claims supported by provided context? (0-1)",
 }
+
+def judge(output: str, context: str, rubric: dict = RUBRIC) -> dict:
+    prompt = f"""You are a strict evaluator. Score each dimension 0.0 to 1.0.
+Context: {context}
+Output to evaluate: {output}
+Rubric: {json.dumps(rubric)}
+Return JSON with scores and one-line justification per dimension."""
+    return json.loads(llm(prompt))
 ```
 
-## Anti-Patterns
+---
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
+## Pattern 4: Test-Driven Agent Refinement
 
-## Notes
+Agent writes code, runs tests, fixes failures in a loop:
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+```python
+async def test_driven_refine(task: str, test_command: str, max_attempts: int = 3):
+    """Agent generates code and iterates until tests pass."""
+    code = await agent.generate(task)
+    write_file("solution.py", code)
+
+    for attempt in range(max_attempts):
+        result = run(test_command)
+        if result.returncode == 0:
+            return code, {"status": "pass", "attempts": attempt + 1}
+
+        code = await agent.generate(f"""Fix failing tests.
+Errors: {result.stderr}
+Current code: {code}
+Task: {task}""")
+        write_file("solution.py", code)
+
+    return code, {"status": "fail", "attempts": max_attempts}
+```
+
+---
+
+## Pattern 5: Evaluation Dataset Pipeline
+
+Build and run evaluation suites for systematic quality tracking:
+
+```python
+import csv
+
+def run_eval_suite(dataset_path: str, agent_fn, metrics_fn) -> dict:
+    """Run agent over dataset and collect metrics."""
+    results = []
+    with open(dataset_path) as f:
+        for row in csv.DictReader(f):
+            output = agent_fn(row["input"])
+            scores = metrics_fn(output, row["expected"])
+            results.append({**row, "output": output, **scores})
+
+    # Aggregate
+    avg = lambda key: sum(r[key] for r in results) / len(results)
+    return {
+        "count": len(results),
+        "avg_accuracy": avg("accuracy"),
+        "avg_groundedness": avg("groundedness"),
+        "pass_rate": sum(1 for r in results if r["accuracy"] >= 0.8) / len(results),
+    }
+```
+
+## Best Practices
+
+| Practice | Rationale |
+|----------|-----------|
+| Structured JSON output | Reliable parsing of critique results |
+| Cap iteration count | Prevent infinite refinement loops |
+| Separate evaluator model | Avoid self-bias — use different model for judging |
+| Log every iteration | Track improvement trajectory for debugging |
+| Fail fast on safety | Block output immediately on safety score < threshold |

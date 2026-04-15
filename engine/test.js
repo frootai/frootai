@@ -415,7 +415,7 @@ test('initEngine — creates evaluator from guardrails', () => {
 
 test('initEngine — loads multiple plays without error', () => {
   const playsDir = path.join(ROOT, 'solution-plays');
-  const plays = fs.readdirSync(playsDir).filter(f => 
+  const plays = fs.readdirSync(playsDir).filter(f =>
     /^\d{2}-/.test(f) && (
       fs.existsSync(path.join(playsDir, f, 'fai-manifest.json')) ||
       fs.existsSync(path.join(playsDir, f, 'spec', 'fai-manifest.json'))

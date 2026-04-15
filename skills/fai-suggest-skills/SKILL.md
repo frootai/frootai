@@ -1,156 +1,100 @@
 ---
 name: fai-suggest-skills
-description: 'Discovers and recommends relevant FAI skills based on user goal description.'
+description: |
+  Recommend skills from the FrootAI catalog based on user task, technology
+  stack, and development phase. Use when helping users discover relevant
+  skills for their workflow.
 ---
 
-# Fai Suggest Skills
+# Skill Recommendation
 
-Discovers and recommends relevant FAI skills based on user goal description.
+Suggest skills from the 322-skill catalog based on task and context.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for discovers and recommends relevant FAI skills based on user goal description.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- User asks "what skill should I use for X?"
+- Matching development tasks to available skills
+- Recommending skills for a specific technology stack
+- Building skill combinations for workflows
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Skill Discovery by Task
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Task | Recommended Skills | Why |
+|------|-------------------|-----|
+| Build RAG pipeline | fai-build-genai-rag, fai-build-semantic-search | End-to-end RAG |
+| Write tests | fai-pytest-coverage, fai-jest-test, fai-junit-test | Language-specific |
+| Deploy to Azure | fai-deploy-01-enterprise-rag, fai-rollout-plan | Deployment patterns |
+| Review code | fai-review-and-refactor, fai-security-review-skill | Quality + security |
+| Build MCP server | fai-mcp-python-generator, fai-mcp-typescript-generator | Language-specific |
+| Create docs | fai-readme-generator, fai-api-docs-generator | Documentation |
+| Optimize cost | fai-az-cost-optimize, fai-cost-estimator | FinOps |
+| Build prompts | fai-prompt-builder, fai-boost-prompt | Prompt engineering |
 
-## Steps
+## Recommendation Logic
 
-### Step 1: Validate Prerequisites
+```python
+def suggest_skills(task: str, stack: str = None, limit: int = 3) -> list[str]:
+    """Recommend skills based on task description and optional stack."""
+    # Keyword matching (simplified — production would use embeddings)
+    TASK_SKILLS = {
+        "test": ["fai-pytest-coverage", "fai-jest-test", "fai-build-integration-test"],
+        "deploy": ["fai-rollout-plan", "fai-multi-stage-docker"],
+        "rag": ["fai-build-genai-rag", "fai-build-semantic-search"],
+        "mcp": ["fai-mcp-python-generator", "fai-mcp-typescript-generator"],
+        "review": ["fai-review-and-refactor", "fai-security-review-skill"],
+        "prompt": ["fai-prompt-builder", "fai-boost-prompt"],
+    }
 
-Verify all required tools, credentials, and dependencies are available.
+    matches = []
+    for keyword, skills in TASK_SKILLS.items():
+        if keyword in task.lower():
+            matches.extend(skills)
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+    # Stack-specific filtering
+    if stack:
+        STACK_SKILLS = {
+            "python": ["fai-pytest-coverage", "fai-fastapi-scaffold"],
+            "dotnet": ["fai-mstest-test", "fai-aspnet-minimal-api"],
+            "java": ["fai-junit-test", "fai-springboot-scaffold"],
+        }
+        matches.extend(STACK_SKILLS.get(stack.lower(), []))
+
+    return list(dict.fromkeys(matches))[:limit]
 ```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: discovers and recommends relevant FAI skills based on user goal description..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-suggest-skills
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-suggest-skills/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| No match found | Task too vague | Ask for specific technology/domain |
+| Wrong stack match | Stack not specified | Ask user for their language/framework |
+| Too many suggestions | No limit | Cap at 3 most relevant |
+| Skill doesn't exist | Catalog gap | Check skills/ directory, suggest nearest |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

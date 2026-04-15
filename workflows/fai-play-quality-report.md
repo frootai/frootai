@@ -1,5 +1,5 @@
 ---
-name: FAI-play-quality-report
+name: fai-play-quality-report
 description: "Weekly quality scan of all solution plays — scores DevKit completeness, TuneKit validation, SpecKit presence, documentation quality, dependency health, security posture, and assigns an overall A-F grade with cross-play comparison."
 on:
   schedule:

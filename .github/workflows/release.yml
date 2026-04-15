@@ -11,8 +11,9 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
@@ -46,7 +47,7 @@ jobs:
           fi
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
         with:
           name: ${{ steps.info.outputs.title }}
           body: |
@@ -72,3 +73,12 @@ jobs:
             - [Docker](https://github.com/frootai/frootai/pkgs/container/frootai-mcp)
             - [Website](https://frootai.dev)
           generate_release_notes: true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## GitHub Release" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Title | ${{ steps.info.outputs.title }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${{ steps.info.outputs.version }} |" >> $GITHUB_STEP_SUMMARY

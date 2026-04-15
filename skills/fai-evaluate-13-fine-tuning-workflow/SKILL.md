@@ -1,167 +1,159 @@
 ---
 name: fai-evaluate-13-fine-tuning-workflow
-description: 'Runs quality evaluation for Play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety.'
+description: 'Evaluates Solution Play 13 Fine-Tuning Workflow for model gains, safety regression, and promotion readiness.'
 ---
 
-# Fai Evaluate 13 Fine Tuning Workflow
+# FAI Skill: Evaluate 13 Fine Tuning Workflow
 
-Runs quality evaluation for Play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety.
+## Purpose
 
-## Overview
+This skill defines a production-grade workflow for Fine-tune quality lift, risk checks, and model promotion decisioning. It enforces full phase coverage, strict quality gates, and reproducible delivery evidence.
 
-This skill provides a structured, repeatable procedure for runs quality evaluation for play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Inputs
 
-**Category:** Evaluation
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Description |
+|---|---|
+| Core parameters | baseline_model, tuned_model, eval_suite, safety_regression_tests |
+| Environment | dev, staging, prod |
+| Constraints | security, reliability, latency, cost, and governance requirements |
 
-## Parameters
+## Prerequisites
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+- Scope, acceptance criteria, and owners are confirmed.
+- Required datasets/configs are versioned and accessible.
+- Baseline metrics are captured for comparison.
+- Rollback and mitigation strategy is defined.
 
-## Steps
+## Full Phases Coverage
 
-### Step 1: Validate Prerequisites
+### Phase 1: Discover
 
-Verify all required tools, credentials, and dependencies are available.
+- Define outcomes, constraints, and risk boundaries.
+- Identify dependency map and unknowns.
+- Lock measurable pass/fail thresholds.
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+### Phase 2: Design
 
-### Step 2: Load Configuration
+- Choose approach with tradeoff rationale.
+- Define reliability, security, and observability controls.
+- Specify fallback and escalation behavior.
 
-Read settings from the FAI manifest and TuneKit config files.
+### Phase 3: Implement
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+- Apply small, reviewable changes.
+- Keep prompts/config/contracts explicit and versioned.
+- Prevent hidden coupling and side effects.
 
-### Step 3: Execute Core Logic
+### Phase 4: Validate
 
-Perform the primary operation: runs quality evaluation for play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety..
+- Run functional, edge-case, and regression checks.
+- Verify telemetry, logs, and traceability outputs.
+- Record findings and remediation actions.
 
-### Step 4: Validate Results
+### Phase 5: Deploy
 
-Verify the output meets quality thresholds and WAF compliance.
+- Promote through staged gates.
+- Verify health/KPI checkpoints at each step.
+- Stop and rollback when thresholds fail.
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
+### Phase 6: Operate
 
-## Output
+- Monitor drift, incidents, and trend signals.
+- Route issues with owner/SLA clarity.
+- Feed lessons into next iteration.
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+## WAF-Aligned Quality Gates
 
-## WAF Alignment
+### Reliability
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
+- Retry, timeout, and fallback behaviors are tested.
+- Health checks include dependency state.
+- Degraded mode remains usable.
 
-## Compatible Solution Plays
+### Security
 
-- **Play 03**
-- **Play 60**
+- Secrets are externalized and least privilege is enforced.
+- Logging avoids sensitive data exposure.
+- Audit evidence exists for critical actions.
 
-## Error Handling
+### Cost Optimization
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+- Resource/model usage is right-sized.
+- High-cost paths are measured and optimized.
+- Budget thresholds and anomalies are monitored.
 
-## Usage
+### Operational Excellence
 
-### Standalone
+- CI/CD and repeatable validation are mandatory.
+- Runbooks and rollback steps are current.
+- Metrics and traces support fast triage.
 
-```bash
-# Run this skill directly
-npx frootai skill run fai-evaluate-13-fine-tuning-workflow
-```
+### Performance Efficiency
 
-### Inside a Solution Play
+- SLO targets are explicit and monitored.
+- Hot paths are benchmarked and tuned.
+- Compute and payload overhead are controlled.
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+### Responsible AI
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-evaluate-13-fine-tuning-workflow/"]
-  }
-}
-```
+- Safety and grounding checks are enforced where AI applies.
+- User-facing outputs remain transparent.
+- Human escalation is available for high-impact failures.
 
-### Via Agent Invocation
+## Deliverables
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Artifact | Purpose |
+|---|---|
+| Primary output | evaluate-13-report.md, delta analysis, promotion recommendation |
+| Validation dossier | Evidence for release/readiness decisions |
+| Rollback guide | Reversal and mitigation steps |
+| Operate handoff | Monitoring and ownership instructions |
 
-## Metrics Reference
+## Completion Checklist
 
-| Metric | Range | Threshold | Description |
-|--------|-------|-----------|-------------|
-| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
-| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
-| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
-| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
-| Safety | 0-4 | 0 | Content safety violations |
-| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+- [ ] Phase 1 discovery complete.
+- [ ] Phase 2 design approved.
+- [ ] Phase 3 implementation reviewed.
+- [ ] Phase 4 validation passed.
+- [ ] Phase 5 staged rollout completed.
+- [ ] Phase 6 operate handoff accepted.
+- [ ] Completion criteria met: quality lift exceeds threshold, safety regressions absent, promotion criteria satisfied.
 
-## Test Set Format
+## Troubleshooting
 
-```jsonl
-{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
-{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
-```
+### Symptom: Quality metrics regress unexpectedly
 
-## CI/CD Integration
+- Compare dataset/config/prompt version deltas.
+- Recalibrate thresholds for changed traffic patterns.
+- Re-run with controlled baseline data.
 
-```yaml
-# .github/workflows/eval.yml
-- name: Run FAI Evaluation
-  run: |
-    python evaluation/eval.py --test-set evaluation/test-set.jsonl
-    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
-```
+### Symptom: Latency or cost spikes during evaluation
 
-## Regression Tracking
+- Analyze retry storms and cache effectiveness.
+- Tune concurrency, batching, and model routing.
+- Rebalance limits for workload class.
 
-Track evaluation scores over time to detect quality regressions:
+### Symptom: Environment-to-environment variance
+
+- Validate parity in dependencies and feature flags.
+- Confirm endpoint routing and region alignment.
+- Execute smoke checks before promotion.
+
+## Example Commands
 
 ```bash
-# Compare with baseline
-python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+# Adapt to repository standards
+npm run lint
+npm test
+npm run build
 ```
 
-## Notes
+## Definition of Done
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Evaluation category in the FAI primitives catalog
+This skill is complete when all six phases have objective evidence, quality gates pass, and another engineer can reproduce outcomes without tribal knowledge.
+
+## Metadata
+
+- Category: Evaluation
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly and after major platform changes

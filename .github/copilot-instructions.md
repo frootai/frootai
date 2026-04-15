@@ -27,14 +27,14 @@ The implementation plan `.internal/improvisation/implementation-plan.md` has **2
 ## Current Website Stats (April 6, 2026)
 - **145 HTML pages** in frootai.dev static output
 - **100 solution plays** with View Play + User Guide pages
-- **4 primitive sub-pages** (agents 201, instructions 176, skills 282, hooks 10)
+- **4 primitive sub-pages** (agents 238, instructions 176, skills 322, hooks 10)
 - **77 plugins** with pagination (20/page), click-to-view modals, download/copy/share
 - **15 learning hub pages** (L1-L15) with avg 340 lines, CodeBlock, prev/next nav
 - **16 cookbook recipes** + **12 workflows** with modals
 - All primitive display names use "FAI" prefix (not "FrootAI")
 - VS Code install uses `vscode://github.copilot-chat/createAgent` protocol
-- **Content Scaling Sprint:** Skills ✅ (159 avg), Hooks ✅ (449 avg), Plugins ✅ (124 avg), Workflows ✅ (306 avg), Cookbook ✅ (344 avg). Agents 10/201 done, Instructions 10/176 done
-- **Distribution:** VS Code v2.0.0, MCP v3.5.0, Python SDK v4.0.0, Python MCP v3.5.0, Docker v3.5.0 — all synced with 100 plays + 780+ primitives + FAI Protocol
+- **Content Scaling Sprint:** Skills ✅ (159 avg), Hooks ✅ (449 avg), Plugins ✅ (124 avg), Workflows ✅ (306 avg), Cookbook ✅ (344 avg). Agents 10/238 done, Instructions 10/176 done
+- **Distribution:** VS Code v2.0.0, MCP v3.5.0, Python SDK v4.0.0, Python MCP v3.5.0, Docker v3.5.0 — all synced with 100 plays + 830+ primitives + FAI Protocol
 
 ## Agent Workflow
 When implementing features, follow the builder → reviewer → tuner chain:

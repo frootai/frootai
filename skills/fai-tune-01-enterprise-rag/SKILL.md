@@ -1,170 +1,110 @@
 ---
 name: fai-tune-01-enterprise-rag
-description: 'Tunes configuration for Play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: |
+  Tune Enterprise RAG (Play 01) configuration for retrieval quality, latency,
+  cost efficiency, and guardrail thresholds. Use when optimizing an existing
+  RAG deployment for production performance.
 ---
 
-# Fai Tune 01 Enterprise Rag
+# Tune Enterprise RAG (Play 01)
 
-Tunes configuration for Play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization.
+Optimize RAG configuration for retrieval quality, latency, and cost.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- RAG quality scores below target thresholds
+- Latency exceeding SLOs on search or generation
+- Token costs growing faster than usage
+- Fine-tuning guardrail thresholds after initial eval
 
-**Category:** RAG & Search
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Tuning Dimensions
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Dimension | Config | Range | Impact |
+|-----------|--------|-------|--------|
+| Chunk size | config/chunking.json | 256-1024 tokens | Retrieval precision |
+| Top K | config/search.json | 3-10 | Context quality vs cost |
+| Temperature | config/openai.json | 0-0.5 | Creativity vs determinism |
+| Vector weight | config/search.json | 0.3-0.9 | Semantic vs keyword |
+| Max tokens | config/openai.json | 512-2048 | Response length vs cost |
+| Reranker | config/search.json | on/off | Quality vs latency |
 
-## Steps
+## Eval-Driven Tuning
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```python
+def tune_parameter(param_name: str, values: list, eval_fn, dataset_path: str):
+    """Test each value, pick best based on eval score."""
+    results = []
+    for value in values:
+        config = load_config()
+        config[param_name] = value
+        save_config(config)
+        score = eval_fn(dataset_path)
+        results.append({"value": value, **score})
+        print(f"{param_name}={value} → groundedness={score['groundedness']:.3f}")
+    best = max(results, key=lambda r: r["groundedness"])
+    return best
 ```
 
-### Step 2: Load Configuration
+## Common Tuning Playbook
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```markdown
+1. Baseline eval → Record current scores
+2. Tune chunk_size: test 256, 512, 768, 1024
+3. Tune top_k: test 3, 5, 7, 10
+4. Tune vector_weight: test 0.3, 0.5, 0.7, 0.9
+5. Tune temperature: test 0.0, 0.1, 0.2, 0.3
+6. Final eval → Compare to baseline
+7. Deploy if improved, rollback if not
 ```
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 01**
-- **Play 21**
-- **Play 26**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-01-enterprise-rag
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Guardrail Thresholds
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-01-enterprise-rag/"]
+  "guardrails": {
+    "groundedness": 0.85,
+    "relevance": 0.80,
+    "safety": 0.95,
+    "latency_p95_ms": 3000
   }
 }
 ```
 
-### Via Agent Invocation
+## Troubleshooting
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low groundedness | Chunks too large, bad context | Reduce chunk size to 512, increase top_k |
+| High latency | Reranker + large top_k | Disable reranker or reduce top_k |
+| High cost | Using gpt-4o for everything | Route simple queries to mini |
+| Inconsistent quality | High temperature | Lower to 0.1-0.2 for factual Q&A |
 
-## RAG Pipeline Reference
+## Best Practices
 
-| Stage | Tool | Config |
-|-------|------|--------|
-| Chunking | Semantic chunker | 512 tokens, 10% overlap |
-| Embedding | text-embedding-3-large | 3072 dimensions |
-| Indexing | Azure AI Search | Hybrid (vector + BM25) |
-| Retrieval | Hybrid search | 60% semantic, 40% keyword |
-| Reranking | Semantic reranker | Top 5 after rerank |
-| Generation | GPT-4o | temp=0.1, top_p=0.9 |
+| Practice | Rationale |
+|----------|-----------|
+| Tune one parameter at a time | Isolate impact of each change |
+| Always measure before and after | Evidence-based tuning |
+| Use evaluation dataset for comparison | Objective quality measurement |
+| Keep previous config for rollback | Instant revert if quality drops |
+| Document tuning decisions | Future reference for the team |
+| Automate tuning evaluation | Reduce manual effort |
 
-## Chunking Strategy
+## Tuning Workflow
 
-```python
-from azure.ai.formrecognizer import DocumentAnalysisClient
-
-# Semantic chunking preserves paragraph boundaries
-chunks = semantic_chunk(
-    text=document,
-    max_tokens=512,
-    overlap_tokens=50,
-    respect_boundaries=True  # Don't split mid-sentence
-)
+```
+1. Baseline eval → record current scores
+2. Change ONE parameter
+3. Re-run eval → compare to baseline
+4. If improved → keep change, update baseline
+5. If regressed → revert change
+6. Repeat for next parameter
 ```
 
-## Search Configuration
+## Related Skills
 
-```json
-{
-  "search_type": "hybrid",
-  "semantic_weight": 0.6,
-  "keyword_weight": 0.4,
-  "top_k": 5,
-  "min_score": 0.78,
-  "reranker": "semantic",
-  "filter": "category eq 'technical'"
-}
-```
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the RAG & Search category in the FAI primitives catalog
+- `fai-tune-01-enterprise-rag` — RAG tuning playbook
+- `fai-evaluation-framework` — Eval infrastructure
+- `fai-inference-optimization` — Latency and cost optimization

@@ -1,5 +1,5 @@
 ---
-name: FAI-primitive-pr-review
+name: fai-primitive-pr-review
 description: "Automated review of PRs that add or modify primitives — validates naming, frontmatter, schema, WAF alignment, duplicate detection, and file size. Posts structured review comment with verdict."
 on:
   pull_request:

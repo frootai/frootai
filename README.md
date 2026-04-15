@@ -220,12 +220,12 @@ Every play ships with: `fai-manifest.json` + `.github` Agentic OS (agents, instr
 
 ```
 frootai/frootai
-├── agents/               201 standalone .agent.md files (WAF-aligned)
+├── agents/               238 standalone .agent.md files (WAF-aligned)
 ├── instructions/         176 standalone .instructions.md files
-├── skills/               282 skill folders with SKILL.md
+├── skills/               322 skill folders with SKILL.md
 ├── hooks/                10 security hooks (secrets, tools, governance, PII, cost...)
 ├── plugins/              77 themed bundles (1,008 items, 416 categories)
-├── workflows/            12 agentic workflows (safe-outputs, NL → YAML)
+├── workflows/            13 agentic workflows (safe-outputs, NL → YAML)
 ├── cookbook/              16 step-by-step recipes
 ├── schemas/              7 JSON schemas validating all primitive types
 ├── engine/               FAI Engine v0.1 (7 modules — manifest reader → evaluator)

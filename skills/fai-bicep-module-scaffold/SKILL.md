@@ -1,161 +1,117 @@
 ---
 name: fai-bicep-module-scaffold
-description: 'Scaffolds a Bicep module with parameters, outputs, AVM patterns, and deployment test.'
+description: |
+  Scaffold reusable Bicep modules with typed parameters, secure defaults, test hooks,
+  and versioning. Use when creating infrastructure modules that follow AVM conventions
+  and need what-if validation before deployment.
 ---
 
-# Fai Bicep Module Scaffold
+# Bicep Module Scaffold
 
-Scaffolds a Bicep module with parameters, outputs, AVM patterns, and deployment test.
+Create reusable Bicep modules with typed parameters, secure defaults, and deployment tests.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a bicep module with parameters, outputs, avm patterns, and deployment test.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating a new reusable infrastructure module
+- Standardizing resource provisioning across teams
+- Building modules that pass Azure Policy checks
+- Publishing modules to a Bicep registry
 
-**Category:** Infrastructure as Code
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Module Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+// modules/storage-account.bicep
+@description('Name of the storage account (3-24 chars, lowercase+numbers)')
+@minLength(3)
+@maxLength(24)
+param name string
 
-## Steps
+@description('Azure region')
+param location string = resourceGroup().location
 
-### Step 1: Validate Prerequisites
+@description('Storage SKU')
+@allowed(['Standard_LRS', 'Standard_ZRS', 'Standard_GRS'])
+param skuName string = 'Standard_ZRS'
 
-Verify all required tools, credentials, and dependencies are available.
+@description('Enable public blob access')
+param allowBlobPublicAccess bool = false
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+@description('Tags')
+param tags object = {}
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a bicep module with parameters, outputs, avm patterns, and deployment test..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 11**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-bicep-module-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-bicep-module-scaffold/"]
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: name
+  location: location
+  kind: 'StorageV2'
+  sku: { name: skuName }
+  tags: tags
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    allowBlobPublicAccess: allowBlobPublicAccess
+    allowSharedKeyAccess: false
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: true
   }
 }
+
+@description('Resource ID of the storage account')
+output id string = storageAccount.id
+
+@description('Name of the storage account')
+output name string = storageAccount.name
+
+@description('Primary blob endpoint')
+output blobEndpoint string = storageAccount.properties.primaryEndpoints.blob
+
+@description('Principal ID of the managed identity')
+output principalId string = storageAccount.identity.principalId
 ```
 
-### Via Agent Invocation
+## Consumer Example
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+```bicep
+// main.bicep
+module storage 'modules/storage-account.bicep' = {
+  name: 'storage-deploy'
+  params: {
+    name: 'staidocs${uniqueString(resourceGroup().id)}'
+    skuName: 'Standard_ZRS'
+    tags: { env: 'prod', owner: 'platform' }
+  }
 }
+
+output storageId string = storage.outputs.id
 ```
 
-## Monitoring
+## What-If Validation
 
-Track skill execution metrics:
+```bash
+# Validate module without deploying
+az deployment group what-if \
+  --resource-group rg-test \
+  --template-file main.bicep \
+  --parameters name=sttest01 skuName=Standard_LRS
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+# Build to check syntax
+az bicep build --file modules/storage-account.bicep --stdout > /dev/null
+```
+
+## Registry Publishing
+
+```bash
+# Publish to Azure Container Registry (Bicep registry)
+az bicep publish \
+  --file modules/storage-account.bicep \
+  --target br:myregistry.azurecr.io/bicep/storage-account:1.0.0
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Infrastructure as Code category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Module breaks consumers | Unstable parameter contract | Version module, preserve backward-compatible defaults |
+| Policy denial on deploy | Defaults violate org policy | Align defaults (disable public access, enforce TLS 1.2) |
+| What-if shows unexpected deletes | Missing conditional resources | Add `if` condition for optional sub-resources |
+| Registry push fails | Auth not configured | `az acr login --name myregistry` before publish |

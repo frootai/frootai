@@ -1,161 +1,107 @@
----
+﻿---
 name: fai-update-avm-bicep
-description: 'Updates Azure Verified Module references in Bicep templates to latest versions.'
+description: "Update Azure Verified Module (AVM) references in Bicep files with safe version pinning, validation, and rollback checks."
 ---
 
-# Fai Update Avm Bicep
+# FAI Update AVM Bicep
 
-Updates Azure Verified Module references in Bicep templates to latest versions.
+## Purpose
 
-## Overview
+Use this skill to safely upgrade AVM module versions in Bicep templates while preserving deployment compatibility.
 
-This skill provides a structured, repeatable procedure for updates azure verified module references in bicep templates to latest versions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Scope
 
-**Category:** Infrastructure as Code
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+- AVM module URI updates in br/public:* or private registries
+- Version pinning strategy (no floating latest tags)
+- Build validation and what-if checks
+- Rollback path if schema or behavior changes
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Step 1 - Inventory Current AVM References
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+rg "br/(public|.*):avm/" infra/**/*.bicep -n
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: updates azure verified module references in bicep templates to latest versions..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 11**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-update-avm-bicep
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-update-avm-bicep/"]
+```bicep
+module storage 'br/public:avm/res/storage/storage-account:0.18.0' = {
+  name: 'storage'
+  params: {
+    name: storageName
+    location: location
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2 - Choose Upgrade Strategy
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Strategy | When to Use | Risk |
+|---------|-------------|------|
+| Patch only | Security/bugfix only | Low |
+| Minor upgrade | New optional params expected | Medium |
+| Major upgrade | Breaking changes tolerated | High |
 
-## Configuration Reference
+## Step 3 - Update Module References
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+```bicep
+// Before
+module kv 'br/public:avm/res/key-vault/vault:0.12.0' = {
+  name: 'kv'
+  params: {
+    name: kvName
+    location: location
+  }
+}
+
+// After
+module kv 'br/public:avm/res/key-vault/vault:0.13.1' = {
+  name: 'kv'
+  params: {
+    name: kvName
+    location: location
+  }
 }
 ```
 
-## Monitoring
+## Step 4 - Validate Breaking Param Changes
 
-Track skill execution metrics:
+```bash
+az bicep build --file infra/main.bicep
+az deployment group what-if --resource-group rg-demo --template-file infra/main.bicep --parameters @infra/main.parameters.json
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 5 - Apply in Controlled Rollout
+
+1. Dev environment first.
+2. Capture what-if output artifact.
+3. Promote to staging only if no destructive drift.
+4. Promote to prod with explicit approval gate.
+
+## Validation Checklist
+
+| Check | Expected |
+|------|----------|
+| All AVM modules pinned | No floating latest tags |
+| Bicep build | Passes without blocking errors |
+| What-if drift | No unintended deletes |
+| Parameter files | Still resolve all required params |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|------|-------|-----|
+| New required param error | Module changed | Add missing params from module README |
+| What-if shows deletes | Name/scope shift after upgrade | Align names/scopes or roll back |
+| Policy deny after upgrade | New default violates policy | Override secure defaults explicitly |
+
+## Rollback
+
+```bash
+git checkout HEAD~1 -- infra/**/*.bicep
+az bicep build --file infra/main.bicep
+```
 
 ## Notes
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Infrastructure as Code category in the FAI primitives catalog
+- Prefer conservative version movement (patch, then minor).
+- Keep module URIs explicit and reviewed in PR.
+- Store what-if output for deployment auditability.

@@ -1,160 +1,110 @@
 ---
 name: fai-scoutqa-test
-description: 'Generates AI-powered test suggestions based on code changes and coverage gaps.'
+description: |
+  Run ScoutQA automated test generation and execution for web applications
+  with AI-driven test discovery and self-healing selectors. Use when adding
+  comprehensive E2E test coverage with minimal manual test writing.
 ---
 
-# Fai Scoutqa Test
+# ScoutQA Test Automation
 
-Generates AI-powered test suggestions based on code changes and coverage gaps.
+AI-driven test generation with self-healing selectors and coverage discovery.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates ai-powered test suggestions based on code changes and coverage gaps.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Adding E2E test coverage to existing web apps
+- Generating tests from user flows without manual scripting
+- Maintaining tests with self-healing selectors
+- Running exploratory testing with AI guidance
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Test Generation
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+from scoutqa import Scout
 
-## Steps
+scout = Scout(base_url="http://localhost:3000")
 
-### Step 1: Validate Prerequisites
+# AI explores the app and generates test scenarios
+scenarios = scout.discover_flows(
+    starting_pages=["/", "/chat", "/dashboard"],
+    max_depth=3,
+    interaction_types=["click", "fill", "navigate"],
+)
 
-Verify all required tools, credentials, and dependencies are available.
+# Generate test code from discovered flows
+for scenario in scenarios:
+    test_code = scout.generate_test(scenario, framework="playwright")
+    print(f"# {scenario.name}")
+    print(test_code)
+```
+
+## Self-Healing Selectors
+
+```python
+# Instead of brittle CSS selectors:
+# page.click("#submit-btn-v3")  # Breaks on redesign
+
+# ScoutQA uses multiple selector strategies:
+scout.click(
+    element="submit button",
+    selectors=[
+        {"strategy": "test-id", "value": "submit-btn"},
+        {"strategy": "role", "value": "button", "name": "Submit"},
+        {"strategy": "text", "value": "Submit"},
+        {"strategy": "css", "value": "form button[type=submit]"},
+    ],
+    # Falls back through strategies if primary fails
+)
+```
+
+## Test Execution
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Run discovered tests
+scoutqa run --base-url http://localhost:3000 --output results/
+
+# Run with visual report
+scoutqa run --report html --screenshots on-failure
 ```
 
-### Step 2: Load Configuration
+## CI Integration
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```yaml
+- name: Run ScoutQA
+  run: |
+    scoutqa run --base-url ${{ env.APP_URL }} \
+      --output test-results/ \
+      --report junit
+- name: Upload Results
+  uses: actions/upload-artifact@v4
+  with: { name: test-results, path: test-results/ }
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates ai-powered test suggestions based on code changes and coverage gaps..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-scoutqa-test
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-scoutqa-test/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low discovery coverage | shallow max_depth | Increase max_depth to 4-5 |
+| False positive failures | UI changed, selectors stale | Enable self-healing mode |
+| Slow test runs | Too many scenarios | Filter by priority or page |
+| Auth flows not discovered | Login not configured | Provide auth cookies or setup script |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Test naming: `test_{action}_{scenario}_{expected}` | Clear intent from name alone |
+| One assertion per test (ideally) | Pinpoints exact failure |
+| Arrange-Act-Assert structure | Consistent, readable tests |
+| Mock external dependencies | Fast, deterministic execution |
+| Run tests in CI on every PR | Catch regressions before merge |
+| Separate unit from integration | Fast feedback loop for unit tests |
+
+## Related Skills
+
+- `fai-build-test-harness` — Reusable test infrastructure
+- `fai-build-unit-test` — Unit test patterns across languages
+- `fai-build-integration-test` — Integration test with fixtures
+- `fai-pytest-coverage` — Python coverage configuration

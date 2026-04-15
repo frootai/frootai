@@ -1,1906 +1,1906 @@
 [
   {
-    "id": "frootai-a2a-expert",
-    "name": "a2a expert",
-    "description": "Agent-to-Agent protocol — Google A2A specification, agent cards, task delegation, multi-agent handoffs, cross-platform orchestration",
-    "waf": "[\"reliability\",\"operational-excellence\"]",
-    "file": "agents/frootai-a2a-expert.agent.md",
-    "size": 3894
+    "id": "fai-a2a-expert",
+    "name": "FAI A2A Expert",
+    "description": "Agent-to-Agent (A2A) protocol specialist — Google's agent interop standard, AgentCard discovery, task lifecycle, streaming artifacts, push notifications, and multi-agent communication patterns.",
+    "waf": [],
+    "file": "agents/fai-a2a-expert.agent.md",
+    "size": 5586
   },
   {
-    "id": "frootai-accessibility-expert",
+    "id": "fai-accessibility-expert",
     "name": "FAI Accessibility Expert",
-    "description": "Accessibility specialist — WCAG 2.2 AA/AAA compliance, ARIA 1.2 patterns, screen reader optimization (NVDA/JAWS/VoiceOver), keyboard navigation, focus management, AI-generated content a11y, and inclusive design for chatbots, dashboards, and data-rich interfaces.",
+    "description": "Accessibility specialist — WCAG 2.2 AA/AAA compliance, ARIA 1.2 patterns, screen reader optimization, keyboard navigation, focus management, and inclusive design for AI chatbots and dashboards.",
     "waf": [],
-    "file": "agents/frootai-accessibility-expert.agent.md",
-    "size": 11215
+    "file": "agents/fai-accessibility-expert.agent.md",
+    "size": 4798
   },
   {
-    "id": "frootai-adr-writer",
+    "id": "fai-adr-writer",
     "name": "FAI ADR Writer",
-    "description": "Architecture Decision Record writer — documents technical decisions with full context, evaluated alternatives, trade-off matrices, consequences, and compliance mapping using the MADR 3.0 template aligned to Azure Well-Architected Framework pillars.",
+    "description": "ADR writer — documents architecture decisions with MADR 3.0 template, context, alternatives, trade-off matrices, consequences, and WAF pillar impact analysis.",
     "waf": [],
-    "file": "agents/frootai-adr-writer.agent.md",
-    "size": 11098
+    "file": "agents/fai-adr-writer.agent.md",
+    "size": 4149
   },
   {
-    "id": "frootai-ag-ui-expert",
-    "name": "ag ui expert",
-    "description": "Agent-UI protocol — AG-UI rendering specification, streaming agent responses, real-time UI updates, chat/canvas/dashboard patterns",
-    "waf": "[\"performance-efficiency\",\"responsible-ai\"]",
-    "file": "agents/frootai-ag-ui-expert.agent.md",
-    "size": 3892
+    "id": "fai-ag-ui-expert",
+    "name": "FAI AG-UI Expert",
+    "description": "AG-UI protocol specialist — Agent-User Interaction standard, event-based rendering, streaming state updates, tool call lifecycle, and frontend integration for AI agent experiences.",
+    "waf": [],
+    "file": "agents/fai-ag-ui-expert.agent.md",
+    "size": 5280
   },
   {
-    "id": "frootai-agentic-retriever",
+    "id": "fai-agentic-retriever",
     "name": "FAI Agentic Retriever",
-    "description": "Autonomous retrieval agent — decides when to search, selects optimal sources (Azure AI Search, SQL, Bing, Graph API), iterates on insufficient results with relevance scoring, applies hybrid search with semantic reranking, and synthesizes grounded answers with inline citations.",
+    "description": "Agentic retrieval specialist — autonomous source selection, iterative refinement with relevance scoring, multi-hop reasoning, query decomposition, and grounded answer synthesis with inline citations.",
     "waf": [],
-    "file": "agents/frootai-agentic-retriever.agent.md",
-    "size": 11015
+    "file": "agents/fai-agentic-retriever.agent.md",
+    "size": 4858
   },
   {
-    "id": "frootai-ai-agents-expert",
+    "id": "fai-ai-agents-expert",
     "name": "FAI AI Agents Expert",
-    "description": "AI agents expert — ReAct loops, tool orchestration, memory tiers (short/working/long-term/episodic), multi-agent topologies (supervisor, pipeline, debate, swarm), agent determinism via 6-layer defense stack, Semantic Kernel 1.x and AutoGen 0.4 patterns, and production guardrails for autonomous AI systems.",
+    "description": "AI agents expert — ReAct loops, tool orchestration, memory tiers, multi-agent topologies (supervisor/pipeline/debate/swarm), agent determinism, and production guardrails for autonomous AI systems.",
     "waf": [],
-    "file": "agents/frootai-ai-agents-expert.agent.md",
-    "size": 11162
+    "file": "agents/fai-ai-agents-expert.agent.md",
+    "size": 4564
   },
   {
-    "id": "frootai-ai-infra-expert",
+    "id": "fai-ai-infra-expert",
     "name": "FAI AI Infra Expert",
-    "description": "AI infrastructure expert — GPU compute sizing (A100/H100/A10G), VRAM estimation, model serving (vLLM 0.6+, TensorRT-LLM, Triton Inference Server), AKS node pool design, Azure ML managed endpoints, PTU vs. PAYG cost modeling, quantization strategies (GPTQ/AWQ/GGUF), and autoscaling patterns for production AI workloads.",
+    "description": "AI infrastructure expert — GPU compute sizing (A100/H100), VRAM estimation, model serving (vLLM/TensorRT-LLM/Triton), AKS node pool design, PTU vs PAYG cost modeling, and quantization strategies.",
     "waf": [],
-    "file": "agents/frootai-ai-infra-expert.agent.md",
-    "size": 11183
+    "file": "agents/fai-ai-infra-expert.agent.md",
+    "size": 4644
   },
   {
-    "id": "frootai-angular-expert",
+    "id": "fai-angular-expert",
     "name": "FAI Angular Expert",
-    "description": "Angular 19+ specialist — signals-based reactivity, standalone components, SSR with hydration, zoneless change detection, control flow syntax, RxJS interop, NgRx SignalStore, and performance optimization for AI-powered frontends.",
+    "description": "Angular 19+ specialist — signals-based reactivity, standalone components, SSR with hydration, zoneless change detection, control flow syntax, and AI chat component patterns.",
     "waf": [],
-    "file": "agents/frootai-angular-expert.agent.md",
-    "size": 11059
+    "file": "agents/fai-angular-expert.agent.md",
+    "size": 4363
   },
   {
-    "id": "frootai-api-gateway-designer",
+    "id": "fai-api-gateway-designer",
     "name": "FAI API Gateway Designer",
-    "description": "Azure API Management gateway architect — AI gateway patterns, rate limiting, token-based throttling, multi-region load balancing, backend circuit breakers, policy expressions, and cost-aware routing for LLM endpoints.",
+    "description": "API gateway architect — Azure APIM patterns, rate limiting, token-based throttling, multi-region load balancing, backend circuit breakers, and cost-aware routing for LLM endpoints.",
     "waf": [],
-    "file": "agents/frootai-api-gateway-designer.agent.md",
-    "size": 11161
+    "file": "agents/fai-api-gateway-designer.agent.md",
+    "size": 3690
   },
   {
-    "id": "frootai-architect",
+    "id": "fai-architect",
     "name": "FAI Architect",
-    "description": "Senior cloud-native solution architect — Azure Well-Architected Framework alignment, AI system design patterns, multi-region infrastructure, cost modeling, trade-off analysis, and production readiness assessment for enterprise AI deployments.",
+    "description": "Senior cloud-native solution architect — Azure Well-Architected Framework alignment, AI system design, multi-service integration, cost modeling, trade-off analysis, and production readiness assessment.",
     "waf": [],
-    "file": "agents/frootai-architect.agent.md",
-    "size": 11230
+    "file": "agents/fai-architect.agent.md",
+    "size": 3931
   },
   {
-    "id": "frootai-autogen-expert",
-    "name": "autogen expert",
-    "description": "Microsoft AutoGen — conversational agents, group chat, code execution, human-in-the-loop, nested chat patterns",
-    "waf": "[\"reliability\",\"responsible-ai\"]",
-    "file": "agents/frootai-autogen-expert.agent.md",
-    "size": 3842
+    "id": "fai-autogen-expert",
+    "name": "FAI AutoGen Expert",
+    "description": "Microsoft AutoGen multi-agent framework — ConversableAgent, GroupChat topologies, code execution sandboxing, nested chat orchestration, human-in-the-loop patterns, and AG2 migration.",
+    "waf": [],
+    "file": "agents/fai-autogen-expert.agent.md",
+    "size": 6304
   },
   {
-    "id": "frootai-azure-ai-foundry-expert",
+    "id": "fai-azure-ai-foundry-expert",
     "name": "FAI Azure AI Foundry Expert",
     "description": "Azure AI Foundry specialist — Hub/Project resource model, Model Catalog deployment, Prompt Flow orchestration, evaluation pipelines with groundedness and safety metrics, fine-tuning workflows, and model lifecycle management across dev/staging/prod environments.",
     "waf": [],
-    "file": "agents/frootai-azure-ai-foundry-expert.agent.md",
-    "size": 11382
+    "file": "agents/fai-azure-ai-foundry-expert.agent.md",
+    "size": 6524
   },
   {
-    "id": "frootai-azure-ai-search-expert",
+    "id": "fai-azure-ai-search-expert",
     "name": "FAI Azure AI Search Expert",
     "description": "Azure AI Search specialist — HNSW vector indexes, hybrid keyword+vector retrieval, semantic ranker, integrated vectorization pipelines, custom skillsets, scoring profiles, and RAG optimization for production search experiences.",
     "waf": [],
-    "file": "agents/frootai-azure-ai-search-expert.agent.md",
-    "size": 11199
+    "file": "agents/fai-azure-ai-search-expert.agent.md",
+    "size": 7245
   },
   {
-    "id": "frootai-azure-aks-expert",
-    "name": "Frootai Azure Aks Expert",
-    "description": "Azure Kubernetes Service specialist — GPU node pools, NVIDIA device plugin, model serving with vLLM, autoscaling, and production AI workload patterns.",
+    "id": "fai-azure-aks-expert",
+    "name": "FAI Azure AKS Expert",
+    "description": "Azure Kubernetes Service specialist — GPU node pools (A100/H100), NVIDIA device plugin, model serving with vLLM/TGI/Triton, HPA/KEDA autoscaling, and production AI inference workload patterns.",
     "waf": [],
-    "file": "agents/frootai-azure-aks-expert.agent.md",
-    "size": 10984
+    "file": "agents/fai-azure-aks-expert.agent.md",
+    "size": 6821
   },
   {
-    "id": "frootai-azure-apim-expert",
-    "name": "Frootai Azure Apim Expert",
-    "description": "Azure API Management specialist — AI Gateway patterns, semantic caching, token metering, multi-backend load balancing, circuit breaker, and rate limiting.",
+    "id": "fai-azure-apim-expert",
+    "name": "FAI Azure APIM Expert",
+    "description": "Azure API Management specialist — AI Gateway patterns, semantic caching, token metering, multi-backend load balancing, circuit breaker, rate limiting, and FinOps for LLM API layers.",
     "waf": [],
-    "file": "agents/frootai-azure-apim-expert.agent.md",
-    "size": 10884
+    "file": "agents/fai-azure-apim-expert.agent.md",
+    "size": 7374
   },
   {
-    "id": "frootai-azure-cdn-expert",
-    "name": "Frootai Azure Cdn Expert",
-    "description": "Azure CDN/Front Door specialist — global content delivery, caching rules, WAF integration, edge optimization.",
+    "id": "fai-azure-cdn-expert",
+    "name": "FAI Azure CDN Expert",
+    "description": "Azure Front Door & CDN specialist — global content delivery, WAF policies, caching rules, edge optimization, SSL/TLS management, and Private Link origins for AI application frontends.",
     "waf": [],
-    "file": "agents/frootai-azure-cdn-expert.agent.md",
-    "size": 10654
+    "file": "agents/fai-azure-cdn-expert.agent.md",
+    "size": 5899
   },
   {
-    "id": "frootai-azure-container-apps-expert",
-    "name": "Frootai Azure Container Apps Expert",
-    "description": "Azure Container Apps specialist — Dapr sidecars, KEDA scaling, GPU workloads, scale-to-zero, and AI agent hosting patterns.",
+    "id": "fai-azure-container-apps-expert",
+    "name": "FAI Azure Container Apps Expert",
+    "description": "Azure Container Apps specialist — serverless containers, Dapr sidecars, KEDA autoscaling, GPU workload profiles, scale-to-zero, and AI agent hosting patterns with blue/green deployments.",
     "waf": [],
-    "file": "agents/frootai-azure-container-apps-expert.agent.md",
-    "size": 10865
+    "file": "agents/fai-azure-container-apps-expert.agent.md",
+    "size": 6827
   },
   {
-    "id": "frootai-azure-cosmos-db-expert",
-    "name": "Frootai Azure Cosmos Db Expert",
-    "description": "Azure Cosmos DB specialist — partition design, vector search, multi-region writes, RU optimization, and conversation/session storage for AI agents.",
+    "id": "fai-azure-cosmos-db-expert",
+    "name": "FAI Azure Cosmos DB Expert",
+    "description": "Azure Cosmos DB specialist — partition key design, DiskANN vector search, multi-region writes, RU optimization, change feed processing, and conversation/session storage for AI agents.",
     "waf": [],
-    "file": "agents/frootai-azure-cosmos-db-expert.agent.md",
-    "size": 10849
+    "file": "agents/fai-azure-cosmos-db-expert.agent.md",
+    "size": 7038
   },
   {
-    "id": "frootai-azure-devops-expert",
-    "name": "Frootai Azure Devops Expert",
-    "description": "Azure DevOps specialist — pipelines, boards, repos, artifacts, and integration with GitHub Actions.",
+    "id": "fai-azure-devops-expert",
+    "name": "FAI Azure DevOps Expert",
+    "description": "Azure DevOps specialist — YAML multi-stage pipelines, environment protection rules, artifact feeds, workload identity federation, and AI-specific deployment quality gates.",
     "waf": [],
-    "file": "agents/frootai-azure-devops-expert.agent.md",
-    "size": 10707
+    "file": "agents/fai-azure-devops-expert.agent.md",
+    "size": 7149
   },
   {
-    "id": "frootai-azure-event-hubs-expert",
-    "name": "Frootai Azure Event Hubs Expert",
-    "description": "Azure Event Hubs specialist — real-time streaming, Kafka compatibility, partition strategy for AI data.",
+    "id": "fai-azure-event-hubs-expert",
+    "name": "FAI Azure Event Hubs Expert",
+    "description": "Azure Event Hubs specialist — partitioned event streaming, Kafka compatibility, Schema Registry governance, real-time AI inference pipelines, and high-throughput data ingestion.",
     "waf": [],
-    "file": "agents/frootai-azure-event-hubs-expert.agent.md",
-    "size": 10770
+    "file": "agents/fai-azure-event-hubs-expert.agent.md",
+    "size": 7480
   },
   {
-    "id": "frootai-azure-functions-expert",
-    "name": "Frootai Azure Functions Expert",
-    "description": "Azure Functions specialist — event-driven AI processing, timer triggers for batch inference, Durable Functions for long-running agent workflows.",
+    "id": "fai-azure-functions-expert",
+    "name": "FAI Azure Functions Expert",
+    "description": "Azure Functions specialist — event-driven AI processing, Durable Functions for long-running agent orchestration, timer triggers for batch inference, and cold start optimization.",
     "waf": [],
-    "file": "agents/frootai-azure-functions-expert.agent.md",
-    "size": 10893
+    "file": "agents/fai-azure-functions-expert.agent.md",
+    "size": 6790
   },
   {
-    "id": "frootai-azure-identity-expert",
-    "name": "Frootai Azure Identity Expert",
-    "description": "Azure identity specialist — Entra ID, Managed Identity, Conditional Access, PIM, RBAC best practices.",
+    "id": "fai-azure-identity-expert",
+    "name": "FAI Azure Identity Expert",
+    "description": "Azure identity and access management specialist — Entra ID, Managed Identity, DefaultAzureCredential, workload identity federation, RBAC, Conditional Access, and zero-trust architecture for AI services.",
     "waf": [],
-    "file": "agents/frootai-azure-identity-expert.agent.md",
-    "size": 10812
+    "file": "agents/fai-azure-identity-expert.agent.md",
+    "size": 6906
   },
   {
-    "id": "frootai-azure-key-vault-expert",
-    "name": "Frootai Azure Key Vault Expert",
-    "description": "Azure Key Vault specialist — secrets rotation, CMK encryption, certificate management, Managed Identity integration, and zero-secret deployment patterns.",
+    "id": "fai-azure-key-vault-expert",
+    "name": "FAI Azure Key Vault Expert",
+    "description": "Azure Key Vault specialist — secrets rotation, CMK encryption, certificate lifecycle, HSM-backed keys, Managed Identity integration, and zero-secret deployment patterns for AI workloads.",
     "waf": [],
-    "file": "agents/frootai-azure-key-vault-expert.agent.md",
-    "size": 10893
+    "file": "agents/fai-azure-key-vault-expert.agent.md",
+    "size": 6555
   },
   {
-    "id": "frootai-azure-logic-apps-expert",
-    "name": "Frootai Azure Logic Apps Expert",
-    "description": "Azure Logic Apps specialist — workflow automation, 1400+ connectors, WDL, enterprise integration.",
+    "id": "fai-azure-logic-apps-expert",
+    "name": "FAI Azure Logic Apps Expert",
+    "description": "Azure Logic Apps specialist — low-code workflow automation, 1400+ connectors, AI integration actions, Durable orchestration, B2B/EDI, and enterprise integration patterns.",
     "waf": [],
-    "file": "agents/frootai-azure-logic-apps-expert.agent.md",
-    "size": 10550
+    "file": "agents/fai-azure-logic-apps-expert.agent.md",
+    "size": 7069
   },
   {
-    "id": "frootai-azure-monitor-expert",
-    "name": "Frootai Azure Monitor Expert",
-    "description": "Azure Monitor specialist — Application Insights for AI tracing, KQL for token analytics, custom dashboards for groundedness/coherence metrics, and cost alerting.",
+    "id": "fai-azure-monitor-expert",
+    "name": "FAI Azure Monitor Expert",
+    "description": "Azure Monitor specialist — Application Insights for AI distributed tracing, KQL for token analytics, custom dashboards for groundedness/coherence metrics, cost alerting, and AI-specific observability patterns.",
     "waf": [],
-    "file": "agents/frootai-azure-monitor-expert.agent.md",
-    "size": 10651
+    "file": "agents/fai-azure-monitor-expert.agent.md",
+    "size": 7943
   },
   {
-    "id": "frootai-azure-networking-expert",
-    "name": "Frootai Azure Networking Expert",
-    "description": "Azure networking specialist — VNets, NSGs, Private Link, Front Door, Application Gateway, DNS.",
+    "id": "fai-azure-networking-expert",
+    "name": "FAI Azure Networking Expert",
+    "description": "Azure networking specialist — hub-spoke VNet design, Private Link for AI services, NSGs, Azure Firewall, DNS private zones, and zero-trust network architecture.",
     "waf": [],
-    "file": "agents/frootai-azure-networking-expert.agent.md",
-    "size": 10514
+    "file": "agents/fai-azure-networking-expert.agent.md",
+    "size": 6804
   },
   {
-    "id": "frootai-azure-openai-expert",
-    "name": "Frootai Azure Openai Expert",
-    "description": "Azure OpenAI specialist — deployment types (PTU/PAYG/Global), content filtering, model selection, token optimization, and multi-region load balancing.",
+    "id": "fai-azure-openai-expert",
+    "name": "FAI Azure OpenAI Expert",
+    "description": "Azure OpenAI specialist — model deployment types (PTU/PAYG/Global), content filtering, structured output, token optimization, multi-region load balancing, and production inference patterns.",
     "waf": [],
-    "file": "agents/frootai-azure-openai-expert.agent.md",
-    "size": 10686
+    "file": "agents/fai-azure-openai-expert.agent.md",
+    "size": 7389
   },
   {
-    "id": "frootai-azure-policy-expert",
-    "name": "Frootai Azure Policy Expert",
-    "description": "Azure Policy specialist — built-in policies, custom definitions, compliance scanning, remediation tasks.",
+    "id": "fai-azure-policy-expert",
+    "name": "FAI Azure Policy Expert",
+    "description": "Azure Policy specialist — built-in/custom policy definitions, AI governance initiatives, compliance scanning, remediation tasks, and policy-as-code deployment patterns.",
     "waf": [],
-    "file": "agents/frootai-azure-policy-expert.agent.md",
-    "size": 10640
+    "file": "agents/fai-azure-policy-expert.agent.md",
+    "size": 6539
   },
   {
-    "id": "frootai-azure-service-bus-expert",
-    "name": "Frootai Azure Service Bus Expert",
-    "description": "Azure Service Bus specialist — queues, topics, dead-letter, session-based messaging for agent orchestration.",
+    "id": "fai-azure-service-bus-expert",
+    "name": "FAI Azure Service Bus Expert",
+    "description": "Azure Service Bus specialist — queues, topics/subscriptions, dead-letter handling, session-based ordered messaging, saga patterns, and agent-to-agent communication for AI workflows.",
     "waf": [],
-    "file": "agents/frootai-azure-service-bus-expert.agent.md",
-    "size": 10567
+    "file": "agents/fai-azure-service-bus-expert.agent.md",
+    "size": 6913
   },
   {
-    "id": "frootai-azure-sql-expert",
-    "name": "Frootai Azure Sql Expert",
-    "description": "Azure SQL specialist — Hyperscale, serverless, geo-replication, intelligent performance tuning.",
+    "id": "fai-azure-sql-expert",
+    "name": "FAI Azure SQL Expert",
+    "description": "Azure SQL specialist — Hyperscale, serverless auto-pause, native vector search, geo-replication, intelligent performance tuning, and AI integration patterns with embeddings storage.",
     "waf": [],
-    "file": "agents/frootai-azure-sql-expert.agent.md",
-    "size": 10605
+    "file": "agents/fai-azure-sql-expert.agent.md",
+    "size": 6904
   },
   {
-    "id": "frootai-azure-storage-expert",
-    "name": "Frootai Azure Storage Expert",
-    "description": "Azure Storage specialist — Blob lifecycle, ADLS Gen2, Queue/Table, private endpoints, SAS tokens.",
+    "id": "fai-azure-storage-expert",
+    "name": "FAI Azure Storage Expert",
+    "description": "Azure Storage specialist — Blob lifecycle tiers, ADLS Gen2 for data lakes, private endpoints, managed identity auth, and document/model artifact storage for AI pipelines.",
     "waf": [],
-    "file": "agents/frootai-azure-storage-expert.agent.md",
-    "size": 10553
+    "file": "agents/fai-azure-storage-expert.agent.md",
+    "size": 5608
   },
   {
-    "id": "frootai-batch-processing-expert",
-    "name": "Frootai Batch Processing Expert",
-    "description": "Batch processing specialist — Azure Batch, async inference, Global Batch API (50% discount), large-scale document processing.",
+    "id": "fai-batch-processing-expert",
+    "name": "FAI Batch Processing Expert",
+    "description": "Batch processing specialist — Azure Batch pools, Global Batch API (50% cost savings), Durable Functions fan-out, large-scale document/embedding pipelines, and async LLM inference patterns.",
     "waf": [],
-    "file": "agents/frootai-batch-processing-expert.agent.md",
-    "size": 10477
+    "file": "agents/fai-batch-processing-expert.agent.md",
+    "size": 6940
   },
   {
-    "id": "frootai-blazor-expert",
-    "name": "Frootai Blazor Expert",
-    "description": "Blazor specialist — Server + WASM components, Razor syntax, SignalR real-time.",
+    "id": "fai-blazor-expert",
+    "name": "FAI Blazor Expert",
+    "description": "Blazor specialist — Server + WebAssembly + United (.NET 8+) render modes, streaming SSR, AI chat UI components, SignalR real-time, and Razor component architecture.",
     "waf": [],
-    "file": "agents/frootai-blazor-expert.agent.md",
-    "size": 10396
+    "file": "agents/fai-blazor-expert.agent.md",
+    "size": 6355
   },
   {
-    "id": "frootai-browser-agent",
-    "name": "FrootAI Browser Agent",
+    "id": "fai-browser-agent",
+    "name": "FAI Browser Agent",
     "description": "Browser automation agent — navigates websites, extracts data, and executes web workflows using Playwright MCP and vision analysis. Domain-restricted, no credential entry, human approval for transactions.",
     "waf": [],
-    "file": "agents/frootai-browser-agent.agent.md",
-    "size": 11196
+    "file": "agents/fai-browser-agent.agent.md",
+    "size": 5724
   },
   {
-    "id": "frootai-bun-expert",
-    "name": "bun expert",
-    "description": "Bun runtime — fast JavaScript/TypeScript, built-in bundler, test runner, SQLite, HTTP server for AI APIs",
-    "waf": "[\"performance-efficiency\",\"operational-excellence\"]",
-    "file": "agents/frootai-bun-expert.agent.md",
+    "id": "fai-bun-expert",
+    "name": "FAI Bun Expert",
+    "description": "Bun runtime specialist — ultra-fast JavaScript/TypeScript, built-in bundler, native SQLite, test runner, and HTTP server patterns for AI APIs and MCP servers.",
+    "waf": [],
+    "file": "agents/fai-bun-expert.agent.md",
+    "size": 6266
+  },
+  {
+    "id": "fai-capacity-planner",
+    "name": "FAI Capacity Planner",
+    "description": "AI capacity planning specialist — GPU sizing, PTU allocation, token volume forecasting, cost modeling, scaling strategy, and FinOps for Azure AI workloads.",
+    "waf": [],
+    "file": "agents/fai-capacity-planner.agent.md",
+    "size": 5531
+  },
+  {
+    "id": "fai-cicd-pipeline-expert",
+    "name": "FAI CI/CD Pipeline Expert",
+    "description": "CI/CD pipeline specialist — GitHub Actions with OIDC, multi-stage deployments, AI quality gates (eval.py), security scanning, and DORA metrics for AI application delivery.",
+    "waf": [],
+    "file": "agents/fai-cicd-pipeline-expert.agent.md",
+    "size": 6370
+  },
+  {
+    "id": "fai-cloudflare-expert",
+    "name": "FAI Cloudflare Expert",
+    "description": "Cloudflare specialist — Workers AI for edge inference, Workers KV, D1 database, R2 storage, AI Gateway, and CDN optimization for AI application delivery.",
+    "waf": [],
+    "file": "agents/fai-cloudflare-expert.agent.md",
+    "size": 5194
+  },
+  {
+    "id": "fai-code-reviewer",
+    "name": "FAI Code Reviewer",
+    "description": "Code review specialist — SOLID principles, clean code, OWASP security checks, AI-specific prompt injection auditing, and performance anti-pattern detection across TypeScript, Python, C#, and Bicep.",
+    "waf": [],
+    "file": "agents/fai-code-reviewer.agent.md",
+    "size": 5963
+  },
+  {
+    "id": "fai-collective-debugger",
+    "name": "FAI Collective Debugger",
+    "description": "Multi-agent debugging specialist — systematic root cause analysis, stack trace interpretation, Azure diagnostics, LLM-specific issue debugging, and performance profiling for AI pipelines.",
+    "waf": [],
+    "file": "agents/fai-collective-debugger.agent.md",
+    "size": 6051
+  },
+  {
+    "id": "fai-collective-implementer",
+    "name": "FAI Collective Implementer",
+    "description": "Multi-agent implementer — writes production code following TDD, implements features with Azure SDKs, generates Bicep infrastructure, and creates solution play components.",
+    "waf": [],
+    "file": "agents/fai-collective-implementer.agent.md",
+    "size": 6223
+  },
+  {
+    "id": "fai-collective-orchestrator",
+    "name": "FAI Collective Orchestrator",
+    "description": "Multi-agent orchestrator — routes tasks to specialist agents, manages turn limits, decomposes complex requests, synthesizes results, and ensures quality gates across the FAI Collective.",
+    "waf": [],
+    "file": "agents/fai-collective-orchestrator.agent.md",
+    "size": 6498
+  },
+  {
+    "id": "fai-collective-researcher",
+    "name": "FAI Collective Researcher",
+    "description": "Multi-agent researcher — gathers information from knowledge bases, codebase search, documentation analysis, and web research to ground specialist agents with verified facts.",
+    "waf": [],
+    "file": "agents/fai-collective-researcher.agent.md",
+    "size": 5706
+  },
+  {
+    "id": "fai-collective-reviewer",
+    "name": "FAI Collective Reviewer",
+    "description": "Multi-agent reviewer — security audit, OWASP LLM Top 10, WAF compliance, code quality, AI safety checks, and PR review with severity-classified feedback.",
+    "waf": [],
+    "file": "agents/fai-collective-reviewer.agent.md",
+    "size": 6024
+  },
+  {
+    "id": "fai-collective-tester",
+    "name": "FAI Collective Tester",
+    "description": "Multi-agent tester — generates unit/integration/E2E tests, AI evaluation pipelines, mutation testing, and quality assurance for AI outputs with deterministic seed-based testing.",
+    "waf": [],
+    "file": "agents/fai-collective-tester.agent.md",
+    "size": 7419
+  },
+  {
+    "id": "fai-compliance-expert",
+    "name": "FAI Compliance Expert",
+    "description": "AI compliance specialist — EU AI Act risk classification, NIST AI RMF, GDPR data subject rights, HIPAA PHI handling, SOC 2 evidence collection, and Azure compliance tooling.",
+    "waf": [],
+    "file": "agents/fai-compliance-expert.agent.md",
+    "size": 6793
+  },
+  {
+    "id": "fai-content-safety-expert",
+    "name": "FAI Content Safety Expert",
+    "description": "Content safety specialist — Azure AI Content Safety API, 4 harm categories with severity scoring, Prompt Shields for jailbreak defense, groundedness detection, PII redaction, and moderation pipeline design.",
+    "waf": [],
+    "file": "agents/fai-content-safety-expert.agent.md",
+    "size": 7456
+  },
+  {
+    "id": "fai-copilot-ecosystem-expert",
+    "name": "FAI Copilot Ecosystem Expert",
+    "description": "Microsoft Copilot ecosystem expert — M365 Copilot declarative agents, Copilot Studio, GitHub Copilot agent mode, Graph connectors, Adaptive Cards, and cross-platform agent extensibility.",
+    "waf": [],
+    "file": "agents/fai-copilot-ecosystem-expert.agent.md",
+    "size": 6119
+  },
+  {
+    "id": "fai-cost-gateway",
+    "name": "FAI Cost Gateway",
+    "description": "AI cost gateway specialist — APIM-based AI gateway with semantic caching, model routing by complexity, token budget enforcement, multi-region PTU load balancing, and FinOps telemetry.",
+    "waf": [],
+    "file": "agents/fai-cost-gateway.agent.md",
+    "size": 6841
+  },
+  {
+    "id": "fai-cost-optimizer",
+    "name": "FAI Cost Optimizer",
+    "description": "FinOps cost optimizer for AI workloads — model routing economics, semantic caching ROI, token budget design, PTU vs PAYG analysis, right-sizing recommendations, and Azure cost attribution.",
+    "waf": [],
+    "file": "agents/fai-cost-optimizer.agent.md",
+    "size": 6755
+  },
+  {
+    "id": "fai-crewai-expert",
+    "name": "FAI CrewAI Expert",
+    "description": "CrewAI multi-agent framework specialist — crew composition, role-based agents with backstory, task delegation with expected output, sequential/hierarchical processes, and custom tool integration.",
+    "waf": [],
+    "file": "agents/fai-crewai-expert.agent.md",
+    "size": 6206
+  },
+  {
+    "id": "fai-csharp-expert",
+    "name": "FAI C# Expert",
+    "description": "C#/.NET specialist — modern C# 12+/.NET 9, Azure SDK integration, Semantic Kernel, async/await patterns, Polly resilience, minimal APIs, and AI-native application development.",
+    "waf": [],
+    "file": "agents/fai-csharp-expert.agent.md",
+    "size": 5804
+  },
+  {
+    "id": "fai-csharp-mcp-expert",
+    "name": "FAI C# MCP Expert",
+    "description": "C# MCP server development specialist — ModelContextProtocol NuGet package, [McpServerTool] attributes, dependency injection, stdio/SSE transport, and Azure-integrated MCP tool development.",
+    "waf": [],
+    "file": "agents/fai-csharp-mcp-expert.agent.md",
+    "size": 6890
+  },
+  {
+    "id": "fai-dapr-expert",
+    "name": "FAI Dapr Expert",
+    "description": "Dapr distributed application runtime specialist — service invocation, state management, pub/sub messaging, bindings, secrets management, and sidecar-based AI microservice patterns.",
+    "waf": [],
+    "file": "agents/fai-dapr-expert.agent.md",
+    "size": 5974
+  },
+  {
+    "id": "fai-data-engineer",
+    "name": "FAI Data Engineer",
+    "description": "Data engineering specialist for AI — RAG ingestion pipelines, document chunking, ETL/ELT patterns, PII detection with Presidio, data quality scoring, and Azure Data Factory orchestration.",
+    "waf": [],
+    "file": "agents/fai-data-engineer.agent.md",
+    "size": 8146
+  },
+  {
+    "id": "fai-datadog-expert",
+    "name": "FAI Datadog Expert",
+    "description": "Datadog observability specialist — monitor creation, APM trace correlation, dashboard design, metric queries, and AI workload monitoring with custom metrics for token usage and model latency.",
+    "waf": [],
+    "file": "agents/fai-datadog-expert.agent.md",
+    "size": 6145
+  },
+  {
+    "id": "fai-debug-expert",
+    "name": "FAI Debug Expert",
+    "description": "Systematic debugging specialist — reproduce-isolate-fix methodology, binary search isolation, stack trace interpretation, Application Insights transaction tracing, and LLM-specific issue diagnosis.",
+    "waf": [],
+    "file": "agents/fai-debug-expert.agent.md",
+    "size": 5608
+  },
+  {
+    "id": "fai-deno-expert",
+    "name": "FAI Deno Expert",
+    "description": "Deno runtime specialist — TypeScript-first with permissions model, Deno KV for edge state, Deno Deploy for serverless, secure-by-default AI service development.",
+    "waf": [],
+    "file": "agents/fai-deno-expert.agent.md",
+    "size": 5997
+  },
+  {
+    "id": "fai-deterministic-expert",
+    "name": "FAI Deterministic Expert",
+    "description": "Deterministic AI specialist — makes AI outputs reproducible, grounded, and auditable with temperature control, seed pinning, JSON schema output, RAG grounding, citation enforcement, and multi-layer hallucination defense.",
+    "waf": [],
+    "file": "agents/fai-deterministic-expert.agent.md",
+    "size": 7826
+  },
+  {
+    "id": "fai-devops-expert",
+    "name": "FAI DevOps Expert",
+    "description": "DevOps lifecycle specialist — GitHub Actions OIDC, Infrastructure as Code (Bicep/Terraform), deployment strategies (blue-green/canary), SRE practices, DORA metrics, and incident management for AI systems.",
+    "waf": [],
+    "file": "agents/fai-devops-expert.agent.md",
+    "size": 5573
+  },
+  {
+    "id": "fai-docker-expert",
+    "name": "FAI Docker Expert",
+    "description": "Docker specialist — multi-stage builds, distroless images, GPU container support (CUDA/NVIDIA), ACR management, layer optimization, and container patterns for AI model serving.",
+    "waf": [],
+    "file": "agents/fai-docker-expert.agent.md",
+    "size": 5286
+  },
+  {
+    "id": "fai-dotnet-maui-expert",
+    "name": "FAI .NET MAUI Expert",
+    "description": ".NET MAUI cross-platform specialist — iOS, Android, Windows, macOS from single C# codebase, on-device AI inference (ONNX), MVVM architecture, and mobile-first AI application patterns.",
+    "waf": [],
+    "file": "agents/fai-dotnet-maui-expert.agent.md",
+    "size": 5494
+  },
+  {
+    "id": "fai-dspy-expert",
+    "name": "FAI DSPy Expert",
+    "description": "DSPy framework specialist — declarative LM programs, signature-based modules, optimizers (BootstrapFewShot, MIPRO), assertions, metric-driven prompt optimization, and compiled prompt pipelines.",
+    "waf": [],
+    "file": "agents/fai-dspy-expert.agent.md",
+    "size": 6654
+  },
+  {
+    "id": "fai-elasticsearch-expert",
+    "name": "FAI Elasticsearch Expert",
+    "description": "Elasticsearch specialist — index design, BM25 + kNN hybrid search, vector fields with HNSW, ILM lifecycle, cluster management, and RAG integration patterns.",
+    "waf": [],
+    "file": "agents/fai-elasticsearch-expert.agent.md",
+    "size": 5486
+  },
+  {
+    "id": "fai-embedding-expert",
+    "name": "FAI Embedding Expert",
+    "description": "Embedding specialist — text-embedding-3 model selection, Matryoshka dimension reduction, batch embedding pipelines, similarity metrics, chunking strategies, and vector database integration for RAG.",
+    "waf": [],
+    "file": "agents/fai-embedding-expert.agent.md",
+    "size": 6827
+  },
+  {
+    "id": "fai-epic-breakdown-expert",
+    "name": "FAI Epic Breakdown Expert",
+    "description": "Epic breakdown specialist — decomposes large AI features into INVEST user stories with acceptance criteria, sprint-sized tasks, dependency mapping, and WSJF prioritization.",
+    "waf": [],
+    "file": "agents/fai-epic-breakdown-expert.agent.md",
+    "size": 5985
+  },
+  {
+    "id": "fai-event-driven-expert",
+    "name": "FAI Event-Driven Expert",
+    "description": "Event-driven architecture specialist — Azure Event Grid, Service Bus, Event Hubs selection, event sourcing, CQRS, saga orchestration, and exactly-once processing patterns for AI pipelines.",
+    "waf": [],
+    "file": "agents/fai-event-driven-expert.agent.md",
+    "size": 6494
+  },
+  {
+    "id": "fai-fine-tuning-expert",
+    "name": "FAI Fine-Tuning Expert",
+    "description": "Fine-tuning and MLOps specialist — LoRA/QLoRA techniques, JSONL training data preparation, Azure OpenAI fine-tuning workflow, hyperparameter tuning, evaluation-driven iteration, and model versioning.",
+    "waf": [],
+    "file": "agents/fai-fine-tuning-expert.agent.md",
+    "size": 7821
+  },
+  {
+    "id": "fai-genai-foundations-expert",
+    "name": "FAI GenAI Foundations Expert",
+    "description": "GenAI foundations expert — transformer architecture, tokenization, inference optimization (KV cache, speculative decoding), model taxonomy, prompt engineering theory, and evaluation benchmarks.",
+    "waf": [],
+    "file": "agents/fai-genai-foundations-expert.agent.md",
+    "size": 5661
+  },
+  {
+    "id": "fai-git-workflow-expert",
+    "name": "FAI Git Workflow Expert",
+    "description": "Git workflow specialist — trunk-based development, conventional commits, PR best practices, branch protection, merge strategies, CODEOWNERS, and Git hooks for AI project collaboration.",
+    "waf": [],
+    "file": "agents/fai-git-workflow-expert.agent.md",
+    "size": 5113
+  },
+  {
+    "id": "fai-github-actions-expert",
+    "name": "FAI GitHub Actions Expert",
+    "description": "GitHub Actions specialist — OIDC federation to Azure, reusable workflows, matrix strategies, composite actions, caching, security hardening, and AI-specific CI/CD patterns (eval.py gates, prompt regression).",
+    "waf": [],
+    "file": "agents/fai-github-actions-expert.agent.md",
+    "size": 6062
+  },
+  {
+    "id": "fai-go-expert",
+    "name": "FAI Go Expert",
+    "description": "Go development specialist — idiomatic Go 1.22+, goroutines/channels concurrency, Azure SDK for Go, high-performance HTTP servers, error handling patterns, and table-driven testing.",
+    "waf": [],
+    "file": "agents/fai-go-expert.agent.md",
+    "size": 6900
+  },
+  {
+    "id": "fai-go-mcp-expert",
+    "name": "FAI Go MCP Expert",
+    "description": "Go MCP server specialist — mcp-go SDK, struct-based tool definitions, context-aware handlers, stdio transport, concurrent tool execution, and Azure service integration.",
+    "waf": [],
+    "file": "agents/fai-go-mcp-expert.agent.md",
+    "size": 5586
+  },
+  {
+    "id": "fai-graphql-expert",
+    "name": "FAI GraphQL Expert",
+    "description": "GraphQL specialist — schema design, resolver patterns, DataLoader N+1 prevention, subscriptions for AI streaming, federation, query complexity limits, and code generation.",
+    "waf": [],
+    "file": "agents/fai-graphql-expert.agent.md",
+    "size": 5752
+  },
+  {
+    "id": "fai-graphrag-expert",
+    "name": "FAI GraphRAG Expert",
+    "description": "GraphRAG specialist — entity extraction, relationship mapping, knowledge graph construction, community detection, graph-based retrieval with Cosmos DB Gremlin/Neo4j, and hybrid graph+vector search.",
+    "waf": [],
+    "file": "agents/fai-graphrag-expert.agent.md",
+    "size": 7794
+  },
+  {
+    "id": "fai-grpc-expert",
+    "name": "FAI gRPC Expert",
+    "description": "gRPC specialist — Protocol Buffers schema design, unary/streaming RPCs, interceptors for auth and tracing, load balancing, health checking, and high-performance AI microservice communication.",
+    "waf": [],
+    "file": "agents/fai-grpc-expert.agent.md",
+    "size": 6148
+  },
+  {
+    "id": "fai-guidance-expert",
+    "name": "FAI Guidance Expert",
+    "description": "Microsoft Guidance specialist — constrained generation, token healing, regex patterns, guaranteed JSON/XML compliance, select/gen/each primitives, and grammar-enforced structured output.",
+    "waf": [],
+    "file": "agents/fai-guidance-expert.agent.md",
+    "size": 5007
+  },
+  {
+    "id": "fai-htmx-expert",
+    "name": "FAI htmx Expert",
+    "description": "htmx specialist — HTML-over-the-wire, hx-get/hx-post/hx-swap, server-sent events for AI streaming, progressive enhancement, and minimal-JavaScript AI chat interfaces.",
+    "waf": [],
+    "file": "agents/fai-htmx-expert.agent.md",
+    "size": 4867
+  },
+  {
+    "id": "fai-i18n-expert",
+    "name": "FAI i18n Expert",
+    "description": "Internationalization specialist — multi-language AI responses, ICU message format, locale-aware formatting, Azure Translator integration, RTL support, and translation workflow design.",
+    "waf": [],
+    "file": "agents/fai-i18n-expert.agent.md",
+    "size": 5570
+  },
+  {
+    "id": "fai-incident-responder",
+    "name": "FAI Incident Responder",
+    "description": "Incident response specialist — severity classification (P0-P4), triage protocols, automated runbooks, war room coordination, root cause analysis, blameless post-mortems, and AI-specific incident patterns.",
+    "waf": [],
+    "file": "agents/fai-incident-responder.agent.md",
+    "size": 6558
+  },
+  {
+    "id": "fai-java-expert",
+    "name": "FAI Java Expert",
+    "description": "Java/Spring Boot specialist — Java 21+ virtual threads, Spring Boot 3.3, Spring AI for LLM integration, reactive streams for SSE, Azure SDK, and enterprise-grade AI application patterns.",
+    "waf": [],
+    "file": "agents/fai-java-expert.agent.md",
+    "size": 5887
+  },
+  {
+    "id": "fai-java-mcp-expert",
+    "name": "FAI Java MCP Expert",
+    "description": "Java MCP server specialist — MCP SDK for Java, Spring Boot auto-configuration, @Tool annotation, reactive streams, enterprise service patterns, and Azure integration.",
+    "waf": [],
+    "file": "agents/fai-java-mcp-expert.agent.md",
+    "size": 6448
+  },
+  {
+    "id": "fai-jira-expert",
+    "name": "FAI Jira Expert",
+    "description": "Jira integration specialist — AI-powered ticket triage, sprint query automation, board management, release tracking, and project management workflow design.",
+    "waf": [],
+    "file": "agents/fai-jira-expert.agent.md",
+    "size": 6201
+  },
+  {
+    "id": "fai-kotlin-expert",
+    "name": "FAI Kotlin Expert",
+    "description": "Kotlin specialist — coroutines with structured concurrency, Ktor HTTP server, Flow for reactive AI streaming, Jetpack Compose UI, and Azure SDK suspend-friendly patterns.",
+    "waf": [],
+    "file": "agents/fai-kotlin-expert.agent.md",
+    "size": 4486
+  },
+  {
+    "id": "fai-kotlin-mcp-expert",
+    "name": "FAI Kotlin MCP Expert",
+    "description": "Kotlin MCP server specialist — coroutine-based tool handlers, Ktor server transport, sealed class tool definitions, Flow-based streaming, and Azure suspend-friendly integration.",
+    "waf": [],
+    "file": "agents/fai-kotlin-mcp-expert.agent.md",
+    "size": 5516
+  },
+  {
+    "id": "fai-kubernetes-expert",
+    "name": "FAI Kubernetes Expert",
+    "description": "Kubernetes specialist — pod scheduling, GPU resource management, network policies, Helm charts, GitOps with Flux/ArgoCD, and production-grade AI workload orchestration on AKS.",
+    "waf": [],
+    "file": "agents/fai-kubernetes-expert.agent.md",
+    "size": 5851
+  },
+  {
+    "id": "fai-landing-zone",
+    "name": "FAI Landing Zone",
+    "description": "Azure AI Landing Zone architect — hub-spoke networking, private endpoints for all PaaS, managed identity, GPU quotas, governance policies, and Bicep-based enterprise AI infrastructure.",
+    "waf": [],
+    "file": "agents/fai-landing-zone.agent.md",
+    "size": 6314
+  },
+  {
+    "id": "fai-langchain-expert",
+    "name": "FAI LangChain Expert",
+    "description": "LangChain framework specialist — LCEL expression language, chains, agents with tool use, retrievers, memory, callbacks, LangSmith tracing, and production RAG pipeline patterns.",
+    "waf": [],
+    "file": "agents/fai-langchain-expert.agent.md",
+    "size": 5574
+  },
+  {
+    "id": "fai-llamaindex-expert",
+    "name": "FAI LlamaIndex Expert",
+    "description": "LlamaIndex data framework specialist — document loaders, index types (VectorStore/Summary/Knowledge Graph), query engines, response synthesizers, and agent tool integration for RAG.",
+    "waf": [],
+    "file": "agents/fai-llamaindex-expert.agent.md",
+    "size": 6425
+  },
+  {
+    "id": "fai-llm-landscape-expert",
+    "name": "FAI LLM Landscape Expert",
+    "description": "LLM landscape expert — model families (GPT, Claude, Llama, Gemini, Phi), benchmarks (MMLU, HumanEval, MT-Bench), deployment types, quantization, and model selection frameworks.",
+    "waf": [],
+    "file": "agents/fai-llm-landscape-expert.agent.md",
+    "size": 5728
+  },
+  {
+    "id": "fai-markdown-expert",
+    "name": "FAI Markdown Expert",
+    "description": "Markdown specialist — CommonMark/GFM, agent markup (.agent.md/.instructions.md/SKILL.md), documentation standards (README/ADR/changelog), accessibility, and content structure.",
+    "waf": [],
+    "file": "agents/fai-markdown-expert.agent.md",
+    "size": 4118
+  },
+  {
+    "id": "fai-mcp-expert",
+    "name": "FAI MCP Expert",
+    "description": "MCP protocol expert — Model Context Protocol specification, tool/resource/prompt primitives, stdio/SSE transports, server development patterns, and MCP ecosystem integration across VS Code, Claude, and Cursor.",
+    "waf": [],
+    "file": "agents/fai-mcp-expert.agent.md",
+    "size": 5833
+  },
+  {
+    "id": "fai-mentoring-agent",
+    "name": "FAI Mentoring Agent",
+    "description": "Developer mentoring specialist — Socratic teaching, personalized learning paths, constructive code review feedback, skill gap analysis, and progressive complexity scaffolding.",
+    "waf": [],
+    "file": "agents/fai-mentoring-agent.agent.md",
+    "size": 6397
+  },
+  {
+    "id": "fai-mermaid-diagram-expert",
+    "name": "FAI Mermaid Diagram Expert",
+    "description": "Mermaid diagram specialist — flowcharts, sequence diagrams, architecture diagrams, ER diagrams, state machines, and Gantt charts for AI system documentation.",
+    "waf": [],
+    "file": "agents/fai-mermaid-diagram-expert.agent.md",
+    "size": 5153
+  },
+  {
+    "id": "fai-migration-expert",
+    "name": "FAI Migration Expert",
+    "description": "Migration specialist — legacy-to-cloud, .NET Framework upgrade, database migration, AI-native re-architecture, 6R framework, Azure Migrate, and incremental migration patterns.",
+    "waf": [],
+    "file": "agents/fai-migration-expert.agent.md",
+    "size": 7257
+  },
+  {
+    "id": "fai-ml-engineer",
+    "name": "FAI ML Engineer",
+    "description": "ML engineering specialist — model training pipelines, LoRA/QLoRA fine-tuning, evaluation metrics, MLOps with Azure AI Foundry, model registry, and serving optimization for production AI.",
+    "waf": [],
+    "file": "agents/fai-ml-engineer.agent.md",
+    "size": 6150
+  },
+  {
+    "id": "fai-mlflow-expert",
+    "name": "FAI MLflow Expert",
+    "description": "MLflow specialist — experiment tracking, model registry, metric/artifact logging, Azure ML integration, deployment pipelines, and model lifecycle management.",
+    "waf": [],
+    "file": "agents/fai-mlflow-expert.agent.md",
+    "size": 4904
+  },
+  {
+    "id": "fai-mongodb-expert",
+    "name": "FAI MongoDB Expert",
+    "description": "MongoDB specialist — document schema design, aggregation pipelines, Atlas Vector Search for RAG, Cosmos DB MongoDB vCore, change streams, and AI application data patterns.",
+    "waf": [],
+    "file": "agents/fai-mongodb-expert.agent.md",
+    "size": 5430
+  },
+  {
+    "id": "fai-nats-expert",
+    "name": "FAI NATS Expert",
+    "description": "NATS messaging specialist — JetStream for durable streams, key-value store, object store, request-reply, pub-sub, and lightweight event-driven AI microservice communication.",
+    "waf": [],
+    "file": "agents/fai-nats-expert.agent.md",
+    "size": 4347
+  },
+  {
+    "id": "fai-neon-expert",
+    "name": "FAI Neon Expert",
+    "description": "Neon serverless Postgres specialist — database branching, auto-scaling compute, pgvector for AI embeddings, connection pooling, and database-per-branch development workflows.",
+    "waf": [],
+    "file": "agents/fai-neon-expert.agent.md",
+    "size": 5499
+  },
+  {
+    "id": "fai-openapi-expert",
+    "name": "FAI OpenAPI Expert",
+    "description": "OpenAPI specialist — API-first design, OpenAPI 3.1 spec authoring, code generation, validation middleware, and Copilot plugin API definition for AI applications.",
+    "waf": [],
+    "file": "agents/fai-openapi-expert.agent.md",
+    "size": 5976
+  },
+  {
+    "id": "fai-opentelemetry-expert",
+    "name": "FAI OpenTelemetry Expert",
+    "description": "OpenTelemetry specialist — distributed tracing, metrics, logs with OTLP protocol, auto-instrumentation, custom spans for AI pipelines, and Azure Monitor exporter integration.",
+    "waf": [],
+    "file": "agents/fai-opentelemetry-expert.agent.md",
+    "size": 5647
+  },
+  {
+    "id": "fai-pagerduty-expert",
+    "name": "FAI PagerDuty Expert",
+    "description": "PagerDuty incident management specialist — alert routing, escalation policies, on-call scheduling, automated incident creation, and AI-specific runbook integration.",
+    "waf": [],
+    "file": "agents/fai-pagerduty-expert.agent.md",
+    "size": 5000
+  },
+  {
+    "id": "fai-performance-profiler",
+    "name": "FAI Performance Profiler",
+    "description": "Performance profiling specialist — latency analysis (P50/P95/P99), token optimization, GPU utilization profiling, bottleneck identification, cold start analysis, and AI pipeline performance tuning.",
+    "waf": [],
+    "file": "agents/fai-performance-profiler.agent.md",
+    "size": 6046
+  },
+  {
+    "id": "fai-php-expert",
+    "name": "FAI PHP Expert",
+    "description": "PHP 8.3+ specialist — modern PHP with attributes, typed properties, enums, fibers, Composer PSR standards, Laravel/Symfony patterns, and PHP-based AI API integration.",
+    "waf": [],
+    "file": "agents/fai-php-expert.agent.md",
+    "size": 5374
+  },
+  {
+    "id": "fai-php-mcp-expert",
+    "name": "FAI PHP MCP Expert",
+    "description": "PHP MCP server specialist — PHP 8.3+ attributes for tool registration, PSR standards, Composer dependency management, typed properties for JSON Schema, and stdio transport.",
+    "waf": [],
+    "file": "agents/fai-php-mcp-expert.agent.md",
+    "size": 4316
+  },
+  {
+    "id": "fai-play-01-builder",
+    "name": "FAI Enterprise RAG Builder",
+    "description": "Enterprise RAG builder — hybrid search pipeline (BM25+vector), Azure AI Search indexing, OpenAI chat completions with citations, chunking strategies, and evaluation-driven quality gates.",
+    "waf": [],
+    "file": "agents/fai-play-01-builder.agent.md",
+    "size": 4257
+  },
+  {
+    "id": "fai-play-01-reviewer",
+    "name": "FAI Enterprise RAG Reviewer",
+    "description": "Enterprise RAG reviewer — RAG quality audit, citation accuracy, search config validation, security compliance, OWASP LLM Top 10, and WAF pillar alignment checks.",
+    "waf": [],
+    "file": "agents/fai-play-01-reviewer.agent.md",
+    "size": 4269
+  },
+  {
+    "id": "fai-play-01-tuner",
+    "name": "FAI Enterprise RAG Tuner",
+    "description": "Enterprise RAG tuner — config optimization for search quality, token costs, chunking parameters, evaluation thresholds, and model selection economics.",
+    "waf": [],
+    "file": "agents/fai-play-01-tuner.agent.md",
+    "size": 4177
+  },
+  {
+    "id": "fai-play-02-builder",
+    "name": "FAI AI Landing Zone Builder",
+    "description": "AI Landing Zone builder — hub-spoke networking, private endpoints, Azure Firewall, DNS architecture, identity foundation, and governance baseline for enterprise AI workloads.",
+    "waf": [],
+    "file": "agents/fai-play-02-builder.agent.md",
+    "size": 5073
+  },
+  {
+    "id": "fai-play-02-reviewer",
+    "name": "FAI AI Landing Zone Reviewer",
+    "description": "AI Landing Zone reviewer — network security audit, private endpoint verification, identity compliance, Azure Policy enforcement, and Bicep infrastructure review.",
+    "waf": [],
+    "file": "agents/fai-play-02-reviewer.agent.md",
+    "size": 2804
+  },
+  {
+    "id": "fai-play-02-tuner",
+    "name": "FAI AI Landing Zone Tuner",
+    "description": "AI Landing Zone tuner — network sizing, firewall rule optimization, SKU right-sizing, cost analysis, DR configuration, and production readiness verification.",
+    "waf": [],
+    "file": "agents/fai-play-02-tuner.agent.md",
+    "size": 2769
+  },
+  {
+    "id": "fai-play-03-builder",
+    "name": "FAI Deterministic Agent Builder",
+    "description": "Deterministic Agent builder — zero-temperature architecture, seed pinning, structured JSON output, multi-layer guardrails, confidence scoring, and anti-hallucination defense.",
+    "waf": [],
+    "file": "agents/fai-play-03-builder.agent.md",
+    "size": 3275
+  },
+  {
+    "id": "fai-play-03-reviewer",
+    "name": "FAI Deterministic Agent Reviewer",
+    "description": "Deterministic Agent reviewer — reproducibility testing, guardrail completeness audit, anti-sycophancy verification, schema validation review, and confidence calibration checks.",
+    "waf": [],
+    "file": "agents/fai-play-03-reviewer.agent.md",
+    "size": 2739
+  },
+  {
+    "id": "fai-play-03-tuner",
+    "name": "FAI Deterministic Agent Tuner",
+    "description": "Deterministic Agent tuner — confidence threshold optimization, guardrail severity calibration, evaluation metric tuning, retry config, and A/B testing for determinism quality.",
+    "waf": [],
+    "file": "agents/fai-play-03-tuner.agent.md",
+    "size": 2775
+  },
+  {
+    "id": "fai-play-04-builder",
+    "name": "FAI Call Center Voice AI Builder",
+    "description": "Call Center Voice AI builder — STT→LLM→TTS streaming pipeline, Azure Communication Services, real-time transcription, intent classification, PII redaction, and escalation triggers.",
+    "waf": [],
+    "file": "agents/fai-play-04-builder.agent.md",
+    "size": 3160
+  },
+  {
+    "id": "fai-play-04-reviewer",
+    "name": "FAI Call Center Voice AI Reviewer",
+    "description": "Call Center Voice AI reviewer — voice quality audit, pipeline latency review, PII redaction verification, TCPA compliance, and escalation trigger testing.",
+    "waf": [],
+    "file": "agents/fai-play-04-reviewer.agent.md",
+    "size": 2640
+  },
+  {
+    "id": "fai-play-04-tuner",
+    "name": "FAI Call Center Voice AI Tuner",
+    "description": "Call Center Voice AI tuner — speech config optimization, neural voice selection, latency tuning, escalation thresholds, cost-per-call analysis, and CSAT metric targeting.",
+    "waf": [],
+    "file": "agents/fai-play-04-tuner.agent.md",
+    "size": 2886
+  },
+  {
+    "id": "fai-play-05-builder",
+    "name": "FAI IT Ticket Resolution Builder",
+    "description": "IT Ticket Resolution builder — event-driven classification pipeline, auto-resolution via knowledge base, ServiceNow/Jira integration, skill-based routing, and SLA monitoring.",
+    "waf": [],
+    "file": "agents/fai-play-05-builder.agent.md",
+    "size": 3221
+  },
+  {
+    "id": "fai-play-05-reviewer",
+    "name": "FAI IT Ticket Resolution Reviewer",
+    "description": "IT Ticket Resolution reviewer — classification accuracy audit, auto-resolution quality, routing fairness, SLA compliance, ServiceNow integration security, and PII handling review.",
+    "waf": [],
+    "file": "agents/fai-play-05-reviewer.agent.md",
+    "size": 2918
+  },
+  {
+    "id": "fai-play-05-tuner",
+    "name": "FAI IT Ticket Resolution Tuner",
+    "description": "IT Ticket Resolution tuner — classification prompt optimization, routing rules, auto-resolution thresholds, SLA configuration, and cost-per-ticket analysis.",
+    "waf": [],
+    "file": "agents/fai-play-05-tuner.agent.md",
+    "size": 2674
+  },
+  {
+    "id": "fai-play-06-builder",
+    "name": "FAI Document Intelligence Builder",
+    "description": "Document Intelligence builder — Azure AI Document Intelligence OCR, multi-format processing, GPT-4o field extraction, Cosmos DB storage, and validation pipeline.",
+    "waf": [],
+    "file": "agents/fai-play-06-builder.agent.md",
+    "size": 3114
+  },
+  {
+    "id": "fai-play-06-reviewer",
+    "name": "FAI Document Intelligence Reviewer",
+    "description": "Document Intelligence reviewer — OCR accuracy audit, schema validation, PII handling review, pipeline error handling, and confidence threshold verification.",
+    "waf": [],
+    "file": "agents/fai-play-06-reviewer.agent.md",
+    "size": 2726
+  },
+  {
+    "id": "fai-play-06-tuner",
+    "name": "FAI Document Intelligence Tuner",
+    "description": "Document Intelligence tuner — OCR settings optimization, extraction confidence calibration, custom model training data, batch performance, and cost-per-document analysis.",
+    "waf": [],
+    "file": "agents/fai-play-06-tuner.agent.md",
+    "size": 2703
+  },
+  {
+    "id": "fai-play-07-builder",
+    "name": "FAI Multi-Agent Service Builder",
+    "description": "Multi-Agent Service builder — supervisor orchestration pattern, agent registry, shared state via Cosmos DB/Redis, Dapr integration, tool routing, and loop prevention.",
+    "waf": [],
+    "file": "agents/fai-play-07-builder.agent.md",
+    "size": 3243
+  },
+  {
+    "id": "fai-play-07-reviewer",
+    "name": "FAI Multi-Agent Service Reviewer",
+    "description": "Multi-Agent Service reviewer — orchestration logic audit, state management review, loop prevention verification, agent security boundaries, and Dapr configuration checks.",
+    "waf": [],
+    "file": "agents/fai-play-07-reviewer.agent.md",
+    "size": 2740
+  },
+  {
+    "id": "fai-play-07-tuner",
+    "name": "FAI Multi-Agent Service Tuner",
+    "description": "Multi-Agent Service tuner — supervisor routing config, per-agent token budgets, loop limits, model selection per role, memory TTL, and orchestration cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-07-tuner.agent.md",
+    "size": 2744
+  },
+  {
+    "id": "fai-play-08-builder",
+    "name": "FAI Copilot Studio Bot Builder",
+    "description": "Copilot Studio Bot builder — declarative agent setup, topic design, SharePoint/Dataverse knowledge grounding, Power Platform connectors, and conversation guardrails.",
+    "waf": [],
+    "file": "agents/fai-play-08-builder.agent.md",
+    "size": 3078
+  },
+  {
+    "id": "fai-play-08-reviewer",
+    "name": "FAI Copilot Studio Bot Reviewer",
+    "description": "Copilot Studio Bot reviewer — topic coverage audit, knowledge source validation, DLP compliance, guardrail verification, and conversation flow testing.",
+    "waf": [],
+    "file": "agents/fai-play-08-reviewer.agent.md",
+    "size": 2763
+  },
+  {
+    "id": "fai-play-08-tuner",
+    "name": "FAI Copilot Studio Bot Tuner",
+    "description": "Copilot Studio Bot tuner — trigger phrase expansion, knowledge source optimization, response tone calibration, guardrail sensitivity, and conversation flow tuning.",
+    "waf": [],
+    "file": "agents/fai-play-08-tuner.agent.md",
+    "size": 2787
+  },
+  {
+    "id": "fai-play-09-builder",
+    "name": "FAI AI Search Portal Builder",
+    "description": "AI Search Portal builder — Azure AI Search index design, hybrid search with scoring profiles, faceted navigation, answer generation with citations, and auto-suggest.",
+    "waf": [],
+    "file": "agents/fai-play-09-builder.agent.md",
+    "size": 2815
+  },
+  {
+    "id": "fai-play-09-reviewer",
+    "name": "FAI AI Search Portal Reviewer",
+    "description": "AI Search Portal reviewer — index schema audit, search relevance testing, answer citation accuracy, facet UX review, and performance benchmarking.",
+    "waf": [],
+    "file": "agents/fai-play-09-reviewer.agent.md",
+    "size": 2593
+  },
+  {
+    "id": "fai-play-09-tuner",
+    "name": "FAI AI Search Portal Tuner",
+    "description": "AI Search Portal tuner — hybrid weight optimization, scoring profile calibration, reranker config, suggester tuning, and answer generation quality.",
+    "waf": [],
+    "file": "agents/fai-play-09-tuner.agent.md",
+    "size": 2579
+  },
+  {
+    "id": "fai-play-10-builder",
+    "name": "FAI Content Moderation Builder",
+    "description": "Content Moderation builder — Azure Content Safety API integration, 4-category severity scoring, custom blocklists, APIM gateway middleware, and severity-based routing.",
+    "waf": [],
+    "file": "agents/fai-play-10-builder.agent.md",
+    "size": 3058
+  },
+  {
+    "id": "fai-play-10-reviewer",
+    "name": "FAI Content Moderation Reviewer",
+    "description": "Content Moderation reviewer — safety coverage audit, severity threshold verification, blocklist completeness, bypass prevention, and human review workflow testing.",
+    "waf": [],
+    "file": "agents/fai-play-10-reviewer.agent.md",
+    "size": 2759
+  },
+  {
+    "id": "fai-play-10-tuner",
+    "name": "FAI Content Moderation Tuner",
+    "description": "Content Moderation tuner — per-category severity calibration, blocklist optimization, false positive reduction, routing distribution, and moderation cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-10-tuner.agent.md",
+    "size": 2744
+  },
+  {
+    "id": "fai-play-11-builder",
+    "name": "FAI AI Landing Zone Advanced Builder",
+    "description": "AI Landing Zone Advanced builder — multi-region hub-spoke, Azure Firewall Premium with TLS/IDPS, policy-driven governance at scale, GPU quota orchestration, and disaster recovery automation.",
+    "waf": [],
+    "file": "agents/fai-play-11-builder.agent.md",
+    "size": 2951
+  },
+  {
+    "id": "fai-play-11-reviewer",
+    "name": "FAI AI Landing Zone Advanced Reviewer",
+    "description": "AI Landing Zone Advanced reviewer — multi-region networking audit, firewall rule review, policy compliance verification, GPU quota validation, and DR testing review.",
+    "waf": [],
+    "file": "agents/fai-play-11-reviewer.agent.md",
+    "size": 2670
+  },
+  {
+    "id": "fai-play-11-tuner",
+    "name": "FAI AI Landing Zone Advanced Tuner",
+    "description": "AI Landing Zone Advanced tuner — multi-region network sizing, firewall rule optimization, policy effect progression, GPU type selection, and DR cost optimization.",
+    "waf": [],
+    "file": "agents/fai-play-11-tuner.agent.md",
+    "size": 2740
+  },
+  {
+    "id": "fai-play-12-builder",
+    "name": "FAI Model Serving AKS Builder",
+    "description": "Model Serving AKS builder — GPU cluster design, vLLM/TGI serving engines, NVIDIA device plugin, HPA/KEDA autoscaling, model versioning, and canary deployments.",
+    "waf": [],
+    "file": "agents/fai-play-12-builder.agent.md",
+    "size": 3020
+  },
+  {
+    "id": "fai-play-12-reviewer",
+    "name": "FAI Model Serving AKS Reviewer",
+    "description": "Model Serving AKS reviewer — GPU cluster audit, vLLM config validation, autoscaling verification, pod security review, and inference latency benchmarking.",
+    "waf": [],
+    "file": "agents/fai-play-12-reviewer.agent.md",
+    "size": 2548
+  },
+  {
+    "id": "fai-play-12-tuner",
+    "name": "FAI Model Serving AKS Tuner",
+    "description": "Model Serving AKS tuner — GPU SKU selection, vLLM memory/batching optimization, quantization decisions, autoscaling thresholds, and inference cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-12-tuner.agent.md",
+    "size": 2789
+  },
+  {
+    "id": "fai-play-13-builder",
+    "name": "FAI Fine-Tuning Workflow Builder",
+    "description": "Fine-Tuning Workflow builder — Azure OpenAI fine-tuning, JSONL data preparation, LoRA/QLoRA techniques, MLflow experiment tracking, evaluation-driven iteration, and A/B deployment.",
+    "waf": [],
+    "file": "agents/fai-play-13-builder.agent.md",
+    "size": 3025
+  },
+  {
+    "id": "fai-play-13-reviewer",
+    "name": "FAI Fine-Tuning Workflow Reviewer",
+    "description": "Fine-Tuning Workflow reviewer — training data quality audit, hyperparameter validation, evaluation methodology review, safety retesting, and alignment preservation checks.",
+    "waf": [],
+    "file": "agents/fai-play-13-reviewer.agent.md",
+    "size": 2677
+  },
+  {
+    "id": "fai-play-13-tuner",
+    "name": "FAI Fine-Tuning Workflow Tuner",
+    "description": "Fine-Tuning Workflow tuner — learning rate scheduling, LoRA rank/alpha optimization, epoch calibration, batch sizing, data quality filtering, and training cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-13-tuner.agent.md",
+    "size": 2750
+  },
+  {
+    "id": "fai-play-14-builder",
+    "name": "FAI Cost-Optimized AI Gateway Builder",
+    "description": "Cost-Optimized AI Gateway builder — APIM AI gateway, semantic caching with Redis, smart model routing by complexity, token budget enforcement, and multi-region load balancing.",
+    "waf": [],
+    "file": "agents/fai-play-14-builder.agent.md",
+    "size": 3132
+  },
+  {
+    "id": "fai-play-14-reviewer",
+    "name": "FAI Cost-Optimized AI Gateway Reviewer",
+    "description": "Cost-Optimized AI Gateway reviewer — routing accuracy audit, cache quality verification, budget enforcement testing, security review, and cost savings validation.",
+    "waf": [],
+    "file": "agents/fai-play-14-reviewer.agent.md",
+    "size": 2763
+  },
+  {
+    "id": "fai-play-14-tuner",
+    "name": "FAI Cost-Optimized AI Gateway Tuner",
+    "description": "Cost-Optimized AI Gateway tuner — semantic cache threshold calibration, routing complexity boundaries, token budget tiers, rate limits, and cost optimization analysis.",
+    "waf": [],
+    "file": "agents/fai-play-14-tuner.agent.md",
+    "size": 2742
+  },
+  {
+    "id": "fai-play-15-builder",
+    "name": "FAI Document Processing Builder",
+    "description": "Document Processing builder — GPT-4o Vision multi-modal analysis, Azure Document Intelligence, table extraction, classification pipeline, and PII-aware storage.",
+    "waf": [],
+    "file": "agents/fai-play-15-builder.agent.md",
+    "size": 3037
+  },
+  {
+    "id": "fai-play-15-reviewer",
+    "name": "FAI Document Processing Reviewer",
+    "description": "Document Processing reviewer — multi-modal extraction accuracy audit, table parsing quality, PII masking verification, pipeline error handling, and classification accuracy review.",
+    "waf": [],
+    "file": "agents/fai-play-15-reviewer.agent.md",
+    "size": 2726
+  },
+  {
+    "id": "fai-play-15-tuner",
+    "name": "FAI Document Processing Tuner",
+    "description": "Document Processing tuner — GPT-4o Vision resolution settings, extraction confidence calibration, table detection thresholds, chart parsing config, and batch performance optimization.",
+    "waf": [],
+    "file": "agents/fai-play-15-tuner.agent.md",
+    "size": 2837
+  },
+  {
+    "id": "fai-play-16-builder",
+    "name": "FAI Copilot Teams Extension Builder",
+    "description": "Copilot Teams Extension builder — M365 Copilot declarative agent, Microsoft Graph API integration, Adaptive Cards, Entra ID SSO, and Teams message extension development.",
+    "waf": [],
+    "file": "agents/fai-play-16-builder.agent.md",
+    "size": 2847
+  },
+  {
+    "id": "fai-play-16-reviewer",
+    "name": "FAI Copilot Teams Extension Reviewer",
+    "description": "Copilot Teams Extension reviewer — Graph permission audit, SSO flow testing, Adaptive Card rendering review, message extension validation, and Teams policy compliance.",
+    "waf": [],
+    "file": "agents/fai-play-16-reviewer.agent.md",
+    "size": 2683
+  },
+  {
+    "id": "fai-play-16-tuner",
+    "name": "FAI Copilot Teams Extension Tuner",
+    "description": "Copilot Teams Extension tuner — Graph scope minimization, knowledge source config, response tone calibration, Adaptive Card optimization, and permission tuning.",
+    "waf": [],
+    "file": "agents/fai-play-16-tuner.agent.md",
+    "size": 2791
+  },
+  {
+    "id": "fai-play-17-builder",
+    "name": "FAI AI Observability Builder",
+    "description": "AI Observability builder — Application Insights distributed tracing, KQL query library for AI metrics, Azure Workbooks dashboards, alerting rules, and FinOps telemetry.",
+    "waf": [],
+    "file": "agents/fai-play-17-builder.agent.md",
+    "size": 3014
+  },
+  {
+    "id": "fai-play-17-reviewer",
+    "name": "FAI AI Observability Reviewer",
+    "description": "AI Observability reviewer — telemetry coverage audit, KQL query accuracy, dashboard UX review, alert threshold calibration, and PII-in-logs verification.",
+    "waf": [],
+    "file": "agents/fai-play-17-reviewer.agent.md",
+    "size": 2649
+  },
+  {
+    "id": "fai-play-17-tuner",
+    "name": "FAI AI Observability Tuner",
+    "description": "AI Observability tuner — Log Analytics commitment tier selection, sampling rate config, alert threshold calibration, dashboard refresh optimization, and retention policy tuning.",
+    "waf": [],
+    "file": "agents/fai-play-17-tuner.agent.md",
+    "size": 2746
+  },
+  {
+    "id": "fai-play-18-builder",
+    "name": "FAI Prompt Optimization Builder",
+    "description": "Prompt Optimization builder — prompt versioning with semantic versions, A/B testing framework, Azure Prompt Flow, template engine with variable injection, and evaluation-driven iteration.",
+    "waf": [],
+    "file": "agents/fai-play-18-builder.agent.md",
+    "size": 2908
+  },
+  {
+    "id": "fai-play-18-reviewer",
+    "name": "FAI Prompt Optimization Reviewer",
+    "description": "Prompt Optimization reviewer — version management audit, A/B test methodology review, template injection safety, evaluation pipeline validation, and prompt quality assessment.",
+    "waf": [],
+    "file": "agents/fai-play-18-reviewer.agent.md",
+    "size": 2735
+  },
+  {
+    "id": "fai-play-18-tuner",
+    "name": "FAI Prompt Optimization Tuner",
+    "description": "Prompt Optimization tuner — system message clarity, few-shot example selection, A/B test config, template variable defaults, and prompt cost-quality trade-off analysis.",
+    "waf": [],
+    "file": "agents/fai-play-18-tuner.agent.md",
+    "size": 2878
+  },
+  {
+    "id": "fai-play-19-builder",
+    "name": "FAI Edge AI Builder",
+    "description": "Edge AI builder — Phi-4 on-device inference, ONNX quantization (INT4/INT8), Azure IoT Hub fleet management, offline-first architecture, and cloud fallback patterns.",
+    "waf": [],
+    "file": "agents/fai-play-19-builder.agent.md",
+    "size": 2863
+  },
+  {
+    "id": "fai-play-19-reviewer",
+    "name": "FAI Edge AI Reviewer",
+    "description": "Edge AI reviewer — quantized model quality audit, offline resilience testing, fleet rollout verification, cloud fallback review, and device security checks.",
+    "waf": [],
+    "file": "agents/fai-play-19-reviewer.agent.md",
+    "size": 2629
+  },
+  {
+    "id": "fai-play-19-tuner",
+    "name": "FAI Edge AI Tuner",
+    "description": "Edge AI tuner — quantization level selection, on-device latency optimization, sync schedule config, cloud fallback thresholds, and per-device cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-19-tuner.agent.md",
+    "size": 2683
+  },
+  {
+    "id": "fai-play-20-builder",
+    "name": "FAI Real-Time Analytics Builder",
+    "description": "Real-Time Analytics builder — Event Hub partitioned ingestion, Stream Analytics windowing, LLM-powered anomaly explanation, multi-signal scoring, and live dashboards.",
+    "waf": [],
+    "file": "agents/fai-play-20-builder.agent.md",
+    "size": 2971
+  },
+  {
+    "id": "fai-play-20-reviewer",
+    "name": "FAI Real-Time Analytics Reviewer",
+    "description": "Real-Time Analytics reviewer — ingestion reliability audit, windowing correctness, anomaly detection accuracy, scoring logic review, and alert quality verification.",
+    "waf": [],
+    "file": "agents/fai-play-20-reviewer.agent.md",
+    "size": 2672
+  },
+  {
+    "id": "fai-play-20-tuner",
+    "name": "FAI Real-Time Analytics Tuner",
+    "description": "Real-Time Analytics tuner — window size optimization, anomaly threshold calibration, baseline window selection, alert severity rules, and streaming cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-20-tuner.agent.md",
+    "size": 2641
+  },
+  {
+    "id": "fai-play-21-builder",
+    "name": "FAI Agentic RAG Builder",
+    "description": "Agentic RAG builder — autonomous retrieval agent, multi-source fusion (Search+web+DB), iterative query refinement, citation pipeline, and reflection-based quality gates.",
+    "waf": [],
+    "file": "agents/fai-play-21-builder.agent.md",
+    "size": 2973
+  },
+  {
+    "id": "fai-play-21-reviewer",
+    "name": "FAI Agentic RAG Reviewer",
+    "description": "Agentic RAG reviewer — retrieval autonomy audit, source selection review, iteration limit verification, citation accuracy check, and reflection quality assessment.",
+    "waf": [],
+    "file": "agents/fai-play-21-reviewer.agent.md",
+    "size": 2716
+  },
+  {
+    "id": "fai-play-21-tuner",
+    "name": "FAI Agentic RAG Tuner",
+    "description": "Agentic RAG tuner — iteration depth config, source weight optimization, reflection threshold calibration, citation requirements, and per-query cost analysis.",
+    "waf": [],
+    "file": "agents/fai-play-21-tuner.agent.md",
+    "size": 2716
+  },
+  {
+    "id": "fai-play-22-builder",
+    "name": "FAI Swarm Orchestration Builder",
+    "description": "Swarm Orchestration builder — mesh/star/hierarchical agent topologies, supervisor task decomposition, agent specialization, shared memory via Cosmos DB, and conflict resolution.",
+    "waf": [],
+    "file": "agents/fai-play-22-builder.agent.md",
+    "size": 2980
+  },
+  {
+    "id": "fai-play-22-reviewer",
+    "name": "FAI Swarm Orchestration Reviewer",
+    "description": "Swarm Orchestration reviewer — topology audit, supervisor logic review, agent specialization validation, shared memory consistency, and conflict resolution testing.",
+    "waf": [],
+    "file": "agents/fai-play-22-reviewer.agent.md",
+    "size": 2734
+  },
+  {
+    "id": "fai-play-22-tuner",
+    "name": "FAI Swarm Orchestration Tuner",
+    "description": "Swarm Orchestration tuner — topology selection, agent count optimization, consensus config, memory TTL calibration, and per-agent budget allocation.",
+    "waf": [],
+    "file": "agents/fai-play-22-tuner.agent.md",
+    "size": 2663
+  },
+  {
+    "id": "fai-play-23-builder",
+    "name": "FAI Browser Agent Builder",
+    "description": "Browser Agent builder — Playwright MCP integration, GPT-4o Vision page navigation, multi-step web task automation, form filling, data extraction, and domain-restricted browsing.",
+    "waf": [],
+    "file": "agents/fai-play-23-builder.agent.md",
+    "size": 2868
+  },
+  {
+    "id": "fai-play-23-reviewer",
+    "name": "FAI Browser Agent Reviewer",
+    "description": "Browser Agent reviewer — domain allowlist verification, vision accuracy testing, credential security audit, error recovery review, and task completion validation.",
+    "waf": [],
+    "file": "agents/fai-play-23-reviewer.agent.md",
+    "size": 2678
+  },
+  {
+    "id": "fai-play-23-tuner",
+    "name": "FAI Browser Agent Tuner",
+    "description": "Browser Agent tuner — screenshot resolution config, timeout calibration, retry strategy, domain allowlist management, and vision cost optimization.",
+    "waf": [],
+    "file": "agents/fai-play-23-tuner.agent.md",
+    "size": 2639
+  },
+  {
+    "id": "fai-play-dispatcher",
+    "name": "FAI Play Dispatcher",
+    "description": "FAI play dispatcher — routes user requests to the correct solution play based on intent classification, understands all 101 plays and their domains, delegates to specialist agents.",
+    "waf": [],
+    "file": "agents/fai-play-dispatcher.agent.md",
+    "size": 3529
+  },
+  {
+    "id": "fai-play-lifecycle",
+    "name": "FAI Play Lifecycle",
+    "description": "FAI play lifecycle manager — handles play initialization (scaffold file structure), Bicep deployment, evaluation quality gates, and config tuning for any of the 101 solution plays.",
+    "waf": [],
+    "file": "agents/fai-play-lifecycle.agent.md",
+    "size": 6304
+  },
+  {
+    "id": "fai-postgresql-expert",
+    "name": "FAI PostgreSQL Expert",
+    "description": "PostgreSQL specialist — pgvector for embedding storage, HNSW/IVFFlat indexes, query optimization with EXPLAIN ANALYZE, connection pooling (PgBouncer), partitioning, and RAG vector store patterns.",
+    "waf": [],
+    "file": "agents/fai-postgresql-expert.agent.md",
+    "size": 5304
+  },
+  {
+    "id": "fai-power-bi-expert",
+    "name": "FAI Power BI Expert",
+    "description": "Power BI specialist — star schema data modeling, DAX formulas, report design, DirectQuery vs Import, AI-powered analytics with Azure OpenAI integration, and performance optimization.",
+    "waf": [],
+    "file": "agents/fai-power-bi-expert.agent.md",
+    "size": 4580
+  },
+  {
+    "id": "fai-power-platform-expert",
+    "name": "FAI Power Platform Expert",
+    "description": "Power Platform specialist — Power Apps (Canvas + Model-driven), Power Automate cloud flows, Dataverse, custom connectors, DLP policies, and Copilot Studio integration.",
+    "waf": [],
+    "file": "agents/fai-power-platform-expert.agent.md",
+    "size": 5428
+  },
+  {
+    "id": "fai-prd-writer",
+    "name": "FAI PRD Writer",
+    "description": "PRD writer — produces structured Product Requirements Documents with user personas, success metrics, AI-specific requirements (quality thresholds, safety), constraints, and acceptance criteria.",
+    "waf": [],
+    "file": "agents/fai-prd-writer.agent.md",
+    "size": 5691
+  },
+  {
+    "id": "fai-product-manager",
+    "name": "FAI Product Manager",
+    "description": "AI product management specialist — requirements gathering, AI use case prioritization, evaluation metric design, go-to-market strategy, and responsible AI impact assessment.",
+    "waf": [],
+    "file": "agents/fai-product-manager.agent.md",
+    "size": 6139
+  },
+  {
+    "id": "fai-production-patterns-expert",
+    "name": "FAI Production Patterns Expert",
+    "description": "Production AI patterns expert — hosting selection (Container Apps/AKS/Functions), APIM gateway patterns, streaming SSE, retry/circuit-breaker, health checks, and multi-region deployment for production AI workloads.",
+    "waf": [],
+    "file": "agents/fai-production-patterns-expert.agent.md",
+    "size": 7056
+  },
+  {
+    "id": "fai-prompt-engineer",
+    "name": "FAI Prompt Engineer",
+    "description": "Prompt engineering specialist — system message design, few-shot patterns, chain-of-thought, structured output schemas, anti-hallucination techniques, and evaluation-driven prompt optimization.",
+    "waf": [],
+    "file": "agents/fai-prompt-engineer.agent.md",
+    "size": 7202
+  },
+  {
+    "id": "fai-protobuf-expert",
+    "name": "FAI Protobuf Expert",
+    "description": "Protocol Buffers specialist — proto3 schema design, backward compatible evolution, gRPC service definitions, code generation, and binary serialization for high-performance AI APIs.",
+    "waf": [],
+    "file": "agents/fai-protobuf-expert.agent.md",
+    "size": 4774
+  },
+  {
+    "id": "fai-python-expert",
+    "name": "FAI Python Expert",
+    "description": "Python development specialist — Python 3.12+, async/await patterns, Pydantic v2, FastAPI, pytest, type hints, Azure SDK, and production-grade AI application patterns.",
+    "waf": [],
+    "file": "agents/fai-python-expert.agent.md",
+    "size": 5856
+  },
+  {
+    "id": "fai-python-mcp-expert",
+    "name": "FAI Python MCP Expert",
+    "description": "Python MCP server specialist — FastMCP framework, @mcp.tool() decorators, async handlers, Pydantic input models, uv deployment, and Azure service integration for AI tools.",
+    "waf": [],
+    "file": "agents/fai-python-mcp-expert.agent.md",
+    "size": 6019
+  },
+  {
+    "id": "fai-qwik-expert",
+    "name": "FAI Qwik Expert",
+    "description": "Qwik framework specialist — resumability (zero hydration), lazy loading, QwikCity routing, Island architecture, and instant-on AI-powered web applications.",
+    "waf": [],
+    "file": "agents/fai-qwik-expert.agent.md",
+    "size": 4227
+  },
+  {
+    "id": "fai-rag-architect",
+    "name": "FAI RAG Architect",
+    "description": "Enterprise RAG architecture specialist — designs end-to-end retrieval-augmented generation pipelines with Azure AI Search, OpenAI embeddings, chunking strategies, grounding, citation, evaluation, and production deployment.",
+    "waf": [],
+    "file": "agents/fai-rag-architect.agent.md",
+    "size": 6972
+  },
+  {
+    "id": "fai-rag-expert",
+    "name": "FAI RAG Expert",
+    "description": "RAG expert — advanced retrieval patterns (agentic, graph, multi-modal RAG), chunking strategies, hybrid search, re-ranking, evaluation metrics, and production RAG optimization.",
+    "waf": [],
+    "file": "agents/fai-rag-expert.agent.md",
+    "size": 7324
+  },
+  {
+    "id": "fai-ray-expert",
+    "name": "FAI Ray Expert",
+    "description": "Ray distributed computing specialist — Ray Serve for model serving, Ray Tune for hyperparameter optimization, Ray Data for preprocessing, and distributed training/inference at scale.",
+    "waf": [],
+    "file": "agents/fai-ray-expert.agent.md",
+    "size": 5305
+  },
+  {
+    "id": "fai-react-expert",
+    "name": "FAI React Expert",
+    "description": "React/Next.js specialist — React 19 Server Components, Suspense streaming for AI chat, App Router, Tailwind CSS, useActionState, and accessibility-first patterns.",
+    "waf": [],
+    "file": "agents/fai-react-expert.agent.md",
+    "size": 7040
+  },
+  {
+    "id": "fai-red-team-expert",
+    "name": "FAI Red Team Expert",
+    "description": "AI red teaming specialist — prompt injection testing, jailbreak simulation, PyRIT automation, bias detection, adversarial dataset creation, and OWASP LLM Top 10 validation.",
+    "waf": [],
+    "file": "agents/fai-red-team-expert.agent.md",
+    "size": 7341
+  },
+  {
+    "id": "fai-redis-expert",
+    "name": "FAI Redis Expert",
+    "description": "Redis specialist — caching patterns (TTL, LRU), semantic cache for AI (embedding similarity), pub/sub messaging, Redis Streams, and session storage for chat applications.",
+    "waf": [],
+    "file": "agents/fai-redis-expert.agent.md",
+    "size": 5469
+  },
+  {
+    "id": "fai-refactoring-expert",
+    "name": "FAI Refactoring Expert",
+    "description": "Code refactoring specialist — extract method, reduce cyclomatic complexity, improve testability, SOLID principles, design pattern application, and safe behavior-preserving transformations.",
+    "waf": [],
+    "file": "agents/fai-refactoring-expert.agent.md",
+    "size": 6841
+  },
+  {
+    "id": "fai-remix-expert",
+    "name": "FAI Remix Expert",
+    "description": "Remix framework specialist — nested routing, loaders/actions, progressive enhancement, streaming SSR, error boundaries, and AI-integrated full-stack patterns.",
+    "waf": [],
+    "file": "agents/fai-remix-expert.agent.md",
+    "size": 5474
+  },
+  {
+    "id": "fai-responsible-ai-reviewer",
+    "name": "FAI Responsible AI Reviewer",
+    "description": "Responsible AI specialist — bias detection, fairness metrics, transparency requirements, EU AI Act compliance, content safety, groundedness evaluation, and AI governance frameworks.",
+    "waf": [],
+    "file": "agents/fai-responsible-ai-reviewer.agent.md",
+    "size": 6845
+  },
+  {
+    "id": "fai-ruby-expert",
+    "name": "FAI Ruby Expert",
+    "description": "Ruby 3.3+ specialist — pattern matching, Ractor concurrency, block DSL patterns, Rails 8, RuboCop standards, and AI API integration with httprb and ActiveJob.",
+    "waf": [],
+    "file": "agents/fai-ruby-expert.agent.md",
+    "size": 4104
+  },
+  {
+    "id": "fai-ruby-mcp-expert",
+    "name": "FAI Ruby MCP Expert",
+    "description": "Ruby MCP server specialist — mcp-rb gem, block DSL tool definitions, Rails integration, idiomatic Ruby patterns, and stdio transport for AI tool development.",
+    "waf": [],
+    "file": "agents/fai-ruby-mcp-expert.agent.md",
+    "size": 3791
+  },
+  {
+    "id": "fai-rust-expert",
+    "name": "FAI Rust Expert",
+    "description": "Rust specialist — ownership/borrowing, async with tokio, serde serialization, error handling with thiserror/anyhow, and high-performance AI infrastructure (inference proxies, MCP servers).",
+    "waf": [],
+    "file": "agents/fai-rust-expert.agent.md",
+    "size": 5920
+  },
+  {
+    "id": "fai-rust-mcp-expert",
+    "name": "FAI Rust MCP Expert",
+    "description": "Rust MCP server specialist — rmcp SDK, tokio async handlers, proc macro tool registration, serde for schemas, and ultra-high-performance MCP tool serving.",
+    "waf": [],
+    "file": "agents/fai-rust-mcp-expert.agent.md",
+    "size": 4342
+  },
+  {
+    "id": "fai-salesforce-expert",
+    "name": "FAI Salesforce Expert",
+    "description": "Salesforce specialist — Apex development, Lightning Web Components, Flow automation, Einstein AI, and enterprise CRM integration patterns with Azure OpenAI.",
+    "waf": [],
+    "file": "agents/fai-salesforce-expert.agent.md",
+    "size": 5012
+  },
+  {
+    "id": "fai-sap-expert",
+    "name": "FAI SAP Expert",
+    "description": "SAP integration specialist — SAP BTP, OData APIs, BAPI/RFC connectors, procurement/inventory/order processing, and AI-enhanced enterprise resource planning.",
+    "waf": [],
+    "file": "agents/fai-sap-expert.agent.md",
+    "size": 4861
+  },
+  {
+    "id": "fai-security-reviewer",
+    "name": "FAI Security Reviewer",
+    "description": "Security reviewer — audits code, infrastructure, and AI pipelines against OWASP Top 10, OWASP LLM Top 10, Azure security baselines, managed identity compliance, network isolation, and secrets management.",
+    "waf": [],
+    "file": "agents/fai-security-reviewer.agent.md",
+    "size": 6408
+  },
+  {
+    "id": "fai-semantic-kernel-expert",
+    "name": "FAI Semantic Kernel Expert",
+    "description": "Semantic Kernel specialist — plugins with function calling, KernelFilter middleware, memory/vector stores, agent group chat orchestration, and RAG pipeline patterns in C#/Python.",
+    "waf": [],
+    "file": "agents/fai-semantic-kernel-expert.agent.md",
+    "size": 6616
+  },
+  {
+    "id": "fai-seo-expert",
+    "name": "FAI SEO Expert",
+    "description": "SEO specialist — structured data (JSON-LD), Core Web Vitals optimization, AI-generated content SEO, meta tags, sitemap generation, and search engine visibility for AI-powered applications.",
+    "waf": [],
+    "file": "agents/fai-seo-expert.agent.md",
+    "size": 4653
+  },
+  {
+    "id": "fai-servicenow-expert",
+    "name": "FAI ServiceNow Expert",
+    "description": "ServiceNow ITSM integration specialist — incident/change/request management via REST API, CMDB queries, knowledge base search, AI-powered ticket triage, and service catalog automation.",
+    "waf": [],
+    "file": "agents/fai-servicenow-expert.agent.md",
+    "size": 5412
+  },
+  {
+    "id": "fai-slack-expert",
+    "name": "FAI Slack Expert",
+    "description": "Slack integration specialist — Bot API, Block Kit UI, slash commands, interactive modals, AI-powered conversation summarization, thread-based notifications, and incident war room automation.",
+    "waf": [],
+    "file": "agents/fai-slack-expert.agent.md",
+    "size": 6537
+  },
+  {
+    "id": "fai-solid-expert",
+    "name": "FAI Solid Expert",
+    "description": "SolidJS specialist — fine-grained reactivity with signals, stores, createResource for AI data fetching, SolidStart SSR, and high-performance UI patterns.",
+    "waf": [],
+    "file": "agents/fai-solid-expert.agent.md",
+    "size": 5352
+  },
+  {
+    "id": "fai-solutions-architect",
+    "name": "FAI Solutions Architect",
+    "description": "Cloud solutions architect — end-to-end AI solution design, Azure service selection, multi-service integration, cost estimation, WAF trade-off analysis, and architecture decision records.",
+    "waf": [],
+    "file": "agents/fai-solutions-architect.agent.md",
+    "size": 6467
+  },
+  {
+    "id": "fai-specification-writer",
+    "name": "FAI Specification Writer",
+    "description": "Specification writer — generates AI-ready technical specifications with requirements, evaluation criteria, WAF alignment, API contracts, data models, and acceptance criteria.",
+    "waf": [],
+    "file": "agents/fai-specification-writer.agent.md",
+    "size": 4792
+  },
+  {
+    "id": "fai-sql-server-expert",
+    "name": "FAI SQL Server Expert",
+    "description": "SQL Server specialist — on-premises SQL Server, Always On Availability Groups, query optimization with EXPLAIN, and structured data integration for AI pipelines (distinct from Azure SQL).",
+    "waf": [],
+    "file": "agents/fai-sql-server-expert.agent.md",
+    "size": 4701
+  },
+  {
+    "id": "fai-streaming-expert",
+    "name": "FAI Streaming Expert",
+    "description": "Real-time streaming specialist — SSE for LLM token delivery, WebSocket for bidirectional chat, ReadableStream API, backpressure handling, and Azure Event Hubs stream processing for AI pipelines.",
+    "waf": [],
+    "file": "agents/fai-streaming-expert.agent.md",
+    "size": 6561
+  },
+  {
+    "id": "fai-supabase-expert",
+    "name": "FAI Supabase Expert",
+    "description": "Supabase specialist — pgvector for AI embeddings, real-time subscriptions, Edge Functions (Deno), Row Level Security, Storage for documents, and Auth for user management in AI applications.",
+    "waf": [],
+    "file": "agents/fai-supabase-expert.agent.md",
+    "size": 5860
+  },
+  {
+    "id": "fai-svelte-expert",
+    "name": "FAI Svelte Expert",
+    "description": "Svelte 5 specialist — runes ($state, $derived, $effect), SvelteKit routing, server load functions, streaming SSR, and minimal-bundle AI chat interfaces.",
+    "waf": [],
+    "file": "agents/fai-svelte-expert.agent.md",
+    "size": 5152
+  },
+  {
+    "id": "fai-swarm-supervisor",
+    "name": "FAI Swarm Supervisor",
+    "description": "Multi-agent swarm supervisor — routes tasks to specialist agents, manages turn limits and token budgets, handles agent coordination, conflict resolution, and synthesizes multi-perspective results.",
+    "waf": [],
+    "file": "agents/fai-swarm-supervisor.agent.md",
+    "size": 6002
+  },
+  {
+    "id": "fai-swift-expert",
+    "name": "FAI Swift Expert",
+    "description": "Swift specialist — structured concurrency (async/await, TaskGroup, actors), SwiftUI, Codable, and Apple platform AI integration with on-device Core ML and cloud Azure OpenAI.",
+    "waf": [],
+    "file": "agents/fai-swift-expert.agent.md",
+    "size": 5904
+  },
+  {
+    "id": "fai-swift-mcp-expert",
+    "name": "FAI Swift MCP Expert",
+    "description": "Swift MCP server specialist — actors for concurrency, Codable for JSON Schema, async/await handlers, and Apple platform MCP tool development.",
+    "waf": [],
+    "file": "agents/fai-swift-mcp-expert.agent.md",
+    "size": 3480
+  },
+  {
+    "id": "fai-tdd-green",
+    "name": "FAI TDD Green",
+    "description": "TDD Green phase specialist — writes the minimal implementation to make failing tests pass, no more and no less. Follows the Red-Green-Refactor cycle.",
+    "waf": [],
+    "file": "agents/fai-tdd-green.agent.md",
     "size": 3853
   },
   {
-    "id": "frootai-capacity-planner",
-    "name": "Frootai Capacity Planner",
-    "description": "AI capacity planning specialist — GPU sizing, token volume forecasting, PTU allocation, cost modeling.",
+    "id": "fai-tdd-red",
+    "name": "FAI TDD Red",
+    "description": "TDD Red phase specialist — writes failing tests from requirements before any implementation. Covers happy path, error cases, edge cases, and AI-specific test scenarios.",
     "waf": [],
-    "file": "agents/frootai-capacity-planner.agent.md",
-    "size": 10470
+    "file": "agents/fai-tdd-red.agent.md",
+    "size": 5892
   },
   {
-    "id": "frootai-cicd-pipeline-expert",
-    "name": "Frootai Cicd Pipeline Expert",
-    "description": "CI/CD pipeline specialist — GitHub Actions, Azure Pipelines, multi-stage deployments, quality gates.",
+    "id": "fai-tdd-refactor",
+    "name": "FAI TDD Refactor",
+    "description": "TDD Refactor phase specialist — improves code quality while keeping ALL tests green. Applies extract method, reduce complexity, improve naming, and design pattern introduction.",
     "waf": [],
-    "file": "agents/frootai-cicd-pipeline-expert.agent.md",
-    "size": 10557
+    "file": "agents/fai-tdd-refactor.agent.md",
+    "size": 5504
   },
   {
-    "id": "frootai-cloudflare-expert",
-    "name": "cloudflare expert",
-    "description": "Cloudflare Workers AI — edge inference, Workers KV, D1 database, R2 storage, AI Gateway, CDN optimization for AI workloads",
-    "waf": "[\"performance-efficiency\",\"cost-optimization\"]",
-    "file": "agents/frootai-cloudflare-expert.agent.md",
-    "size": 3900
-  },
-  {
-    "id": "frootai-code-reviewer",
-    "name": "Frootai Code Reviewer",
-    "description": "Code review specialist — SOLID principles, clean code, design patterns, anti-pattern detection across languages.",
-    "waf": [],
-    "file": "agents/frootai-code-reviewer.agent.md",
-    "size": 10490
-  },
-  {
-    "id": "frootai-collective-debugger",
-    "name": "Frootai Collective Debugger",
-    "description": "Multi-agent debugger — root cause analysis, stack trace interpretation, performance profiling, and systematic debugging for AI pipeline issues.",
-    "waf": [],
-    "file": "agents/frootai-collective-debugger.agent.md",
-    "size": 10560
-  },
-  {
-    "id": "frootai-collective-implementer",
-    "name": "Frootai Collective Implementer",
-    "description": "Multi-agent implementer — writes code following TDD, implements features, generates infrastructure templates, and creates solution play components.",
-    "waf": [],
-    "file": "agents/frootai-collective-implementer.agent.md",
-    "size": 10512
-  },
-  {
-    "id": "frootai-collective-orchestrator",
-    "name": "Frootai Collective Orchestrator",
-    "description": "Multi-agent orchestrator — routes tasks to specialist agents, manages turn limits, synthesizes results, and ensures quality gates across the FrootAI Collective.",
-    "waf": [],
-    "file": "agents/frootai-collective-orchestrator.agent.md",
-    "size": 10811
-  },
-  {
-    "id": "frootai-collective-researcher",
-    "name": "Frootai Collective Researcher",
-    "description": "Multi-agent researcher — gathers information from knowledge bases, web search, and documentation to feed specialist agents.",
-    "waf": [],
-    "file": "agents/frootai-collective-researcher.agent.md",
-    "size": 10516
-  },
-  {
-    "id": "frootai-collective-reviewer",
-    "name": "Frootai Collective Reviewer",
-    "description": "Multi-agent reviewer — security audit, OWASP compliance, WAF alignment, code quality, and PRD compliance checking.",
-    "waf": [],
-    "file": "agents/frootai-collective-reviewer.agent.md",
-    "size": 10492
-  },
-  {
-    "id": "frootai-collective-tester",
-    "name": "Frootai Collective Tester",
-    "description": "Multi-agent tester — test generation, E2E testing with Playwright, AI evaluation pipelines, and quality assurance for AI outputs.",
-    "waf": [],
-    "file": "agents/frootai-collective-tester.agent.md",
-    "size": 10532
-  },
-  {
-    "id": "frootai-compliance-expert",
-    "name": "Frootai Compliance Expert",
-    "description": "AI compliance specialist — EU AI Act, NIST AI RMF, ISO 42001, GDPR, risk assessment for AI systems.",
-    "waf": [],
-    "file": "agents/frootai-compliance-expert.agent.md",
-    "size": 10543
-  },
-  {
-    "id": "frootai-content-safety-expert",
-    "name": "Frootai Content Safety Expert",
-    "description": "Content safety specialist — Azure AI Content Safety, 4 harm categories, Prompt Shields, protected material detection.",
-    "waf": [],
-    "file": "agents/frootai-content-safety-expert.agent.md",
-    "size": 10536
-  },
-  {
-    "id": "frootai-copilot-ecosystem-expert",
-    "name": "Frootai Copilot Ecosystem Expert",
-    "description": "Microsoft Copilot ecosystem expert — M365 Copilot, Copilot Studio, GitHub Copilot, Copilot for Azure, agent extensibility, and Graph connectors.",
-    "waf": [],
-    "file": "agents/frootai-copilot-ecosystem-expert.agent.md",
-    "size": 10641
-  },
-  {
-    "id": "frootai-cost-gateway",
-    "name": "FrootAI Cost Gateway Agent",
-    "description": "AI cost gateway specialist — designs APIM-based AI gateways with model routing, semantic caching, token metering, multi-region load balancing, PTU management, and budget enforcement. Maps to Play 14.",
-    "waf": [],
-    "file": "agents/frootai-cost-gateway.agent.md",
-    "size": 12420
-  },
-  {
-    "id": "frootai-cost-optimizer",
-    "name": "FrootAI Cost Optimizer",
-    "description": "WAF Cost optimizer — analyzes Azure AI workloads for cost savings. Recommends model routing (mini vs full), semantic caching, token budgets, PTU vs PAYG decisions, right-sizing, and reserved instances.",
-    "waf": [],
-    "file": "agents/frootai-cost-optimizer.agent.md",
-    "size": 12419
-  },
-  {
-    "id": "frootai-crewai-expert",
-    "name": "crewai expert",
-    "description": "CrewAI multi-agent — crew composition, task delegation, agent roles, tools integration, sequential/hierarchical processes",
-    "waf": "[\"reliability\",\"operational-excellence\"]",
-    "file": "agents/frootai-crewai-expert.agent.md",
-    "size": 3878
-  },
-  {
-    "id": "frootai-csharp-expert",
-    "name": "Frootai Csharp Expert",
-    "description": "C#/.NET specialist — modern C# 12+, dependency injection, async/await, Polly resilience, and Azure-native integration patterns.",
-    "waf": [],
-    "file": "agents/frootai-csharp-expert.agent.md",
-    "size": 10481
-  },
-  {
-    "id": "frootai-csharp-mcp-expert",
-    "name": "FrootAI C# MCP Expert",
-    "description": "C#/.NET MCP development specialist — guides building MCP servers with the ModelContextProtocol NuGet package, dependency injection, [McpServerTool] attributes, and FrootAI-aligned patterns for Azure integration.",
-    "waf": [],
-    "file": "agents/frootai-csharp-mcp-expert.agent.md",
-    "size": 12535
-  },
-  {
-    "id": "frootai-dapr-expert",
-    "name": "dapr expert",
-    "description": "Dapr distributed application runtime — service invocation, state management, pub/sub, bindings for AI microservices",
-    "waf": "[\"reliability\",\"operational-excellence\"]",
-    "file": "agents/frootai-dapr-expert.agent.md",
-    "size": 3861
-  },
-  {
-    "id": "frootai-data-engineer",
-    "name": "Frootai Data Engineer",
-    "description": "Data engineering specialist — RAG ingestion pipelines, ETL for AI, data quality, Azure Data Factory, and document processing with AI Document Intelligence.",
-    "waf": [],
-    "file": "agents/frootai-data-engineer.agent.md",
-    "size": 10604
-  },
-  {
-    "id": "frootai-datadog-expert",
-    "name": "datadog expert",
-    "description": "Datadog observability integration — monitor creation, event search, dashboard queries, metric analysis, APM trace correlation for AI workloads",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-datadog-expert.agent.md",
-    "size": 3520
-  },
-  {
-    "id": "frootai-debug-expert",
-    "name": "Frootai Debug Expert",
-    "description": "Systematic debugging specialist — root cause analysis, reproduce-isolate-fix methodology, stack trace interpretation.",
-    "waf": [],
-    "file": "agents/frootai-debug-expert.agent.md",
-    "size": 10629
-  },
-  {
-    "id": "frootai-deno-expert",
-    "name": "deno expert",
-    "description": "Deno runtime — TypeScript-first, permissions model, Deno KV, Deno Deploy, secure-by-default AI service development",
-    "waf": "[\"security\",\"performance-efficiency\"]",
-    "file": "agents/frootai-deno-expert.agent.md",
-    "size": 3850
-  },
-  {
-    "id": "frootai-deterministic-expert",
-    "name": "FrootAI Deterministic Agent Expert",
-    "description": "Deterministic AI specialist — makes AI outputs reproducible, grounded, and auditable. Covers temperature control, structured output, RAG grounding, citation enforcement, evaluation-driven reliability, and multi-layer defense. Maps to Play 03.",
-    "waf": [],
-    "file": "agents/frootai-deterministic-expert.agent.md",
-    "size": 11865
-  },
-  {
-    "id": "frootai-devops-expert",
-    "name": "Frootai Devops Expert",
-    "description": "DevOps lifecycle specialist — CI/CD pipelines, GitHub Actions, Infrastructure as Code, deployment strategies, and SRE practices for AI workloads.",
-    "waf": [],
-    "file": "agents/frootai-devops-expert.agent.md",
-    "size": 10591
-  },
-  {
-    "id": "frootai-docker-expert",
-    "name": "Frootai Docker Expert",
-    "description": "Docker specialist — multi-stage builds, distroless images, GPU container support, and container optimization for AI model serving.",
-    "waf": [],
-    "file": "agents/frootai-docker-expert.agent.md",
-    "size": 10547
-  },
-  {
-    "id": "frootai-dotnet-maui-expert",
-    "name": "Frootai Dotnet Maui Expert",
-    "description": "Cross-platform .NET MAUI specialist — iOS, Android, Windows, macOS from a single C# codebase.",
-    "waf": [],
-    "file": "agents/frootai-dotnet-maui-expert.agent.md",
-    "size": 10439
-  },
-  {
-    "id": "frootai-dspy-expert",
-    "name": "dspy expert",
-    "description": "DSPy programming — declarative language model programs, optimizers, teleprompters, signatures, assertions, metric-driven prompt optimization",
-    "waf": "[\"performance-efficiency\",\"cost-optimization\"]",
-    "file": "agents/frootai-dspy-expert.agent.md",
-    "size": 3924
-  },
-  {
-    "id": "frootai-elasticsearch-expert",
-    "name": "Frootai Elasticsearch Expert",
-    "description": "Elasticsearch specialist — search optimization, observability, APM integration.",
-    "waf": [],
-    "file": "agents/frootai-elasticsearch-expert.agent.md",
-    "size": 10423
-  },
-  {
-    "id": "frootai-embedding-expert",
-    "name": "Frootai Embedding Expert",
-    "description": "Embedding specialist — text-embedding-3-large/small, Matryoshka embeddings, dimension selection, batch embedding pipelines.",
-    "waf": [],
-    "file": "agents/frootai-embedding-expert.agent.md",
-    "size": 10490
-  },
-  {
-    "id": "frootai-epic-breakdown-expert",
-    "name": "Frootai Epic Breakdown Expert",
-    "description": "Epic breakdown specialist — decomposes large features into implementable stories with acceptance criteria.",
-    "waf": [],
-    "file": "agents/frootai-epic-breakdown-expert.agent.md",
-    "size": 10586
-  },
-  {
-    "id": "frootai-event-driven-expert",
-    "name": "Frootai Event Driven Expert",
-    "description": "Event-driven architecture specialist — Azure Event Grid, Service Bus, Event Hubs for AI pipeline triggers.",
-    "waf": [],
-    "file": "agents/frootai-event-driven-expert.agent.md",
-    "size": 10511
-  },
-  {
-    "id": "frootai-fine-tuning-expert",
-    "name": "Frootai Fine Tuning Expert",
-    "description": "Fine-tuning and MLOps expert — LoRA/QLoRA techniques, training data preparation, evaluation-driven iteration, Azure AI Foundry workflows, and model versioning.",
-    "waf": [],
-    "file": "agents/frootai-fine-tuning-expert.agent.md",
-    "size": 10620
-  },
-  {
-    "id": "frootai-genai-foundations-expert",
-    "name": "Frootai Genai Foundations Expert",
-    "description": "GenAI foundations expert — tokens, transformer architecture, inference phases, generation parameters, and the infrastructure impact of LLM workloads.",
-    "waf": [],
-    "file": "agents/frootai-genai-foundations-expert.agent.md",
-    "size": 10597
-  },
-  {
-    "id": "frootai-git-workflow-expert",
-    "name": "Frootai Git Workflow Expert",
-    "description": "Git workflow specialist — branching strategies, conventional commits, rebasing, merge conflict resolution.",
-    "waf": [],
-    "file": "agents/frootai-git-workflow-expert.agent.md",
-    "size": 10568
-  },
-  {
-    "id": "frootai-github-actions-expert",
-    "name": "Frootai Github Actions Expert",
-    "description": "GitHub Actions specialist — workflow design, reusable workflows, matrix strategies, security hardening, and AI-specific CI/CD patterns.",
-    "waf": [],
-    "file": "agents/frootai-github-actions-expert.agent.md",
-    "size": 10481
-  },
-  {
-    "id": "frootai-go-expert",
-    "name": "Frootai Go Expert",
-    "description": "Go development specialist — idiomatic Go, goroutines, channels, error handling, and high-performance MCP server patterns.",
-    "waf": [],
-    "file": "agents/frootai-go-expert.agent.md",
-    "size": 10388
-  },
-  {
-    "id": "frootai-go-mcp-expert",
-    "name": "Frootai Go Mcp Expert",
-    "description": "Go MCP server specialist — go-sdk/mcp, struct-based I/O, context handling, minimal-dependency servers.",
-    "waf": [],
-    "file": "agents/frootai-go-mcp-expert.agent.md",
-    "size": 10473
-  },
-  {
-    "id": "frootai-graphql-expert",
-    "name": "Frootai Graphql Expert",
-    "description": "GraphQL specialist — schema design, resolvers, DataLoader, federation.",
-    "waf": [],
-    "file": "agents/frootai-graphql-expert.agent.md",
-    "size": 10365
-  },
-  {
-    "id": "frootai-graphrag-expert",
-    "name": "graphrag expert",
-    "description": "Graph-based RAG — entity extraction, relationship mapping, knowledge graphs, Neo4j/Cosmos DB Gremlin, graph traversal for retrieval",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-graphrag-expert.agent.md",
-    "size": 3917
-  },
-  {
-    "id": "frootai-grpc-expert",
-    "name": "grpc expert",
-    "description": "gRPC services — Protocol Buffers, streaming RPCs, interceptors, load balancing, health checking for AI microservices",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-grpc-expert.agent.md",
-    "size": 3870
-  },
-  {
-    "id": "frootai-guidance-expert",
-    "name": "guidance expert",
-    "description": "Microsoft Guidance — constrained generation, token healing, regex patterns, structured output, guaranteed JSON/XML compliance",
-    "waf": "[\"reliability\",\"performance-efficiency\"]",
-    "file": "agents/frootai-guidance-expert.agent.md",
-    "size": 3896
-  },
-  {
-    "id": "frootai-htmx-expert",
-    "name": "htmx expert",
-    "description": "htmx hypermedia — AJAX, server-sent events, WebSockets, HTML-over-the-wire, progressive enhancement for AI-powered UIs",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-htmx-expert.agent.md",
-    "size": 3874
-  },
-  {
-    "id": "frootai-i18n-expert",
-    "name": "Frootai I18n Expert",
-    "description": "Internationalization specialist — multi-language AI, locale-aware formatting, translation workflows.",
-    "waf": [],
-    "file": "agents/frootai-i18n-expert.agent.md",
-    "size": 10398
-  },
-  {
-    "id": "frootai-incident-responder",
-    "name": "Frootai Incident Responder",
-    "description": "Incident response specialist — triage, root cause analysis, communication, post-mortem for AI system failures.",
-    "waf": [],
-    "file": "agents/frootai-incident-responder.agent.md",
-    "size": 10475
-  },
-  {
-    "id": "frootai-java-expert",
-    "name": "Frootai Java Expert",
-    "description": "Java/Spring Boot specialist — constructor injection, reactive streams, Spring Boot 4, and enterprise-grade patterns for AI integration.",
-    "waf": [],
-    "file": "agents/frootai-java-expert.agent.md",
-    "size": 10452
-  },
-  {
-    "id": "frootai-java-mcp-expert",
-    "name": "Frootai Java Mcp Expert",
-    "description": "Java MCP server specialist — official SDK, reactive streams, Spring Boot integration, enterprise service.",
-    "waf": [],
-    "file": "agents/frootai-java-mcp-expert.agent.md",
-    "size": 10524
-  },
-  {
-    "id": "frootai-jira-expert",
-    "name": "jira expert",
-    "description": "Jira project management — issue creation, sprint queries, board management, release tracking, AI-powered ticket triage and prioritization",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-jira-expert.agent.md",
-    "size": 3486
-  },
-  {
-    "id": "frootai-kotlin-expert",
-    "name": "Frootai Kotlin Expert",
-    "description": "Kotlin specialist — coroutines, data classes, Ktor, Gradle, and modern Android/backend development patterns.",
-    "waf": [],
-    "file": "agents/frootai-kotlin-expert.agent.md",
-    "size": 10413
-  },
-  {
-    "id": "frootai-kotlin-mcp-expert",
-    "name": "Frootai Kotlin Mcp Expert",
-    "description": "Kotlin MCP server specialist — coroutines, Ktor, Gradle, data classes for concise tool definitions.",
-    "waf": [],
-    "file": "agents/frootai-kotlin-mcp-expert.agent.md",
-    "size": 10509
-  },
-  {
-    "id": "frootai-kubernetes-expert",
-    "name": "Frootai Kubernetes Expert",
-    "description": "Kubernetes specialist — pod scheduling, GPU resource management, network policies, Helm charts, and production-grade AI workload orchestration.",
-    "waf": [],
-    "file": "agents/frootai-kubernetes-expert.agent.md",
-    "size": 10564
-  },
-  {
-    "id": "frootai-landing-zone",
-    "name": "FrootAI Landing Zone Agent",
-    "description": "Azure AI Landing Zone architect — designs enterprise-ready Azure environments for AI workloads with hub-spoke networking, private endpoints, managed identity, GPU quotas, and governance policies. Maps to Plays 02 and 11.",
-    "waf": [],
-    "file": "agents/frootai-landing-zone.agent.md",
-    "size": 12192
-  },
-  {
-    "id": "frootai-langchain-expert",
-    "name": "langchain expert",
-    "description": "LangChain framework — chains, agents, retrievers, memory, callbacks, LCEL expression language, LangSmith tracing",
-    "waf": "[\"reliability\",\"operational-excellence\"]",
-    "file": "agents/frootai-langchain-expert.agent.md",
-    "size": 3877
-  },
-  {
-    "id": "frootai-llamaindex-expert",
-    "name": "llamaindex expert",
-    "description": "LlamaIndex data framework — document loaders, index types, query engines, response synthesizers, agent tools",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-llamaindex-expert.agent.md",
-    "size": 3875
-  },
-  {
-    "id": "frootai-llm-landscape-expert",
-    "name": "Frootai Llm Landscape Expert",
-    "description": "LLM landscape expert — model families (GPT, Claude, Llama, Gemini, Phi), benchmarks, deployment types, and model selection frameworks.",
-    "waf": [],
-    "file": "agents/frootai-llm-landscape-expert.agent.md",
-    "size": 10506
-  },
-  {
-    "id": "frootai-markdown-expert",
-    "name": "Frootai Markdown Expert",
-    "description": "Markdown specialist — CommonMark, GFM, accessibility, content structure, documentation formatting.",
-    "waf": [],
-    "file": "agents/frootai-markdown-expert.agent.md",
-    "size": 10499
-  },
-  {
-    "id": "frootai-mcp-expert",
-    "name": "Frootai Mcp Expert",
-    "description": "MCP protocol expert — tool/resource/prompt primitives, stdio/SSE transports, server development in Python/TypeScript/C#, and MCP ecosystem integration.",
-    "waf": [],
-    "file": "agents/frootai-mcp-expert.agent.md",
-    "size": 10605
-  },
-  {
-    "id": "frootai-mentoring-agent",
-    "name": "Frootai Mentoring Agent",
-    "description": "Developer mentoring specialist — explains concepts Socratically, guides learning, provides constructive feedback.",
-    "waf": [],
-    "file": "agents/frootai-mentoring-agent.agent.md",
-    "size": 10586
-  },
-  {
-    "id": "frootai-mermaid-diagram-expert",
-    "name": "Frootai Mermaid Diagram Expert",
-    "description": "Mermaid diagram specialist — flowcharts, sequence diagrams, architecture diagrams, entity relationships.",
-    "waf": [],
-    "file": "agents/frootai-mermaid-diagram-expert.agent.md",
-    "size": 10475
-  },
-  {
-    "id": "frootai-migration-expert",
-    "name": "Frootai Migration Expert",
-    "description": "Migration specialist — legacy to AI-native, .NET Framework upgrade, database migration, cloud lift-and-shift.",
-    "waf": [],
-    "file": "agents/frootai-migration-expert.agent.md",
-    "size": 10424
-  },
-  {
-    "id": "frootai-ml-engineer",
-    "name": "Frootai Ml Engineer",
-    "description": "ML engineering specialist — fine-tuning with LoRA/QLoRA, model evaluation, MLOps pipelines, Azure AI Foundry, and model serving optimization.",
-    "waf": [],
-    "file": "agents/frootai-ml-engineer.agent.md",
-    "size": 10584
-  },
-  {
-    "id": "frootai-mlflow-expert",
-    "name": "mlflow expert",
-    "description": "MLflow experiment tracking — model registry, deployment pipelines, metric logging, artifact storage, Azure ML integration",
-    "waf": "[\"operational-excellence\",\"reliability\"]",
-    "file": "agents/frootai-mlflow-expert.agent.md",
-    "size": 3878
-  },
-  {
-    "id": "frootai-mongodb-expert",
-    "name": "Frootai Mongodb Expert",
-    "description": "MongoDB specialist — schema design, aggregation pipelines, Atlas Vector Search.",
-    "waf": [],
-    "file": "agents/frootai-mongodb-expert.agent.md",
-    "size": 10403
-  },
-  {
-    "id": "frootai-nats-expert",
-    "name": "nats expert",
-    "description": "NATS messaging — JetStream, key-value store, object store, request-reply, pub-sub for AI event-driven architectures",
-    "waf": "[\"reliability\",\"performance-efficiency\"]",
-    "file": "agents/frootai-nats-expert.agent.md",
-    "size": 3868
-  },
-  {
-    "id": "frootai-neon-expert",
-    "name": "neon expert",
-    "description": "Neon serverless Postgres — branching, auto-scaling, pgvector for AI workloads, connection pooling, database-per-branch development",
-    "waf": "[\"cost-optimization\",\"performance-efficiency\"]",
-    "file": "agents/frootai-neon-expert.agent.md",
-    "size": 3903
-  },
-  {
-    "id": "frootai-openapi-expert",
-    "name": "Frootai Openapi Expert",
-    "description": "OpenAPI specialist — spec design, code generation, API-first development.",
-    "waf": [],
-    "file": "agents/frootai-openapi-expert.agent.md",
-    "size": 10381
-  },
-  {
-    "id": "frootai-opentelemetry-expert",
-    "name": "opentelemetry expert",
-    "description": "OpenTelemetry observability — distributed tracing, metrics, logs, OTLP exporters, Azure Monitor integration",
-    "waf": "[\"operational-excellence\",\"performance-efficiency\"]",
-    "file": "agents/frootai-opentelemetry-expert.agent.md",
-    "size": 3879
-  },
-  {
-    "id": "frootai-pagerduty-expert",
-    "name": "pagerduty expert",
-    "description": "PagerDuty incident management — incident creation, on-call queries, escalation triggers, postmortem automation for AI system outages",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-pagerduty-expert.agent.md",
-    "size": 3321
-  },
-  {
-    "id": "frootai-performance-profiler",
-    "name": "Frootai Performance Profiler",
-    "description": "Performance profiling specialist — latency analysis, token optimization, GPU utilization, bottleneck identification.",
-    "waf": [],
-    "file": "agents/frootai-performance-profiler.agent.md",
-    "size": 10450
-  },
-  {
-    "id": "frootai-php-expert",
-    "name": "Frootai Php Expert",
-    "description": "PHP specialist — modern PHP 8.3+, attributes, typed properties, Composer, PSR standards, and Laravel/Symfony patterns.",
-    "waf": [],
-    "file": "agents/frootai-php-expert.agent.md",
-    "size": 10362
-  },
-  {
-    "id": "frootai-php-mcp-expert",
-    "name": "Frootai Php Mcp Expert",
-    "description": "PHP MCP server specialist — attributes, PSR standards, Composer, typed properties for tool schemas.",
-    "waf": [],
-    "file": "agents/frootai-php-mcp-expert.agent.md",
-    "size": 10444
-  },
-  {
-    "id": "frootai-play-01-builder",
-    "name": "Frootai Play 01 Builder",
-    "description": "Play 01 builder — Enterprise RAG pipeline builder — Azure AI Search, OpenAI, embeddings, evaluation",
-    "waf": [],
-    "file": "agents/frootai-play-01-builder.agent.md",
-    "size": 10682
-  },
-  {
-    "id": "frootai-play-01-reviewer",
-    "name": "Frootai Play 01 Reviewer",
-    "description": "Play 01 reviewer — code quality, security audit, WAF compliance for enterprise-rag",
-    "waf": [],
-    "file": "agents/frootai-play-01-reviewer.agent.md",
-    "size": 10517
-  },
-  {
-    "id": "frootai-play-01-tuner",
-    "name": "Frootai Play 01 Tuner",
-    "description": "Play 01 tuner — config optimization, evaluation thresholds, cost tuning for enterprise-rag",
-    "waf": [],
-    "file": "agents/frootai-play-01-tuner.agent.md",
-    "size": 10618
-  },
-  {
-    "id": "frootai-play-02-builder",
-    "name": "Frootai Play 02 Builder",
-    "description": "Play 02 builder — AI Landing Zone builder — hub-spoke networking, private endpoints, governance",
-    "waf": [],
-    "file": "agents/frootai-play-02-builder.agent.md",
-    "size": 10654
-  },
-  {
-    "id": "frootai-play-02-reviewer",
-    "name": "Frootai Play 02 Reviewer",
-    "description": "Play 02 reviewer — code quality, security audit, WAF compliance for ai-landing-zone",
-    "waf": [],
-    "file": "agents/frootai-play-02-reviewer.agent.md",
-    "size": 10562
-  },
-  {
-    "id": "frootai-play-02-tuner",
-    "name": "Frootai Play 02 Tuner",
-    "description": "Play 02 tuner — config optimization, evaluation thresholds, cost tuning for ai-landing-zone",
-    "waf": [],
-    "file": "agents/frootai-play-02-tuner.agent.md",
-    "size": 10589
-  },
-  {
-    "id": "frootai-play-03-builder",
-    "name": "Frootai Play 03 Builder",
-    "description": "Play 03 builder — Deterministic AI builder — grounding, structured output, evaluation-driven reliability",
-    "waf": [],
-    "file": "agents/frootai-play-03-builder.agent.md",
-    "size": 10665
-  },
-  {
-    "id": "frootai-play-03-reviewer",
-    "name": "Frootai Play 03 Reviewer",
-    "description": "Play 03 reviewer — code quality, security audit, WAF compliance for deterministic-agent",
-    "waf": [],
-    "file": "agents/frootai-play-03-reviewer.agent.md",
-    "size": 10564
-  },
-  {
-    "id": "frootai-play-03-tuner",
-    "name": "Frootai Play 03 Tuner",
-    "description": "Play 03 tuner — config optimization, evaluation thresholds, cost tuning for deterministic-agent",
-    "waf": [],
-    "file": "agents/frootai-play-03-tuner.agent.md",
-    "size": 10604
-  },
-  {
-    "id": "frootai-play-04-builder",
-    "name": "Frootai Play 04 Builder",
-    "description": "Play 04 builder — Voice AI builder — Azure Speech, call center analytics, real-time transcription",
-    "waf": [],
-    "file": "agents/frootai-play-04-builder.agent.md",
-    "size": 10604
-  },
-  {
-    "id": "frootai-play-04-reviewer",
-    "name": "Frootai Play 04 Reviewer",
-    "description": "Play 04 reviewer — code quality, security audit, WAF compliance for call-center-voice-ai",
-    "waf": [],
-    "file": "agents/frootai-play-04-reviewer.agent.md",
-    "size": 10463
-  },
-  {
-    "id": "frootai-play-04-tuner",
-    "name": "Frootai Play 04 Tuner",
-    "description": "Play 04 tuner — config optimization, evaluation thresholds, cost tuning for call-center-voice-ai",
-    "waf": [],
-    "file": "agents/frootai-play-04-tuner.agent.md",
-    "size": 10599
-  },
-  {
-    "id": "frootai-play-05-builder",
-    "name": "Frootai Play 05 Builder",
-    "description": "Play 05 builder — IT ticket resolution builder — classification, routing, automated resolution",
-    "waf": [],
-    "file": "agents/frootai-play-05-builder.agent.md",
-    "size": 10642
-  },
-  {
-    "id": "frootai-play-05-reviewer",
-    "name": "Frootai Play 05 Reviewer",
-    "description": "Play 05 reviewer — code quality, security audit, WAF compliance for it-ticket-resolution",
-    "waf": [],
-    "file": "agents/frootai-play-05-reviewer.agent.md",
-    "size": 10474
-  },
-  {
-    "id": "frootai-play-05-tuner",
-    "name": "Frootai Play 05 Tuner",
-    "description": "Play 05 tuner — config optimization, evaluation thresholds, cost tuning for it-ticket-resolution",
-    "waf": [],
-    "file": "agents/frootai-play-05-tuner.agent.md",
-    "size": 10528
-  },
-  {
-    "id": "frootai-play-06-builder",
-    "name": "Frootai Play 06 Builder",
-    "description": "Play 06 builder — Document processing builder — OCR, table extraction, PDF to structured data",
-    "waf": [],
-    "file": "agents/frootai-play-06-builder.agent.md",
-    "size": 10641
-  },
-  {
-    "id": "frootai-play-06-reviewer",
-    "name": "Frootai Play 06 Reviewer",
-    "description": "Play 06 reviewer — code quality, security audit, WAF compliance for document-intelligence",
-    "waf": [],
-    "file": "agents/frootai-play-06-reviewer.agent.md",
-    "size": 10587
-  },
-  {
-    "id": "frootai-play-06-tuner",
-    "name": "Frootai Play 06 Tuner",
-    "description": "Play 06 tuner — config optimization, evaluation thresholds, cost tuning for document-intelligence",
-    "waf": [],
-    "file": "agents/frootai-play-06-tuner.agent.md",
-    "size": 10626
-  },
-  {
-    "id": "frootai-play-07-builder",
-    "name": "Frootai Play 07 Builder",
-    "description": "Play 07 builder — Multi-agent service builder — orchestration, Dapr, agent collaboration",
-    "waf": [],
-    "file": "agents/frootai-play-07-builder.agent.md",
-    "size": 10597
-  },
-  {
-    "id": "frootai-play-07-reviewer",
-    "name": "Frootai Play 07 Reviewer",
-    "description": "Play 07 reviewer — code quality, security audit, WAF compliance for multi-agent-service",
-    "waf": [],
-    "file": "agents/frootai-play-07-reviewer.agent.md",
-    "size": 10557
-  },
-  {
-    "id": "frootai-play-07-tuner",
-    "name": "Frootai Play 07 Tuner",
-    "description": "Play 07 tuner — config optimization, evaluation thresholds, cost tuning for multi-agent-service",
-    "waf": [],
-    "file": "agents/frootai-play-07-tuner.agent.md",
-    "size": 10656
-  },
-  {
-    "id": "frootai-play-08-builder",
-    "name": "Frootai Play 08 Builder",
-    "description": "Play 08 builder — Copilot Studio builder — topics, generative answers, Teams deployment",
-    "waf": [],
-    "file": "agents/frootai-play-08-builder.agent.md",
-    "size": 10586
-  },
-  {
-    "id": "frootai-play-08-reviewer",
-    "name": "Frootai Play 08 Reviewer",
-    "description": "Play 08 reviewer — code quality, security audit, WAF compliance for copilot-studio-bot",
-    "waf": [],
-    "file": "agents/frootai-play-08-reviewer.agent.md",
-    "size": 10517
-  },
-  {
-    "id": "frootai-play-08-tuner",
-    "name": "Frootai Play 08 Tuner",
-    "description": "Play 08 tuner — config optimization, evaluation thresholds, cost tuning for copilot-studio-bot",
-    "waf": [],
-    "file": "agents/frootai-play-08-tuner.agent.md",
-    "size": 10565
-  },
-  {
-    "id": "frootai-play-09-builder",
-    "name": "Frootai Play 09 Builder",
-    "description": "Play 09 builder — AI Search portal builder — semantic search, knowledge discovery, faceted navigation",
-    "waf": [],
-    "file": "agents/frootai-play-09-builder.agent.md",
-    "size": 10637
-  },
-  {
-    "id": "frootai-play-09-reviewer",
-    "name": "Frootai Play 09 Reviewer",
-    "description": "Play 09 reviewer — code quality, security audit, WAF compliance for ai-search-portal",
-    "waf": [],
-    "file": "agents/frootai-play-09-reviewer.agent.md",
-    "size": 10461
-  },
-  {
-    "id": "frootai-play-09-tuner",
-    "name": "Frootai Play 09 Tuner",
-    "description": "Play 09 tuner — config optimization, evaluation thresholds, cost tuning for ai-search-portal",
-    "waf": [],
-    "file": "agents/frootai-play-09-tuner.agent.md",
-    "size": 10624
-  },
-  {
-    "id": "frootai-play-10-builder",
-    "name": "Frootai Play 10 Builder",
-    "description": "Play 10 builder — Content moderation builder — safety filters, policy enforcement, human review",
-    "waf": [],
-    "file": "agents/frootai-play-10-builder.agent.md",
-    "size": 10647
-  },
-  {
-    "id": "frootai-play-10-reviewer",
-    "name": "Frootai Play 10 Reviewer",
-    "description": "Play 10 reviewer — code quality, security audit, WAF compliance for content-moderation",
-    "waf": [],
-    "file": "agents/frootai-play-10-reviewer.agent.md",
-    "size": 10537
-  },
-  {
-    "id": "frootai-play-10-tuner",
-    "name": "Frootai Play 10 Tuner",
-    "description": "Play 10 tuner — config optimization, evaluation thresholds, cost tuning for content-moderation",
-    "waf": [],
-    "file": "agents/frootai-play-10-tuner.agent.md",
-    "size": 10561
-  },
-  {
-    "id": "frootai-play-11-builder",
-    "name": "Frootai Play 11 Builder",
-    "description": "Play 11 builder — Advanced landing zone builder — multi-region, hub-spoke, enterprise governance",
-    "waf": [],
-    "file": "agents/frootai-play-11-builder.agent.md",
-    "size": 10672
-  },
-  {
-    "id": "frootai-play-11-reviewer",
-    "name": "Frootai Play 11 Reviewer",
-    "description": "Play 11 reviewer — code quality, security audit, WAF compliance for ai-landing-zone-advanced",
-    "waf": [],
-    "file": "agents/frootai-play-11-reviewer.agent.md",
-    "size": 10557
-  },
-  {
-    "id": "frootai-play-11-tuner",
-    "name": "Frootai Play 11 Tuner",
-    "description": "Play 11 tuner — config optimization, evaluation thresholds, cost tuning for ai-landing-zone-advanced",
-    "waf": [],
-    "file": "agents/frootai-play-11-tuner.agent.md",
-    "size": 10645
-  },
-  {
-    "id": "frootai-play-12-builder",
-    "name": "Frootai Play 12 Builder",
-    "description": "Play 12 builder — Model serving builder — AKS GPU nodes, vLLM, autoscaling, quantization",
-    "waf": [],
-    "file": "agents/frootai-play-12-builder.agent.md",
-    "size": 10645
-  },
-  {
-    "id": "frootai-play-12-reviewer",
-    "name": "Frootai Play 12 Reviewer",
-    "description": "Play 12 reviewer — code quality, security audit, WAF compliance for model-serving-aks",
-    "waf": [],
-    "file": "agents/frootai-play-12-reviewer.agent.md",
-    "size": 10580
-  },
-  {
-    "id": "frootai-play-12-tuner",
-    "name": "Frootai Play 12 Tuner",
-    "description": "Play 12 tuner — config optimization, evaluation thresholds, cost tuning for model-serving-aks",
-    "waf": [],
-    "file": "agents/frootai-play-12-tuner.agent.md",
-    "size": 10636
-  },
-  {
-    "id": "frootai-play-13-builder",
-    "name": "Frootai Play 13 Builder",
-    "description": "Play 13 builder — Fine-tuning builder — LoRA/QLoRA, data prep, evaluation, Azure AI Foundry",
-    "waf": [],
-    "file": "agents/frootai-play-13-builder.agent.md",
-    "size": 10700
-  },
-  {
-    "id": "frootai-play-13-reviewer",
-    "name": "Frootai Play 13 Reviewer",
-    "description": "Play 13 reviewer — code quality, security audit, WAF compliance for fine-tuning-workflow",
-    "waf": [],
-    "file": "agents/frootai-play-13-reviewer.agent.md",
-    "size": 10632
-  },
-  {
-    "id": "frootai-play-13-tuner",
-    "name": "Frootai Play 13 Tuner",
-    "description": "Play 13 tuner — config optimization, evaluation thresholds, cost tuning for fine-tuning-workflow",
-    "waf": [],
-    "file": "agents/frootai-play-13-tuner.agent.md",
-    "size": 10638
-  },
-  {
-    "id": "frootai-play-14-builder",
-    "name": "Frootai Play 14 Builder",
-    "description": "Play 14 builder — AI gateway builder — APIM, semantic cache, model routing, token metering",
-    "waf": [],
-    "file": "agents/frootai-play-14-builder.agent.md",
-    "size": 10725
-  },
-  {
-    "id": "frootai-play-14-reviewer",
-    "name": "Frootai Play 14 Reviewer",
-    "description": "Play 14 reviewer — code quality, security audit, WAF compliance for cost-optimized-ai-gateway",
-    "waf": [],
-    "file": "agents/frootai-play-14-reviewer.agent.md",
-    "size": 10603
-  },
-  {
-    "id": "frootai-play-14-tuner",
-    "name": "Frootai Play 14 Tuner",
-    "description": "Play 14 tuner — config optimization, evaluation thresholds, cost tuning for cost-optimized-ai-gateway",
-    "waf": [],
-    "file": "agents/frootai-play-14-tuner.agent.md",
-    "size": 10631
-  },
-  {
-    "id": "frootai-play-15-builder",
-    "name": "Frootai Play 15 Builder",
-    "description": "Play 15 builder — Multi-modal doc processor — images + text, vision models, PDF extraction",
-    "waf": [],
-    "file": "agents/frootai-play-15-builder.agent.md",
-    "size": 10699
-  },
-  {
-    "id": "frootai-play-15-reviewer",
-    "name": "Frootai Play 15 Reviewer",
-    "description": "Play 15 reviewer — code quality, security audit, WAF compliance for multi-modal-docproc",
-    "waf": [],
-    "file": "agents/frootai-play-15-reviewer.agent.md",
-    "size": 10524
-  },
-  {
-    "id": "frootai-play-15-tuner",
-    "name": "Frootai Play 15 Tuner",
-    "description": "Play 15 tuner — config optimization, evaluation thresholds, cost tuning for multi-modal-docproc",
-    "waf": [],
-    "file": "agents/frootai-play-15-tuner.agent.md",
-    "size": 10616
-  },
-  {
-    "id": "frootai-play-16-builder",
-    "name": "Frootai Play 16 Builder",
-    "description": "Play 16 builder — Teams extension builder — message extensions, adaptive cards, Copilot plugins",
-    "waf": [],
-    "file": "agents/frootai-play-16-builder.agent.md",
-    "size": 10668
-  },
-  {
-    "id": "frootai-play-16-reviewer",
-    "name": "Frootai Play 16 Reviewer",
-    "description": "Play 16 reviewer — code quality, security audit, WAF compliance for copilot-teams-extension",
-    "waf": [],
-    "file": "agents/frootai-play-16-reviewer.agent.md",
-    "size": 10620
-  },
-  {
-    "id": "frootai-play-16-tuner",
-    "name": "Frootai Play 16 Tuner",
-    "description": "Play 16 tuner — config optimization, evaluation thresholds, cost tuning for copilot-teams-extension",
-    "waf": [],
-    "file": "agents/frootai-play-16-tuner.agent.md",
-    "size": 10616
-  },
-  {
-    "id": "frootai-play-17-builder",
-    "name": "Frootai Play 17 Builder",
-    "description": "Play 17 builder — AI observability builder — OpenTelemetry, token tracking, quality dashboards",
-    "waf": [],
-    "file": "agents/frootai-play-17-builder.agent.md",
-    "size": 10672
-  },
-  {
-    "id": "frootai-play-17-reviewer",
-    "name": "Frootai Play 17 Reviewer",
-    "description": "Play 17 reviewer — code quality, security audit, WAF compliance for ai-observability",
-    "waf": [],
-    "file": "agents/frootai-play-17-reviewer.agent.md",
-    "size": 10554
-  },
-  {
-    "id": "frootai-play-17-tuner",
-    "name": "Frootai Play 17 Tuner",
-    "description": "Play 17 tuner — config optimization, evaluation thresholds, cost tuning for ai-observability",
-    "waf": [],
-    "file": "agents/frootai-play-17-tuner.agent.md",
-    "size": 10636
-  },
-  {
-    "id": "frootai-play-18-builder",
-    "name": "Frootai Play 18 Builder",
-    "description": "Play 18 builder — Prompt management builder — versioning, A/B testing, prompt libraries",
-    "waf": [],
-    "file": "agents/frootai-play-18-builder.agent.md",
-    "size": 10679
-  },
-  {
-    "id": "frootai-play-18-reviewer",
-    "name": "Frootai Play 18 Reviewer",
-    "description": "Play 18 reviewer — code quality, security audit, WAF compliance for prompt-management",
-    "waf": [],
-    "file": "agents/frootai-play-18-reviewer.agent.md",
-    "size": 10538
-  },
-  {
-    "id": "frootai-play-18-tuner",
-    "name": "Frootai Play 18 Tuner",
-    "description": "Play 18 tuner — config optimization, evaluation thresholds, cost tuning for prompt-management",
-    "waf": [],
-    "file": "agents/frootai-play-18-tuner.agent.md",
-    "size": 10622
-  },
-  {
-    "id": "frootai-play-19-builder",
-    "name": "Frootai Play 19 Builder",
-    "description": "Play 19 builder — Edge AI builder — Phi-4, ONNX Runtime, on-device inference, quantization",
-    "waf": [],
-    "file": "agents/frootai-play-19-builder.agent.md",
-    "size": 10644
-  },
-  {
-    "id": "frootai-play-19-reviewer",
-    "name": "Frootai Play 19 Reviewer",
-    "description": "Play 19 reviewer — code quality, security audit, WAF compliance for edge-ai-phi4",
-    "waf": [],
-    "file": "agents/frootai-play-19-reviewer.agent.md",
-    "size": 10577
-  },
-  {
-    "id": "frootai-play-19-tuner",
-    "name": "Frootai Play 19 Tuner",
-    "description": "Play 19 tuner — config optimization, evaluation thresholds, cost tuning for edge-ai-phi4",
-    "waf": [],
-    "file": "agents/frootai-play-19-tuner.agent.md",
-    "size": 10566
-  },
-  {
-    "id": "frootai-play-20-builder",
-    "name": "Frootai Play 20 Builder",
-    "description": "Play 20 builder — Anomaly detection builder — streaming analytics, real-time alerting, ML models",
-    "waf": [],
-    "file": "agents/frootai-play-20-builder.agent.md",
-    "size": 10664
-  },
-  {
-    "id": "frootai-play-20-reviewer",
-    "name": "Frootai Play 20 Reviewer",
-    "description": "Play 20 reviewer — code quality, security audit, WAF compliance for anomaly-detection",
-    "waf": [],
-    "file": "agents/frootai-play-20-reviewer.agent.md",
-    "size": 10532
-  },
-  {
-    "id": "frootai-play-20-tuner",
-    "name": "Frootai Play 20 Tuner",
-    "description": "Play 20 tuner — config optimization, evaluation thresholds, cost tuning for anomaly-detection",
-    "waf": [],
-    "file": "agents/frootai-play-20-tuner.agent.md",
-    "size": 10613
-  },
-  {
-    "id": "frootai-play-21-builder",
-    "name": "Frootai Play 21 Builder",
-    "description": "Play 21 builder — Agentic RAG builder — autonomous retrieval, multi-source synthesis, self-evaluation",
-    "waf": [],
-    "file": "agents/frootai-play-21-builder.agent.md",
-    "size": 10644
-  },
-  {
-    "id": "frootai-play-21-reviewer",
-    "name": "Frootai Play 21 Reviewer",
-    "description": "Play 21 reviewer — code quality, security audit, WAF compliance for agentic-rag",
-    "waf": [],
-    "file": "agents/frootai-play-21-reviewer.agent.md",
-    "size": 10507
-  },
-  {
-    "id": "frootai-play-21-tuner",
-    "name": "Frootai Play 21 Tuner",
-    "description": "Play 21 tuner — config optimization, evaluation thresholds, cost tuning for agentic-rag",
-    "waf": [],
-    "file": "agents/frootai-play-21-tuner.agent.md",
-    "size": 10542
-  },
-  {
-    "id": "frootai-play-22-builder",
-    "name": "Frootai Play 22 Builder",
-    "description": "Play 22 builder — Multi-agent swarm builder — supervisor pattern, distributed collaboration",
-    "waf": [],
-    "file": "agents/frootai-play-22-builder.agent.md",
-    "size": 10662
-  },
-  {
-    "id": "frootai-play-22-reviewer",
-    "name": "Frootai Play 22 Reviewer",
-    "description": "Play 22 reviewer — code quality, security audit, WAF compliance for multi-agent-swarm",
-    "waf": [],
-    "file": "agents/frootai-play-22-reviewer.agent.md",
-    "size": 10526
-  },
-  {
-    "id": "frootai-play-22-tuner",
-    "name": "Frootai Play 22 Tuner",
-    "description": "Play 22 tuner — config optimization, evaluation thresholds, cost tuning for multi-agent-swarm",
-    "waf": [],
-    "file": "agents/frootai-play-22-tuner.agent.md",
-    "size": 10564
-  },
-  {
-    "id": "frootai-play-23-builder",
-    "name": "Frootai Play 23 Builder",
-    "description": "Play 23 builder — Browser automation builder — Playwright MCP, vision navigation, web tasks",
-    "waf": [],
-    "file": "agents/frootai-play-23-builder.agent.md",
-    "size": 10681
-  },
-  {
-    "id": "frootai-play-23-reviewer",
-    "name": "Frootai Play 23 Reviewer",
-    "description": "Play 23 reviewer — code quality, security audit, WAF compliance for browser-automation-agent",
+    "id": "fai-teams-expert",
+    "name": "FAI Teams Expert",
+    "description": "Microsoft Teams integration specialist — Adaptive Cards, Bot Framework SDK, Graph API for channels/chats/meetings, AI-powered meeting summarization, and action item extraction.",
     "waf": [],
-    "file": "agents/frootai-play-23-reviewer.agent.md",
-    "size": 10559
+    "file": "agents/fai-teams-expert.agent.md",
+    "size": 5335
   },
   {
-    "id": "frootai-play-23-tuner",
-    "name": "Frootai Play 23 Tuner",
-    "description": "Play 23 tuner — config optimization, evaluation thresholds, cost tuning for browser-automation-agent",
+    "id": "fai-tech-debt-analyst",
+    "name": "FAI Tech Debt Analyst",
+    "description": "Tech debt analyst — identifies, quantifies, and prioritizes technical debt with cost-of-delay analysis, remediation plans, and sprint allocation recommendations.",
     "waf": [],
-    "file": "agents/frootai-play-23-tuner.agent.md",
-    "size": 10625
+    "file": "agents/fai-tech-debt-analyst.agent.md",
+    "size": 5571
   },
   {
-    "id": "frootai-play-dispatcher",
-    "name": "FrootAI Play Dispatcher",
-    "description": "FrootAI play dispatcher — routes user requests to the correct solution play agent based on intent classification. Understands all 23 plays, their domains, and capabilities. Routes to specialist agents or handles cross-play queries directly.",
+    "id": "fai-technical-writer",
+    "name": "FAI Technical Writer",
+    "description": "Technical documentation specialist — Diátaxis framework (tutorials/how-to/reference/explanation), API documentation, architecture docs, Mermaid diagrams, and README standards for AI systems.",
     "waf": [],
-    "file": "agents/frootai-play-dispatcher.agent.md",
-    "size": 14138
+    "file": "agents/fai-technical-writer.agent.md",
+    "size": 6298
   },
   {
-    "id": "frootai-play-lifecycle",
-    "name": "FrootAI Play Lifecycle",
-    "description": "FrootAI play lifecycle manager — handles play initialization (scaffold), deployment (Bicep), evaluation (quality gates), and tuning (config optimization). The operational backbone for any solution play.",
+    "id": "fai-temporal-expert",
+    "name": "FAI Temporal Expert",
+    "description": "Temporal workflow orchestration specialist — durable execution, saga patterns, long-running AI workflows, activity retry policies, timeouts, and distributed task scheduling.",
     "waf": [],
-    "file": "agents/frootai-play-lifecycle.agent.md",
-    "size": 12283
+    "file": "agents/fai-temporal-expert.agent.md",
+    "size": 6689
   },
   {
-    "id": "frootai-postgresql-expert",
-    "name": "Frootai Postgresql Expert",
-    "description": "PostgreSQL specialist — pgvector for embeddings, query optimization, connection pooling, backup/recovery, and RAG vector store patterns.",
+    "id": "fai-terraform-expert",
+    "name": "FAI Terraform Expert",
+    "description": "Terraform specialist — Azure provider, state management, module design, plan/apply workflow, drift detection, and multi-environment infrastructure deployment.",
     "waf": [],
-    "file": "agents/frootai-postgresql-expert.agent.md",
-    "size": 10492
+    "file": "agents/fai-terraform-expert.agent.md",
+    "size": 4919
   },
   {
-    "id": "frootai-power-bi-expert",
-    "name": "Frootai Power Bi Expert",
-    "description": "Power BI specialist — data modeling (star schema), DAX formulas, report design, performance optimization, and AI-powered analytics integration.",
+    "id": "fai-test-generator",
+    "name": "FAI Test Generator",
+    "description": "Test generation specialist — creates unit, integration, and E2E tests across Python (pytest), TypeScript (vitest), C# (xUnit), with AI-specific test patterns (groundedness, safety, streaming).",
     "waf": [],
-    "file": "agents/frootai-power-bi-expert.agent.md",
-    "size": 10464
+    "file": "agents/fai-test-generator.agent.md",
+    "size": 6393
   },
   {
-    "id": "frootai-power-platform-expert",
-    "name": "Frootai Power Platform Expert",
-    "description": "Power Platform specialist — Power Apps (Canvas + Model-driven), Power Automate flows, Dataverse, custom connectors, and Copilot Studio integration.",
+    "id": "fai-test-planner",
+    "name": "FAI Test Planner",
+    "description": "Test planning specialist — designs test strategy, identifies coverage gaps, prioritizes test types (unit/integration/E2E/AI eval), and creates test plans with risk-based prioritization.",
     "waf": [],
-    "file": "agents/frootai-power-platform-expert.agent.md",
-    "size": 10551
+    "file": "agents/fai-test-planner.agent.md",
+    "size": 4810
   },
   {
-    "id": "frootai-prd-writer",
-    "name": "Frootai Prd Writer",
-    "description": "Product Requirements Document writer — user needs, success metrics, constraints, and AI-specific requirements.",
+    "id": "fai-test-runner",
+    "name": "FAI Test Runner",
+    "description": "Test execution specialist — runs test suites, interprets results, identifies flaky tests, diagnoses failures, and reports coverage with actionable recommendations.",
     "waf": [],
-    "file": "agents/frootai-prd-writer.agent.md",
-    "size": 10536
+    "file": "agents/fai-test-runner.agent.md",
+    "size": 4303
   },
   {
-    "id": "frootai-product-manager",
-    "name": "Frootai Product Manager",
-    "description": "AI product management specialist — requirements gathering, AI use case prioritization, evaluation metrics, and go-to-market strategy for AI products.",
+    "id": "fai-turso-expert",
+    "name": "FAI Turso Expert",
+    "description": "Turso specialist — libSQL (SQLite fork), edge replication, embedded vector search, multi-tenant databases, and low-latency AI data patterns.",
     "waf": [],
-    "file": "agents/frootai-product-manager.agent.md",
-    "size": 10506
+    "file": "agents/fai-turso-expert.agent.md",
+    "size": 4740
   },
   {
-    "id": "frootai-production-patterns-expert",
-    "name": "Frootai Production Patterns Expert",
-    "description": "Production AI patterns expert — hosting (Container Apps/AKS), APIM gateway, latency optimization, cost control, multi-agent hosting, and observability for AI.",
+    "id": "fai-typescript-expert",
+    "name": "FAI TypeScript Expert",
+    "description": "TypeScript/Node.js specialist — strict mode, Zod validation, ESM modules, Vitest testing, Azure SDK integration, async patterns, and production-ready AI application development.",
     "waf": [],
-    "file": "agents/frootai-production-patterns-expert.agent.md",
-    "size": 10712
+    "file": "agents/fai-typescript-expert.agent.md",
+    "size": 5132
   },
   {
-    "id": "frootai-prompt-engineer",
-    "name": "Frootai Prompt Engineer",
-    "description": "Prompt engineering specialist — system message design, few-shot patterns, chain-of-thought, structured output, and evaluation-driven prompt optimization.",
+    "id": "fai-typescript-mcp-expert",
+    "name": "FAI TypeScript MCP Expert",
+    "description": "TypeScript MCP server specialist — @modelcontextprotocol/sdk, McpServer class, Zod schema validation, async tool handlers, stdio/SSE transport, and npm distribution.",
     "waf": [],
-    "file": "agents/frootai-prompt-engineer.agent.md",
-    "size": 10551
+    "file": "agents/fai-typescript-mcp-expert.agent.md",
+    "size": 5292
   },
   {
-    "id": "frootai-protobuf-expert",
-    "name": "protobuf expert",
-    "description": "Protocol Buffers — schema design, code generation, backward compatibility, gRPC service definitions for AI APIs",
-    "waf": "[\"performance-efficiency\",\"operational-excellence\"]",
-    "file": "agents/frootai-protobuf-expert.agent.md",
-    "size": 3876
-  },
-  {
-    "id": "frootai-python-expert",
-    "name": "Frootai Python Expert",
-    "description": "Python development specialist — async patterns, Pydantic, FastAPI, pytest, type hints, and WAF-aligned production patterns.",
-    "waf": [],
-    "file": "agents/frootai-python-expert.agent.md",
-    "size": 10516
-  },
-  {
-    "id": "frootai-python-mcp-expert",
-    "name": "FrootAI Python MCP Expert",
-    "description": "Python MCP development specialist — guides building MCP servers with FastMCP, async patterns, Pydantic models, type hints, and FrootAI-aligned tool design. Covers @mcp.tool() decorators, resource definitions, and production deployment with uv.",
-    "waf": [],
-    "file": "agents/frootai-python-mcp-expert.agent.md",
-    "size": 12860
-  },
-  {
-    "id": "frootai-qwik-expert",
-    "name": "qwik expert",
-    "description": "Qwik framework — resumability, lazy loading, Island architecture, Qwik City, instant-on AI-powered web applications",
-    "waf": "[\"performance-efficiency\",\"cost-optimization\"]",
-    "file": "agents/frootai-qwik-expert.agent.md",
-    "size": 3873
-  },
-  {
-    "id": "frootai-rag-architect",
-    "name": "FrootAI RAG Architect",
-    "description": "Enterprise RAG architecture specialist — designs retrieval-augmented generation pipelines with Azure AI Search, OpenAI embeddings, and production-grade evaluation. Enforces grounding, citation, and cost controls per FrootAI WAF pillars.",
-    "waf": [],
-    "file": "agents/frootai-rag-architect.agent.md",
-    "size": 10946
-  },
-  {
-    "id": "frootai-rag-expert",
-    "name": "Frootai Rag Expert",
-    "description": "RAG architecture expert — chunking strategies, embedding models, hybrid search, reranking, evaluation metrics, and advanced RAG patterns (agentic, graph, multi-modal).",
-    "waf": [],
-    "file": "agents/frootai-rag-expert.agent.md",
-    "size": 10596
-  },
-  {
-    "id": "frootai-ray-expert",
-    "name": "ray expert",
-    "description": "Ray distributed computing — Ray Serve for model serving, Ray Tune for hyperparameter optimization, distributed training at scale",
-    "waf": "[\"performance-efficiency\",\"cost-optimization\"]",
-    "file": "agents/frootai-ray-expert.agent.md",
-    "size": 3895
-  },
-  {
-    "id": "frootai-react-expert",
-    "name": "Frootai React Expert",
-    "description": "React/Next.js frontend specialist — Server Components, Suspense streaming, Tailwind, framer-motion animations, and accessibility-first patterns.",
-    "waf": [],
-    "file": "agents/frootai-react-expert.agent.md",
-    "size": 10488
-  },
-  {
-    "id": "frootai-red-team-expert",
-    "name": "Frootai Red Team Expert",
-    "description": "AI red teaming specialist — prompt injection, jailbreaks, adversarial testing, PyRIT automation, bias detection.",
-    "waf": [],
-    "file": "agents/frootai-red-team-expert.agent.md",
-    "size": 10471
-  },
-  {
-    "id": "frootai-redis-expert",
-    "name": "Frootai Redis Expert",
-    "description": "Redis specialist — caching patterns, semantic cache for AI, pub/sub, streams.",
-    "waf": [],
-    "file": "agents/frootai-redis-expert.agent.md",
-    "size": 10395
-  },
-  {
-    "id": "frootai-refactoring-expert",
-    "name": "Frootai Refactoring Expert",
-    "description": "Code refactoring specialist — extract method, reduce complexity, improve testability while maintaining behavior.",
-    "waf": [],
-    "file": "agents/frootai-refactoring-expert.agent.md",
-    "size": 10595
-  },
-  {
-    "id": "frootai-remix-expert",
-    "name": "remix expert",
-    "description": "Remix framework — nested routing, loaders/actions, progressive enhancement, streaming SSR for AI applications",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-remix-expert.agent.md",
-    "size": 3857
-  },
-  {
-    "id": "frootai-responsible-ai-reviewer",
-    "name": "Frootai Responsible Ai Reviewer",
-    "description": "Responsible AI specialist — bias detection, fairness testing, content safety, red teaming, EU AI Act compliance, and AI governance frameworks.",
-    "waf": [],
-    "file": "agents/frootai-responsible-ai-reviewer.agent.md",
-    "size": 10617
-  },
-  {
-    "id": "frootai-ruby-expert",
-    "name": "Frootai Ruby Expert",
-    "description": "Ruby specialist — Ruby 3.3+, Rails 8, block DSL patterns, RuboCop standards, and MCP server integration.",
-    "waf": [],
-    "file": "agents/frootai-ruby-expert.agent.md",
-    "size": 10464
-  },
-  {
-    "id": "frootai-ruby-mcp-expert",
-    "name": "Frootai Ruby Mcp Expert",
-    "description": "Ruby MCP server specialist — mcp gem, block DSL, Rails integration, idiomatic Ruby tool design.",
-    "waf": [],
-    "file": "agents/frootai-ruby-mcp-expert.agent.md",
-    "size": 10421
-  },
-  {
-    "id": "frootai-rust-expert",
-    "name": "Frootai Rust Expert",
-    "description": "Rust development specialist — ownership, lifetimes, async with tokio, serde serialization, and systems-level MCP server patterns.",
-    "waf": [],
-    "file": "agents/frootai-rust-expert.agent.md",
-    "size": 10462
-  },
-  {
-    "id": "frootai-rust-mcp-expert",
-    "name": "Frootai Rust Mcp Expert",
-    "description": "Rust MCP server specialist — rmcp SDK, tokio async, proc macros, serde, high-performance tool serving.",
-    "waf": [],
-    "file": "agents/frootai-rust-mcp-expert.agent.md",
-    "size": 10541
-  },
-  {
-    "id": "frootai-salesforce-expert",
-    "name": "Frootai Salesforce Expert",
-    "description": "Salesforce specialist — Apex development, Lightning Web Components, Flow automation, and enterprise CRM integration patterns for AI solutions.",
-    "waf": [],
-    "file": "agents/frootai-salesforce-expert.agent.md",
-    "size": 10430
-  },
-  {
-    "id": "frootai-sap-expert",
-    "name": "sap expert",
-    "description": "SAP integration — procurement, inventory management, order processing, material queries via SAP BTP and OData APIs",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-sap-expert.agent.md",
-    "size": 3353
-  },
-  {
-    "id": "frootai-security-reviewer",
-    "name": "FrootAI Security Reviewer",
-    "description": "WAF Security reviewer — audits code, infrastructure, and AI pipelines against OWASP Top 10, Azure security baselines, and FrootAI's security pillar. Identifies vulnerabilities in Managed Identity usage, network isolation, secrets handling, content safety, and RBAC.",
-    "waf": [],
-    "file": "agents/frootai-security-reviewer.agent.md",
-    "size": 12547
-  },
-  {
-    "id": "frootai-semantic-kernel-expert",
-    "name": "Frootai Semantic Kernel Expert",
-    "description": "Semantic Kernel specialist — plugins, function calling, agent framework, memory stores, filters/middleware, and multi-agent group chat orchestration.",
-    "waf": [],
-    "file": "agents/frootai-semantic-kernel-expert.agent.md",
-    "size": 10482
-  },
-  {
-    "id": "frootai-seo-expert",
-    "name": "Frootai Seo Expert",
-    "description": "SEO and AI search optimization — structured data, Core Web Vitals, AI-generated content SEO.",
-    "waf": [],
-    "file": "agents/frootai-seo-expert.agent.md",
-    "size": 10425
-  },
-  {
-    "id": "frootai-servicenow-expert",
-    "name": "servicenow expert",
-    "description": "ServiceNow ITSM integration — incident management, change requests, CMDB queries, knowledge base, service catalog automation via REST API and MCP tools",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-servicenow-expert.agent.md",
-    "size": 3817
-  },
-  {
-    "id": "frootai-slack-expert",
-    "name": "slack expert",
-    "description": "Slack integration — message sending, channel management, thread replies, user notifications, AI-powered conversation summarization and action extraction",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-slack-expert.agent.md",
-    "size": 3494
-  },
-  {
-    "id": "frootai-solid-expert",
-    "name": "solid expert",
-    "description": "SolidJS — fine-grained reactivity, signals, stores, createResource for AI data fetching, SolidStart SSR",
-    "waf": "[\"performance-efficiency\",\"reliability\"]",
-    "file": "agents/frootai-solid-expert.agent.md",
-    "size": 3846
-  },
-  {
-    "id": "frootai-solutions-architect",
-    "name": "Frootai Solutions Architect",
-    "description": "Cloud solutions architect — end-to-end AI solution design, multi-service integration, cost estimation, and customer-facing architecture presentations.",
-    "waf": [],
-    "file": "agents/frootai-solutions-architect.agent.md",
-    "size": 10592
-  },
-  {
-    "id": "frootai-specification-writer",
-    "name": "Frootai Specification Writer",
-    "description": "Specification writer — generates AI-ready specs with requirements, evaluation criteria, WAF alignment.",
-    "waf": [],
-    "file": "agents/frootai-specification-writer.agent.md",
-    "size": 10553
-  },
-  {
-    "id": "frootai-sql-server-expert",
-    "name": "Frootai Sql Server Expert",
-    "description": "SQL Server specialist — query optimization, Always On availability, Azure SQL Hyperscale, and structured data integration for AI pipelines.",
-    "waf": [],
-    "file": "agents/frootai-sql-server-expert.agent.md",
-    "size": 10451
-  },
-  {
-    "id": "frootai-streaming-expert",
-    "name": "Frootai Streaming Expert",
-    "description": "Real-time streaming specialist — SSE for LLM output, WebSocket, Azure Event Hubs, stream processing for AI.",
-    "waf": [],
-    "file": "agents/frootai-streaming-expert.agent.md",
-    "size": 10452
-  },
-  {
-    "id": "frootai-supabase-expert",
-    "name": "supabase expert",
-    "description": "Supabase with AI — pgvector integration, real-time subscriptions, Edge Functions, Auth, storage for AI applications",
-    "waf": "[\"reliability\",\"security\"]",
-    "file": "agents/frootai-supabase-expert.agent.md",
-    "size": 3845
-  },
-  {
-    "id": "frootai-svelte-expert",
-    "name": "Frootai Svelte Expert",
-    "description": "Svelte 5 specialist — runes, SvelteKit, TypeScript integration, minimal bundle size.",
-    "waf": [],
-    "file": "agents/frootai-svelte-expert.agent.md",
-    "size": 10428
-  },
-  {
-    "id": "frootai-swarm-supervisor",
-    "name": "FrootAI Swarm Supervisor",
-    "description": "Multi-agent swarm supervisor — routes tasks to specialist agents, manages turn limits and token budgets, synthesizes multi-perspective results. Works standalone or wired into Play 22.",
-    "waf": [],
-    "file": "agents/frootai-swarm-supervisor.agent.md",
-    "size": 11187
-  },
-  {
-    "id": "frootai-swift-expert",
-    "name": "Frootai Swift Expert",
-    "description": "Swift specialist — actors, Codable, async/await, SwiftUI, and Apple platform MCP integration patterns.",
-    "waf": [],
-    "file": "agents/frootai-swift-expert.agent.md",
-    "size": 10432
-  },
-  {
-    "id": "frootai-swift-mcp-expert",
-    "name": "Frootai Swift Mcp Expert",
-    "description": "Swift MCP server specialist — actors, Codable, async/await, Apple platform integration.",
-    "waf": [],
-    "file": "agents/frootai-swift-mcp-expert.agent.md",
-    "size": 10515
-  },
-  {
-    "id": "frootai-tdd-green",
-    "name": "Frootai Tdd Green",
-    "description": "TDD Green phase — minimal implementation to make failing tests pass.",
-    "waf": [],
-    "file": "agents/frootai-tdd-green.agent.md",
-    "size": 10462
-  },
-  {
-    "id": "frootai-tdd-red",
-    "name": "Frootai Tdd Red",
-    "description": "TDD Red phase — write failing tests from requirements before any implementation.",
+    "id": "fai-ux-designer",
+    "name": "FAI UX Designer",
+    "description": "AI UX designer — conversation design patterns, chatbot interaction flows, AI disclosure/transparency, loading states for streaming, confidence display, and accessibility for AI interfaces.",
     "waf": [],
-    "file": "agents/frootai-tdd-red.agent.md",
-    "size": 10496
+    "file": "agents/fai-ux-designer.agent.md",
+    "size": 6459
   },
   {
-    "id": "frootai-tdd-refactor",
-    "name": "Frootai Tdd Refactor",
-    "description": "TDD Refactor phase — improve code quality while keeping all tests green.",
+    "id": "fai-vector-database-expert",
+    "name": "FAI Vector Database Expert",
+    "description": "Vector database specialist — HNSW vs IVFFlat index selection, embedding storage with Qdrant/Pinecone/pgvector/Azure AI Search, similarity metrics, and performance tuning for RAG retrieval.",
     "waf": [],
-    "file": "agents/frootai-tdd-refactor.agent.md",
-    "size": 10548
+    "file": "agents/fai-vector-database-expert.agent.md",
+    "size": 6958
   },
   {
-    "id": "frootai-teams-expert",
-    "name": "teams expert",
-    "description": "Microsoft Teams integration — adaptive card sending, channel messages, meeting scheduling, AI-powered meeting summarization and action item extraction via Graph API",
-    "waf": "[\"reliability\", \"security\", \"operational-excellence\"]",
-    "file": "agents/frootai-teams-expert.agent.md",
-    "size": 3415
-  },
-  {
-    "id": "frootai-tech-debt-analyst",
-    "name": "Frootai Tech Debt Analyst",
-    "description": "Tech debt analyst — identifies, quantifies, and prioritizes technical debt with remediation plans.",
-    "waf": [],
-    "file": "agents/frootai-tech-debt-analyst.agent.md",
-    "size": 10586
-  },
-  {
-    "id": "frootai-technical-writer",
-    "name": "Frootai Technical Writer",
-    "description": "Technical documentation specialist — Diátaxis framework, FROOT module style, mermaid diagrams, API docs, and architecture documentation for AI systems.",
-    "waf": [],
-    "file": "agents/frootai-technical-writer.agent.md",
-    "size": 10519
-  },
-  {
-    "id": "frootai-temporal-expert",
-    "name": "temporal expert",
-    "description": "Temporal workflow orchestration — durable execution, saga patterns, long-running AI workflows, retry policies, activity timeouts",
-    "waf": "[\"reliability\",\"operational-excellence\"]",
-    "file": "agents/frootai-temporal-expert.agent.md",
-    "size": 3896
-  },
-  {
-    "id": "frootai-terraform-expert",
-    "name": "Frootai Terraform Expert",
-    "description": "Terraform specialist — Azure provider, state management, module design, AVM from HashiCorp Registry, and infrastructure planning with plan/apply workflow.",
-    "waf": [],
-    "file": "agents/frootai-terraform-expert.agent.md",
-    "size": 10531
-  },
-  {
-    "id": "frootai-test-generator",
-    "name": "Frootai Test Generator",
-    "description": "Test generation specialist — creates unit, integration, and E2E tests across Python, TypeScript, C#.",
-    "waf": [],
-    "file": "agents/frootai-test-generator.agent.md",
-    "size": 10496
-  },
-  {
-    "id": "frootai-test-planner",
-    "name": "Frootai Test Planner",
-    "description": "Test planning specialist — organizes tests by priority, identifies coverage gaps, designs test strategy.",
+    "id": "fai-vercel-expert",
+    "name": "FAI Vercel Expert",
+    "description": "Vercel specialist — AI SDK (streaming useChat/useCompletion), Edge Functions, Next.js deployment, KV/Blob/Postgres storage, and serverless AI application patterns.",
     "waf": [],
-    "file": "agents/frootai-test-planner.agent.md",
-    "size": 10582
+    "file": "agents/fai-vercel-expert.agent.md",
+    "size": 5714
   },
   {
-    "id": "frootai-test-runner",
-    "name": "Frootai Test Runner",
-    "description": "Test execution specialist — runs test suites, interprets results, identifies flaky tests.",
+    "id": "fai-vue-expert",
+    "name": "FAI Vue Expert",
+    "description": "Vue.js 3 specialist — Composition API with script setup, Pinia state management, Nuxt 3 SSR/SSG, reactive streaming for AI chat, and TypeScript-first component patterns.",
     "waf": [],
-    "file": "agents/frootai-test-runner.agent.md",
-    "size": 10558
+    "file": "agents/fai-vue-expert.agent.md",
+    "size": 5406
   },
   {
-    "id": "frootai-turso-expert",
-    "name": "turso expert",
-    "description": "Turso embedded database — libSQL, edge replication, vector search, multi-tenant databases for AI applications",
-    "waf": "[\"performance-efficiency\",\"cost-optimization\"]",
-    "file": "agents/frootai-turso-expert.agent.md",
-    "size": 3862
-  },
-  {
-    "id": "frootai-typescript-expert",
-    "name": "Frootai Typescript Expert",
-    "description": "TypeScript/Node.js specialist — strict mode, Zod validation, ESM patterns, Vitest testing, and production-ready async patterns.",
-    "waf": [],
-    "file": "agents/frootai-typescript-expert.agent.md",
-    "size": 10495
-  },
-  {
-    "id": "frootai-typescript-mcp-expert",
-    "name": "FrootAI TypeScript MCP Expert",
-    "description": "TypeScript MCP development specialist — guides building MCP servers with @modelcontextprotocol/sdk, Zod schemas, async handlers, and FrootAI-aligned tool design. Covers McpServer class, stdio/SSE transports, and npm publishing.",
-    "waf": [],
-    "file": "agents/frootai-typescript-mcp-expert.agent.md",
-    "size": 12431
-  },
-  {
-    "id": "frootai-ux-designer",
-    "name": "Frootai Ux Designer",
-    "description": "AI UX designer — conversation design, chatbot flows, AI disclosure patterns, loading states for streaming, and accessibility for AI interfaces.",
+    "id": "fai-wandb-expert",
+    "name": "FAI W&B Expert",
+    "description": "Weights & Biases specialist — experiment tracking, model versioning, hyperparameter sweeps, prompt tracing, evaluation dashboards, and LLM fine-tuning monitoring.",
     "waf": [],
-    "file": "agents/frootai-ux-designer.agent.md",
-    "size": 10516
+    "file": "agents/fai-wandb-expert.agent.md",
+    "size": 5558
   },
   {
-    "id": "frootai-vector-database-expert",
-    "name": "Frootai Vector Database Expert",
-    "description": "Vector database specialist — HNSW, IVF, embedding storage, Qdrant, Pinecone, pgvector, Azure AI Search vector.",
+    "id": "fai-wasm-expert",
+    "name": "FAI WASM Expert",
+    "description": "WebAssembly specialist — WASI preview 2, Component Model, edge AI inference with Spin/Fermyon, Wasmtime runtime, and portable, sandboxed AI model execution.",
     "waf": [],
-    "file": "agents/frootai-vector-database-expert.agent.md",
-    "size": 10554
-  },
-  {
-    "id": "frootai-vercel-expert",
-    "name": "vercel expert",
-    "description": "Vercel AI SDK — streaming responses, edge functions, AI playground, Next.js AI integration, serverless deployment patterns",
-    "waf": "[\"performance-efficiency\",\"operational-excellence\"]",
-    "file": "agents/frootai-vercel-expert.agent.md",
-    "size": 3895
-  },
-  {
-    "id": "frootai-vue-expert",
-    "name": "Frootai Vue Expert",
-    "description": "Vue.js 3 specialist — Composition API, Pinia state, Nuxt SSR patterns.",
-    "waf": [],
-    "file": "agents/frootai-vue-expert.agent.md",
-    "size": 10348
-  },
-  {
-    "id": "frootai-wandb-expert",
-    "name": "wandb expert",
-    "description": "Weights & Biases — experiment tracking, model versioning, hyperparameter sweeps, prompt tracing, evaluation dashboards",
-    "waf": "[\"operational-excellence\",\"performance-efficiency\"]",
-    "file": "agents/frootai-wandb-expert.agent.md",
-    "size": 3885
-  },
-  {
-    "id": "frootai-wasm-expert",
-    "name": "wasm expert",
-    "description": "WebAssembly — WASI, component model, edge AI inference, Spin/Fermyon, Wasmtime, portable AI model execution",
-    "waf": "[\"performance-efficiency\",\"security\"]",
-    "file": "agents/frootai-wasm-expert.agent.md",
-    "size": 3837
+    "file": "agents/fai-wasm-expert.agent.md",
+    "size": 4757
   }
 ]

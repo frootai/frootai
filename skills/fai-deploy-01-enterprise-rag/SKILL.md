@@ -1,165 +1,111 @@
 ---
 name: fai-deploy-01-enterprise-rag
-description: 'Deploys Play 01-enterprise-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.'
+description: |
+  Deploy Enterprise RAG (Play 01) with Azure OpenAI, AI Search, App Service,
+  and Cosmos DB. Covers Bicep provisioning, environment promotion, smoke tests,
+  and rollback procedures.
 ---
 
-# Fai Deploy 01 Enterprise Rag
+# Deploy Enterprise RAG (Play 01)
 
-Deploys Play 01-enterprise-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.
+Production deployment workflow for the Enterprise RAG solution play.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys play 01-enterprise-rag to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying a new Enterprise RAG environment
+- Promoting from dev → staging → production
+- Running post-deployment smoke tests
+- Rolling back a failed deployment
 
-**Category:** Deployment
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Infrastructure Stack
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Service | Purpose | SKU |
+|---------|---------|-----|
+| Azure OpenAI | LLM inference + embeddings | S0 (PAYG or PTU) |
+| Azure AI Search | Vector + semantic retrieval | Standard S1 |
+| App Service | API hosting | P1v3 |
+| Cosmos DB | Conversation history | Serverless |
+| Key Vault | Secrets | Standard |
+| Application Insights | Monitoring | Workspace-based |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Deployment Steps
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys play 01-enterprise-rag to azure with bicep validation, what-if check, and post-deploy health verification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 37**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-deploy-01-enterprise-rag
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-deploy-01-enterprise-rag/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Deployment Checklist
-
-- [ ] Infrastructure templates validated (`az deployment what-if`)
-- [ ] Environment variables configured (Key Vault references)
-- [ ] Health check endpoints responding (HTTP 200)
-- [ ] DNS/CNAME records updated
-- [ ] SSL certificates valid (not expiring within 30 days)
-- [ ] Rollback procedure documented and tested
-- [ ] Smoke tests passing in target environment
-- [ ] Cost estimate reviewed and approved
-- [ ] RBAC roles assigned (least privilege)
-- [ ] Monitoring alerts configured
-
-## Rollback Procedure
-
-```bash
-# Quick rollback to previous deployment
+# 1. Deploy infrastructure
 az deployment group create \
-  --resource-group $RG \
+  --resource-group rg-rag-prod \
   --template-file infra/main.bicep \
-  --parameters @infra/parameters.previous.json
+  --parameters infra/main.bicepparam
 
-# Verify rollback
-az resource list --resource-group $RG --output table
+# 2. Deploy application code
+az webapp deploy --resource-group rg-rag-prod \
+  --name app-rag-prod --src-path dist/app.zip
+
+# 3. Run smoke tests
+python tests/smoke/test_rag_endpoint.py --base-url https://app-rag-prod.azurewebsites.net
+
+# 4. Verify health
+curl -s https://app-rag-prod.azurewebsites.net/health | jq .
 ```
 
-## Environment Matrix
+## Environment Promotion
 
-| Setting | Dev | Staging | Prod |
-|---------|-----|---------|------|
-| SKU | Basic | Standard | Premium |
-| Replicas | 1 | 2 | 3+ |
-| Region | Single | Single | Multi |
-| Backup | None | Daily | Continuous |
+```yaml
+# GitHub Actions staged deployment
+jobs:
+  deploy-dev:
+    uses: ./.github/workflows/deploy.yml
+    with: { environment: dev, resource-group: rg-rag-dev }
+  deploy-staging:
+    needs: deploy-dev
+    uses: ./.github/workflows/deploy.yml
+    with: { environment: staging, resource-group: rg-rag-staging }
+  deploy-prod:
+    needs: deploy-staging
+    uses: ./.github/workflows/deploy.yml
+    with: { environment: production, resource-group: rg-rag-prod }
+```
 
-## Notes
+## Smoke Tests
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Deployment category in the FAI primitives catalog
+```python
+def test_rag_query(base_url: str):
+    resp = requests.post(f"{base_url}/api/chat",
+        json={"message": "What is a circuit breaker pattern?"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert "answer" in body
+    assert len(body["answer"]) > 50
+    assert "citations" in body
+
+def test_health(base_url: str):
+    resp = requests.get(f"{base_url}/health")
+    assert resp.status_code == 200
+    health = resp.json()
+    assert health["status"] == "healthy"
+    assert health["openai"] == "connected"
+    assert health["search"] == "connected"
+```
+
+## Rollback
+
+```bash
+# Rollback to previous app version
+az webapp deployment slot swap --resource-group rg-rag-prod \
+  --name app-rag-prod --slot staging --target-slot production
+
+# Or rollback infrastructure
+az deployment group create --resource-group rg-rag-prod \
+  --template-file infra/main.bicep --parameters @infra/rollback.bicepparam
+```
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Search returns empty | Index not populated | Run indexer or re-index documents |
+| OpenAI 403 | MI role not assigned | Grant Cognitive Services OpenAI User |
+| High latency after deploy | Cold start | Warm up with health check requests |
+| Smoke test fails | Config mismatch between envs | Verify App Config labels match environment |

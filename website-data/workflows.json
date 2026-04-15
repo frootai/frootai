@@ -1,86 +1,86 @@
 [
   {
-    "id": "frootai-contributors-report",
-    "name": "frootai-contributors-report",
-    "description": "Include frootai.dev repo stats",
+    "id": "fai-contributors-report",
+    "name": "FAI-contributors-report",
+    "description": "Include FAI.dev repo stats",
     "steps": 12,
-    "file": "workflows/frootai-contributors-report.md"
+    "file": "workflows/fai-contributors-report.md"
   },
   {
-    "id": "frootai-daily-ecosystem-report",
-    "name": "frootai-daily-ecosystem-report",
-    "description": "Daily ecosystem health summary — primitive counts, marketplace stats, validation status, and recent changes across agents, instructions, skills, hooks, and plugins. The morning briefing for the FrootAI team.",
+    "id": "fai-daily-ecosystem-report",
+    "name": "FAI-daily-ecosystem-report",
+    "description": "Daily ecosystem health summary — primitive counts, marketplace stats, validation status, and recent changes across agents, instructions, skills, hooks, and plugins. The morning briefing for the FAI team.",
     "steps": 10,
-    "file": "workflows/frootai-daily-ecosystem-report.md"
+    "file": "workflows/fai-daily-ecosystem-report.md"
   },
   {
-    "id": "frootai-evaluation-regression",
-    "name": "frootai-evaluation-regression",
+    "id": "fai-evaluation-regression",
+    "name": "FAI-evaluation-regression",
     "description": "Number of previous evaluations for moving average",
     "steps": 12,
-    "file": "workflows/frootai-evaluation-regression.md"
+    "file": "workflows/fai-evaluation-regression.md"
   },
   {
-    "id": "frootai-knowledge-staleness",
-    "name": "frootai-knowledge-staleness",
+    "id": "fai-knowledge-staleness",
+    "name": "FAI-knowledge-staleness",
     "description": "Monthly check for stale FROOT knowledge modules — scores staleness across docs, plays, primitives, and schemas using a weighted multi-signal algorithm. Generates a freshness dashboard with automated update suggestions.",
     "steps": 9,
-    "file": "workflows/frootai-knowledge-staleness.md"
+    "file": "workflows/fai-knowledge-staleness.md"
   },
   {
-    "id": "frootai-marketplace-health",
-    "name": "frootai-marketplace-health",
+    "id": "fai-marketplace-health",
+    "name": "FAI-marketplace-health",
     "description": "Weekly marketplace integrity check — validates all plugin.json files, verifies referenced primitives exist, detects orphaned plugins, and regenerates marketplace.json if needed.",
     "steps": 10,
-    "file": "workflows/frootai-marketplace-health.md"
+    "file": "workflows/fai-marketplace-health.md"
   },
   {
-    "id": "frootai-play-portfolio-summary",
-    "name": "frootai-play-portfolio-summary",
+    "id": "fai-play-portfolio-summary",
+    "name": "FAI-play-portfolio-summary",
     "description": "Aggregated portfolio assessment across all 68 solution plays — dashboard of play health, WAF coverage, technology stack analysis, cost estimation, and ecosystem maturity. Auto-closes previous summary.",
     "steps": 12,
-    "file": "workflows/frootai-play-portfolio-summary.md"
+    "file": "workflows/fai-play-portfolio-summary.md"
   },
   {
-    "id": "frootai-play-quality-report",
-    "name": "frootai-play-quality-report",
+    "id": "fai-play-quality-report",
+    "name": "FAI-play-quality-report",
     "description": "Minimum passing grade (A-F)",
     "steps": 13,
-    "file": "workflows/frootai-play-quality-report.md"
+    "file": "workflows/fai-play-quality-report.md"
   },
   {
-    "id": "frootai-play-relevance-check",
+    "id": "fai-play-relevance-check",
     "name": "play-relevance",
     "description": "Interactive slash command to assess whether a solution play is still relevant — checks Azure service availability, pricing changes, SDK deprecations, and alternative patterns.",
     "steps": 11,
-    "file": "workflows/frootai-play-relevance-check.md"
+    "file": "workflows/fai-play-relevance-check.md"
   },
   {
-    "id": "frootai-primitive-pr-review",
-    "name": "frootai-primitive-pr-review",
+    "id": "fai-primitive-pr-review",
+    "name": "FAI-primitive-pr-review",
     "description": "Automated review of PRs that add or modify primitives — validates naming, frontmatter, schema, WAF alignment, duplicate detection, and file size. Posts structured review comment with verdict.",
     "steps": 14,
-    "file": "workflows/frootai-primitive-pr-review.md"
+    "file": "workflows/fai-primitive-pr-review.md"
   },
   {
-    "id": "frootai-release-readiness",
-    "name": "frootai-release-readiness",
+    "id": "fai-release-readiness",
+    "name": "FAI-release-readiness",
     "description": "Preview only — do not create issue",
     "steps": 13,
-    "file": "workflows/frootai-release-readiness.md"
+    "file": "workflows/fai-release-readiness.md"
   },
   {
-    "id": "frootai-stale-plays-detector",
-    "name": "frootai-stale-plays-detector",
+    "id": "fai-stale-plays-detector",
+    "name": "FAI-stale-plays-detector",
     "description": "Comma-separated play numbers to exempt (e.g., 01,02)",
     "steps": 10,
-    "file": "workflows/frootai-stale-plays-detector.md"
+    "file": "workflows/fai-stale-plays-detector.md"
   },
   {
-    "id": "frootai-waf-compliance-check",
-    "name": "frootai-waf-compliance-check",
+    "id": "fai-waf-compliance-check",
+    "name": "FAI-waf-compliance-check",
     "description": "Per-PR WAF pillar validation — scans changed files for security anti-patterns, reliability gaps, cost waste, operational issues, performance bottlenecks, and responsible AI violations. Produces per-pillar scores (0-100) and compliance matrix.",
     "steps": 10,
-    "file": "workflows/frootai-waf-compliance-check.md"
+    "file": "workflows/fai-waf-compliance-check.md"
   }
 ]

@@ -20,7 +20,7 @@
   "common": {
     "brand": "FrootAI",
     "tagline": "From the Roots to the Fruits",
-    "description": "The open-source FAI Protocol for AI primitive unification — 100 solution plays, 780+ primitives, 25 MCP tools",
+    "description": "The open-source FAI Protocol for AI primitive unification — 100 solution plays, 830+ primitives, 25 MCP tools",
     "cta_get_started": "Get Started",
     "cta_install": "Install",
     "cta_try_free": "Try Free",
@@ -85,7 +85,7 @@
     "pagination_showing": "Showing {start}-{end} of {total}"
   },
   "primitives": {
-    "title": "780+ AI Primitives",
+    "title": "830+ AI Primitives",
     "subtitle": "LEGO blocks for AI development — agents, instructions, skills, hooks, plugins",
     "agents": "Agents",
     "instructions": "Instructions",
@@ -103,7 +103,7 @@
   "chatbot": {
     "title": "Ask Agent FAI",
     "placeholder": "Ask me about AI architecture, solution plays, or FrootAI...",
-    "greeting": "Hi! I'm Agent FAI. I know all 100 solution plays, 780+ primitives, and Azure AI best practices. How can I help you build?",
+    "greeting": "Hi! I'm Agent FAI. I know all 100 solution plays, 830+ primitives, and Azure AI best practices. How can I help you build?",
     "thinking": "Thinking...",
     "error": "Sorry, I couldn't process that. Please try again.",
     "suggested_questions": [

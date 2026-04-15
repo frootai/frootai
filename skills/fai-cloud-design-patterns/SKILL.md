@@ -1,156 +1,120 @@
 ---
 name: fai-cloud-design-patterns
-description: 'Applies cloud design patterns — circuit breaker, bulkhead, cache-aside, CQRS, event sourcing.'
+description: |
+  Apply cloud design patterns for scalability, resilience, and cost control
+  with pattern-to-problem mapping. Use when selecting architecture patterns
+  for distributed AI systems on Azure.
 ---
 
-# Fai Cloud Design Patterns
+# Cloud Design Patterns
 
-Applies cloud design patterns — circuit breaker, bulkhead, cache-aside, CQRS, event sourcing.
+Select and apply cloud patterns for resilience, scalability, and cost.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for applies cloud design patterns — circuit breaker, bulkhead, cache-aside, cqrs, event sourcing.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Designing distributed AI systems on Azure
+- Solving specific reliability or scalability problems
+- Reviewing architecture for pattern alignment
+- Teaching team members about proven cloud patterns
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Pattern Selection Guide
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Problem | Pattern | Implementation |
+|---------|---------|---------------|
+| Cascading failures | Circuit Breaker | Wrap external calls with failure threshold |
+| Transient errors | Retry with Backoff | Exponential backoff + jitter |
+| Traffic spikes | Queue-Based Load Leveling | Service Bus/Storage Queue buffer |
+| Read scalability | CQRS | Separate read/write models |
+| Data consistency | Saga | Compensating transactions |
+| Config management | External Configuration | App Configuration + Key Vault |
+| Rate limiting | Throttling | APIM policies |
+| Cache invalidation | Cache-Aside | Redis with TTL |
 
-## Steps
+## Circuit Breaker
 
-### Step 1: Validate Prerequisites
+```python
+class CircuitBreaker:
+    def __init__(self, threshold=5, timeout=30):
+        self.threshold = threshold
+        self.timeout = timeout
+        self.failures = 0
+        self.state = "closed"
+        self.last_fail = 0
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+    def call(self, fn, *args):
+        if self.state == "open":
+            if time.time() - self.last_fail < self.timeout:
+                raise Exception("Circuit open")
+            self.state = "half-open"
+        try:
+            result = fn(*args)
+            self.failures = 0
+            self.state = "closed"
+            return result
+        except Exception:
+            self.failures += 1
+            self.last_fail = time.time()
+            if self.failures >= self.threshold:
+                self.state = "open"
+            raise
 ```
 
-### Step 2: Load Configuration
+## Retry with Jitter
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+import random, time
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+def retry_with_backoff(fn, max_retries=5, base_delay=1.0):
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except Exception:
+            if attempt == max_retries - 1:
+                raise
+            delay = base_delay * (2 ** attempt) + random.uniform(0, 1)
+            time.sleep(delay)
 ```
 
-### Step 3: Execute Core Logic
+## Queue-Based Load Leveling
 
-Perform the primary operation: applies cloud design patterns — circuit breaker, bulkhead, cache-aside, cqrs, event sourcing..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
 ```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-cloud-design-patterns
+[API] --enqueue--> [Service Bus Queue] --dequeue--> [Worker]
+  Fast response         Buffer              Process at own pace
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-cloud-design-patterns/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Circuit stays open | Timeout too long | Reduce recovery timeout |
+| Retry storms | No jitter | Add random jitter to delay |
+| Queue growing unbounded | Consumer too slow | Scale consumers or add DLQ |
+| Cache stampede | Many requests on miss | Use cache-aside with lock |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

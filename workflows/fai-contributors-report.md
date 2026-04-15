@@ -1,5 +1,5 @@
 ---
-name: FAI-contributors-report
+name: fai-contributors-report
 description: "Monthly contributor activity report — tracks commits, PRs, reviews, new primitives, streak tracking, recognition badges, and community health across repos. Produces leaderboards and month-over-month growth analysis."
 on:
   schedule:

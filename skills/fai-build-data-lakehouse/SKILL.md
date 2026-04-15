@@ -1,161 +1,107 @@
 ---
 name: fai-build-data-lakehouse
-description: 'Designs data lakehouse architecture with medallion pattern (bronze/silver/gold).'
+description: |
+  Design lakehouse pipelines with bronze/silver/gold zones, data quality gates,
+  governance cataloging, and cost-aware compute tiers. Use when building data
+  platforms for AI training data, analytics, or feature engineering.
 ---
 
-# Fai Build Data Lakehouse
+# Data Lakehouse Architecture
 
-Designs data lakehouse architecture with medallion pattern (bronze/silver/gold).
+Design medallion-architecture data pipelines with quality gates and governance.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs data lakehouse architecture with medallion pattern (bronze/silver/gold).. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building data platforms for AI model training data
+- Implementing bronze/silver/gold data quality zones
+- Setting up data governance with catalog and lineage
+- Designing cost-efficient compute for batch and streaming
 
-**Category:** Data Processing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Medallion Architecture
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```
+Sources → [Bronze] → [Silver] → [Gold] → Consumers
+           Raw        Cleaned    Business    AI Models
+           Append     Validated  Aggregated  Dashboards
+           Any format Schema     Star schema APIs
+```
 
-## Steps
+## ADLS Gen2 Layout
 
-### Step 1: Validate Prerequisites
+```
+datalake/
+├── bronze/
+│   ├── raw-events/        # Append-only, partitioned by date
+│   │   └── year=2026/month=04/day=15/
+│   ├── documents/         # Unprocessed files
+│   └── api-extracts/      # Raw API responses
+├── silver/
+│   ├── events-cleaned/    # Deduplicated, validated schema
+│   ├── documents-parsed/  # Extracted text + metadata
+│   └── embeddings/        # Vector embeddings
+├── gold/
+│   ├── customer-360/      # Business-ready aggregation
+│   ├── training-data/     # ML-ready datasets
+│   └── feature-store/     # Feature engineering outputs
+└── system/
+    ├── checkpoints/       # Pipeline state
+    └── audit-logs/        # Data lineage records
+```
 
-Verify all required tools, credentials, and dependencies are available.
+## Bronze → Silver Promotion
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, current_timestamp
+
+spark = SparkSession.builder.appName("bronze-to-silver").getOrCreate()
+
+# Read raw events
+raw = spark.read.json("abfss://bronze@datalake.dfs.core.windows.net/raw-events/")
+
+# Clean: deduplicate, validate schema, add metadata
+cleaned = (raw
+    .dropDuplicates(["event_id"])
+    .filter(col("event_type").isNotNull())
+    .withColumn("processed_at", current_timestamp())
+    .withColumn("_source", col("_metadata.file_path"))
+)
+
+# Quality gate
+null_rate = cleaned.filter(col("user_id").isNull()).count() / cleaned.count()
+assert null_rate < 0.05, f"Null rate {null_rate:.2%} exceeds 5% threshold"
+
+# Write to silver
+cleaned.write.format("delta").mode("merge").save(
+    "abfss://silver@datalake.dfs.core.windows.net/events-cleaned/")
+```
+
+## Data Quality Gates
+
+| Zone Transition | Check | Threshold | Action on Fail |
+|----------------|-------|-----------|---------------|
+| Bronze → Silver | Schema validation | 100% match | Quarantine bad records |
+| Bronze → Silver | Null rate | < 5% per column | Alert + block promotion |
+| Silver → Gold | Dedup rate | < 0.1% duplicates | Re-run dedup before promotion |
+| Silver → Gold | Freshness | < 4 hours lag | Alert, investigate source |
+
+## Governance with Purview
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Register data source
+az purview scan create --account-name purview-prod \
+  --data-source-name datalake \
+  --scan-name weekly-scan \
+  --trigger '{"scanLevel": "Full", "schedule": {"frequency": "Week", "interval": 1}}'
 ```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs data lakehouse architecture with medallion pattern (bronze/silver/gold)..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 27**
-- **Play 47**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-data-lakehouse
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-data-lakehouse/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Data Processing category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Data quality drift | No zone-level validation | Add schema checks and null-rate gates between zones |
+| Duplicate records in gold | Non-idempotent merges | Use merge keys and watermark columns |
+| High compute costs | Always-on clusters | Use serverless Spark pools or auto-termination |
+| Lineage gaps | No audit trail | Log source file + transform version with each write |

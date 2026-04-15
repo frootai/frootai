@@ -13,12 +13,13 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # On tag push: always run. On branch push: only if vscode-extension changed.
     # Always run on tag push or manual dispatch
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
 
@@ -49,3 +50,13 @@ jobs:
           vsce publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## VS Code Extension Publish" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${{ steps.version_check.outputs.local }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Marketplace | ${{ steps.version_check.outputs.marketplace }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skipped | ${{ steps.version_check.outputs.skip }} |" >> $GITHUB_STEP_SUMMARY

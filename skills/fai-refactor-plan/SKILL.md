@@ -1,156 +1,108 @@
 ---
 name: fai-refactor-plan
-description: 'Creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy.'
+description: |
+  Create refactoring plans with scope assessment, risk ranking, incremental
+  execution, and regression protection. Use when planning systematic code
+  improvements over multiple sprints.
 ---
 
-# Fai Refactor Plan
+# Refactoring Plan
 
-Creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy.
+Plan safe, incremental refactoring with risk assessment and regression guards.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Planning a multi-sprint refactoring effort
+- Prioritizing tech debt items by impact and risk
+- Creating a refactoring roadmap for stakeholders
+- Ensuring refactoring doesn't introduce regressions
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Plan Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+# Refactoring Plan — [Area/Module]
 
-## Steps
+## Goal
+[What quality improvement are we targeting?]
 
-### Step 1: Validate Prerequisites
+## Scope
+| Item | Current State | Target State | Risk | Priority |
+|------|--------------|-------------|------|----------|
+| OrderService | 450 lines, CC=15 | <100 lines, CC<5 | Medium | P1 |
+| PaymentHandler | No tests | 80% coverage | High | P1 |
+| UserController | Mixed concerns | Clean separation | Low | P2 |
 
-Verify all required tools, credentials, and dependencies are available.
+## Execution Order
+1. Add tests to PaymentHandler (safety net first)
+2. Extract methods from OrderService
+3. Separate concerns in UserController
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## Constraints
+- No behavior changes — only structural improvement
+- Each PR < 200 lines changed
+- All existing tests must pass after each step
+- Run integration tests before merge
+
+## Timeline
+| Sprint | Items | Validation |
+|--------|-------|-----------|
+| S1 | Add test coverage for payment | Coverage >= 80% |
+| S2 | Extract OrderService methods | CC < 5 per method |
+| S3 | Separate UserController | No mixed concerns |
 ```
 
-### Step 2: Load Configuration
+## Risk Assessment
 
-Read settings from the FAI manifest and TuneKit config files.
+| Risk Level | Definition | Mitigation |
+|-----------|-----------|-----------|
+| High | Changes core business logic paths | Add tests FIRST, then refactor |
+| Medium | Changes shared utilities | Review blast radius, test consumers |
+| Low | Cosmetic or naming changes | Standard PR review |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+## Incremental Approach
+
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+1. Add tests for current behavior (safety net)
+2. Refactor one function/class at a time
+3. Run all tests after each change
+4. Commit each step separately (easy revert)
+5. Repeat until target state reached
 ```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-refactor-plan
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-refactor-plan/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Regression after refactor | No test safety net | Always add tests BEFORE refactoring |
+| Scope creep | "While I'm here..." | Stick to plan, log new items separately |
+| PR too large | Refactoring in one commit | One extraction per commit |
+| Stakeholder pushback | No clear value | Show complexity metrics before/after |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-review-and-refactor` — Combined review + fix workflow

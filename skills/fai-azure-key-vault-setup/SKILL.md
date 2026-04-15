@@ -1,161 +1,130 @@
 ---
 name: fai-azure-key-vault-setup
-description: 'Configures Azure Key Vault with RBAC, rotation, CMK, and application integration.'
+description: |
+  Set up Azure Key Vault with RBAC-only access, private networking, rotation policies,
+  and audit logging. Use when centralizing secrets, keys, and certificates for AI
+  workloads with compliance requirements.
 ---
 
-# Fai Azure Key Vault Setup
+# Azure Key Vault Setup
 
-Configures Azure Key Vault with RBAC, rotation, CMK, and application integration.
+Provision and harden Key Vault with RBAC, private endpoints, rotation, and auditing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure key vault with rbac, rotation, cmk, and application integration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Centralizing secrets for AI service connections
+- Setting up certificate management for mTLS
+- Implementing key rotation policies for compliance
+- Enabling audit logging for security reviews
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: kvName
+  location: location
+  properties: {
+    sku: { family: 'A', name: 'standard' }
+    tenantId: subscription().tenantId
+    enableRbacAuthorization: true        // RBAC-only, no access policies
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    enablePurgeProtection: true          // Required for compliance
+    publicNetworkAccess: 'Disabled'
+    networkAcls: { defaultAction: 'Deny' }
+  }
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: configures azure key vault with rbac, rotation, cmk, and application integration..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-key-vault-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-key-vault-setup/"]
+// Private endpoint
+resource pe 'Microsoft.Network/privateEndpoints@2023-11-01' = {
+  name: '${kvName}-pe'
+  location: location
+  properties: {
+    subnet: { id: subnetId }
+    privateLinkServiceConnections: [{
+      name: 'kv-link'
+      properties: {
+        privateLinkServiceId: keyVault.id
+        groupIds: ['vault']
+      }
+    }]
   }
 }
 ```
 
-### Via Agent Invocation
+## RBAC Roles
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Role | Scope | Who |
+|------|-------|-----|
+| Key Vault Secrets User | Vault | App Managed Identities (read secrets) |
+| Key Vault Secrets Officer | Vault | DevOps pipeline (set secrets) |
+| Key Vault Administrator | Vault | Platform team only |
+| Key Vault Crypto User | Vault | Services doing encryption/decryption |
 
-## Configuration Reference
+```bash
+# Grant app MI read-only secret access
+az role assignment create \
+  --assignee-object-id $APP_MI_ID \
+  --role "Key Vault Secrets User" \
+  --scope $KV_RESOURCE_ID
+```
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+## Secret Management
+
+```python
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
+
+client = SecretClient(
+    vault_url="https://kv-prod.vault.azure.net",
+    credential=DefaultAzureCredential()
+)
+
+# Get secret
+api_key = client.get_secret("openai-api-key").value
+
+# Set secret with expiration
+from datetime import datetime, timedelta, timezone
+client.set_secret("db-connection", "Server=...",
+    expires_on=datetime.now(timezone.utc) + timedelta(days=90))
+```
+
+## Rotation Policy
+
+```bash
+# Set auto-rotation: generate new version every 90 days, notify 30 days before expiry
+az keyvault secret set-attributes --vault-name $KV --name openai-key \
+  --expires "$(date -u -d '+90 days' '+%Y-%m-%dT%H:%M:%SZ')"
+
+# Event Grid notification for rotation
+az eventgrid event-subscription create \
+  --name secret-rotation-sub \
+  --source-resource-id $KV_RESOURCE_ID \
+  --endpoint $FUNCTION_ENDPOINT \
+  --included-event-types Microsoft.KeyVault.SecretNearExpiry
+```
+
+## Diagnostic Logging
+
+```bicep
+resource diagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'kv-audit'
+  scope: keyVault
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [{ category: 'AuditEvent', enabled: true, retentionPolicy: { days: 365 } }]
+    metrics: [{ category: 'AllMetrics', enabled: true }]
+  }
 }
 ```
 
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| 403 Forbidden on secret access | Missing RBAC role (not access policy) | Grant Key Vault Secrets User to MI |
+| Soft-deleted vault blocking recreate | Purge protection preventing deletion | Use `az keyvault recover` or wait for retention to expire |
+| Secret rotation not firing | No Event Grid subscription for NearExpiry | Create event subscription for SecretNearExpiry |
+| DNS resolution fails from VNet | Private endpoint DNS zone not linked | Link privatelink.vaultcore.azure.net to VNet |

@@ -1,156 +1,106 @@
 ---
 name: fai-technical-spike
-description: 'Conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation.'
+description: |
+  Run timeboxed technical spikes to de-risk unknowns with structured experiments,
+  decision criteria, and actionable conclusions. Use when evaluating technologies,
+  patterns, or approaches before committing to implementation.
 ---
 
-# Fai Technical Spike
+# Technical Spike
 
-Conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation.
+Run timeboxed experiments to de-risk technical decisions.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Evaluating a new technology or library
+- Testing if an approach is feasible before committing
+- Comparing two technical solutions head-to-head
+- De-risking unknowns in a sprint planning session
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Spike Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+# Technical Spike: [Title]
 
-## Steps
+**Time box:** [1-3 days]
+**Owner:** [name]
+**Goal:** [What question are we answering?]
 
-### Step 1: Validate Prerequisites
+## Hypothesis
+[What do we expect to find?]
 
-Verify all required tools, credentials, and dependencies are available.
+## Experiment
+[What will we build/test to validate?]
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## Decision Criteria
+| Criterion | Target | Actual |
+|-----------|--------|--------|
+| Latency | < 500ms | — |
+| Integration effort | < 2 days | — |
+| Quality | >= 80% accuracy | — |
+
+## Findings
+[What did we discover?]
+
+## Recommendation
+[Go / No-Go / More research needed]
+
+## Artifacts
+- [Link to prototype code]
+- [Link to benchmark results]
 ```
 
-### Step 2: Load Configuration
+## Spike Types
 
-Read settings from the FAI manifest and TuneKit config files.
+| Type | Duration | Output |
+|------|----------|--------|
+| Feasibility | 1 day | Can we do X? Yes/No + evidence |
+| Comparison | 2 days | A vs B with benchmark data |
+| Integration | 2-3 days | Working prototype + rough edges list |
+| Performance | 1-2 days | Benchmark results + bottleneck analysis |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+## Best Practices
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-technical-spike
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-technical-spike/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Practice | Why |
+|----------|-----|
+| Strict timebox | Prevents perfectionism — spike explores, doesn't build |
+| Written conclusion | Forces clear decision, prevents "let me keep exploring" |
+| Throwaway code is OK | Spike code is learning, not production |
+| Share findings | Spike value is in the knowledge, not the code |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Spike runs over timebox | Scope too broad | Narrow to one specific question |
+| No clear conclusion | No decision criteria upfront | Define criteria BEFORE starting |
+| Spike code goes to prod | No separation | Use separate branch, delete after |
+| Team doesn't learn from spike | No writeup | Require written findings + demo |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

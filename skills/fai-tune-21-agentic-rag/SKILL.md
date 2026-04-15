@@ -1,170 +1,107 @@
 ---
 name: fai-tune-21-agentic-rag
-description: 'Tunes configuration for Play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 21 agentic RAG with planner depth, retrieval fan-out, reranker policy, and citation strictness."
 ---
 
-# Fai Tune 21 Agentic Rag
+# FAI Tune - Play 21: Agentic RAG
 
-Tunes configuration for Play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/21-agentic-rag/config/
+├── planner.json
+├── retrieval.json
+├── reranker.json
+└── citations.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Step 1 - Validate Core Configuration
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```json
+// config/retrieval.json
+{
+  "search_mode": "hybrid",
+  "top_k": 8,
+  "fetch_k": 32,
+  "max_hops": 3,
+  "reranker": "semantic",
+  "min_relevance_score": 0.65,
+  "require_citations": true
+}
 ```
 
-### Step 2: Load Configuration
+## Step 2 - Tune Critical Parameters
 
-Read settings from the FAI manifest and TuneKit config files.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `top_k` | 1-50 | 8 | Higher improves recall, may hurt precision. |
+| `fetch_k` | top_k to 200 | 32 | Candidate pool for reranking. |
+| `max_hops` | 1-6 | 3 | Planner depth for tool+retrieval loops. |
+| `min_relevance_score` | 0.0-1.0 | 0.65 | Raise for stricter grounding. |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 07**
-- **Play 22**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-21-agentic-rag
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-21-agentic-rag/"]
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Evaluation Pipeline
-
-This skill integrates with the FAI evaluation framework:
-
 ```python
-from frootai.evaluation import SkillEvaluator
+import json
 
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
-
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
 ```
 
-## Advanced Configuration
+## Step 4 - Add Cost Controls
 
 ```json
 {
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
 }
 ```
 
-## Anti-Patterns
+## Validation Checklist
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
+| Check | Expected | Command |
+|-------|----------|---------|
+| Hybrid search enabled | true | `jq '.search_mode' config/retrieval.json` |
+| Citation required | true | `jq '.require_citations' config/retrieval.json` |
+| Hop count | <= 6 | `jq '.max_hops' config/retrieval.json` |
 
-## Notes
+## Troubleshooting
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Ungrounded answers | Low relevance threshold | Increase min_relevance_score and require citations. |
+| Slow responses | High fetch_k and many hops | Reduce fetch_k to 16 and max_hops to 2. |
+| Missing facts | top_k too small | Increase top_k and validate reranker settings. |
+
+## Rollback Plan
+
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

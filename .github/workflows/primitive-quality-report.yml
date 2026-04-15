@@ -1,0 +1,142 @@
+name: Primitive Quality Report
+
+on:
+  schedule:
+    # Run nightly at 3:30 AM UTC
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  quality-scan:
+    name: Scan all primitives for quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Scan skills
+        id: skills
+        run: |
+          node -e "
+          const fs = require('fs'), path = require('path');
+          const dir = 'skills';
+          if (!fs.existsSync(dir)) { console.log('0 skills'); process.exit(0); }
+          const folders = fs.readdirSync(dir).filter(f => fs.statSync(path.join(dir,f)).isDirectory());
+          let errors = 0, warnings = 0, details = [];
+          
+          for (const folder of folders) {
+            const p = path.join(dir, folder, 'SKILL.md');
+            if (!fs.existsSync(p)) { errors++; details.push('❌ ' + folder + ': missing SKILL.md'); continue; }
+            const c = fs.readFileSync(p, 'utf8');
+            const lines = c.split('\\n').length;
+            
+            if (!folder.startsWith('fai-')) { errors++; details.push('❌ ' + folder + ': missing fai- prefix'); }
+            if (lines < 100) { warnings++; details.push('⚠️ ' + folder + ': ' + lines + ' lines (min 100)'); }
+            if (!/\`\`\`/.test(c)) { warnings++; details.push('⚠️ ' + folder + ': no code blocks'); }
+            
+            const nameMatch = c.match(/^name:\\s*(.+)$/m);
+            if (!nameMatch) { errors++; details.push('❌ ' + folder + ': missing name field'); }
+            else if (nameMatch[1].trim() !== folder) { errors++; details.push('❌ ' + folder + ': name mismatch'); }
+            
+            if (!/^description:/m.test(c)) { errors++; details.push('❌ ' + folder + ': missing description'); }
+          }
+          
+          console.log(folders.length + ' skills scanned: ' + errors + ' errors, ' + warnings + ' warnings');
+          if (details.length > 0) details.forEach(d => console.log(d));
+          
+          const fs2 = require('fs');
+          fs2.writeFileSync('/tmp/skill-report.txt', JSON.stringify({total: folders.length, errors, warnings, details}));
+          if (errors > 0) process.exit(1);
+          "
+
+      - name: Scan agents
+        id: agents
+        continue-on-error: true
+        run: |
+          node -e "
+          const fs = require('fs'), path = require('path');
+          const dir = 'agents';
+          if (!fs.existsSync(dir)) { console.log('0 agents'); process.exit(0); }
+          const files = fs.readdirSync(dir).filter(f => f.endsWith('.agent.md'));
+          let errors = 0;
+          
+          for (const file of files) {
+            const c = fs.readFileSync(path.join(dir, file), 'utf8');
+            if (!/^description:/m.test(c)) { errors++; console.log('❌ ' + file + ': missing description'); }
+          }
+          
+          console.log(files.length + ' agents scanned: ' + errors + ' errors');
+          if (errors > 0) process.exit(1);
+          "
+
+      - name: Scan instructions
+        id: instructions
+        continue-on-error: true
+        run: |
+          node -e "
+          const fs = require('fs'), path = require('path');
+          const dir = 'instructions';
+          if (!fs.existsSync(dir)) { console.log('0 instructions'); process.exit(0); }
+          const files = fs.readdirSync(dir).filter(f => f.endsWith('.instructions.md'));
+          let errors = 0;
+          
+          for (const file of files) {
+            const c = fs.readFileSync(path.join(dir, file), 'utf8');
+            if (!/^description:/m.test(c)) { errors++; console.log('❌ ' + file + ': missing description'); }
+            if (!/^applyTo:/m.test(c)) { errors++; console.log('❌ ' + file + ': missing applyTo'); }
+          }
+          
+          console.log(files.length + ' instructions scanned: ' + errors + ' errors');
+          if (errors > 0) process.exit(1);
+          "
+
+      - name: Create quality report issue (on failures)
+        if: failure()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'quality-report',
+              state: 'open',
+            });
+
+            const body = `## 🔍 Nightly Primitive Quality Report
+
+            Quality issues were detected during the nightly scan.
+            
+            **Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+            
+            Check the workflow logs for details on which primitives need fixes.
+            
+            _Auto-generated at ${new Date().toISOString()}_`;
+
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔍 Primitive quality issues detected',
+                body,
+                labels: ['quality-report'],
+              });
+            }
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Primitive Quality Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Primitive | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Skills | ${{ steps.skills.outcome == 'success' && '✅ Pass' || '❌ Issues found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Agents | ${{ steps.agents.outcome == 'success' && '✅ Pass' || '⚠️ Issues found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Instructions | ${{ steps.instructions.outcome == 'success' && '✅ Pass' || '⚠️ Issues found' }} |" >> $GITHUB_STEP_SUMMARY

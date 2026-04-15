@@ -22,6 +22,7 @@ jobs:
   regenerate:
     name: Regenerate Marketplace & Sync
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - name: Checkout
@@ -51,3 +52,9 @@ jobs:
             git commit -m "chore: auto-regenerate marketplace + sync content [skip ci]"
             git push
           fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Auto-Generate" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Marketplace + content sync completed" >> $GITHUB_STEP_SUMMARY

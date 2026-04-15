@@ -1,156 +1,101 @@
 ---
 name: fai-excalidraw-generator
-description: 'Generates Excalidraw whiteboard diagrams for informal architecture discussions.'
+description: |
+  Generate architecture and workflow diagrams in Excalidraw JSON format with
+  consistent notation, color coding, and exportable layouts. Use when creating
+  visual documentation that can be edited collaboratively.
 ---
 
-# Fai Excalidraw Generator
+# Excalidraw Diagram Generator
 
-Generates Excalidraw whiteboard diagrams for informal architecture discussions.
+Generate editable architecture diagrams in Excalidraw format.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates excalidraw whiteboard diagrams for informal architecture discussions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating architecture diagrams that teams can edit
+- Generating visual documentation from code or config
+- Building consistent diagram notation across projects
+- Exporting diagrams for presentations or docs
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates excalidraw whiteboard diagrams for informal architecture discussions..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-excalidraw-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Excalidraw JSON Structure
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-excalidraw-generator/"]
-  }
+  "type": "excalidraw",
+  "version": 2,
+  "elements": [
+    {
+      "type": "rectangle",
+      "x": 100, "y": 100, "width": 200, "height": 80,
+      "backgroundColor": "#a5d8ff",
+      "strokeColor": "#1971c2",
+      "label": { "text": "API Gateway" }
+    },
+    {
+      "type": "arrow",
+      "x": 300, "y": 140,
+      "points": [[0, 0], [150, 0]],
+      "strokeColor": "#495057",
+      "label": { "text": "HTTPS" }
+    },
+    {
+      "type": "rectangle",
+      "x": 450, "y": 100, "width": 200, "height": 80,
+      "backgroundColor": "#b2f2bb",
+      "strokeColor": "#2f9e44",
+      "label": { "text": "Azure OpenAI" }
+    }
+  ]
 }
 ```
 
-### Via Agent Invocation
+## Generation from Architecture
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+def generate_excalidraw(services: list[dict], connections: list[dict]) -> dict:
+    elements = []
+    positions = {}
+    x, y = 100, 100
 
-## Configuration Reference
+    for svc in services:
+        elements.append({
+            "type": "rectangle", "x": x, "y": y,
+            "width": 200, "height": 80,
+            "backgroundColor": svc.get("color", "#a5d8ff"),
+            "label": {"text": svc["name"]},
+        })
+        positions[svc["name"]] = (x + 200, y + 40)
+        x += 300
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+    for conn in connections:
+        src = positions[conn["from"]]
+        dst = positions[conn["to"]]
+        elements.append({
+            "type": "arrow",
+            "x": src[0], "y": src[1],
+            "points": [[0, 0], [dst[0]-src[0], dst[1]-src[1]]],
+            "label": {"text": conn.get("label", "")},
+        })
+
+    return {"type": "excalidraw", "version": 2, "elements": elements}
 ```
 
-## Monitoring
+## Color Coding Convention
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Category | Color | Hex |
+|----------|-------|-----|
+| Compute | Blue | #a5d8ff |
+| AI/ML | Green | #b2f2bb |
+| Data | Yellow | #ffec99 |
+| Security | Red | #ffc9c9 |
+| Network | Gray | #dee2e6 |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Elements overlap | Fixed x/y positions | Use auto-layout algorithm |
+| Arrows misaligned | Wrong source/target points | Calculate from element center |
+| Large diagrams unreadable | Too many elements | Group by domain, use frames |

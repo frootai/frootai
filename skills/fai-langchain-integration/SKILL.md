@@ -1,156 +1,114 @@
 ---
 name: fai-langchain-integration
-description: 'Integrates LangChain with Azure OpenAI, vector stores, and retrieval patterns.'
+description: |
+  Integrate LangChain with Azure OpenAI, tool orchestration, RAG chains,
+  and LangSmith tracing. Use when building AI applications with LangChain's
+  LCEL chains and agent framework.
 ---
 
-# Fai Langchain Integration
+# LangChain Integration
 
-Integrates LangChain with Azure OpenAI, vector stores, and retrieval patterns.
+Build LangChain applications with Azure OpenAI, RAG chains, and tracing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for integrates langchain with azure openai, vector stores, and retrieval patterns.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building AI apps with LangChain's chain-of-thought patterns
+- Integrating Azure OpenAI as the LLM provider
+- Creating RAG chains with document retrieval
+- Adding observability with LangSmith tracing
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Azure OpenAI Setup
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
-## Steps
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
+)
 
-### Step 1: Validate Prerequisites
+llm = AzureChatOpenAI(
+    azure_deployment="gpt-4o",
+    azure_endpoint="https://oai-prod.openai.azure.com",
+    azure_ad_token_provider=token_provider,
+    api_version="2024-10-21",
+    temperature=0.3,
+)
 
-Verify all required tools, credentials, and dependencies are available.
+embeddings = AzureOpenAIEmbeddings(
+    azure_deployment="text-embedding-3-small",
+    azure_endpoint="https://oai-prod.openai.azure.com",
+    azure_ad_token_provider=token_provider,
+)
+```
+
+## RAG Chain (LCEL)
+
+```python
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "Answer using ONLY the context. If unknown, say 'I don't know'.\n\nContext:\n{context}"),
+    ("user", "{question}"),
+])
+
+def format_docs(docs):
+    return "\n\n".join(d.page_content for d in docs)
+
+rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+answer = rag_chain.invoke("How do I configure retry policies?")
+```
+
+## Agent with Tools
+
+```python
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.tools import tool
+
+@tool
+def search_docs(query: str) -> str:
+    """Search the documentation knowledge base."""
+    docs = retriever.invoke(query)
+    return "\n".join(d.page_content for d in docs[:3])
+
+@tool
+def calculate(expression: str) -> str:
+    """Evaluate a math expression."""
+    return str(eval(expression))  # Use safe_eval in production
+
+agent = create_tool_calling_agent(llm, [search_docs, calculate], prompt)
+executor = AgentExecutor(agent=agent, tools=[search_docs, calculate], verbose=True)
+result = executor.invoke({"input": "What's the cost of 1M tokens at $2.50/M?"})
+```
+
+## LangSmith Tracing
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+export LANGCHAIN_TRACING_V2=true
+export LANGCHAIN_API_KEY=ls_...
+export LANGCHAIN_PROJECT=my-rag-app
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```python
+# Traces appear automatically in LangSmith dashboard
+# No code changes needed — just set env vars
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: integrates langchain with azure openai, vector stores, and retrieval patterns..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-langchain-integration
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-langchain-integration/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Auth fails with Azure | Missing token provider | Use azure_ad_token_provider with DefaultAzureCredential |
+| Chain returns empty | Retriever not connected | Check retriever returns documents |
+| Agent infinite loop | No max_iterations | Set max_iterations=5 in AgentExecutor |
+| No traces in LangSmith | Env vars not set | Set LANGCHAIN_TRACING_V2=true |

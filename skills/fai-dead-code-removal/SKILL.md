@@ -1,161 +1,120 @@
 ---
 name: fai-dead-code-removal
-description: 'Identifies and safely removes dead code, unused imports, and unreachable branches.'
+description: |
+  Detect and safely remove dead code with dependency analysis, coverage data,
+  and regression protection. Use when cleaning up unused functions, imports,
+  feature flags, or deprecated modules.
 ---
 
-# Fai Dead Code Removal
+# Dead Code Removal
 
-Identifies and safely removes dead code, unused imports, and unreachable branches.
+Detect and safely remove unused code with dependency checks and regression guards.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for identifies and safely removes dead code, unused imports, and unreachable branches.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Cleaning up after a major refactoring
+- Removing deprecated features or feature flags
+- Reducing bundle size or compile times
+- Improving codebase readability
 
-**Category:** Code Quality
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Detection Methods
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+### Python: vulture
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Find unused code
+pip install vulture
+vulture src/ --min-confidence 80
+
+# Output:
+# src/utils.py:42: unused function 'old_parser' (90% confidence)
+# src/models.py:15: unused import 'deprecated_lib' (100% confidence)
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
+### TypeScript: ts-prune
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+npx ts-prune | grep -v '(used in module)'
 ```
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: identifies and safely removes dead code, unused imports, and unreachable branches..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
+### .NET: dotnet-unused
 
 ```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+dotnet tool install -g dotnet-unused
+dotnet-unused --solution MyApp.sln
 ```
 
-## Output
+## Coverage-Based Detection
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 24**
-- **Play 51**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-dead-code-removal
+```python
+def find_uncovered_functions(coverage_json: str) -> list[str]:
+    """Find functions with 0% coverage — likely dead code."""
+    import json
+    data = json.loads(open(coverage_json).read())
+    dead = []
+    for file_path, file_data in data.items():
+        for func_name, hit_count in file_data.get("functions", {}).items():
+            if hit_count == 0:
+                dead.append(f"{file_path}:{func_name}")
+    return dead
 ```
 
-### Inside a Solution Play
+## Safe Removal Process
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+1. **Identify** — Run detection tools, collect candidates
+2. **Verify** — Cross-reference with tests, imports, and dynamic calls
+3. **Remove** — Delete code in small, reviewable PRs
+4. **Test** — Run full test suite + integration tests
+5. **Monitor** — Watch for runtime errors in staging for 48 hours
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-dead-code-removal/"]
-  }
-}
+## Feature Flag Cleanup
+
+```python
+# Find stale feature flags (enabled everywhere for 30+ days)
+def find_stale_flags(config_path: str, threshold_days: int = 30) -> list[str]:
+    flags = json.loads(open(config_path).read())
+    stale = []
+    for name, info in flags.items():
+        if info.get("enabled_since"):
+            age = (datetime.now() - datetime.fromisoformat(info["enabled_since"])).days
+            if age > threshold_days and info.get("percentage") == 100:
+                stale.append(name)
+    return stale
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| False positive | Dynamic import or reflection | Mark as used in whitelist |
+| Runtime error after removal | Code used via string reference | Search for string-based usage |
+| Feature flag can't be removed | Still referenced in config | Remove flag + all branches |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Code Quality category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-review-and-refactor` — Combined review + fix workflow

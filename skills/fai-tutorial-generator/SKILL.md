@@ -1,156 +1,135 @@
 ---
 name: fai-tutorial-generator
-description: 'Creates step-by-step tutorials with code examples, screenshots, and verification steps.'
+description: "Generate production-ready tutorials with prerequisites, runnable code, verification steps, and troubleshooting paths."
 ---
 
-# Fai Tutorial Generator
+# FAI Tutorial Generator
 
-Creates step-by-step tutorials with code examples, screenshots, and verification steps.
+## Purpose
 
-## Overview
+Use this skill to create practical tutorials that users can execute end-to-end without guessing hidden steps.
 
-This skill provides a structured, repeatable procedure for creates step-by-step tutorials with code examples, screenshots, and verification steps.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Inputs
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Required | Description |
+|-------|----------|-------------|
+| topic | Yes | Tutorial subject (for example: Azure OpenAI setup). |
+| audience | Yes | Beginner, intermediate, advanced, or mixed. |
+| runtime | No | Environment (Python, Node, .NET, Bash, etc.). |
+| target_time_minutes | No | Time box for completion, default 30. |
+| constraints | No | Cost, security, region, policy limits. |
 
-## Parameters
+## Output Contract
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+A complete tutorial must include all sections below:
+
+1. Learning objective.
+2. Prerequisites with exact versions.
+3. Architecture summary.
+4. Step-by-step implementation.
+5. Verification commands.
+6. Expected output examples.
+7. Common failures and fixes.
+8. Next-step improvements.
+
+## Step 1 - Build a Strong Outline
+
+```json
+{
+  "title": "Build a Cost-Optimized RAG API",
+  "objective": "Deploy and test a small RAG API with guarded prompts.",
+  "estimated_time_minutes": 45,
+  "audience": "intermediate",
+  "sections": [
+    "Prerequisites",
+    "Project setup",
+    "Index creation",
+    "API implementation",
+    "Validation",
+    "Troubleshooting"
+  ]
+}
+```
+
+## Step 2 - Generate Runnable Steps
+
+Each step should include:
+
+- Why the step exists.
+- Exact command or code.
+- Expected result.
+- What to do if it fails.
+
+```bash
+# Example verification step
+python -m pytest tests/test_smoke.py -q
+```
+
+```python
+# Example expected output assertion
+assert response.status_code == 200
+assert "citations" in response.json()
+```
+
+## Step 3 - Add Validation Gates
+
+| Gate | Pass Condition |
+|------|----------------|
+| Build gate | Project compiles/runs locally. |
+| Functional gate | Key workflow returns expected output. |
+| Reliability gate | Retry/fallback behavior works on transient failure. |
+| Safety gate | Harmful/prompt-injection samples are blocked. |
+| Cost gate | Estimated cost remains under budget threshold. |
+
+## Step 4 - Include Troubleshooting Tree
+
+| Symptom | Probable Cause | Fix |
+|---------|----------------|-----|
+| Command not found | Missing dependency or PATH issue | Install required tool and reopen shell. |
+| Auth failure | Credential not set or expired | Re-authenticate and verify environment variables. |
+| Timeout | Resource/network constraints | Increase timeout and validate endpoint health. |
+| Wrong output format | Prompt/schema mismatch | Enforce strict output schema and re-test. |
+
+## Step 5 - Add Quality Checklist
+
+Before finalizing a tutorial, verify:
+
+- No hidden assumptions.
+- All commands are copy-paste runnable.
+- Versions are pinned.
+- Security-sensitive steps avoid hardcoded secrets.
+- The tutorial can be completed within stated time.
+
+## Authoring Template
+
+```md
+# <Tutorial Title>
+
+## Objective
+<One measurable goal>
+
+## Prerequisites
+- Tool A version x.y
+- Tool B version x.y
 
 ## Steps
+### 1. <Step>
+Why:
+Command/code:
+Expected result:
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates step-by-step tutorials with code examples, screenshots, and verification steps..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tutorial-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-tutorial-generator/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Verification
+<commands and expected outputs>
 
 ## Troubleshooting
+<table>
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+## Next Steps
+<2-3 upgrades>
+```
 
 ## Notes
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+- Prefer deterministic examples over vague pseudo-steps.
+- Prefer short runnable snippets over long unexplained code dumps.
+- Include both success criteria and failure diagnostics.

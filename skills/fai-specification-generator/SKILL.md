@@ -1,156 +1,107 @@
 ---
 name: fai-specification-generator
-description: 'name: fai-specification-generator'
+description: |
+  Generate technical specifications with requirements, API contracts,
+  data models, and acceptance criteria. Use when creating detailed specs
+  for engineering handoff or system design documentation.
 ---
 
-# Fai Specification Generator
+# Technical Specification Generator
 
-name: fai-specification-generator
+Create detailed specs with requirements, API contracts, and acceptance criteria.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for name: fai-specification-generator. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Writing technical specs for a new feature or system
+- Defining API contracts before implementation
+- Creating data model specifications
+- Documenting acceptance criteria for QA handoff
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Spec Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```markdown
+# Technical Specification: [Feature Name]
 
-## Steps
+## 1. Overview
+**Author:** [name] | **Date:** [date] | **Status:** Draft
 
-### Step 1: Validate Prerequisites
+### Problem
+[What problem does this solve?]
 
-Verify all required tools, credentials, and dependencies are available.
+### Solution
+[High-level technical approach]
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+## 2. API Contract
 
-### Step 2: Load Configuration
+### POST /api/chat
+**Request:**
+\```json
+{
+  "message": "string (required, 1-4000 chars)",
+  "model": "string (optional, default: gpt-4o-mini)",
+  "context_id": "string (optional, UUID)"
+}
+\```
 
-Read settings from the FAI manifest and TuneKit config files.
+**Response (200):**
+\```json
+{
+  "reply": "string",
+  "model": "string",
+  "tokens": { "prompt": 150, "completion": 300 },
+  "context_id": "UUID"
+}
+\```
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+**Errors:**
+| Code | Reason |
+|------|--------|
+| 400 | Invalid input (validation failed) |
+| 429 | Rate limit exceeded |
+| 500 | Internal server error |
 
-### Step 3: Execute Core Logic
+## 3. Data Model
 
-Perform the primary operation: name: fai-specification-generator.
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
+### conversations
+| Column | Type | Constraints |
 |--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+| id | UUID | PK, auto-generated |
+| user_id | UUID | FK → users, NOT NULL |
+| title | VARCHAR(500) | |
+| model | VARCHAR(50) | DEFAULT 'gpt-4o-mini' |
+| created_at | TIMESTAMPTZ | DEFAULT NOW() |
 
-## WAF Alignment
+## 4. Non-Functional Requirements
+- Latency: P95 < 2000ms
+- Availability: 99.9%
+- Throughput: 100 concurrent users
+- Security: Managed Identity, no API keys
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-specification-generator
+## 5. Acceptance Criteria
+- [ ] Chat endpoint returns grounded response within 2s
+- [ ] Rate limiting returns 429 after 100 req/min
+- [ ] Invalid input returns 400 with field-level errors
+- [ ] Conversation persisted in Cosmos DB
 ```
 
-### Inside a Solution Play
+## Auto-Generation
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-specification-generator/"]
-  }
-}
+```python
+def generate_spec(feature: str, stack: str) -> str:
+    return llm(f"""Write a technical specification for:
+Feature: {feature}
+Stack: {stack}
+Include: API contract (request/response/errors), data model, NFRs, acceptance criteria.
+Use markdown with code blocks for JSON schemas.""")
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Spec too vague | Missing examples | Add concrete JSON request/response |
+| API contract ambiguous | No error codes | Document all error scenarios |
+| NFRs missing | Not considered | Add latency, throughput, availability targets |
+| Spec becomes stale | No update process | Link spec to implementation in PR |

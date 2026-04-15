@@ -1,156 +1,119 @@
 ---
 name: fai-refactor-skill
-description: 'Refactors code to improve readability, maintainability, and testability while preserving behavior.'
+description: |
+  Apply systematic code refactoring patterns with behavior preservation,
+  test-driven validation, and complexity reduction. Use when improving
+  code structure without changing external behavior.
 ---
 
-# Fai Refactor Skill
+# Code Refactoring Patterns
 
-Refactors code to improve readability, maintainability, and testability while preserving behavior.
+Apply safe refactoring with behavior preservation and test validation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for refactors code to improve readability, maintainability, and testability while preserving behavior.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Improving code readability and maintainability
+- Reducing duplication
+- Preparing code for new features
+- Addressing code review feedback
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Core Refactoring Patterns
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### Extract Method
+```python
+# Before
+def process(data):
+    # validate
+    if not data: raise ValueError()
+    if len(data) > 1000: raise ValueError("too large")
+    # transform
+    result = [item.strip().lower() for item in data]
+    # save
+    db.save(result)
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# After
+def process(data):
+    validate(data)
+    result = transform(data)
+    save(result)
 ```
 
-### Step 2: Load Configuration
+### Replace Temp with Query
+```python
+# Before
+base = order.quantity * order.price
+discount = base * 0.1 if order.is_bulk else 0
+total = base - discount
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+# After
+def base_price(order): return order.quantity * order.price
+def discount(order): return base_price(order) * 0.1 if order.is_bulk else 0
+def total(order): return base_price(order) - discount(order)
 ```
 
-### Step 3: Execute Core Logic
+### Introduce Parameter Object
+```python
+# Before
+def search(query, limit, offset, sort_by, sort_dir, filters):
+    pass
 
-Perform the primary operation: refactors code to improve readability, maintainability, and testability while preserving behavior..
+# After
+@dataclass
+class SearchParams:
+    query: str
+    limit: int = 10
+    offset: int = 0
+    sort_by: str = "relevance"
+    sort_dir: str = "desc"
+    filters: dict = field(default_factory=dict)
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+def search(params: SearchParams):
+    pass
 ```
 
-## Output
+## Refactoring Safety Rules
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-refactor-skill
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-refactor-skill/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Rule | Why |
+|------|-----|
+| Tests pass before AND after | Proves no behavior change |
+| One refactoring per commit | Easy to bisect and revert |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tests break | Changed behavior | Undo, refactor without changing logic |
+| Too many changes at once | Not incremental | One pattern per commit |
+| Can't test private methods | Testing implementation | Test public behavior instead |
+| Performance regression | Added indirection | Profile before and after |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-review-and-refactor` — Combined review + fix workflow

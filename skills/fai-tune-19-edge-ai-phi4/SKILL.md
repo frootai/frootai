@@ -1,156 +1,107 @@
 ---
 name: fai-tune-19-edge-ai-phi4
-description: 'Tunes configuration for Play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 19 edge deployment for Phi-4 with quantization, device constraints, and offline fallback behavior."
 ---
 
-# Fai Tune 19 Edge Ai Phi4
+# FAI Tune - Play 19: Edge AI Phi-4
 
-Tunes configuration for Play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/19-edge-ai-phi4/config/
+├── model.json
+├── runtime.json
+├── device.json
+└── offline.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Step 1 - Validate Core Configuration
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```json
+// config/model.json
+{
+  "model_id": "phi-4-mini-instruct",
+  "quantization": "int4",
+  "context_length": 4096,
+  "max_new_tokens": 512,
+  "target_runtime": "onnxruntime",
+  "cpu_threads": 4,
+  "memory_budget_mb": 2048
+}
 ```
 
-### Step 2: Load Configuration
+## Step 2 - Tune Critical Parameters
 
-Read settings from the FAI manifest and TuneKit config files.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `quantization` | fp16,int8,int4 | int4 | Int4 for smallest footprint. |
+| `context_length` | 512-8192 | 4096 | Reduce for low-memory devices. |
+| `cpu_threads` | 1-16 | 4 | Tune for battery and latency. |
+| `memory_budget_mb` | 512-8192 | 2048 | Hard cap to avoid OOM. |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-19-edge-ai-phi4
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-19-edge-ai-phi4/"]
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+```python
+import json
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-## Configuration Reference
+## Step 4 - Add Cost Controls
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
 }
 ```
 
-## Monitoring
+## Validation Checklist
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Check | Expected | Command |
+|-------|----------|---------|
+| Quantization mode | int4 or int8 for edge | `jq '.quantization' config/model.json` |
+| Memory budget | <= device RAM budget | `jq '.memory_budget_mb' config/model.json` |
+| Offline mode | enabled | `jq '.offline_enabled' config/offline.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| OOM on startup | Model too large for device | Use int4 and lower context_length. |
+| Slow inference | Threading mismatch | Tune cpu_threads and disable background jobs. |
+| No response when offline | Fallback disabled | Enable offline.json fallback templates. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

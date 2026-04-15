@@ -1,156 +1,142 @@
 ---
 name: fai-tune-11-ai-landing-zone-advanced
-description: 'Tunes configuration for Play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 11 (AI Landing Zone Advanced) hub-spoke topology, private DNS, governance policies, and network segmentation."
 ---
 
-# Fai Tune 11 Ai Landing Zone Advanced
+# FAI Tune — Play 11: AI Landing Zone Advanced
 
-Tunes configuration for Play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
-
-This skill provides a structured, repeatable procedure for tunes configuration for play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/11-ai-landing-zone-advanced/config/
+├── networking.json       # Hub-spoke VNET, NSG, and DNS config
+├── governance.json       # Azure Policy and RBAC assignments
+├── private-endpoints.json# Private endpoint mappings
+├── monitoring.json       # Diagnostic settings and alerts
+└── guardrails.json       # Compliance and security thresholds
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-11-ai-landing-zone-advanced
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 — Validate Hub-Spoke Network Config
 
 ```json
+// config/networking.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-11-ai-landing-zone-advanced/"]
+  "hub_vnet": {
+    "address_space": "10.0.0.0/16",
+    "subnets": {
+      "firewall": "10.0.1.0/24",
+      "bastion": "10.0.2.0/24",
+      "shared-services": "10.0.3.0/24",
+      "dns-resolver": "10.0.4.0/24"
+    }
+  },
+  "spoke_vnets": {
+    "ai-workload": {
+      "address_space": "10.1.0.0/16",
+      "subnets": {
+        "compute": "10.1.1.0/24",
+        "data": "10.1.2.0/24",
+        "endpoints": "10.1.3.0/24"
+      }
+    }
+  },
+  "peering": {
+    "allow_forwarded_traffic": true,
+    "allow_gateway_transit": true,
+    "use_remote_gateways": false
+  },
+  "dns": {
+    "private_dns_zones": [
+      "privatelink.openai.azure.com",
+      "privatelink.search.windows.net",
+      "privatelink.cognitiveservices.azure.com",
+      "privatelink.vaultcore.azure.net"
+    ],
+    "custom_dns_servers": []
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
+## Step 2 — Configure Governance Policies
 
 ```json
+// config/governance.json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "azure_policies": [
+    { "name": "deny-public-endpoints", "effect": "Deny", "scope": "subscription" },
+    { "name": "require-managed-identity", "effect": "Deny", "scope": "subscription" },
+    { "name": "require-diagnostic-settings", "effect": "DeployIfNotExists", "scope": "subscription" },
+    { "name": "allowed-locations", "effect": "Deny", "params": { "listOfAllowedLocations": ["eastus", "eastus2", "westus2"] } },
+    { "name": "require-encryption-at-rest", "effect": "Deny", "scope": "subscription" }
+  ],
+  "rbac": {
+    "ai_developers": ["Cognitive Services User", "Search Index Data Reader"],
+    "ai_admins": ["Cognitive Services Contributor", "Key Vault Administrator"],
+    "platform_team": ["Owner", "Network Contributor"]
+  },
+  "resource_naming": {
+    "convention": "{org}-{env}-{service}-{region}",
+    "example": "contoso-prod-aoai-eastus"
+  }
 }
 ```
 
-## Monitoring
+## Step 3 — Set Private Endpoint Mappings
 
-Track skill execution metrics:
+```json
+// config/private-endpoints.json
+{
+  "endpoints": [
+    { "service": "Azure OpenAI", "subresource": "account", "dns_zone": "privatelink.openai.azure.com" },
+    { "service": "AI Search", "subresource": "searchService", "dns_zone": "privatelink.search.windows.net" },
+    { "service": "Key Vault", "subresource": "vault", "dns_zone": "privatelink.vaultcore.azure.net" },
+    { "service": "Storage", "subresource": "blob", "dns_zone": "privatelink.blob.core.windows.net" },
+    { "service": "Cosmos DB", "subresource": "sql", "dns_zone": "privatelink.documents.azure.com" }
+  ],
+  "subnet": "endpoints",
+  "auto_approval": true
+}
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 4 — Set Guardrails
+
+```json
+// config/guardrails.json
+{
+  "security": {
+    "public_endpoints_allowed": false,
+    "managed_identity_required": true,
+    "key_vault_for_secrets": true,
+    "encryption_at_rest": true,
+    "tls_minimum_version": "1.2"
+  },
+  "compliance": {
+    "data_residency_regions": ["eastus", "eastus2"],
+    "audit_log_retention_days": 365,
+    "diagnostic_settings_required": true
+  },
+  "cost": {
+    "budget_alert_thresholds": [50, 75, 90, 100],
+    "max_monthly_spend_usd": 50000,
+    "auto_shutdown_non_prod": true
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Public endpoints | Denied | `jq '.security.public_endpoints_allowed' config/guardrails.json` |
+| Managed Identity | Required | `jq '.security.managed_identity_required' config/guardrails.json` |
+| Private DNS zones | >=4 | `jq '.dns.private_dns_zones | length' config/networking.json` |
+| Governance policies | >=5 | `jq '.azure_policies | length' config/governance.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| DNS resolution failures | Private DNS zone not linked | Link DNS zones to hub and spoke VNETs |
+| Cannot access AI services | Private endpoint not provisioned | Check `private-endpoints.json` mapping |
+| Policy conflicts | Conflicting deny/audit effects | Use DeployIfNotExists for auto-remediation |
+| High costs | Non-prod running 24/7 | Enable `auto_shutdown_non_prod: true` |

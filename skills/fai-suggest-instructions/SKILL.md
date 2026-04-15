@@ -1,156 +1,102 @@
 ---
 name: fai-suggest-instructions
-description: 'Discovers and recommends relevant FAI instructions based on file type and project context.'
+description: |
+  Recommend instruction files from the FrootAI catalog based on project
+  context, technology stack, and WAF requirements. Use when helping users
+  configure Copilot instructions for their repository.
 ---
 
-# Fai Suggest Instructions
+# Instruction Recommendation
 
-Discovers and recommends relevant FAI instructions based on file type and project context.
+Suggest .instructions.md files based on project context and stack.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for discovers and recommends relevant FAI instructions based on file type and project context.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up .github/instructions/ for a new repository
+- Matching WAF pillars to instruction files
+- Recommending instructions for specific frameworks
+- Configuring applyTo globs for targeted activation
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Instruction Categories
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Category | Examples | ApplyTo Pattern |
+|----------|---------|----------------|
+| WAF Pillars | waf-reliability, waf-security | `**/*.{ts,py,bicep}` |
+| Languages | python-waf, csharp-waf | `**/*.py`, `**/*.cs` |
+| Frameworks | fastapi-*, aspnet-* | `**/api/**` |
+| IaC | bicep-*, terraform-* | `**/*.bicep`, `**/*.tf` |
+| AI | rag-*, prompt-*, eval-* | `**/*.py` |
 
-## Steps
+## Recommendation Process
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: discovers and recommends relevant FAI instructions based on file type and project context..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-suggest-instructions
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-suggest-instructions/"]
-  }
+```python
+INSTRUCTION_MAP = {
+    "python": ["python-waf.instructions.md"],
+    "typescript": ["typescript-waf.instructions.md"],
+    "csharp": ["csharp-waf.instructions.md"],
+    "bicep": ["bicep-best-practices.instructions.md"],
+    "fastapi": ["fastapi-patterns.instructions.md"],
+    "security": ["waf-security.instructions.md"],
+    "reliability": ["waf-reliability.instructions.md"],
+    "cost": ["waf-cost-optimization.instructions.md"],
 }
+
+def suggest_instructions(stack: list[str]) -> list[dict]:
+    suggestions = []
+    for tech in stack:
+        for key, files in INSTRUCTION_MAP.items():
+            if key in tech.lower():
+                for f in files:
+                    suggestions.append({"file": f, "reason": f"Matches {tech}"})
+    # Always include WAF security
+    suggestions.append({"file": "waf-security.instructions.md", "reason": "Required for all projects"})
+    return suggestions
 ```
 
-### Via Agent Invocation
+## Setup in Repository
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```yaml
+# .github/instructions/waf-security.instructions.md
+---
+description: Security patterns for AI applications
+applyTo: "**/*.{ts,js,py,bicep,json,yaml,yml}"
+---
+[instruction content]
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Instructions not activating | Wrong applyTo glob | Check glob matches file extensions |
+| Too many instructions loaded | Broad globs | Narrow applyTo to relevant paths |
+| Conflicting guidance | Multiple overlapping | Deduplicate, set priority order |
+| Instructions outdated | No review cadence | Review quarterly with stack changes |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

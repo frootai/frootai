@@ -1,160 +1,106 @@
 ---
 name: fai-mcp-php-scaffold
-description: 'Scaffolds a complete php MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.'
+description: |
+  Scaffold PHP MCP servers with typed tool handlers, JSON-RPC processing,
+  and Composer project structure. Use when building MCP servers in PHP
+  for web application or CMS integration.
 ---
 
-# Fai Mcp Php Scaffold
+# PHP MCP Server Scaffold
 
-Scaffolds a complete php MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
+Build MCP servers in PHP with typed handlers and Composer packaging.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a complete php mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building MCP tools for WordPress, Laravel, or PHP applications
+- Exposing PHP service logic as AI agent tools
+- Creating lightweight MCP servers with minimal dependencies
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Project Setup
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+mkdir my-mcp-server && cd my-mcp-server
+composer init --name=org/mcp-server --type=project
+composer require modelcontextprotocol/php-sdk
 ```
 
-### Step 2: Load Configuration
+## Tool Definition
 
-Read settings from the FAI manifest and TuneKit config files.
+```php
+<?php
+use ModelContextProtocol\Tool;
+use ModelContextProtocol\ToolResult;
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a complete php mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-php-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
+class SearchDocumentsTool extends Tool
 {
-  "primitives": {
-    "skills": ["skills/fai-mcp-php-scaffold/"]
-  }
+    public function getName(): string { return 'search_documents'; }
+    public function getDescription(): string { return 'Search knowledge base documents'; }
+
+    public function getInputSchema(): array {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'query' => ['type' => 'string', 'description' => 'Search query'],
+                'top_k' => ['type' => 'integer', 'description' => 'Results count', 'default' => 5],
+            ],
+            'required' => ['query'],
+        ];
+    }
+
+    public function execute(array $args): ToolResult {
+        $query = $args['query'];
+        $topK = $args['top_k'] ?? 5;
+        $results = $this->searchService->search($query, $topK);
+        return ToolResult::text(json_encode($results));
+    }
 }
 ```
 
-### Via Agent Invocation
+## Server Entry Point
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
 
-## Configuration Reference
+use ModelContextProtocol\Server;
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+$server = new Server('my-mcp-server', '1.0.0');
+$server->addTool(new SearchDocumentsTool($searchService));
+$server->serveStdio();
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tool not found | Not registered with addTool | Register before serveStdio() |
+| JSON decode error | Invalid input schema | Validate schema matches spec |
+| Memory limit | Large result sets | Paginate results, limit response size |
+| Autoload fails | Composer not run | Run composer install / dump-autoload |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Type all tool parameters | Agent understands expected inputs |
+| Write descriptive tool docstrings | Agent matches tasks to tools |
+| Validate inputs before processing | Prevent injection and crashes |
+| Return structured JSON strings | Consistent parsing by consumers |
+| Add error messages in results | Agent can report failures to user |
+| Test tools independently | Verify behavior before server integration |
+
+## MCP Transport Options
+
+| Transport | Use Case | Config |
+|-----------|----------|--------|
+| stdio | VS Code Copilot, Claude Desktop | Default — no setup needed |
+| SSE | Web clients, remote access | Add HTTP server endpoint |
+| WebSocket | Real-time bidirectional | For streaming-heavy tools |
+
+## Related Skills
+
+- `fai-mcp-python-generator` — Python MCP with FastMCP
+- `fai-mcp-typescript-generator` — TypeScript MCP with SDK
+- `fai-mcp-csharp-scaffold` — C# MCP with ModelContextProtocol

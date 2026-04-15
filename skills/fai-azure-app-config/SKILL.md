@@ -1,161 +1,115 @@
 ---
 name: fai-azure-app-config
-description: 'Configures Azure App Configuration with feature flags, key-value settings, and refresh patterns.'
+description: |
+  Set up Azure App Configuration for centralized settings, feature flags, key-value
+  references, and environment-labeled configuration. Use when managing config across
+  multiple services or implementing feature flag rollouts.
 ---
 
-# Fai Azure App Config
+# Azure App Configuration
 
-Configures Azure App Configuration with feature flags, key-value settings, and refresh patterns.
+Centralize application settings with labels, feature flags, and Key Vault references.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure app configuration with feature flags, key-value settings, and refresh patterns.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Managing configuration across multiple microservices
+- Implementing feature flags for gradual rollout
+- Centralizing settings that change between dev/staging/prod
+- Referencing secrets from Key Vault without embedding them
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: configures azure app configuration with feature flags, key-value settings, and refresh patterns..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-app-config
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-app-config/"]
+```bicep
+resource appConfig 'Microsoft.AppConfiguration/configurationStores@2023-03-01' = {
+  name: appConfigName
+  location: location
+  sku: { name: 'standard' }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    publicNetworkAccess: 'Disabled'
+    disableLocalAuth: true
+    softDeleteRetentionInDays: 7
   }
 }
 ```
 
-### Via Agent Invocation
+## Label Strategy
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+Use labels to separate environments — same key, different values:
 
-## Configuration Reference
+```bash
+# Set value per environment
+az appconfig kv set --name $STORE --key "app:MaxTokens" \
+  --value 4096 --label dev
+az appconfig kv set --name $STORE --key "app:MaxTokens" \
+  --value 2048 --label prod
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+# Reference Key Vault secret
+az appconfig kv set-keyvault --name $STORE \
+  --key "app:OpenAIKey" --label prod \
+  --secret-identifier "https://kv-prod.vault.azure.net/secrets/openai-key"
 ```
 
-## Monitoring
+## Feature Flags
 
-Track skill execution metrics:
+```bash
+# Create a feature flag with targeting filter
+az appconfig feature set --name $STORE \
+  --feature "UseGPT4o" --label prod
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+# Add percentage filter (10% rollout)
+az appconfig feature filter add --name $STORE \
+  --feature "UseGPT4o" --label prod \
+  --filter-name "Microsoft.Percentage" \
+  --filter-parameters Percent=10
+```
+
+## .NET Integration
+
+```csharp
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
+           .Select(KeyFilter.Any, "prod")
+           .ConfigureKeyVault(kv => kv.SetCredential(new DefaultAzureCredential()))
+           .ConfigureRefresh(refresh =>
+           {
+               refresh.Register("app:Sentinel", refreshAll: true)
+                      .SetRefreshInterval(TimeSpan.FromSeconds(30));
+           })
+           .UseFeatureFlags(flags =>
+           {
+               flags.Label = "prod";
+               flags.CacheExpirationInterval = TimeSpan.FromSeconds(30);
+           });
+});
+```
+
+## Python Integration
+
+```python
+from azure.appconfiguration.provider import load
+from azure.identity import DefaultAzureCredential
+
+config = load(
+    endpoint="https://appcfg-prod.azconfig.io",
+    credential=DefaultAzureCredential(),
+    selects=[{"key_filter": "app:*", "label_filter": "prod"}],
+    keyvault_credential=DefaultAzureCredential(),
+    refresh_on=[{"key": "app:Sentinel", "label": "prod"}],
+    refresh_interval=30,
+)
+
+max_tokens = config["app:MaxTokens"]
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Config drift between environments | No label discipline | Enforce label strategy and promote via pipeline |
+| Key Vault reference fails | MI missing Key Vault Secrets User | Grant RBAC role on Key Vault |
+| Feature flag not activating | Stale cache | Trigger sentinel key update to force refresh |
+| Slow startup | Loading too many keys | Narrow select filter with key prefix |

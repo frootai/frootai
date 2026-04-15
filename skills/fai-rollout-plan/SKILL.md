@@ -1,156 +1,117 @@
 ---
 name: fai-rollout-plan
-description: "Plan phased rollouts for AI features — canary percentages, promotion gates, rollback triggers, and timeline."
+description: |
+  Create deployment rollout plans with staged promotion, health checks, rollback
+  triggers, and communication templates. Use when deploying changes to production
+  with risk-managed incremental rollout.
 ---
 
-# Fai Rollout Plan
+# Rollout Plan
 
-name: fai-rollout-plan
+Plan staged deployments with health checks, rollback triggers, and communication.
+
+## When to Use
+
+- Deploying major changes to production
+- Setting up canary or blue-green deployments
+- Creating rollback runbooks
+- Communicating deployment status to stakeholders
+
+---
+
+## Rollout Plan Template
+
+```markdown
+# Rollout Plan — [Feature/Release]
 
 ## Overview
+- **Release:** v2.1.0
+- **Owner:** [name]
+- **Date:** YYYY-MM-DD
+- **Risk:** Low / Medium / High
 
-This skill provides a structured, repeatable procedure for name: fai-rollout-plan. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Pre-Deployment
+- [ ] All CI checks pass on release branch
+- [ ] Staging smoke tests pass
+- [ ] Rollback procedure tested
+- [ ] Monitoring dashboards open
+- [ ] On-call engineer notified
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+## Deployment Stages
 
-## Parameters
+### Stage 1: Canary (5% traffic)
+- **Duration:** 30 minutes
+- **Health checks:**
+  - [ ] Error rate < 0.1%
+  - [ ] P95 latency < 2s
+  - [ ] No new exception types
+- **Go/No-Go:** If all checks pass → proceed to Stage 2
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### Stage 2: Partial (25% traffic)
+- **Duration:** 2 hours
+- **Health checks:** Same as Stage 1
+- **Go/No-Go:** If all checks pass → proceed to Stage 3
 
-## Steps
+### Stage 3: Full (100% traffic)
+- **Duration:** Monitor for 24 hours
+- **Health checks:** Same + business KPIs stable
 
-### Step 1: Validate Prerequisites
+## Rollback Triggers
+- Error rate > 1% sustained for 5 minutes
+- P95 latency > 5s
+- Any P1 incident attributed to release
+- Rollback command: `az webapp deployment slot swap --slot staging`
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+## Communication
+| When | To | Channel | Message |
+|------|-----|---------|---------|
+| Start | Engineering | Slack #deploy | "Starting v2.1.0 rollout" |
+| Stage 2 | Engineering | Slack #deploy | "25% traffic, metrics healthy" |
+| Complete | All stakeholders | Email | "v2.1.0 deployed successfully" |
+| Rollback | All stakeholders | Slack + Email | "Rolling back v2.1.0 — [reason]" |
 ```
 
-### Step 2: Load Configuration
+## Post-Deployment
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```markdown
+- [ ] Remove feature flags no longer needed
+- [ ] Update documentation
+- [ ] Close related issues/PRs
+- [ ] Update changelog
+- [ ] Post-deployment review (lessons learned)
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: name: fai-rollout-plan.
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-rollout-plan
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-rollout-plan/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Canary shows elevated errors | Bug in new code | Rollback immediately, debug in staging |
+| Rollback takes too long | No pre-staged rollback | Keep previous version deployed in staging slot |
+| No one monitoring | No ownership | Assign on-call for deployment window |
+| Stakeholders surprised | No communication plan | Send start/progress/complete notifications |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

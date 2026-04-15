@@ -1,160 +1,109 @@
 ---
 name: fai-mcp-java-scaffold
-description: 'Scaffolds a complete java MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.'
+description: |
+  Scaffold Java MCP servers with Spring Boot integration, typed tool beans,
+  and structured error handling. Use when building MCP servers in Java
+  for enterprise AI agent tool access.
 ---
 
-# Fai Mcp Java Scaffold
+# Java MCP Server Scaffold
 
-Scaffolds a complete java MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
+Build MCP servers in Java with Spring Boot and typed tool definitions.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a complete java mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building MCP servers for enterprise Java environments
+- Integrating with existing Spring Boot applications
+- Exposing Java services as AI agent tools
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Maven Dependencies
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```xml
+<dependency>
+    <groupId>io.modelcontextprotocol</groupId>
+    <artifactId>mcp-spring-boot-starter</artifactId>
+    <version>0.9.0</version>
+</dependency>
 ```
 
-### Step 2: Load Configuration
+## Tool Definition
 
-Read settings from the FAI manifest and TuneKit config files.
+```java
+import io.modelcontextprotocol.annotation.McpTool;
+import io.modelcontextprotocol.annotation.McpParam;
+import org.springframework.stereotype.Component;
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+@Component
+public class SearchTools {
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a complete java mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-java-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-mcp-java-scaffold/"]
-  }
+    @McpTool(name = "search_documents",
+             description = "Search knowledge base documents by query")
+    public String searchDocuments(
+            @McpParam(name = "query", required = true,
+                      description = "Search query text") String query,
+            @McpParam(name = "top_k",
+                      description = "Number of results") Integer topK) {
+        if (topK == null) topK = 5;
+        var results = searchService.search(query, topK);
+        return objectMapper.writeValueAsString(results);
+    }
 }
 ```
 
-### Via Agent Invocation
+## Application Config
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```yaml
+# application.yml
+mcp:
+  server:
+    name: my-mcp-server
+    version: 1.0.0
+    transport: stdio
 ```
 
-## Monitoring
+## Spring Boot Main
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+```java
+@SpringBootApplication
+public class McpServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(McpServerApplication.class, args);
+    }
+}
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tool not registered | Missing @Component | Add @Component to tool class |
+| Serialization error | Complex return type | Return String (serialize manually) |
+| Slow startup | Full Spring context | Use Spring Boot 3.x with AOT |
+| Classpath conflict | Dependency version mismatch | Check BOM alignment |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Type all tool parameters | Agent understands expected inputs |
+| Write descriptive tool docstrings | Agent matches tasks to tools |
+| Validate inputs before processing | Prevent injection and crashes |
+| Return structured JSON strings | Consistent parsing by consumers |
+| Add error messages in results | Agent can report failures to user |
+| Test tools independently | Verify behavior before server integration |
+
+## MCP Transport Options
+
+| Transport | Use Case | Config |
+|-----------|----------|--------|
+| stdio | VS Code Copilot, Claude Desktop | Default — no setup needed |
+| SSE | Web clients, remote access | Add HTTP server endpoint |
+| WebSocket | Real-time bidirectional | For streaming-heavy tools |
+
+## Related Skills
+
+- `fai-mcp-python-generator` — Python MCP with FastMCP
+- `fai-mcp-typescript-generator` — TypeScript MCP with SDK
+- `fai-mcp-csharp-scaffold` — C# MCP with ModelContextProtocol

@@ -1,156 +1,110 @@
 ---
 name: fai-nextjs-scaffold
-description: 'Scaffolds a Next.js 16 project with App Router, Tailwind, TypeScript, and static export.'
+description: |
+  Scaffold Next.js applications with App Router, server components, API routes,
+  and deployment configuration. Use when building React frontends with SSR,
+  static export, or full-stack Next.js applications.
 ---
 
-# Fai Nextjs Scaffold
+# Next.js Scaffold
 
-Scaffolds a Next.js 16 project with App Router, Tailwind, TypeScript, and static export.
+Scaffold production Next.js apps with App Router, server components, and deployment.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a next.js 16 project with app router, tailwind, typescript, and static export.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building React frontends with server-side rendering
+- Creating full-stack apps with API routes
+- Setting up static export for Azure Static Web Apps
+- Configuring Next.js with TypeScript and Tailwind
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Project Structure
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx        # Root layout
+│   │   ├── page.tsx          # Home page
+│   │   ├── globals.css       # Global styles
+│   │   └── api/
+│   │       └── chat/
+│   │           └── route.ts  # API route
+│   ├── components/
+│   │   ├── ui/               # Reusable UI components
+│   │   └── chat-widget.tsx   # Feature component
+│   └── lib/
+│       └── openai.ts         # OpenAI client
+├── public/                   # Static assets
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-### Step 2: Load Configuration
+## App Router Page
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a next.js 16 project with app router, tailwind, typescript, and static export..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-nextjs-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-nextjs-scaffold/"]
-  }
+```tsx
+// src/app/page.tsx
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center p-24">
+      <h1 className="text-4xl font-bold">AI Chat</h1>
+      <ChatWidget />
+    </main>
+  );
 }
 ```
 
-### Via Agent Invocation
+## API Route
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```typescript
+// src/app/api/chat/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+export async function POST(req: NextRequest) {
+  const { message } = await req.json();
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [{ role: 'user', content: message }],
+  });
+  return NextResponse.json({ reply: response.choices[0].message.content });
 }
 ```
 
-## Monitoring
+## Server Component with Data Fetching
 
-Track skill execution metrics:
+```tsx
+// src/app/dashboard/page.tsx
+async function getData() {
+  const res = await fetch('https://api.example.com/stats', { next: { revalidate: 60 } });
+  return res.json();
+}
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+export default async function Dashboard() {
+  const data = await getData();
+  return <div>{data.totalUsers} users</div>;
+}
+```
+
+## Static Export Config
+
+```typescript
+// next.config.ts
+const config = {
+  output: 'export',          // Static HTML export
+  images: { unoptimized: true }, // Required for static
+  trailingSlash: true,
+};
+export default config;
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Hydration mismatch | Server/client content differs | Use `use client` for interactive components |
+| API route 404 | Wrong file path | Must be `app/api/.../route.ts` |
+| Static export fails | Using server features | Remove dynamic routes or use generateStaticParams |
+| Build OOM | Large page count | Set NODE_OPTIONS=--max-old-space-size=4096 |

@@ -1,156 +1,125 @@
 ---
 name: fai-tune-06-document-intelligence
-description: 'Tunes configuration for Play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: |
+  Tune Document Intelligence OCR model selection, field extraction confidence,
+  and multi-format processing. Use when optimizing Azure Document Intelligence
+  for invoice, receipt, ID, or custom form extraction.
 ---
 
-# Fai Tune 06 Document Intelligence
+# Tune Document Intelligence
 
-Tunes configuration for Play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization.
+Optimize Azure Document Intelligence for field extraction accuracy and throughput.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Tuning OCR accuracy for specific document types
+- Selecting between prebuilt and custom models
+- Configuring confidence thresholds for extraction
+- Optimizing multi-format processing pipelines
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Model Selection
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Document Type | Model | Accuracy |
+|--------------|-------|----------|
+| Invoices | prebuilt-invoice | High (95%+) |
+| Receipts | prebuilt-receipt | High |
+| ID documents | prebuilt-idDocument | High |
+| Custom forms | Custom trained | Varies (train with 5+ samples) |
+| General text | prebuilt-read | Good for OCR-only |
+| Layout + tables | prebuilt-layout | Good for structured docs |
 
-## Steps
+## Python SDK Usage
 
-### Step 1: Validate Prerequisites
+```python
+from azure.ai.documentintelligence import DocumentIntelligenceClient
+from azure.identity import DefaultAzureCredential
 
-Verify all required tools, credentials, and dependencies are available.
+client = DocumentIntelligenceClient(
+    endpoint="https://di-prod.cognitiveservices.azure.com",
+    credential=DefaultAzureCredential()
+)
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Analyze invoice
+with open("invoice.pdf", "rb") as f:
+    poller = client.begin_analyze_document("prebuilt-invoice", body=f, content_type="application/pdf")
+
+result = poller.result()
+for doc in result.documents:
+    vendor = doc.fields.get("VendorName")
+    total = doc.fields.get("InvoiceTotal")
+    print(f"Vendor: {vendor.content} (confidence: {vendor.confidence:.2f})")
+    print(f"Total: {total.content} (confidence: {total.confidence:.2f})")
 ```
 
-### Step 2: Load Configuration
+## Confidence Thresholds
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-06-document-intelligence
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-tune-06-document-intelligence/"]
-  }
+```python
+CONFIDENCE_THRESHOLDS = {
+    "high": 0.90,    # Auto-accept
+    "medium": 0.70,  # Flag for review
+    "low": 0.50,     # Require manual entry
 }
+
+def route_by_confidence(field_name: str, value, confidence: float) -> dict:
+    if confidence >= CONFIDENCE_THRESHOLDS["high"]:
+        return {"field": field_name, "value": value, "action": "accept"}
+    elif confidence >= CONFIDENCE_THRESHOLDS["medium"]:
+        return {"field": field_name, "value": value, "action": "review"}
+    else:
+        return {"field": field_name, "value": None, "action": "manual"}
 ```
 
-### Via Agent Invocation
+## Multi-Format Pipeline
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+SUPPORTED = {".pdf": "application/pdf", ".png": "image/png",
+             ".jpg": "image/jpeg", ".tiff": "image/tiff"}
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+def process_document(path: str, model: str = "prebuilt-invoice"):
+    ext = Path(path).suffix.lower()
+    content_type = SUPPORTED.get(ext)
+    if not content_type:
+        raise ValueError(f"Unsupported format: {ext}")
+    with open(path, "rb") as f:
+        poller = client.begin_analyze_document(model, body=f, content_type=content_type)
+    return poller.result()
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low extraction accuracy | Wrong model for doc type | Match prebuilt model to document category |
+| Fields missing | Document layout varies | Train custom model with 5+ representative samples |
+| Slow processing | Large files, no batching | Use async API, process pages in parallel |
+| Confidence too low | Poor scan quality | Require 300+ DPI, good contrast scans |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tune one parameter at a time | Isolate impact of each change |
+| Always measure before and after | Evidence-based tuning |
+| Use evaluation dataset for comparison | Objective quality measurement |
+| Keep previous config for rollback | Instant revert if quality drops |
+| Document tuning decisions | Future reference for the team |
+| Automate tuning evaluation | Reduce manual effort |
+
+## Tuning Workflow
+
+```
+1. Baseline eval → record current scores
+2. Change ONE parameter
+3. Re-run eval → compare to baseline
+4. If improved → keep change, update baseline
+5. If regressed → revert change
+6. Repeat for next parameter
+```
+
+## Related Skills
+
+- `fai-tune-01-enterprise-rag` — RAG tuning playbook
+- `fai-evaluation-framework` — Eval infrastructure
+- `fai-inference-optimization` — Latency and cost optimization

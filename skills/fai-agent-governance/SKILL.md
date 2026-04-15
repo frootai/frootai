@@ -1,170 +1,228 @@
 ---
 name: fai-agent-governance
-description: 'Reviews AI agent implementations for safety, budget controls, and human-in-the-loop patterns.'
+description: |
+  Patterns for adding governance, safety, and trust controls to AI agent systems. Use this skill when:
+  - Building agents that call external tools (APIs, databases, file systems)
+  - Implementing policy-based access controls for agent tool usage
+  - Adding intent classification to detect dangerous prompts
+  - Creating audit trails for agent actions and decisions
+  - Enforcing rate limits, content filters, or tool restrictions
 ---
 
-# Fai Agent Governance
+# Agent Governance Patterns
 
-Reviews AI agent implementations for safety, budget controls, and human-in-the-loop patterns.
+Patterns for adding safety, trust, and policy enforcement to AI agent systems.
 
 ## Overview
 
-This skill provides a structured, repeatable procedure for reviews ai agent implementations for safety, budget controls, and human-in-the-loop patterns.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+Governance patterns ensure AI agents operate within defined boundaries — controlling which tools they can call, what content they can process, and maintaining accountability through audit trails.
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+User Request → Intent Classification → Policy Check → Tool Execution → Audit Log
+                     ↓                      ↓               ↓
+              Threat Detection         Allow/Deny      Trust Update
 ```
 
-### Step 2: Load Configuration
+## When to Use
 
-Read settings from the FAI manifest and TuneKit config files.
+- **Agents with tool access**: Any agent calling external tools, APIs, databases, or shell commands
+- **Multi-agent systems**: Agents delegating to other agents need trust boundaries
+- **Production deployments**: Compliance, audit, and safety requirements
+- **Sensitive operations**: Financial transactions, data access, infrastructure changes
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+---
 
-### Step 3: Execute Core Logic
+## Pattern 1: Governance Policy
 
-Perform the primary operation: reviews ai agent implementations for safety, budget controls, and human-in-the-loop patterns..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 07**
-- **Play 22**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-agent-governance
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-agent-governance/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Evaluation Pipeline
-
-This skill integrates with the FAI evaluation framework:
+Define what an agent is allowed to do as a composable, serializable policy object.
 
 ```python
-from frootai.evaluation import SkillEvaluator
+from dataclasses import dataclass, field
+from enum import Enum
+import re
 
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
+class PolicyAction(Enum):
+    ALLOW = "allow"
+    DENY = "deny"
+    REVIEW = "review"
 
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
+@dataclass
+class GovernancePolicy:
+    """Declarative policy controlling agent behavior."""
+    name: str
+    allowed_tools: list[str] = field(default_factory=list)
+    blocked_tools: list[str] = field(default_factory=list)
+    blocked_patterns: list[str] = field(default_factory=list)
+    max_calls_per_request: int = 100
+    require_approval: list[str] = field(default_factory=list)
+
+    def check_tool(self, tool_name: str) -> PolicyAction:
+        if tool_name in self.blocked_tools:
+            return PolicyAction.DENY
+        if tool_name in self.require_approval:
+            return PolicyAction.REVIEW
+        if self.allowed_tools and tool_name not in self.allowed_tools:
+            return PolicyAction.DENY
+        return PolicyAction.ALLOW
+
+    def check_content(self, content: str) -> str | None:
+        for pattern in self.blocked_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                return pattern
+        return None
 ```
 
-## Advanced Configuration
+### Policy as YAML Configuration
 
-```json
-{
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
-}
+Store policies as configuration, not code:
+
+```yaml
+# governance-policy.yaml
+name: production-agent
+allowed_tools:
+  - search_documents
+  - query_database
+  - send_email
+blocked_tools:
+  - shell_exec
+  - delete_record
+blocked_patterns:
+  - "(?i)(api[_-]?key|secret|password)\\s*[:=]"
+  - "(?i)(drop|truncate|delete from)\\s+\\w+"
+max_calls_per_request: 25
+require_approval:
+  - send_email
 ```
 
-## Anti-Patterns
+---
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
+## Pattern 2: Tool-Level Governance Decorator
 
-## Notes
+Wrap tool functions with governance enforcement:
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+```python
+import functools, time
+from collections import defaultdict
+
+_counters: dict[str, int] = defaultdict(int)
+
+def govern(policy: GovernancePolicy, audit=None):
+    """Decorator that enforces governance policy on a tool function."""
+    def decorator(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            tool = func.__name__
+            action = policy.check_tool(tool)
+            if action == PolicyAction.DENY:
+                raise PermissionError(f"Policy '{policy.name}' blocks '{tool}'")
+            if action == PolicyAction.REVIEW:
+                raise PermissionError(f"'{tool}' requires human approval")
+
+            _counters[policy.name] += 1
+            if _counters[policy.name] > policy.max_calls_per_request:
+                raise PermissionError("Rate limit exceeded")
+
+            for arg in list(args) + list(kwargs.values()):
+                if isinstance(arg, str):
+                    matched = policy.check_content(arg)
+                    if matched:
+                        raise PermissionError(f"Blocked pattern: {matched}")
+
+            start = time.monotonic()
+            try:
+                result = await func(*args, **kwargs)
+                if audit is not None:
+                    audit.append({"tool": tool, "action": "allowed",
+                                  "ms": (time.monotonic()-start)*1000})
+                return result
+            except Exception as e:
+                if audit is not None:
+                    audit.append({"tool": tool, "action": "error", "error": str(e)})
+                raise
+        return wrapper
+    return decorator
+
+# Usage
+policy = GovernancePolicy(
+    name="search-agent",
+    allowed_tools=["search", "summarize"],
+    blocked_patterns=[r"(?i)password"],
+    max_calls_per_request=10
+)
+
+@govern(policy)
+async def search(query: str) -> str:
+    return f"Results for: {query}"
+```
+
+---
+
+## Pattern 3: Semantic Intent Classification
+
+Detect dangerous intent before tool execution:
+
+```python
+THREAT_SIGNALS = [
+    (r"(?i)send\s+(all|every)\s+\w+\s+to\s+", "data_exfiltration", 0.8),
+    (r"(?i)(sudo|as\s+root|admin\s+access)", "privilege_escalation", 0.8),
+    (r"(?i)(rm\s+-rf|drop\s+database)", "system_destruction", 0.95),
+    (r"(?i)ignore\s+(previous|above)\s+(instructions?|rules?)", "prompt_injection", 0.9),
+]
+
+def classify_intent(content: str) -> list[dict]:
+    signals = []
+    for pattern, category, weight in THREAT_SIGNALS:
+        if re.search(pattern, content):
+            signals.append({"category": category, "confidence": weight})
+    return signals
+
+def is_safe(content: str, threshold: float = 0.7) -> bool:
+    return not any(s["confidence"] >= threshold for s in classify_intent(content))
+```
+
+---
+
+## Pattern 4: Append-Only Audit Trail
+
+```python
+import json, time
+
+class AuditTrail:
+    def __init__(self):
+        self._entries = []
+
+    def log(self, agent_id: str, tool: str, action: str, **details):
+        self._entries.append({
+            "timestamp": time.time(), "agent_id": agent_id,
+            "tool": tool, "action": action, **details
+        })
+
+    def denied(self):
+        return [e for e in self._entries if e["action"] == "denied"]
+
+    def export_jsonl(self, path: str):
+        with open(path, "w") as f:
+            for entry in self._entries:
+                f.write(json.dumps(entry) + "\n")
+```
+
+---
+
+## Governance Levels
+
+| Level | Controls | Use Case |
+|-------|----------|----------|
+| **Open** | Audit only | Internal dev/testing |
+| **Standard** | Tool allowlist + content filters | General production |
+| **Strict** | All controls + human approval | Financial, healthcare |
+| **Locked** | Allowlist only, full audit | Compliance-critical |
+
+## Best Practices
+
+| Practice | Rationale |
+|----------|-----------|
+| Policy as configuration | Enables change without deploys |
+| Most-restrictive-wins | Deny always overrides allow when composing policies |
+| Pre-flight intent check | Classify before execution, not after |
+| Append-only audit | Immutability enables compliance |
+| Fail closed | If governance check errors, deny the action |

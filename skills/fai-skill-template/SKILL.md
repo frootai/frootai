@@ -1,156 +1,106 @@
 ---
 name: fai-skill-template
-description: 'Generates a SKILL.md template with frontmatter, sections, template variables, and verification steps.'
+description: |
+  Create SKILL.md files following the Agent Skills specification with proper
+  frontmatter, structured content, and progressive disclosure. Use when
+  authoring new skills for VS Code Copilot, Claude, or other agent platforms.
 ---
 
-# Fai Skill Template
+# Skill Template
 
-Generates a SKILL.md template with frontmatter, sections, template variables, and verification steps.
+Author SKILL.md files following the Agent Skills specification.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates a skill.md template with frontmatter, sections, template variables, and verification steps.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating a new skill for VS Code Copilot
+- Following the agentskills.io specification
+- Ensuring skill metadata enables proper agent matching
+- Structuring content for progressive disclosure
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Specification Requirements
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Field | Required | Constraints |
+|-------|----------|-------------|
+| name | Yes | 1-64 chars, lowercase, hyphens, match folder |
+| description | Yes | 1-1024 chars, WHAT + WHEN keywords |
+| license | No | License name or file reference |
+| compatibility | No | Environment requirements |
+| metadata | No | Arbitrary key-value map |
 
-## Steps
+## Template
 
-### Step 1: Validate Prerequisites
+```markdown
+---
+name: my-skill-name
+description: |
+  [Verb] [domain objects] with [techniques/tools]. Use this skill when:
+  - [Scenario 1 that triggers this skill]
+  - [Scenario 2]
+  - [Scenario 3]
+---
 
-Verify all required tools, credentials, and dependencies are available.
+# [Skill Title]
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+[One-sentence summary of what the skill does.]
 
-### Step 2: Load Configuration
+## When to Use
 
-Read settings from the FAI manifest and TuneKit config files.
+- [Specific trigger 1]
+- [Specific trigger 2]
+- [Specific trigger 3]
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+---
 
-### Step 3: Execute Core Logic
+## [Pattern/Step/Section 1]
 
-Perform the primary operation: generates a skill.md template with frontmatter, sections, template variables, and verification steps..
+\`\`\`[language]
+[Real, runnable code example]
+\`\`\`
 
-### Step 4: Validate Results
+## [Pattern/Step/Section 2]
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-skill-template
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-skill-template/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+\`\`\`[language]
+[Real, runnable code example]
+\`\`\`
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| [Problem 1] | [Root cause] | [Solution] |
+| [Problem 2] | [Root cause] | [Solution] |
+```
 
-## Notes
+## Quality Checklist
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+- [ ] Name matches folder name exactly
+- [ ] Description is keyword-rich (WHAT + WHEN)
+- [ ] Description is multi-line with `|` for trigger list
+- [ ] Content has real code in correct language
+- [ ] 100-300 lines (sweet spot for token budget)
+- [ ] Troubleshooting table with domain-specific issues
+- [ ] No generic boilerplate — every line adds value
+
+## Description Quality Examples
+
+```yaml
+# Bad — too generic
+description: "Helps with testing"
+
+# Good — keyword-rich with triggers
+description: |
+  Write pytest tests with coverage reporting, parametrized cases, and
+  async fixtures. Use when setting up Python test infrastructure or
+  enforcing coverage thresholds in CI.
+```
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Skill not discovered | Name doesn't match folder | Ensure name == folder name |
+| Agent never invokes skill | Description too vague | Add specific trigger scenarios |
+| Skill too expensive to load | Over 500 lines | Move detail to references/ folder |
+| Code examples outdated | No review cadence | Review quarterly |

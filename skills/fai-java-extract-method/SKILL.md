@@ -1,156 +1,107 @@
 ---
 name: fai-java-extract-method
-description: 'Applies Extract Method refactoring in Java with proper error handling and testing.'
+description: |
+  Apply extract-method refactoring in Java with behavior preservation, test
+  coverage validation, and IDE-assisted automation. Use when reducing method
+  complexity or improving code readability in Java projects.
 ---
 
-# Fai Java Extract Method
+# Java Extract Method Refactoring
 
-Applies Extract Method refactoring in Java with proper error handling and testing.
+Safely extract methods from complex Java code with behavior preservation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for applies extract method refactoring in java with proper error handling and testing.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Methods exceed 30-50 lines (too long)
+- Same logic repeated in multiple places
+- Method has multiple responsibilities
+- Improving testability by isolating logic
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Before: Long Method
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```java
+public OrderResult processOrder(Order order) {
+    // Validate
+    if (order.getItems().isEmpty()) throw new IllegalArgumentException("Empty order");
+    if (order.getCustomer() == null) throw new IllegalArgumentException("No customer");
 
-## Steps
+    // Calculate totals
+    double subtotal = 0;
+    for (OrderItem item : order.getItems()) {
+        subtotal += item.getPrice() * item.getQuantity();
+    }
+    double tax = subtotal * 0.08;
+    double total = subtotal + tax;
 
-### Step 1: Validate Prerequisites
+    // Apply discount
+    if (order.getCustomer().isVip()) {
+        total *= 0.9;
+    }
 
-Verify all required tools, credentials, and dependencies are available.
+    // Save
+    order.setTotal(total);
+    orderRepository.save(order);
+    notificationService.sendConfirmation(order);
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: applies extract method refactoring in java with proper error handling and testing..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-java-extract-method
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-java-extract-method/"]
-  }
+    return new OrderResult(order.getId(), total);
 }
 ```
 
-### Via Agent Invocation
+## After: Extracted Methods
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```java
+public OrderResult processOrder(Order order) {
+    validateOrder(order);
+    double total = calculateTotal(order);
+    return finalizeOrder(order, total);
+}
 
-## Configuration Reference
+private void validateOrder(Order order) {
+    if (order.getItems().isEmpty()) throw new IllegalArgumentException("Empty order");
+    if (order.getCustomer() == null) throw new IllegalArgumentException("No customer");
+}
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+private double calculateTotal(Order order) {
+    double subtotal = order.getItems().stream()
+        .mapToDouble(i -> i.getPrice() * i.getQuantity())
+        .sum();
+    double total = subtotal + subtotal * TAX_RATE;
+    return order.getCustomer().isVip() ? total * VIP_DISCOUNT : total;
+}
+
+private OrderResult finalizeOrder(Order order, double total) {
+    order.setTotal(total);
+    orderRepository.save(order);
+    notificationService.sendConfirmation(order);
+    return new OrderResult(order.getId(), total);
 }
 ```
 
-## Monitoring
+## Extraction Rules
 
-Track skill execution metrics:
+| Rule | Why |
+|------|-----|
+| Name describes WHAT, not HOW | `calculateTotal` not `doCalculation` |
+| Extract when >1 responsibility | Single Responsibility Principle |
+| Keep extracted method at same access level | Don't expose internals |
+| Parameters: 0-3 max | More = create a parameter object |
+| Never change behavior during extraction | Refactor ≠ rewrite |
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## IDE Automation
+
+```
+IntelliJ: Select code → Ctrl+Alt+M (Extract Method)
+Eclipse: Select code → Alt+Shift+M
+VS Code: Select code → Ctrl+Shift+R → Extract Method
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tests break after extract | Changed behavior accidentally | Extract only, don't modify logic |
+| Too many parameters | Extracting from middle of method | Pass object or restructure |
+| Extracted method too generic | Bad naming | Name by domain intent, not implementation |
+| Performance regression | Extra method call overhead | Negligible — JIT inlines small methods |

@@ -12,6 +12,7 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Check frootai.dev
         id: website
@@ -51,7 +52,7 @@ jobs:
 
       - name: Create issue on failure
         if: steps.website.outcome == 'failure' || steps.chatbot.outcome == 'failure'
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             const website = '${{ steps.website.outputs.status }}';
@@ -82,3 +83,13 @@ jobs:
                 labels: ['downtime', 'automated'],
               });
             }
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Uptime Check" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| frootai.dev | ${{ steps.website.outcome }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Chatbot API | ${{ steps.chatbot.outcome }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| npm Registry | ${{ steps.npm.outcome }} |" >> $GITHUB_STEP_SUMMARY

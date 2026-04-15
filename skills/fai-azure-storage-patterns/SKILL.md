@@ -1,169 +1,122 @@
 ---
 name: fai-azure-storage-patterns
-description: 'Implements cross-service Azure Storage patterns — Blob, Queue, Table, File.'
+description: |
+  Apply Azure Storage design patterns for blobs, queues, tables, and files with
+  lifecycle management, private access, SAS policies, and replication strategies.
+  Use when designing storage architecture for AI data pipelines.
 ---
 
-# Fai Azure Storage Patterns
+# Azure Storage Patterns
 
-Implements cross-service Azure Storage patterns — Blob, Queue, Table, File.
+Design patterns for blobs, queues, tables, and files with security and lifecycle management.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for implements cross-service azure storage patterns — blob, queue, table, file.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Designing blob storage for AI training data and document pipelines
+- Implementing queue-based async processing patterns
+- Setting up storage with private endpoints and SAS policies
+- Configuring lifecycle tiering for cost optimization
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep: Hardened Storage Account
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: implements cross-service azure storage patterns — blob, queue, table, file..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-storage-patterns
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-storage-patterns/"]
+```bicep
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: storageName
+  location: location
+  kind: 'StorageV2'
+  sku: { name: 'Standard_ZRS' }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    allowBlobPublicAccess: false
+    allowSharedKeyAccess: false    // Force AAD/MI auth
+    minimumTlsVersion: 'TLS1_2'
+    publicNetworkAccess: 'Disabled'
+    networkAcls: { defaultAction: 'Deny' }
+    supportsHttpsTrafficOnly: true
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## RAG Pipeline Reference
-
-| Stage | Tool | Config |
-|-------|------|--------|
-| Chunking | Semantic chunker | 512 tokens, 10% overlap |
-| Embedding | text-embedding-3-large | 3072 dimensions |
-| Indexing | Azure AI Search | Hybrid (vector + BM25) |
-| Retrieval | Hybrid search | 60% semantic, 40% keyword |
-| Reranking | Semantic reranker | Top 5 after rerank |
-| Generation | GPT-4o | temp=0.1, top_p=0.9 |
-
-## Chunking Strategy
+## Pattern 1: Blob Upload with MI
 
 ```python
-from azure.ai.formrecognizer import DocumentAnalysisClient
+from azure.storage.blob import BlobServiceClient
+from azure.identity import DefaultAzureCredential
 
-# Semantic chunking preserves paragraph boundaries
-chunks = semantic_chunk(
-    text=document,
-    max_tokens=512,
-    overlap_tokens=50,
-    respect_boundaries=True  # Don't split mid-sentence
+client = BlobServiceClient(
+    account_url="https://storageai.blob.core.windows.net",
+    credential=DefaultAzureCredential(),
 )
+
+container = client.get_container_client("documents")
+with open("report.pdf", "rb") as f:
+    container.upload_blob("reports/2026/report.pdf", f, overwrite=True,
+        metadata={"category": "invoice", "processed": "false"})
 ```
 
-## Search Configuration
+## Pattern 2: Queue-Based Async Processing
+
+```python
+from azure.storage.queue import QueueServiceClient
+import json, base64
+
+queue_client = QueueServiceClient(
+    account_url="https://storageai.queue.core.windows.net",
+    credential=DefaultAzureCredential(),
+).get_queue_client("processing-tasks")
+
+# Enqueue
+message = json.dumps({"blob": "reports/2026/report.pdf", "action": "embed"})
+queue_client.send_message(base64.b64encode(message.encode()).decode())
+
+# Dequeue and process
+for msg in queue_client.receive_messages(max_messages=5, visibility_timeout=60):
+    task = json.loads(base64.b64decode(msg.content))
+    process(task)
+    queue_client.delete_message(msg)
+```
+
+## Pattern 3: SAS Token with Short Expiry
+
+```python
+from azure.storage.blob import generate_blob_sas, BlobSasPermissions
+from datetime import datetime, timedelta, timezone
+
+sas = generate_blob_sas(
+    account_name="storageai",
+    container_name="documents",
+    blob_name="reports/2026/report.pdf",
+    account_key=None,  # Use user delegation key with MI instead
+    permission=BlobSasPermissions(read=True),
+    expiry=datetime.now(timezone.utc) + timedelta(hours=1),
+)
+url = f"https://storageai.blob.core.windows.net/documents/reports/2026/report.pdf?{sas}"
+```
+
+## Lifecycle Management
 
 ```json
 {
-  "search_type": "hybrid",
-  "semantic_weight": 0.6,
-  "keyword_weight": 0.4,
-  "top_k": 5,
-  "min_score": 0.78,
-  "reranker": "semantic",
-  "filter": "category eq 'technical'"
+  "rules": [
+    { "name": "cool-30d", "type": "Lifecycle", "definition": {
+        "filters": { "blobTypes": ["blockBlob"], "prefixMatch": ["documents/"] },
+        "actions": { "baseBlob": { "tierToCool": { "daysAfterModificationGreaterThan": 30 }}}
+    }},
+    { "name": "archive-90d", "type": "Lifecycle", "definition": {
+        "filters": { "blobTypes": ["blockBlob"], "prefixMatch": ["documents/"] },
+        "actions": { "baseBlob": { "tierToArchive": { "daysAfterModificationGreaterThan": 90 }}}
+    }}
+  ]
 }
 ```
 
-## Notes
+## Troubleshooting
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Unexpected cost growth | No lifecycle tiering | Add Cool/Archive transitions |
+| 403 on blob access | Shared key disabled, MI role missing | Grant Storage Blob Data Contributor |
+| SAS token abuse | Long expiry or broad permissions | Use user delegation SAS with 1-hour max |
+| Queue poison messages | No max dequeue count | Set dequeueCount limit, move to poison queue |

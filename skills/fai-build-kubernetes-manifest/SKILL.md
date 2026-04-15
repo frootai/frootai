@@ -1,155 +1,123 @@
 ---
 name: fai-build-kubernetes-manifest
-description: 'Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.'
+description: |
+  Generate Kubernetes manifests with resource limits, health probes, secrets via
+  CSI driver, HPA autoscaling, and rollout strategies. Use when deploying AI
+  workloads to AKS or Kubernetes.
 ---
 
-# Fai Build Kubernetes Manifest
+# Kubernetes Manifest Patterns
 
-Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.
+Generate production manifests with limits, probes, secrets, and rollout strategies.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates kubernetes manifests with gpu scheduling, health probes, and autoscaling.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying AI inference services to AKS
+- Setting up GPU workloads for model serving
+- Configuring autoscaling for variable AI traffic
+- Implementing rolling updates with health checks
 
-**Category:** Build Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Deployment
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-api
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: ai-api } }
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  template:
+    metadata: { labels: { app: ai-api } }
+    spec:
+      containers:
+        - name: api
+          image: myacr.azurecr.io/ai-api:v1.2.0
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "500m", memory: "512Mi" }
+            limits: { cpu: "2", memory: "2Gi" }
+          env:
+            - name: AZURE_OPENAI_ENDPOINT
+              valueFrom: { secretKeyRef: { name: ai-secrets, key: endpoint } }
+          livenessProbe:
+            httpGet: { path: /health, port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet: { path: /ready, port: 8000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ```
 
-### Step 2: Load Configuration
+## HPA Autoscaling
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: { name: ai-api-hpa }
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: ai-api }
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }
 ```
 
-### Step 3: Execute Core Logic
+## Service + Ingress
 
-Perform the primary operation: generates kubernetes manifests with gpu scheduling, health probes, and autoscaling..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+```yaml
+apiVersion: v1
+kind: Service
+metadata: { name: ai-api }
+spec:
+  selector: { app: ai-api }
+  ports: [{ port: 80, targetPort: 8000 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-api
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls: [{ hosts: [api.example.com], secretName: tls-cert }]
+  rules:
+    - host: api.example.com
+      http:
+        paths: [{ path: /, pathType: Prefix,
+                  backend: { service: { name: ai-api, port: { number: 80 } } } }]
 ```
 
-## Output
+## Secrets with Azure Key Vault CSI
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-kubernetes-manifest
+```yaml
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata: { name: ai-secrets-provider }
+spec:
+  provider: azure
+  parameters:
+    useVMManagedIdentity: "true"
+    keyvaultName: kv-prod
+    objects: |
+      array:
+        - objectName: openai-endpoint
+          objectType: secret
+    tenantId: "your-tenant-id"
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-kubernetes-manifest/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Build Tooling category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| CrashLoopBackOff | Startup probe too aggressive | Increase failureThreshold |
+| OOMKilled | Memory limit too low | Increase limit, profile actual usage |
+| HPA not scaling | metrics-server missing | Install metrics-server or KEDA |
+| Secret mount empty | CSI driver not installed | Install secrets-store-csi-driver |

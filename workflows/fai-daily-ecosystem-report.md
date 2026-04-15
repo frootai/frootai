@@ -1,5 +1,5 @@
 ---
-name: FAI-daily-ecosystem-report
+name: fai-daily-ecosystem-report
 description: "Daily ecosystem health summary — primitive counts, marketplace stats, validation status, and recent changes across agents, instructions, skills, hooks, and plugins. The morning briefing for the FAI team."
 on:
   schedule:
@@ -194,15 +194,15 @@ Create an issue with the full ecosystem dashboard:
 
 | Type | Count | vs Baseline | Delta | Status |
 |------|-------|-------------|-------|--------|
-| Agents | 201 | +14 vs 187 | +2 ↑ | 🟢 Ahead |
+| Agents | 238 | +51 vs 187 | +2 ↑ | 🟢 Ahead |
 | Instructions | 176 | +1 vs 175 | +0 → | 🟢 Ahead |
-| Skills | 282 | +11 vs 271 | +3 ↑ | 🟢 Ahead |
+| Skills | 322 | +51 vs 271 | +3 ↑ | 🟢 Ahead |
 | Hooks | 10 | +4 vs 6 | +0 → | 🟢 Ahead |
 | Plugins | 77 | +12 vs 65 | +1 ↑ | 🟢 Ahead |
 | Workflows | 12 | — | +0 → | — |
 | Cookbook | 16 | — | +0 → | — |
-| Solution Plays | 68 | — | +0 → | — |
-| **Total Primitives** | **774** | — | **+6 ↑** | — |
+| Solution Plays | 101 | — | +0 → | — |
+| **Total Primitives** | **952** | — | **+6 ↑** | — |
 
 ## Marketplace
 
@@ -246,7 +246,7 @@ Create an issue with the full ecosystem dashboard:
 
 | Metric | Yesterday | Today | Trend |
 |--------|-----------|-------|-------|
-| Total primitives | 768 | 774 | ↑ +6 |
+| Total primitives | 946 | 952 | ↑ +6 |
 | Validation errors | 0 | 0 | → 0 |
 | Commits | 5 | 7 | ↑ +2 |
 

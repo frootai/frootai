@@ -1,0 +1,93 @@
+name: Validate Play Workflows
+
+on:
+  pull_request:
+    paths:
+      - 'solution-plays/**/.github/workflows/**'
+  push:
+    branches: [main]
+    paths:
+      - 'solution-plays/**/.github/workflows/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-play-workflows:
+    name: Validate solution play workflow YAML
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Validate all play workflows
+        run: |
+          node -e "
+          const fs = require('fs'), path = require('path'), yaml = require('module');
+          const dir = 'solution-plays';
+          const plays = fs.readdirSync(dir).filter(f => {
+            const fp = path.join(dir, f);
+            return fs.statSync(fp).isDirectory() && /^\d+/.test(f);
+          });
+          
+          let errors = 0, checked = 0;
+          
+          for (const play of plays) {
+            const wfDir = path.join(dir, play, '.github/workflows');
+            if (!fs.existsSync(wfDir)) continue;
+            
+            const wfs = fs.readdirSync(wfDir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml') || f.endsWith('.md'));
+            
+            for (const wf of wfs) {
+              checked++;
+              const fp = path.join(wfDir, wf);
+              const content = fs.readFileSync(fp, 'utf8');
+              
+              // Check for Play 01 path leaks
+              if (play !== '01-enterprise-rag' && content.includes('01-enterprise-rag')) {
+                console.error('❌ ' + play + '/' + wf + ': references 01-enterprise-rag (path leak)');
+                errors++;
+              }
+              
+              // Check for timeout-minutes
+              if (wf.endsWith('.yml') && !content.includes('timeout-minutes')) {
+                console.warn('⚠️ ' + play + '/' + wf + ': missing timeout-minutes');
+              }
+              
+              // Check YAML is valid (basic: has 'name:' and 'on:' for .yml)
+              if (wf.endsWith('.yml')) {
+                if (!content.includes('name:')) {
+                  console.error('❌ ' + play + '/' + wf + ': missing name: field');
+                  errors++;
+                }
+                if (!content.includes('on:') && !content.includes('\\\"on\\\":')) {
+                  console.error('❌ ' + play + '/' + wf + ': missing on: trigger');
+                  errors++;
+                }
+              }
+            }
+          }
+          
+          console.log('');
+          console.log('Checked ' + checked + ' play workflows across ' + plays.length + ' plays');
+          
+          if (errors > 0) {
+            console.error('❌ ' + errors + ' errors found');
+            process.exit(1);
+          }
+          
+          console.log('✅ All play workflows are valid');
+          "
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Play Workflow Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          PLAY_COUNT=$(find solution-plays -maxdepth 1 -type d -name '[0-9]*' | wc -l)
+          WF_COUNT=$(find solution-plays -name '*.yml' -path '*/.github/workflows/*' | wc -l)
+          echo "**${PLAY_COUNT} plays** with **${WF_COUNT} workflow files** validated" >> $GITHUB_STEP_SUMMARY

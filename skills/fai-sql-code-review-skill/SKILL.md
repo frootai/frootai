@@ -1,161 +1,119 @@
 ---
 name: fai-sql-code-review-skill
-description: 'Reviews SQL code for performance, security (injection), and best practices.'
+description: |
+  Review SQL code for correctness, performance, security, and maintainability
+  across PostgreSQL, SQL Server, and MySQL. Use when auditing SQL in PRs
+  or reviewing database migration scripts.
 ---
 
-# Fai Sql Code Review Skill
+# SQL Code Review
 
-Reviews SQL code for performance, security (injection), and best practices.
+Review SQL for correctness, performance, security, and maintainability.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for reviews sql code for performance, security (injection), and best practices.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Reviewing PRs with SQL changes
+- Auditing stored procedures or migrations
+- Checking for SQL injection vulnerabilities
+- Validating query performance before deployment
 
-**Category:** Code Quality
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Review Checklist
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Category | Check | Severity |
+|----------|-------|----------|
+| Security | Parameterized queries (no concatenation) | Blocking |
+| Security | Least-privilege GRANT statements | Blocking |
+| Performance | No SELECT * in production code | Warning |
+| Performance | WHERE clause uses indexed columns | Warning |
+| Performance | LIMIT on all unbounded queries | Warning |
+| Correctness | UPDATE/DELETE has WHERE clause | Blocking |
+| Correctness | Foreign keys have ON DELETE behavior | Warning |
+| Maintainability | Consistent naming (snake_case) | Advisory |
+| Maintainability | Comments on complex logic | Advisory |
 
-## Steps
+## Common Anti-Patterns
 
-### Step 1: Validate Prerequisites
+```sql
+-- Anti-pattern 1: SQL injection
+-- BAD
+EXECUTE('SELECT * FROM users WHERE email = ''' + @email + '''')
+-- GOOD
+SELECT * FROM users WHERE email = @email
 
-Verify all required tools, credentials, and dependencies are available.
+-- Anti-pattern 2: SELECT *
+-- BAD (fetches unnecessary columns)
+SELECT * FROM conversations WHERE user_id = @uid
+-- GOOD
+SELECT id, title, status FROM conversations WHERE user_id = @uid
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+-- Anti-pattern 3: Missing index hint
+-- BAD (full table scan on millions of rows)
+SELECT * FROM messages WHERE content LIKE '%search%'
+-- GOOD (use full-text search)
+SELECT * FROM messages WHERE CONTAINS(content, 'search')
+
+-- Anti-pattern 4: N+1 query pattern
+-- BAD (loop in app code)
+FOR EACH conversation: SELECT * FROM messages WHERE conv_id = ?
+-- GOOD (single query)
+SELECT c.*, m.* FROM conversations c
+JOIN messages m ON m.conversation_id = c.id
+WHERE c.user_id = @uid
 ```
 
-### Step 2: Load Configuration
+## Migration Safety
 
-Read settings from the FAI manifest and TuneKit config files.
+```sql
+-- Safe: ADD COLUMN nullable (no table rewrite)
+ALTER TABLE users ADD COLUMN avatar_url VARCHAR(500);
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+-- Unsafe: ADD NOT NULL without default (blocks writes on large table)
+ALTER TABLE users ADD COLUMN avatar_url VARCHAR(500) NOT NULL DEFAULT '';
+-- Fix: Add nullable → backfill → add constraint
 ```
 
-### Step 3: Execute Core Logic
+## Performance Review
 
-Perform the primary operation: reviews sql code for performance, security (injection), and best practices..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+```sql
+-- Always check execution plan for reviewed queries
+EXPLAIN ANALYZE [query];
+-- Look for: Seq Scan, Nested Loop with high rows, Sort on disk
 ```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 24**
-- **Play 51**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-sql-code-review-skill
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-sql-code-review-skill/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| SQL injection found | String concatenation | Use parameterized queries |
+| Slow migration | Table rewrite on ALTER | Use nullable-first pattern |
+| Missing index | No EXPLAIN in review | Require EXPLAIN for new queries |
+| Inconsistent naming | No convention | Enforce snake_case in linter |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Code Quality category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Tests before refactoring | Safety net for behavior preservation |
+| One refactoring per commit | Easy to revert specific changes |
+| No feature changes mixed in | Separate refactor from feature PRs |
+| Measure complexity before/after | Prove improvement objectively |
+| Small PRs (< 200 lines changed) | Easier to review thoroughly |
+| CI must pass after each step | Catch breakage immediately |
+
+## Refactoring Safety Checklist
+
+- [ ] All existing tests pass before starting
+- [ ] Each refactoring step committed separately
+- [ ] No behavior changes (same inputs → same outputs)
+- [ ] All tests still pass after each step
+- [ ] Complexity metrics improved
+- [ ] PR is under 200 lines of changes
+
+## Related Skills
+
+- `fai-refactor-complexity` — Reduce cyclomatic complexity
+- `fai-refactor-plan` — Multi-sprint refactoring plans
+- `fai-code-smell-detector` — Automated smell detection
+- `fai-review-and-refactor` — Combined review + fix workflow

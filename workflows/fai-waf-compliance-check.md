@@ -1,5 +1,5 @@
 ---
-name: FAI-waf-compliance-check
+name: fai-waf-compliance-check
 description: "Per-PR WAF pillar validation — scans changed files for security anti-patterns, reliability gaps, cost waste, operational issues, performance bottlenecks, and responsible AI violations. Produces per-pillar scores (0-100) and compliance matrix."
 on:
   pull_request:

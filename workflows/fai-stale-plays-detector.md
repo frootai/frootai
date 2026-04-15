@@ -1,5 +1,5 @@
 ---
-name: FAI-stale-plays-detector
+name: fai-stale-plays-detector
 description: "Monthly detection of inactive solution plays — scores staleness across multiple signals including commit recency, issue activity, dependency age, and Azure service changes. Suggests renovation, archival, or removal with automatic issue creation."
 on:
   schedule:

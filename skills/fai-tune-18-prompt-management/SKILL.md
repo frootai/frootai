@@ -1,160 +1,112 @@
 ---
 name: fai-tune-18-prompt-management
-description: 'Tunes configuration for Play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 18 prompt management with version gates, A/B split, rollback policy, and template lint checks."
 ---
 
-# Fai Tune 18 Prompt Management
+# FAI Tune - Play 18: Prompt Management
 
-Tunes configuration for Play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/18-prompt-management/config/
+├── prompts.json
+├── experiments.json
+├── safety.json
+└── rollout.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** Prompt Engineering
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-
-## Compatible Solution Plays
-
-- **Play 18**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-18-prompt-management
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 - Validate Core Configuration
 
 ```json
+// config/experiments.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-18-prompt-management/"]
+  "active_prompt": "v12",
+  "ab_test": {
+    "enabled": true,
+    "variant_a": "v12",
+    "variant_b": "v13",
+    "traffic_split": [50, 50],
+    "min_sample": 200
+  },
+  "promotion_rule": {
+    "metric": "task_success",
+    "delta_min": 0.03
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2 - Tune Critical Parameters
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `traffic_split` | sum=100 | [50,50] | Use 90/10 for safer rollout. |
+| `min_sample` | 50-5000 | 200 | Increase for low-variance confidence. |
+| `delta_min` | 0.01-0.20 | 0.03 | Required improvement to promote variant. |
+| `rollback_window_h` | 1-168 | 24 | Auto-revert if quality drops. |
 
-## Configuration Reference
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
+  }
 }
 ```
 
-## Monitoring
+```python
+import json
 
-Track skill execution metrics:
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 4 - Add Cost Controls
+
+```json
+{
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| A/B enabled | true or false by plan | `jq '.ab_test.enabled' config/experiments.json` |
+| Traffic split sum | 100 | `jq '.ab_test.traffic_split | add' config/experiments.json` |
+| Promotion delta | >= 0.01 | `jq '.promotion_rule.delta_min' config/experiments.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| No significant winner | Sample size too small | Increase min_sample and run longer. |
+| Quality regression after promotion | Gate too weak | Raise delta_min and add groundedness gate. |
+| Inconsistent outputs | Prompt templates not pinned | Pin version and lock template variables. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Prompt Engineering category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

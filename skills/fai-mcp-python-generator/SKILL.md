@@ -1,160 +1,110 @@
 ---
 name: fai-mcp-python-generator
-description: 'name: fai-mcp-python-generator'
+description: |
+  Generate Python MCP servers with FastMCP decorators, typed tool definitions,
+  async handlers, and uvicorn hosting. Use when building MCP servers in Python
+  for AI agent tool access.
 ---
 
-# Fai Mcp Python Generator
+# Python MCP Server Generator
 
-name: fai-mcp-python-generator
+Build MCP servers in Python with FastMCP decorators and async handlers.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for name: fai-mcp-python-generator. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building MCP servers for Python-based AI tools
+- Exposing Python functions as AI agent tools
+- Creating MCP servers with async/await patterns
+- Deploying MCP servers with Docker
 
-**Category:** MCP Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Quick Start
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+pip install mcp
 ```
 
-### Step 2: Load Configuration
+## Server with FastMCP
 
-Read settings from the FAI manifest and TuneKit config files.
+```python
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("my-mcp-server")
+
+@mcp.tool()
+async def search_documents(query: str, top_k: int = 5) -> str:
+    """Search knowledge base documents by query.
+
+    Args:
+        query: Search query text
+        top_k: Number of results to return (default: 5)
+    """
+    results = await search_service.search(query, top_k)
+    return json.dumps([{"id": r.id, "title": r.title, "score": r.score}
+                       for r in results])
+
+@mcp.tool()
+async def calculate_cost(prompt_tokens: int, completion_tokens: int,
+                          model: str = "gpt-4o") -> str:
+    """Estimate API cost for given token counts.
+
+    Args:
+        prompt_tokens: Number of input tokens
+        completion_tokens: Number of output tokens
+        model: Model name (gpt-4o or gpt-4o-mini)
+    """
+    rates = {"gpt-4o": (2.50, 10.00), "gpt-4o-mini": (0.15, 0.60)}
+    p_rate, c_rate = rates.get(model, (2.50, 10.00))
+    cost = (prompt_tokens * p_rate + completion_tokens * c_rate) / 1_000_000
+    return json.dumps({"model": model, "cost_usd": round(cost, 4)})
+
+@mcp.resource("config://settings")
+async def get_settings() -> str:
+    """Return server configuration."""
+    return json.dumps({"version": "1.0.0", "models": ["gpt-4o", "gpt-4o-mini"]})
+```
+
+## Run Server
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+# Stdio transport (for Copilot, Claude Desktop)
+python -m my_server
+
+# SSE transport (for web clients)
+uvicorn my_server:mcp.sse_app --host 0.0.0.0 --port 8080
 ```
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: name: fai-mcp-python-generator.
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 29**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-mcp-python-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## MCP Config (for VS Code)
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-mcp-python-generator/"]
+  "servers": {
+    "my-tools": {
+      "command": "python",
+      "args": ["-m", "my_server"],
+      "env": { "AZURE_OPENAI_ENDPOINT": "${input:endpoint}" }
+    }
   }
 }
 ```
 
-### Via Agent Invocation
+## Dockerfile
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["python", "-m", "my_server"]
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the MCP Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Tool not discovered | Missing @mcp.tool() decorator | Add decorator with docstring |
+| Type error on args | Wrong type annotation | Use str, int, float, bool — not complex types |
+| Server hangs | Blocking sync call in async handler | Use await for all I/O operations |
+| SSE connection drops | No keep-alive | Configure uvicorn timeout settings |

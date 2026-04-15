@@ -1,156 +1,125 @@
 ---
 name: fai-aspire-orchestration
-description: 'Sets up Azure Aspire for multi-container orchestration with service discovery.'
+description: |
+  Configure .NET Aspire app host for distributed AI services with health dependencies,
+  OpenTelemetry wiring, and environment-aware secret management. Use when building
+  multi-service .NET solutions with Aspire orchestration.
 ---
 
-# Fai Aspire Orchestration
+# .NET Aspire Orchestration
 
-Sets up Azure Aspire for multi-container orchestration with service discovery.
+Configure .NET Aspire to orchestrate distributed services with health checks, telemetry, and secrets.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for sets up azure aspire for multi-container orchestration with service discovery.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building multi-service .NET applications (API + workers + cache + AI)
+- Setting up local development with service discovery
+- Configuring OpenTelemetry for distributed tracing
+- Wiring Azure services (OpenAI, AI Search, Storage) into local dev
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## App Host Configuration
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```csharp
+// AppHost/Program.cs
+var builder = DistributedApplication.CreateBuilder(args);
 
-## Steps
+// Infrastructure
+var cache = builder.AddRedis("cache");
+var storage = builder.AddAzureStorage("storage");
+var blobs = storage.AddBlobs("documents");
 
-### Step 1: Validate Prerequisites
+// AI Services
+var openai = builder.AddConnectionString("openai");
+var search = builder.AddConnectionString("search");
 
-Verify all required tools, credentials, and dependencies are available.
+// API Service
+var api = builder.AddProject<Projects.Api>("api")
+    .WithReference(cache)
+    .WithReference(openai)
+    .WithReference(search)
+    .WithExternalHttpEndpoints();
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+// Background Worker
+builder.AddProject<Projects.Worker>("worker")
+    .WithReference(cache)
+    .WithReference(blobs)
+    .WithReference(openai)
+    .WaitFor(cache)          // Health dependency
+    .WaitFor(api);           // Start after API is ready
+
+builder.Build().Run();
 ```
 
-### Step 2: Load Configuration
+## Health Dependency Ordering
 
-Read settings from the FAI manifest and TuneKit config files.
+Use `WaitFor` to enforce startup order based on health checks:
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```csharp
+// Worker waits for cache AND search to be healthy before starting
+var worker = builder.AddProject<Projects.Worker>("worker")
+    .WaitFor(cache)
+    .WaitFor(search);
+
+// API waits only for cache (search is optional/degraded)
+var api = builder.AddProject<Projects.Api>("api")
+    .WaitFor(cache);
 ```
 
-### Step 3: Execute Core Logic
+## OpenTelemetry Wiring
 
-Perform the primary operation: sets up azure aspire for multi-container orchestration with service discovery..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-aspire-orchestration
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
+```csharp
+// ServiceDefaults/Extensions.cs — shared across all services
+public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
 {
-  "primitives": {
-    "skills": ["skills/fai-aspire-orchestration/"]
-  }
+    builder.ConfigureOpenTelemetry();
+    builder.AddDefaultHealthChecks();
+    return builder;
+}
+
+public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
+{
+    builder.Logging.AddOpenTelemetry(logging =>
+    {
+        logging.IncludeFormattedMessage = true;
+        logging.IncludeScopes = true;
+    });
+
+    builder.Services.AddOpenTelemetry()
+        .WithMetrics(metrics =>
+        {
+            metrics.AddAspNetCoreInstrumentation()
+                   .AddHttpClientInstrumentation()
+                   .AddRuntimeInstrumentation();
+        })
+        .WithTracing(tracing =>
+        {
+            tracing.AddAspNetCoreInstrumentation()
+                   .AddHttpClientInstrumentation()
+                   .AddSource("Azure.AI.OpenAI");
+        });
+
+    builder.AddOpenTelemetryExporters();
+    return builder;
 }
 ```
 
-### Via Agent Invocation
+## Secret Management
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```csharp
+// In AppHost — wire Key Vault connection strings
+var openai = builder.AddConnectionString("openai");
 
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+// In service — consume via DI (never hardcode)
+builder.Services.AddAzureOpenAI(builder.Configuration.GetConnectionString("openai"));
 ```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Service startup flakiness | Missing WaitFor dependencies | Add WaitFor for all required services |
+| Telemetry not appearing | Missing OTLP exporter config | Ensure AddOpenTelemetryExporters is called |
+| Connection string missing | Secret not configured in AppHost | Add via AddConnectionString or user-secrets |
+| Port conflicts | Multiple services binding same port | Let Aspire assign ports automatically |

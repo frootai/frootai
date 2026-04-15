@@ -1,156 +1,119 @@
 ---
 name: fai-feature-breakdown
-description: 'Breaks down features into atomic implementation tasks with effort estimates and dependency order.'
+description: |
+  Break large features into executable slices with dependency ordering, risk
+  assessment, and release sequencing. Use when planning epics, decomposing
+  user stories, or creating implementation plans.
 ---
 
-# Fai Feature Breakdown
+# Feature Breakdown
 
-Breaks down features into atomic implementation tasks with effort estimates and dependency order.
+Decompose large features into ordered, right-sized implementation slices.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for breaks down features into atomic implementation tasks with effort estimates and dependency order.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Planning a multi-week epic into sprint-sized slices
+- Creating implementation plans from PRDs or specs
+- Identifying dependencies and critical path
+- Sequencing releases for incremental delivery
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Breakdown Process
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+### Step 1: Identify Capabilities
 
-## Steps
+```markdown
+## Feature: AI-Powered Search
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+### Capabilities
+1. Document ingestion pipeline
+2. Embedding generation and indexing
+3. Hybrid search API endpoint
+4. Results ranking and reranking
+5. Citation extraction
+6. Admin dashboard for index management
 ```
 
-### Step 2: Load Configuration
+### Step 2: Dependency Graph
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```mermaid
+graph LR
+    A[1. Ingestion] --> B[2. Embedding]
+    B --> C[3. Search API]
+    C --> D[4. Reranking]
+    C --> E[5. Citations]
+    F[6. Admin Dashboard] --> B
 ```
 
-### Step 3: Execute Core Logic
+### Step 3: Size and Sequence
 
-Perform the primary operation: breaks down features into atomic implementation tasks with effort estimates and dependency order..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+```markdown
+| Slice | Depends On | Size | Risk | Sprint |
+|-------|-----------|------|------|--------|
+| 1. Ingestion pipeline | None | M | Low | 1 |
+| 2. Embedding + indexing | 1 | L | Medium | 1-2 |
+| 3. Search API (basic) | 2 | M | Low | 2 |
+| 4. Reranking | 3 | S | Medium | 3 |
+| 5. Citations | 3 | S | Low | 3 |
+| 6. Admin dashboard | 2 | L | Low | 3-4 |
 ```
 
-## Output
+## Slice Quality Rules
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+| Rule | Why |
+|------|-----|
+| Each slice is independently deployable | Enables incremental delivery |
+| Each slice has a clear "done" definition | Prevents scope creep |
+| Critical path slices first | Unblocks downstream work early |
+| Risky slices early | Fail fast on unknowns |
+| No slice > 5 story points | Keeps estimation accurate |
 
-## WAF Alignment
+## Automation
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+```python
+def generate_breakdown(feature_spec: str) -> str:
+    return llm(f"""Break this feature into implementation slices.
+For each slice provide: name, dependencies, size (S/M/L), risk (Low/Med/High), sprint.
+Order by dependency then risk (risky first).
 
-## Error Handling
+Feature spec:
+{feature_spec}
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-feature-breakdown
+Output as markdown table.""")
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-feature-breakdown/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slices too large | Not decomposed enough | Split until each is 1-3 days of work |
+| Circular dependencies | Wrong decomposition axis | Reorganize by vertical slices, not layers |
+| Critical path unclear | Missing dependency analysis | Draw dependency graph first |
+| Scope creep mid-sprint | No "done" definition per slice | Add acceptance criteria to each |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

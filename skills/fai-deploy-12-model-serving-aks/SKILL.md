@@ -1,165 +1,105 @@
 ---
 name: fai-deploy-12-model-serving-aks
-description: 'Deploys Play 12-model-serving-aks to Azure with Bicep validation, what-if check, and post-deploy health verification.'
+description: |
+  Deploy Play 12 Model Serving on AKS with GPU node pools, vLLM, KEDA autoscaling, and Prometheus monitoring. Covers Helm deployment, model loading, throughput validation, and rollback.
 ---
 
-# Fai Deploy 12 Model Serving Aks
+# Deploy Model Serving on AKS (Play 12)
 
-Deploys Play 12-model-serving-aks to Azure with Bicep validation, what-if check, and post-deploy health verification.
+Production deployment workflow for this solution play.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys play 12-model-serving-aks to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying self-hosted LLM inference on AKS
+- Setting up vLLM or TGI with GPU node pools
+- Promoting model serving from dev → prod cluster
+- Validating throughput and latency SLOs
 
-**Category:** Deployment
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Infrastructure Stack
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Service | Purpose | SKU |
+|---------|---------|-----|
+| AKS | Kubernetes cluster | Standard + GPU pool |
+| GPU Node Pool | NVIDIA A100/H100 | NC-series |
+| vLLM | Model inference engine | Helm chart |
+| KEDA | Request-based autoscaling | Add-on |
+| Prometheus + Grafana | Inference monitoring | Managed |
+| ACR | Container images | Premium |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Deployment Steps
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# 1. Add GPU node pool
+az aks nodepool add \
+  --resource-group rg-aks-prod \
+  --cluster-name aks-inference-prod \
+  --name gpupool --node-count 2 \
+  --node-vm-size Standard_NC24ads_A100_v4 \
+  --labels workload=inference
+
+# 2. Deploy vLLM with Helm
+helm upgrade --install vllm charts/vllm \
+  --namespace inference --create-namespace \
+  --set model=meta-llama/Llama-3.3-70B-Instruct \
+  --set gpu.count=2 --set replicas=2
+
+# 3. Deploy KEDA scaler
+kubectl apply -f infra/keda-scaler.yaml
+
+# 4. Run throughput benchmark
+python tests/smoke/test_inference_throughput.py \
+  --endpoint http://vllm.inference.svc:8000 \
+  --concurrent 50 --min-tps 120 --max-latency-p99 2000
 ```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys play 12-model-serving-aks to azure with bicep validation, what-if check, and post-deploy health verification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 37**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-deploy-12-model-serving-aks
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-deploy-12-model-serving-aks/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Deployment Checklist
-
-- [ ] Infrastructure templates validated (`az deployment what-if`)
-- [ ] Environment variables configured (Key Vault references)
-- [ ] Health check endpoints responding (HTTP 200)
-- [ ] DNS/CNAME records updated
-- [ ] SSL certificates valid (not expiring within 30 days)
-- [ ] Rollback procedure documented and tested
-- [ ] Smoke tests passing in target environment
-- [ ] Cost estimate reviewed and approved
-- [ ] RBAC roles assigned (least privilege)
-- [ ] Monitoring alerts configured
 
 ## Rollback Procedure
 
 ```bash
-# Quick rollback to previous deployment
-az deployment group create \
-  --resource-group $RG \
-  --template-file infra/main.bicep \
-  --parameters @infra/parameters.previous.json
+# Rollback to previous Helm revision
+helm rollback vllm --namespace inference
 
-# Verify rollback
-az resource list --resource-group $RG --output table
+# Scale down GPU pool if needed
+az aks nodepool scale \
+  --resource-group rg-aks-prod \
+  --cluster-name aks-inference-prod \
+  --name gpupool --node-count 0
 ```
 
-## Environment Matrix
+## Health Check
 
-| Setting | Dev | Staging | Prod |
-|---------|-----|---------|------|
-| SKU | Basic | Standard | Premium |
-| Replicas | 1 | 2 | 3+ |
-| Region | Single | Single | Multi |
-| Backup | None | Daily | Continuous |
+```bash
+kubectl get pods -n inference -l app=vllm
+curl -s http://vllm.inference.svc:8000/health | jq .
+# Expected: {"status":"ready","model":"loaded","gpu_memory_utilization":0.85}
+```
 
-## Notes
+## Troubleshooting
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Deployment category in the FAI primitives catalog
+### GPU out-of-memory on model load
+
+Reduce tensor-parallel-size or use a quantized model (AWQ/GPTQ). Check gpu.count matches allocated GPUs.
+
+### Throughput below SLO
+
+Enable continuous batching. Increase max-num-seqs. Check if KEDA is scaling pods. Monitor GPU utilization with nvidia-smi.
+
+### Pod stuck in Pending state
+
+Check GPU node pool has available capacity. Verify tolerations match GPU node taints. Use kubectl describe pod for events.
+
+## Post-Deploy Checklist
+
+- [ ] All infrastructure resources provisioned and healthy
+- [ ] Application deployed and responding on all endpoints
+- [ ] Smoke tests passing with expected thresholds
+- [ ] Monitoring dashboards showing baseline metrics
+- [ ] Alerts configured for error rate, latency, and cost
+- [ ] Rollback procedure tested and documented
+- [ ] Incident ownership and escalation path confirmed
+- [ ] Post-deploy review scheduled within 24 hours
+
+## Definition of Done
+
+Deployment is complete when infrastructure is provisioned, application is serving traffic, smoke tests pass, monitoring is active, and another engineer can reproduce the process from this skill alone.

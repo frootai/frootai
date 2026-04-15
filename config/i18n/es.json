@@ -7,7 +7,7 @@
   "common": {
     "brand": "FrootAI",
     "tagline": "De las Raíces a los Frutos",
-    "description": "El protocolo FAI de código abierto para la unificación de primitivas de IA — 100 soluciones, 780+ primitivas, 25 herramientas MCP",
+    "description": "El protocolo FAI de código abierto para la unificación de primitivas de IA — 100 soluciones, 830+ primitivas, 25 herramientas MCP",
     "cta_get_started": "Comenzar",
     "cta_install": "Instalar",
     "cta_try_free": "Probar Gratis",
@@ -50,6 +50,6 @@
   "chatbot": {
     "title": "Pregunta al Agente FAI",
     "placeholder": "Pregúntame sobre arquitectura de IA, soluciones o FrootAI...",
-    "greeting": "¡Hola! Soy el Agente FAI. Conozco las 100 soluciones y 780+ primitivas. ¿En qué puedo ayudarte?"
+    "greeting": "¡Hola! Soy el Agente FAI. Conozco las 100 soluciones y 830+ primitivas. ¿En qué puedo ayudarte?"
   }
 }

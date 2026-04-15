@@ -1,165 +1,99 @@
 ---
 name: fai-deploy-08-copilot-studio-bot
-description: 'Deploys Play 08-copilot-studio-bot to Azure with Bicep validation, what-if check, and post-deploy health verification.'
+description: |
+  Deploy Play 08 Copilot Studio Bot with Power Platform, Dataverse, Azure OpenAI, and Teams. Covers bot publishing, environment promotion, conversation testing, and rollback.
 ---
 
-# Fai Deploy 08 Copilot Studio Bot
+# Deploy Copilot Studio Bot (Play 08)
 
-Deploys Play 08-copilot-studio-bot to Azure with Bicep validation, what-if check, and post-deploy health verification.
+Production deployment workflow for this solution play.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys play 08-copilot-studio-bot to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Publishing a Copilot Studio bot to Teams or web
+- Promoting bot from dev → test → production environment
+- Validating conversation flows and topic routing
+- Rolling back a misbehaving bot deployment
 
-**Category:** Deployment
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Infrastructure Stack
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Service | Purpose | SKU |
+|---------|---------|-----|
+| Copilot Studio | Bot authoring + topic management | Per-tenant |
+| Dataverse | Bot config + conversation logs | Standard |
+| Azure OpenAI | Generative answers + plugins | S0 |
+| Teams | Channel deployment | Standard |
+| Application Insights | Conversation analytics | Workspace-based |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Deployment Steps
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# 1. Export bot solution from dev environment
+pac solution export --path bot-solution.zip \
+  --name CopilotStudioBot --environment dev-env-id
+
+# 2. Import to production environment
+pac solution import --path bot-solution.zip \
+  --environment prod-env-id --activate-plugins
+
+# 3. Publish bot to Teams channel
+pac copilot publish --bot-id $BOT_ID \
+  --environment prod-env-id --channel teams
+
+# 4. Run conversation smoke test
+python tests/smoke/test_bot_conversations.py \
+  --bot-url https://directline.botframework.com \
+  --scenarios tests/fixtures/conversation-scripts.json
 ```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys play 08-copilot-studio-bot to azure with bicep validation, what-if check, and post-deploy health verification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 37**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-deploy-08-copilot-studio-bot
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-deploy-08-copilot-studio-bot/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Deployment Checklist
-
-- [ ] Infrastructure templates validated (`az deployment what-if`)
-- [ ] Environment variables configured (Key Vault references)
-- [ ] Health check endpoints responding (HTTP 200)
-- [ ] DNS/CNAME records updated
-- [ ] SSL certificates valid (not expiring within 30 days)
-- [ ] Rollback procedure documented and tested
-- [ ] Smoke tests passing in target environment
-- [ ] Cost estimate reviewed and approved
-- [ ] RBAC roles assigned (least privilege)
-- [ ] Monitoring alerts configured
 
 ## Rollback Procedure
 
 ```bash
-# Quick rollback to previous deployment
-az deployment group create \
-  --resource-group $RG \
-  --template-file infra/main.bicep \
-  --parameters @infra/parameters.previous.json
+# Revert solution to previous version
+pac solution export --path bot-solution-rollback.zip \
+  --name CopilotStudioBot --environment prod-env-id \
+  --include previous
 
-# Verify rollback
-az resource list --resource-group $RG --output table
+# Re-import previous version
+pac solution import --path bot-solution-rollback.zip \
+  --environment prod-env-id --force-overwrite
 ```
 
-## Environment Matrix
+## Health Check
 
-| Setting | Dev | Staging | Prod |
-|---------|-----|---------|------|
-| SKU | Basic | Standard | Premium |
-| Replicas | 1 | 2 | 3+ |
-| Region | Single | Single | Multi |
-| Backup | None | Daily | Continuous |
+```bash
+# Check bot health via Direct Line
+curl -s -H "Authorization: Bearer $DL_TOKEN" \
+  https://directline.botframework.com/v3/directline/conversations | jq .status
+```
 
-## Notes
+## Troubleshooting
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Deployment category in the FAI primitives catalog
+### Bot not responding in Teams
+
+Verify Teams channel is published and bot is active. Check Copilot Studio > Channels > Teams status. Republish if stuck.
+
+### Generative answers returning irrelevant content
+
+Check knowledge sources in Copilot Studio. Verify Azure OpenAI endpoint and deployment. Update grounding data.
+
+### Solution import fails
+
+Check environment compatibility. Verify all dependencies are present. Use pac solution check before import.
+
+## Post-Deploy Checklist
+
+- [ ] All infrastructure resources provisioned and healthy
+- [ ] Application deployed and responding on all endpoints
+- [ ] Smoke tests passing with expected thresholds
+- [ ] Monitoring dashboards showing baseline metrics
+- [ ] Alerts configured for error rate, latency, and cost
+- [ ] Rollback procedure tested and documented
+- [ ] Incident ownership and escalation path confirmed
+- [ ] Post-deploy review scheduled within 24 hours
+
+## Definition of Done
+
+Deployment is complete when infrastructure is provisioned, application is serving traffic, smoke tests pass, monitoring is active, and another engineer can reproduce the process from this skill alone.

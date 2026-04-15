@@ -1,156 +1,114 @@
 ---
 name: fai-import-iac
-description: 'Imports existing Azure resources into Bicep/Terraform Infrastructure as Code.'
+description: |
+  Import existing Azure resources into Bicep or Terraform state with resource
+  mapping, state reconciliation, and drift detection. Use when bringing
+  manually-created resources under IaC management.
 ---
 
-# Fai Import Iac
+# Import IaC Resources
 
-Imports existing Azure resources into Bicep/Terraform Infrastructure as Code.
+Import existing Azure resources into Bicep or Terraform for governance.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for imports existing azure resources into bicep/terraform infrastructure as code.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Bringing manually-created resources under IaC control
+- Migrating from ARM JSON to Bicep
+- Importing click-ops resources into Terraform state
+- Detecting drift between IaC and actual state
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Bicep Import
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Export existing resource to Bicep
+az group export --resource-group rg-prod --include-parameter-default-value > exported.json
+
+# Convert ARM JSON to Bicep
+az bicep decompile --file exported.json
+
+# Or generate Bicep for a specific resource
+az resource show --ids $RESOURCE_ID --query "{name:name, type:type, properties:properties}" > resource.json
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
+## Terraform Import
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+# Import existing resource into state
+terraform import azurerm_storage_account.main /subscriptions/.../storageAccounts/stprod
+
+# Generate config from state
+terraform plan -generate-config-out=generated.tf
+
+# Verify no changes needed
+terraform plan  # Should show "No changes"
 ```
 
-### Step 3: Execute Core Logic
+## Import Workflow
 
-Perform the primary operation: imports existing azure resources into bicep/terraform infrastructure as code..
+```
+1. Inventory → List all resources in target RG
+2. Map → Match to Bicep/TF resource types
+3. Import → Bring into state
+4. Validate → Plan shows no drift
+5. Iterate → Fix parameter mismatches
+6. Commit → Check in IaC files
+```
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
+## Drift Detection
 
 ```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+# Bicep: What-if shows drift
+az deployment group what-if --resource-group rg-prod --template-file main.bicep
+
+# Terraform: Plan shows drift
+terraform plan  # Any non-empty plan = drift
 ```
 
-## Output
+## Common Import Issues
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-import-iac
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-import-iac/"]
-  }
+```python
+IMPORT_MAPPING = {
+    "Microsoft.Storage/storageAccounts": "azurerm_storage_account",
+    "Microsoft.CognitiveServices/accounts": "azurerm_cognitive_account",
+    "Microsoft.KeyVault/vaults": "azurerm_key_vault",
+    "Microsoft.Search/searchServices": "azurerm_search_service",
+    "Microsoft.Web/sites": "azurerm_linux_web_app",
 }
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Import fails | Resource type not supported | Check provider docs for import support |
+| Plan shows changes after import | Config doesn't match actual | Update config to match current state |
+| State conflict | Resource already in state | Use `terraform state rm` then reimport |
+| Decompile produces warnings | ARM features not in Bicep | Fix manually after decompile |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

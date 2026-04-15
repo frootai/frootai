@@ -1,156 +1,137 @@
----
+﻿---
 name: fai-what-context-needed
-description: 'Analyzes a task and identifies what context the AI needs to produce high-quality output.'
+description: "Determine the minimal high-value context required for an AI task, including files, constraints, interfaces, and quality bars."
 ---
 
-# Fai What Context Needed
+# FAI What Context Needed
 
-Analyzes a task and identifies what context the AI needs to produce high-quality output.
+## Goal
 
-## Overview
+Identify exactly what information is required before implementation to avoid low-quality or hallucinated output.
 
-This skill provides a structured, repeatable procedure for analyzes a task and identifies what context the ai needs to produce high-quality output.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Context Dimensions
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Dimension | Why It Matters |
+|----------|----------------|
+| Code scope | Determines affected files and boundaries |
+| Interfaces/contracts | Prevents breaking public APIs |
+| Runtime constraints | Affects architecture and dependencies |
+| Security/compliance | Prevents unsafe implementation choices |
+| Quality bar | Defines done criteria |
 
-## Parameters
+## Step 1 - Extract Task Type
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+Classify the request as one of:
 
-## Steps
+- Feature implementation
+- Refactor
+- Bug fix
+- Migration
+- Documentation/test generation
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: analyzes a task and identifies what context the ai needs to produce high-quality output..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-what-context-needed
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 2 - Build Context Checklist
 
 ```json
 {
-  "primitives": {
-    "skills": ["skills/fai-what-context-needed/"]
+  "required": [
+    "entry files",
+    "calling interfaces",
+    "config and environment assumptions",
+    "tests or evaluation criteria"
+  ],
+  "optional": [
+    "architecture docs",
+    "performance baselines",
+    "release constraints"
+  ]
+}
+```
+
+## Step 3 - Rank by Impact
+
+| Priority | Context Item | Impact |
+|---------|---------------|--------|
+| P0 | Public interface definitions | Breakage risk |
+| P0 | Existing tests and expected behavior | Regression risk |
+| P1 | Deployment/runtime constraints | Operability risk |
+| P2 | Supporting docs | Speed/clarity improvement |
+
+## Step 4 - Define Sufficiency Gate
+
+Context is sufficient when:
+
+1. Affected files are known.
+2. Expected behavior is explicit.
+3. Validation method is available.
+4. Security and cost constraints are identified.
+
+## Step 5 - Output Structured Context Request
+
+```md
+Need before implementation:
+1) Entry point file(s)
+2) Current contract/schema
+3) Constraints (runtime, policy, latency)
+4) Acceptance test cases
+```
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|------|-------|-----|
+| AI output too generic | Missing concrete code context | Provide file-level references and interfaces |
+| Regressions after change | No behavior baseline | Add explicit acceptance tests first |
+| Over-collection of context | No prioritization | Apply P0/P1/P2 ranking before reading |
+
+## Advanced Implementation Notes
+
+### Operational Guardrails
+
+- Define measurable SLOs before rollout.
+- Capture baseline metrics and compare deltas post-change.
+- Add alert thresholds with explicit on-call ownership.
+- Use environment-specific overrides for dev/staging/prod.
+
+### CI/CD and Validation Expansion
+
+```bash
+# Example verification sequence
+npm run lint
+npm test
+npm run build
+```
+
+```json
+{
+  "quality_gate": {
+    "required": true,
+    "min_score": 0.8,
+    "block_on_failure": true
   }
 }
 ```
 
-### Via Agent Invocation
+### Security and Compliance Checks
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Control | Requirement |
+|--------|-------------|
+| Secret handling | No plaintext secrets in repo |
+| Access model | Least privilege role assignments |
+| Logging | Redact sensitive data before persistence |
+| Auditability | Keep immutable trace of critical actions |
 
-## Configuration Reference
+### Performance and Cost Notes
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
+- Budget requests and tokens per endpoint/class of workload.
+- Profile p95 and p99 latency as separate objectives.
+- Add caching only where correctness is preserved.
+- Use periodic reports to catch drift in cost/quality.
 
-## Monitoring
+### Extended Troubleshooting
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
-
-## Troubleshooting
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Symptom | Likely Cause | Recommended Action |
+|--------|--------------|--------------------|
+| Validation gate failures | Threshold too strict or wrong baseline | Recalibrate using a fixed reference dataset |
+| Unexpected regressions | Missing scenario coverage | Add targeted regression tests and rerun |
+| Production-only issues | Environment mismatch | Diff environment config and identity settings |
+| Slow recovery during incidents | Unclear ownership/runbook steps | Add explicit owner and sequence in runbook |

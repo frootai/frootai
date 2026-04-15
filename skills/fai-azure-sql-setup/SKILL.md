@@ -1,161 +1,140 @@
 ---
 name: fai-azure-sql-setup
-description: 'Configures Azure SQL Database with Hyperscale, geo-replication, and performance tuning.'
+description: |
+  Provision Azure SQL Database with AAD-only auth, private networking, backup policies,
+  and workload performance tuning. Use when setting up relational storage for AI
+  application metadata, conversation history, or evaluation results.
 ---
 
-# Fai Azure Sql Setup
+# Azure SQL Database Setup
 
-Configures Azure SQL Database with Hyperscale, geo-replication, and performance tuning.
+Provision and harden Azure SQL with AAD auth, networking, backup, and performance tuning.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for configures azure sql database with hyperscale, geo-replication, and performance tuning.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up relational storage for AI application data
+- Storing conversation history, evaluation results, or user metadata
+- Migrating from SQL Server to Azure SQL
+- Hardening existing SQL databases for production
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
+  name: sqlServerName
+  location: location
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    administratorLogin: null              // AAD-only
+    administrators: {
+      azureADOnlyAuthentication: true
+      login: adminGroupName
+      principalType: 'Group'
+      sid: adminGroupObjectId
+      tenantId: subscription().tenantId
+    }
+    publicNetworkAccess: 'Disabled'
+    minimalTlsVersion: '1.2'
+  }
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: configures azure sql database with hyperscale, geo-replication, and performance tuning..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-sql-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-sql-setup/"]
+resource sqlDb 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
+  name: dbName
+  parent: sqlServer
+  location: location
+  sku: { name: 'GP_S_Gen5_2', tier: 'GeneralPurpose' }  // Serverless
+  properties: {
+    autoPauseDelay: 60                    // Pause after 60 min idle
+    minCapacity: '0.5'                    // Min 0.5 vCores
+    zoneRedundant: true
+    backupStorageRedundancy: 'Geo'
+    requestedBackupStorageRedundancy: 'Geo'
   }
 }
 ```
 
-### Via Agent Invocation
+## Private Endpoint
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+```bicep
+resource sqlPe 'Microsoft.Network/privateEndpoints@2023-11-01' = {
+  name: '${sqlServerName}-pe'
+  location: location
+  properties: {
+    subnet: { id: subnetId }
+    privateLinkServiceConnections: [{
+      name: 'sql-link'
+      properties: {
+        privateLinkServiceId: sqlServer.id
+        groupIds: ['sqlServer']
+      }
+    }]
+  }
 }
 ```
 
-## Monitoring
+## Python Connection with MI
 
-Track skill execution metrics:
+```python
+import pyodbc
+from azure.identity import DefaultAzureCredential
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+credential = DefaultAzureCredential()
+token = credential.get_token("https://database.windows.net/.default")
+
+conn = pyodbc.connect(
+    f"Driver={{ODBC Driver 18 for SQL Server}};"
+    f"Server=tcp:{server_name}.database.windows.net,1433;"
+    f"Database={db_name};"
+    f"Encrypt=yes;TrustServerCertificate=no;",
+    attrs_before={1256: token.token.encode("utf-16-le")},  # SQL_COPT_SS_ACCESS_TOKEN
+)
+
+cursor = conn.cursor()
+cursor.execute("SELECT COUNT(*) FROM conversations")
+print(cursor.fetchone()[0])
+```
+
+## Performance Tuning
+
+```sql
+-- Enable Query Store for performance tracking
+ALTER DATABASE [appdb] SET QUERY_STORE = ON;
+ALTER DATABASE [appdb] SET QUERY_STORE (
+    OPERATION_MODE = READ_WRITE,
+    DATA_FLUSH_INTERVAL_SECONDS = 900,
+    QUERY_CAPTURE_MODE = AUTO
+);
+
+-- Find top resource-consuming queries
+SELECT TOP 10
+    qs.query_id,
+    qt.query_sql_text,
+    rs.avg_duration / 1000 AS avg_ms,
+    rs.count_executions,
+    rs.avg_cpu_time / 1000 AS avg_cpu_ms
+FROM sys.query_store_runtime_stats rs
+JOIN sys.query_store_plan qp ON rs.plan_id = qp.plan_id
+JOIN sys.query_store_query qs ON qp.query_id = qs.query_id
+JOIN sys.query_store_query_text qt ON qs.query_text_id = qt.query_text_id
+ORDER BY rs.avg_duration DESC;
+```
+
+## SKU Selection Guide
+
+| Workload | SKU | Cost | Notes |
+|----------|-----|------|-------|
+| Dev/test | GP_S_Gen5_1 (Serverless) | $$ | Auto-pause saves cost |
+| Low-traffic prod | GP_S_Gen5_2 (Serverless) | $$ | Good for bursty AI workloads |
+| Steady prod | GP_Gen5_2 (Provisioned) | $$$ | Predictable performance |
+| High throughput | BC_Gen5_4 (Business Critical) | $$$$ | Local SSD, zone redundant |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow query spikes | Missing indexes | Enable Query Store, apply index recommendations |
+| Connection timeout | Serverless auto-paused | Set autoPauseDelay=-1 or increase min vCores |
+| AAD auth fails | MI not added as SQL user | Run `CREATE USER [mi-name] FROM EXTERNAL PROVIDER` |
+| Private endpoint DNS fails | Zone not linked to VNet | Link privatelink.database.windows.net to app VNet |

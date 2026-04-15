@@ -1,161 +1,130 @@
 ---
 name: fai-azure-architecture-review
-description: 'Conducts Azure Well-Architected Framework reviews with pillar scoring and recommendations.'
+description: |
+  Review Azure architecture against Well-Architected Framework pillars. Use when:
+  - Preparing for production launch of an AI workload
+  - Conducting periodic architecture health checks
+  - Identifying security gaps, reliability risks, and cost waste
+  - Validating WAF alignment before major changes
 ---
 
-# Fai Azure Architecture Review
+# Azure Architecture Review
 
-Conducts Azure Well-Architected Framework reviews with pillar scoring and recommendations.
+Systematic review of Azure architecture against the 6 WAF pillars with actionable findings.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for conducts azure well-architected framework reviews with pillar scoring and recommendations.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Before production launch — catch issues early
+- Quarterly health checks — detect architecture drift
+- After major changes — validate new components
+- Compliance reviews — document WAF alignment
 
-**Category:** Architecture
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Review Framework
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+### Pillar 1: Reliability
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# Check for single points of failure
+az resource list --resource-group $RG --query "[?sku.capacity==1]" -o table
+
+# Verify health probes exist
+az network lb probe list --resource-group $RG --lb-name $LB -o table
+
+# Check backup configuration
+az backup policy list --resource-group $RG --vault-name $VAULT -o table
 ```
 
-### Step 2: Load Configuration
+| Check | Pass Criteria |
+|-------|--------------|
+| Multi-instance | All critical services have ≥2 instances |
+| Health probes | Every LB/AG has active health probes |
+| Retry policy | All external calls have exponential backoff |
+| Backup | RPO/RTO documented and tested |
 
-Read settings from the FAI manifest and TuneKit config files.
+### Pillar 2: Security
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+# Find resources with public endpoints
+az resource list --resource-group $RG \
+  --query "[?properties.publicNetworkAccess=='Enabled'].{Name:name, Type:type}" -o table
+
+# Check for resources without Managed Identity
+az resource list --resource-group $RG \
+  --query "[?identity==null].{Name:name, Type:type}" -o table
+
+# Audit RBAC assignments
+az role assignment list --scope /subscriptions/$SUB/resourceGroups/$RG -o table
 ```
 
-### Step 3: Execute Core Logic
+| Check | Pass Criteria |
+|-------|--------------|
+| No public endpoints | All data-plane endpoints use private endpoints |
+| Managed Identity | All services authenticate via MI, not keys |
+| RBAC | No Owner/Contributor at subscription scope for service accounts |
+| Key Vault | All secrets externalized, no env vars or hardcoded |
 
-Perform the primary operation: conducts azure well-architected framework reviews with pillar scoring and recommendations..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
+### Pillar 3: Cost Optimization
 
 ```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+# Find oversized resources
+az monitor metrics list --resource $RESOURCE_ID \
+  --metric "Percentage CPU" --interval PT1H \
+  --aggregation Average --query "value[].timeseries[].data[]" -o table
+
+# Check for unused resources
+az advisor recommendation list --resource-group $RG \
+  --category Cost -o table
 ```
 
-## Output
+### Pillar 4: Operational Excellence
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+| Check | Pass Criteria |
+|-------|--------------|
+| IaC coverage | 100% of resources defined in Bicep/Terraform |
+| CI/CD | Every service has automated build + deploy pipeline |
+| Monitoring | Application Insights + Log Analytics configured |
+| Runbooks | Incident response procedures documented |
 
-## WAF Alignment
+### Pillar 5: Performance Efficiency
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| Check | Pass Criteria |
+|-------|--------------|
+| Latency SLOs | P95 targets defined and monitored |
+| Caching | Redis or semantic cache for hot paths |
+| Autoscale | Configured for variable workloads |
+| CDN | Static assets served via CDN |
 
-## Compatible Solution Plays
+### Pillar 6: Responsible AI
 
-- **Play 02**
-- **Play 11**
+| Check | Pass Criteria |
+|-------|--------------|
+| Content safety | Filters enabled on all AI endpoints |
+| Groundedness | Evaluation pipeline running with ≥0.8 threshold |
+| Transparency | Users informed when interacting with AI |
+| Human escalation | Override path exists for high-impact decisions |
 
-## Error Handling
+## Review Report Template
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+```markdown
+# Architecture Review — [Project Name]
+**Date:** YYYY-MM-DD | **Reviewer:** [name]
 
-## Usage
+## Summary
+- Critical: X | High: X | Medium: X | Low: X
 
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-architecture-review
+## Findings
+| # | Pillar | Severity | Finding | Recommendation |
+|---|--------|----------|---------|---------------|
+| 1 | Security | Critical | Public endpoint on OpenAI | Add private endpoint |
+| 2 | Reliability | High | Single replica on search | Scale to 2+ replicas |
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-architecture-review/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Architecture category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| High-risk findings discovered late | No review gate | Add architecture review as release pipeline gate |
+| Review takes too long | Scope too broad | Focus on changed components + critical path only |
+| Findings not acted on | No ownership | Assign finding owner + due date in review report |

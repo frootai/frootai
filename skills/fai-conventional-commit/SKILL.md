@@ -1,156 +1,142 @@
 ---
 name: fai-conventional-commit
-description: 'Generates conventional commit messages following the Angular convention for changelogs.'
+description: 'Enforces Conventional Commits with changelog-ready scopes and release discipline.'
 ---
 
-# Fai Conventional Commit
+# FAI Skill: Conventional Commit
 
-Generates conventional commit messages following the Angular convention for changelogs.
+## Purpose
 
-## Overview
+This skill defines a production-oriented workflow for Commit hygiene and release traceability. It is intended for builders and reviewers who need repeatable outcomes, explicit validation, and clear rollback guidance.
 
-This skill provides a structured, repeatable procedure for generates conventional commit messages following the angular convention for changelogs.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## When To Use
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+- Use when the team needs a standardized implementation path for this capability.
+- Use when quality gates must be documented before rollout.
+- Use when architecture, security, and operational concerns must be captured in one artifact.
 
-## Parameters
+## Inputs
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Input | Description |
+|---|---|
+| Core parameters | allowed_types, scope_catalog, breaking_change_policy, release_rules |
+| Environment | dev, staging, prod |
+| Constraints | compliance, latency, budget, and ownership constraints |
 
-## Steps
+## Prerequisites
 
-### Step 1: Validate Prerequisites
+- Repository has documented build and test commands.
+- Owners are assigned for implementation and approval.
+- Required platform access is validated before execution.
+- A rollback plan exists for every production-facing change.
 
-Verify all required tools, credentials, and dependencies are available.
+## Execution Workflow
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+### 1) Discover and Scope
 
-### Step 2: Load Configuration
+- Identify the minimum viable change for initial rollout.
+- List dependencies across code, config, infra, and docs.
+- Capture assumptions that can invalidate results.
 
-Read settings from the FAI manifest and TuneKit config files.
+### 2) Design Decisions
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+- Select patterns that favor reliability and clear observability.
+- Keep interfaces stable and versioned where possible.
+- Separate required behavior from optional enhancements.
 
-### Step 3: Execute Core Logic
+### 3) Implement in Small Steps
 
-Perform the primary operation: generates conventional commit messages following the angular convention for changelogs..
+- Make incremental changes with narrow blast radius.
+- Run local validation after each meaningful edit.
+- Document non-obvious tradeoffs near the implementation.
 
-### Step 4: Validate Results
+### 4) Validate and Review
 
-Verify the output meets quality thresholds and WAF compliance.
+- Run lint, unit, and integration checks for impacted areas.
+- Confirm expected behavior with representative scenarios.
+- Capture evidence in a concise review record.
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
+### 5) Release and Observe
 
-## Output
+- Promote with staged rollout where practical.
+- Monitor key signals and set alert thresholds.
+- Prepare rollback trigger criteria and ownership.
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+## Quality Gates
 
-## WAF Alignment
+- Correctness: behavior matches acceptance criteria.
+- Reliability: failure modes are handled with safe defaults.
+- Security: secrets are externalized and access is least-privilege.
+- Cost: implementation respects budget guardrails.
+- Operability: logs, metrics, and runbooks are available.
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+## Deliverables
 
-## Error Handling
+| Artifact | Purpose |
+|---|---|
+| Primary output | commit-policy.md, commitlint config recommendations, examples |
+| Decision log | Captures architecture and tradeoff decisions |
+| Validation record | Stores test and review evidence |
+| Rollback note | Defines reversal steps and owner |
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+## Verification Checklist
 
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-conventional-commit
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-conventional-commit/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+- [ ] Scope and assumptions documented.
+- [ ] Implementation reviewed by responsible owner.
+- [ ] Validation evidence attached.
+- [ ] Operational monitors configured.
+- [ ] Rollback plan tested or rehearsed.
+- [ ] Completion criteria met: invalid messages fail, changelog categories generated, release notes consistent.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+### Symptom: Results differ between environments
 
-## Notes
+- Compare environment-specific configuration values.
+- Verify version parity for tools and dependencies.
+- Re-run with deterministic inputs and fixed sample data.
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+### Symptom: Validation passes locally but fails in CI
+
+- Reproduce using CI-equivalent commands and versions.
+- Inspect generated artifacts and line-ending differences.
+- Check for timing/order assumptions in tests.
+
+### Symptom: Operational metrics are noisy
+
+- Tune thresholds based on baseline behavior.
+- Add dimensions to isolate source and impact.
+- Separate informational events from alerting signals.
+
+## Security and Compliance Notes
+
+- Avoid embedding secrets or tokens in docs and examples.
+- Prefer managed identity and centralized secret stores.
+- Record data handling boundaries and retention expectations.
+- Ensure auditability for critical decisions and approvals.
+
+## Performance and Cost Notes
+
+- Start with right-sized defaults; scale with evidence.
+- Cache expensive operations where consistency allows.
+- Track utilization trends and revisit thresholds monthly.
+- Stop non-essential background processing in low-traffic windows.
+
+## Example Command Set
+
+```bash
+# Adapt these commands to the repository conventions
+npm run lint
+npm test
+npm run build
+```
+
+## Definition of Done
+
+The skill execution is complete when implementation, validation, and operational handoff are all documented, approved, and reproducible by another engineer without tribal knowledge.
+
+## Metadata
+
+- Category: DevEx
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly or after major platform changes

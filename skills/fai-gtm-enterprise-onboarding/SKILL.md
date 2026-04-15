@@ -1,156 +1,100 @@
 ---
 name: fai-gtm-enterprise-onboarding
-description: 'Designs enterprise customer onboarding workflows for AI platform adoption.'
+description: |
+  Design enterprise customer onboarding journeys with time-to-value optimization,
+  success milestones, and expansion readiness. Use when onboarding enterprise
+  customers to an AI platform.
 ---
 
-# Fai Gtm Enterprise Onboarding
+# Enterprise Onboarding
 
-Designs enterprise customer onboarding workflows for AI platform adoption.
+Design onboarding journeys that reduce time-to-value and drive expansion.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs enterprise customer onboarding workflows for ai platform adoption.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Onboarding new enterprise customers to AI platform
+- Reducing time from contract signing to first deployment
+- Defining success milestones and health scores
+- Preparing accounts for upsell/expansion
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Onboarding Journey
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Week | Milestone | Owner | Deliverable |
+|------|-----------|-------|-------------|
+| 0 | Kickoff call | CSM | Scope doc, success criteria |
+| 1 | Environment provisioned | Platform | Landing zone + credentials |
+| 2 | First play deployed (dev) | Customer + SE | Working dev environment |
+| 3 | Data integration complete | Customer | Connected to data sources |
+| 4 | Production deployment | Customer + SE | Live with real users |
+| 6 | Health check review | CSM | Usage metrics, satisfaction |
+| 8 | Expansion planning | CSM + Sales | Next play identification |
 
-## Steps
+## Customer Health Score
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```python
+def calculate_health(usage: dict) -> dict:
+    score = 0
+    score += 25 if usage["active_users"] > 10 else 10 if usage["active_users"] > 0 else 0
+    score += 25 if usage["queries_per_day"] > 50 else 10 if usage["queries_per_day"] > 0 else 0
+    score += 25 if usage["plays_deployed"] >= 2 else 10 if usage["plays_deployed"] >= 1 else 0
+    score += 25 if usage["nps_score"] >= 8 else 10 if usage["nps_score"] >= 6 else 0
+    status = "healthy" if score >= 75 else "at-risk" if score >= 40 else "critical"
+    return {"score": score, "status": status}
 ```
 
-### Step 2: Load Configuration
+## Success Criteria Template
 
-Read settings from the FAI manifest and TuneKit config files.
+```markdown
+## Success Criteria — [Customer Name]
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+### Business Outcomes
+- [ ] Reduce ticket resolution time by 30%
+- [ ] Automate 50% of L1 support queries
+- [ ] Achieve 85%+ user satisfaction score
+
+### Technical Milestones
+- [ ] Landing zone provisioned (Week 1)
+- [ ] First play deployed to dev (Week 2)
+- [ ] Production deployment (Week 4)
+- [ ] 100+ queries/day sustained (Week 6)
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs enterprise customer onboarding workflows for ai platform adoption..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-gtm-enterprise-onboarding
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-gtm-enterprise-onboarding/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow onboarding | Complex enterprise security | Pre-build landing zone templates |
+| Low adoption after deploy | No champion inside customer | Identify and enable internal champion |
+| Time-to-value > 8 weeks | Scope too broad | Start with single high-impact play |
+| Expansion stalled | No success metrics shared | Send monthly success reports |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Measure everything | Can't improve what you can't measure |
+| Weekly review cadence | Catch issues before they compound |
+| Customer interviews monthly | Stay connected to real problems |
+| Competitor watch quarterly | Know the landscape, don't obsess |
+| Content before campaigns | Educate first, sell second |
+| Single owner per metric | Accountability drives results |
+
+## Key Metrics
+
+| Stage | Metric | Target |
+|-------|--------|--------|
+| Awareness | Website visits | 10K/month |
+| Interest | GitHub stars | 1000 |
+| Activation | First play deployed | 200 |
+| Retention | Monthly active | 50 |
+| Revenue | MRR | Track growth rate |
+
+
+## Related Skills
+
+- `fai-gtm-ai-strategy` — Overall GTM strategy
+- `fai-gtm-launch` — Launch execution
+- `fai-gtm-developer-ecosystem` — Community growth
+- `fai-gtm-operating-cadence` — Weekly rhythms

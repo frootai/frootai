@@ -1,156 +1,109 @@
 ---
 name: fai-tune-17-ai-observability
-description: 'Tunes configuration for Play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 17 observability settings for traces, semantic metrics, alert thresholds, and log retention policy."
 ---
 
-# Fai Tune 17 Ai Observability
+# FAI Tune - Play 17: AI Observability
 
-Tunes configuration for Play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/17-ai-observability/config/
+├── tracing.json
+├── metrics.json
+├── alerts.json
+└── retention.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-17-ai-observability
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 - Validate Core Configuration
 
 ```json
+// config/metrics.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-17-ai-observability/"]
+  "sampling_rate": 1.0,
+  "capture_prompt": true,
+  "capture_completion": true,
+  "redact_pii": true,
+  "slo": {
+    "latency_p95_ms": 1800,
+    "error_rate_max": 0.02,
+    "groundedness_min": 0.80
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2 - Tune Critical Parameters
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `sampling_rate` | 0.01-1.0 | 1.0 | Reduce in prod for cost if volume is high. |
+| `latency_p95_ms` | 200-5000 | 1800 | Set per endpoint class. |
+| `error_rate_max` | 0.001-0.10 | 0.02 | Alert above this threshold. |
+| `groundedness_min` | 0.60-0.95 | 0.80 | Raise for regulated workloads. |
 
-## Configuration Reference
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
+  }
 }
 ```
 
-## Monitoring
+```python
+import json
 
-Track skill execution metrics:
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 4 - Add Cost Controls
+
+```json
+{
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| PII redaction | true | `jq '.redact_pii' config/metrics.json` |
+| P95 latency objective | <= 5000 | `jq '.slo.latency_p95_ms' config/metrics.json` |
+| Error rate objective | <= 0.10 | `jq '.slo.error_rate_max' config/metrics.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| No traces in dashboard | Sampling disabled or exporter misconfigured | Set sampling_rate > 0 and verify exporter endpoint. |
+| Alert fatigue | Threshold too strict | Tune error_rate_max and add debounce windows. |
+| Compliance risk in logs | PII redaction disabled | Set redact_pii true and re-run log scan. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

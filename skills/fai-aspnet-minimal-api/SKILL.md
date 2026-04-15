@@ -1,180 +1,136 @@
 ---
 name: fai-aspnet-minimal-api
-description: 'Scaffolds an ASP.NET Core Minimal API with DI, health checks, OpenAPI, and Azure integration.'
+description: |
+  Build ASP.NET Minimal API endpoints with typed validation, auth policies, Problem Details
+  error responses, rate limiting, and OpenAPI spec generation. Use when scaffolding
+  .NET HTTP APIs or standardizing endpoint patterns.
 ---
 
-# Fai Aspnet Minimal Api
+# ASP.NET Minimal API Patterns
 
-Scaffolds an ASP.NET Core Minimal API with DI, health checks, OpenAPI, and Azure integration.
+Production patterns for ASP.NET Minimal APIs with validation, auth, and observability.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds an asp.net core minimal api with di, health checks, openapi, and azure integration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating new HTTP APIs in .NET 8+
+- Migrating from controller-based to minimal APIs
+- Standardizing error response formats across an API
+- Adding rate limiting, auth policies, or OpenAPI generation
 
-**Category:** API Development
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Pattern 1: Endpoint with Validation
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```csharp
+using FluentValidation;
 
-## Steps
+public record CreateItemRequest(string Name, string Category, decimal Price);
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds an asp.net core minimal api with di, health checks, openapi, and azure integration..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 14**
-- **Play 52**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-aspnet-minimal-api
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
+public class CreateItemValidator : AbstractValidator<CreateItemRequest>
 {
-  "primitives": {
-    "skills": ["skills/fai-aspnet-minimal-api/"]
-  }
+    public CreateItemValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(200);
+        RuleFor(x => x.Category).Matches("^[a-z-]+$");
+        RuleFor(x => x.Price).GreaterThan(0).LessThan(1_000_000);
+    }
 }
+
+// Registration
+app.MapPost("/items", async (CreateItemRequest req,
+    IValidator<CreateItemRequest> validator, AppDbContext db) =>
+{
+    var result = await validator.ValidateAsync(req);
+    if (!result.IsValid)
+        return Results.ValidationProblem(result.ToDictionary());
+
+    var item = new Item { Id = Guid.NewGuid(), Name = req.Name,
+                          Category = req.Category, Price = req.Price };
+    db.Items.Add(item);
+    await db.SaveChangesAsync();
+    return Results.Created($"/items/{item.Id}", item);
+})
+.WithName("CreateItem")
+.Produces<Item>(201)
+.ProducesValidationProblem()
+.RequireAuthorization("api-write");
 ```
 
-### Via Agent Invocation
+## Pattern 2: Global Problem Details
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## API Patterns
-
-### Request Validation
-
-```typescript
-import { z } from "zod";
-
-const RequestSchema = z.object({
-  query: z.string().min(1).max(2000),
-  top_k: z.number().int().min(1).max(50).default(5),
-  filters: z.record(z.string()).optional(),
+```csharp
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = ctx =>
+    {
+        ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+        ctx.ProblemDetails.Extensions["traceId"] =
+            ctx.HttpContext.TraceIdentifier;
+    };
 });
+
+app.UseStatusCodePages();
+app.UseExceptionHandler();
 ```
 
-### Response Format
+## Pattern 3: Rate Limiting
 
-```json
+```csharp
+builder.Services.AddRateLimiter(options =>
 {
-  "status": "success",
-  "data": { "results": [] },
-  "metadata": {
-    "duration_ms": 245,
-    "tokens_used": 150,
-    "model": "gpt-4o",
-    "cached": false
-  }
-}
+    options.AddFixedWindowLimiter("per-user", opt =>
+    {
+        opt.PermitLimit = 100;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = 429;
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            new { type = "/errors/rate-limit", title = "Too Many Requests",
+                  status = 429, retryAfter = 60 }, token);
+    };
+});
+
+app.UseRateLimiter();
 ```
 
-### Error Responses
+## Pattern 4: Endpoint Groups with Auth
 
-```json
-{
-  "status": "error",
-  "error": {
-    "code": "RATE_LIMITED",
-    "message": "Too many requests. Retry after 30 seconds.",
-    "retry_after": 30
-  }
-}
+```csharp
+var items = app.MapGroup("/items")
+    .RequireAuthorization("api-read")
+    .RequireRateLimiting("per-user")
+    .AddEndpointFilter<LoggingFilter>();
+
+items.MapGet("/", async (AppDbContext db) =>
+    await db.Items.Take(100).ToListAsync());
+
+items.MapGet("/{id:guid}", async (Guid id, AppDbContext db) =>
+    await db.Items.FindAsync(id) is { } item
+        ? Results.Ok(item)
+        : Results.Problem(statusCode: 404, title: "Item not found"));
+
+items.MapPost("/", async (CreateItemRequest req, /* ... */) => { /* ... */ })
+    .RequireAuthorization("api-write");
 ```
 
-## Rate Limiting
+## Pattern 5: OpenAPI with Scalar
 
-| Tier | Requests/min | Tokens/min | Burst |
-|------|-------------|------------|-------|
-| Free | 10 | 5,000 | 20 |
-| Standard | 60 | 50,000 | 120 |
-| Enterprise | 300 | 500,000 | 600 |
+```csharp
+builder.Services.AddOpenApi();
 
-## Notes
+// In pipeline
+app.MapOpenApi();
+app.MapScalarApiReference(); // Interactive docs at /scalar
+```
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the API Development category in the FAI primitives catalog
+## Checklist
+
+- [ ] All endpoints use typed request models with FluentValidation
+- [ ] ProblemDetails registered globally for consistent error responses
+- [ ] Rate limiting applied per user/API key
+- [ ] Auth policies at group or endpoint level (never inline checks)
+- [ ] OpenAPI generated automatically from endpoint metadata
+- [ ] TraceId included in all error responses

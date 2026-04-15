@@ -1,156 +1,112 @@
 ---
 name: fai-postgresql-optimization
-description: 'Optimizes PostgreSQL queries and configurations including pgvector for RAG workloads.'
+description: |
+  Optimize PostgreSQL queries with EXPLAIN ANALYZE, index tuning, query
+  rewriting, and configuration adjustments. Use when diagnosing slow queries
+  or improving database performance for AI workloads.
 ---
 
-# Fai Postgresql Optimization
+# PostgreSQL Query Optimization
 
-Optimizes PostgreSQL queries and configurations including pgvector for RAG workloads.
+Diagnose and fix slow queries with EXPLAIN ANALYZE, indexing, and tuning.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for optimizes postgresql queries and configurations including pgvector for rag workloads.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Queries exceeding latency targets
+- Identifying missing or unused indexes
+- Tuning PostgreSQL configuration for workload
+- Optimizing queries for AI application data access
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## EXPLAIN ANALYZE
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```sql
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT c.id, c.title, COUNT(m.id) as msg_count
+FROM conversations c
+JOIN messages m ON m.conversation_id = c.id
+WHERE c.user_id = 'user-42' AND c.status = 'active'
+GROUP BY c.id, c.title
+ORDER BY c.created_at DESC
+LIMIT 20;
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+-- Look for:
+-- Seq Scan on large tables → needs index
+-- Nested Loop with high row count → consider Hash Join
+-- Sort with large external sort → increase work_mem
+-- Buffers: shared hit ratio < 95% → needs more shared_buffers
 ```
 
-### Step 2: Load Configuration
+## Index Strategies
 
-Read settings from the FAI manifest and TuneKit config files.
+```sql
+-- Covering index for common query pattern
+CREATE INDEX idx_conv_user_active ON conversations(user_id, created_at DESC)
+    WHERE status = 'active';
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+-- Partial index (only index active rows)
+CREATE INDEX idx_active_conversations ON conversations(status)
+    WHERE status = 'active';
+
+-- Expression index
+CREATE INDEX idx_messages_lower_content ON messages(lower(content));
+
+-- GIN index for JSONB queries
+CREATE INDEX idx_metadata ON conversations USING GIN (metadata jsonb_path_ops);
 ```
 
-### Step 3: Execute Core Logic
+## Query Rewriting
 
-Perform the primary operation: optimizes postgresql queries and configurations including pgvector for rag workloads..
+```sql
+-- Bad: Correlated subquery
+SELECT * FROM conversations c
+WHERE (SELECT COUNT(*) FROM messages WHERE conversation_id = c.id) > 10;
 
-### Step 4: Validate Results
+-- Good: JOIN with HAVING
+SELECT c.* FROM conversations c
+JOIN messages m ON m.conversation_id = c.id
+GROUP BY c.id HAVING COUNT(m.id) > 10;
 
-Verify the output meets quality thresholds and WAF compliance.
+-- Bad: OFFSET pagination (slow for large offsets)
+SELECT * FROM messages ORDER BY created_at LIMIT 20 OFFSET 10000;
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+-- Good: Keyset pagination
+SELECT * FROM messages
+WHERE created_at < '2026-04-10T00:00:00Z'
+ORDER BY created_at DESC LIMIT 20;
 ```
 
-## Output
+## Configuration Tuning
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+| Setting | Default | Recommendation | Why |
+|---------|---------|---------------|-----|
+| shared_buffers | 128MB | 25% of RAM | Cache more data in memory |
+| work_mem | 4MB | 64-256MB | Reduce disk sorts |
+| effective_cache_size | 4GB | 75% of RAM | Better query planning |
+| random_page_cost | 4.0 | 1.1 (SSD) | Favor index scans on SSD |
+| max_connections | 100 | Use pgbouncer | Connection pooling |
 
-## WAF Alignment
+## Find Problem Queries
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+```sql
+-- Top 10 slowest queries (requires pg_stat_statements)
+SELECT query, calls, mean_exec_time::numeric(10,2) as avg_ms,
+       total_exec_time::numeric(10,2) as total_ms
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC LIMIT 10;
 
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-postgresql-optimization
+-- Find unused indexes (wasting write performance)
+SELECT schemaname, indexrelname, idx_scan
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0 ORDER BY pg_relation_size(indexrelid) DESC;
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-postgresql-optimization/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Seq Scan on large table | Missing index | Add index on WHERE/JOIN columns |
+| Sort uses disk | work_mem too low | Increase work_mem for session |
+| Connection exhaustion | No pooling | Add pgbouncer or connection pool |
+| Planner picks wrong plan | Stale statistics | Run ANALYZE on affected tables |

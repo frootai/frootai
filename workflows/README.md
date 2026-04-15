@@ -62,7 +62,7 @@ Safe-outputs constrain what the workflow agent can produce — preventing runawa
 | `create-pull-request` | `draft: true`, `title-prefix` |
 | `noop` | Agent can choose to produce no output |
 
-## Planned Workflows
+## implemented Workflows
 
 ### Quality & Health (4)
 

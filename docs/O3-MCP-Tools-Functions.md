@@ -663,7 +663,7 @@ The FAI Engine is the runtime for the FAI Protocol — it reads `fai-manifest.js
 | `inspect_wiring` | Audit an existing play's wiring: primitives resolved, context chains, health score |
 | `validate_manifest` | Validate `fai-manifest.json` schema: required fields, primitive paths, guardrail thresholds |
 | `get_play_detail` | Full play specification: services, config, WAF alignment, evaluation metrics |
-| `list_primitives` | Browse 830+ primitives by type: agents (238), instructions (176), skills (282), hooks (10), plugins (77) |
+| `list_primitives` | Browse 830+ primitives by type: agents (238), instructions (176), skills (322), hooks (10), plugins (77) |
 | `evaluate_quality` | Run quality evaluation with configurable thresholds — pass/fail with action recommendations |
 
 ### Category 6: Scaffold & Create (3 tools)

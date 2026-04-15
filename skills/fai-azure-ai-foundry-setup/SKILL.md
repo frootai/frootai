@@ -1,161 +1,148 @@
 ---
 name: fai-azure-ai-foundry-setup
-description: 'Sets up Azure AI Foundry Hub/Project with RBAC, networking, and connected services.'
+description: |
+  Set up Azure AI Foundry with hub/project topology, model deployments, evaluation pipelines,
+  Prompt Flow integration, and secure networking. Use when provisioning AI Foundry for
+  model management and experimentation.
 ---
 
-# Fai Azure Ai Foundry Setup
+# Azure AI Foundry Setup
 
-Sets up Azure AI Foundry Hub/Project with RBAC, networking, and connected services.
+Provision and configure Azure AI Foundry for model management, evaluation, and experimentation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for sets up azure ai foundry hub/project with rbac, networking, and connected services.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Setting up a new AI development environment
+- Deploying models through AI Foundry hub/project
+- Creating evaluation pipelines for model quality tracking
+- Integrating Prompt Flow for prompt engineering workflows
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Step 1: Provision Hub and Project
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+// Hub — shared infrastructure (networking, identity, storage)
+resource hub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
+  name: hubName
+  location: location
+  kind: 'Hub'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    friendlyName: 'AI Foundry Hub'
+    storageAccount: storageAccount.id
+    keyVault: keyVault.id
+    applicationInsights: appInsights.id
+    publicNetworkAccess: 'Disabled'
+  }
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: sets up azure ai foundry hub/project with rbac, networking, and connected services..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-ai-foundry-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-ai-foundry-setup/"]
+// Project — team-scoped workspace under the hub
+resource project 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
+  name: projectName
+  location: location
+  kind: 'Project'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    friendlyName: 'Enterprise RAG Project'
+    hubResourceId: hub.id
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2: Deploy Models
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```bash
+# Deploy GPT-4o via Azure CLI
+az ml serverless-endpoint create \
+  --resource-group $RG \
+  --workspace-name $PROJECT \
+  --name gpt-4o-endpoint \
+  --model-id azureml://registries/azure-openai/models/gpt-4o
 
-## Configuration Reference
+# Deploy embedding model
+az ml online-deployment create \
+  --resource-group $RG \
+  --workspace-name $PROJECT \
+  --endpoint-name embedding-endpoint \
+  --file deployment-config.yml
+```
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+## Step 3: Configure RBAC
+
+```bicep
+// Grant project identity access to Azure OpenAI
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(project.id, openAI.id, cognitiveServicesUserId)
+  scope: openAI
+  properties: {
+    principalId: project.identity.principalId
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd') // Cognitive Services OpenAI User
+    principalType: 'ServicePrincipal'
+  }
 }
 ```
 
-## Monitoring
+## Step 4: Evaluation Pipeline
 
-Track skill execution metrics:
+```python
+from azure.ai.evaluation import evaluate
+from azure.identity import DefaultAzureCredential
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+# Run evaluation against deployed model
+result = evaluate(
+    data="evaluation/test-dataset.jsonl",
+    evaluators={
+        "groundedness": GroundednessEvaluator(credential=DefaultAzureCredential()),
+        "relevance": RelevanceEvaluator(credential=DefaultAzureCredential()),
+        "coherence": CoherenceEvaluator(credential=DefaultAzureCredential()),
+    },
+    target=lambda row: call_model(row["question"], row["context"]),
+)
+
+print(f"Groundedness: {result.metrics['groundedness.score']:.2f}")
+print(f"Relevance: {result.metrics['relevance.score']:.2f}")
+```
+
+## Step 5: Prompt Flow Integration
+
+```yaml
+# flow.dag.yaml — Prompt Flow definition
+inputs:
+  question: { type: string }
+  context: { type: string }
+nodes:
+  - name: format_prompt
+    type: prompt
+    source: { type: code, path: prompts/rag-prompt.jinja2 }
+    inputs: { question: ${inputs.question}, context: ${inputs.context} }
+  - name: call_llm
+    type: llm
+    source: { type: code, path: llm_call.py }
+    inputs: { prompt: ${format_prompt.output} }
+    connection: azure_openai
+    api: chat
+outputs:
+  answer: { value: ${call_llm.output} }
+```
+
+## Networking
+
+| Component | Network Access | Auth |
+|-----------|---------------|------|
+| Hub | Private endpoint | Managed Identity |
+| Project | Inherits from Hub | MI + RBAC |
+| OpenAI | Private endpoint | MI (OpenAI User role) |
+| Storage | Private endpoint | MI (Blob Contributor) |
+| Key Vault | Private endpoint | MI (Secrets User) |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Eval pipeline can't reach model | RBAC not assigned to project MI | Grant Cognitive Services OpenAI User |
+| Prompt Flow times out | Network rules block hub→OpenAI | Verify private endpoint DNS resolution |
+| Model deployment fails | Quota exceeded in region | Check regional capacity, try alternate region |
+| High eval costs | Running against full dataset | Use sampling (100-500 rows) for dev evals |

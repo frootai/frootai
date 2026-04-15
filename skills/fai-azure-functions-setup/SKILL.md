@@ -1,161 +1,145 @@
 ---
 name: fai-azure-functions-setup
-description: 'Creates Azure Functions apps with triggers, bindings, Managed Identity, and monitoring.'
+description: |
+  Configure Azure Functions for AI workloads with Managed Identity, plan sizing,
+  durable orchestrations, and OpenTelemetry observability. Use when building
+  serverless AI endpoints, background processors, or event-driven pipelines.
 ---
 
-# Fai Azure Functions Setup
+# Azure Functions for AI Workloads
 
-Creates Azure Functions apps with triggers, bindings, Managed Identity, and monitoring.
+Configure Functions for serverless AI with identity, scaling, retries, and observability.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates azure functions apps with triggers, bindings, managed identity, and monitoring.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building serverless API endpoints for AI inference
+- Creating event-driven document processing pipelines
+- Running background jobs (embedding generation, evaluation)
+- Orchestrating multi-step AI workflows with Durable Functions
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Bicep Provisioning
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: functionAppName
+  location: location
+  kind: 'functionapp,linux'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    serverFarmId: appServicePlan.id
+    httpsOnly: true
+    siteConfig: {
+      linuxFxVersion: 'PYTHON|3.11'
+      appSettings: [
+        { name: 'AzureWebJobsStorage__accountName', value: storageAccount.name }
+        { name: 'FUNCTIONS_EXTENSION_VERSION', value: '~4' }
+        { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'python' }
+        { name: 'AZURE_OPENAI_ENDPOINT', value: openAI.properties.endpoint }
+        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
+      ]
+    }
+  }
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: creates azure functions apps with triggers, bindings, managed identity, and monitoring..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-functions-setup
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-functions-setup/"]
+resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: planName
+  location: location
+  sku: { name: 'EP1', tier: 'ElasticPremium' }
+  properties: {
+    reserved: true
+    maximumElasticWorkerCount: 10
   }
 }
 ```
 
-### Via Agent Invocation
+## Python Function with OpenAI
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+import azure.functions as func
+from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+import json, logging
 
-## Configuration Reference
+app = func.FunctionApp()
+
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
+)
+client = AzureOpenAI(
+    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    azure_ad_token_provider=token_provider,
+    api_version="2024-10-21",
+)
+
+@app.route(route="chat", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+async def chat(req: func.HttpRequest) -> func.HttpResponse:
+    body = req.get_json()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": body["message"]}],
+        temperature=0.3,
+        max_tokens=1024,
+    )
+    return func.HttpResponse(
+        json.dumps({"reply": response.choices[0].message.content}),
+        mimetype="application/json",
+    )
+
+@app.blob_trigger(arg_name="blob", path="documents/{name}",
+                   connection="AzureWebJobsStorage")
+async def process_document(blob: func.InputStream):
+    logging.info(f"Processing: {blob.name}, size: {blob.length}")
+    content = blob.read().decode("utf-8")
+    # Embed and index the document...
+```
+
+## Plan Sizing
+
+| Plan | Min Instances | Scale-out | Cold Start | Best For |
+|------|--------------|-----------|------------|----------|
+| Consumption | 0 | 200 | Yes (seconds) | Dev, low-traffic |
+| Flex Consumption | 0 | 1000 | Reduced | Variable traffic |
+| Elastic Premium (EP1) | 1 | 20 | None | Production AI |
+| Dedicated (P1v3) | 1 | 30 | None | Sustained high load |
+
+**For AI workloads:** Use Elastic Premium with `min_instances=1` to eliminate cold starts.
+
+## Retry Policy
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "retry": {
+    "strategy": "exponentialBackoff",
+    "maxRetryCount": 5,
+    "minimumInterval": "00:00:04",
+    "maximumInterval": "00:15:00"
+  }
 }
 ```
 
-## Monitoring
+## RBAC for Managed Identity
 
-Track skill execution metrics:
+```bash
+# Grant Function MI access to OpenAI
+az role assignment create \
+  --assignee-object-id $FUNC_MI_ID \
+  --role "Cognitive Services OpenAI User" \
+  --scope $OPENAI_RESOURCE_ID
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+# Grant access to Storage (for blob trigger)
+az role assignment create \
+  --assignee-object-id $FUNC_MI_ID \
+  --role "Storage Blob Data Contributor" \
+  --scope $STORAGE_RESOURCE_ID
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Cold start latency >5s | Consumption plan, no pre-warmed instances | Switch to Premium with min_instances ≥ 1 |
+| 403 on OpenAI calls | MI missing RBAC role | Grant Cognitive Services OpenAI User |
+| Blob trigger not firing | Storage connection using keys, not MI | Set AzureWebJobsStorage__accountName (MI-based) |
+| Function timeout (5 min) | Long AI processing on Consumption | Increase timeout or use Durable Functions |

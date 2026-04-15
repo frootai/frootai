@@ -1,160 +1,108 @@
 ---
 name: fai-build-integration-test
-description: 'Generates integration tests with real service connections, test containers, and cleanup.'
+description: |
+  Create integration tests with service contracts, seeded fixtures, deterministic
+  assertions, and CI-friendly test isolation. Use when testing API endpoints,
+  database interactions, or multi-service workflows.
 ---
 
-# Fai Build Integration Test
+# Integration Test Patterns
 
-Generates integration tests with real service connections, test containers, and cleanup.
+Build reliable integration tests with fixtures, isolation, and deterministic assertions.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates integration tests with real service connections, test containers, and cleanup.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Testing API endpoints against real or emulated services
+- Validating database operations with seeded test data
+- Testing multi-service interactions (API -> Queue -> Worker)
+- Running tests in CI with isolated environments
 
-**Category:** Testing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Python: FastAPI Integration Test
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```python
+import pytest
+from httpx import AsyncClient, ASGITransport
+from main import app
 
-## Steps
+@pytest.fixture
+async def client():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as c:
+        yield c
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+@pytest.mark.asyncio
+async def test_create_and_get(client):
+    resp = await client.post("/items", json={"name": "Test", "category": "test"})
+    assert resp.status_code == 201
+    item_id = resp.json()["id"]
+    resp = await client.get(f"/items/{item_id}")
+    assert resp.status_code == 200
+    assert resp.json()["name"] == "Test"
 ```
 
-### Step 2: Load Configuration
+## .NET: WebApplicationFactory
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: generates integration tests with real service connections, test containers, and cleanup..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Compatible Solution Plays
-
-- **Play 32**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-integration-test
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
+```csharp
+public class ApiTests : IClassFixture<WebApplicationFactory<Program>>
 {
-  "primitives": {
-    "skills": ["skills/fai-build-integration-test/"]
-  }
+    private readonly HttpClient _client;
+    public ApiTests(WebApplicationFactory<Program> factory) =>
+        _client = factory.CreateClient();
+
+    [Fact]
+    public async Task CreateItem_Returns201()
+    {
+        var resp = await _client.PostAsJsonAsync("/items",
+            new { Name = "Test", Category = "test" });
+        Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
+    }
 }
 ```
 
-### Via Agent Invocation
+## Database Fixture with Rollback
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
+```python
+@pytest.fixture
+async def db():
+    async with engine.begin() as conn:
+        session = AsyncSession(bind=conn)
+        yield session
+        await conn.rollback()
 ```
 
-## Monitoring
+## Test Isolation Patterns
 
-Track skill execution metrics:
+| Pattern | How | When |
+|---------|-----|------|
+| Transaction rollback | Wrap in txn, rollback after | DB tests |
+| Testcontainers | Programmatic containers | Local + CI |
+| Docker Compose services | Spin up deps per CI run | Multi-service |
+| Mock external APIs | responses/respx library | External APIs |
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## CI Configuration
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_PASSWORD: test }
+        ports: ["5432:5432"]
+    steps:
+      - uses: actions/checkout@v4
+      - run: pytest tests/integration/ -v
+        env: { DATABASE_URL: "postgresql://postgres:test@localhost/postgres" }
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Testing category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Flaky tests | Shared state | Use transaction rollback or fresh containers |
+| Slow CI | Starting services per test | Use services block or Testcontainers reuse |
+| Auth failures | Missing test credentials | Mock auth middleware in test |
+| Port conflicts | Same runner, same port | Use dynamic ports or Docker networks |

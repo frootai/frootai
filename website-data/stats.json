@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-07T13:55:23.999Z",
+  "generated": "2026-04-15T07:34:58.236Z",
   "counts": {
     "agents": 238,
     "instructions": 176,
@@ -8,10 +8,10 @@
     "plugins": 77,
     "workflows": 12,
     "cookbook": 16,
-    "solutionPlays": 100,
+    "solutionPlays": 101,
     "schemas": 7,
     "engineModules": 8,
-    "cicdWorkflows": 15,
+    "cicdWorkflows": 17,
     "mcpTools": 22
   },
   "marketplace": {

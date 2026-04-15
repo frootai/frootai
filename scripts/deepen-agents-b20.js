@@ -153,7 +153,7 @@ console.log(`\n═══ B20 COMPLETE: min=${Math.min(...fl)} max=${Math.max(...
 // Grand total
 const all = fs.readdirSync(dir).filter(f => f.endsWith(".agent.md"));
 const allL = all.map(f => fs.readFileSync(path.join(dir, f), "utf8").split("\n").length);
-console.log(`\n═══ ALL 201 AGENTS COMPLETE ═══`);
+console.log(`\n═══ ALL 238 AGENTS COMPLETE ═══`);
 console.log(`  Total agents: ${all.length}`);
 console.log(`  Min: ${Math.min(...allL)}, Max: ${Math.max(...allL)}, Avg: ${Math.round(allL.reduce((a, b) => a + b, 0) / allL.length)}`);
 console.log(`  Under 200: ${allL.filter(l => l < 200).length}`);

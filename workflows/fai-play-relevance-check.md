@@ -1,5 +1,5 @@
 ---
-name: FAI-play-relevance-check
+name: fai-play-relevance-check
 description: "Interactive slash command to assess whether a solution play is still relevant — checks Azure service availability, pricing changes, SDK deprecations, and alternative patterns."
 on:
   slash_command:

@@ -1,155 +1,116 @@
 ---
 name: fai-build-sql-migration
-description: 'Creates database migration scripts with versioning, rollback, and data preservation.'
+description: |
+  Create safe SQL migrations with backward-compatible schema changes, rollback
+  scripts, data integrity checks, and CI/CD integration. Use when evolving
+  database schemas in production.
 ---
 
-# Fai Build Sql Migration
+# SQL Migration Patterns
 
-Creates database migration scripts with versioning, rollback, and data preservation.
+Safe schema evolution with backward-compatible changes, rollback, and validation.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for creates database migration scripts with versioning, rollback, and data preservation.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Adding columns, tables, or indexes to production
+- Renaming or removing columns without downtime
+- Data migrations alongside schema changes
+- Integrating migrations into CI/CD
 
-**Category:** Build Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## File Convention
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+migrations/
+  001_create_users.sql
+  001_create_users_rollback.sql
+  002_add_email.sql
+  002_add_email_rollback.sql
 ```
 
-### Step 2: Load Configuration
+## Add Column (safe)
 
-Read settings from the FAI manifest and TuneKit config files.
+```sql
+-- 002_add_email.sql
+ALTER TABLE users ADD COLUMN email VARCHAR(255) NULL;
+CREATE INDEX idx_users_email ON users(email);
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+-- 002_add_email_rollback.sql
+DROP INDEX IF EXISTS idx_users_email;
+ALTER TABLE users DROP COLUMN IF EXISTS email;
 ```
 
-### Step 3: Execute Core Logic
+## Rename Column (expand-contract)
 
-Perform the primary operation: creates database migration scripts with versioning, rollback, and data preservation..
+```sql
+-- Step 1: Add new (app reads both)
+ALTER TABLE users ADD COLUMN full_name VARCHAR(255);
+UPDATE users SET full_name = name WHERE full_name IS NULL;
 
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+-- Step 2: After all app instances migrated
+ALTER TABLE users DROP COLUMN name;
 ```
 
-## Output
+## Migration Runner
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+```python
+import os, re
 
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-sql-migration
+def run_migrations(conn, dir):
+    cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS _migrations (
+        id SERIAL PRIMARY KEY, name VARCHAR(255) UNIQUE,
+        applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    applied = {r[0] for r in cursor.execute("SELECT name FROM _migrations")}
+    for f in sorted(os.listdir(dir)):
+        if re.match(r'\d{3}_.*\.sql$', f) and 'rollback' not in f and f not in applied:
+            cursor.execute(open(os.path.join(dir, f)).read())
+            cursor.execute("INSERT INTO _migrations (name) VALUES (%s)", (f,))
+            conn.commit()
 ```
 
-### Inside a Solution Play
+## Data Integrity Check
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-sql-migration/"]
-  }
-}
+```sql
+SELECT 'orphans' AS chk, COUNT(*) FROM sessions s
+  LEFT JOIN users u ON s.user_id = u.id WHERE u.id IS NULL
+UNION ALL
+SELECT 'null_emails', COUNT(*) FROM users WHERE email IS NULL AND created_at > '2026-01-01';
 ```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Breaks running app | Non-backward-compatible | Use expand-contract |
+| Rollback fails | No rollback script | Always create alongside |
+| Duplicate apply | No tracking table | Use _migrations with UNIQUE |
+| Slow ALTER | Full table rewrite | Use online DDL or pg_repack |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Build Tooling category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Always use parameterized queries | Prevent SQL injection |
+| Index columns used in WHERE/JOIN | Query performance |
+| Use EXPLAIN ANALYZE for slow queries | Evidence-based optimization |
+| Test migrations with rollback | Safe schema evolution |
+| Monitor query performance | Catch regressions early |
+| Least-privilege database access | Security best practice |
+
+## Database Quality Checklist
+
+- [ ] All queries use parameterized inputs
+- [ ] Indexes exist for all filter/join columns
+- [ ] Migrations have rollback scripts
+- [ ] Connection uses Managed Identity
+- [ ] Query performance baselined
+- [ ] Backup and recovery tested
+
+## Related Skills
+
+- `fai-sql-optimization-skill` — Query performance tuning
+- `fai-sql-code-review-skill` — SQL code review
+- `fai-database-schema-designer` — Schema design
+- `fai-build-sql-migration` — Safe migration patterns

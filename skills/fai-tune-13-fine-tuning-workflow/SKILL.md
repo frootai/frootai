@@ -1,160 +1,188 @@
 ---
 name: fai-tune-13-fine-tuning-workflow
-description: 'Tunes configuration for Play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 13 (Fine-Tuning Workflow) training hyperparameters, dataset validation, LoRA config, and evaluation metrics."
 ---
 
-# Fai Tune 13 Fine Tuning Workflow
+# FAI Tune — Play 13: Fine-Tuning Workflow
 
-Tunes configuration for Play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
-
-This skill provides a structured, repeatable procedure for tunes configuration for play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** Workflow Automation
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/13-fine-tuning-workflow/config/
+├── training.json         # Hyperparameters and training config
+├── dataset.json          # Dataset validation and preprocessing
+├── lora.json             # LoRA/QLoRA adapter configuration
+├── evaluation.json       # Evaluation metrics and thresholds
+└── guardrails.json       # Quality and cost guardrails
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 37**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-13-fine-tuning-workflow
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 — Set Training Hyperparameters
 
 ```json
+// config/training.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-13-fine-tuning-workflow/"]
+  "base_model": "gpt-4o-mini-2024-07-18",
+  "method": "supervised_fine_tuning",
+  "hyperparameters": {
+    "n_epochs": 3,
+    "batch_size": 4,
+    "learning_rate_multiplier": 1.0,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01
+  },
+  "training_file": "data/train.jsonl",
+  "validation_file": "data/validation.jsonl",
+  "suffix": "custom-assistant-v1",
+  "seed": 42
+}
+```
+
+**Hyperparameter tuning guidance:**
+
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `n_epochs` | 1-10 | 3 | Start with 3; increase if validation loss still dropping |
+| `batch_size` | 1-16 | 4 | Larger = faster training but uses more memory |
+| `learning_rate_multiplier` | 0.1-2.0 | 1.0 | Lower for large datasets; higher for small |
+| `seed` | any int | 42 | Pin for reproducibility |
+
+## Step 2 — Validate Dataset Quality
+
+```json
+// config/dataset.json
+{
+  "format": "chat_completion",
+  "min_examples": 50,
+  "max_examples": 100000,
+  "validation_split": 0.20,
+  "quality_checks": {
+    "min_message_length": 10,
+    "max_message_length": 32768,
+    "require_system_message": true,
+    "require_assistant_response": true,
+    "max_token_count_per_example": 16384,
+    "check_duplicates": true,
+    "max_duplicate_rate": 0.05
+  },
+  "preprocessing": {
+    "strip_whitespace": true,
+    "normalize_unicode": true,
+    "remove_empty_messages": true
   }
 }
 ```
 
-### Via Agent Invocation
+```python
+# Validate dataset before submitting
+import json
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+def validate_dataset(filepath, config):
+    with open(filepath) as f:
+        examples = [json.loads(line) for line in f]
 
-## Configuration Reference
+    errors = []
+    if len(examples) < config["min_examples"]:
+        errors.append(f"Too few examples: {len(examples)} < {config['min_examples']}")
+
+    for i, ex in enumerate(examples):
+        messages = ex.get("messages", [])
+        if not any(m["role"] == "assistant" for m in messages):
+            errors.append(f"Example {i}: missing assistant response")
+        total_tokens = sum(len(m["content"].split()) for m in messages)
+        if total_tokens > config["quality_checks"]["max_token_count_per_example"]:
+            errors.append(f"Example {i}: exceeds max token count")
+
+    if errors:
+        print(f"FAIL: {len(errors)} validation errors")
+        for e in errors[:10]:
+            print(f"  - {e}")
+    else:
+        print(f"PASS: {len(examples)} examples validated")
+    return len(errors) == 0
+```
+
+## Step 3 — Configure LoRA Adapters (Open-Source Models)
 
 ```json
+// config/lora.json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "method": "qlora",
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": ["q_proj", "v_proj", "k_proj", "o_proj"],
+  "quantization": {
+    "bits": 4,
+    "type": "nf4",
+    "double_quantization": true
+  },
+  "gradient_checkpointing": true,
+  "max_grad_norm": 1.0
 }
 ```
 
-## Monitoring
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `lora_r` | 4-64 | 16 | Higher = more capacity but slower training |
+| `lora_alpha` | r to 2*r | 32 | Typically 2x lora_r |
+| `lora_dropout` | 0.0-0.1 | 0.05 | Small dropout helps prevent overfitting |
+| `bits` | 4 or 8 | 4 | 4-bit is usually sufficient (QLoRA) |
 
-Track skill execution metrics:
+## Step 4 — Set Evaluation Metrics
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+```json
+// config/evaluation.json
+{
+  "metrics": ["accuracy", "f1", "perplexity", "bleu"],
+  "eval_dataset": "data/test.jsonl",
+  "thresholds": {
+    "accuracy": 0.85,
+    "f1": 0.80,
+    "perplexity_max": 15.0
+  },
+  "comparison_baseline": "base_model",
+  "regression_check": true,
+  "human_eval_sample_size": 50
+}
+```
+
+## Guardrails
+
+```json
+// config/guardrails.json
+{
+  "quality": {
+    "min_accuracy_improvement": 0.05,
+    "max_perplexity": 15.0,
+    "no_regression_on_general_tasks": true
+  },
+  "safety": {
+    "content_safety_eval": true,
+    "bias_detection": true,
+    "harmful_output_rate_max": 0.001
+  },
+  "cost": {
+    "max_training_hours": 24,
+    "max_training_cost_usd": 500,
+    "max_gpu_hours": 48
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Dataset size | 50-100K examples | `wc -l data/train.jsonl` |
+| Validation split | 20% | `wc -l data/validation.jsonl` |
+| Accuracy improvement | >=5% over base | Run evaluation pipeline |
+| Content safety | <=0.1% harmful | Run safety evaluation |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Workflow Automation category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Overfitting | Too many epochs or small dataset | Reduce `n_epochs` to 2 or add more examples |
+| Underfitting | Learning rate too low | Increase `learning_rate_multiplier` to 1.5 |
+| OOM during training | Batch size too large | Reduce `batch_size` to 2 and enable gradient checkpointing |
+| Regression on general tasks | Catastrophic forgetting | Use LoRA instead of full fine-tuning |

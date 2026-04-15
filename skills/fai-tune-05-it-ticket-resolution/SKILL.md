@@ -1,156 +1,163 @@
 ---
 name: fai-tune-05-it-ticket-resolution
-description: 'Tunes configuration for Play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 05 (IT Ticket Resolution) classifier routing, priority scoring, SLA thresholds, and escalation model config."
 ---
 
-# Fai Tune 05 It Ticket Resolution
+# FAI Tune — Play 05: IT Ticket Resolution
 
-Tunes configuration for Play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
+All tunable parameters live in `config/` inside the solution play:
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/05-it-ticket-resolution/config/
+├── classifier.json       # Ticket classification model settings
+├── routing.json          # Team routing rules + priority matrix
+├── sla.json              # SLA targets per priority level
+├── escalation.json       # Auto-escalation triggers
+└── guardrails.json       # Quality + safety thresholds
 ```
 
-### Step 2: Load Configuration
+## Step 1 — Validate Classifier Model Config
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-05-it-ticket-resolution
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+The classifier routes incoming tickets to the correct resolution team:
 
 ```json
+// config/classifier.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-05-it-ticket-resolution/"]
+  "model": "gpt-4o-mini",
+  "temperature": 0.0,
+  "max_tokens": 256,
+  "categories": [
+    "network", "hardware", "software", "access-control",
+    "email", "vpn", "printer", "other"
+  ],
+  "confidence_threshold": 0.85,
+  "fallback_category": "other",
+  "few_shot_examples": 5,
+  "structured_output": true
+}
+```
+
+**Tuning checklist:**
+
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `temperature` | 0.0 | 0.0 | Must be 0 for deterministic classification |
+| `confidence_threshold` | 0.7-0.95 | 0.85 | Lower = more auto-routing; higher = more human review |
+| `few_shot_examples` | 3-10 | 5 | More = better accuracy, higher token cost |
+| `model` | gpt-4o-mini, gpt-4o | gpt-4o-mini | Mini sufficient for classification |
+
+## Step 2 — Tune Priority and Routing Matrix
+
+```json
+// config/routing.json
+{
+  "priority_matrix": {
+    "P1-critical": {
+      "sla_response_minutes": 15,
+      "sla_resolution_hours": 4,
+      "auto_escalate_after_minutes": 30,
+      "teams": ["infra-oncall", "security-oncall"]
+    },
+    "P2-high": {
+      "sla_response_minutes": 60,
+      "sla_resolution_hours": 8,
+      "auto_escalate_after_minutes": 120,
+      "teams": ["it-support-l2"]
+    },
+    "P3-medium": {
+      "sla_response_minutes": 240,
+      "sla_resolution_hours": 24,
+      "auto_escalate_after_minutes": 480,
+      "teams": ["it-support-l1"]
+    },
+    "P4-low": {
+      "sla_response_minutes": 480,
+      "sla_resolution_hours": 72,
+      "auto_escalate_after_minutes": null,
+      "teams": ["self-service"]
+    }
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
+## Step 3 — Configure Escalation Rules
 
 ```json
+// config/escalation.json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "auto_escalate": true,
+  "escalation_triggers": [
+    { "condition": "sla_breach_warning", "threshold_percent": 80 },
+    { "condition": "negative_sentiment", "threshold": 0.3 },
+    { "condition": "repeated_reopens", "count": 3 },
+    { "condition": "vip_requester", "auto_priority": "P2-high" }
+  ],
+  "notification_channels": ["teams", "email", "pagerduty"],
+  "escalation_chain": ["l1-support", "l2-support", "manager"]
 }
 ```
 
-## Monitoring
+## Step 4 — Set Guardrails Thresholds
 
-Track skill execution metrics:
+```json
+// config/guardrails.json
+{
+  "response_quality": {
+    "groundedness": 0.85,
+    "relevance": 0.80,
+    "coherence": 0.85,
+    "min_response_length": 50,
+    "max_response_length": 2000
+  },
+  "safety": {
+    "pii_detection": true,
+    "pii_mask_in_logs": true,
+    "block_credential_sharing": true
+  },
+  "cost": {
+    "max_tokens_per_ticket": 4096,
+    "max_tokens_per_day": 500000,
+    "preferred_model": "gpt-4o-mini"
+  }
+}
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 5 — Run Evaluation Pipeline
+
+```python
+from azure.ai.evaluation import evaluate, GroundednessEvaluator, RelevanceEvaluator
+
+results = evaluate(
+    data="evaluation/test-tickets.jsonl",
+    evaluators={
+        "groundedness": GroundednessEvaluator(model_config),
+        "relevance": RelevanceEvaluator(model_config),
+    }
+)
+
+for metric, score in results["metrics"].items():
+    threshold = guardrails["response_quality"].get(metric, 0.8)
+    status = "PASS" if score >= threshold else "FAIL"
+    print(f"{status} {metric}: {score:.2f} (threshold: {threshold})")
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Classifier temperature | 0.0 | `jq '.temperature' config/classifier.json` |
+| Confidence threshold | 0.7-0.95 | `jq '.confidence_threshold' config/classifier.json` |
+| SLA P1 response | <=15 min | `jq '.priority_matrix["P1-critical"].sla_response_minutes' config/routing.json` |
+| Groundedness score | >=0.85 | Run evaluation pipeline |
+| PII masking enabled | true | `jq '.safety.pii_mask_in_logs' config/guardrails.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Misclassified tickets | Low confidence threshold | Increase `few_shot_examples` to 8+ |
+| SLA breaches | Escalation timing too slow | Reduce `auto_escalate_after_minutes` by 25% |
+| High token costs | gpt-4o for simple tickets | Set `preferred_model` to gpt-4o-mini |
+| PII in responses | Safety guardrails off | Set `pii_detection: true` |

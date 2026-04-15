@@ -1,156 +1,100 @@
 ---
 name: fai-springboot-kotlin-scaffold
-description: 'Scaffolds a Spring Boot Kotlin project with coroutines, data classes, and Gradle config.'
+description: |
+  Scaffold Spring Boot applications in Kotlin with coroutines, WebFlux,
+  and Gradle configuration. Use when building Kotlin-based microservices
+  with Spring Boot.
 ---
 
-# Fai Springboot Kotlin Scaffold
+# Spring Boot Kotlin Scaffold
 
-Scaffolds a Spring Boot Kotlin project with coroutines, data classes, and Gradle config.
+Build Spring Boot services in Kotlin with coroutines and WebFlux.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds a spring boot kotlin project with coroutines, data classes, and gradle config.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building Kotlin microservices with Spring Boot
+- Using coroutines for async endpoint handling
+- Setting up Gradle with Kotlin DSL
+- Creating REST APIs with Spring WebFlux
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## build.gradle.kts
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```kotlin
+plugins {
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.spring") version "2.0.0"
+    id("org.springframework.boot") version "3.3.0"
+    id("io.spring.dependency-management") version "1.1.5"
+}
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds a spring boot kotlin project with coroutines, data classes, and gradle config..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-springboot-kotlin-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-springboot-kotlin-scaffold/"]
-  }
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 ```
 
-### Via Agent Invocation
+## Controller with Coroutines
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```kotlin
+@RestController
+@RequestMapping("/api")
+class ChatController(private val chatService: ChatService) {
 
-## Configuration Reference
+    @PostMapping("/chat")
+    suspend fun chat(@RequestBody request: ChatRequest): ChatResponse {
+        return chatService.chat(request)
+    }
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+    @GetMapping("/health")
+    suspend fun health(): Map<String, String> {
+        return mapOf("status" to "healthy")
+    }
+}
+
+data class ChatRequest(val message: String, val model: String = "gpt-4o-mini")
+data class ChatResponse(val reply: String, val tokens: Int)
+```
+
+## Service
+
+```kotlin
+@Service
+class ChatService(private val openAIClient: OpenAIClient) {
+
+    suspend fun chat(request: ChatRequest): ChatResponse {
+        val response = openAIClient.complete(request.message, request.model)
+        return ChatResponse(
+            reply = response.content,
+            tokens = response.totalTokens
+        )
+    }
 }
 ```
 
-## Monitoring
+## Configuration
 
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+```kotlin
+@Configuration
+class OpenAIConfig {
+    @Bean
+    fun openAIClient(
+        @Value("\${azure.openai.endpoint}") endpoint: String
+    ): OpenAIClient {
+        return OpenAIClient(endpoint, DefaultAzureCredential())
+    }
+}
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Null safety issues | Java interop | Use `!!` carefully, prefer Kotlin types |
+| Coroutine scope leak | Missing structured concurrency | Use coroutineScope in service |
+| Jackson serialize error | No Kotlin module | Add jackson-module-kotlin dependency |
+| Spring DI fails | Missing open modifier | Apply kotlin-spring plugin (opens classes) |
 
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog

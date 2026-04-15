@@ -1,180 +1,148 @@
 ---
 name: fai-api-docs-generator
-description: 'Generates API documentation from OpenAPI specs or code annotations with examples and error codes.'
+description: |
+  Generate API documentation from OpenAPI specs with auth examples, error taxonomy,
+  and runnable code snippets. Use when creating or updating API reference docs,
+  building developer portals, or ensuring spec-to-doc consistency.
 ---
 
-# Fai Api Docs Generator
+# API Documentation Generator
 
-Generates API documentation from OpenAPI specs or code annotations with examples and error codes.
+Generate comprehensive API reference documentation from OpenAPI specifications.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for generates api documentation from openapi specs or code annotations with examples and error codes.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating API documentation for a new service
+- Keeping docs in sync with OpenAPI spec changes
+- Building developer portal content with runnable examples
+- Generating error catalogs and auth flow documentation
 
-**Category:** API Development
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Step 1: Parse the OpenAPI Spec
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+Read and validate the OpenAPI document:
 
-## Steps
+```python
+import json, yaml
+from pathlib import Path
 
-### Step 1: Validate Prerequisites
+def load_spec(spec_path: str) -> dict:
+    """Load OpenAPI 3.x spec from JSON or YAML."""
+    content = Path(spec_path).read_text()
+    if spec_path.endswith(('.yml', '.yaml')):
+        spec = yaml.safe_load(content)
+    else:
+        spec = json.loads(content)
 
-Verify all required tools, credentials, and dependencies are available.
+    assert spec.get("openapi", "").startswith("3."), "Requires OpenAPI 3.x"
+    return spec
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+def extract_endpoints(spec: dict) -> list[dict]:
+    """Extract all endpoints with method, path, summary, and parameters."""
+    endpoints = []
+    for path, methods in spec.get("paths", {}).items():
+        for method, details in methods.items():
+            if method in ("get", "post", "put", "patch", "delete"):
+                endpoints.append({
+                    "method": method.upper(),
+                    "path": path,
+                    "summary": details.get("summary", ""),
+                    "parameters": details.get("parameters", []),
+                    "request_body": details.get("requestBody"),
+                    "responses": details.get("responses", {}),
+                    "tags": details.get("tags", []),
+                    "security": details.get("security", []),
+                })
+    return endpoints
 ```
 
-### Step 2: Load Configuration
+## Step 2: Generate Endpoint Documentation
 
-Read settings from the FAI manifest and TuneKit config files.
+For each endpoint, produce a structured documentation section:
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```python
+def render_endpoint(ep: dict) -> str:
+    """Render a single endpoint as markdown."""
+    lines = [f"### {ep['method']} {ep['path']}", "", ep['summary'], ""]
+
+    # Parameters table
+    if ep['parameters']:
+        lines += ["| Parameter | In | Type | Required | Description |",
+                   "|-----------|-----|------|----------|-------------|"]
+        for p in ep['parameters']:
+            schema = p.get('schema', {})
+            lines.append(f"| {p['name']} | {p['in']} | {schema.get('type','-')} "
+                         f"| {p.get('required', False)} | {p.get('description','-')} |")
+        lines.append("")
+
+    # Response codes
+    lines += ["**Responses:**", ""]
+    for code, resp in ep['responses'].items():
+        lines.append(f"- **{code}**: {resp.get('description', '')}")
+
+    return "\n".join(lines)
 ```
 
-### Step 3: Execute Core Logic
+## Step 3: Generate Auth Examples
 
-Perform the primary operation: generates api documentation from openapi specs or code annotations with examples and error codes..
+```python
+AUTH_EXAMPLES = {
+    "bearerAuth": '''\
+curl -H "Authorization: Bearer $TOKEN" \\
+  https://api.example.com/v1/resource''',
 
-### Step 4: Validate Results
+    "apiKey": '''\
+curl -H "X-API-Key: $API_KEY" \\
+  https://api.example.com/v1/resource''',
 
-Verify the output meets quality thresholds and WAF compliance.
+    "oauth2": '''\
+# 1. Get token
+TOKEN=$(curl -s -X POST https://login.microsoftonline.com/$TENANT/oauth2/v2.0/token \\
+  -d "grant_type=client_credentials&client_id=$CLIENT_ID&client_secret=$SECRET&scope=$SCOPE" \\
+  | jq -r '.access_token')
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 14**
-- **Play 52**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-api-docs-generator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-api-docs-generator/"]
-  }
+# 2. Call API
+curl -H "Authorization: Bearer $TOKEN" https://api.example.com/v1/resource''',
 }
 ```
 
-### Via Agent Invocation
+## Step 4: Generate Error Catalog
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```python
+def build_error_catalog(spec: dict) -> str:
+    """Extract all error responses into a unified catalog."""
+    errors = {}
+    for path, methods in spec.get("paths", {}).items():
+        for method, details in methods.items():
+            for code, resp in details.get("responses", {}).items():
+                if code.startswith(("4", "5")):
+                    key = f"{code}"
+                    if key not in errors:
+                        errors[key] = {"code": code, "description": resp.get("description", ""),
+                                       "endpoints": []}
+                    errors[key]["endpoints"].append(f"{method.upper()} {path}")
 
-## API Patterns
-
-### Request Validation
-
-```typescript
-import { z } from "zod";
-
-const RequestSchema = z.object({
-  query: z.string().min(1).max(2000),
-  top_k: z.number().int().min(1).max(50).default(5),
-  filters: z.record(z.string()).optional(),
-});
+    lines = ["## Error Reference", "", "| Code | Description | Endpoints |",
+             "|------|-------------|-----------|"]
+    for e in sorted(errors.values(), key=lambda x: x["code"]):
+        eps = ", ".join(e["endpoints"][:3])
+        lines.append(f"| {e['code']} | {e['description']} | {eps} |")
+    return "\n".join(lines)
 ```
 
-### Response Format
+## Step 5: Validate Doc Freshness in CI
 
-```json
-{
-  "status": "success",
-  "data": { "results": [] },
-  "metadata": {
-    "duration_ms": 245,
-    "tokens_used": 150,
-    "model": "gpt-4o",
-    "cached": false
-  }
-}
+```bash
+# Compare generated docs against committed docs
+python generate_docs.py --spec openapi.json --output docs/api-reference.md
+git diff --exit-code docs/api-reference.md || (echo "API docs are stale" && exit 1)
 ```
 
-### Error Responses
+## Troubleshooting
 
-```json
-{
-  "status": "error",
-  "error": {
-    "code": "RATE_LIMITED",
-    "message": "Too many requests. Retry after 30 seconds.",
-    "retry_after": 30
-  }
-}
-```
-
-## Rate Limiting
-
-| Tier | Requests/min | Tokens/min | Burst |
-|------|-------------|------------|-------|
-| Free | 10 | 5,000 | 20 |
-| Standard | 60 | 50,000 | 120 |
-| Enterprise | 300 | 500,000 | 600 |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the API Development category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Docs drift from spec | No CI validation | Add spec-to-doc diff check in PR pipeline |
+| Missing auth examples | Security schemes not parsed | Map all securitySchemes from spec components |
+| Broken code samples | Hardcoded URLs | Parameterize base URL and use environment variables |

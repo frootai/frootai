@@ -1,156 +1,120 @@
 ---
 name: fai-folder-structure
-description: 'Designs optimal project folder structure based on framework, team size, and complexity.'
+description: |
+  Design scalable repository folder structures for monorepos, microservices,
+  and AI projects. Use when initializing projects, standardizing layouts
+  across teams, or planning repository reorganization.
 ---
 
-# Fai Folder Structure
+# Repository Folder Structure
 
-Designs optimal project folder structure based on framework, team size, and complexity.
+Design clear, scalable project layouts for different architecture styles.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs optimal project folder structure based on framework, team size, and complexity.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Initializing a new project or monorepo
+- Standardizing folder conventions across teams
+- Reorganizing a grown-organically codebase
+- Setting up solution play repository structure
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## AI Application Layout
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+my-ai-app/
+├── .github/
+│   ├── agents/                 # Agent definitions
+│   ├── instructions/           # Copilot instructions
+│   ├── skills/                 # Copilot skills
+│   ├── workflows/              # CI/CD pipelines
+│   └── copilot-instructions.md # Project-level guidance
+├── src/
+│   ├── api/                    # FastAPI/Express endpoints
+│   ├── services/               # Business logic
+│   ├── models/                 # Pydantic/data models
+│   └── utils/                  # Shared utilities
+├── infra/
+│   ├── main.bicep              # Infrastructure entry point
+│   ├── modules/                # Reusable Bicep modules
+│   └── main.bicepparam         # Parameter values
+├── config/
+│   ├── openai.json             # AI model configuration
+│   └── guardrails.json         # Safety thresholds
+├── evaluation/
+│   ├── datasets/               # Test datasets (JSONL)
+│   └── metrics/                # Evaluation results
+├── tests/
+│   ├── unit/                   # Unit tests
+│   ├── integration/            # Integration tests
+│   └── smoke/                  # Post-deploy smoke tests
+├── docs/
+│   └── adr/                    # Architecture Decision Records
+├── Dockerfile
+├── requirements.txt
+├── fai-manifest.json           # FAI Protocol manifest
+└── README.md
 ```
 
-### Step 2: Load Configuration
+## Monorepo Layout
 
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+```
+monorepo/
+├── apps/
+│   ├── api/                    # Backend service
+│   ├── web/                    # Frontend app
+│   └── worker/                 # Background processor
+├── packages/
+│   ├── shared/                 # Shared types/utils
+│   └── sdk/                    # Internal SDK
+├── infra/                      # Shared infrastructure
+├── tools/                      # Build/dev scripts
+└── turbo.json / nx.json        # Monorepo orchestrator config
 ```
 
-### Step 3: Execute Core Logic
+## Naming Conventions
 
-Perform the primary operation: designs optimal project folder structure based on framework, team size, and complexity..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-folder-structure
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-folder-structure/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Element | Convention | Example |
+|---------|-----------|---------|
+| Folders | lowercase-hyphen | `ai-search/` |
+| Files (code) | snake_case (Python), camelCase (TS) | `openai_client.py` |
+| Config files | lowercase-hyphen | `openai-config.json` |
+| Bicep modules | lowercase-hyphen | `key-vault.bicep` |
+| Test files | `test_` prefix (Python) | `test_chat.py` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Can't find files | No convention | Enforce naming rules in CI |
+| Circular imports | Bad dependency direction | Enforce src/ → services/ → utils/ layering |
+| Config scattered | No config/ folder | Centralize in config/ or .env |
+| Tests mixed with source | No tests/ separation | Use dedicated tests/ tree |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Convention over configuration | Reduce decisions, increase consistency |
+| Separate concerns by folder | Clear boundaries, easy navigation |
+| Include health endpoint | Operational readiness from day one |
+| Add .editorconfig | Consistent formatting across IDEs |
+| Include Dockerfile | Containerization-ready from start |
+| Add CI workflow file | Quality gates from first commit |
+
+## Project Initialization Checklist
+
+- [ ] Folder structure created with conventions documented
+- [ ] Dependencies installed and lockfile committed
+- [ ] Health/ready endpoints implemented
+- [ ] Dockerfile with multi-stage build
+- [ ] CI workflow (lint + test + build)
+- [ ] README with quickstart instructions
+- [ ] .gitignore with language-specific exclusions
+
+## Related Skills
+
+- `fai-folder-structure` — Repository layout conventions
+- `fai-readme-generator` — README documentation
+- `fai-multi-stage-docker` — Optimized Dockerfiles
+- `fai-build-github-workflow` — CI/CD setup

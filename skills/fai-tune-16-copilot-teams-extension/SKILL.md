@@ -1,156 +1,108 @@
 ---
 name: fai-tune-16-copilot-teams-extension
-description: 'Tunes configuration for Play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 16 Teams extension behavior with command routing, intent matching, adaptive card payloads, and auth flow."
 ---
 
-# Fai Tune 16 Copilot Teams Extension
+# FAI Tune - Play 16: Copilot Teams Extension
 
-Tunes configuration for Play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Config Layout
 
-## Overview
+solution-plays/16-copilot-teams-extension/config/
+├── intents.json
+├── commands.json
+├── cards.json
+└── auth.json
 
-This skill provides a structured, repeatable procedure for tunes configuration for play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-16-copilot-teams-extension
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 - Validate Core Configuration
 
 ```json
+// config/intents.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-16-copilot-teams-extension/"]
+  "intent_threshold": 0.78,
+  "max_candidates": 4,
+  "fallback_intent": "help",
+  "command_timeout_ms": 6000,
+  "adaptive_card": {
+    "max_actions": 5,
+    "truncate_text_at": 1400
   }
 }
 ```
 
-### Via Agent Invocation
+## Step 2 - Tune Critical Parameters
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `intent_threshold` | 0.60-0.95 | 0.78 | Lower improves recall, may reduce precision. |
+| `max_candidates` | 1-10 | 4 | More candidates may improve hit rate. |
+| `command_timeout_ms` | 1000-15000 | 6000 | Set by downstream SLA. |
+| `max_actions` | 1-10 | 5 | Too many actions hurts usability. |
 
-## Configuration Reference
+## Step 3 - Add Evaluation Gates
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "evaluation": {
+    "enabled": true,
+    "dataset": "evaluation/test-cases.jsonl",
+    "sample_size": 200,
+    "gates": {
+      "quality_min": 0.80,
+      "safety_min": 0.90,
+      "latency_p95_ms_max": 2000
+    }
+  }
 }
 ```
 
-## Monitoring
+```python
+import json
 
-Track skill execution metrics:
+def validate_gate(metrics, gates):
+    failures = []
+    if metrics.get("quality", 0) < gates["quality_min"]:
+        failures.append("quality")
+    if metrics.get("safety", 0) < gates["safety_min"]:
+        failures.append("safety")
+    if metrics.get("latency_p95_ms", 999999) > gates["latency_p95_ms_max"]:
+        failures.append("latency")
+    if failures:
+        raise SystemExit(f"Gate failed: {', '.join(failures)}")
+    print("PASS: all gates met")
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Step 4 - Add Cost Controls
+
+```json
+{
+  "cost_controls": {
+    "daily_budget_usd": 500,
+    "monthly_budget_usd": 10000,
+    "alert_thresholds": [50, 75, 90],
+    "throttle_on_budget_breach": true
+  }
+}
+```
+
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| Intent threshold | 0.60-0.95 | `jq '.intent_threshold' config/intents.json` |
+| Adaptive card actions | <= 5 recommended | `jq '.adaptive_card.max_actions' config/intents.json` |
+| Timeout | <= 15000ms | `jq '.command_timeout_ms' config/intents.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Wrong command triggered | Threshold too low | Increase intent_threshold by 0.03. |
+| Card rendering errors | Payload too large | Reduce truncate_text_at and optional fields. |
+| Auth failures | Token expiry/claims mismatch | Validate auth.json and token refresh flow. |
 
-## Notes
+## Rollback Plan
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+1. Restore previous config from git tag.
+2. Revert model or routing changes first.
+3. Re-run evaluation gate on rollback commit.
+4. Promote rollback only if safety and quality gates pass.

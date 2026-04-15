@@ -1,167 +1,159 @@
 ---
 name: fai-evaluate-02-ai-landing-zone
-description: 'Runs quality evaluation for Play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety.'
+description: 'Evaluates Solution Play 02 AI Landing Zone for policy compliance, reliability, and operational readiness.'
 ---
 
-# Fai Evaluate 02 Ai Landing Zone
+# FAI Skill: Evaluate 02 Ai Landing Zone
 
-Runs quality evaluation for Play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety.
+## Purpose
 
-## Overview
+This skill defines a production-grade workflow for Landing-zone validation across governance, security, and reliability controls. It uses full six-phase execution with explicit validation gates so outcomes remain reproducible and auditable.
 
-This skill provides a structured, repeatable procedure for runs quality evaluation for play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+## Inputs
 
-**Category:** Evaluation
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+| Input | Description |
+|---|---|
+| Core parameters | policy_results, network_checks, identity_checks, incident_readiness |
+| Environment | dev, staging, prod |
+| Constraints | security, reliability, latency, cost, and governance limits |
 
-## Parameters
+## Prerequisites
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+- Scope and quality objectives are approved.
+- Required datasets, configs, and dependencies are versioned.
+- Ownership and approval responsibilities are assigned.
+- Rollback/mitigation strategy exists for failed outcomes.
 
-## Steps
+## Full Phases Coverage
 
-### Step 1: Validate Prerequisites
+### Phase 1: Discover
 
-Verify all required tools, credentials, and dependencies are available.
+- Confirm goals, constraints, and critical user/system journeys.
+- Identify dependencies, assumptions, and risk hotspots.
+- Define measurable acceptance thresholds.
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
+### Phase 2: Design
 
-### Step 2: Load Configuration
+- Choose evaluation or implementation approach with tradeoff notes.
+- Define control points for reliability, safety, and observability.
+- Specify fallback behavior and escalation criteria.
 
-Read settings from the FAI manifest and TuneKit config files.
+### Phase 3: Implement
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
+- Apply incremental changes with review checkpoints.
+- Keep contracts, prompts, and configs explicit and versioned.
+- Minimize hidden coupling and side effects.
 
-### Step 3: Execute Core Logic
+### Phase 4: Validate
 
-Perform the primary operation: runs quality evaluation for play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety..
+- Run quality, regression, and edge-case checks.
+- Verify telemetry, traceability, and evidence capture.
+- Record unresolved risks and remediation actions.
 
-### Step 4: Validate Results
+### Phase 5: Deploy
 
-Verify the output meets quality thresholds and WAF compliance.
+- Roll out through staged gates or controlled promotion.
+- Validate KPIs and health checks at each stage.
+- Stop rollout and rollback when thresholds fail.
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
+### Phase 6: Operate
 
-## Output
+- Monitor drift and post-release behavior continuously.
+- Route incidents via defined owner and SLA.
+- Feed lessons back into next iteration cycle.
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+## WAF-Aligned Quality Gates
 
-## WAF Alignment
+### Reliability
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
+- Retry/timeout/fallback behavior is tested.
+- Health and dependency checks are operational.
+- Degraded-mode responses remain actionable.
 
-## Compatible Solution Plays
+### Security
 
-- **Play 03**
-- **Play 60**
+- Secrets are externalized and access is least-privilege.
+- Data exposure in logs and outputs is controlled.
+- Audit trails exist for critical actions.
 
-## Error Handling
+### Cost Optimization
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+- Resource/model usage is right-sized to workload.
+- High-cost operations are measured and optimized.
+- Budget thresholds and anomaly signals are configured.
 
-## Usage
+### Operational Excellence
 
-### Standalone
+- CI/CD and repeatable run steps are mandatory.
+- Runbooks and rollback instructions are current.
+- Metrics and traces support incident triage.
 
-```bash
-# Run this skill directly
-npx frootai skill run fai-evaluate-02-ai-landing-zone
-```
+### Performance Efficiency
 
-### Inside a Solution Play
+- SLO targets are explicit and monitored.
+- Hot paths are benchmarked and tuned.
+- Payload and compute overhead are controlled.
 
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+### Responsible AI
 
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-evaluate-02-ai-landing-zone/"]
-  }
-}
-```
+- Safety, grounding, and fairness checks are applied where AI exists.
+- User-facing outputs are transparent about AI involvement.
+- Human escalation paths are available for high-impact outcomes.
 
-### Via Agent Invocation
+## Deliverables
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Artifact | Purpose |
+|---|---|
+| Primary output | evaluate-02-report.md, compliance matrix, readiness summary |
+| Validation dossier | Evidence for readiness decisions |
+| Rollback guide | Mitigation and reversal actions |
+| Operate handoff | Monitoring and ownership instructions |
 
-## Metrics Reference
+## Completion Checklist
 
-| Metric | Range | Threshold | Description |
-|--------|-------|-----------|-------------|
-| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
-| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
-| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
-| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
-| Safety | 0-4 | 0 | Content safety violations |
-| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+- [ ] Phase 1 discovery evidence captured.
+- [ ] Phase 2 design decisions documented.
+- [ ] Phase 3 implementation reviewed.
+- [ ] Phase 4 validation passed.
+- [ ] Phase 5 staged rollout completed.
+- [ ] Phase 6 operate handoff accepted.
+- [ ] Completion criteria met: policy pass rate acceptable, network/isolation validated, operations handoff complete.
 
-## Test Set Format
+## Troubleshooting
 
-```jsonl
-{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
-{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
-```
+### Symptom: Score quality regresses after updates
 
-## CI/CD Integration
+- Compare data/prompt/config version deltas.
+- Validate threshold calibration and scenario coverage.
+- Re-run with fixed baselines for controlled comparison.
 
-```yaml
-# .github/workflows/eval.yml
-- name: Run FAI Evaluation
-  run: |
-    python evaluation/eval.py --test-set evaluation/test-set.jsonl
-    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
-```
+### Symptom: Cost or latency spikes during runs
 
-## Regression Tracking
+- Inspect hot paths, retries, and caching effectiveness.
+- Right-size model/resource choices for workload class.
+- Tune timeouts, concurrency, and batching policies.
 
-Track evaluation scores over time to detect quality regressions:
+### Symptom: Inconsistent outcomes between environments
+
+- Verify environment parity for dependencies and flags.
+- Check data residency and endpoint routing differences.
+- Execute representative smoke suites pre-release.
+
+## Example Commands
 
 ```bash
-# Compare with baseline
-python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+# Adapt to repository conventions
+npm run lint
+npm test
+npm run build
 ```
 
-## Notes
+## Definition of Done
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Evaluation category in the FAI primitives catalog
+The skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce the workflow without tribal knowledge.
+
+## Metadata
+
+- Category: Evaluation
+- Maintainer: FAI Skill System
+- Review cadence: Quarterly and after major platform changes

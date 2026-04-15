@@ -1,156 +1,104 @@
 ---
 name: fai-sql-optimization-skill
-description: 'Optimizes SQL queries with execution plan analysis, index recommendations, and rewrite suggestions.'
+description: |
+  Optimize SQL queries with execution plan analysis, index tuning, query
+  rewriting, and statistics management. Use when diagnosing slow queries
+  across PostgreSQL, SQL Server, or MySQL.
 ---
 
-# Fai Sql Optimization Skill
+# SQL Query Optimization
 
-Optimizes SQL queries with execution plan analysis, index recommendations, and rewrite suggestions.
+Diagnose and fix slow queries with execution plans, indexes, and rewrites.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for optimizes sql queries with execution plan analysis, index recommendations, and rewrite suggestions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Queries exceeding latency SLOs
+- High CPU or I/O from database operations
+- Identifying missing or redundant indexes
+- Tuning queries for AI application data access
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Execution Plan Analysis
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```sql
+-- PostgreSQL
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT ...;
 
-## Steps
+-- SQL Server
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+-- Then run query, check Messages tab
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+-- MySQL
+EXPLAIN FORMAT=TREE SELECT ...;
 ```
 
-### Step 2: Load Configuration
+## Key Plan Red Flags
 
-Read settings from the FAI manifest and TuneKit config files.
+| Signal | Problem | Fix |
+|--------|---------|-----|
+| Seq Scan / Table Scan | Full table read | Add index on filter columns |
+| Nested Loop (high rows) | N+1 join pattern | Consider Hash/Merge Join |
+| Sort (external) | work_mem too low | Increase work_mem or add sorted index |
+| Key Lookup | Non-covering index | Add INCLUDE columns |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+## Index Optimization
+
+```sql
+-- Composite index for common query pattern
+CREATE INDEX idx_conv_user_status ON conversations(user_id, status, created_at DESC);
+
+-- Covering index (avoids key lookup)
+CREATE INDEX idx_msg_conv_covering ON messages(conversation_id)
+    INCLUDE (role, content, created_at);
+
+-- Partial index (index only relevant rows)
+CREATE INDEX idx_active_conv ON conversations(user_id)
+    WHERE status = 'active';
+
+-- Find unused indexes
+SELECT indexrelname, idx_scan FROM pg_stat_user_indexes
+WHERE idx_scan = 0 ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
-### Step 3: Execute Core Logic
+## Query Rewriting
 
-Perform the primary operation: optimizes sql queries with execution plan analysis, index recommendations, and rewrite suggestions..
+```sql
+-- Bad: Correlated subquery
+SELECT * FROM conversations c
+WHERE (SELECT COUNT(*) FROM messages WHERE conversation_id = c.id) > 10;
 
-### Step 4: Validate Results
+-- Good: JOIN with HAVING
+SELECT c.id, COUNT(m.id) FROM conversations c
+JOIN messages m ON m.conversation_id = c.id
+GROUP BY c.id HAVING COUNT(m.id) > 10;
 
-Verify the output meets quality thresholds and WAF compliance.
+-- Bad: OFFSET pagination
+SELECT * FROM messages ORDER BY created_at LIMIT 20 OFFSET 50000;
 
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+-- Good: Keyset pagination
+SELECT * FROM messages WHERE created_at < @last_seen
+ORDER BY created_at DESC LIMIT 20;
 ```
 
-## Output
+## Statistics Management
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+```sql
+-- PostgreSQL: Update table statistics
+ANALYZE conversations;
+ANALYZE messages;
 
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-sql-optimization-skill
+-- SQL Server: Update statistics
+UPDATE STATISTICS conversations;
+UPDATE STATISTICS messages;
 ```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-sql-optimization-skill/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Seq scan on indexed column | Statistics stale | Run ANALYZE |
+| Slow with LIKE '%text%' | B-tree can't use leading wildcard | Use full-text search or GIN trigram |
+| Join order wrong | Planner estimates off | Update statistics, consider join hints |
+| Index not used | Type mismatch in WHERE | Ensure column and parameter types match |

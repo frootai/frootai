@@ -37,11 +37,11 @@ function updateBadge(readmePath, label, count) {
 
   let content = fs.readFileSync(readmePath, 'utf8');
 
-  // Update shield.io badge pattern: ![Agents](https://img.shields.io/badge/Agents-201-...)
+  // Update shield.io badge pattern: ![Agents](https://img.shields.io/badge/Agents-238-...)
   const badgeRegex = new RegExp(`(img\\.shields\\.io/badge/${label}-)\\d+(-[^)]+)`, 'g');
   const newContent = content.replace(badgeRegex, `$1${count}$2`);
 
-  // Update inline count pattern: **201 agents** or *201 agents*
+  // Update inline count pattern: **238 agents** or *238 agents*
   const countRegex = new RegExp(`\\*\\*\\d+ ${label.toLowerCase()}s?\\*\\*`, 'gi');
   const finalContent = newContent.replace(countRegex, `**${count} ${label.toLowerCase()}${count !== 1 ? 's' : ''}**`);
 

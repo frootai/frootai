@@ -1,156 +1,138 @@
 ---
 name: fai-tune-08-copilot-studio-bot
-description: 'Tunes configuration for Play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 08 (Copilot Studio Bot) topic routing, generative answers config, handoff triggers, and channel settings."
 ---
 
-# Fai Tune 08 Copilot Studio Bot
+# FAI Tune — Play 08: Copilot Studio Bot
 
-Tunes configuration for Play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
-
-This skill provides a structured, repeatable procedure for tunes configuration for play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/08-copilot-studio-bot/config/
+├── topics.json           # Topic routing and trigger phrases
+├── generative.json       # Generative answers (GPT) settings
+├── handoff.json          # Live agent handoff configuration
+├── channels.json         # Teams, Web, Slack channel config
+└── guardrails.json       # Safety and quality thresholds
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-08-copilot-studio-bot
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 — Configure Topic Routing
 
 ```json
+// config/topics.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-08-copilot-studio-bot/"]
+  "fallback_behavior": "generative_answers",
+  "topic_confidence_threshold": 0.75,
+  "max_topic_suggestions": 3,
+  "disambiguation_enabled": true,
+  "greeting_topic": "Welcome",
+  "escalation_topic": "Transfer to Agent",
+  "custom_topics": [
+    {
+      "name": "Order Status",
+      "trigger_phrases": ["where is my order", "track package", "delivery status"],
+      "action": "api_call",
+      "api_endpoint": "/api/orders/{orderId}/status"
+    },
+    {
+      "name": "Return Request",
+      "trigger_phrases": ["return item", "refund", "exchange"],
+      "action": "guided_flow",
+      "require_authentication": true
+    }
+  ]
+}
+```
+
+## Step 2 — Tune Generative Answers (GPT)
+
+```json
+// config/generative.json
+{
+  "enabled": true,
+  "model": "gpt-4o-mini",
+  "temperature": 0.5,
+  "max_tokens": 1024,
+  "knowledge_sources": [
+    { "type": "sharepoint", "url": "https://contoso.sharepoint.com/kb" },
+    { "type": "website", "url": "https://help.contoso.com" },
+    { "type": "dataverse", "table": "kb_articles" }
+  ],
+  "citation_style": "inline",
+  "no_answer_response": "I don't have information about that. Let me connect you with a support agent.",
+  "content_moderation": "strict"
+}
+```
+
+**Tuning checklist:**
+
+| Parameter | Range | Default | Guidance |
+|-----------|-------|---------|----------|
+| `temperature` | 0.3-0.7 | 0.5 | Lower = more factual; higher = more conversational |
+| `max_tokens` | 256-2048 | 1024 | Keep short for chat; increase for detailed answers |
+| `content_moderation` | strict/medium | strict | Always strict for customer-facing bots |
+| `citation_style` | inline/footnote/none | inline | Inline builds trust with source links |
+
+## Step 3 — Set Handoff Configuration
+
+```json
+// config/handoff.json
+{
+  "handoff_triggers": [
+    { "condition": "user_requests_agent", "phrases": ["talk to human", "agent please"] },
+    { "condition": "sentiment_negative", "threshold": -0.5 },
+    { "condition": "topic_not_found", "after_attempts": 2 },
+    { "condition": "authentication_required", "and_user_not_authed": true }
+  ],
+  "handoff_target": "dynamics_omnichannel",
+  "context_transfer": {
+    "include_conversation_history": true,
+    "include_topic_detected": true,
+    "include_sentiment_score": true,
+    "max_history_messages": 10
+  },
+  "queue_message": "Connecting you with a support agent. Estimated wait: {wait_time}."
+}
+```
+
+## Step 4 — Set Guardrails
+
+```json
+// config/guardrails.json
+{
+  "quality": {
+    "topic_resolution_rate": 0.80,
+    "user_satisfaction_target": 4.0,
+    "avg_turns_to_resolution": 5
+  },
+  "safety": {
+    "content_moderation": "strict",
+    "block_competitor_mentions": true,
+    "pii_masking_in_logs": true,
+    "max_consecutive_bot_messages": 3
+  },
+  "cost": {
+    "max_tokens_per_conversation": 8192,
+    "max_generative_calls_per_hour": 1000,
+    "cache_common_responses": true
   }
 }
 ```
 
-### Via Agent Invocation
+## Validation Checklist
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Check | Expected | Command |
+|-------|----------|---------|
+| Content moderation | strict | `jq '.content_moderation' config/generative.json` |
+| Handoff triggers defined | >=2 | `jq '.handoff_triggers | length' config/handoff.json` |
+| PII masking | true | `jq '.safety.pii_masking_in_logs' config/guardrails.json` |
+| Token budget | <=8192/conversation | `jq '.cost.max_tokens_per_conversation' config/guardrails.json` |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Bot gives wrong answers | Knowledge source outdated | Refresh SharePoint/website index |
+| Too many handoffs | Topic threshold too high | Lower `topic_confidence_threshold` to 0.65 |
+| Users frustrated | No disambiguation | Enable `disambiguation_enabled: true` |
+| High token costs | Long conversations | Reduce `max_tokens` to 512 for simple topics |

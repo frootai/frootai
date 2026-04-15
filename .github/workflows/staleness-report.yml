@@ -1,0 +1,144 @@
+name: Staleness Report
+
+on:
+  schedule:
+    # Run weekly on Mondays at 4:00 AM UTC
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      stale_days:
+        description: 'Days without changes to flag as stale'
+        required: false
+        default: '90'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  staleness-scan:
+    name: Detect stale primitives
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0  # Full history for git log dates
+
+      - name: Scan for stale resources
+        id: scan
+        run: |
+          STALE_DAYS="${{ github.event.inputs.stale_days || '90' }}"
+          CUTOFF=$(date -d "${STALE_DAYS} days ago" +%Y-%m-%d 2>/dev/null || date -v-${STALE_DAYS}d +%Y-%m-%d)
+          
+          echo "🔍 Scanning for resources unchanged since ${CUTOFF} (${STALE_DAYS} days)..."
+          echo ""
+          
+          STALE_COUNT=0
+          REPORT=""
+          
+          # Check skills
+          if [ -d "skills" ]; then
+            for dir in skills/*/; do
+              [ ! -f "${dir}SKILL.md" ] && continue
+              LAST_MODIFIED=$(git log -1 --format="%ai" -- "${dir}SKILL.md" 2>/dev/null | cut -d' ' -f1)
+              if [ -n "$LAST_MODIFIED" ] && [ "$LAST_MODIFIED" \< "$CUTOFF" ]; then
+                DAYS_AGO=$(( ($(date +%s) - $(date -d "$LAST_MODIFIED" +%s 2>/dev/null || echo 0)) / 86400 ))
+                REPORT="${REPORT}| skill | $(basename $dir) | ${LAST_MODIFIED} | ${DAYS_AGO}d |\n"
+                STALE_COUNT=$((STALE_COUNT+1))
+              fi
+            done
+          fi
+          
+          # Check agents
+          if [ -d "agents" ]; then
+            for f in agents/*.agent.md; do
+              [ ! -f "$f" ] && continue
+              LAST_MODIFIED=$(git log -1 --format="%ai" -- "$f" 2>/dev/null | cut -d' ' -f1)
+              if [ -n "$LAST_MODIFIED" ] && [ "$LAST_MODIFIED" \< "$CUTOFF" ]; then
+                DAYS_AGO=$(( ($(date +%s) - $(date -d "$LAST_MODIFIED" +%s 2>/dev/null || echo 0)) / 86400 ))
+                REPORT="${REPORT}| agent | $(basename $f .agent.md) | ${LAST_MODIFIED} | ${DAYS_AGO}d |\n"
+                STALE_COUNT=$((STALE_COUNT+1))
+              fi
+            done
+          fi
+          
+          # Check instructions
+          if [ -d "instructions" ]; then
+            for f in instructions/*.instructions.md; do
+              [ ! -f "$f" ] && continue
+              LAST_MODIFIED=$(git log -1 --format="%ai" -- "$f" 2>/dev/null | cut -d' ' -f1)
+              if [ -n "$LAST_MODIFIED" ] && [ "$LAST_MODIFIED" \< "$CUTOFF" ]; then
+                DAYS_AGO=$(( ($(date +%s) - $(date -d "$LAST_MODIFIED" +%s 2>/dev/null || echo 0)) / 86400 ))
+                REPORT="${REPORT}| instruction | $(basename $f .instructions.md) | ${LAST_MODIFIED} | ${DAYS_AGO}d |\n"
+                STALE_COUNT=$((STALE_COUNT+1))
+              fi
+            done
+          fi
+          
+          echo "Found ${STALE_COUNT} stale resources (unchanged >${STALE_DAYS} days)"
+          echo "stale_count=${STALE_COUNT}" >> $GITHUB_OUTPUT
+          
+          if [ $STALE_COUNT -gt 0 ]; then
+            echo "report<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$REPORT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create staleness report issue
+        if: steps.scan.outputs.stale_count > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const staleCount = '${{ steps.scan.outputs.stale_count }}';
+            const report = `${{ steps.scan.outputs.report }}`;
+            const staleDays = '${{ github.event.inputs.stale_days || 90 }}';
+            
+            const body = `## 📦 Weekly Staleness Report
+
+            **${staleCount} resources** unchanged for >${staleDays} days.
+
+            | Type | Name | Last Modified | Age |
+            |------|------|---------------|-----|
+            ${report}
+
+            ### Recommended Actions
+            - Review each stale resource for relevance
+            - Update content if still applicable
+            - Archive or remove if no longer needed
+            - Touch file to reset staleness if content is still current
+
+            _Auto-generated at ${new Date().toISOString()}_`;
+
+            // Close older staleness reports
+            const { data: oldIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'staleness-report',
+              state: 'open',
+            });
+            for (const issue of oldIssues) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📦 Staleness Report: ${staleCount} resources need review`,
+              body,
+              labels: ['staleness-report'],
+            });
+
+      - name: Summary
+        if: always()
+        run: |
+          STALE="${{ steps.scan.outputs.stale_count || '0' }}"
+          echo "## Staleness Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Stale resources (>${{ github.event.inputs.stale_days || '90' }}d):** ${STALE}" >> $GITHUB_STEP_SUMMARY

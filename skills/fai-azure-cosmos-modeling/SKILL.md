@@ -1,161 +1,127 @@
 ---
 name: fai-azure-cosmos-modeling
-description: 'Designs Cosmos DB data models with partition keys, RU estimation, and vector search.'
+description: |
+  Model Cosmos DB containers with partition key strategy, RU budgets, indexing policies,
+  and consistency levels. Use when designing NoSQL data models for AI applications
+  with high throughput and global distribution requirements.
 ---
 
-# Fai Azure Cosmos Modeling
+# Cosmos DB Data Modeling
 
-Designs Cosmos DB data models with partition keys, RU estimation, and vector search.
+Design Cosmos DB containers with optimal partitioning, indexing, and consistency for AI workloads.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs cosmos db data models with partition keys, ru estimation, and vector search.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Designing a new Cosmos DB data model for an AI application
+- Optimizing partition keys to avoid hot partitions
+- Tuning RU consumption with selective indexing
+- Choosing consistency levels for multi-region deployments
 
-**Category:** Azure Integration
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Container Design
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```bicep
+resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
+  name: cosmosName
+  location: location
+  kind: 'GlobalDocumentDB'
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    consistencyPolicy: { defaultConsistencyLevel: 'Session' }
+    locations: [{ locationName: location, failoverPriority: 0 }]
+    capabilities: [{ name: 'EnableServerless' }]  // or use provisioned throughput
+  }
+}
 
-## Steps
+resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-05-15' = {
+  name: 'appdb'
+  parent: cosmosAccount
+  properties: { resource: { id: 'appdb' } }
+}
 
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs cosmos db data models with partition keys, ru estimation, and vector search..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 02**
-- **Play 14**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-azure-cosmos-modeling
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-azure-cosmos-modeling/"]
+resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/sqlContainers@2024-05-15' = {
+  name: 'events'
+  parent: database
+  properties: {
+    resource: {
+      id: 'events'
+      partitionKey: { paths: ['/tenantId'], kind: 'Hash', version: 2 }
+      indexingPolicy: {
+        indexingMode: 'consistent'
+        includedPaths: [{ path: '/category/?' }, { path: '/timestamp/?' }]
+        excludedPaths: [{ path: '/payload/*' }, { path: '/"_etag"/?' }]
+      }
+      defaultTtl: 7776000  // 90 days in seconds
+    }
+    options: { autoscaleSettings: { maxThroughput: 10000 } }
   }
 }
 ```
 
-### Via Agent Invocation
+## Partition Key Selection
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+| Pattern | Good Key | Why |
+|---------|----------|-----|
+| Multi-tenant SaaS | `/tenantId` | Even distribution, natural isolation |
+| IoT telemetry | `/deviceId` | High cardinality, co-located reads |
+| E-commerce | `/customerId` | Most queries scoped to one customer |
+| Chat/session | `/sessionId` | Co-locates conversation history |
+| **Avoid** | `/status`, `/country` | Low cardinality → hot partitions |
 
-## Configuration Reference
+## Query with SDK
+
+```python
+from azure.cosmos import CosmosClient
+from azure.identity import DefaultAzureCredential
+
+client = CosmosClient(
+    url="https://cosmos-prod.documents.azure.com:443/",
+    credential=DefaultAzureCredential()
+)
+container = client.get_database_client("appdb").get_container_client("events")
+
+# Efficient: partition key in query
+items = container.query_items(
+    query="SELECT * FROM c WHERE c.tenantId = @tenant AND c.category = @cat",
+    parameters=[
+        {"name": "@tenant", "value": "tenant-123"},
+        {"name": "@cat", "value": "inference"},
+    ],
+    partition_key="tenant-123",  # Single-partition query = low RU
+)
+
+for item in items:
+    print(f"{item['id']}: {item['category']}")
+```
+
+## Indexing Policy Optimization
+
+Exclude large fields and fields you never filter/sort on:
 
 ```json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "indexingMode": "consistent",
+  "includedPaths": [
+    { "path": "/category/?" },
+    { "path": "/timestamp/?" },
+    { "path": "/status/?" }
+  ],
+  "excludedPaths": [
+    { "path": "/payload/*" },
+    { "path": "/embedding/*" },
+    { "path": "/*" }
+  ]
 }
 ```
 
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+**Rule of thumb:** Exclude everything, then include only paths you query on. This can reduce write RU by 50%+.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Azure Integration category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Hot partitions (429s on some) | Low-cardinality partition key | Choose high-cardinality key, use hierarchical partitioning |
+| High RU charges | Cross-partition queries or over-indexing | Add partition key to queries, trim indexing policy |
+| Stale reads in multi-region | Consistency level too weak | Upgrade from Eventual to Session or Bounded Staleness |
+| TTL not deleting expired items | defaultTtl not set or ttl field missing | Set defaultTtl on container, add ttl field to documents |

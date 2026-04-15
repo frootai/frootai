@@ -1,161 +1,118 @@
 ---
 name: fai-database-schema-designer
-description: 'Designs relational database schemas with normalization, indexes, and referential integrity.'
+description: |
+  Design relational database schemas with normalization, migration safety,
+  query-driven indexing, and constraint enforcement. Use when modeling
+  SQL databases for AI application metadata or operational data.
 ---
 
-# Fai Database Schema Designer
+# Database Schema Design
 
-Designs relational database schemas with normalization, indexes, and referential integrity.
+Design normalized relational schemas with indexes, constraints, and migration safety.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs relational database schemas with normalization, indexes, and referential integrity.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Designing a new SQL database for an AI application
+- Modeling user data, conversation history, or evaluation results
+- Adding indexes for query performance
+- Planning schema migrations for production databases
 
-**Category:** Data Processing
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Schema Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```sql
+-- Users table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    display_name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
-## Steps
+-- Conversations table (FK to users)
+CREATE TABLE conversations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(500),
+    model VARCHAR(50) NOT NULL DEFAULT 'gpt-4o-mini',
+    status VARCHAR(20) NOT NULL DEFAULT 'active'
+        CHECK (status IN ('active', 'archived', 'deleted')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    token_count INT NOT NULL DEFAULT 0
+);
 
-### Step 1: Validate Prerequisites
+-- Messages table
+CREATE TABLE messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    tokens INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+-- Performance indexes
+CREATE INDEX idx_conversations_user_id ON conversations(user_id);
+CREATE INDEX idx_conversations_status ON conversations(status) WHERE status = 'active';
+CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
+CREATE INDEX idx_messages_created_at ON messages(created_at);
 ```
 
-### Step 2: Load Configuration
+## Normalization Guide
 
-Read settings from the FAI manifest and TuneKit config files.
+| Normal Form | Rule | Example |
+|------------|------|---------|
+| 1NF | No repeating groups | Split arrays into rows |
+| 2NF | No partial dependencies | Every non-key depends on full PK |
+| 3NF | No transitive dependencies | Remove derived columns |
+| Denormalize when | Read performance critical | Add token_count to conversation |
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+## Index Strategy
+
+```sql
+-- Covering index for common query
+CREATE INDEX idx_conv_user_active ON conversations(user_id, created_at DESC)
+    WHERE status = 'active';
+
+-- Partial index (only active rows)
+CREATE INDEX idx_active_convs ON conversations(status)
+    WHERE status = 'active';
 ```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: designs relational database schemas with normalization, indexes, and referential integrity..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
-
-## Compatible Solution Plays
-
-- **Play 27**
-- **Play 47**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-database-schema-designer
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-database-schema-designer/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow queries | Missing index on filter column | Add index matching WHERE clause |
+| Orphaned rows | No CASCADE on FK | Add ON DELETE CASCADE or SET NULL |
+| Schema migration fails | Non-backward-compatible change | Use expand-contract pattern |
+| Constraint violations | Bad data from app | Add CHECK constraints + app validation |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Data Processing category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Always use parameterized queries | Prevent SQL injection |
+| Index columns used in WHERE/JOIN | Query performance |
+| Use EXPLAIN ANALYZE for slow queries | Evidence-based optimization |
+| Test migrations with rollback | Safe schema evolution |
+| Monitor query performance | Catch regressions early |
+| Least-privilege database access | Security best practice |
+
+## Database Quality Checklist
+
+- [ ] All queries use parameterized inputs
+- [ ] Indexes exist for all filter/join columns
+- [ ] Migrations have rollback scripts
+- [ ] Connection uses Managed Identity
+- [ ] Query performance baselined
+- [ ] Backup and recovery tested
+
+## Related Skills
+
+- `fai-sql-optimization-skill` — Query performance tuning
+- `fai-sql-code-review-skill` — SQL code review
+- `fai-database-schema-designer` — Schema design
+- `fai-build-sql-migration` — Safe migration patterns

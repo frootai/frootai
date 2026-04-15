@@ -1,86 +1,86 @@
 [
   {
-    "id": "frootai-cost-tracker",
-    "name": "FrootAI Cost Tracker\r",
+    "id": "fai-cost-tracker",
+    "name": "FAI Cost Tracker\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-cost-tracker/"
+    "folder": "hooks/fai-cost-tracker/"
   },
   {
-    "id": "frootai-governance-audit",
-    "name": "FrootAI Governance Audit\r",
+    "id": "fai-governance-audit",
+    "name": "FAI Governance Audit\r",
     "events": [
-      "userPromptSubmitted",
-      "sessionStart",
-      "sessionEnd"
+      "UserPromptSubmit",
+      "SessionStart",
+      "Stop"
     ],
-    "folder": "hooks/frootai-governance-audit/"
+    "folder": "hooks/fai-governance-audit/"
   },
   {
-    "id": "frootai-license-checker",
-    "name": "FrootAI License Checker\r",
+    "id": "fai-license-checker",
+    "name": "FAI License Checker\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-license-checker/"
+    "folder": "hooks/fai-license-checker/"
   },
   {
-    "id": "frootai-output-validator",
-    "name": "FrootAI Output Validator\r",
+    "id": "fai-output-validator",
+    "name": "FAI Output Validator\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-output-validator/"
+    "folder": "hooks/fai-output-validator/"
   },
   {
-    "id": "frootai-pii-redactor",
-    "name": "FrootAI PII Redactor\r",
+    "id": "fai-pii-redactor",
+    "name": "FAI PII Redactor\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-pii-redactor/"
+    "folder": "hooks/fai-pii-redactor/"
   },
   {
-    "id": "frootai-secrets-scanner",
-    "name": "FrootAI Secrets Scanner\r",
+    "id": "fai-secrets-scanner",
+    "name": "FAI Secrets Scanner\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-secrets-scanner/"
+    "folder": "hooks/fai-secrets-scanner/"
   },
   {
-    "id": "frootai-session-logger",
-    "name": "FrootAI Session Logger\r",
+    "id": "fai-session-logger",
+    "name": "FAI Session Logger\r",
     "events": [
-      "sessionStart",
-      "sessionEnd",
-      "userPromptSubmitted"
+      "SessionStart",
+      "Stop",
+      "UserPromptSubmit"
     ],
-    "folder": "hooks/frootai-session-logger/"
+    "folder": "hooks/fai-session-logger/"
   },
   {
-    "id": "frootai-token-budget-enforcer",
-    "name": "FrootAI Token Budget Enforcer\r",
+    "id": "fai-token-budget-enforcer",
+    "name": "FAI Token Budget Enforcer\r",
     "events": [
-      "preToolUse"
+      "SessionStart"
     ],
-    "folder": "hooks/frootai-token-budget-enforcer/"
+    "folder": "hooks/fai-token-budget-enforcer/"
   },
   {
-    "id": "frootai-tool-guardian",
-    "name": "FrootAI Tool Guardian\r",
+    "id": "fai-tool-guardian",
+    "name": "FAI Tool Guardian\r",
     "events": [
-      "preToolUse"
+      "PreToolUse"
     ],
-    "folder": "hooks/frootai-tool-guardian/"
+    "folder": "hooks/fai-tool-guardian/"
   },
   {
-    "id": "frootai-waf-compliance",
-    "name": "FrootAI WAF Compliance\r",
+    "id": "fai-waf-compliance",
+    "name": "FAI WAF Compliance\r",
     "events": [
-      "sessionEnd"
+      "Stop"
     ],
-    "folder": "hooks/frootai-waf-compliance/"
+    "folder": "hooks/fai-waf-compliance/"
   }
 ]

@@ -1,5 +1,5 @@
 ---
-name: FAI-evaluation-regression
+name: fai-evaluation-regression
 description: "Weekly evaluation regression detection — compares play eval scores against baselines, flags quality degradation across groundedness, coherence, relevance, safety, and cost metrics, applies statistical significance testing, and blocks releases on critical regressions."
 on:
   schedule:

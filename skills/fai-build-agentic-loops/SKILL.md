@@ -1,170 +1,130 @@
 ---
 name: fai-build-agentic-loops
-description: 'Implements autonomous agent loops with ReAct pattern, tool calling, and termination conditions.'
+description: |
+  Build agentic feedback loops with planner-critic iterations, stop conditions,
+  budget-aware execution, and disk-based state. Use when implementing autonomous
+  agents that iterate on their own output until quality thresholds are met.
 ---
 
-# Fai Build Agentic Loops
+# Agentic Loop Patterns
 
-Implements autonomous agent loops with ReAct pattern, tool calling, and termination conditions.
+Build autonomous agent loops with planning, execution, critique, and improvement cycles.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for implements autonomous agent loops with react pattern, tool calling, and termination conditions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Agent needs to iterate on output until quality threshold is met
+- Building plan-then-execute workflows (like Ralph Loop pattern)
+- Need budget-aware execution that stops when token limit is reached
+- Want fresh context per iteration to prevent drift
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: implements autonomous agent loops with react pattern, tool calling, and termination conditions..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 07**
-- **Play 22**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-agentic-loops
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-agentic-loops/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Evaluation Pipeline
-
-This skill integrates with the FAI evaluation framework:
+## Pattern 1: Basic Reflection Loop
 
 ```python
-from frootai.evaluation import SkillEvaluator
+def agentic_loop(task: str, max_iterations: int = 4, quality_threshold: float = 0.85):
+    """Generate, evaluate, improve until quality threshold or budget is met."""
+    output = llm(f"Complete this task:\n{task}")
+    total_tokens = 0
 
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
+    for i in range(max_iterations):
+        # Critique
+        evaluation = llm(f"""Rate this output 0.0-1.0 on: correctness, completeness, clarity.
+Task: {task}
+Output: {output}
+Return JSON: {{"score": float, "feedback": "string"}}""")
 
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
+        result = json.loads(evaluation)
+        total_tokens += count_tokens(output) + count_tokens(evaluation)
+
+        if result["score"] >= quality_threshold:
+            return {"output": output, "score": result["score"],
+                    "iterations": i + 1, "tokens": total_tokens}
+
+        # Improve
+        output = llm(f"""Improve based on feedback: {result['feedback']}
+Original task: {task}
+Current output: {output}""")
+
+    return {"output": output, "score": result["score"],
+            "iterations": max_iterations, "tokens": total_tokens}
 ```
 
-## Advanced Configuration
+## Pattern 2: Plan-Execute-Verify (Ralph Loop)
 
-```json
-{
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
-}
+```python
+import json
+from pathlib import Path
+
+STATE_FILE = "IMPLEMENTATION_PLAN.md"
+
+async def ralph_loop(client, max_iterations: int = 5):
+    """Autonomous loop: each iteration gets fresh context from disk state."""
+    for i in range(max_iterations):
+        # Fresh session per iteration (prevents context drift)
+        session = await client.create_session(working_directory=os.getcwd())
+
+        # Read current state from disk
+        plan = Path(STATE_FILE).read_text() if Path(STATE_FILE).exists() else "No plan yet"
+
+        # Execute one task
+        await session.send_and_wait(f"""Read {STATE_FILE}.
+Pick the most important uncompleted task.
+Implement it. Run tests. Update {STATE_FILE}. Commit.""", timeout=600_000)
+
+        await session.destroy()
+
+        # Check if all tasks are done
+        plan = Path(STATE_FILE).read_text()
+        if "[ ]" not in plan:
+            return {"status": "complete", "iterations": i + 1}
+
+    return {"status": "partial", "iterations": max_iterations}
 ```
 
-## Anti-Patterns
+## Pattern 3: Budget-Aware Execution
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
+```python
+class TokenBudget:
+    def __init__(self, max_tokens: int = 50000):
+        self.max_tokens = max_tokens
+        self.used = 0
 
-## Notes
+    def spend(self, tokens: int) -> bool:
+        self.used += tokens
+        return self.used < self.max_tokens
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+    @property
+    def remaining(self) -> int:
+        return max(0, self.max_tokens - self.used)
+
+    @property
+    def exhausted(self) -> bool:
+        return self.used >= self.max_tokens
+
+budget = TokenBudget(max_tokens=30000)
+
+while not budget.exhausted:
+    response = llm(prompt)
+    if not budget.spend(response.usage.total_tokens):
+        break  # Budget exceeded — stop gracefully
+```
+
+## Stop Conditions
+
+| Condition | Check | Purpose |
+|-----------|-------|---------|
+| Quality met | score >= 0.85 | Task complete |
+| Max iterations | i >= max_iterations | Prevent infinite loops |
+| Budget exhausted | tokens >= token_budget | Cost control |
+| No improvement | score_delta < 0.01 | Diminishing returns |
+| Safety violation | safety_score < 0.5 | Stop unsafe generation |
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Infinite loop | No stop conditions | Add max_iterations AND budget limit |
+| Context drift after many iterations | Accumulated context | Use fresh session per iteration (Ralph pattern) |
+| Quality plateaus | Same critique-improve cycle | Change critic model or add new evaluation dimension |
+| High cost | Too many iterations with large model | Use mini for critique, 4o only for generation |

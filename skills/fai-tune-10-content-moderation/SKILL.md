@@ -1,161 +1,151 @@
 ---
 name: fai-tune-10-content-moderation
-description: 'Tunes configuration for Play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization.'
+description: "Tune Play 10 (Content Moderation) severity thresholds, category blocklists, Prompt Shields config, and review workflows."
 ---
 
-# Fai Tune 10 Content Moderation
+# FAI Tune — Play 10: Content Moderation
 
-Tunes configuration for Play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization.
+## TuneKit Configuration Files
 
-## Overview
-
-This skill provides a structured, repeatable procedure for tunes configuration for play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
-
-**Category:** Content Safety
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+solution-plays/10-content-moderation/config/
+├── categories.json       # Content category severity thresholds
+├── blocklists.json       # Custom blocklist configuration
+├── prompt-shields.json   # Prompt injection detection settings
+├── review.json           # Human review workflow config
+└── guardrails.json       # Quality and safety thresholds
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: tunes configuration for play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| security | Validates credentials, enforces least-privilege, scans for secrets |
-
-## Compatible Solution Plays
-
-- **Play 10**
-- **Play 61**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-tune-10-content-moderation
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+## Step 1 — Set Category Severity Thresholds
 
 ```json
+// config/categories.json
 {
-  "primitives": {
-    "skills": ["skills/fai-tune-10-content-moderation/"]
+  "categories": {
+    "Hate": { "severity_threshold": 2, "action": "block" },
+    "Violence": { "severity_threshold": 2, "action": "block" },
+    "Sexual": { "severity_threshold": 2, "action": "block" },
+    "SelfHarm": { "severity_threshold": 2, "action": "block" }
+  },
+  "severity_levels": {
+    "0": "safe",
+    "2": "low — may need review",
+    "4": "medium — likely harmful",
+    "6": "high — definitely harmful"
+  },
+  "default_action": "block",
+  "log_all_detections": true
+}
+```
+
+**Severity tuning:**
+
+| Setting | Conservative | Balanced | Permissive |
+|---------|-------------|----------|------------|
+| Hate threshold | 0 (block all) | 2 | 4 |
+| Violence threshold | 0 | 2 | 4 |
+| Sexual threshold | 0 | 2 | 4 |
+| SelfHarm threshold | 0 | 0 | 2 |
+
+## Step 2 — Configure Custom Blocklists
+
+```json
+// config/blocklists.json
+{
+  "blocklists": [
+    {
+      "name": "competitor-names",
+      "description": "Block competitor brand mentions in bot responses",
+      "terms": ["CompetitorA", "CompetitorB"],
+      "match_type": "exact_or_substring"
+    },
+    {
+      "name": "internal-projects",
+      "description": "Block internal project codenames",
+      "terms": ["ProjectX", "OperationY"],
+      "match_type": "exact"
+    }
+  ],
+  "max_blocklist_terms": 10000,
+  "case_sensitive": false
+}
+```
+
+## Step 3 — Configure Prompt Shields
+
+```json
+// config/prompt-shields.json
+{
+  "prompt_injection_detection": true,
+  "jailbreak_detection": true,
+  "indirect_attack_detection": true,
+  "detection_model": "default",
+  "action_on_detection": "block_and_log",
+  "custom_patterns": [
+    { "pattern": "ignore previous instructions", "severity": "high" },
+    { "pattern": "you are now", "severity": "medium" },
+    { "pattern": "system prompt", "severity": "high" }
+  ],
+  "groundedness_detection": {
+    "enabled": true,
+    "threshold": 0.7,
+    "action": "flag_for_review"
   }
 }
 ```
 
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
+## Step 4 — Set Human Review Workflow
 
 ```json
+// config/review.json
 {
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+  "auto_approve_below_severity": 0,
+  "require_review_above_severity": 2,
+  "review_queue": "content-moderation-review",
+  "reviewer_roles": ["content_moderator", "compliance_officer"],
+  "sla_review_hours": 4,
+  "escalation_after_hours": 8,
+  "review_actions": ["approve", "reject", "modify", "escalate"],
+  "appeal_process": true
 }
 ```
 
-## Monitoring
+## Step 5 — Set Guardrails
 
-Track skill execution metrics:
+```json
+// config/guardrails.json
+{
+  "quality": {
+    "false_positive_rate_max": 0.05,
+    "false_negative_rate_max": 0.01,
+    "detection_latency_ms": 200
+  },
+  "safety": {
+    "block_rate_alert_threshold": 0.10,
+    "review_backlog_alert": 100,
+    "real_time_monitoring": true
+  },
+  "cost": {
+    "max_api_calls_per_minute": 1000,
+    "max_review_queue_size": 500
+  }
+}
+```
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+## Validation Checklist
+
+| Check | Expected | Command |
+|-------|----------|---------|
+| All 4 categories configured | true | `jq '.categories | keys | length' config/categories.json` |
+| Prompt Shields enabled | true | `jq '.prompt_injection_detection' config/prompt-shields.json` |
+| Detection latency | <=200ms | Monitor via Application Insights |
+| False negative rate | <=1% | Run evaluation with adversarial test set |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Content Safety category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Too many false positives | Thresholds too low | Increase severity threshold to 2 |
+| Missed harmful content | Thresholds too high | Lower to 0 for SelfHarm category |
+| Prompt injections passing | Shields disabled | Enable all three detection types |
+| Review backlog growing | SLA too long | Reduce `sla_review_hours` or add reviewers |

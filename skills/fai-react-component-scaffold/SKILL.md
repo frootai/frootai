@@ -1,156 +1,136 @@
 ---
 name: fai-react-component-scaffold
-description: 'Scaffolds React components with TypeScript, Storybook stories, and test files.'
+description: |
+  Scaffold React components with TypeScript, props interfaces, hooks patterns,
+  and Storybook stories. Use when building reusable UI components for
+  React applications.
 ---
 
-# Fai React Component Scaffold
+# React Component Scaffold
 
-Scaffolds React components with TypeScript, Storybook stories, and test files.
+Build typed React components with hooks, stories, and testing.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for scaffolds react components with typescript, storybook stories, and test files.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Creating reusable UI components
+- Setting up component libraries with Storybook
+- Building form components with controlled state
+- Writing component tests with React Testing Library
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Component Template
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+```tsx
+import { useState, useCallback } from 'react';
 
-## Steps
+interface ChatInputProps {
+  onSend: (message: string) => void;
+  disabled?: boolean;
+  placeholder?: string;
+}
 
-### Step 1: Validate Prerequisites
+export function ChatInput({ onSend, disabled = false, placeholder = "Type a message..." }: ChatInputProps) {
+  const [value, setValue] = useState('');
 
-Verify all required tools, credentials, and dependencies are available.
+  const handleSend = useCallback(() => {
+    if (!value.trim()) return;
+    onSend(value.trim());
+    setValue('');
+  }, [value, onSend]);
 
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: scaffolds react components with typescript, storybook stories, and test files..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-react-component-scaffold
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-react-component-scaffold/"]
-  }
+  return (
+    <div className="flex gap-2">
+      <input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleSend()}
+        placeholder={placeholder}
+        disabled={disabled}
+        className="flex-1 border rounded px-3 py-2"
+        aria-label="Chat message"
+      />
+      <button onClick={handleSend} disabled={disabled || !value.trim()}
+        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50">
+        Send
+      </button>
+    </div>
+  );
 }
 ```
 
-### Via Agent Invocation
+## Custom Hook
 
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
+```tsx
+import { useState, useCallback } from 'react';
 
-## Configuration Reference
+interface UseChat {
+  messages: Message[];
+  sendMessage: (content: string) => Promise<void>;
+  isLoading: boolean;
+}
 
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
+export function useChat(): UseChat {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sendMessage = useCallback(async (content: string) => {
+    setMessages(prev => [...prev, { role: 'user', content }]);
+    setIsLoading(true);
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST', body: JSON.stringify({ message: content }),
+      });
+      const data = await resp.json();
+      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { messages, sendMessage, isLoading };
 }
 ```
 
-## Monitoring
+## Test
 
-Track skill execution metrics:
+```tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { ChatInput } from './ChatInput';
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+test('calls onSend with trimmed value', () => {
+  const onSend = jest.fn();
+  render(<ChatInput onSend={onSend} />);
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: '  hello  ' } });
+  fireEvent.click(screen.getByText('Send'));
+  expect(onSend).toHaveBeenCalledWith('hello');
+});
+
+test('disables send when empty', () => {
+  render(<ChatInput onSend={jest.fn()} />);
+  expect(screen.getByText('Send')).toBeDisabled();
+});
+```
+
+## Storybook
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { ChatInput } from './ChatInput';
+
+const meta: Meta<typeof ChatInput> = { component: ChatInput };
+export default meta;
+
+export const Default: StoryObj = { args: { onSend: console.log } };
+export const Disabled: StoryObj = { args: { onSend: console.log, disabled: true } };
+export const CustomPlaceholder: StoryObj = { args: { onSend: console.log, placeholder: "Ask AI..." } };
+```
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Stale closure in callback | Missing dep in useCallback | Add all dependencies |
+| Infinite re-render | Object/array in deps | Use useMemo for objects |
+| Test can't find element | Wrong query | Use getByRole or getByLabelText |
+| Component too complex | Too many responsibilities | Extract custom hooks |

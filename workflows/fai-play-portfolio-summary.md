@@ -1,6 +1,6 @@
 ---
-name: FAI-play-portfolio-summary
-description: "Aggregated portfolio assessment across all 68 solution plays — dashboard of play health, WAF coverage, technology stack analysis, cost estimation, and ecosystem maturity. Auto-closes previous summary."
+name: fai-play-portfolio-summary
+description: "Aggregated portfolio assessment across all solution plays — dashboard of play health, WAF coverage, technology stack analysis, cost estimation, and ecosystem maturity. Auto-closes previous summary."
 on:
   workflow_dispatch: {}
 permissions:
@@ -124,12 +124,12 @@ Build a coverage heatmap showing which pillars are most/least covered across all
 
 | Pillar | Plays Covering | Percentage | Coverage Band |
 |--------|---------------|------------|---------------|
-| Security | X/68 | Y% | 🟢 > 80%, 🟡 50-80%, 🔴 < 50% |
-| Reliability | X/68 | Y% | 🟢/🟡/🔴 |
-| Cost Optimization | X/68 | Y% | 🟢/🟡/🔴 |
-| Operational Excellence | X/68 | Y% | 🟢/🟡/🔴 |
-| Performance Efficiency | X/68 | Y% | 🟢/🟡/🔴 |
-| Responsible AI | X/68 | Y% | 🟢/🟡/🔴 |
+| Security | X/101 | Y% | 🟢 > 80%, 🟡 50-80%, 🔴 < 50% |
+| Reliability | X/101 | Y% | 🟢/🟡/🔴 |
+| Cost Optimization | X/101 | Y% | 🟢/🟡/🔴 |
+| Operational Excellence | X/101 | Y% | 🟢/🟡/🔴 |
+| Performance Efficiency | X/101 | Y% | 🟢/🟡/🔴 |
+| Responsible AI | X/101 | Y% | 🟢/🟡/🔴 |
 
 ## Step 5: Technology stack analysis
 
@@ -274,16 +274,16 @@ Create an issue with the comprehensive portfolio view:
 
 | Metric | Value |
 |--------|-------|
-| Total Plays | 68 |
+| Total Plays | 101 |
 | Gold 🏆 | 12 (18%) |
 | Silver 🥈 | 28 (41%) |
 | Bronze 🥉 | 20 (29%) |
 | Unrated ⬜ | 8 (12%) |
 | Average WAF Score | 4.2/6 |
-| Plugin Coverage | 54/68 (79%) |
-| Plays  with manifest | 60/68 (88%) |
+| Plugin Coverage | 82/101 (81%) |
+| Plays  with manifest | 93/101 (92%) |
 | Median play cost (dev) | $85/mo |
-| Portfolio target | 68/100 (68%) |
+| Portfolio target | 101/100 (101%) |
 
 ## Maturity Distribution
 
@@ -300,12 +300,12 @@ Create an issue with the comprehensive portfolio view:
 
 | Pillar | Count | Pct | Coverage |
 |--------|-------|-----|----------|
-| Security | 58/68 | 85% | 🟢 ████████░░ |
-| Reliability | 52/68 | 76% | 🟡 ████████░░ |
-| Cost Optimization | 48/68 | 71% | 🟡 ███████░░░ |
-| Operational Excellence | 55/68 | 81% | 🟢 ████████░░ |
-| Performance Efficiency | 40/68 | 59% | 🟡 ██████░░░░ |
-| Responsible AI | 45/68 | 66% | 🟡 ███████░░░ |
+| Security | 86/101 | 85% | 🟢 ████████░░ |
+| Reliability | 77/101 | 76% | 🟡 ████████░░ |
+| Cost Optimization | 72/101 | 71% | 🟡 ███████░░░ |
+| Operational Excellence | 82/101 | 81% | 🟢 ████████░░ |
+| Performance Efficiency | 60/101 | 59% | 🟡 ██████░░░░ |
+| Responsible AI | 67/101 | 66% | 🟡 ███████░░░ |
 
 ## Technology Stack (Top 5)
 

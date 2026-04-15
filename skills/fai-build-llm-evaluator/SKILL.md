@@ -1,167 +1,117 @@
 ---
 name: fai-build-llm-evaluator
-description: 'Builds custom LLM evaluation metrics for groundedness, coherence, and domain-specific quality.'
+description: |
+  Implement LLM evaluation pipelines with groundedness, relevance, coherence,
+  safety metrics, and pass/fail gates. Use when measuring AI output quality,
+  comparing model versions, or gating deployments on thresholds.
 ---
 
-# Fai Build Llm Evaluator
+# LLM Evaluation Pipeline
 
-Builds custom LLM evaluation metrics for groundedness, coherence, and domain-specific quality.
+Build evaluation pipelines to measure, compare, and gate AI output quality.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for builds custom llm evaluation metrics for groundedness, coherence, and domain-specific quality.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Measuring groundedness and relevance of RAG answers
+- Comparing model versions before promotion
+- Gating deployments on quality thresholds
+- Building regression test suites for prompt changes
 
-**Category:** Evaluation
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
-```
-
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
-
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
-```
-
-### Step 3: Execute Core Logic
-
-Perform the primary operation: builds custom llm evaluation metrics for groundedness, coherence, and domain-specific quality..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-
-## Compatible Solution Plays
-
-- **Play 03**
-- **Play 60**
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-build-llm-evaluator
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-build-llm-evaluator/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Metrics Reference
-
-| Metric | Range | Threshold | Description |
-|--------|-------|-----------|-------------|
-| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
-| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
-| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
-| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
-| Safety | 0-4 | 0 | Content safety violations |
-| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
-
-## Test Set Format
+## Evaluation Dataset
 
 ```jsonl
-{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
-{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
+{"question": "What is circuit breaker?", "context": "A circuit breaker...", "expected": "A circuit breaker is..."}
+{"question": "How to configure retry?", "context": "Retry policies use...", "expected": "Configure with backoff..."}
 ```
 
-## CI/CD Integration
+## Evaluator Functions
 
-```yaml
-# .github/workflows/eval.yml
-- name: Run FAI Evaluation
-  run: |
-    python evaluation/eval.py --test-set evaluation/test-set.jsonl
-    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
+```python
+import json
+
+def evaluate_groundedness(answer: str, context: str, judge) -> float:
+    resp = judge.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "system", "content": "Rate 0-1: Is the answer supported by context? Return JSON: {\"score\": float}"},
+            {"role": "user", "content": f"Context: {context}\nAnswer: {answer}"}],
+        temperature=0.0, response_format={"type": "json_object"},
+    )
+    return json.loads(resp.choices[0].message.content)["score"]
+
+def evaluate_relevance(answer: str, question: str, judge) -> float:
+    resp = judge.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "system", "content": "Rate 0-1: Does answer address question? Return JSON: {\"score\": float}"},
+            {"role": "user", "content": f"Question: {question}\nAnswer: {answer}"}],
+        temperature=0.0, response_format={"type": "json_object"},
+    )
+    return json.loads(resp.choices[0].message.content)["score"]
 ```
 
-## Regression Tracking
+## Pipeline Runner
 
-Track evaluation scores over time to detect quality regressions:
-
-```bash
-# Compare with baseline
-python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+```python
+def run_evaluation(dataset_path: str, generate_fn, judge, thresholds=None):
+    thresholds = thresholds or {"groundedness": 0.8, "relevance": 0.8}
+    results = []
+    with open(dataset_path) as f:
+        for line in f:
+            row = json.loads(line)
+            answer = generate_fn(row["question"], row["context"])
+            scores = {
+                "groundedness": evaluate_groundedness(answer, row["context"], judge),
+                "relevance": evaluate_relevance(answer, row["question"], judge),
+            }
+            results.append({**row, "answer": answer, **scores})
+    avg = lambda k: sum(r[k] for r in results) / len(results)
+    summary = {k: avg(k) for k in thresholds}
+    summary["passed"] = all(summary[k] >= v for k, v in thresholds.items())
+    return summary
 ```
 
-## Notes
+## Metric Reference
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Evaluation category in the FAI primitives catalog
+| Metric | Measures | Threshold |
+|--------|----------|-----------|
+| Groundedness | Claims supported by context | >= 0.80 |
+| Relevance | Answer addresses question | >= 0.80 |
+| Coherence | Logical flow and clarity | >= 0.75 |
+| Safety | No harmful content | >= 0.95 |
+| Latency P95 | Response time | <= 3000ms |
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low groundedness | Model hallucinating | Strengthen grounding rules in prompt |
+| Inconsistent judge | High temperature | Set judge temperature to 0.0 |
+| Eval too expensive | Using gpt-4o for judging | Use gpt-4o-mini as judge |
+| False failures | Ambiguous test questions | Clean evaluation dataset |
+
+## Best Practices
+
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

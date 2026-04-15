@@ -1,156 +1,120 @@
 ---
 name: fai-power-bi-dashboard
-description: 'Designs Power BI dashboards with KPIs, drill-through, and real-time streaming.'
+description: |
+  Design Power BI operational dashboards with KPI tiles, trend charts,
+  filter slicers, and refresh schedules. Use when building executive or
+  operational dashboards for AI workload monitoring.
 ---
 
-# Fai Power Bi Dashboard
+# Power BI Dashboard Design
 
-Designs Power BI dashboards with KPIs, drill-through, and real-time streaming.
+Build operational dashboards with KPIs, trends, and interactive filtering.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for designs power bi dashboards with kpis, drill-through, and real-time streaming.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Building executive dashboards for AI workload metrics
+- Creating operational views for token usage and costs
+- Designing interactive reports with drill-through
+- Setting up scheduled refresh for live data
 
-**Category:** General
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Dashboard Layout
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
-
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
-
-```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+┌─────────────────────────────────────────┐
+│  KPI Tiles                              │
+│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐  │
+│  │ MAU  │ │Queries│ │ Cost │ │ P95  │  │
+│  │1,234 │ │45.2K │ │$1.2K │ │850ms │  │
+│  └──────┘ └──────┘ └──────┘ └──────┘  │
+│                                         │
+│  ┌─────────────────┐ ┌───────────────┐ │
+│  │ Usage Trend      │ │ Cost by Model │ │
+│  │ (line chart)     │ │ (pie chart)   │ │
+│  └─────────────────┘ └───────────────┘ │
+│                                         │
+│  ┌─────────────────┐ ┌───────────────┐ │
+│  │ Top Queries      │ │ Error Rate    │ │
+│  │ (table)          │ │ (area chart)  │ │
+│  └─────────────────┘ └───────────────┘ │
+│                                         │
+│  Filters: [Date Range] [Model] [Team]  │
+└─────────────────────────────────────────┘
 ```
 
-### Step 2: Load Configuration
+## DAX Measures
 
-Read settings from the FAI manifest and TuneKit config files.
+```dax
+Total Queries = COUNTROWS(AITelemetry)
 
-```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+Monthly Active Users = DISTINCTCOUNT(AITelemetry[UserId])
+
+Average Latency =
+    AVERAGE(AITelemetry[LatencyMs])
+
+P95 Latency =
+    PERCENTILE.INC(AITelemetry[LatencyMs], 0.95)
+
+Total Cost =
+    SUMX(AITelemetry,
+        AITelemetry[PromptTokens] * RELATED(ModelPricing[InputRate])
+        + AITelemetry[CompletionTokens] * RELATED(ModelPricing[OutputRate])
+    ) / 1000000
+
+MoM Growth =
+    VAR CurrentMonth = [Total Queries]
+    VAR PreviousMonth = CALCULATE([Total Queries], DATEADD(Calendar[Date], -1, MONTH))
+    RETURN DIVIDE(CurrentMonth - PreviousMonth, PreviousMonth, 0)
 ```
 
-### Step 3: Execute Core Logic
+## Data Model
 
-Perform the primary operation: designs power bi dashboards with kpis, drill-through, and real-time streaming..
+| Table | Key Columns | Update |
+|-------|------------|--------|
+| AITelemetry | Timestamp, Model, Tokens, LatencyMs, UserId | Incremental |
+| ModelPricing | Model, InputRate, OutputRate | Manual |
+| Calendar | Date, Month, Quarter, Year | Generated |
 
-### Step 4: Validate Results
+## Refresh Schedule
 
-Verify the output meets quality thresholds and WAF compliance.
-
-```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
-```
-
-## Output
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
-
-## WAF Alignment
-
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
-
-## Error Handling
-
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
-
-## Usage
-
-### Standalone
-
-```bash
-# Run this skill directly
-npx frootai skill run fai-power-bi-dashboard
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-power-bi-dashboard/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Configuration Reference
-
-```json
-{
-  "skill": "skill-name",
-  "version": "1.0.0",
-  "timeout_seconds": 300,
-  "retry_attempts": 3,
-  "log_level": "info"
-}
-```
-
-## Monitoring
-
-Track skill execution metrics:
-
-| Metric | Description | Alert Threshold |
-|--------|-------------|----------------|
-| Duration | Execution time | > 60 seconds |
-| Success rate | Pass/fail ratio | < 95% |
-| Error count | Failed executions | > 5/hour |
+| Dataset | Schedule | Mode |
+|---------|----------|------|
+| AITelemetry | Every 30 min | Incremental |
+| ModelPricing | Weekly | Full |
+| Calendar | Never | Calculated |
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Timeout | Slow dependency | Increase timeout_seconds |
-| Auth failure | Expired credentials | Refresh Managed Identity |
-| Missing config | No fai-manifest.json | Create manifest or pass config_path |
-| Validation error | Invalid input | Check parameter types and ranges |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Slow dashboard | Too many visuals | Limit to 6-8 visuals per page |
+| Refresh timeout | Large dataset | Use incremental refresh |
+| Wrong KPI value | Filter context | Check measure with ALL/REMOVEFILTERS |
+| Stale data | Refresh not scheduled | Configure gateway + schedule |
 
-## Notes
+## Best Practices
 
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the General category in the FAI primitives catalog
+| Practice | Rationale |
+|----------|-----------|
+| Start simple, add complexity when needed | Avoid over-engineering |
+| Automate repetitive tasks | Consistency and speed |
+| Document decisions and tradeoffs | Future reference for the team |
+| Validate with real data | Don't rely on synthetic tests alone |
+| Review with peers | Fresh eyes catch blind spots |
+| Iterate based on feedback | First version is never perfect |
+
+## Quality Checklist
+
+- [ ] Requirements clearly defined
+- [ ] Implementation follows project conventions
+- [ ] Tests cover happy path and error paths
+- [ ] Documentation updated
+- [ ] Peer reviewed
+- [ ] Validated in staging environment
+
+## Related Skills
+
+- `fai-implementation-plan-generator` — Planning and milestones
+- `fai-review-and-refactor` — Code review patterns
+- `fai-quality-playbook` — Engineering quality standards

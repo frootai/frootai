@@ -1,170 +1,102 @@
 ---
 name: fai-deploy-07-multi-agent-service
-description: 'Deploys Play 07-multi-agent-service to Azure with Bicep validation, what-if check, and post-deploy health verification.'
+description: |
+  Deploy Play 07 Multi-Agent Service with Azure Container Apps, Redis, Cosmos DB, and Azure OpenAI. Covers agent orchestrator provisioning, inter-agent communication, health checks, and rollback.
 ---
 
-# Fai Deploy 07 Multi Agent Service
+# Deploy Multi-Agent Service (Play 07)
 
-Deploys Play 07-multi-agent-service to Azure with Bicep validation, what-if check, and post-deploy health verification.
+Production deployment workflow for this solution play.
 
-## Overview
+## When to Use
 
-This skill provides a structured, repeatable procedure for deploys play 07-multi-agent-service to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+- Deploying a multi-agent orchestration platform
+- Setting up AutoGen/Semantic Kernel agent teams
+- Promoting agent service from dev → staging → prod
+- Validating agent delegation and conflict resolution
 
-**Category:** Agent Tooling
-**Complexity:** Medium
-**Estimated Time:** 10-30 minutes
+---
 
-## Parameters
+## Infrastructure Stack
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `target` | string | Yes | — | Target resource, file, or endpoint |
-| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
-| `verbose` | boolean | No | `false` | Enable detailed output logging |
-| `dry_run` | boolean | No | `false` | Validate without making changes |
-| `config_path` | string | No | `config/` | Path to configuration directory |
+| Service | Purpose | SKU |
+|---------|---------|-----|
+| Azure Container Apps | Agent runtime hosting | Consumption |
+| Azure OpenAI | LLM inference for agents | S0 |
+| Redis Cache | Agent session state | C1 |
+| Cosmos DB | Conversation + task history | Serverless |
+| Service Bus | Inter-agent messaging | Standard |
+| Application Insights | Agent telemetry + traces | Workspace-based |
 
-## Steps
-
-### Step 1: Validate Prerequisites
-
-Verify all required tools, credentials, and dependencies are available.
+## Deployment Steps
 
 ```bash
-# Check required tools
-command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
-command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+# 1. Deploy infrastructure
+az deployment group create \
+  --resource-group rg-agents-prod \
+  --template-file infra/main.bicep \
+  --parameters environment=prod
+
+# 2. Build and push container image
+az acr build --registry cracragentsprod \
+  --image agent-service:$(git rev-parse --short HEAD) .
+
+# 3. Deploy to Container Apps
+az containerapp update \
+  --resource-group rg-agents-prod \
+  --name ca-agent-orchestrator \
+  --image cracragentsprod.azurecr.io/agent-service:$(git rev-parse --short HEAD)
+
+# 4. Run agent delegation smoke test
+python tests/smoke/test_agent_delegation.py \
+  --endpoint https://ca-agent-orchestrator.azurecontainerapps.io \
+  --scenario builder-reviewer-handoff
 ```
 
-### Step 2: Load Configuration
-
-Read settings from the FAI manifest and TuneKit config files.
+## Rollback Procedure
 
 ```bash
-# Load from fai-manifest.json if inside a play
-CONFIG_DIR="${config_path:-config}"
-if [ -f "fai-manifest.json" ]; then
-  echo "FAI Protocol detected — auto-wiring context"
-fi
+# Revert to previous container revision
+az containerapp revision list \
+  --resource-group rg-agents-prod \
+  --name ca-agent-orchestrator --query "[1].name" -o tsv | \
+  xargs -I {} az containerapp ingress traffic set \
+  --resource-group rg-agents-prod --name ca-agent-orchestrator \
+  --revision-weight {}=100
 ```
 
-### Step 3: Execute Core Logic
-
-Perform the primary operation: deploys play 07-multi-agent-service to azure with bicep validation, what-if check, and post-deploy health verification..
-
-### Step 4: Validate Results
-
-Verify the output meets quality thresholds and WAF compliance.
+## Health Check
 
 ```bash
-# Validate output
-if [ "$?" -eq 0 ]; then
-  echo "✅ Skill completed successfully"
-else
-  echo "❌ Skill failed — check logs"
-  exit 1
-fi
+curl -s https://ca-agent-orchestrator.azurecontainerapps.io/health | jq .
+# Expected: {"status":"healthy","agents":3,"redis":"connected","llm":"connected"}
 ```
 
-## Output
+## Troubleshooting
 
-| Output | Type | Description |
-|--------|------|-------------|
-| `status` | enum | `success`, `warning`, `failure` |
-| `duration_ms` | number | Execution time in milliseconds |
-| `artifacts` | string[] | List of generated/modified files |
-| `logs` | string | Detailed execution log |
+### Agent delegation loops infinitely
 
-## WAF Alignment
+Check max-rounds config in orchestrator. Set explicit termination conditions per agent role. Monitor token usage per round.
 
-| Pillar | How This Skill Contributes |
-|--------|---------------------------|
-| reliability | Includes retry logic, validates outputs, provides rollback steps |
-| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+### Inter-agent latency exceeds SLA
 
-## Compatible Solution Plays
+Use Service Bus sessions for ordered delivery. Scale Redis to Premium tier. Check Container Apps min-replicas.
 
-- **Play 03**
-- **Play 07**
-- **Play 22**
+### Agent produces inconsistent outputs
 
-## Error Handling
+Pin temperature=0 and seed for deterministic agents. Add structured-output JSON schemas. Enable conversation history truncation.
 
-| Exit Code | Meaning | Action |
-|-----------|---------|--------|
-| 0 | Success | Proceed to next step |
-| 1 | Validation failure | Check input parameters |
-| 2 | Dependency missing | Install required tools |
-| 3 | Runtime error | Check logs, retry with `--verbose` |
+## Post-Deploy Checklist
 
-## Usage
+- [ ] All infrastructure resources provisioned and healthy
+- [ ] Application deployed and responding on all endpoints
+- [ ] Smoke tests passing with expected thresholds
+- [ ] Monitoring dashboards showing baseline metrics
+- [ ] Alerts configured for error rate, latency, and cost
+- [ ] Rollback procedure tested and documented
+- [ ] Incident ownership and escalation path confirmed
+- [ ] Post-deploy review scheduled within 24 hours
 
-### Standalone
+## Definition of Done
 
-```bash
-# Run this skill directly
-npx frootai skill run fai-deploy-07-multi-agent-service
-```
-
-### Inside a Solution Play
-
-When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
-
-```json
-{
-  "primitives": {
-    "skills": ["skills/fai-deploy-07-multi-agent-service/"]
-  }
-}
-```
-
-### Via Agent Invocation
-
-Agents can invoke this skill using the `/skill` command in Copilot Chat.
-
-## Evaluation Pipeline
-
-This skill integrates with the FAI evaluation framework:
-
-```python
-from frootai.evaluation import SkillEvaluator
-
-evaluator = SkillEvaluator(skill="agent-governance")
-results = evaluator.run(test_cases="evaluation/test-set.jsonl")
-
-# Check thresholds
-assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
-assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
-assert results.safety_violations == 0, "Safety violations detected"
-```
-
-## Advanced Configuration
-
-```json
-{
-  "max_iterations": 5,
-  "confidence_threshold": 0.7,
-  "fallback_strategy": "escalate",
-  "budget_per_request": 0.05,
-  "tools_allowed": ["search", "retrieve", "analyze"],
-  "human_in_the_loop": true,
-  "audit_trail": true
-}
-```
-
-## Anti-Patterns
-
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|--------------|-----------------|
-| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
-| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
-| No cost tracking | Budget overruns | Enable budget_per_request |
-| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
-
-## Notes
-
-- This skill follows the FAI SKILL.md specification
-- All outputs are deterministic when `dry_run=true`
-- Integrates with FAI Engine for automated pipeline execution
-- Part of the Agent Tooling category in the FAI primitives catalog
+Deployment is complete when infrastructure is provisioned, application is serving traffic, smoke tests pass, monitoring is active, and another engineer can reproduce the process from this skill alone.
