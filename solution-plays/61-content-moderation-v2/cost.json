@@ -1,0 +1,177 @@
+{
+  "play": "61",
+  "name": "Content Moderation V2",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Multi-modal content analysis — text moderation (hate, violence, sexual, self-harm with severity levels 0-7), image moderation (same categories with visual analysis), prompt shield (jailbreak and indirect attack detection for AI inputs), groundedness detection (hallucination checking for AI outputs), protected material detection (copyrighted content identification), and custom category classifiers for organization-specific content policies",
+      "tiers": {
+        "dev": {
+          "sku": "Free (F0)",
+          "cost": 0,
+          "note": "5K transactions/month, prototype moderation testing"
+        },
+        "prod": {
+          "sku": "Standard (S0)",
+          "cost": 200,
+          "note": "~200K transactions/month, production moderation pipeline"
+        },
+        "enterprise": {
+          "sku": "Standard (S0)",
+          "cost": 800,
+          "note": "~1M transactions/month, high-volume multi-platform moderation"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Context-aware moderation intelligence — GPT-4o for nuanced content analysis that requires understanding context, sarcasm, coded language, and cultural references beyond pattern matching; severity routing decisions (auto-remove vs human review vs warning); appeal review analysis (re-evaluating flagged content with additional context); and generating moderation explanations for content creators describing why their content was flagged and how to modify it for compliance",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~50K tokens/day, context-aware moderation prototyping"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~400K tokens/day, production escalation analysis"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1500,
+          "note": "Provisioned throughput, real-time multi-language moderation"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Moderation operations store — content moderation decisions (content hash, categories, severity scores, action taken), appeal records and outcomes, user violation history and trust scores, content policy versions and enforcement rules, moderator activity logs, and aggregate moderation statistics with low-latency reads for real-time moderation queue rendering",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, moderation pipeline prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 2000 RU/s",
+          "cost": 150,
+          "note": "Multi-partition, 100GB, production moderation records"
+        },
+        "enterprise": {
+          "sku": "Provisioned 8000 RU/s",
+          "cost": 600,
+          "note": "Multi-region, 500GB, high-volume moderation at scale"
+        }
+      }
+    },
+    {
+      "name": "Azure Service Bus",
+      "category": "Integration",
+      "purpose": "Severity-based routing fabric — priority queues for moderation actions: high-severity content (violence, CSAM) routed to immediate-action queue with <1 minute SLA, medium-severity (hate speech, harassment) routed to human-review queue within 15 minutes, low-severity (borderline, context-dependent) routed to batch-review queue; dead-letter queue for failed processing; topic subscriptions for downstream notifications (trust & safety team, legal, user notification service)",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "~100K messages/month, prototype routing"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 50,
+          "note": "~5M messages/month, topics + subscriptions, production routing"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 700,
+          "note": "~50M messages/month, VNET, partitioned queues, geo-DR"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Content evidence storage — flagged content snapshots (text, images) retained for review and appeal processing, moderation decision evidence packages, training data for custom classifiers, content policy documentation, and compliance audit archives with legal hold for law enforcement requests",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 3,
+          "note": "~20GB, sample flagged content"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot + Cool",
+          "cost": 30,
+          "note": "~200GB hot + 500GB cool, production evidence"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Cool + Legal Hold",
+          "cost": 100,
+          "note": "~1TB hot + 3TB cool, geo-redundant, immutable archives"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Content Safety API keys, OpenAI API keys, Cosmos DB connection strings, Service Bus connection strings, law enforcement reporting API credentials, and content hash service signing keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, evidence chain signing"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Moderation platform observability — moderation latency (time from content submission to action), queue depth and processing rates per severity level, false positive/negative rates, moderator workload distribution, content category trends, and appeal resolution metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, moderation dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 64,
+    "prod": 865,
+    "enterprise": 3815
+  },
+  "optimization_tips": [
+    "Use Azure AI Content Safety as the first-pass filter for all content — it processes text at ~$1/1K transactions with sub-second latency; only escalate ambiguous results (severity 3-4 out of 7) to Azure OpenAI for context-aware analysis, reducing GPT costs by 85%",
+    "Implement content hashing (perceptual hash for images, MinHash for text) to deduplicate moderation requests — identical or near-identical content resubmissions get cached moderation results, reducing Content Safety API calls by 20-30% on platforms with resharing behavior",
+    "Use Service Bus message deferral for batch processing of low-severity content — accumulate borderline items and process in hourly batches rather than individually, reducing per-message processing overhead and enabling more efficient human moderator scheduling",
+    "Leverage Content Safety custom categories for organization-specific policies instead of building custom classifiers — custom categories train on 50-200 examples and run at the same speed and cost as built-in categories, avoiding the expense of maintaining separate ML models",
+    "Implement tiered storage lifecycle for moderation evidence — hot storage for active appeals (30 days), cool storage for resolved cases (1 year), archive for compliance retention (7 years); 85% of moderation evidence is never accessed after appeal resolution",
+    "Use Content Safety Free tier (F0) for development — 5K transactions/month free, sufficient for developing and testing moderation pipelines without any API cost"
+  ]
+}

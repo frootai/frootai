@@ -4,14 +4,81 @@ AI-powered legal document analysis — contract review, clause extraction with l
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Layout Extraction | Azure Document Intelligence | OCR, section detection, table parsing |
-| Legal Reasoning | Azure OpenAI (GPT-4o) | Clause extraction, risk scoring, redlining |
-| Contract Storage | Azure Blob Storage | Document ingestion and version management |
-| Pipeline | Azure Container Apps | Review orchestration |
-| Secrets | Azure Key Vault | API keys |
-| PII Handling | Presidio (local) | De-identify before AI processing |
+```mermaid
+graph TB
+    subgraph Document Intake
+        Upload[Document Upload<br/>PDF · DOCX · TIFF · Scanned Contracts]
+        BulkImport[Bulk Import<br/>Existing Contract Libraries · M&A Due Diligence]
+    end
+
+    subgraph Document Processing
+        DocIntel[Document Intelligence<br/>OCR · Layout Analysis · Table Extraction · Signatures]
+        Chunking[Clause-Aware Chunking<br/>Section Detection · Hierarchy Preservation · Cross-References]
+    end
+
+    subgraph Knowledge Layer
+        AISearch[Azure AI Search<br/>Hybrid Search · Semantic Ranking · Clause Library · Precedents]
+        BlobStore[Azure Blob Storage<br/>Document Repository · Version History · Legal Hold · WORM]
+    end
+
+    subgraph AI Analysis Engine
+        AOAI[Azure OpenAI<br/>Risk Assessment · Clause Analysis · Obligation Extraction]
+        RiskEngine[Risk Scoring<br/>Deviation Analysis · Template Comparison · Jurisdictional Rules]
+        Summary[Summarization<br/>Plain-Language Briefs · Executive Summaries · Key Terms]
+    end
+
+    subgraph Legal Metadata
+        CosmosDB[Cosmos DB<br/>Risk Scores · Obligations · Deadlines · Review Status · Audit Trail]
+    end
+
+    subgraph User Interface
+        ReviewUI[Legal Review Dashboard<br/>Risk Heatmap · Clause Navigator · Obligation Timeline]
+        Reports[Compliance Reports<br/>Portfolio Risk · Regulatory Gaps · Audit Export]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Encryption Keys · Service Credentials]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Processing Throughput · Analysis Latency · Risk Distribution]
+    end
+
+    Upload -->|Ingest| DocIntel
+    BulkImport -->|Batch| DocIntel
+    DocIntel -->|Structured Text| Chunking
+    Chunking -->|Clauses| AISearch
+    Chunking -->|Original| BlobStore
+    AISearch -->|Relevant Clauses| AOAI
+    AOAI -->|Analysis| RiskEngine
+    AOAI -->|Summaries| Summary
+    RiskEngine -->|Scores| CosmosDB
+    Summary -->|Briefs| CosmosDB
+    CosmosDB -->|Data| ReviewUI
+    CosmosDB -->|Analytics| Reports
+    BlobStore -->|Documents| ReviewUI
+    MI -->|Secrets| KV
+    DocIntel -->|Traces| AppInsights
+
+    style Upload fill:#3b82f6,color:#fff,stroke:#2563eb
+    style BulkImport fill:#3b82f6,color:#fff,stroke:#2563eb
+    style DocIntel fill:#10b981,color:#fff,stroke:#059669
+    style Chunking fill:#10b981,color:#fff,stroke:#059669
+    style AISearch fill:#f59e0b,color:#fff,stroke:#d97706
+    style BlobStore fill:#f59e0b,color:#fff,stroke:#d97706
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style RiskEngine fill:#10b981,color:#fff,stroke:#059669
+    style Summary fill:#10b981,color:#fff,stroke:#059669
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style ReviewUI fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Reports fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -83,6 +150,22 @@ AI-powered legal document analysis — contract review, clause extraction with l
 | Redline Relevance | > 85% | Suggestions address identified risk |
 | Critical Risk Detection | > 95% | High-severity risks caught |
 | Cost per Contract | < $3.00 | 20-page MSA review |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $100 | $900 | $3,500 |
+| Azure AI Search | $0 | $250 | $1,000 |
+| Azure Document Intelligence | $0 | $100 | $400 |
+| Azure Blob Storage | $5 | $40 | $150 |
+| Cosmos DB | $5 | $75 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| Container Apps | $10 | $80 | $350 |
+| **Total** | **$121** | **$1,480** | **$5,865** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

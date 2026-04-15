@@ -1,0 +1,199 @@
+{
+  "play": "58",
+  "name": "Digital Twin Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Digital twin intelligence — GPT-4o for predictive simulation narration (explaining what-if scenario outcomes in natural language), anomaly root-cause analysis from sensor data patterns, maintenance recommendation generation, and natural-language query interface for twin state ('What is the current efficiency of Turbine 3?'); GPT-4o-mini for routine status summarization and alert classification",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 60,
+          "note": "~60K tokens/day, simulation and NL query prototyping"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~500K tokens/day, production twin intelligence"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2000,
+          "note": "Provisioned throughput, real-time multi-facility simulation"
+        }
+      }
+    },
+    {
+      "name": "Azure IoT Hub",
+      "category": "IoT",
+      "purpose": "Device connectivity and telemetry ingestion — bidirectional communication with IoT sensors and actuators, device provisioning (DPS with X.509 certificates), telemetry routing to Digital Twins and storage, device twin state management, and cloud-to-device commands for actuator control based on simulation recommendations",
+      "tiers": {
+        "dev": {
+          "sku": "Free (F1)",
+          "cost": 0,
+          "note": "500 devices, 8K messages/day, prototype connectivity"
+        },
+        "prod": {
+          "sku": "Standard (S1)",
+          "cost": 100,
+          "note": "~400K messages/day, production telemetry ingestion"
+        },
+        "enterprise": {
+          "sku": "Standard (S3)",
+          "cost": 500,
+          "note": "~300M messages/day, high-frequency industrial telemetry"
+        }
+      }
+    },
+    {
+      "name": "Azure Digital Twins",
+      "category": "IoT",
+      "purpose": "Digital twin graph and simulation — DTDL (Digital Twins Definition Language) models representing physical assets (buildings, machines, production lines), spatial relationships (floor contains room, factory contains line), live state synchronization from IoT telemetry, event-driven graph updates, twin-to-twin relationships for system-level simulation, and query API for aggregate analytics across the twin graph",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 15,
+          "note": "~50 twins, ~100K messages/month, prototype modeling"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 150,
+          "note": "~5K twins, ~10M messages/month, production facility model"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 600,
+          "note": "~50K twins, ~100M messages/month, multi-facility campus"
+        }
+      }
+    },
+    {
+      "name": "Azure Functions",
+      "category": "Compute",
+      "purpose": "Event-driven processing — IoT message routing and transformation (raw telemetry to DTDL property updates), twin graph event handlers (propagate state changes through relationships), simulation trigger functions (schedule and execute predictive scenarios), anomaly detection threshold evaluation, and alert routing to notification channels",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 0,
+          "note": "~100K executions/month, free tier"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 30,
+          "note": "~5M executions/month, production event processing"
+        },
+        "enterprise": {
+          "sku": "Premium EP2",
+          "cost": 250,
+          "note": "Always-warm, VNET, ~50M executions/month"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Grid",
+      "category": "Integration",
+      "purpose": "Event routing fabric — Digital Twins change notifications (twin property updates, relationship changes, twin lifecycle events) routed to downstream consumers (Functions, Storage, SignalR), IoT Hub device events (connect/disconnect, telemetry anomaly), and simulation completion events triggering dashboard updates and alert evaluation",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 1,
+          "note": "~100K events/month"
+        },
+        "prod": {
+          "sku": "Basic",
+          "cost": 10,
+          "note": "~10M events/month"
+        },
+        "enterprise": {
+          "sku": "Basic",
+          "cost": 50,
+          "note": "~100M events/month, MQTT broker topics"
+        }
+      }
+    },
+    {
+      "name": "Azure Data Explorer",
+      "category": "Analytics",
+      "purpose": "Time-series telemetry analytics — historical sensor data storage and fast KQL queries over billions of telemetry records, trend analysis (vibration increasing over weeks), anomaly detection baselines, simulation input data preparation, and dashboard visualizations for twin performance over time",
+      "tiers": {
+        "dev": {
+          "sku": "Dev/Test (no SLA)",
+          "cost": 25,
+          "note": "Single node, ~50GB data, prototype analytics"
+        },
+        "prod": {
+          "sku": "Standard D13_v2",
+          "cost": 200,
+          "note": "2-node cluster, ~1TB data, production analytics"
+        },
+        "enterprise": {
+          "sku": "Standard D14_v2",
+          "cost": 800,
+          "note": "4+ node cluster, ~10TB data, multi-facility analytics"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "IoT Hub connection strings, Digital Twins API keys, OpenAI API keys, device provisioning certificates, Event Grid topic keys, and Data Explorer cluster credentials",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, device certificate management"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Platform observability — twin synchronization latency (IoT event to twin update), simulation execution time, AI inference latency, device connectivity health, event processing throughput, and anomaly detection accuracy metrics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 35,
+          "note": "~70GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, facility dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 102,
+    "prod": 1030,
+    "enterprise": 4315
+  },
+  "optimization_tips": [
+    "Use Azure Digital Twins message routing to filter and aggregate IoT telemetry before processing — only propagate meaningful state changes (value differs by >threshold from last update) rather than every raw sensor reading, reducing message costs by 60-80%",
+    "Store high-frequency telemetry (sub-second sensor data) in Azure Data Explorer with hot/warm/cold tiering — keep 7 days hot for real-time queries, 90 days warm for trend analysis, and archive older data to cold storage at 1/10th the cost",
+    "Use GPT-4o-mini for routine twin status queries and alert classification, reserving GPT-4o for complex simulation narration and multi-factor root-cause analysis — 85% of natural-language twin interactions are simple status lookups",
+    "Implement IoT Hub message batching — aggregate multiple sensor readings into single messages (e.g., batch 10 readings per 30-second window) to reduce per-message costs while maintaining acceptable telemetry freshness",
+    "Schedule predictive simulations during off-peak hours (overnight) for non-urgent scenarios — Azure Functions consumption plan charges per execution, and batch simulation reduces the number of expensive GPT-4o calls by grouping related what-if analyses",
+    "Use Azure Digital Twins query API with projection (SELECT specific properties) instead of full twin retrieval — reduces data transfer costs and query execution time for dashboard refresh operations"
+  ]
+}

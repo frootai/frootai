@@ -1,0 +1,177 @@
+{
+  "play": "57",
+  "name": "AI Translation Engine",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Advanced translation intelligence — GPT-4o for nuanced literary and marketing translations requiring cultural adaptation, idiom handling, and tone preservation; GPT-4o-mini for high-volume routine translations (product descriptions, UI strings, support articles); few-shot prompting with domain glossaries for terminology consistency across documents",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 60,
+          "note": "~60K tokens/day, glossary-aware translation prototyping"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 500,
+          "note": "~500K tokens/day, production translation workloads"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2000,
+          "note": "Provisioned throughput, real-time multilingual content pipeline"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Translator",
+      "category": "AI Services",
+      "purpose": "Neural machine translation backbone — document translation (PDF, DOCX, PPTX) with layout preservation, custom translator models trained on domain-specific parallel corpora (legal, medical, technical), glossary enforcement for brand terms and product names, language detection, and transliteration for non-Latin scripts",
+      "tiers": {
+        "dev": {
+          "sku": "Free (S0)",
+          "cost": 0,
+          "note": "2M characters/month free, prototype testing"
+        },
+        "prod": {
+          "sku": "Standard (S1)",
+          "cost": 200,
+          "note": "~20M characters/month, document + text translation"
+        },
+        "enterprise": {
+          "sku": "Standard (S1) + Custom",
+          "cost": 800,
+          "note": "~100M characters/month, custom models, 50+ language pairs"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Translation memory and glossary store — translation memory database for fuzzy matching against previously translated segments (TM leverage reduces costs by 30-60%), multilingual glossaries with term variants and context rules, translation request tracking, user preferences, quality scores, and project metadata with low-latency reads for real-time translation suggestions",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, glossary and TM prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1500 RU/s",
+          "cost": 120,
+          "note": "Multi-partition, 50GB, production TM and glossaries"
+        },
+        "enterprise": {
+          "sku": "Provisioned 6000 RU/s",
+          "cost": 500,
+          "note": "Multi-region, 300GB, enterprise translation memory"
+        }
+      }
+    },
+    {
+      "name": "Azure CDN",
+      "category": "Networking",
+      "purpose": "Translated content delivery — cached translated web content, localized media assets (images with embedded text, videos with subtitles), static translated documents, and localized API responses served from edge locations nearest to end users for sub-50ms delivery globally",
+      "tiers": {
+        "dev": {
+          "sku": "Standard Microsoft",
+          "cost": 5,
+          "note": "~50GB transfer, dev/test localized content"
+        },
+        "prod": {
+          "sku": "Standard Microsoft",
+          "cost": 50,
+          "note": "~500GB transfer, production localized content delivery"
+        },
+        "enterprise": {
+          "sku": "Premium Verizon",
+          "cost": 200,
+          "note": "~5TB transfer, global edge delivery, custom rules"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Document and asset storage — source documents awaiting translation, translated output files with preserved formatting, parallel corpora for custom translator training, translation memory export/import files (TMX/XLIFF), and localized media assets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 3,
+          "note": "~20GB, sample documents"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 25,
+          "note": "~250GB, production document pipeline"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Cool",
+          "cost": 80,
+          "note": "~1TB hot + 2TB cool, geo-redundant archive"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "Translator API keys, OpenAI API keys, Cosmos DB connection strings, CDN tokens, third-party translation vendor API credentials, and webhook signing secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Translation platform observability — translation latency per language pair, quality score distribution (BLEU/COMET), TM leverage ratios, glossary hit rates, character consumption tracking, error rates by document type, and cost-per-word analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, quality dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 74,
+    "prod": 923,
+    "enterprise": 3670
+  },
+  "optimization_tips": [
+    "Use Azure AI Translator for high-volume routine translations (product listings, UI strings) and reserve Azure OpenAI for culturally nuanced content (marketing copy, legal documents) — Translator costs ~$10/M characters vs GPT-4o at ~$15/M tokens, 5-10x cheaper for straightforward text",
+    "Build and maintain translation memory in Cosmos DB — fuzzy matching against previously translated segments provides 30-60% TM leverage, directly reducing the volume of text that requires fresh AI translation",
+    "Train custom Azure Translator models on domain-specific parallel corpora (minimum 10K sentence pairs) — custom models outperform generic models for specialized domains and reduce the need for expensive GPT-4o post-editing",
+    "Use GPT-4o-mini for translation quality estimation (QE) scoring instead of human review for routine content — automated QE at $0.15/1M tokens identifies segments needing human review, reducing human QA costs by 70%",
+    "Implement CDN caching for translated web content with locale-based cache keys — translated pages rarely change, and edge caching eliminates re-translation and reduces origin requests by 90%",
+    "Batch document translations during off-peak hours using Azure Translator async document translation API — batch processing is more efficient than real-time per-page translation and reduces API call overhead"
+  ]
+}

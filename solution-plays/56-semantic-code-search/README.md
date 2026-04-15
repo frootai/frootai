@@ -4,14 +4,80 @@ Vector-based code search engine — AST-aware function parsing (tree-sitter), mu
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Code Embeddings | Azure OpenAI (text-embedding-3-large) | Function-level vector embeddings |
-| Search Index | Azure AI Search | Hybrid keyword + vector search |
-| Code Parser | tree-sitter (local) | AST-aware function/class extraction |
-| Search API | Azure Container Apps | Query endpoint with filters |
-| Webhook | GitHub Webhooks | Incremental re-index on push |
-| Secrets | Azure Key Vault | API keys |
+```mermaid
+graph TB
+    subgraph Developer Interface
+        SearchUI[Search UI<br/>Natural Language Query · Filters · Code Preview]
+        IDE[IDE Integration<br/>VS Code Extension · JetBrains Plugin · CLI]
+        API[Search API<br/>REST · GraphQL · SDK]
+    end
+
+    subgraph Query Processing
+        QueryEngine[Query Engine<br/>Query Expansion · Intent Detection · Filter Extraction]
+        GPTMini[GPT-4o-mini<br/>Query Translation · Result Explanation · Summarization]
+    end
+
+    subgraph Search Engine
+        AISearch[Azure AI Search<br/>Hybrid Search · Keyword + Vector · Semantic Reranking]
+    end
+
+    subgraph Indexing Pipeline
+        GitHooks[Git Webhooks<br/>Push Events · Incremental Triggers]
+        Parser[Code Parser<br/>AST Extraction · Function · Class · Module Boundaries]
+        Embedder[Embedding Generator<br/>text-embedding-3-large · Code Vectors · Batch Processing]
+    end
+
+    subgraph Storage
+        BlobStore[Azure Blob Storage<br/>Repo Mirrors · AST Cache · Embeddings · Artifacts]
+    end
+
+    subgraph Application Runtime
+        ContainerApps[Container Apps<br/>Search API · Indexing Workers · Query Service]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Git Tokens · Search Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Query Latency · Relevance Metrics · Indexing Rate]
+    end
+
+    SearchUI -->|Query| ContainerApps
+    IDE -->|Query| ContainerApps
+    API -->|Query| ContainerApps
+    ContainerApps -->|Process| QueryEngine
+    QueryEngine -->|Expand| GPTMini
+    GPTMini -->|Enhanced Query| AISearch
+    AISearch -->|Results| GPTMini
+    GPTMini -->|Explained Results| ContainerApps
+    GitHooks -->|Changed Files| ContainerApps
+    ContainerApps -->|Parse| Parser
+    Parser -->|Code Chunks| Embedder
+    Embedder -->|Vectors| AISearch
+    Parser -->|AST Cache| BlobStore
+    Embedder -->|Embeddings| BlobStore
+    MI -->|Secrets| KV
+    ContainerApps -->|Traces| AppInsights
+
+    style SearchUI fill:#3b82f6,color:#fff,stroke:#2563eb
+    style IDE fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style QueryEngine fill:#10b981,color:#fff,stroke:#059669
+    style GPTMini fill:#10b981,color:#fff,stroke:#059669
+    style AISearch fill:#f59e0b,color:#fff,stroke:#d97706
+    style GitHooks fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Parser fill:#10b981,color:#fff,stroke:#059669
+    style Embedder fill:#10b981,color:#fff,stroke:#059669
+    style BlobStore fill:#f59e0b,color:#fff,stroke:#d97706
+    style ContainerApps fill:#10b981,color:#fff,stroke:#059669
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -33,6 +99,20 @@ Vector-based code search engine — AST-aware function parsing (tree-sitter), mu
 | P95 Latency | < 300ms | Search response time |
 | Index Freshness | < 60s | Push to searchable |
 | Access Control | 100% | No unauthorized repo access |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $40 | $300 | $1,200 |
+| Azure AI Search | $0 | $250 | $1,000 |
+| Azure Blob Storage | $3 | $20 | $80 |
+| Container Apps | $8 | $60 | $250 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $20 | $60 |
+| **Total** | **$52** | **$653** | **$2,600** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

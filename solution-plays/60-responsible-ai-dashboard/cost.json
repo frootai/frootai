@@ -1,0 +1,199 @@
+{
+  "play": "60",
+  "name": "Responsible AI Dashboard",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Responsible AI analysis engine — GPT-4o for generating fairness assessment narratives from statistical disparity data, bias root-cause analysis, model behavior explanation and interpretability reports, responsible AI incident investigation, and natural-language querying of RAI metrics ('Are our loan approval models showing demographic bias this quarter?'); GPT-4o-mini for automated policy compliance checks and report summarization",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 50,
+          "note": "~50K tokens/day, RAI analysis prototyping"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 400,
+          "note": "~400K tokens/day, production RAI monitoring"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1600,
+          "note": "Provisioned throughput, multi-model RAI analysis at scale"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Model evaluation and fairness computation — Responsible AI toolbox integration (Fairlearn for group fairness metrics, InterpretML for model explanations, Error Analysis for failure pattern identification), model performance monitoring (accuracy drift, data drift), counterfactual analysis for individual predictions, and model card generation with automated documentation",
+      "tiers": {
+        "dev": {
+          "sku": "Basic Compute",
+          "cost": 40,
+          "note": "Standard_DS3_v2, 4-core, RAI toolkit experimentation"
+        },
+        "prod": {
+          "sku": "Standard Compute + Endpoint",
+          "cost": 250,
+          "note": "Standard_DS4_v2 training + managed endpoint for RAI scoring"
+        },
+        "enterprise": {
+          "sku": "GPU Cluster + Endpoints",
+          "cost": 1000,
+          "note": "NC6s_v3 GPU, large-scale fairness audits, multi-model registry"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor",
+      "category": "Monitoring",
+      "purpose": "AI system health and RAI metric collection — custom metrics for model fairness indicators (demographic parity, equalized odds, calibration), model performance metrics (accuracy, F1, AUC by subgroup), content safety filter trigger rates, prompt injection attempt rates, and alerting on RAI threshold breaches",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic metrics, 31-day retention"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 80,
+          "note": "Custom metrics, 90-day retention, alert rules"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 250,
+          "note": "Multi-workspace, 180-day retention, cross-model correlation"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "RAI metrics store — fairness audit results (per model, per demographic group, per time period), model evaluation histories, incident reports, compliance check results, user feedback records, explanation logs, and model lineage metadata with low-latency reads for real-time dashboard rendering",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, RAI metrics prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1500 RU/s",
+          "cost": 120,
+          "note": "Multi-partition, 50GB, production RAI data store"
+        },
+        "enterprise": {
+          "sku": "Provisioned 5000 RU/s",
+          "cost": 400,
+          "note": "Multi-region, 200GB, enterprise-wide RAI repository"
+        }
+      }
+    },
+    {
+      "name": "Azure Static Web Apps",
+      "category": "Compute",
+      "purpose": "Responsible AI dashboard frontend — interactive visualizations for fairness metrics (confusion matrices by subgroup, ROC curves, calibration plots), model performance comparisons, incident timeline, compliance status indicators, and executive summary views with role-based access for different stakeholder levels",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "Dev/test dashboard, custom domain"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 15,
+          "note": "Production dashboard, auth, custom domains, SLA"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 15,
+          "note": "Production dashboard, enterprise auth, private endpoints"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "RAI artifact storage — model cards, fairness audit reports (PDF), training dataset metadata and data sheets, evaluation result exports, compliance documentation, incident investigation evidence, and regulatory filing archives",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 2,
+          "note": "~10GB, sample reports and test artifacts"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 15,
+          "note": "~150GB, production RAI artifacts"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Cool",
+          "cost": 50,
+          "note": "~500GB hot + 1TB cool, geo-redundant compliance archive"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, ML workspace secrets, Monitor connection strings, Cosmos DB keys, dashboard authentication secrets, and third-party RAI tool API credentials",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Dashboard and pipeline observability — RAI pipeline execution latency, fairness computation duration, dashboard render performance, API response times, user engagement analytics, and error tracking for evaluation pipelines",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, RAI operational dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 98,
+    "prod": 908,
+    "enterprise": 3405
+  },
+  "optimization_tips": [
+    "Schedule heavy fairness audits (full dataset evaluation across all demographic groups) during off-peak hours — batch ML compute jobs overnight on low-priority VMs at 60-80% discount compared to on-demand",
+    "Use GPT-4o-mini for routine compliance checks (policy adherence, documentation completeness) and reserve GPT-4o for complex fairness narrative generation and incident root-cause analysis — 75% of RAI checks are template-based and well-suited for mini models",
+    "Implement incremental fairness monitoring — evaluate new predictions against existing baselines rather than recomputing fairness metrics from scratch; only trigger full audits when drift thresholds are exceeded, reducing ML compute by 70%",
+    "Cache model explanations for frequently queried predictions in Cosmos DB — SHAP/LIME explanations are expensive to compute but static for a given model version and input, reducing repeat computation costs",
+    "Use Azure Static Web Apps Free tier for development dashboards — free tier includes custom domains and authentication, sufficient for RAI dashboard development without any hosting cost",
+    "Aggregate fine-grained RAI metrics into pre-computed rollups (hourly → daily → weekly → monthly) in Cosmos DB — dashboard queries hit rollups instead of scanning raw evaluation records, reducing RU consumption by 90% for trend views"
+  ]
+}

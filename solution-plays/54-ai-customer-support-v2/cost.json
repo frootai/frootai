@@ -1,0 +1,199 @@
+{
+  "play": "54",
+  "name": "AI Customer Support V2",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Conversational AI engine — customer query understanding, sentiment-aware response generation, multi-turn dialogue management, knowledge-grounded answers, escalation decision-making, and automatic ticket classification using GPT-4o for complex cases and GPT-4o-mini for routine inquiries",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~80K tokens/day, chatbot prototyping with sample conversations"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 700,
+          "note": "~700K tokens/day, production customer conversations"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2800,
+          "note": "Provisioned throughput, high-volume support operations"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Knowledge base retrieval — semantic search across product documentation, FAQ libraries, troubleshooting guides, past resolved tickets, and internal SOPs for grounded response generation with citation support",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, basic knowledge base prototype"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, 200K articles"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB index, multi-replica HA, multi-language"
+        }
+      }
+    },
+    {
+      "name": "Azure Communication Services",
+      "category": "Communication",
+      "purpose": "Omnichannel customer engagement — live chat widget, email integration, SMS notifications for ticket updates, voice call routing for escalation, and video support for complex troubleshooting scenarios",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 10,
+          "note": "~500 chat sessions, ~100 SMS, basic testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~10K chat sessions, ~2K SMS, ~500 voice minutes"
+        },
+        "enterprise": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~100K chat sessions, ~20K SMS, ~5K voice minutes, video"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Conversation and ticket state management — multi-turn conversation history, customer profiles, ticket lifecycle tracking, sentiment trend data, escalation records, SLA timers, and agent performance analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, conversation state prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, real-time ticket tracking"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, global customer support"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Support platform runtime — hosts the AI chatbot service, sentiment analysis pipeline, escalation engine, ticket routing logic, and integration APIs for CRM and ticketing systems",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "~50 vCPU-hours/month, single instance"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 100,
+          "note": "~500 vCPU-hours/month, 3-5 replicas, auto-scale"
+        },
+        "enterprise": {
+          "sku": "Dedicated",
+          "cost": 400,
+          "note": "~2000 vCPU-hours/month, VNET, 15+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Azure Service Bus",
+      "category": "Integration",
+      "purpose": "Asynchronous message routing — escalation queue for human agent handoff, ticket creation events, CRM sync messages, notification triggers, and dead-letter handling for failed processing",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 5,
+          "note": "~10K messages/month, basic queues"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 25,
+          "note": "~500K messages/month, topics + subscriptions"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 100,
+          "note": "~5M messages/month, VNET, geo-DR"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, Communication Services connection strings, CRM integration credentials, search service keys, and customer data encryption keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Support platform observability — conversation resolution rate, sentiment trends, escalation rates, response latency, customer satisfaction scores (CSAT), and SLA compliance tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, CSAT dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 111,
+    "prod": 1265,
+    "enterprise": 5065
+  },
+  "optimization_tips": [
+    "Route routine inquiries (password reset, order status, FAQ-type questions) to GPT-4o-mini and reserve GPT-4o for complex troubleshooting, complaint handling, and multi-step issue resolution — reduces AI costs by 50-65%",
+    "Implement conversation-level semantic caching — many customers ask the same questions; cache responses for common queries (shipping policy, return process, pricing) with 30-minute TTL, reducing redundant inference by 25-35%",
+    "Use AI Search to ground responses in product documentation before calling OpenAI — providing relevant context in the prompt reduces hallucination and follow-up clarification tokens by 30-40%",
+    "Implement intent classification as the first AI call using GPT-4o-mini — classify the query intent (billing, technical, general, complaint) in a single cheap call, then route to specialized prompts with targeted context, avoiding loading all knowledge for every query",
+    "Configure auto-escalation rules based on sentiment thresholds — if customer sentiment drops below 0.3 for 3+ messages, escalate to human agent immediately instead of continuing AI loops that consume tokens without resolving the issue",
+    "Use Communication Services chat over voice for first-contact resolution — chat interactions cost ~$0.004 vs voice at ~$0.04/minute, and AI can handle text more efficiently than transcribed speech"
+  ]
+}

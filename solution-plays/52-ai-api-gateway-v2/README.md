@@ -4,15 +4,86 @@ Intelligent AI API gateway — multi-provider routing (Azure OpenAI, Anthropic, 
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Gateway | Azure API Management | Policy enforcement, rate limiting, routing |
-| Semantic Cache | Azure Redis (RediSearch) | Embedding-based response caching |
-| Primary Provider | Azure OpenAI | GPT-4o + GPT-4o-mini |
-| Fallback Providers | Anthropic, Google | Claude Sonnet, Gemini Pro |
-| Routing Logic | Azure Container Apps | Complexity classification, failover |
-| Metering | Cosmos DB / App Insights | Per-consumer token + cost tracking |
-| Secrets | Azure Key Vault | Provider API keys |
+```mermaid
+graph TB
+    subgraph API Consumers
+        WebApp[Web Applications<br/>SPA · Server-Side · Mobile BFF]
+        Partners[Partner APIs<br/>B2B Integration · Third-Party Apps]
+        Internal[Internal Services<br/>Microservices · Batch Jobs · Agents]
+    end
+
+    subgraph Gateway Layer
+        APIM[Azure API Management<br/>Rate Limiting · Routing · Auth · Transformation]
+        Policies[Gateway Policies<br/>Complexity Detection · Model Selection · Quota Check]
+    end
+
+    subgraph Caching Layer
+        Redis[Azure Cache for Redis<br/>Semantic Cache · Rate Counters · Circuit Breaker]
+        Embeddings[Embedding Index<br/>Vector Similarity · 0.95 Threshold · TTL Management]
+    end
+
+    subgraph AI Backend Pool
+        GPT4o[Azure OpenAI GPT-4o<br/>Complex Reasoning · Code Gen · Analysis]
+        GPT4oMini[Azure OpenAI GPT-4o-mini<br/>Classification · Extraction · FAQ]
+        EmbedModel[Embedding Model<br/>text-embedding-3-large · Cache Key Generation]
+    end
+
+    subgraph Configuration
+        AppConfig[App Configuration<br/>Routing Rules · Rate Limits · Feature Flags · Cache TTL]
+    end
+
+    subgraph Analytics & Audit
+        CosmosDB[Cosmos DB<br/>Usage Tracking · Cost Attribution · Chargeback · Audit Logs]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Subscription Keys · TLS Certs]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Distributed Tracing · Latency · Cache Hit Ratio]
+        Monitor[Azure Monitor<br/>Dashboards · Alerts · Token Consumption · SLA Tracking]
+    end
+
+    WebApp -->|API Request| APIM
+    Partners -->|API Request| APIM
+    Internal -->|API Request| APIM
+    APIM -->|Evaluate| Policies
+    Policies -->|Check Cache| Redis
+    Redis -->|Vector Search| Embeddings
+    Embeddings -->|Cache Hit| APIM
+    Policies -->|Simple Query| GPT4oMini
+    Policies -->|Complex Query| GPT4o
+    Policies -->|Generate Key| EmbedModel
+    EmbedModel -->|Store| Redis
+    GPT4o -->|Response| APIM
+    GPT4oMini -->|Response| APIM
+    APIM -->|Log Usage| CosmosDB
+    AppConfig -->|Hot Reload| Policies
+    MI -->|Secrets| KV
+    APIM -->|Traces| AppInsights
+    AppInsights -->|Metrics| Monitor
+
+    style WebApp fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Partners fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Internal fill:#3b82f6,color:#fff,stroke:#2563eb
+    style APIM fill:#10b981,color:#fff,stroke:#059669
+    style Policies fill:#10b981,color:#fff,stroke:#059669
+    style Redis fill:#f59e0b,color:#fff,stroke:#d97706
+    style Embeddings fill:#f59e0b,color:#fff,stroke:#d97706
+    style GPT4o fill:#10b981,color:#fff,stroke:#059669
+    style GPT4oMini fill:#10b981,color:#fff,stroke:#059669
+    style EmbedModel fill:#10b981,color:#fff,stroke:#059669
+    style AppConfig fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -84,6 +155,22 @@ Intelligent AI API gateway — multi-provider routing (Azure OpenAI, Anthropic, 
 | P95 Latency (cached) | < 500ms | Cached response delivery |
 | Error Rate | < 1% | 4xx + 5xx responses |
 | Rate Limit Accuracy | 100% | Quota enforcement per consumer |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure API Management | $50 | $280 | $1,400 |
+| Azure OpenAI | $60 | $600 | $3,000 |
+| Azure Cache for Redis | $40 | $160 | $700 |
+| Azure Monitor | $0 | $50 | $150 |
+| Azure App Configuration | $0 | $35 | $70 |
+| Cosmos DB | $5 | $75 | $350 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$156** | **$1,235** | **$5,785** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

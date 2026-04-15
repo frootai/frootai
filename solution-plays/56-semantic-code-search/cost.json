@@ -1,0 +1,155 @@
+{
+  "play": "56",
+  "name": "Semantic Code Search",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Code understanding and embedding generation — text-embedding-3-large for semantic code vectors, GPT-4o-mini for natural-language-to-code query translation, code summarization, and search result explanation with contextual code snippets",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 40,
+          "note": "~40K tokens/day, embedding generation and query testing"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 300,
+          "note": "~300K tokens/day, production search and re-indexing"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1200,
+          "note": "Provisioned throughput, large-scale multi-repo indexing"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Code search index — hybrid search combining keyword matching (function names, class names, identifiers) with vector similarity for semantic queries (\"find the retry logic\", \"where is authentication handled\"); faceted search by language, repository, and file type",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, small codebase prototype"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, ~1M code chunks"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB index, multi-replica HA, ~10M code chunks"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Code repository mirror and chunk storage — cloned repository snapshots, parsed AST (Abstract Syntax Tree) outputs, pre-computed embeddings, indexing pipeline artifacts, and search result cache for popular queries",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 3,
+          "note": "~20GB, small codebase mirror"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 20,
+          "note": "~200GB, multi-repo mirrors with zone redundancy"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot",
+          "cost": 80,
+          "note": "~1TB, geo-redundant, enterprise-wide codebase archive"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Search platform runtime — hosts the search API, code parsing and chunking workers, incremental indexing pipeline, query processing service, and developer-facing search UI backend",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 8,
+          "note": "~40 vCPU-hours/month, single instance"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 60,
+          "note": "~300 vCPU-hours/month, 2-3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated",
+          "cost": 250,
+          "note": "~1000 vCPU-hours/month, VNET, 8+ replicas"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, search service keys, Git repository access tokens (PAT/SSH), storage account keys, and webhook signing secrets",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Search platform observability — query latency (P50/P95), search relevance metrics (MRR, NDCG), indexing pipeline throughput, embedding generation rate, and developer usage analytics",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 20,
+          "note": "~40GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 60,
+          "note": "~120GB/month, 90-day retention, relevance dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 52,
+    "prod": 653,
+    "enterprise": 2600
+  },
+  "optimization_tips": [
+    "Use text-embedding-3-large with reduced dimensions (1024 instead of 3072) — achieves 95% of full-dimension retrieval quality at 1/3 the storage and vector search cost in AI Search",
+    "Implement incremental indexing via Git webhooks — only re-index changed files on push events instead of full repository re-scans, reducing embedding generation costs by 90% for active repositories",
+    "Use GPT-4o-mini for query expansion and result summarization instead of GPT-4o — code search queries are typically short and structured, making mini models sufficient for query understanding at 1/30th the cost",
+    "Cache popular search queries and their results with a 1-hour TTL — developer search patterns follow a power law where 20% of queries account for 80% of volume, significantly reducing AI Search and embedding costs",
+    "Chunk code at function/class granularity using AST parsing instead of fixed-size text chunks — produces more meaningful search results and reduces the number of chunks by 40-60% compared to line-based splitting",
+    "Use AI Search Free tier for dev environments (50MB index) — sufficient for indexing a single small-to-medium codebase during development without any search service cost"
+  ]
+}

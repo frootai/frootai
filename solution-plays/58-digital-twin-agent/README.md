@@ -4,15 +4,85 @@ AI-powered digital twin — Azure Digital Twins with DTDL models, IoT Hub sensor
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Twin Platform | Azure Digital Twins | Virtual representation of physical assets |
-| Sensor Data | Azure IoT Hub | Device telemetry ingestion |
-| Event Routing | Azure Event Grid + Functions | IoT→Twin state updates |
-| NL Queries | Azure OpenAI (GPT-4o) | Natural language→DTDL translation |
-| Telemetry Archive | Azure Data Explorer | Historical sensor data for ML |
-| Predictions | Custom ML + GPT-4o-mini | RUL prediction + explanation |
-| Agent API | Azure Container Apps | Query + prediction endpoint |
+```mermaid
+graph TB
+    subgraph Physical World
+        Sensors[IoT Sensors<br/>Temperature · Vibration · Pressure · Flow · Energy]
+        Actuators[Actuators<br/>Valves · Motors · HVAC · Switches · Dampers]
+        Edge[Edge Devices<br/>Gateway · Protocol Translation · Local Processing]
+    end
+
+    subgraph IoT Connectivity
+        IoTHub[Azure IoT Hub<br/>Device Management · Telemetry Routing · C2D Commands]
+    end
+
+    subgraph Twin Platform
+        ADT[Azure Digital Twins<br/>DTDL Models · Twin Graph · Relationships · Live State]
+        EventGrid[Event Grid<br/>Twin Events · Device Events · Simulation Events]
+    end
+
+    subgraph Event Processing
+        Functions[Azure Functions<br/>Telemetry Transform · Graph Handlers · Anomaly Detection]
+    end
+
+    subgraph AI Intelligence
+        AOAI[Azure OpenAI<br/>Simulation Narration · Root-Cause Analysis · NL Queries]
+        Simulation[Simulation Engine<br/>What-If Scenarios · Cascading Effects · Prediction]
+    end
+
+    subgraph Analytics
+        ADX[Azure Data Explorer<br/>Time-Series Store · KQL Analytics · Trend Analysis]
+    end
+
+    subgraph Visualization
+        Dashboard[Operations Dashboard<br/>3D Twin View · Live Metrics · Alerts · Simulation Results]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>IoT Certs · API Keys · Connection Strings]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Sync Latency · Simulation Time · Device Health]
+    end
+
+    Sensors -->|Telemetry| Edge
+    Edge -->|Messages| IoTHub
+    IoTHub -->|Telemetry| Functions
+    Functions -->|Property Updates| ADT
+    ADT -->|Change Events| EventGrid
+    EventGrid -->|Handlers| Functions
+    Functions -->|Anomalies| AOAI
+    ADT -->|Twin State| Simulation
+    Simulation -->|Results| AOAI
+    AOAI -->|Narration| Dashboard
+    IoTHub -->|Raw Data| ADX
+    ADT -->|History| ADX
+    ADX -->|Trends| AOAI
+    AOAI -->|Commands| IoTHub
+    IoTHub -->|C2D| Actuators
+    ADT -->|Live State| Dashboard
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+
+    style Sensors fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Actuators fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Edge fill:#3b82f6,color:#fff,stroke:#2563eb
+    style IoTHub fill:#f59e0b,color:#fff,stroke:#d97706
+    style ADT fill:#10b981,color:#fff,stroke:#059669
+    style EventGrid fill:#f59e0b,color:#fff,stroke:#d97706
+    style Functions fill:#10b981,color:#fff,stroke:#059669
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style Simulation fill:#10b981,color:#fff,stroke:#059669
+    style ADX fill:#f59e0b,color:#fff,stroke:#d97706
+    style Dashboard fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -34,6 +104,22 @@ AI-powered digital twin — Azure Digital Twins with DTDL models, IoT Hub sensor
 | Critical Detection | > 90% | Failing machines flagged within 7 days |
 | Sync Latency | < 5s | IoT message→twin property update |
 | Telemetry Coverage | > 95% | Sensors actively reporting |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $60 | $500 | $2,000 |
+| Azure IoT Hub | $0 | $100 | $500 |
+| Azure Digital Twins | $15 | $150 | $600 |
+| Azure Functions | $0 | $30 | $250 |
+| Azure Event Grid | $1 | $10 | $50 |
+| Azure Data Explorer | $25 | $200 | $800 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $35 | $100 |
+| **Total** | **$102** | **$1,030** | **$4,315** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

@@ -1,0 +1,199 @@
+{
+  "play": "55",
+  "name": "Supply Chain AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Supply chain intelligence engine — demand narrative interpretation, supplier risk assessment from unstructured reports, anomaly root-cause explanation, natural-language supply chain query interface, and scenario simulation narration for what-if planning",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 80,
+          "note": "~80K tokens/day, prototype demand analysis and NL queries"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 600,
+          "note": "~600K tokens/day, production insights and reporting"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 2500,
+          "note": "Provisioned throughput, real-time global supply chain analysis"
+        }
+      }
+    },
+    {
+      "name": "Azure Machine Learning",
+      "category": "AI Services",
+      "purpose": "Demand forecasting and optimization models — time-series forecasting (ARIMA, Prophet, DeepAR), inventory optimization, lead-time prediction, supplier scoring models, and route optimization using managed endpoints for real-time inference",
+      "tiers": {
+        "dev": {
+          "sku": "Basic Compute",
+          "cost": 50,
+          "note": "Standard_DS3_v2, 4-core, training and experimentation"
+        },
+        "prod": {
+          "sku": "Standard Compute + Endpoint",
+          "cost": 300,
+          "note": "Standard_DS4_v2 training + managed endpoint for inference"
+        },
+        "enterprise": {
+          "sku": "GPU Cluster + Endpoints",
+          "cost": 1200,
+          "note": "NC6s_v3 GPU training, multi-model endpoints, MLflow registry"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Supply chain operational data store — real-time inventory levels, order tracking, supplier performance metrics, demand forecast results, logistics events, and cross-facility stock positions with global distribution and low-latency reads",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, supply chain data prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 2000 RU/s",
+          "cost": 150,
+          "note": "Multi-partition, 100GB, real-time inventory tracking"
+        },
+        "enterprise": {
+          "sku": "Provisioned 8000 RU/s",
+          "cost": 600,
+          "note": "Multi-region writes, 500GB, global supply chain state"
+        }
+      }
+    },
+    {
+      "name": "Azure Event Hubs",
+      "category": "Integration",
+      "purpose": "Real-time supply chain event ingestion — IoT sensor data (warehouse temperature, fleet GPS), POS transaction streams, supplier shipment notifications, logistics status updates, and demand signal capture at millions of events per second",
+      "tiers": {
+        "dev": {
+          "sku": "Basic",
+          "cost": 10,
+          "note": "1 TU, ~1M events/month, prototype streams"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 75,
+          "note": "4 TUs, ~50M events/month, production data streams"
+        },
+        "enterprise": {
+          "sku": "Premium",
+          "cost": 350,
+          "note": "8 PUs, ~500M events/month, zone-redundant, Kafka API"
+        }
+      }
+    },
+    {
+      "name": "Azure Stream Analytics",
+      "category": "Analytics",
+      "purpose": "Real-time event processing — demand signal aggregation, inventory threshold alerting, logistics delay detection, supplier SLA monitoring, and windowed aggregations for near-real-time dashboards",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 25,
+          "note": "1 SU, basic stream processing"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 100,
+          "note": "4 SUs, production event processing"
+        },
+        "enterprise": {
+          "sku": "Standard",
+          "cost": 300,
+          "note": "12 SUs, high-throughput multi-stream processing"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Supply chain data lake — historical demand data, supplier performance archives, logistics records, ML training datasets, forecast result archives, and compliance documentation for audit",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 5,
+          "note": "~50GB, sample datasets"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot + Cool",
+          "cost": 40,
+          "note": "~500GB hot + 1TB cool, tiered lifecycle"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Cool + Archive",
+          "cost": 120,
+          "note": "~2TB hot + 5TB cool + 10TB archive, geo-redundant"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "ML workspace secrets, OpenAI API keys, Event Hubs connection strings, Cosmos DB keys, supplier API credentials, and ERP integration tokens",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Platform observability — forecast accuracy tracking (MAPE/RMSE), inventory turnover rates, demand signal processing latency, model inference performance, and supply chain KPI dashboards",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 40,
+          "note": "~80GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 120,
+          "note": "~250GB/month, 90-day retention, supply chain dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 176,
+    "prod": 1310,
+    "enterprise": 5205
+  },
+  "optimization_tips": [
+    "Use Azure ML batch endpoints for non-urgent forecasts (weekly/monthly demand planning) instead of real-time managed endpoints — batch inference is 60-70% cheaper and ideal for scheduled forecast refreshes",
+    "Implement tiered storage lifecycle policies for supply chain data — hot storage for last 90 days, cool for 90 days-1 year, archive for 1+ years; most supply chain analytics only need recent data, saving 50-60% on storage",
+    "Use GPT-4o-mini for routine supply chain queries (order status, inventory levels, shipment tracking) and reserve GPT-4o for complex scenario analysis (what-if simulations, multi-factor root cause analysis) — 80% of queries are routine",
+    "Right-size Event Hubs throughput units to actual demand signal volume — start with 1 TU (1MB/s ingress) and enable auto-inflate rather than over-provisioning fixed capacity",
+    "Cache frequently accessed forecasts and inventory snapshots in Redis (15-minute TTL) — demand forecasts and stock levels change slowly relative to query frequency, reducing Cosmos DB RU consumption by 40%",
+    "Train ML models on sampled datasets for hyperparameter tuning (10-20% sample), then train the final model on full data — reduces GPU compute hours for experimentation by 80% without impacting final model quality"
+  ]
+}

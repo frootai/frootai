@@ -4,14 +4,81 @@ Enterprise translation engine — two-layer architecture: Azure Translator for b
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| NMT Engine | Azure Translator (S1) | Bulk neural machine translation, 130+ languages |
-| Post-Editing | Azure OpenAI (GPT-4o) | LLM refinement for marketing/legal/medical |
-| Quality Scoring | Azure OpenAI (GPT-4o-mini) | Translation quality assessment |
-| Glossary | Azure Blob Storage | Custom terminology enforcement (TSV) |
-| Pipeline | Azure Container Apps | Translation API + batch orchestration |
-| Secrets | Azure Key Vault | API keys |
+```mermaid
+graph TB
+    subgraph Content Sources
+        WebCMS[Web CMS<br/>Pages · Blog Posts · Marketing Copy]
+        Docs[Documents<br/>PDF · DOCX · PPTX · XLIFF]
+        AppStrings[Application Strings<br/>UI Labels · Error Messages · Notifications]
+        API[Translation API<br/>REST · Batch · Real-Time]
+    end
+
+    subgraph Translation Engine
+        Router[Translation Router<br/>Content Classifier · Complexity Scorer · TM Lookup]
+        Translator[Azure AI Translator<br/>Neural MT · Custom Models · Document Translation]
+        GPT[Azure OpenAI<br/>Cultural Adaptation · Tone Preservation · Context-Aware]
+    end
+
+    subgraph Translation Memory
+        TMStore[Cosmos DB<br/>TM Segments · Glossaries · Quality Scores · Projects]
+    end
+
+    subgraph Quality Pipeline
+        QE[Quality Estimation<br/>BLEU · COMET · GPT-4o-mini QE Scoring]
+        HumanReview[Human Review Queue<br/>Below-Threshold Segments · Reviewer Feedback]
+    end
+
+    subgraph Content Delivery
+        CDN[Azure CDN<br/>Edge Delivery · Locale-Based Caching · Global PoPs]
+        BlobStore[Azure Blob Storage<br/>Source Docs · Translated Outputs · Training Corpora]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Translator Credentials · Webhook Secrets]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Translation Latency · Quality Metrics · Cost Tracking]
+    end
+
+    WebCMS -->|Content| Router
+    Docs -->|Files| Router
+    AppStrings -->|Strings| Router
+    API -->|Requests| Router
+    Router -->|TM Lookup| TMStore
+    Router -->|Routine| Translator
+    Router -->|Nuanced| GPT
+    Translator -->|Translations| QE
+    GPT -->|Translations| QE
+    QE -->|Approved| TMStore
+    QE -->|Below Threshold| HumanReview
+    HumanReview -->|Corrected| TMStore
+    TMStore -->|Cached Content| CDN
+    Router -->|Source Files| BlobStore
+    QE -->|Translated Files| BlobStore
+    BlobStore -->|Assets| CDN
+    MI -->|Secrets| KV
+    Router -->|Traces| AppInsights
+
+    style WebCMS fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Docs fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AppStrings fill:#3b82f6,color:#fff,stroke:#2563eb
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Router fill:#10b981,color:#fff,stroke:#059669
+    style Translator fill:#10b981,color:#fff,stroke:#059669
+    style GPT fill:#10b981,color:#fff,stroke:#059669
+    style TMStore fill:#f59e0b,color:#fff,stroke:#d97706
+    style QE fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style HumanReview fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style CDN fill:#f59e0b,color:#fff,stroke:#d97706
+    style BlobStore fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -34,6 +101,21 @@ Enterprise translation engine — two-layer architecture: Azure Translator for b
 | Product Name Preservation | 100% | Product names never translated |
 | Markup Preservation | 100% | HTML/markdown tags intact |
 | Cost per 1K Words | < $0.20 | NMT + LLM refinement |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $60 | $500 | $2,000 |
+| Azure AI Translator | $0 | $200 | $800 |
+| Cosmos DB | $5 | $120 | $500 |
+| Azure CDN | $5 | $50 | $200 |
+| Azure Blob Storage | $3 | $25 | $80 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $25 | $80 |
+| **Total** | **$74** | **$923** | **$3,670** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

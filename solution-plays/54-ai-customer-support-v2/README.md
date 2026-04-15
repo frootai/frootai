@@ -4,14 +4,86 @@ Advanced AI customer support — multi-channel (chat, email, voice), intent clas
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Intent Classification | Azure OpenAI (GPT-4o-mini) | Fast intent + slot + sentiment detection |
-| Response Generation | Azure OpenAI (GPT-4o) | Knowledge-grounded customer responses |
-| Knowledge Base | Azure AI Search | FAQ, product docs, policies, troubleshooting |
-| Session State | Azure Cosmos DB | Conversation history, slot tracking |
-| Support API | Azure Container Apps | Multi-channel endpoint |
-| Secrets | Azure Key Vault | API keys |
+```mermaid
+graph TB
+    subgraph Customer Channels
+        Chat[Live Chat Widget<br/>Web · Mobile · In-App]
+        Email[Email<br/>Support Inbox · Auto-Reply · Threading]
+        SMS[SMS / WhatsApp<br/>Notifications · Quick Queries]
+        Voice[Voice / Video<br/>Escalation · Complex Troubleshooting]
+    end
+
+    subgraph Communication Layer
+        ACS[Azure Communication Services<br/>Omnichannel Router · Chat · SMS · Voice · Video]
+    end
+
+    subgraph AI Engine
+        AOAI[Azure OpenAI<br/>Response Generation · Sentiment Analysis · Intent Classification]
+        Sentiment[Sentiment Tracker<br/>Real-Time Scoring · Trend Detection · Escalation Triggers]
+    end
+
+    subgraph Knowledge Layer
+        AISearch[Azure AI Search<br/>Product Docs · FAQ · Troubleshooting · Past Tickets]
+    end
+
+    subgraph Conversation State
+        CosmosDB[Cosmos DB<br/>Conversations · Tickets · Customer Profiles · SLA Timers]
+    end
+
+    subgraph Escalation & Routing
+        ServiceBus[Azure Service Bus<br/>Escalation Queue · CRM Sync · Notifications]
+        HumanAgent[Human Agents<br/>Complex Cases · VIP Customers · Complaints]
+    end
+
+    subgraph Application Runtime
+        ContainerApps[Container Apps<br/>Chatbot Service · Routing Engine · Integration APIs]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Connection Strings · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Resolution Rate · Sentiment Trends · CSAT · SLA Compliance]
+    end
+
+    Chat -->|Message| ACS
+    Email -->|Thread| ACS
+    SMS -->|Text| ACS
+    Voice -->|Call| ACS
+    ACS -->|Unified Thread| ContainerApps
+    ContainerApps -->|Query| AISearch
+    AISearch -->|Context| AOAI
+    ContainerApps -->|Analyze| AOAI
+    AOAI -->|Score| Sentiment
+    Sentiment -->|Escalate| ServiceBus
+    ServiceBus -->|Route| HumanAgent
+    AOAI -->|Response| ACS
+    ContainerApps -->|State| CosmosDB
+    CosmosDB -->|History| ContainerApps
+    ServiceBus -->|CRM Sync| ContainerApps
+    MI -->|Secrets| KV
+    ContainerApps -->|Traces| AppInsights
+
+    style Chat fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Email fill:#3b82f6,color:#fff,stroke:#2563eb
+    style SMS fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Voice fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ACS fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style Sentiment fill:#10b981,color:#fff,stroke:#059669
+    style AISearch fill:#f59e0b,color:#fff,stroke:#d97706
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style ServiceBus fill:#f59e0b,color:#fff,stroke:#d97706
+    style HumanAgent fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ContainerApps fill:#10b981,color:#fff,stroke:#059669
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -53,6 +125,22 @@ Advanced AI customer support — multi-channel (chat, email, voice), intent clas
 | Escalation Rate | 15-25% | Sweet spot: not too many, not too few |
 | KB Grounding | > 95% | Responses from knowledge base only |
 | Cost per Conversation | < $0.05 | ~3 turns average |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $80 | $700 | $2,800 |
+| Azure AI Search | $0 | $250 | $1,000 |
+| Azure Communication Services | $10 | $80 | $300 |
+| Cosmos DB | $5 | $75 | $350 |
+| Container Apps | $10 | $100 | $400 |
+| Azure Service Bus | $5 | $25 | $100 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $30 | $100 |
+| **Total** | **$111** | **$1,265** | **$5,065** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

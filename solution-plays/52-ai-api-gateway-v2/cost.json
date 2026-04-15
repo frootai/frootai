@@ -1,0 +1,199 @@
+{
+  "play": "52",
+  "name": "AI API Gateway V2",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure API Management",
+      "category": "Networking",
+      "purpose": "Unified AI gateway — intelligent request routing across multiple Azure OpenAI backends, rate limiting per consumer, token-based quota enforcement, retry with failover, request/response transformation, and developer portal for API consumers",
+      "tiers": {
+        "dev": {
+          "sku": "Developer",
+          "cost": 50,
+          "note": "Single unit, no SLA, prototyping gateway policies"
+        },
+        "prod": {
+          "sku": "Standard v2",
+          "cost": 280,
+          "note": "2 units, zone-redundant, production SLA"
+        },
+        "enterprise": {
+          "sku": "Premium v2",
+          "cost": 1400,
+          "note": "4 units, multi-region, VNET injection, self-hosted gateways"
+        }
+      }
+    },
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Backend inference pool — multiple model deployments (GPT-4o, GPT-4o-mini, text-embedding-3-large) behind the gateway for intelligent model routing based on request complexity, cost tier, and latency requirements",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 60,
+          "note": "~60K tokens/day across 2 model deployments"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 600,
+          "note": "~600K tokens/day, multi-model routing"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 3000,
+          "note": "Provisioned throughput, guaranteed capacity across regions"
+        }
+      }
+    },
+    {
+      "name": "Azure Cache for Redis",
+      "category": "Data",
+      "purpose": "Semantic response cache — stores AI responses keyed by embedding similarity, reducing redundant inference calls by 30-50%; also manages rate-limit counters, circuit breaker state, and session tokens per consumer",
+      "tiers": {
+        "dev": {
+          "sku": "Basic C1",
+          "cost": 40,
+          "note": "1GB cache, semantic caching prototype"
+        },
+        "prod": {
+          "sku": "Standard C2",
+          "cost": 160,
+          "note": "6GB, replication, RediSearch for vector similarity"
+        },
+        "enterprise": {
+          "sku": "Enterprise E10",
+          "cost": 700,
+          "note": "12GB, active geo-replication, RediSearch + vector indexing"
+        }
+      }
+    },
+    {
+      "name": "Azure Monitor",
+      "category": "Monitoring",
+      "purpose": "Gateway observability — real-time dashboards for request latency (P50/P95/P99), token consumption per consumer, cache hit ratio, model routing distribution, error rates, and cost attribution per API consumer",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "Basic metrics and 5GB log ingestion"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 50,
+          "note": "~100GB/month, custom dashboards, alert rules"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 150,
+          "note": "~300GB/month, 90-day retention, cross-region correlation"
+        }
+      }
+    },
+    {
+      "name": "Azure App Configuration",
+      "category": "Platform",
+      "purpose": "Dynamic gateway configuration — feature flags for canary model rollouts, routing rules, rate-limit thresholds, cache TTL settings, and consumer tier definitions with hot-reload without gateway restart",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "1K requests/day, basic feature flags"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 35,
+          "note": "Unlimited requests, labels, snapshots"
+        },
+        "enterprise": {
+          "sku": "Standard + Replicas",
+          "cost": 70,
+          "note": "Geo-replicated, private endpoint, audit logs"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Usage analytics and audit store — per-consumer token usage tracking, cost attribution records, request audit logs, SLA compliance data, and billing aggregation for chargeback reporting",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~2K RUs, usage tracking prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, real-time usage aggregation"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, enterprise chargeback analytics"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "API keys, consumer subscription keys, OpenAI endpoint secrets, Redis connection strings, and TLS certificates for custom gateway domains",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month, auto-rotation"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Distributed tracing — end-to-end request correlation from consumer through gateway to AI backend, cache hit/miss telemetry, model selection decisions, and latency breakdown per pipeline stage",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, SLA dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 156,
+    "prod": 1235,
+    "enterprise": 5785
+  },
+  "optimization_tips": [
+    "Enable semantic caching with embedding similarity threshold of 0.95 — captures 30-50% of repeated or near-duplicate queries, directly reducing Azure OpenAI token spend without quality degradation",
+    "Route simple queries (classification, extraction, summarization under 500 tokens) to GPT-4o-mini at 1/30th the cost of GPT-4o — use APIM policies to inspect prompt complexity and auto-route",
+    "Implement tiered rate limits per consumer — free tier gets 100 req/min with GPT-4o-mini only, premium tier gets 1000 req/min with GPT-4o access, enabling cost-proportional SLA guarantees",
+    "Use Redis pipeline batching for cache lookups — batch 10-20 similarity checks in a single round-trip instead of sequential calls, reducing cache check latency from 50ms to 5ms",
+    "Deploy APIM Developer tier for dev/staging environments ($50/month vs $280+ for Standard) — Developer tier has identical policy engine, only lacks SLA and multi-unit scaling",
+    "Use Cosmos DB serverless for dev and low-traffic environments — only pay for consumed RUs instead of provisioned capacity, saving 90% on usage analytics storage during off-peak periods"
+  ]
+}

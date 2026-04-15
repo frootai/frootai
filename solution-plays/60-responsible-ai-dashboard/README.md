@@ -4,14 +4,84 @@ Organization-wide responsible AI monitoring — centralized fairness scorecards 
 
 ## Architecture
 
-| Component | Azure Service | Purpose |
-|-----------|--------------|---------|
-| Dashboard API | Azure Container Apps | Metrics collection, compliance, reporting |
-| Dashboard UI | Azure Static Web Apps | Executive scorecards, system health view |
-| System Registry | Azure Cosmos DB | AI system metadata, model cards |
-| Incident Tracker | Azure Cosmos DB | Safety incidents with severity + remediation |
-| Metrics Source | Azure Application Insights | Telemetry from registered AI systems |
-| Report Generator | Azure OpenAI (GPT-4o) | Executive summaries, trend analysis |
+```mermaid
+graph TB
+    subgraph AI Systems Under Monitoring
+        Models[Production AI Models<br/>Classification · Recommendation · Generation · Decision]
+        GenAI[Generative AI Apps<br/>Chatbots · Content Generation · Summarization]
+        Decisions[Automated Decisions<br/>Loan Approval · Hiring Screen · Risk Score]
+    end
+
+    subgraph RAI Evaluation Pipeline
+        Fairlearn[Fairlearn<br/>Demographic Parity · Equalized Odds · Calibration]
+        InterpretML[InterpretML<br/>SHAP Values · Feature Importance · Counterfactuals]
+        ErrorAnalysis[Error Analysis<br/>Failure Patterns · Subgroup Errors · Cohort Analysis]
+        AzureML[Azure Machine Learning<br/>RAI Toolbox · Model Registry · Evaluation Pipelines]
+    end
+
+    subgraph AI Intelligence
+        AOAI[Azure OpenAI<br/>Fairness Narratives · Root-Cause Analysis · NL Queries]
+    end
+
+    subgraph Real-Time Monitoring
+        Monitor[Azure Monitor<br/>Accuracy Drift · Fairness Shifts · Safety Filters · Alerts]
+    end
+
+    subgraph Data Store
+        CosmosDB[Cosmos DB<br/>Audit Results · Evaluations · Incidents · Compliance Records]
+        BlobStore[Azure Blob Storage<br/>Model Cards · Reports · Data Sheets · Archives]
+    end
+
+    subgraph Dashboard
+        SWA[Azure Static Web Apps<br/>Fairness Visualizations · Trend Lines · Compliance Status]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · ML Secrets · Monitor Strings]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Observability
+        AppInsights[Application Insights<br/>Pipeline Latency · Dashboard Performance · Errors]
+    end
+
+    Models -->|Predictions| Monitor
+    GenAI -->|Outputs| Monitor
+    Decisions -->|Results| Monitor
+    Monitor -->|Metrics| CosmosDB
+    Models -->|Evaluation Data| AzureML
+    AzureML -->|Compute| Fairlearn
+    AzureML -->|Compute| InterpretML
+    AzureML -->|Compute| ErrorAnalysis
+    Fairlearn -->|Fairness Scores| CosmosDB
+    InterpretML -->|Explanations| CosmosDB
+    ErrorAnalysis -->|Patterns| CosmosDB
+    CosmosDB -->|RAI Data| AOAI
+    AOAI -->|Narratives| SWA
+    CosmosDB -->|Metrics| SWA
+    Monitor -->|Alerts| SWA
+    AzureML -->|Model Cards| BlobStore
+    MI -->|Secrets| KV
+    AzureML -->|Traces| AppInsights
+
+    style Models fill:#3b82f6,color:#fff,stroke:#2563eb
+    style GenAI fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Decisions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Fairlearn fill:#10b981,color:#fff,stroke:#059669
+    style InterpretML fill:#10b981,color:#fff,stroke:#059669
+    style ErrorAnalysis fill:#10b981,color:#fff,stroke:#059669
+    style AzureML fill:#10b981,color:#fff,stroke:#059669
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
+    style BlobStore fill:#f59e0b,color:#fff,stroke:#d97706
+    style SWA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
 
 ## How It Differs from Related Plays
 
@@ -34,6 +104,22 @@ Organization-wide responsible AI monitoring — centralized fairness scorecards 
 | Compliance Evidence | > 90% | Required docs per framework |
 | Model Card Coverage | 100% | Every system has model card |
 | Monthly Cost | < $100 | Org-wide monitoring |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $50 | $400 | $1,600 |
+| Azure Machine Learning | $40 | $250 | $1,000 |
+| Azure Monitor | $0 | $80 | $250 |
+| Cosmos DB | $5 | $120 | $400 |
+| Azure Static Web Apps | $0 | $15 | $15 |
+| Azure Blob Storage | $2 | $15 | $50 |
+| Key Vault | $1 | $3 | $10 |
+| Application Insights | $0 | $25 | $80 |
+| **Total** | **$98** | **$908** | **$3,405** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ## WAF Alignment
 

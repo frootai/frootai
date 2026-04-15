@@ -1,26 +1,11 @@
 {
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "azure-openai-key",
-            "description": "Azure OpenAI API Key for code embeddings (text-embedding-3-large)",
-            "password": true
-        },
-        {
-            "type": "promptString",
-            "id": "azure-search-key",
-            "description": "Azure AI Search Key for code index",
-            "password": true
-        }
-    ],
     "servers": {
         "frootai": {
             "type": "stdio",
             "command": "npx",
             "args": [
                 "frootai-mcp@latest"
-            ],
-            "envFile": "${workspaceFolder}/.env"
+            ]
         }
     }
 }

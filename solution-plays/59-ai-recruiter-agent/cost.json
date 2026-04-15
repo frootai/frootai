@@ -1,0 +1,177 @@
+{
+  "play": "59",
+  "name": "AI Recruiter Agent",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Recruitment intelligence — GPT-4o for resume analysis and candidate-role matching (extracting skills, experience, and qualifications from unstructured resumes and mapping to job requirements), job description generation from hiring manager briefs, interview question generation tailored to role and seniority, candidate communication drafting, and bias-aware evaluation summaries; GPT-4o-mini for high-volume resume screening and FAQ responses",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 60,
+          "note": "~60K tokens/day, resume parsing and matching prototype"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 450,
+          "note": "~450K tokens/day, production recruitment pipeline"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 1800,
+          "note": "Provisioned throughput, high-volume enterprise hiring"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Candidate search and talent pool — hybrid search across candidate profiles combining keyword matching (job titles, certifications, company names) with vector similarity for semantic skill matching ('machine learning experience' matches candidates with 'PyTorch, TensorFlow, neural networks' even without exact keyword overlap); faceted filtering by location, experience level, availability, and skill category",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, ~1K candidate profiles"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, ~500K profiles"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB index, multi-replica HA, ~5M profiles"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Recruitment operations data — candidate application records, interview schedules and feedback, hiring pipeline stages (applied → screened → interviewed → offered → hired), recruiter activity logs, job requisition details, offer tracking, and onboarding status with low-latency reads for real-time recruitment dashboard",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~5K RUs, prototype recruitment pipeline"
+        },
+        "prod": {
+          "sku": "Provisioned 1500 RU/s",
+          "cost": 120,
+          "note": "Multi-partition, 50GB, production recruitment ops"
+        },
+        "enterprise": {
+          "sku": "Provisioned 5000 RU/s",
+          "cost": 400,
+          "note": "Multi-region, 200GB, global recruitment platform"
+        }
+      }
+    },
+    {
+      "name": "Microsoft Graph",
+      "category": "Integration",
+      "purpose": "Calendar and email integration — interview scheduling via Outlook calendar API (find available slots across interviewers, send invites, handle rescheduling), candidate email communication, Teams meeting creation for virtual interviews, organizational hierarchy for hiring manager approval workflows, and SharePoint integration for job posting distribution",
+      "tiers": {
+        "dev": {
+          "sku": "Included (M365)",
+          "cost": 0,
+          "note": "Graph API calls within M365 license"
+        },
+        "prod": {
+          "sku": "Included (M365)",
+          "cost": 0,
+          "note": "Graph API calls within M365 license"
+        },
+        "enterprise": {
+          "sku": "Included (M365)",
+          "cost": 0,
+          "note": "Graph API calls within M365 license"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Document storage — candidate resumes (PDF, DOCX), cover letters, portfolio documents, interview recordings (with consent), job description templates, offer letter templates, and compliance documentation for audit retention",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 3,
+          "note": "~20GB, sample resumes and templates"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 25,
+          "note": "~250GB, production document storage"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Cool",
+          "cost": 80,
+          "note": "~1TB hot + 2TB cool, geo-redundant, compliance archive"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, AI Search keys, Cosmos DB connection strings, Graph API client secrets, ATS integration credentials, and background check vendor API keys",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 3,
+          "note": "~15K operations/month"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 10,
+          "note": "HSM-backed, compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Recruitment platform observability — candidate matching accuracy, resume processing latency, pipeline conversion rates, bias detection metrics (demographic distribution at each pipeline stage), recruiter productivity analytics, and time-to-hire tracking",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 25,
+          "note": "~50GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 80,
+          "note": "~160GB/month, 90-day retention, diversity dashboards"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 69,
+    "prod": 873,
+    "enterprise": 3370
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for initial resume screening (pass/fail against minimum qualifications) and reserve GPT-4o for detailed candidate-role matching analysis — 70% of applications are clearly unqualified and can be filtered with the mini model at 1/30th the cost",
+    "Index candidate profiles in AI Search with incremental updates — only re-embed profiles when skills or experience change, not on every status update (interview scheduled, note added), reducing embedding generation costs by 80%",
+    "Cache AI-generated job descriptions and interview questions by role template — similar positions (e.g., 'Senior Software Engineer') share 80% of content, reducing OpenAI calls for repeat requisitions",
+    "Use Azure AI Search Free tier for dev (50MB, ~1K profiles) — sufficient for prototype development without any search service cost",
+    "Implement candidate data lifecycle policies — archive candidate records to cool storage 1 year after position closure (legal retention requirement), delete after the compliance-required retention period, reducing hot storage costs",
+    "Batch resume processing during off-peak hours for bulk uploads (job fair imports, ATS migrations) — reduces Function App scaling spikes and allows more efficient token usage with GPT-4o-mini batch API"
+  ]
+}

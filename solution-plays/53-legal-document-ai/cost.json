@@ -1,0 +1,199 @@
+{
+  "play": "53",
+  "name": "Legal Document AI",
+  "currency": "USD",
+  "updated": "2026-04-15",
+  "note": "Estimates based on Azure retail pricing. Actual costs depend on usage, region, reserved instances, and enterprise agreements.",
+  "calculator": "https://azure.microsoft.com/pricing/calculator/",
+  "services": [
+    {
+      "name": "Azure OpenAI",
+      "category": "AI Services",
+      "purpose": "Legal reasoning engine — contract clause analysis, risk identification, regulatory compliance assessment, legal summarization, obligation extraction, party identification, and jurisdictional analysis using GPT-4o for complex legal reasoning and GPT-4o-mini for classification and extraction tasks",
+      "tiers": {
+        "dev": {
+          "sku": "Pay-As-You-Go",
+          "cost": 100,
+          "note": "~100K tokens/day, legal analysis prototyping with long documents"
+        },
+        "prod": {
+          "sku": "Pay-As-You-Go",
+          "cost": 900,
+          "note": "~900K tokens/day, production contract review pipeline"
+        },
+        "enterprise": {
+          "sku": "PTU Reserved",
+          "cost": 3500,
+          "note": "Provisioned throughput, batch contract processing at scale"
+        }
+      }
+    },
+    {
+      "name": "Azure AI Search",
+      "category": "AI Services",
+      "purpose": "Legal knowledge retrieval — semantic search across contract libraries, case law precedents, regulatory databases, and internal legal opinions; hybrid search combining keyword matching for legal citations with vector similarity for conceptual legal queries",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "50MB index, 10K documents, prototype search"
+        },
+        "prod": {
+          "sku": "Standard S1",
+          "cost": 250,
+          "note": "25GB index, semantic ranker, 500K documents"
+        },
+        "enterprise": {
+          "sku": "Standard S2",
+          "cost": 1000,
+          "note": "100GB index, multi-replica, high-availability search"
+        }
+      }
+    },
+    {
+      "name": "Azure Document Intelligence",
+      "category": "AI Services",
+      "purpose": "Document parsing and extraction — OCR for scanned contracts, structured extraction of tables, signatures, dates, and parties from PDF/DOCX/TIFF legal documents; layout analysis for complex multi-column contracts and appendices",
+      "tiers": {
+        "dev": {
+          "sku": "Free",
+          "cost": 0,
+          "note": "500 pages/month, basic layout extraction"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 100,
+          "note": "~10K pages/month, custom models for legal formats"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 400,
+          "note": "~50K pages/month, custom classification + extraction models"
+        }
+      }
+    },
+    {
+      "name": "Azure Blob Storage",
+      "category": "Data",
+      "purpose": "Legal document repository — original contracts, processed documents, extracted clause libraries, OCR outputs, version history, and compliance audit archives with immutable storage for legal hold requirements",
+      "tiers": {
+        "dev": {
+          "sku": "Standard LRS Hot",
+          "cost": 5,
+          "note": "~50GB, sample contract library"
+        },
+        "prod": {
+          "sku": "Standard ZRS Hot",
+          "cost": 40,
+          "note": "~500GB, production document archive with zone redundancy"
+        },
+        "enterprise": {
+          "sku": "Standard GRS Hot + Immutable",
+          "cost": 150,
+          "note": "~2TB, geo-redundant, WORM compliance, legal hold policies"
+        }
+      }
+    },
+    {
+      "name": "Cosmos DB",
+      "category": "Data",
+      "purpose": "Legal analysis metadata — contract risk scores, extracted obligations and deadlines, clause classifications, review status tracking, reviewer assignments, audit trail of all AI-assisted legal decisions, and cross-contract relationship mapping",
+      "tiers": {
+        "dev": {
+          "sku": "Serverless",
+          "cost": 5,
+          "note": "~3K RUs, metadata prototype"
+        },
+        "prod": {
+          "sku": "Provisioned 1000 RU/s",
+          "cost": 75,
+          "note": "Multi-partition, 50GB, real-time risk dashboards"
+        },
+        "enterprise": {
+          "sku": "Provisioned 4000 RU/s",
+          "cost": 350,
+          "note": "Multi-region, 200GB, enterprise-wide contract analytics"
+        }
+      }
+    },
+    {
+      "name": "Key Vault",
+      "category": "Security",
+      "purpose": "OpenAI API keys, storage account keys, search service keys, document processing credentials, and encryption keys for sensitive legal documents",
+      "tiers": {
+        "dev": {
+          "sku": "Standard",
+          "cost": 1,
+          "note": "~1K operations/month"
+        },
+        "prod": {
+          "sku": "Standard",
+          "cost": 5,
+          "note": "~30K operations/month, auto-rotation"
+        },
+        "enterprise": {
+          "sku": "Premium HSM",
+          "cost": 15,
+          "note": "HSM-backed, regulatory compliance audit trail"
+        }
+      }
+    },
+    {
+      "name": "Application Insights",
+      "category": "Monitoring",
+      "purpose": "Pipeline observability — document processing throughput, AI analysis latency per document type, risk score distribution, clause extraction accuracy tracking, and legal review SLA compliance monitoring",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "5GB/month data cap"
+        },
+        "prod": {
+          "sku": "Pay-per-GB",
+          "cost": 30,
+          "note": "~60GB/month ingestion"
+        },
+        "enterprise": {
+          "sku": "Pay-per-GB",
+          "cost": 100,
+          "note": "~200GB/month, 90-day retention, compliance dashboards"
+        }
+      }
+    },
+    {
+      "name": "Container Apps",
+      "category": "Compute",
+      "purpose": "Document processing pipeline runtime — hosts the legal analysis microservices, document chunking workers, risk assessment engine, and API layer for the legal review interface",
+      "tiers": {
+        "dev": {
+          "sku": "Consumption",
+          "cost": 10,
+          "note": "~50 vCPU-hours/month, single instance"
+        },
+        "prod": {
+          "sku": "Consumption",
+          "cost": 80,
+          "note": "~400 vCPU-hours/month, 3 replicas"
+        },
+        "enterprise": {
+          "sku": "Dedicated",
+          "cost": 350,
+          "note": "~1500 vCPU-hours/month, VNET integration, 10+ replicas"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "dev": 121,
+    "prod": 1480,
+    "enterprise": 5865
+  },
+  "optimization_tips": [
+    "Use GPT-4o-mini for initial clause classification and entity extraction (party names, dates, amounts) — reserve GPT-4o for complex risk assessment and multi-clause reasoning that requires deep legal understanding",
+    "Implement document chunking with clause-aware boundaries — legal contracts have natural section breaks (recitals, definitions, covenants, representations) that preserve context better than fixed-size chunks, reducing re-read tokens by 40%",
+    "Cache frequently referenced legal templates and standard clause libraries in AI Search — most contracts in a domain (NDA, MSA, SaaS) share 60-70% common language, enabling reuse of prior analysis for standard clauses",
+    "Use Document Intelligence custom models trained on your specific contract formats — pre-trained layout extraction reduces GPT token consumption by providing structured input instead of raw OCR text",
+    "Process contracts in batch during off-peak hours for non-urgent reviews — queue documents and process overnight to benefit from lower contention and potential future reserved pricing",
+    "Implement incremental re-indexing for AI Search — when contract amendments arrive, re-index only changed sections rather than the full document, reducing search indexer compute by 80%"
+  ]
+}
