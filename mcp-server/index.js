@@ -2,7 +2,7 @@
 
 // ─── CLI Delegation ─────────────────────────────────
 // When invoked as `npx frootai-mcp info 01` (CLI args), delegate to cli.js
-const CLI_COMMANDS = ['init','scaffold','install','deploy','info','list','search','cost','validate','doctor','primitives','protocol','version','help','--help','-h','--version','-v'];
+const CLI_COMMANDS = ['init', 'scaffold', 'install', 'deploy', 'info', 'list', 'search', 'cost', 'validate', 'doctor', 'primitives', 'protocol', 'version', 'help', '--help', '-h', '--version', '-v'];
 if (CLI_COMMANDS.includes(process.argv[2])) {
   const { execFileSync } = await import('child_process');
   const { fileURLToPath: toPath } = await import('url');

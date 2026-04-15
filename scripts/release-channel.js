@@ -110,7 +110,18 @@ const channels = {
         name: "npm MCP Server + Docker",
         file: "mcp-server/package.json",
         read: () => readJsonVersion("mcp-server/package.json"),
-        write: (v) => writeJsonVersion("mcp-server/package.json", v),
+        write: (v) => {
+            writeJsonVersion("mcp-server/package.json", v);
+            // Keep frootai alias package in sync
+            const aliasFile = "cli/package.json";
+            if (fs.existsSync(aliasFile)) {
+                const content = fs.readFileSync(aliasFile, "utf8");
+                let updated = content.replace(/"version":\s*"[^"]*"/, `"version": "${v}"`);
+                updated = updated.replace(/"frootai-mcp":\s*"\^[^"]*"/, `"frootai-mcp": "^${v}"`);
+                fs.writeFileSync(aliasFile, updated);
+                console.log(`  ✅ cli/package.json (alias) → ${v}`);
+            }
+        },
         tagPrefix: "mcp-v",
         serverRef: "FROOTAI_MCP_VERSION",
         serverFormat: (v) => `"@${v}"`,

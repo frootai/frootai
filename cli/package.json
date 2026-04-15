@@ -1,0 +1,43 @@
+{
+  "name": "frootai",
+  "version": "5.1.2",
+  "description": "FrootAI — AI Primitive Unification Ecosystem. CLI + MCP Server for 100 solution plays, 830+ primitives, and the FAI Protocol.",
+  "bin": {
+    "frootai": "./bin.js"
+  },
+  "dependencies": {
+    "frootai-mcp": "^5.1.2"
+  },
+  "keywords": [
+    "frootai",
+    "fai",
+    "ai",
+    "mcp",
+    "model-context-protocol",
+    "rag",
+    "agents",
+    "azure",
+    "openai",
+    "copilot",
+    "solution-plays",
+    "primitives",
+    "cli"
+  ],
+  "author": {
+    "name": "FrootAI",
+    "url": "https://frootai.dev"
+  },
+  "license": "MIT",
+  "homepage": "https://frootai.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frootai/frootai",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/frootai/frootai/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

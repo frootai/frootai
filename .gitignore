@@ -21,3 +21,5 @@ website-implementation-plan.md
 
 __pycache__/
 *.pyc
+
+cli/node_modules/
