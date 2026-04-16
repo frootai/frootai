@@ -722,9 +722,9 @@ class FaiProtocolProvider {
   getChildren(element) {
     if (element) return [];
 
-    const protocol = new vscode.TreeItem("FAI Protocol & Architecture", vscode.TreeItemCollapsibleState.None);
-    protocol.command = { command: "frootai.openProtocolExplainer", title: "FAI Protocol & Architecture" };
-    protocol.description = "Protocol · Engine · Factory";
+    const protocol = new vscode.TreeItem("FAI Ecosystem", vscode.TreeItemCollapsibleState.None);
+    protocol.command = { command: "frootai.openProtocolExplainer", title: "FAI Ecosystem" };
+    protocol.description = "Factory · Packages · Toolkit · Engine · Protocol · Layer";
     protocol.iconPath = new vscode.ThemeIcon("symbol-namespace", new vscode.ThemeColor("charts.green"));
 
     return [protocol];

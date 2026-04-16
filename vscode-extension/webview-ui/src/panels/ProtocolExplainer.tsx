@@ -3,17 +3,19 @@ import { vscode } from "../vscode";
 import {
   FileJson, Layers, Server, Rocket, GitMerge, Shield, Cpu, Play,
   Search, Link, BarChart3, Cloud, Package, CheckCircle, FileText,
-  BookOpen, Cog, Zap, ArrowRight, ExternalLink, Code, Box,
+  BookOpen, Cog, Zap, ArrowRight, ExternalLink, Code, Box, Wrench,
 } from "lucide-react";
 
 // ─── Types ───
-type Tab = "protocol" | "layer" | "engine" | "factory";
+type Tab = "factory" | "packages" | "toolkit" | "engine" | "protocol" | "layer";
 
 const TABS: { id: Tab; label: string; Icon: any; color: string }[] = [
-  { id: "protocol", label: "FAI Protocol", Icon: FileJson, color: "#10b981" },
-  { id: "layer", label: "FAI Layer", Icon: Layers, color: "#06b6d4" },
-  { id: "engine", label: "FAI Engine", Icon: Server, color: "#8b5cf6" },
   { id: "factory", label: "FAI Factory", Icon: Rocket, color: "#f59e0b" },
+  { id: "packages", label: "FAI Packages", Icon: Package, color: "#0ea5e9" },
+  { id: "toolkit", label: "FAI Toolkit", Icon: Wrench, color: "#8b5cf6" },
+  { id: "engine", label: "FAI Engine", Icon: Server, color: "#06b6d4" },
+  { id: "protocol", label: "FAI Protocol", Icon: FileJson, color: "#10b981" },
+  { id: "layer", label: "FAI Layer", Icon: Layers, color: "#a16207" },
 ];
 
 // ─── Reusable components ───
@@ -247,11 +249,11 @@ function FactoryTab() {
   return (
     <div>
       <p style={{ fontSize: 13, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
-        The <strong>FAI Factory</strong> is the CI/CD pipeline that builds, tests, validates, and publishes FrootAI across all distribution channels.
+        The <strong>FAI Factory</strong> is the CI/CD assembly line that builds, tests, validates, and publishes FrootAI. Every commit flows through automated quality gates before reaching any distribution channel.
       </p>
 
-      <Section icon={CheckCircle} title="Validation Pipeline" color="#10b981">
-        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 8px" }}>Every commit triggers 2,800+ checks:</p>
+      <Section icon={CheckCircle} title="Validation Pipeline — 2,800+ Checks" color="#10b981">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 8px" }}>Every commit triggers comprehensive validation:</p>
         <div style={{ display: "grid", gap: 4, fontSize: 12 }}>
           {[
             "Schema validation — all 7 primitive types checked against JSON Schema",
@@ -269,29 +271,8 @@ function FactoryTab() {
         </div>
       </Section>
 
-      <Section icon={Rocket} title="Distribution Channels" color="#8b5cf6">
-        <div style={{ display: "grid", gap: 8 }}>
-          {[
-            { name: "VS Code Extension", pkg: "frootai.frootai-vscode", ver: "v9.2.0", Icon: Cog, color: "#0ea5e9" },
-            { name: "MCP Server (npm)", pkg: "frootai-mcp", ver: "v3.5.0", Icon: Cloud, color: "#10b981" },
-            { name: "Python SDK (PyPI)", pkg: "frootai", ver: "v4.0.0", Icon: Package, color: "#f59e0b" },
-            { name: "Python MCP (PyPI)", pkg: "frootai-mcp", ver: "v3.5.0", Icon: Cloud, color: "#8b5cf6" },
-            { name: "Docker Image", pkg: "ghcr.io/frootai/mcp", ver: "v3.5.0", Icon: Box, color: "#06b6d4" },
-          ].map(ch => (
-            <div key={ch.name} style={{ display: "flex", alignItems: "center", gap: 10, padding: 8, borderRadius: 6, border: `1px solid ${ch.color}20`, background: `${ch.color}06` }}>
-              <ch.Icon size={16} color={ch.color} />
-              <div style={{ flex: 1 }}>
-                <strong style={{ fontSize: 12 }}>{ch.name}</strong>
-                <div style={{ fontSize: 10, opacity: 0.6, fontFamily: "var(--vscode-editor-font-family)" }}>{ch.pkg}</div>
-              </div>
-              <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 4, background: `${ch.color}20`, color: ch.color }}>{ch.ver}</span>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section icon={Zap} title="GitHub Actions" color="#f59e0b">
-        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 8px" }}>15 automated workflows:</p>
+      <Section icon={Zap} title="GitHub Actions — 15 Workflows" color="#f59e0b">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 8px" }}>Automated pipelines for every stage of the release cycle:</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4, fontSize: 11 }}>
           {[
             "validate-primitives", "build-extension", "publish-npm",
@@ -307,16 +288,182 @@ function FactoryTab() {
         </div>
       </Section>
 
+      <Section icon={Rocket} title="Release Process" color="#8b5cf6">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 10px" }}>
+          Conventional commits drive automated releases with changelog generation:
+        </p>
+        <div style={{ padding: 10, borderRadius: 6, background: "var(--vscode-textCodeBlock-background, #1e1e1e)", fontFamily: "var(--vscode-editor-font-family)", fontSize: 11, lineHeight: 1.6, whiteSpace: "pre", overflow: "auto" }}>
+{`npm run release:dry    # Preview version bump + changelog
+npm run release        # Bump → sync → validate → commit → tag
+git push origin main --tags  # Triggers npm + vsce + docker publish`}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
+          {["Conventional Commits", "Semantic Versioning", "Auto-Changelog", "Multi-Channel Publish"].map(tag => (
+            <span key={tag} style={{ fontSize: 10, padding: "3px 8px", borderRadius: 4, background: "#8b5cf615", border: "1px solid #8b5cf630", color: "#8b5cf6" }}>{tag}</span>
+          ))}
+        </div>
+      </Section>
+
       <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-        <button className="btn btn-sm" style={{ background: "#10b98120", color: "#10b981", borderColor: "#10b981" }}
+        <button className="btn btn-sm" style={{ background: "#f59e0b20", color: "#f59e0b", borderColor: "#f59e0b" }}
           onClick={() => vscode.postMessage({ command: "openUrl", url: "https://github.com/frootai/frootai/actions" })}>
           <ExternalLink size={12} /> GitHub Actions ↗
         </button>
-        <button className="btn btn-sm" style={{ background: "#8b5cf620", color: "#8b5cf6", borderColor: "#8b5cf6" }}
+      </div>
+    </div>
+  );
+}
+
+// ─── Packages Tab ───
+function PackagesTab() {
+  return (
+    <div>
+      <p style={{ fontSize: 13, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
+        <strong>FAI Packages</strong> deliver FrootAI through 6 distribution channels — install via your preferred platform and get the full ecosystem of 830+ primitives and 100 solution plays.
+      </p>
+
+      <Section icon={Package} title="Distribution Channels" color="#0ea5e9">
+        <div style={{ display: "grid", gap: 8 }}>
+          {[
+            { name: "VS Code Extension", pkg: "frootai.frootai-vscode", ver: "v9.3.0", Icon: Cog, color: "#0ea5e9", desc: "Full IDE integration — agents, skills, webview panels, tree views" },
+            { name: "MCP Server (npm)", pkg: "frootai-mcp", ver: "v3.5.0", Icon: Cloud, color: "#10b981", desc: "25 MCP tools for any AI assistant — npx frootai-mcp@latest" },
+            { name: "Python SDK (PyPI)", pkg: "frootai", ver: "v4.0.0", Icon: Package, color: "#f59e0b", desc: "Python-native access to plays, primitives, and knowledge modules" },
+            { name: "Python MCP (PyPI)", pkg: "frootai-mcp", ver: "v3.5.0", Icon: Cloud, color: "#8b5cf6", desc: "Python MCP server with FastMCP decorators" },
+            { name: "Docker Image", pkg: "ghcr.io/frootai/mcp", ver: "v3.5.0", Icon: Box, color: "#06b6d4", desc: "Containerized MCP server for cloud and CI/CD environments" },
+            { name: "CLI", pkg: "npx frootai", ver: "latest", Icon: Code, color: "#a16207", desc: "Command-line interface — browse plays, install plugins, validate primitives" },
+          ].map(ch => (
+            <div key={ch.name} style={{ display: "flex", alignItems: "center", gap: 10, padding: 10, borderRadius: 6, border: `1px solid ${ch.color}20`, background: `${ch.color}06` }}>
+              <ch.Icon size={18} color={ch.color} style={{ flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <strong style={{ fontSize: 12 }}>{ch.name}</strong>
+                <div style={{ fontSize: 10, opacity: 0.6, fontFamily: "var(--vscode-editor-font-family)" }}>{ch.pkg}</div>
+                <div style={{ fontSize: 10, opacity: 0.5, marginTop: 2 }}>{ch.desc}</div>
+              </div>
+              <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 4, background: `${ch.color}20`, color: ch.color, flexShrink: 0 }}>{ch.ver}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section icon={Zap} title="Quick Install" color="#10b981">
+        <div style={{ display: "grid", gap: 6 }}>
+          {[
+            { label: "npm (MCP)", cmd: "npx frootai-mcp@latest" },
+            { label: "pip (SDK)", cmd: "pip install frootai" },
+            { label: "pip (MCP)", cmd: "pip install frootai-mcp" },
+            { label: "Docker", cmd: "docker pull ghcr.io/frootai/mcp:latest" },
+          ].map(item => (
+            <div key={item.label} style={{ display: "flex", gap: 8, alignItems: "center", padding: 6, borderRadius: 4, background: "var(--vscode-textCodeBlock-background, #1e1e1e)" }}>
+              <span style={{ fontSize: 10, opacity: 0.5, minWidth: 70 }}>{item.label}</span>
+              <code style={{ fontSize: 11, color: "#10b981", flex: 1 }}>{item.cmd}</code>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <button className="btn btn-sm" style={{ background: "#0ea5e920", color: "#0ea5e9", borderColor: "#0ea5e9" }}
           onClick={() => vscode.postMessage({ command: "openUrl", url: "https://www.npmjs.com/package/frootai-mcp" })}>
           <ExternalLink size={12} /> npm Registry ↗
         </button>
+        <button className="btn btn-sm" style={{ background: "#f59e0b20", color: "#f59e0b", borderColor: "#f59e0b" }}
+          onClick={() => vscode.postMessage({ command: "openUrl", url: "https://pypi.org/project/frootai/" })}>
+          <ExternalLink size={12} /> PyPI ↗
+        </button>
       </div>
+    </div>
+  );
+}
+
+// ─── Toolkit Tab ───
+function ToolkitTab() {
+  return (
+    <div>
+      <p style={{ fontSize: 13, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
+        The <strong>FAI Toolkit</strong> organizes every solution play into 4 kits — each serving a distinct role in the development lifecycle. Together they form a complete, plugin-extractable developer experience.
+      </p>
+
+      <Section icon={Code} title="DevKit — AI Development Primitives" color="#8b5cf6">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 10px" }}>
+          The Copilot brain of every play — agents, instructions, skills, and hooks that wire into the AI coding assistant.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+          {[
+            { name: "Agents", count: "238", desc: ".agent.md files with model, tools, WAF", color: "#8b5cf6" },
+            { name: "Instructions", count: "176", desc: ".instructions.md with applyTo globs", color: "#06b6d4" },
+            { name: "Skills", count: "322", desc: "SKILL.md with steps and parameters", color: "#10b981" },
+            { name: "Hooks", count: "10", desc: "hooks.json with lifecycle events", color: "#f59e0b" },
+          ].map(p => (
+            <div key={p.name} style={{ padding: 8, borderRadius: 6, border: `1px solid ${p.color}25`, background: `${p.color}08`, fontSize: 11 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <strong style={{ color: p.color }}>{p.name}</strong>
+                <span style={{ fontSize: 10, padding: "1px 6px", borderRadius: 4, background: `${p.color}20`, color: p.color }}>{p.count}</span>
+              </div>
+              <div style={{ opacity: 0.7, marginTop: 2 }}>{p.desc}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 8, fontSize: 11, opacity: 0.6 }}>
+          📂 <code style={{ fontSize: 10 }}>.github/agents/</code> · <code style={{ fontSize: 10 }}>.github/instructions/</code> · <code style={{ fontSize: 10 }}>.github/skills/</code> · <code style={{ fontSize: 10 }}>.github/hooks/</code>
+        </div>
+      </Section>
+
+      <Section icon={Cog} title="TuneKit — Customer-Tunable AI Parameters" color="#f59e0b">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 10px" }}>
+          Configuration files that customers adjust without touching code — model parameters, guardrails, evaluation thresholds.
+        </p>
+        <div style={{ display: "grid", gap: 4, fontSize: 12 }}>
+          {[
+            { file: "config/openai.json", desc: "Model, temperature, max_tokens, top_p, system prompt" },
+            { file: "config/guardrails.json", desc: "Content safety thresholds, blocked categories, rate limits" },
+            { file: "config/search.json", desc: "AI Search index, semantic config, top_k, reranker" },
+            { file: "evaluation/", desc: "Quality metrics, groundedness ≥ 4.0, eval datasets" },
+          ].map(item => (
+            <div key={item.file} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: 4 }}>
+              <code style={{ fontSize: 10, color: "#f59e0b", minWidth: 160, flexShrink: 0 }}>{item.file}</code>
+              <span style={{ opacity: 0.7, fontSize: 11 }}>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section icon={FileText} title="SpecKit — Documentation & Metadata" color="#06b6d4">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 10px" }}>
+          Standardized documentation and metadata for every play — architecture decisions, API references, runbooks.
+        </p>
+        <div style={{ display: "grid", gap: 4, fontSize: 12 }}>
+          {[
+            { file: "spec/README.md", desc: "Play overview, architecture diagram, getting started" },
+            { file: "spec/ARCHITECTURE.md", desc: "Design decisions, data flow, component diagram" },
+            { file: "spec/API.md", desc: "Endpoint documentation, request/response schemas" },
+            { file: "fai-manifest.json", desc: "FAI Protocol wiring — the play's identity and context" },
+          ].map(item => (
+            <div key={item.file} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: 4 }}>
+              <code style={{ fontSize: 10, color: "#06b6d4", minWidth: 160, flexShrink: 0 }}>{item.file}</code>
+              <span style={{ opacity: 0.7, fontSize: 11 }}>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section icon={Cloud} title="InfraKit — Azure Infrastructure as Code" color="#0ea5e9">
+        <p style={{ fontSize: 12, opacity: 0.8, margin: "0 0 10px" }}>
+          Production-ready Bicep templates using Azure Verified Modules — only present in Azure-based plays.
+        </p>
+        <div style={{ display: "grid", gap: 4, fontSize: 12 }}>
+          {[
+            { file: "infra/main.bicep", desc: "Root orchestrator — parameters, modules, outputs" },
+            { file: "infra/modules/", desc: "AVM-based modules for each Azure service" },
+            { file: "infra/main.bicepparam", desc: "Environment-specific parameter values" },
+            { file: "azure.yaml", desc: "Azure Developer CLI (azd) deployment descriptor" },
+          ].map(item => (
+            <div key={item.file} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: 4 }}>
+              <code style={{ fontSize: 10, color: "#0ea5e9", minWidth: 160, flexShrink: 0 }}>{item.file}</code>
+              <span style={{ opacity: 0.7, fontSize: 11 }}>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }
@@ -325,15 +472,15 @@ function FactoryTab() {
 interface Props { logoUri?: string; }
 
 export default function ProtocolExplainer({ logoUri }: Props) {
-  const [tab, setTab] = useState<Tab>("protocol");
+  const [tab, setTab] = useState<Tab>("factory");
 
   return (
     <div className="container">
       {/* Hero */}
       <div className="hero">
         {logoUri && <img src={logoUri} alt="FrootAI" style={{ width: 48, height: 48 }} />}
-        <h1>FAI Protocol & Architecture</h1>
-        <p style={{ opacity: 0.6, fontSize: 12 }}>The open glue for GenAI — specification, layers, engine, and factory</p>
+        <h1>FAI Ecosystem</h1>
+        <p style={{ opacity: 0.6, fontSize: 12 }}>From the Roots to the Fruits — the open glue for GenAI ecosystem</p>
       </div>
 
       {/* Tab bar */}
@@ -360,16 +507,18 @@ export default function ProtocolExplainer({ logoUri }: Props) {
       </div>
 
       {/* Tab content */}
+      {tab === "factory" && <FactoryTab />}
+      {tab === "packages" && <PackagesTab />}
+      {tab === "toolkit" && <ToolkitTab />}
+      {tab === "engine" && <EngineTab />}
       {tab === "protocol" && <ProtocolTab />}
       {tab === "layer" && <LayerTab />}
-      {tab === "engine" && <EngineTab />}
-      {tab === "factory" && <FactoryTab />}
 
       {/* Footer */}
       <div style={{ marginTop: 24, padding: 12, borderRadius: 8, background: "var(--vscode-textCodeBlock-background, #1e1e1e)", fontSize: 11, opacity: 0.7, textAlign: "center" }}>
         Explore further on{" "}
-        <a href="#" onClick={(e) => { e.preventDefault(); vscode.postMessage({ command: "openUrl", url: "https://frootai.dev/fai-protocol" }); }} style={{ color: "#10b981" }}>
-          frootai.dev/fai-protocol ↗
+        <a href="#" onClick={(e) => { e.preventDefault(); vscode.postMessage({ command: "openUrl", url: "https://frootai.dev/ecosystem" }); }} style={{ color: "#10b981" }}>
+          frootai.dev/ecosystem ↗
         </a>
       </div>
     </div>

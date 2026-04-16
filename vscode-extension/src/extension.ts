@@ -710,7 +710,7 @@ ${bodyHtml}
 
   // ─── FAI Protocol & Architecture Panel (D1-D3) ───
   safeRegister("frootai.openProtocolExplainer", () => {
-    const panel = createReactPanel(context.extensionUri, "frootai.protocolExplainer", "FAI Protocol & Architecture", { panel: "protocolExplainer" as any });
+    const panel = createReactPanel(context.extensionUri, "frootai.protocolExplainer", "FAI Ecosystem", { panel: "protocolExplainer" as any });
     panel.webview.onDidReceiveMessage((msg: any) => {
       switch (msg.command) {
         case "openUrl":
