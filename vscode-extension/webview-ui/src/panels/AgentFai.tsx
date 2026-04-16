@@ -20,41 +20,47 @@ interface Message {
 function renderMarkdown(md: string): string {
   let html = md
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    // Code blocks
-    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:#0d1117;border:1px solid #10b98125;padding:10px 12px;border-radius:8px;overflow-x:auto;font-size:11px;margin:8px 0;line-height:1.5"><code style="color:#10b981">$2</code></pre>')
+    // Code blocks — dark with emerald syntax
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:#0d1117;border:1px solid #10b98120;padding:12px 14px;border-radius:10px;overflow-x:auto;font-size:11px;margin:10px 0;line-height:1.6;font-family:monospace"><code style="color:#10b981">$2</code></pre>')
     // Inline code
-    .replace(/`([^`]+)`/g, '<code style="background:#10b98112;color:#10b981;padding:1px 5px;border-radius:4px;font-size:11px">$1</code>')
-    // Headers
-    .replace(/^### (.+)$/gm, '<h4 style="font-size:13px;font-weight:700;margin:14px 0 4px;color:#fbbf24;border-bottom:1px solid #fbbf2415;padding-bottom:4px">$1</h4>')
-    .replace(/^## (.+)$/gm, '<h3 style="font-size:14px;font-weight:700;margin:16px 0 6px;color:#10b981;border-bottom:1px solid #10b98115;padding-bottom:4px">$1</h3>')
-    .replace(/^# (.+)$/gm, '<h2 style="font-size:16px;font-weight:800;margin:16px 0 8px">$1</h2>')
-    // Bold
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#fff;font-weight:600">$1</strong>')
+    .replace(/`([^`]+)`/g, '<code style="background:#10b98110;color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;font-family:monospace">$1</code>')
+    // Headers — emerald h2, amber h3, white h4
+    .replace(/^#### (.+)$/gm, '<h5 style="font-size:12px;font-weight:700;margin:12px 0 4px;color:#94a3b8">$1</h5>')
+    .replace(/^### (.+)$/gm, '<h4 style="font-size:13px;font-weight:700;margin:14px 0 6px;color:#fbbf24">$1</h4>')
+    .replace(/^## (.+)$/gm, '<h3 style="font-size:15px;font-weight:700;margin:18px 0 8px;color:#10b981;border-bottom:1px solid #10b98115;padding-bottom:6px">$1</h3>')
+    .replace(/^# (.+)$/gm, '<h2 style="font-size:17px;font-weight:800;margin:18px 0 8px;color:#fff">$1</h2>')
+    // Bold + italic
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong style="color:#fff;font-weight:700;font-style:italic">$1</strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e2e8f0;font-weight:600">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em style="color:#94a3b8">$1</em>')
-    // Blockquotes
-    .replace(/^&gt; (.+)$/gm, '<div style="border-left:3px solid #10b981;padding:6px 12px;margin:8px 0;background:#10b98108;border-radius:0 6px 6px 0;font-size:12px">$1</div>')
-    // Lists
-    .replace(/^- (.+)$/gm, '<div style="padding-left:14px;margin:3px 0;font-size:12px"><span style="color:#10b981;margin-right:6px">•</span>$1</div>')
+    // Blockquotes — emerald accent
+    .replace(/^&gt; 💡(.+)$/gm, '<div style="border-left:3px solid #f59e0b;padding:8px 14px;margin:10px 0;background:#f59e0b08;border-radius:0 8px 8px 0;font-size:12px;line-height:1.5">💡$1</div>')
+    .replace(/^&gt; (.+)$/gm, '<div style="border-left:3px solid #10b981;padding:8px 14px;margin:10px 0;background:#10b98108;border-radius:0 8px 8px 0;font-size:12px;line-height:1.5">$1</div>')
+    // Numbered lists
+    .replace(/^(\d+)\. (.+)$/gm, '<div style="padding-left:4px;margin:4px 0;font-size:12px;display:flex;gap:8px;line-height:1.5"><span style="color:#10b981;font-weight:600;min-width:16px">$1.</span><span>$2</span></div>')
+    // Unordered lists
+    .replace(/^- (.+)$/gm, '<div style="padding-left:4px;margin:4px 0;font-size:12px;display:flex;gap:8px;line-height:1.5"><span style="color:#10b981">•</span><span>$1</span></div>')
     // HR
-    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #1a1a2e;margin:14px 0">')
-    // Links — use data attributes for click handling (CSP blocks inline onclick)
-    .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d440;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/user-guide\?play=(\d{2})\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/configurator\)/g, '<a href="#" data-fai="configurator" style="color:#f59e0b;text-decoration:none;border-bottom:1px dashed #f59e0b40;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/solution-plays\)/g, '<a href="#" data-fai="browse" style="color:#10b981;text-decoration:none;border-bottom:1px dashed #10b98140;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/user-guide[^)]*\)/g, '<a href="#" data-fai="browse" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/setup-guide\)/g, '<a href="#" data-fai="setup" style="color:#f97316;text-decoration:none;border-bottom:1px dashed #f9731640;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/docs\/([^)]+)\)/g, '<a href="#" data-fai="module" data-arg="$2" style="color:#6366f1;text-decoration:none;border-bottom:1px dashed #6366f140;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/marketplace\)/g, '<a href="#" data-fai="marketplace" style="color:#ec4899;text-decoration:none;border-bottom:1px dashed #ec489940;cursor:pointer">$1</a>')
-    .replace(/\[([^\]]+)\]\(\/primitives[^)]*\)/g, '<a href="#" data-fai="primitives" style="color:#3b82f6;text-decoration:none;border-bottom:1px dashed #3b82f640;cursor:pointer">$1</a>')
-    // External links
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="#" data-fai="external" data-arg="$2" style="color:#94a3b8;text-decoration:none;border-bottom:1px dashed #94a3b830;cursor:pointer">$1 ↗</a>')
-    // Remaining relative links → external via frootai.dev
-    .replace(/\[([^\]]+)\]\(\/([^)]+)\)/g, '<a href="#" data-fai="external" data-arg="https://frootai.dev/$2" style="color:#94a3b8;text-decoration:none;cursor:pointer">$1 ↗</a>')
-    .replace(/\n\n/g, '</p><p style="margin:6px 0;line-height:1.6">')
+    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #1a1a2e;margin:16px 0">')
+    // Links — VS Code ecosystem (data-fai attributes for event delegation)
+    .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d430;cursor:pointer;transition:color 0.2s">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/user-guide\?play=(\d{2})\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf630;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/configurator\)/g, '<a href="#" data-fai="configurator" style="color:#f59e0b;text-decoration:none;border-bottom:1px dashed #f59e0b30;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/solution-plays\)/g, '<a href="#" data-fai="browse" style="color:#10b981;text-decoration:none;border-bottom:1px dashed #10b98130;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/user-guide[^)]*\)/g, '<a href="#" data-fai="browse" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf630;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/setup-guide\)/g, '<a href="#" data-fai="setup" style="color:#f97316;text-decoration:none;border-bottom:1px dashed #f9731630;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/docs\/([^)]+)\)/g, '<a href="#" data-fai="module" data-arg="$2" style="color:#6366f1;text-decoration:none;border-bottom:1px dashed #6366f130;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/marketplace\)/g, '<a href="#" data-fai="marketplace" style="color:#ec4899;text-decoration:none;border-bottom:1px dashed #ec489930;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/primitives[^)]*\)/g, '<a href="#" data-fai="primitives" style="color:#3b82f6;text-decoration:none;border-bottom:1px dashed #3b82f630;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/mcp[^)]*\)/g, '<a href="#" data-fai="external" data-arg="https://frootai.dev/mcp-tooling" style="color:#7c3aed;text-decoration:none;cursor:pointer">$1 ↗</a>')
+    // External links — grey with arrow-up-right symbol
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="#" data-fai="external" data-arg="$2" style="color:#64748b;text-decoration:none;border-bottom:1px dashed #64748b25;cursor:pointer;font-size:12px">$1 <span style="font-size:10px;opacity:0.6">↗</span></a>')
+    // Remaining relative links
+    .replace(/\[([^\]]+)\]\(\/([^)]+)\)/g, '<a href="#" data-fai="external" data-arg="https://frootai.dev/$2" style="color:#64748b;text-decoration:none;cursor:pointer;font-size:12px">$1 <span style="font-size:10px;opacity:0.6">↗</span></a>')
+    .replace(/\n\n/g, '</p><p style="margin:8px 0;line-height:1.65;font-size:13px">')
     .replace(/\n/g, '<br>');
 
-  // Tables
+  // Tables — rounded container with emerald headers
   html = html.replace(/(\|.+\|(?:<br>\|[-:| ]+\|)?(?:<br>\|.+\|)*)/g, (match) => {
     const rows = match.split('<br>').filter(r => r.trim() && !r.match(/^\|[-:| ]+\|$/));
     if (rows.length === 0) return match;
@@ -62,14 +68,14 @@ function renderMarkdown(md: string): string {
       const cells = row.split('|').filter(c => c.trim()).map(c => c.trim());
       const tag = idx === 0 ? 'th' : 'td';
       const style = idx === 0
-        ? 'style="padding:5px 8px;text-align:left;border-bottom:2px solid #10b98130;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#10b981"'
-        : 'style="padding:5px 8px;border-bottom:1px solid #1a1a2e;font-size:12px"';
-      return `<tr>${cells.map(c => `<${tag} ${style}>${c}</${tag}>`).join('')}</tr>`;
+        ? 'style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#10b981;background:#10b98108"'
+        : 'style="padding:7px 10px;border-top:1px solid #1a1a2e;font-size:12px;line-height:1.5"';
+      return `<tr style="${idx > 0 ? 'transition:background 0.15s' : ''}" ${idx > 0 ? 'onmouseenter="this.style.background=\'#ffffff06\'" onmouseleave="this.style.background=\'none\'"' : ''}>${cells.map(c => `<${tag} ${style}>${c}</${tag}>`).join('')}</tr>`;
     }).join('');
-    return `<div style="overflow-x:auto;margin:8px 0;border:1px solid #1a1a2e;border-radius:8px"><table style="width:100%;border-collapse:collapse">${tableRows}</table></div>`;
+    return `<div style="overflow-x:auto;margin:10px 0;border:1px solid #1a1a2e;border-radius:10px;background:#0a0a12"><table style="width:100%;border-collapse:collapse">${tableRows}</table></div>`;
   });
 
-  return `<p style="margin:6px 0;line-height:1.6">${html}</p>`;
+  return `<div style="line-height:1.65;font-size:13px"><p style="margin:6px 0">${html}</p></div>`;
 }
 
 export default function AgentFai() {
@@ -111,16 +117,38 @@ export default function AgentFai() {
     setInput("");
     setLoading(true);
 
-    // System prompt tells the API to use VS Code-friendly links
     const systemMsg = {
       role: "system",
-      content: "You are Agent FAI inside the VS Code extension. The user is working in VS Code. " +
-        "When linking to FrootAI resources, use these exact markdown link formats: " +
-        "[Play Name](/solution-plays/XX-slug) for plays, [Configurator](/configurator) for recommendations, " +
-        "[User Guide](/solution-plays/XX-slug) for guides (NOT /user-guide), " +
-        "[Primitives](/primitives) for catalog, [Marketplace](/marketplace) for plugins. " +
-        "Put external website links (GitHub, Azure docs) at the END of your response under a '## Explore Further' section. " +
-        "Keep responses concise and actionable. Never use mermaid diagrams."
+      content: `You are Agent FAI — the intelligent navigator for FrootAI inside VS Code.
+
+## Your VS Code Ecosystem (use these internal links — they open panels inside VS Code):
+
+### Solution Plays (101 deployable AI architectures)
+- Link format: [Play Name](/solution-plays/XX-slug) — opens Play Detail panel
+- Example: [Play 01: Enterprise RAG](/solution-plays/01-enterprise-rag)
+- Browse all: [Browse All Plays](/solution-plays) — opens Play Browser panel
+- Find the right play: [Solution Configurator](/configurator) — opens Configurator panel
+
+### Primitives (830+ building blocks)
+- Agents (238): [Primitives Catalog](/primitives/agents) — opens Catalog panel
+- Skills (322): [Skills Catalog](/primitives/skills)
+- Instructions (176): [Instructions](/primitives/instructions)
+- Hooks (10): [Hooks](/primitives/hooks)
+- Browse all: [Primitives Catalog](/primitives) — opens full catalog
+- Plugins (77): [Plugin Marketplace](/marketplace) — opens Marketplace panel
+
+### Knowledge & Learning
+- FROOT modules: [Module Name](/docs/MODULE-ID) — opens knowledge webview
+- Setup: [Setup Guide](/setup-guide) — opens Setup Guide panel
+
+## Rules:
+1. ALWAYS use the internal link formats above — they open VS Code panels, not browser
+2. NEVER use /user-guide links — use /solution-plays/XX-slug instead
+3. Put external links (GitHub, Azure docs, npm) at the END under "## 🌐 Explore on Web"
+4. Keep responses concise, structured, and actionable
+5. Use tables for comparisons
+6. Never use mermaid diagrams
+7. Use bold for key terms, code blocks for commands`
     };
     const history = [systemMsg, ...messages.slice(-8).map(m => ({ role: m.role, content: m.text })), { role: "user", content: text.trim() }];
 
