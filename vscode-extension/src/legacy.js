@@ -722,12 +722,32 @@ class FaiProtocolProvider {
   getChildren(element) {
     if (element) return [];
 
-    const protocol = new vscode.TreeItem("FAI Ecosystem", vscode.TreeItemCollapsibleState.None);
-    protocol.command = { command: "frootai.openProtocolExplainer", title: "FAI Ecosystem" };
-    protocol.description = "Factory · Packages · Toolkit · Engine · Protocol · Layer";
-    protocol.iconPath = new vscode.ThemeIcon("symbol-namespace", new vscode.ThemeColor("charts.green"));
+    const ecosystem = new vscode.TreeItem("FAI Ecosystem", vscode.TreeItemCollapsibleState.None);
+    ecosystem.command = { command: "frootai.openProtocolExplainer", title: "FAI Ecosystem" };
+    ecosystem.description = "Factory · Packages · Toolkit · Engine · Protocol · Layer";
+    ecosystem.iconPath = new vscode.ThemeIcon("symbol-namespace", new vscode.ThemeColor("charts.green"));
 
-    return [protocol];
+    const learning = new vscode.TreeItem("Learning Center", vscode.TreeItemCollapsibleState.None);
+    learning.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse("https://frootai.dev/learning-hub")] };
+    learning.description = "15 guided learning pages";
+    learning.iconPath = new vscode.ThemeIcon("mortar-board", new vscode.ThemeColor("charts.orange"));
+
+    const modules = new vscode.TreeItem("FROOT Modules", vscode.TreeItemCollapsibleState.None);
+    modules.command = { command: "frootai.openFrootModules", title: "FROOT Modules" };
+    modules.description = "16 knowledge modules across 5 layers";
+    modules.iconPath = new vscode.ThemeIcon("layers", new vscode.ThemeColor("charts.blue"));
+
+    const glossary = new vscode.TreeItem("AI Glossary", vscode.TreeItemCollapsibleState.None);
+    glossary.command = { command: "frootai.openGlossary", title: "AI Glossary" };
+    glossary.description = `${Object.keys(GLOSSARY).length}+ AI terms`;
+    glossary.iconPath = new vscode.ThemeIcon("whole-word", new vscode.ThemeColor("charts.purple"));
+
+    const quiz = new vscode.TreeItem("Quiz & Assessment", vscode.TreeItemCollapsibleState.None);
+    quiz.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse("https://frootai.dev/docs/Quiz-Assessment")] };
+    quiz.description = "25 questions — test your knowledge";
+    quiz.iconPath = new vscode.ThemeIcon("checklist", new vscode.ThemeColor("charts.yellow"));
+
+    return [ecosystem, learning, modules, glossary, quiz];
   }
 }
 
@@ -1006,6 +1026,38 @@ function activate(context) {
   );
 
   // ── Command: Search Knowledge (standalone: searches bundled content) ──
+  // ── Command: Open FROOT Modules (quick pick → module viewer) ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.openFrootModules", async () => {
+      const modules = FROOT_MODULES.flatMap(layer =>
+        layer.modules.map(m => ({
+          label: `${m.id}: ${m.name}`,
+          description: `${layer.layer} · ${getModuleDescription(m.id)}`,
+          value: m
+        }))
+      );
+      const pick = await vscode.window.showQuickPick(modules, { placeHolder: "Select a FROOT knowledge module to read" });
+      if (pick) vscode.commands.executeCommand("frootai.openModule", pick.value);
+    })
+  );
+
+  // ── Command: Open Glossary (quick pick → term viewer) ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.openGlossary", async () => {
+      const terms = Object.entries(GLOSSARY).map(([, v]) => ({
+        label: v.term,
+        description: v.definition.substring(0, 80) + "...",
+        value: v
+      }));
+      const pick = await vscode.window.showQuickPick(terms, { placeHolder: `Search ${terms.length} AI/ML terms...`, matchOnDescription: true });
+      if (pick) {
+        createModuleWebview(context, `term-${pick.value.term.toLowerCase()}`, `📖 ${pick.value.term}`,
+          `# ${pick.value.term}\n\n${pick.value.definition}\n\n---\n*Source: FrootAI Glossary A–Z (Module F3)*`
+        );
+      }
+    })
+  );
+
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.searchKnowledge", async () => {
       const query = await vscode.window.showInputBox({
