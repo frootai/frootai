@@ -67,7 +67,8 @@
       "frootai-sidebar": [
         {
           "id": "frootai.welcome",
-          "name": "Welcome to FAI"
+          "name": "Hi FAI",
+          "visibility": "visible"
         },
         {
           "id": "frootai.solutionPlays",

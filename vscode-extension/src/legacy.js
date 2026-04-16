@@ -929,20 +929,29 @@ class GlossaryProvider {
 class WelcomeTreeProvider {
   getTreeItem(element) { return element; }
   getChildren() {
-    const items = [
-      { label: "Get Started", desc: "Welcome panel + quick start guide", icon: "home", color: "charts.orange", cmd: "frootai.openWelcome" },
-      { label: "Setup Guide", desc: "Install MCP, scaffold, deploy", icon: "book", color: "charts.green", cmd: "frootai.openSetupGuide" },
-      { label: "Scaffold a Project", desc: "4-step wizard to create a play project", icon: "file-add", color: "charts.blue", cmd: "frootai.openScaffoldWizard" },
-      { label: "Search Everything", desc: "Plays, tools, glossary — Ctrl+Shift+F9", icon: "search", color: "charts.yellow", cmd: "frootai.searchAll" },
-    ];
-    return items.map(l => {
-      const item = new vscode.TreeItem(l.label, vscode.TreeItemCollapsibleState.None);
-      item.description = l.desc;
-      item.iconPath = new vscode.ThemeIcon(l.icon, new vscode.ThemeColor(l.color));
-      item.command = { command: l.cmd, title: l.label };
-      item.contextValue = "welcomeItem";
-      return item;
-    });
+    const hi = new vscode.TreeItem("Welcome — Get Started", vscode.TreeItemCollapsibleState.None);
+    hi.description = "Your AI hub — click to open";
+    hi.iconPath = new vscode.ThemeIcon("home", new vscode.ThemeColor("charts.green"));
+    hi.command = { command: "frootai.openWelcome", title: "Open Welcome" };
+    hi.contextValue = "welcomeItem";
+    hi.tooltip = new vscode.MarkdownString("**Hi FAI!** 👋\n\nClick to open the Welcome panel with quick start guide, feature overview, and ecosystem links.");
+
+    const scaffold = new vscode.TreeItem("Scaffold a Project", vscode.TreeItemCollapsibleState.None);
+    scaffold.description = "4-step wizard";
+    scaffold.iconPath = new vscode.ThemeIcon("file-add", new vscode.ThemeColor("charts.blue"));
+    scaffold.command = { command: "frootai.openScaffoldWizard", title: "Scaffold" };
+
+    const setup = new vscode.TreeItem("Setup Guide", vscode.TreeItemCollapsibleState.None);
+    setup.description = "Install MCP, configure, deploy";
+    setup.iconPath = new vscode.ThemeIcon("book", new vscode.ThemeColor("charts.orange"));
+    setup.command = { command: "frootai.openSetupGuide", title: "Setup Guide" };
+
+    const search = new vscode.TreeItem("Search Everything", vscode.TreeItemCollapsibleState.None);
+    search.description = "Ctrl+Shift+F9";
+    search.iconPath = new vscode.ThemeIcon("search", new vscode.ThemeColor("charts.yellow"));
+    search.command = { command: "frootai.searchAll", title: "Search" };
+
+    return [hi, scaffold, setup, search];
   }
 }
 
