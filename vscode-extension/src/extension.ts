@@ -436,7 +436,22 @@ ${bodyHtml}
 
   // ─── Agent FAI Chat Panel ───
   safeRegister("frootai.openAgentFai", () => {
-    createReactPanel(context.extensionUri, "frootai.agentFai", "Agent FAI", { panel: "agentFai" as any });
+    const panel = createReactPanel(context.extensionUri, "frootai.agentFai", "Agent FAI", { panel: "agentFai" as any });
+    panel.webview.onDidReceiveMessage((msg: any) => {
+      switch (msg.command) {
+        case "openPlay": {
+          const play = SOLUTION_PLAYS.find(p => p.id === msg.playId || p.id.startsWith(msg.playId));
+          if (play) vscode.commands.executeCommand("frootai.openPlayDetail", play);
+          break;
+        }
+        case "openConfigurator": vscode.commands.executeCommand("frootai.openConfigurator"); break;
+        case "browsePlays": vscode.commands.executeCommand("frootai.browsePlays"); break;
+        case "openSetup": vscode.commands.executeCommand("frootai.openSetupGuide"); break;
+        case "openPrimitives": vscode.commands.executeCommand("frootai.openPrimitivesCatalog"); break;
+        case "openMarketplace": vscode.commands.executeCommand("frootai.openMarketplace"); break;
+        case "openUrl": if (msg.url) vscode.env.openExternal(vscode.Uri.parse(msg.url)); break;
+      }
+    });
   });
 
   // ─── Marketplace Panel ───
