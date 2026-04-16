@@ -616,6 +616,7 @@ ${bodyHtml}
                 const destFile = path.join(destDir, `${msg.primitiveId}${cfg.ext}`);
                 fs.writeFileSync(destFile, content, "utf-8");
                 vscode.window.showInformationMessage(`✅ Installed ${msg.primitiveId}${cfg.ext} → ${cfg.destDir}/`);
+                vscode.commands.executeCommand("frootai.trackRecentPrimitive", msg.primitiveType, msg.primitiveId, msg.primitiveId);
               } else {
                 // For folder-based primitives (skills, hooks, plugins) — download primary file
                 const primaryFiles: Record<string, string> = {
@@ -636,6 +637,7 @@ ${bodyHtml}
                 if (!fs.existsSync(primDir)) fs.mkdirSync(primDir, { recursive: true });
                 fs.writeFileSync(path.join(primDir, primaryFile), content, "utf-8");
                 vscode.window.showInformationMessage(`✅ Installed ${folderName}/${primaryFile} → ${cfg.destDir}/${folderName}/`);
+                vscode.commands.executeCommand("frootai.trackRecentPrimitive", msg.primitiveType, msg.primitiveId, folderName);
               }
             } catch (err: any) {
               vscode.window.showErrorMessage(`Failed to install ${msg.primitiveId}: ${err.message}`);

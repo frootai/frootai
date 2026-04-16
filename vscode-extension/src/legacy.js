@@ -660,16 +660,57 @@ function getModuleDescription(moduleId) {
 // ─── Primitives Catalog Provider ──────────────────────────────────
 
 class PrimitivesCatalogProvider {
+  constructor(context) {
+    this._onDidChange = new vscode.EventEmitter();
+    this.onDidChangeTreeData = this._onDidChange.event;
+    this._context = context;
+    this._recentIds = context?.globalState?.get("frootai.recentPrimitives") || [];
+  }
+
+  trackRecent(type, id, label) {
+    if (!this._context) return;
+    const entry = { type, id, label };
+    this._recentIds = [entry, ...this._recentIds.filter(e => !(e.type === type && e.id === id))].slice(0, 8);
+    this._context.globalState.update("frootai.recentPrimitives", this._recentIds);
+    this._onDidChange.fire();
+  }
+
+  refresh() { this._onDidChange.fire(); }
+
   getTreeItem(element) { return element; }
   getChildren(element) {
-    if (!element) {
-      const openCatalog = new vscode.TreeItem("Browse Primitives Catalog", vscode.TreeItemCollapsibleState.None);
-      openCatalog.command = { command: "frootai.openPrimitivesCatalog", title: "Browse Primitives Catalog" };
-      openCatalog.description = "Agents · Instructions · Skills · Hooks · Plugins";
-      openCatalog.iconPath = new vscode.ThemeIcon("extensions", new vscode.ThemeColor("charts.blue"));
-      return [openCatalog];
+    // Expand recently used group
+    if (element?._recentPrimitives) {
+      return element._recentPrimitives.map(entry => {
+        const typeIcons = { agents: "person", instructions: "book", skills: "tools", hooks: "zap", plugins: "extensions" };
+        const item = new vscode.TreeItem(entry.label || entry.id, vscode.TreeItemCollapsibleState.None);
+        item.description = entry.type;
+        item.iconPath = new vscode.ThemeIcon(typeIcons[entry.type] || "file");
+        item.command = { command: "frootai.openPrimitivesCatalog", title: "Open Catalog" };
+        return item;
+      });
     }
-    return [];
+
+    if (element) return [];
+
+    // Root level
+    const openCatalog = new vscode.TreeItem("Browse Primitives Catalog", vscode.TreeItemCollapsibleState.None);
+    openCatalog.command = { command: "frootai.openPrimitivesCatalog", title: "Browse Primitives Catalog" };
+    openCatalog.description = "Agents · Instructions · Skills · Hooks · Plugins";
+    openCatalog.iconPath = new vscode.ThemeIcon("extensions", new vscode.ThemeColor("charts.blue"));
+
+    const items = [openCatalog];
+
+    if (this._recentIds.length > 0) {
+      const recentGroup = new vscode.TreeItem("⏱️ Recently Installed", vscode.TreeItemCollapsibleState.Expanded);
+      recentGroup.description = `${this._recentIds.length} primitives`;
+      recentGroup.iconPath = new vscode.ThemeIcon("history", new vscode.ThemeColor("charts.orange"));
+      recentGroup.contextValue = "recentPrimitives";
+      recentGroup._recentPrimitives = this._recentIds;
+      items.push(recentGroup);
+    }
+
+    return items;
   }
 }
 
@@ -885,9 +926,10 @@ function activate(context) {
 
   // Register tree views (5 panels)
   const playProvider = new SolutionPlayProvider(context);
+  const primProvider = new PrimitivesCatalogProvider(context);
   vscode.window.registerTreeDataProvider("frootai.welcome", new WelcomeTreeProvider());
   vscode.window.registerTreeDataProvider("frootai.solutionPlays", playProvider);
-  vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", new PrimitivesCatalogProvider());
+  vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", primProvider);
   vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
   vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
 
@@ -934,6 +976,13 @@ function activate(context) {
     vscode.commands.registerCommand("frootai.openSolutionPlay", async (play) => {
       if (play?.id) playProvider.trackRecent(play.id);
       vscode.commands.executeCommand("frootai.openPlayDetail", play);
+    })
+  );
+
+  // ── Track recently installed primitives ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.trackRecentPrimitive", (type, id, label) => {
+      primProvider.trackRecent(type, id, label || id);
     })
   );
 
