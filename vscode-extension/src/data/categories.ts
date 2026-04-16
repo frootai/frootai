@@ -1,0 +1,85 @@
+import type { PlayCategory, ConfigQuestion, ConfigRecommendation } from "../../webview-ui/src/types";
+
+export const CATEGORIES: PlayCategory[] = [
+  { id: "rag", label: "RAG & Search", icon: "search", color: "#10b981" },
+  { id: "agent", label: "Agents", icon: "robot", color: "#6366f1" },
+  { id: "voice", label: "Voice & Speech", icon: "mic", color: "#06b6d4" },
+  { id: "security", label: "Security", icon: "shield", color: "#ec4899" },
+  { id: "infra", label: "Infrastructure", icon: "cloud", color: "#7c3aed" },
+  { id: "doc", label: "Documents", icon: "file-text", color: "#f59e0b" },
+  { id: "devops", label: "DevOps", icon: "terminal", color: "#0ea5e9" },
+  { id: "customer", label: "Customer & Sales", icon: "comment-discussion", color: "#14b8a6" },
+  { id: "data", label: "Data & Pipeline", icon: "database", color: "#8b5cf6" },
+  { id: "ml", label: "MLOps", icon: "wrench", color: "#f97316" },
+  { id: "creative", label: "Creative & Media", icon: "lightbulb", color: "#d946ef" },
+  { id: "health", label: "Healthcare", icon: "heart", color: "#ef4444" },
+  { id: "finance", label: "Finance & Risk", icon: "graph", color: "#22c55e" },
+  { id: "education", label: "Education", icon: "book", color: "#3b82f6" },
+  { id: "energy", label: "Energy & Climate", icon: "globe", color: "#16a34a" },
+  { id: "iot", label: "IoT & Edge", icon: "broadcast", color: "#f43f5e" },
+  { id: "retail", label: "Retail & Commerce", icon: "package", color: "#a855f7" },
+  { id: "legal", label: "Legal & Compliance", icon: "law", color: "#a855f7" },
+  { id: "gov", label: "Government", icon: "building2", color: "#64748b" },
+  { id: "telecom", label: "Telecom", icon: "broadcast", color: "#0891b2" },
+  { id: "special", label: "Specialized", icon: "zap", color: "#eab308" },
+];
+
+export const CONFIG_QUESTIONS: ConfigQuestion[] = [
+  {
+    q: "What are you building?",
+    options: [
+      { label: "Document Processing (OCR, extraction, forms)", tags: ["doc"], icon: "file-text", color: "#f59e0b" },
+      { label: "Search / RAG / Knowledge Base", tags: ["rag"], icon: "search", color: "#10b981" },
+      { label: "AI Agent / Multi-Agent", tags: ["agent"], icon: "robot", color: "#6366f1" },
+      { label: "Voice / Speech / Call Center", tags: ["voice"], icon: "mic", color: "#06b6d4" },
+      { label: "Content Safety / Moderation", tags: ["safety"], icon: "shield", color: "#ec4899" },
+      { label: "Infrastructure / Landing Zone", tags: ["infra"], icon: "cloud", color: "#7c3aed" },
+      { label: "DevOps / Observability", tags: ["ops"], icon: "eye", color: "#0ea5e9" },
+      { label: "Model Serving / MLOps", tags: ["ml"], icon: "wrench", color: "#f97316" },
+      { label: "Healthcare / Clinical", tags: ["health"], icon: "heart", color: "#ef4444" },
+      { label: "Finance / Risk / Fraud", tags: ["finance"], icon: "graph", color: "#22c55e" },
+      { label: "Legal / Compliance", tags: ["legal"], icon: "law", color: "#a855f7" },
+      { label: "Education / Training", tags: ["education"], icon: "book", color: "#3b82f6" },
+      { label: "Customer Support / CRM", tags: ["support"], icon: "comment-discussion", color: "#14b8a6" },
+      { label: "IoT / Edge / Digital Twin", tags: ["iot"], icon: "broadcast", color: "#f43f5e" },
+      { label: "Creative / Media / Translation", tags: ["creative"], icon: "lightbulb", color: "#d946ef" },
+      { label: "Data Pipeline / Synthetic Data", tags: ["data"], icon: "database", color: "#8b5cf6" },
+    ],
+  },
+  {
+    q: "What's your team's primary role?",
+    options: [
+      { label: "Infrastructure / Platform Engineering", tags: ["infra-team"], icon: "cloud", color: "#7c3aed" },
+      { label: "Application / Full-stack Development", tags: ["dev-team"], icon: "terminal", color: "#6366f1" },
+      { label: "Data / ML Engineering", tags: ["data-team"], icon: "database", color: "#10b981" },
+      { label: "Security / Compliance", tags: ["sec-team"], icon: "lock", color: "#ec4899" },
+    ],
+  },
+  {
+    q: "What complexity level fits your timeline?",
+    options: [
+      { label: "Low — ship in a week", tags: ["low"], icon: "zap", color: "#10b981" },
+      { label: "Medium — ship in 2-4 weeks", tags: ["medium"], icon: "clock", color: "#f59e0b" },
+      { label: "High — enterprise-grade, months", tags: ["high"], icon: "crown", color: "#7c3aed" },
+    ],
+  },
+];
+
+export const CONFIG_RECOMMENDATIONS: Record<string, ConfigRecommendation> = {
+  doc: { plays: ["06", "15", "38"], why: "Document Intelligence, Multi-Modal DocProc, and Document Understanding V2 cover OCR, forms, PDFs, and advanced extraction." },
+  rag: { plays: ["01", "21", "26", "28", "67"], why: "Enterprise RAG, Agentic RAG, Semantic Search, Knowledge Graph RAG, and Knowledge Management for any search or knowledge scenario." },
+  agent: { plays: ["03", "07", "22", "42", "51", "100"], why: "Deterministic Agent, Multi-Agent Service, Swarm, Computer Use, Autonomous Coding, and FAI Meta Agent for any agent architecture." },
+  voice: { plays: ["04", "33", "96"], why: "Call Center Voice AI, Voice AI Agent, and Realtime Voice Agent V2 for speech and telephony solutions." },
+  safety: { plays: ["10", "30", "41", "61"], why: "Content Moderation, Security Hardening, Red Teaming, and Moderation V2 for safety and responsible AI." },
+  infra: { plays: ["02", "11", "66", "83", "99"], why: "AI Landing Zones (basic + advanced), Infrastructure Optimizer, Building Energy Optimizer, and Enterprise Governance Hub." },
+  ops: { plays: ["17", "37", "98"], why: "AI Observability, AI-Powered DevOps, and Agent Evaluation Platform for monitoring and CI/CD." },
+  ml: { plays: ["12", "13", "19", "34", "48"], why: "Model Serving AKS, Fine-Tuning, Edge AI Phi-4, Edge Deployment, and Model Governance for end-to-end MLOps." },
+  health: { plays: ["46"], why: "Healthcare Clinical AI for clinical decision support, medical NLP, and patient-facing AI." },
+  finance: { plays: ["50", "63", "72", "87"], why: "Financial Risk Intelligence, Fraud Detection, Climate Risk Assessor, and Dynamic Pricing for finance and risk." },
+  legal: { plays: ["35", "53", "70", "85"], why: "AI Compliance Engine, Legal Document AI, ESG Compliance Agent, and Policy Impact Analyzer for legal and regulatory use cases." },
+  education: { plays: ["65", "74", "75", "76", "77"], why: "Training Curriculum, Tutoring Agent, Exam Generation, Accessibility Learning, and Research Paper AI for education." },
+  support: { plays: ["54", "64", "84", "91"], why: "Customer Support V2, Sales Assistant, Citizen Services Chatbot, and Churn Predictor for CRM and support." },
+  iot: { plays: ["44", "58", "68", "71", "78", "80", "90"], why: "On-Device AI, Digital Twin, Predictive Maintenance, Smart Energy, Precision Agriculture, Biodiversity, and Network Optimization for IoT and edge." },
+  creative: { plays: ["43", "49", "57", "94"], why: "Video Generation, Creative AI Studio, Translation Engine, and Podcast Generator for media and creative workflows." },
+  data: { plays: ["27", "47", "55", "89", "97"], why: "AI Data Pipeline, Synthetic Data Factory, Supply Chain AI, Retail Inventory Predictor, and Data Marketplace for data engineering." },
+};

@@ -9,6 +9,32 @@ export interface SolutionPlay {
   desc?: string;
   cx?: string;
   infra?: string;
+  cat?: string;
+  slug?: string;
+  tagline?: string;
+  pattern?: string;
+  devkit?: string[];
+  tunekit?: string[];
+  tuningParams?: string[];
+  costDev?: string;
+  costProd?: string;
+}
+
+export interface PlayCategory {
+  id: string;
+  label: string;
+  icon: string;
+  color: string;
+}
+
+export interface ConfigQuestion {
+  q: string;
+  options: { label: string; tags: string[]; icon: string; color: string }[];
+}
+
+export interface ConfigRecommendation {
+  plays: string[];
+  why: string;
 }
 
 export interface McpTool {
@@ -31,7 +57,7 @@ export interface WafPillar {
   color: string;
 }
 
-export type PanelType = "playDetail" | "evaluation" | "scaffold" | "mcpExplorer";
+export type PanelType = "playDetail" | "evaluation" | "scaffold" | "mcpExplorer" | "playBrowser" | "configurator";
 
 export interface PanelData {
   panel: PanelType;
