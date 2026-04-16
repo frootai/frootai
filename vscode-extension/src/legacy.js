@@ -871,7 +871,7 @@ class WelcomeTreeProvider {
   getTreeItem(element) { return element; }
   getChildren() {
     const hi = new vscode.TreeItem("Welcome — Get Started", vscode.TreeItemCollapsibleState.None);
-    hi.description = "Your AI hub — click to open";
+    hi.description = "Your FrootAI hub";
     hi.iconPath = new vscode.ThemeIcon("home", new vscode.ThemeColor("charts.green"));
     hi.command = { command: "frootai.openWelcome", title: "Open Welcome" };
     hi.contextValue = "welcomeItem";
@@ -1151,20 +1151,29 @@ function activate(context) {
           <p>From the Roots to the Fruits — your complete getting started reference</p>
         </div>
 
-        <h2>🚀 Quick Start (3 Steps)</h2>
+        <h2>🚀 Getting Started</h2>
         <div class="step"><h3>Step 1: Install MCP Server</h3>
-        <p>Choose your runtime:</p>
+        <p>Connect your AI coding assistant to 45 FrootAI tools:</p>
         <pre>npx frootai-mcp@latest          # Node.js (recommended)
 pip install frootai-mcp          # Python
 docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
         <p>Or use <code>Ctrl+Shift+P → FrootAI: Setup MCP Server</code></p></div>
 
-        <div class="step"><h3>Step 2: Scaffold a Project</h3>
-        <p>Use the <strong>Scaffold a Project</strong> wizard in the sidebar, or via CLI:</p>
+        <div class="step"><h3>Step 2: Ask Agent FAI</h3>
+        <p>Your AI assistant for everything FrootAI. Ask about solution plays, architecture patterns, primitives, or how to get started. Find it in the <strong>Hi FAI</strong> sidebar section.</p></div>
+
+        <div class="step"><h3>Step 3: Solution Configurator</h3>
+        <p>Answer a few questions about your use case and the configurator recommends the best solution play. Find it under <strong>FAI Solution Plays</strong> in the sidebar.</p></div>
+
+        <div class="step"><h3>Step 4: Browse All Plays</h3>
+        <p>Explore all 101 pre-architected AI solutions — search, filter by category, compare plays side by side. Click any play to see full architecture details, then <strong>Init DevKit</strong> to scaffold.</p></div>
+
+        <div class="step"><h3>Step 5: Scaffold a Project</h3>
+        <p>Pick a play and create a full project structure with one click. Generates <code>.github/</code> agents, instructions, skills, hooks, config, and infra templates.</p>
         <pre>npx frootai scaffold 01 my-rag-project</pre></div>
 
-        <div class="step"><h3>Step 3: Configure & Deploy</h3>
-        <p>Open <strong>Solution Configurator</strong> to find the right play, then use <strong>Init DevKit</strong> from any play detail.</p></div>
+        <div class="step"><h3>Step 6: FAI Primitives Catalog</h3>
+        <p>Browse and install 830+ reusable AI building blocks — agents, instructions, skills, hooks, and plugins. Each primitive is a standalone LEGO block that auto-wires when placed inside a solution play via the FAI Protocol.</p></div>
 
         <h2>📋 Sidebar Overview</h2>
         <table>
