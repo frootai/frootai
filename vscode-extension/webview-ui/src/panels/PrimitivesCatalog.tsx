@@ -43,7 +43,6 @@ interface SubCategory {
 // ─── Constants ───
 const ITEMS_PER_PAGE = 30;
 const GITHUB_BASE = "https://github.com/frootai/frootai/tree/main/";
-const GITHUB_RAW = "https://raw.githubusercontent.com/frootai/frootai/main/";
 
 const CATEGORY_META: Record<CategoryId, CategoryMeta> = {
   agents: { label: "Agents", Icon: Bot, color: "#10b981", desc: "Autonomous AI personas with WAF alignment and play compatibility", ext: ".agent.md", githubPath: "agents" },
@@ -134,33 +133,16 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
   const switchSubCat = (id: string) => { setSubCat(id); setPage(1); };
 
   const getGithubUrl = (item: PrimitiveItem) => GITHUB_BASE + (item.file || item.folder || `${meta.githubPath}/${item.id}`);
-  const getInstallUri = (item: PrimitiveItem) => {
-    // Agents + instructions can install via VS Code protocol
-    if (activeTab === "agents") {
-      const rawUrl = `${GITHUB_RAW}${item.file || `agents/${item.id}.agent.md`}`;
-      return `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
-    }
-    if (activeTab === "instructions") {
-      const rawUrl = `${GITHUB_RAW}${item.file || `instructions/${item.id}.instructions.md`}`;
-      return `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
-    }
-    return null;
-  };
   const handleInstall = (item: PrimitiveItem) => {
-    const uri = getInstallUri(item);
-    if (uri) {
-      vscode.postMessage({ command: "openUrl", url: uri });
-    } else {
-      // For skills, hooks, plugins — install via CLI in terminal
-      const typeMap: Record<string, string> = { skills: "skill", hooks: "hook", plugins: "plugin" };
-      const cliType = typeMap[activeTab] || activeTab;
-      vscode.postMessage({ command: "installPrimitive", primitiveType: cliType, primitiveId: item.id });
-    }
+    vscode.postMessage({
+      command: "installPrimitive",
+      primitiveType: activeTab,
+      primitiveId: item.id,
+      file: item.file || null,
+      folder: item.folder || null,
+    });
   };
-  const getInstallLabel = () => {
-    if (activeTab === "agents" || activeTab === "instructions") return "Install";
-    return "Install via CLI";
-  };
+  const getInstallLabel = () => "Install";
 
   // ─── Detail View ───
   if (selectedItem) {

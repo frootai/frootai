@@ -708,70 +708,11 @@ class PrimitivesCatalogProvider {
   getTreeItem(element) { return element; }
   getChildren(element) {
     if (!element) {
-      // Top-level: Browse Full Catalog + categories
       const openCatalog = new vscode.TreeItem("Browse Primitives Catalog", vscode.TreeItemCollapsibleState.None);
       openCatalog.command = { command: "frootai.openPrimitivesCatalog", title: "Browse Primitives Catalog" };
-      openCatalog.description = "Search, filter, install";
+      openCatalog.description = "Agents · Instructions · Skills · Hooks · Plugins";
       openCatalog.iconPath = new vscode.ThemeIcon("extensions", new vscode.ThemeColor("charts.blue"));
-
-      const categories = [
-        { label: "Agents (238)", icon: "hubot", color: "#10b981", children: [
-          { label: "Browse all agents", desc: "View 238 agents on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/agents" },
-          { label: "Install agent in VS Code", desc: "One-click agent install via VS Code protocol", icon: "cloud-download", cmd: "frootai.installAgent" },
-          { label: "WAF-aligned AI personas", desc: "Each agent has expertise + tools + WAF alignment", icon: "info" },
-        ]},
-        { label: "Instructions (176)", icon: "file-text", children: [
-          { label: "Browse all instructions", desc: "View 176 instructions on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/instructions" },
-          { label: "Auto-apply via applyTo globs", desc: "Match file patterns like **/*.tsx", icon: "regex" },
-          { label: "Scoped behavioral directives", desc: "Coding standards, security rules, best practices", icon: "info" },
-        ]},
-        { label: "Skills (322)", icon: "tools", children: [
-          { label: "Browse all skills", desc: "View 322 skills on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/skills" },
-          { label: "SKILL.md folder structure", desc: "Parameters, steps, bundled assets", icon: "folder" },
-          { label: "Reusable LEGO blocks", desc: "Auto-wire inside solution plays", icon: "info" },
-        ]},
-        { label: "Hooks (10)", icon: "shield", children: [
-          { label: "Browse all hooks", desc: "View 10 hooks on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/hooks" },
-          { label: "secrets-scanner", desc: "40+ secret patterns, entropy detection", icon: "lock" },
-          { label: "tool-guardian", desc: "Allowlist/blocklist, rate limiting", icon: "shield" },
-          { label: "governance-audit", desc: "OWASP LLM Top 10 checks", icon: "law" },
-          { label: "pii-redactor", desc: "12+ PII types, GDPR/HIPAA", icon: "eye-closed" },
-          { label: "cost-tracker", desc: "Per-model pricing, anomaly detection", icon: "graph" },
-          { label: "waf-compliance", desc: "6-pillar scoring, 36 checks", icon: "checklist" },
-          { label: "output-validator", desc: "Schema, safety, hallucination checks", icon: "check-all" },
-          { label: "token-budget-enforcer", desc: "Per-model budgets, sliding window", icon: "dashboard" },
-          { label: "session-logger", desc: "JSON Lines audit trail", icon: "output" },
-          { label: "license-checker", desc: "SPDX compliance, 4 ecosystems", icon: "file-certificate" },
-        ]},
-        { label: "Plugins (77)", icon: "package", children: [
-          { label: "Browse marketplace", desc: "View 77 plugins on frootai.dev", icon: "globe", url: "https://frootai.dev/marketplace" },
-          { label: "npx frootai install <plugin>", desc: "One-command installation", icon: "terminal" },
-          { label: "1,008 bundled items", desc: "Agents + instructions + skills + hooks per plugin", icon: "info" },
-        ]},
-      ];
-
-      const items = categories.map(cat => {
-        const item = new vscode.TreeItem(cat.label, vscode.TreeItemCollapsibleState.Collapsed);
-        item.iconPath = new vscode.ThemeIcon(cat.icon);
-        item.contextValue = "primitiveCategory";
-        item._children = cat.children;
-        return item;
-      });
-      return [openCatalog, ...items];
-    }
-    if (element._children) {
-      return element._children.map(child => {
-        const item = new vscode.TreeItem(child.label, vscode.TreeItemCollapsibleState.None);
-        item.description = child.desc;
-        item.iconPath = new vscode.ThemeIcon(child.icon);
-        item.tooltip = child.desc;
-        if (child.cmd) {
-          item.command = { command: child.cmd, title: child.label };
-        } else if (child.url) {
-          item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(child.url)] };
-        }
-        return item;
-      });
+      return [openCatalog];
     }
     return [];
   }

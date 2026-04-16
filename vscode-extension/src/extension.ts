@@ -577,14 +577,69 @@ ${bodyHtml}
     };
     const total = Object.values(primitives).reduce((s: number, a: any[]) => s + a.length, 0);
     const panel = createReactPanel(context.extensionUri, "frootai.primitivesCatalog", `FAI Primitives (${total})`, { panel: "primitivesCatalog" as any, primitives });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    panel.webview.onDidReceiveMessage(async (msg: any) => {
       if (msg.command === "openUrl" && msg.url) {
         vscode.env.openExternal(vscode.Uri.parse(msg.url));
       }
       if (msg.command === "installPrimitive" && msg.primitiveType && msg.primitiveId) {
-        const term = vscode.window.createTerminal("FAI Install");
-        term.sendText(`npx frootai install ${msg.primitiveType} ${msg.primitiveId}`);
-        term.show();
+        // Download primitive file(s) from GitHub into workspace
+        const folders = vscode.workspace.workspaceFolders;
+        if (!folders) {
+          vscode.window.showWarningMessage("Open a workspace folder first to install primitives.");
+          return;
+        }
+        const wsRoot = folders[0].uri.fsPath;
+        const typeConfig: Record<string, { destDir: string; repoPath: string; ext: string }> = {
+          agents:       { destDir: ".github/agents",       repoPath: "agents",       ext: ".agent.md" },
+          instructions: { destDir: ".github/instructions", repoPath: "instructions", ext: ".instructions.md" },
+          skills:       { destDir: ".github/skills",       repoPath: "skills",       ext: "" },
+          hooks:        { destDir: ".github/hooks",        repoPath: "hooks",        ext: "" },
+          plugins:      { destDir: "community-plugins",    repoPath: "community-plugins", ext: "" },
+        };
+        const cfg = typeConfig[msg.primitiveType];
+        if (!cfg) return;
+
+        const destDir = path.join(wsRoot, cfg.destDir);
+        if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+
+        await vscode.window.withProgress(
+          { location: vscode.ProgressLocation.Notification, title: `Installing ${msg.primitiveType.slice(0, -1)}: ${msg.primitiveId}...`, cancellable: false },
+          async () => {
+            try {
+              // For single-file primitives (agents, instructions)
+              if (cfg.ext) {
+                const file = msg.file || `${cfg.repoPath}/${msg.primitiveId}${cfg.ext}`;
+                const url = `https://raw.githubusercontent.com/frootai/frootai/main/${file}`;
+                const resp = await fetch(url, { headers: { "User-Agent": "FrootAI-VSCode" } });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const content = await resp.text();
+                const destFile = path.join(destDir, `${msg.primitiveId}${cfg.ext}`);
+                fs.writeFileSync(destFile, content, "utf-8");
+                vscode.window.showInformationMessage(`✅ Installed ${msg.primitiveId}${cfg.ext} → ${cfg.destDir}/`);
+              } else {
+                // For folder-based primitives (skills, hooks, plugins) — download primary file
+                const primaryFiles: Record<string, string> = {
+                  skills: "SKILL.md",
+                  hooks: "hooks.json",
+                  plugins: "plugin.json",
+                };
+                const primaryFile = primaryFiles[msg.primitiveType] || "README.md";
+                const folderName = msg.folder ? path.basename(msg.folder) : msg.primitiveId;
+                const repoFile = `${cfg.repoPath}/${folderName}/${primaryFile}`;
+                const url = `https://raw.githubusercontent.com/frootai/frootai/main/${repoFile}`;
+                const resp = await fetch(url, { headers: { "User-Agent": "FrootAI-VSCode" } });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const content = await resp.text();
+                const primDir = path.join(destDir, folderName);
+                if (!fs.existsSync(primDir)) fs.mkdirSync(primDir, { recursive: true });
+                fs.writeFileSync(path.join(primDir, primaryFile), content, "utf-8");
+                vscode.window.showInformationMessage(`✅ Installed ${folderName}/${primaryFile} → ${cfg.destDir}/${folderName}/`);
+              }
+            } catch (err: any) {
+              vscode.window.showErrorMessage(`Failed to install ${msg.primitiveId}: ${err.message}`);
+            }
+          }
+        );
       }
     });
   });
