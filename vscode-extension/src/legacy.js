@@ -490,6 +490,17 @@ class SolutionPlayProvider {
   getChildren(element) {
     const layerNames = { F: "Foundations", R: "Reasoning", O: "Orchestration", T: "Transformation" };
 
+    // Children of a category group or recently used
+    if (element?._plays) {
+      return element._plays.map(p => this._buildPlayItem(p, layerNames));
+    }
+
+    // Non-root element — nothing else to expand
+    if (element) return [];
+
+    // ── Root level ──
+    const launchers = this._buildLaunchers();
+
     // Apply filter
     let plays = SOLUTION_PLAYS;
     if (this._filter) {
@@ -499,67 +510,79 @@ class SolutionPlayProvider {
       });
     }
 
+    // Flat view
+    if (this._viewMode === "flat") {
+      return [...launchers, ...plays.map(p => this._buildPlayItem(p, layerNames))];
+    }
+
     // Category view (grouped)
-    if (!element && this._viewMode === "category") {
-      const catMap = {};
-      const catMeta = {
-        R: { label: "🧩 Reasoning", color: "charts.green", order: 1 },
-        O: { label: "🤖 Orchestration", color: "charts.blue", order: 2 },
-        F: { label: "🏗️ Foundations", color: "charts.yellow", order: 3 },
-        T: { label: "🔧 Transformation", color: "charts.purple", order: 4 },
-      };
-      for (const p of plays) {
-        if (!catMap[p.layer]) catMap[p.layer] = [];
-        catMap[p.layer].push(p);
-      }
-      const groups = Object.entries(catMap)
-        .sort((a, b) => (catMeta[a[0]]?.order || 9) - (catMeta[b[0]]?.order || 9))
-        .map(([layer, layerPlays]) => {
-          const meta = catMeta[layer] || { label: layer, color: "foreground" };
-          const item = new vscode.TreeItem(meta.label, vscode.TreeItemCollapsibleState.Expanded);
-          item.description = `${layerPlays.length} plays`;
-          item.iconPath = new vscode.ThemeIcon("symbol-folder", new vscode.ThemeColor(meta.color));
-          item.contextValue = "playCategory";
-          item._plays = layerPlays;
-          return item;
-        });
+    const catMap = {};
+    const catMeta = {
+      R: { label: "🧩 Reasoning", color: "charts.green", order: 1 },
+      O: { label: "🤖 Orchestration", color: "charts.blue", order: 2 },
+      F: { label: "🏗️ Foundations", color: "charts.yellow", order: 3 },
+      T: { label: "🔧 Transformation", color: "charts.purple", order: 4 },
+    };
+    for (const p of plays) {
+      if (!catMap[p.layer]) catMap[p.layer] = [];
+      catMap[p.layer].push(p);
+    }
+    const groups = Object.entries(catMap)
+      .sort((a, b) => (catMeta[a[0]]?.order || 9) - (catMeta[b[0]]?.order || 9))
+      .map(([layer, layerPlays]) => {
+        const meta = catMeta[layer] || { label: layer, color: "foreground" };
+        const item = new vscode.TreeItem(meta.label, vscode.TreeItemCollapsibleState.Expanded);
+        item.description = `${layerPlays.length} plays`;
+        item.iconPath = new vscode.ThemeIcon("symbol-folder", new vscode.ThemeColor(meta.color));
+        item.contextValue = "playCategory";
+        item._plays = layerPlays;
+        return item;
+      });
 
-      // Prepend search results count if filtering
-      if (this._filter) {
-        const header = new vscode.TreeItem(`🔍 "${this._filter}" — ${plays.length} results`, vscode.TreeItemCollapsibleState.None);
-        header.contextValue = "searchHeader";
-        header.command = { command: "frootai.filterPlays", title: "Clear Filter" };
-        return [header, ...groups];
-      }
-
-      // Prepend "Recently Used" group if we have history and no active filter
-      if (this._recentIds.length > 0) {
-        const recentPlays = this._recentIds
-          .map(id => SOLUTION_PLAYS.find(p => p.id === id))
-          .filter(Boolean);
-        if (recentPlays.length > 0) {
-          const recentGroup = new vscode.TreeItem("⏱️ Recently Used", vscode.TreeItemCollapsibleState.Expanded);
-          recentGroup.description = `${recentPlays.length} plays`;
-          recentGroup.iconPath = new vscode.ThemeIcon("history", new vscode.ThemeColor("charts.orange"));
-          recentGroup.contextValue = "recentPlays";
-          recentGroup._plays = recentPlays;
-          return [recentGroup, ...groups];
-        }
-      }
-      return groups;
+    // Prepend search results count if filtering
+    if (this._filter) {
+      const header = new vscode.TreeItem(`🔍 "${this._filter}" — ${plays.length} results`, vscode.TreeItemCollapsibleState.None);
+      header.contextValue = "searchHeader";
+      header.command = { command: "frootai.filterPlays", title: "Clear Filter" };
+      return [...launchers, header, ...groups];
     }
 
-    // Children of a category group
-    if (element?._plays) {
-      return element._plays.map(p => this._buildPlayItem(p, layerNames));
+    // Prepend "Recently Used" group
+    if (this._recentIds.length > 0) {
+      const recentPlays = this._recentIds
+        .map(id => SOLUTION_PLAYS.find(p => p.id === id))
+        .filter(Boolean);
+      if (recentPlays.length > 0) {
+        const recentGroup = new vscode.TreeItem("⏱️ Recently Used", vscode.TreeItemCollapsibleState.Expanded);
+        recentGroup.description = `${recentPlays.length} plays`;
+        recentGroup.iconPath = new vscode.ThemeIcon("history", new vscode.ThemeColor("charts.orange"));
+        recentGroup.contextValue = "recentPlays";
+        recentGroup._plays = recentPlays;
+        return [...launchers, recentGroup, ...groups];
+      }
     }
+    return [...launchers, ...groups];
+  }
 
-    // Flat view (no grouping)
-    if (!element && this._viewMode === "flat") {
-      return plays.map(p => this._buildPlayItem(p, layerNames));
-    }
-
-    return [];
+  _buildLaunchers() {
+    const items = [
+      { label: "Solution Configurator", desc: "Find the right play for your needs", icon: "settings-gear", color: "charts.yellow", cmd: "frootai.openConfigurator" },
+      { label: "Browse All Plays", desc: "Search, filter, compare 101 plays", icon: "layout", color: "charts.green", cmd: "frootai.browsePlays" },
+      { label: "Primitives Catalog", desc: "823 agents, skills, instructions, hooks", icon: "extensions", color: "charts.blue", cmd: "frootai.openPrimitivesCatalog" },
+      { label: "MCP Tools Explorer", desc: "45 tools for AI agents", icon: "tools", color: "charts.purple", cmd: "frootai.openMcpExplorer" },
+      { label: "Welcome & Quick Start", desc: "Get started with FrootAI", icon: "home", color: "charts.orange", cmd: "frootai.openWelcome" },
+    ];
+    return items.map(l => {
+      const item = new vscode.TreeItem(l.label, vscode.TreeItemCollapsibleState.None);
+      item.description = l.desc;
+      item.iconPath = new vscode.ThemeIcon(l.icon, new vscode.ThemeColor(l.color));
+      item.command = { command: l.cmd, title: l.label };
+      item.contextValue = "launcher";
+      const tip = new vscode.MarkdownString(`**${l.label}**\n\n${l.desc}\n\n*Click to open*`);
+      tip.supportThemeIcons = true;
+      item.tooltip = tip;
+      return item;
+    });
   }
 
   _buildPlayItem(p, layerNames) {

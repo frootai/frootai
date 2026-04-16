@@ -299,7 +299,7 @@
         {
           "command": "frootai.browseSolutionPlays",
           "when": "view == frootai.solutionPlays",
-          "group": "2_more"
+          "group": "navigation"
         },
         {
           "command": "frootai.installMcpServer",
