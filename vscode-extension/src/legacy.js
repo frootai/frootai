@@ -762,54 +762,28 @@ class FaiProtocolProvider {
 class McpToolProvider {
   getTreeItem(element) { return element; }
   getChildren(element) {
-    const groups = [
-      { label: "Knowledge (6)", type: "static", icon: "database", desc: "Offline knowledge lookups" },
-      { label: "Live (4)", type: "live", icon: "cloud", desc: "Azure + GitHub API calls" },
-      { label: "Agent Chain (3)", type: "chain", icon: "link", desc: "Build → Review → Tune workflow" },
-      { label: "Ecosystem (10)", type: "ecosystem", icon: "globe", desc: "Model catalog, pricing, compare, embed" },
-      { label: "Engine (6)", type: "engine", icon: "circuit-board", desc: "FAI Engine bridge tools" },
-      { label: "Scaffold (3)", type: "scaffold", icon: "file-add", desc: "Play + primitive scaffolding" },
-      { label: "Marketplace (13)", type: "marketplace", icon: "extensions", desc: "Plugin install, compose, publish" },
-    ];
-    if (!element) {
-      // MCP Explorer launcher at top
-      const explorer = new vscode.TreeItem("Open MCP Explorer", vscode.TreeItemCollapsibleState.None);
-      explorer.description = "Interactive tool browser";
-      explorer.iconPath = new vscode.ThemeIcon("tools", new vscode.ThemeColor("charts.purple"));
-      explorer.command = { command: "frootai.openMcpExplorer", title: "Open MCP Explorer" };
-      explorer.contextValue = "launcher";
+    if (element) return [];
 
-      const groupItems = groups.map(g => {
-        const item = new vscode.TreeItem(g.label, vscode.TreeItemCollapsibleState.Collapsed);
-        item.description = g.desc;
-        item.iconPath = new vscode.ThemeIcon(g.icon);
-        item.contextValue = "toolGroup";
-        item._groupType = g.type;
-        return item;
-      });
-      return [explorer, ...groupItems];
-    }
-    const groupType = element._groupType;
-    if (groupType) {
-      const typeIcons = { static: "book", live: "cloud-upload", chain: "debug-disconnect", ecosystem: "graph-scatter", compute: "symbol-ruler", engine: "circuit-board", scaffold: "file-add", marketplace: "extensions" };
-      return MCP_TOOLS.filter(t => t.type === groupType).map(t => {
-        const item = new vscode.TreeItem(t.name, vscode.TreeItemCollapsibleState.None);
-        item.description = t.desc;
-        const toolTooltip = new vscode.MarkdownString(
-          `**\`${t.name}\`**\n\n${t.desc}\n\n---\n\n` +
-          `**Category:** ${t.type}  \n` +
-          `**Read-only:** ${t.readOnly !== false ? "Yes" : "No"}  \n\n` +
-          `*Click to view documentation*`
-        );
-        toolTooltip.supportThemeIcons = true;
-        item.tooltip = toolTooltip;
-        item.iconPath = new vscode.ThemeIcon(typeIcons[t.type] || "symbol-method");
-        item.contextValue = "mcpTool";
-        item.command = { command: "frootai.viewToolDocs", title: "View Docs", arguments: [t] };
-        return item;
-      });
-    }
-    return [];
+    const items = [
+      { label: "MCP Explorer", desc: "Browse all 45 tools interactively", icon: "tools", color: "charts.purple", cmd: "frootai.openMcpExplorer" },
+      { label: "Setup MCP Server", desc: "Configure MCP for your IDE", icon: "gear", color: "charts.green", cmd: "frootai.installMcpServer" },
+      { label: "npm — frootai-mcp", desc: "Node.js MCP server (v3.5.0)", icon: "package", color: "charts.orange", url: "https://www.npmjs.com/package/frootai-mcp" },
+      { label: "PyPI — frootai-mcp", desc: "Python MCP server (v3.5.0)", icon: "package", color: "charts.blue", url: "https://pypi.org/project/frootai-mcp/" },
+      { label: "Docker Image", desc: "ghcr.io/frootai/frootai-mcp", icon: "server-process", color: "charts.blue", url: "https://github.com/frootai/frootai/pkgs/container/frootai-mcp" },
+      { label: "CLI — npx frootai", desc: "Scaffold, install, validate", icon: "terminal", color: "charts.yellow", url: "https://www.npmjs.com/package/frootai" },
+    ];
+
+    return items.map(i => {
+      const item = new vscode.TreeItem(i.label, vscode.TreeItemCollapsibleState.None);
+      item.description = i.desc;
+      item.iconPath = new vscode.ThemeIcon(i.icon, new vscode.ThemeColor(i.color));
+      if (i.cmd) {
+        item.command = { command: i.cmd, title: i.label };
+      } else if (i.url) {
+        item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(i.url)] };
+      }
+      return item;
+    });
   }
 }
 
@@ -869,7 +843,7 @@ class CommunityProvider {
     if (element) return [];
 
     const items = [
-      { label: "Community & Showcase", desc: "Contributions, leaderboard, featured projects", icon: "people", color: "charts.green", url: "https://frootai.dev/community" },
+      { label: "Community & Showcase", desc: "Contributions, leaderboard, featured projects", icon: "organization", color: "charts.green", url: "https://frootai.dev/community" },
       { label: "Contribute", desc: "Full contribution guide + PR templates", icon: "git-pull-request", color: "charts.blue", url: "https://frootai.dev/contribute" },
     ];
 

@@ -84,7 +84,7 @@
         },
         {
           "id": "frootai.mcpTools",
-          "name": "FAI MCP Tools (45)"
+          "name": "FAI Packages"
         },
         {
           "id": "frootai.devHub",
@@ -343,21 +343,6 @@
           "command": "frootai.openWebsite",
           "when": "view == frootai.welcome",
           "group": "navigation"
-        },
-        {
-          "command": "frootai.installMcpServer",
-          "when": "view == frootai.mcpTools",
-          "group": "navigation@1"
-        },
-        {
-          "command": "frootai.openSetupGuide",
-          "when": "view == frootai.mcpTools",
-          "group": "navigation@2"
-        },
-        {
-          "command": "frootai.openNpmPage",
-          "when": "view == frootai.mcpTools",
-          "group": "navigation@3"
         }
       ],
       "view/item/context": [
