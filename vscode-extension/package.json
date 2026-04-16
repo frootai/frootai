@@ -85,6 +85,14 @@
         {
           "id": "frootai.mcpTools",
           "name": "FAI MCP Tools (45)"
+        },
+        {
+          "id": "frootai.devHub",
+          "name": "FAI Dev Hub"
+        },
+        {
+          "id": "frootai.community",
+          "name": "FAI Community"
         }
       ]
     },

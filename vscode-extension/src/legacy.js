@@ -755,7 +755,7 @@ class FaiProtocolProvider {
     quiz.description = "25 questions — test your knowledge";
     quiz.iconPath = new vscode.ThemeIcon("checklist", new vscode.ThemeColor("charts.yellow"));
 
-    return [ecosystem, learning, modules, glossary, quiz];
+    return [ecosystem, modules, glossary, learning, quiz];
   }
 }
 
@@ -836,6 +836,53 @@ class GlossaryProvider {
   }
 }
 
+// ─── FAI Dev Hub Provider ──────────────────────────────────────────
+class DevHubProvider {
+  getTreeItem(element) { return element; }
+  getChildren(element) {
+    if (element) return [];
+
+    const items = [
+      { label: "Admin Guide", desc: "Install, configure, maintain", icon: "wrench", color: "charts.yellow", url: "https://frootai.dev/docs/admin-guide" },
+      { label: "User Guide", desc: "End-to-end usage walkthrough", icon: "book", color: "charts.green", url: "https://frootai.dev/docs/user-guide-complete" },
+      { label: "Contribution Guide", desc: "Add primitives, plugins, plays", icon: "git-pull-request", color: "charts.blue", url: "https://frootai.dev/contribute" },
+      { label: "API Reference", desc: "45 MCP tools, 16 commands", icon: "radio-tower", color: "charts.purple", url: "https://frootai.dev/docs/api-reference" },
+      { label: "Changelog", desc: "Version history & releases", icon: "list-ordered", color: "charts.purple", url: "https://frootai.dev/dev-hub-changelog" },
+      { label: "Architecture", desc: "System design & data flow", icon: "circuit-board", color: "charts.orange", url: "https://frootai.dev/docs/architecture-overview" },
+      { label: "GitHub Repository", desc: "Source code — star ⭐ us!", icon: "github", color: "charts.green", url: "https://github.com/frootai/frootai" },
+    ];
+
+    return items.map(i => {
+      const item = new vscode.TreeItem(i.label, vscode.TreeItemCollapsibleState.None);
+      item.description = i.desc;
+      item.iconPath = new vscode.ThemeIcon(i.icon, new vscode.ThemeColor(i.color));
+      item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(i.url)] };
+      return item;
+    });
+  }
+}
+
+// ─── FAI Community Provider ──────────────────────────────────────────
+class CommunityProvider {
+  getTreeItem(element) { return element; }
+  getChildren(element) {
+    if (element) return [];
+
+    const items = [
+      { label: "Community & Showcase", desc: "Contributions, leaderboard, featured projects", icon: "people", color: "charts.green", url: "https://frootai.dev/community" },
+      { label: "Contribute", desc: "Full contribution guide + PR templates", icon: "git-pull-request", color: "charts.blue", url: "https://frootai.dev/contribute" },
+    ];
+
+    return items.map(i => {
+      const item = new vscode.TreeItem(i.label, vscode.TreeItemCollapsibleState.None);
+      item.description = i.desc;
+      item.iconPath = new vscode.ThemeIcon(i.icon, new vscode.ThemeColor(i.color));
+      item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(i.url)] };
+      return item;
+    });
+  }
+}
+
 // ─── Welcome Tree Provider ──────────────────────────────────────────
 class WelcomeTreeProvider {
   getTreeItem(element) { return element; }
@@ -898,6 +945,8 @@ function activate(context) {
   vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", primProvider);
   vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
   vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
+  vscode.window.registerTreeDataProvider("frootai.devHub", new DevHubProvider());
+  vscode.window.registerTreeDataProvider("frootai.community", new CommunityProvider());
 
   // Auto-show Welcome when sidebar first becomes visible
   const welcomeView = vscode.window.createTreeView("frootai.welcome", { treeDataProvider: new WelcomeTreeProvider() });
