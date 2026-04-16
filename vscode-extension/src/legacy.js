@@ -523,6 +523,7 @@ class SolutionPlayProvider {
     const items = [
       { label: "Solution Configurator", desc: "Find the right play for your needs", icon: "settings-gear", color: "charts.yellow", cmd: "frootai.openConfigurator" },
       { label: "Browse All Plays", desc: "Search, filter, compare 101 plays", icon: "layout", color: "charts.green", cmd: "frootai.browsePlays" },
+      { label: "Scaffold a Project", desc: "4-step wizard", icon: "file-add", color: "charts.blue", cmd: "frootai.openScaffoldWizard" },
     ];
     return items.map(l => {
       const item = new vscode.TreeItem(l.label, vscode.TreeItemCollapsibleState.None);
@@ -876,11 +877,6 @@ class WelcomeTreeProvider {
     hi.contextValue = "welcomeItem";
     hi.tooltip = new vscode.MarkdownString("**Hi FAI!** 👋\n\nClick to open the Welcome panel with quick start guide, feature overview, and ecosystem links.");
 
-    const scaffold = new vscode.TreeItem("Scaffold a Project", vscode.TreeItemCollapsibleState.None);
-    scaffold.description = "4-step wizard";
-    scaffold.iconPath = new vscode.ThemeIcon("file-add", new vscode.ThemeColor("charts.blue"));
-    scaffold.command = { command: "frootai.openScaffoldWizard", title: "Scaffold" };
-
     const setup = new vscode.TreeItem("Setup Guide", vscode.TreeItemCollapsibleState.None);
     setup.description = "Install MCP, configure, deploy";
     setup.iconPath = new vscode.ThemeIcon("book", new vscode.ThemeColor("charts.orange"));
@@ -896,7 +892,7 @@ class WelcomeTreeProvider {
     agent.iconPath = new vscode.ThemeIcon("comment-discussion", new vscode.ThemeColor("charts.purple"));
     agent.command = { command: "frootai.openAgentFai", title: "Ask Agent FAI" };
 
-    return [hi, agent, scaffold, setup, search];
+    return [hi, agent, setup, search];
   }
 }
 
