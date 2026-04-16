@@ -765,7 +765,6 @@ class McpToolProvider {
     if (element) return [];
 
     const items = [
-      { label: "MCP Explorer", desc: "Browse all 45 tools interactively", icon: "tools", color: "charts.purple", cmd: "frootai.openMcpExplorer" },
       { label: "Setup MCP Server", desc: "Configure MCP for your IDE", icon: "gear", color: "charts.green", cmd: "frootai.installMcpServer" },
       { label: "npm — frootai-mcp", desc: "Node.js MCP server (v3.5.0)", icon: "package", color: "charts.orange", url: "https://www.npmjs.com/package/frootai-mcp" },
       { label: "PyPI — frootai-mcp", desc: "Python MCP server (v3.5.0)", icon: "package", color: "charts.blue", url: "https://pypi.org/project/frootai-mcp/" },
@@ -1724,8 +1723,8 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
         { label: "$(gear) Configure MCP", description: "⭐ Recommended — creates .vscode/mcp.json for Copilot", value: "config" },
         { label: "$(play) Run via npx", description: "npx frootai-mcp@latest — zero install", value: "npx" },
         { label: "$(package) Install globally (npm)", description: "npm install -g frootai-mcp@latest", value: "global" },
-        { label: "$(symbol-namespace) Python (pip)", description: "pip install frootai-mcp — pure Python server", value: "pip" },
-        { label: "$(symbol-container) Docker", description: "docker run -i ghcr.io/frootai/frootai-mcp", value: "docker" },
+        { label: "$(symbol-namespace) Python (pip)", description: "pip install frootai-mcp → python -m frootai_mcp.server", value: "pip" },
+        { label: "$(symbol-container) Docker", description: "Requires Docker Desktop running", value: "docker" },
       ], { placeHolder: "Set up FrootAI MCP Server" });
       if (!choice) return;
 
@@ -1762,14 +1761,15 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
         terminal.show();
         autoCreateMcpJson();
       } else if (choice.value === "docker") {
+        // Check if Docker is available first
         const terminal = vscode.window.createTerminal("FrootAI MCP Docker");
-        terminal.sendText("docker run -i ghcr.io/frootai/frootai-mcp");
+        terminal.sendText("docker info >$null 2>&1 && docker run -i ghcr.io/frootai/frootai-mcp || echo '❌ Docker Desktop is not running. Please start Docker Desktop first.'");
         terminal.show();
-        vscode.window.showInformationMessage("🐳 Starting FrootAI MCP via Docker. 45 tools ready.");
+        vscode.window.showInformationMessage("🐳 Starting FrootAI MCP via Docker. Make sure Docker Desktop is running.");
         autoCreateMcpJson();
       } else if (choice.value === "pip") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Python");
-        terminal.sendText("pip install frootai-mcp && frootai-mcp-py");
+        terminal.sendText("pip install frootai-mcp && python -m frootai_mcp.server");
         terminal.show();
         vscode.window.showInformationMessage("🐍 Installing Python MCP server from PyPI.");
         autoCreateMcpJson();
