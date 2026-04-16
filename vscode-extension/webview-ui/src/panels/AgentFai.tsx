@@ -39,6 +39,7 @@ function renderMarkdown(md: string): string {
     .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #1a1a2e;margin:14px 0">')
     // Links — use data attributes for click handling (CSP blocks inline onclick)
     .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d440;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/user-guide\?play=(\d{2})\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1</a>')
     .replace(/\[([^\]]+)\]\(\/configurator\)/g, '<a href="#" data-fai="configurator" style="color:#f59e0b;text-decoration:none;border-bottom:1px dashed #f59e0b40;cursor:pointer">$1</a>')
     .replace(/\[([^\]]+)\]\(\/solution-plays\)/g, '<a href="#" data-fai="browse" style="color:#10b981;text-decoration:none;border-bottom:1px dashed #10b98140;cursor:pointer">$1</a>')
     .replace(/\[([^\]]+)\]\(\/user-guide[^)]*\)/g, '<a href="#" data-fai="browse" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1</a>')
@@ -110,7 +111,18 @@ export default function AgentFai() {
     setInput("");
     setLoading(true);
 
-    const history = [...messages.slice(-8), userMsg].map(m => ({ role: m.role, content: m.text }));
+    // System prompt tells the API to use VS Code-friendly links
+    const systemMsg = {
+      role: "system",
+      content: "You are Agent FAI inside the VS Code extension. The user is working in VS Code. " +
+        "When linking to FrootAI resources, use these exact markdown link formats: " +
+        "[Play Name](/solution-plays/XX-slug) for plays, [Configurator](/configurator) for recommendations, " +
+        "[User Guide](/solution-plays/XX-slug) for guides (NOT /user-guide), " +
+        "[Primitives](/primitives) for catalog, [Marketplace](/marketplace) for plugins. " +
+        "Put external website links (GitHub, Azure docs) at the END of your response under a '## Explore Further' section. " +
+        "Keep responses concise and actionable. Never use mermaid diagrams."
+    };
+    const history = [systemMsg, ...messages.slice(-8).map(m => ({ role: m.role, content: m.text })), { role: "user", content: text.trim() }];
 
     try {
       const res = await fetch(STREAM_API, {
@@ -161,7 +173,12 @@ export default function AgentFai() {
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", padding: 0 }}>
       {/* Header */}
       <div style={{ padding: "14px 16px", borderBottom: "1px solid #1a1a2e", background: "#0a0a12", display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: "#10b98115", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🤖</div>
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg, #10b98115, #06b6d415)", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 8V4H8"/><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="4" y="8" width="16" height="12" rx="2"/>
+            <circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 17h4"/>
+          </svg>
+        </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: -0.3 }}>Agent <span style={{ color: "#10b981" }}>FAI</span></div>
           <div style={{ fontSize: 11, opacity: 0.45 }}>Powered by Azure OpenAI — ask anything about FrootAI</div>
@@ -171,16 +188,22 @@ export default function AgentFai() {
       {/* Messages */}
       <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px" }}>
         {messages.length === 0 && (
-          <div style={{ textAlign: "center", paddingTop: 40 }}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: "#10b98110", border: "1px solid #10b98120", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, margin: "0 auto 12px" }}>🤖</div>
-            <p style={{ fontWeight: 700, fontSize: 16, marginBottom: 4, letterSpacing: -0.3 }}>Hi! I'm Agent <span style={{ color: "#10b981" }}>FAI</span></p>
-            <p style={{ fontSize: 12, opacity: 0.5, marginBottom: 20 }}>Ask me anything about solution plays, architecture, costs, or getting started.</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, maxWidth: 400, margin: "0 auto" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "70vh", padding: "0 20px" }}>
+            {/* Icon — styled SVG circle, no emoji */}
+            <div style={{ width: 72, height: 72, borderRadius: 20, background: "linear-gradient(135deg, #10b98115, #06b6d415)", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 8V4H8"/><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="4" y="8" width="16" height="12" rx="2"/>
+                <circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 17h4"/>
+              </svg>
+            </div>
+            <p style={{ fontWeight: 800, fontSize: 22, marginBottom: 4, letterSpacing: -0.5 }}>Hi! I'm Agent <span style={{ color: "#10b981" }}>FAI</span></p>
+            <p style={{ fontSize: 13, opacity: 0.45, marginBottom: 28, maxWidth: 400, textAlign: "center", lineHeight: 1.5 }}>Ask me anything about solution plays, architecture patterns, costs, or getting started with FrootAI.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, width: "100%", maxWidth: 480 }}>
               {SUGGESTIONS.map(s => (
                 <button key={s} onClick={() => send(s)}
-                  style={{ textAlign: "left", fontSize: 11, padding: "8px 10px", lineHeight: 1.4, background: "#10b98108", border: "1px solid #10b98115", borderRadius: 8, cursor: "pointer", color: "inherit", transition: "all 0.2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#10b98140"; e.currentTarget.style.background = "#10b98115"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#10b98115"; e.currentTarget.style.background = "#10b98108"; }}>
+                  style={{ textAlign: "left", fontSize: 13, padding: "14px 16px", lineHeight: 1.5, background: "linear-gradient(135deg, #10b98106, #06b6d406)", border: "1px solid #10b98118", borderRadius: 12, cursor: "pointer", color: "inherit", transition: "all 0.25s" }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#10b98140"; e.currentTarget.style.background = "linear-gradient(135deg, #10b98112, #06b6d412)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#10b98118"; e.currentTarget.style.background = "linear-gradient(135deg, #10b98106, #06b6d406)"; e.currentTarget.style.transform = "none"; }}>
                   {s}
                 </button>
               ))}
