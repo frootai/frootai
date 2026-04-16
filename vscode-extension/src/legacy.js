@@ -888,7 +888,7 @@ class WelcomeTreeProvider {
     search.command = { command: "frootai.searchAll", title: "Search" };
 
     const agent = new vscode.TreeItem("Ask Agent FAI", vscode.TreeItemCollapsibleState.None);
-    agent.description = "AI assistant — powered by Azure";
+    agent.description = "Your FrootAI assistant";
     agent.iconPath = new vscode.ThemeIcon("comment-discussion", new vscode.ThemeColor("charts.purple"));
     agent.command = { command: "frootai.openAgentFai", title: "Ask Agent FAI" };
 
@@ -954,6 +954,13 @@ function activate(context) {
   // ── Refresh plays tree ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.refreshPlays", () => playProvider.refresh())
+  );
+
+  // ── Open external website ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.openWebsite", () => {
+      vscode.env.openExternal(vscode.Uri.parse("https://frootai.dev"));
+    })
   );
 
   // ── Toggle view mode (one-click toggle: category ↔ flat) ──
@@ -1125,32 +1132,83 @@ function activate(context) {
         .hero img { width: 48px; height: 48px; margin-bottom: 8px; }
         .hero h1 { font-size: 22px; margin: 0 0 6px; }
         .hero p { opacity: 0.7; margin: 0; font-size: 14px; }
-        h2 { font-size: 16px; margin-top: 24px; color: #10b981; }
+        h2 { font-size: 16px; margin-top: 28px; color: #10b981; border-bottom: 1px solid #10b98133; padding-bottom: 6px; }
+        h3 { font-size: 14px; margin-top: 16px; color: #7c3aed; }
         code { background: var(--vscode-textCodeBlock-background); padding: 2px 6px; border-radius: 3px; font-size: 13px; }
         pre { background: var(--vscode-textCodeBlock-background); padding: 12px; border-radius: 6px; overflow-x: auto; }
-        .step { margin: 16px 0; padding: 12px; border-left: 3px solid #10b981; background: #10b98108; border-radius: 4px; }
+        .step { margin: 16px 0; padding: 12px 16px; border-left: 3px solid #10b981; background: #10b98108; border-radius: 4px; }
+        .section { margin: 12px 0; padding: 10px 14px; border-left: 3px solid #7c3aed; background: #7c3aed08; border-radius: 4px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+        .grid-item { padding: 8px 10px; background: var(--vscode-textCodeBlock-background); border-radius: 4px; font-size: 13px; }
+        .badge { display: inline-block; background: #10b98122; color: #10b981; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-right: 4px; }
+        table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+        td, th { padding: 6px 10px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: #10b981; font-weight: 600; }
       </style></head><body>
         <div class="hero">
           <img src="${logoUri}" alt="FrootAI" />
           <h1>FAI Setup Guide</h1>
-          <p>Get started with the FrootAI ecosystem in 3 steps</p>
+          <p>From the Roots to the Fruits — your complete getting started reference</p>
         </div>
-        <div class="step"><h2>Step 1: Install MCP Server</h2>
-        <p>Choose one method:</p>
+
+        <h2>🚀 Quick Start (3 Steps)</h2>
+        <div class="step"><h3>Step 1: Install MCP Server</h3>
+        <p>Choose your runtime:</p>
         <pre>npx frootai-mcp@latest          # Node.js (recommended)
 pip install frootai-mcp          # Python
 docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
-        <p>Or use the <strong>Ctrl+Shift+P → FrootAI: Setup MCP Server</strong> command.</p></div>
-        <div class="step"><h2>Step 2: Scaffold a Play</h2>
-        <p>Use <strong>Ctrl+Shift+P → FrootAI: Open Scaffold Wizard</strong> to pick a play and create your project.</p>
-        <p>Or via CLI:</p><pre>npx frootai scaffold 01 my-rag-project</pre></div>
-        <div class="step"><h2>Step 3: Configure & Deploy</h2>
-        <p>Use the <strong>Solution Configurator</strong> (Ctrl+Shift+P → FrootAI: Solution Configurator) to find the right play for your needs.</p>
-        <p>Then use <strong>Init DevKit</strong> / <strong>Init TuneKit</strong> from any play detail to scaffold the full project structure.</p></div>
-        <h2>📋 Key Commands</h2>
-        <pre>Ctrl+Shift+F9   → Search Everything
-Ctrl+Shift+F10  → Browse All Plays
-Ctrl+Shift+F11  → Welcome Panel</pre>
+        <p>Or use <code>Ctrl+Shift+P → FrootAI: Setup MCP Server</code></p></div>
+
+        <div class="step"><h3>Step 2: Scaffold a Project</h3>
+        <p>Use the <strong>Scaffold a Project</strong> wizard in the sidebar, or via CLI:</p>
+        <pre>npx frootai scaffold 01 my-rag-project</pre></div>
+
+        <div class="step"><h3>Step 3: Configure & Deploy</h3>
+        <p>Open <strong>Solution Configurator</strong> to find the right play, then use <strong>Init DevKit</strong> from any play detail.</p></div>
+
+        <h2>📋 Sidebar Overview</h2>
+        <table>
+          <tr><th>Section</th><th>What It Does</th></tr>
+          <tr><td>🏠 Hi FAI</td><td>Welcome panel, Agent FAI chat, Setup Guide, Search</td></tr>
+          <tr><td>📦 FAI Solution Plays</td><td>Solution Configurator, Browse 101 plays, Scaffold projects</td></tr>
+          <tr><td>🧩 FAI Primitives Catalog</td><td>Browse & install agents, instructions, skills, hooks, plugins</td></tr>
+          <tr><td>⚙️ FAI Protocol & Layer</td><td>FAI Protocol, Engine, Factory, Marketplace architecture</td></tr>
+          <tr><td>🔧 FAI MCP Tools</td><td>45 MCP tools — knowledge, live, chain, ecosystem, engine</td></tr>
+        </table>
+
+        <h2>🧩 Primitives at a Glance</h2>
+        <div class="grid">
+          <div class="grid-item"><span class="badge">238</span> Agents</div>
+          <div class="grid-item"><span class="badge">176</span> Instructions</div>
+          <div class="grid-item"><span class="badge">322</span> Skills</div>
+          <div class="grid-item"><span class="badge">10</span> Hooks</div>
+          <div class="grid-item"><span class="badge">77</span> Plugins</div>
+          <div class="grid-item"><span class="badge">101</span> Solution Plays</div>
+        </div>
+        <p>Install any primitive directly into your workspace from <strong>Browse Primitives Catalog</strong>.</p>
+
+        <h2>⌨️ Key Commands</h2>
+        <table>
+          <tr><th>Shortcut</th><th>Action</th></tr>
+          <tr><td><code>Ctrl+Shift+F9</code></td><td>Search Everything</td></tr>
+          <tr><td><code>Ctrl+Shift+F10</code></td><td>Browse All Plays</td></tr>
+          <tr><td><code>Ctrl+Shift+F11</code></td><td>Welcome Panel</td></tr>
+          <tr><td><code>Ctrl+Shift+P</code></td><td>All FrootAI commands (type "FrootAI")</td></tr>
+        </table>
+
+        <h2>🔌 Distribution Channels</h2>
+        <div class="section">
+          <p><strong>VS Code Extension</strong> — this extension (v9.3.0)</p>
+          <p><strong>MCP Server</strong> — <code>npx frootai-mcp@latest</code> (45 tools)</p>
+          <p><strong>Python SDK</strong> — <code>pip install frootai-mcp</code></p>
+          <p><strong>CLI</strong> — <code>npx frootai &lt;command&gt;</code></p>
+          <p><strong>Website</strong> — <a href="https://frootai.dev" style="color:#10b981">frootai.dev</a></p>
+          <p><strong>GitHub</strong> — <a href="https://github.com/frootai/frootai" style="color:#10b981">github.com/frootai/frootai</a></p>
+        </div>
+
+        <h2>📖 Learn More</h2>
+        <p>Use <strong>Ask Agent FAI</strong> in the sidebar to chat about solution plays, architecture patterns, FAI Protocol, or any AI concept.</p>
+        <p style="text-align:center;opacity:0.5;font-size:12px;margin-top:32px">FrootAI — The Open Glue for GenAI Ecosystem</p>
       </body></html>`;
     })
   );

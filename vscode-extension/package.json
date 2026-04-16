@@ -296,6 +296,12 @@
         "command": "frootai.openProtocolExplainer",
         "title": "FrootAI: FAI Protocol & Architecture",
         "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "frootai.openWebsite",
+        "title": "FrootAI: Open frootai.dev",
+        "icon": "$(globe)",
+        "shortTitle": "Website"
       }
     ],
     "menus": {
@@ -326,8 +332,8 @@
           "group": "2_more"
         },
         {
-          "command": "frootai.browseSolutionPlays",
-          "when": "view == frootai.solutionPlays",
+          "command": "frootai.openWebsite",
+          "when": "view == frootai.welcome",
           "group": "navigation"
         },
         {
