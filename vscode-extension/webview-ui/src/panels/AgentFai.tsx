@@ -238,23 +238,38 @@ export default function AgentFai() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", padding: 0 }}>
       {/* Sticky Header — always visible identity */}
-      <div style={{ padding: "14px 16px", borderBottom: "1px solid #1a1a2e", background: "#0a0a12", display: "flex", alignItems: "center", gap: 10, position: "sticky", top: 0, zIndex: 10 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg, #10b98115, #06b6d415)", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 8V4H8"/><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="4" y="8" width="16" height="12" rx="2"/>
-            <circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 17h4"/>
-          </svg>
+      <div style={{ padding: "12px 16px", borderBottom: "1px solid #1a1a2e", background: "#0a0a12", position: "sticky", top: 0, zIndex: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, #10b98115, #06b6d415)", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 8V4H8"/><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="4" y="8" width="16" height="12" rx="2"/>
+              <circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 17h4"/>
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: -0.3 }}>Agent <span style={{ color: "#10b981" }}>FAI</span></div>
+            <div style={{ fontSize: 10, opacity: 0.4 }}>Ask anything about FrootAI</div>
+          </div>
+          {messages.length > 0 && (
+            <button onClick={() => setMessages([])} title="New conversation"
+              style={{ background: "none", border: "1px solid #1a1a2e", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#64748b", fontSize: 11 }}>
+              New chat
+            </button>
+          )}
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: -0.3 }}>Agent <span style={{ color: "#10b981" }}>FAI</span></div>
-          <div style={{ fontSize: 11, opacity: 0.45 }}>Ask about solution plays, architecture, costs, or getting started</div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {[
+            { label: "Solution Plays", color: "#10b981" },
+            { label: "Primitives Catalog", color: "#3b82f6" },
+            { label: "Developer Tools", color: "#f59e0b" },
+            { label: "Learning Hub", color: "#8b5cf6" },
+            { label: "Architecture", color: "#06b6d4" },
+          ].map(t => (
+            <span key={t.label} style={{ fontSize: 9, padding: "2px 7px", borderRadius: 4, background: `${t.color}10`, color: t.color, border: `1px solid ${t.color}15`, fontWeight: 600, letterSpacing: 0.3 }}>
+              {t.label}
+            </span>
+          ))}
         </div>
-        {messages.length > 0 && (
-          <button onClick={() => setMessages([])} title="New conversation"
-            style={{ background: "none", border: "1px solid #1a1a2e", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#64748b", fontSize: 11 }}>
-            New chat
-          </button>
-        )}
       </div>
 
       {/* Messages */}
