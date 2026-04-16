@@ -202,7 +202,9 @@ export default function AgentFai() {
       const decoder = new TextDecoder();
       let accumulated = "";
 
+      // Show typing indicator for at least 600ms before streaming
       setMessages(prev => [...prev, { role: "assistant", text: "" }]);
+      await new Promise(r => setTimeout(r, 600));
 
       while (true) {
         const { done, value } = await reader.read();
