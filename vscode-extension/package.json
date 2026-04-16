@@ -272,7 +272,7 @@
     "menus": {
       "view/title": [
         {
-          "command": "frootai.browsePlays",
+          "command": "frootai.togglePlayView",
           "when": "view == frootai.solutionPlays",
           "group": "navigation"
         },
@@ -292,7 +292,7 @@
           "group": "2_more"
         },
         {
-          "command": "frootai.togglePlayView",
+          "command": "frootai.browsePlays",
           "when": "view == frootai.solutionPlays",
           "group": "2_more"
         },

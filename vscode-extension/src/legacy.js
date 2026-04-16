@@ -469,7 +469,7 @@ class SolutionPlayProvider {
     this._onDidChange = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._onDidChange.event;
     this._filter = "";
-    this._viewMode = "category"; // "category" | "flat" | "complexity"
+    this._viewMode = context?.workspaceState?.get("frootai.playViewMode") || "category";
     this._context = context;
     this._recentIds = context?.workspaceState?.get("frootai.recentPlays") || [];
   }
@@ -946,15 +946,14 @@ function activate(context) {
     vscode.commands.registerCommand("frootai.refreshPlays", () => playProvider.refresh())
   );
 
-  // ── Toggle view mode (category / flat) ──
+  // ── Toggle view mode (one-click toggle: category ↔ flat) ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("frootai.togglePlayView", async () => {
-      const modes = [
-        { label: "$(symbol-folder) Category View", description: "Group by FROOT layer", value: "category" },
-        { label: "$(list-flat) Flat View", description: "All plays in one list", value: "flat" },
-      ];
-      const pick = await vscode.window.showQuickPick(modes, { placeHolder: "Choose view layout" });
-      if (pick) playProvider.setViewMode(pick.value);
+    vscode.commands.registerCommand("frootai.togglePlayView", () => {
+      const current = playProvider._viewMode;
+      const next = current === "category" ? "flat" : "category";
+      playProvider.setViewMode(next);
+      context.workspaceState.update("frootai.playViewMode", next);
+      vscode.window.showInformationMessage(`Solution Plays: ${next === "category" ? "📁 Category View" : "📋 Flat View"}`);
     })
   );
 
