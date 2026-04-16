@@ -722,7 +722,7 @@ class PrimitivesCatalogProvider {
       const categories = [
         { label: "Agents (238)", icon: "hubot", color: "#10b981", children: [
           { label: "Browse all agents", desc: "View 238 agents on frootai.dev", icon: "globe", url: "https://frootai.dev/primitives/agents" },
-          { label: "Install agent in VS Code", desc: "One-click agent install via VS Code protocol", icon: "cloud-download", url: "https://frootai.dev/primitives/agents" },
+          { label: "Install agent in VS Code", desc: "One-click agent install via VS Code protocol", icon: "cloud-download", cmd: "frootai.installAgent" },
           { label: "WAF-aligned AI personas", desc: "Each agent has expertise + tools + WAF alignment", icon: "info" },
         ]},
         { label: "Instructions (176)", icon: "file-text", children: [
@@ -770,7 +770,9 @@ class PrimitivesCatalogProvider {
         item.description = child.desc;
         item.iconPath = new vscode.ThemeIcon(child.icon);
         item.tooltip = child.desc;
-        if (child.url) {
+        if (child.cmd) {
+          item.command = { command: child.cmd, title: child.label };
+        } else if (child.url) {
           item.command = { command: "vscode.open", title: "Open", arguments: [vscode.Uri.parse(child.url)] };
         }
         return item;

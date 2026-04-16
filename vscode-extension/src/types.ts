@@ -86,4 +86,5 @@ export interface PanelData {
   plays?: SolutionPlay[];
   primitives?: Record<string, PrimitiveItem[]>;
   plugins?: any[];
+  initialPlay?: SolutionPlay | null;
 }

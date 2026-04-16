@@ -81,13 +81,22 @@ function TryItModal({ tool, onClose }: { tool: McpTool; onClose: () => void }) {
 
   const handleRun = () => {
     setLoading(true);
-    // Send to extension for execution
     vscode.postMessage({ command: "tryTool", toolName: tool.name, params: values });
-    // Simulate response after delay (real response comes via message)
     setTimeout(() => {
-      setResult(JSON.stringify({ status: "success", tool: tool.name, params: values, message: `Tool "${tool.name}" invoked successfully. In a connected MCP session, this would return live results.` }, null, 2));
+      const hasParams = Object.values(values).some(v => v.trim());
+      setResult(JSON.stringify({
+        tool: tool.name,
+        params: hasParams ? values : "(none)",
+        note: "MCP tools require a running MCP server connection. To execute live:",
+        steps: [
+          "1. Run: npx frootai-mcp@latest (starts the MCP server)",
+          "2. In VS Code settings, configure MCP server connection",
+          "3. Use the @fai chat participant or Agent FAI to invoke tools",
+        ],
+        quickStart: "npx frootai-mcp@latest",
+      }, null, 2));
       setLoading(false);
-    }, 800);
+    }, 400);
   };
 
   return (

@@ -356,8 +356,8 @@ ${bodyHtml}
     });
   });
 
-  safeRegister("frootai.openScaffoldWizard", () => {
-    const panel = createReactPanel(context.extensionUri, "frootai.scaffold", "Scaffold Wizard", { panel: "scaffold", plays: SOLUTION_PLAYS });
+  safeRegister("frootai.openScaffoldWizard", (initialPlay?: any) => {
+    const panel = createReactPanel(context.extensionUri, "frootai.scaffold", "Scaffold Wizard", { panel: "scaffold", plays: SOLUTION_PLAYS, initialPlay: initialPlay || null });
     panel.webview.onDidReceiveMessage((msg: any) => {
       if (msg.command === "scaffold") vscode.commands.executeCommand("frootai.initDevKit");
       if (msg.command === "openFolder") vscode.commands.executeCommand("vscode.openFolder");
@@ -373,7 +373,12 @@ ${bodyHtml}
             vscode.window.showInformationMessage("Copied to clipboard!"));
           break;
         case "tryTool":
-          vscode.window.showInformationMessage(`MCP Tool "${msg.toolName}" — connect an MCP server to execute live. Params: ${JSON.stringify(msg.params)}`);
+          vscode.window.showInformationMessage(
+            `MCP Tool "${msg.toolName}" — Run \`npx frootai-mcp@latest\` to start the server, then use @fai in Copilot Chat.`,
+            "Copy Command"
+          ).then(sel => {
+            if (sel === "Copy Command") vscode.env.clipboard.writeText("npx frootai-mcp@latest");
+          });
           break;
         case "openUrl":
           if (msg.url) vscode.env.openExternal(vscode.Uri.parse(msg.url));
@@ -435,6 +440,41 @@ ${bodyHtml}
         vscode.env.openExternal(vscode.Uri.parse(msg.url));
       }
     });
+  });
+
+  // ─── Aliases for backward-compatible commands ───
+  safeRegister("frootai.browsePrimitives", () => vscode.commands.executeCommand("frootai.openPrimitivesCatalog"));
+
+  // ─── Install Agent via vscode:// protocol ───
+  safeRegister("frootai.installAgent", async () => {
+    const agents = (() => {
+      try { return JSON.parse(fs.readFileSync(path.join(context.extensionPath, "data", "agents.json"), "utf-8")); } catch { return []; }
+    })();
+    const picked = await vscode.window.showQuickPick(
+      agents.map((a: any) => ({ label: a.name || a.id, description: a.description, id: a.id, file: a.file })),
+      { placeHolder: "Select an agent to install in VS Code Copilot Chat", matchOnDescription: true }
+    );
+    if (picked) {
+      const rawUrl = `https://raw.githubusercontent.com/frootai/frootai/main/${(picked as any).file || `agents/${(picked as any).id}.agent.md`}`;
+      const uri = `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
+      vscode.env.openExternal(vscode.Uri.parse(uri));
+    }
+  });
+
+  // ─── Install Instruction via vscode:// protocol ───
+  safeRegister("frootai.installInstruction", async () => {
+    const instructions = (() => {
+      try { return JSON.parse(fs.readFileSync(path.join(context.extensionPath, "data", "instructions.json"), "utf-8")); } catch { return []; }
+    })();
+    const picked = await vscode.window.showQuickPick(
+      instructions.map((i: any) => ({ label: i.name || i.id, description: i.description, id: i.id, file: i.file })),
+      { placeHolder: "Select an instruction to install", matchOnDescription: true }
+    );
+    if (picked) {
+      const rawUrl = `https://raw.githubusercontent.com/frootai/frootai/main/${(picked as any).file || `instructions/${(picked as any).id}.instructions.md`}`;
+      const uri = `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
+      vscode.env.openExternal(vscode.Uri.parse(uri));
+    }
   });
 
   // ─── Agent FAI Chat Panel ───
@@ -809,21 +849,49 @@ ${bodyHtml}
 class FaiFileDecorationProvider implements vscode.FileDecorationProvider {
   provideFileDecoration(uri: vscode.Uri): vscode.FileDecoration | undefined {
     const name = uri.path.split("/").pop() || "";
+    const dir = uri.path.split("/").slice(-2, -1)[0] || "";
+
+    // FAI Protocol files
     if (name === "fai-manifest.json") {
-      return { badge: "⚡", tooltip: "FAI Protocol Manifest — wiring context for this play", color: new vscode.ThemeColor("charts.green") };
-    }
-    if (name.endsWith(".agent.md")) {
-      return { badge: "🤖", tooltip: "FAI Agent definition" };
-    }
-    if (name.endsWith(".instructions.md")) {
-      return { badge: "📋", tooltip: "FAI Instructions file" };
+      return { badge: "FM", tooltip: "FAI Protocol Manifest — wiring context for this play", color: new vscode.ThemeColor("charts.green") };
     }
     if (name === "fai-context.json") {
-      return { badge: "🧩", tooltip: "FAI Context — LEGO block wiring" };
+      return { badge: "FC", tooltip: "FAI Context — LEGO block wiring", color: new vscode.ThemeColor("charts.blue") };
+    }
+
+    // Primitives
+    if (name.endsWith(".agent.md")) {
+      return { badge: "AG", tooltip: "FAI Agent definition", color: new vscode.ThemeColor("charts.green") };
+    }
+    if (name.endsWith(".instructions.md")) {
+      return { badge: "IN", tooltip: "FAI Instructions file", color: new vscode.ThemeColor("charts.blue") };
     }
     if (name === "SKILL.md") {
-      return { badge: "⚙️", tooltip: "FAI Skill definition" };
+      return { badge: "SK", tooltip: "FAI Skill definition", color: new vscode.ThemeColor("charts.purple") };
     }
+    if (name === "hooks.json" && (dir === "hooks" || uri.path.includes(".github/hooks"))) {
+      return { badge: "HK", tooltip: "FAI Hook definition", color: new vscode.ThemeColor("charts.orange") };
+    }
+    if (name.endsWith(".prompt.md") || (dir === "prompts" && name.endsWith(".md"))) {
+      return { badge: "PR", tooltip: "FAI Prompt template", color: new vscode.ThemeColor("charts.yellow") };
+    }
+    if (name.endsWith(".yml") && dir === "workflows") {
+      return { badge: "WF", tooltip: "FAI Workflow definition", color: new vscode.ThemeColor("charts.red") };
+    }
+
+    // Configuration & Infrastructure
+    if ((name === "openai.json" || name === "guardrails.json") && dir === "config") {
+      return { badge: "TK", tooltip: "TuneKit configuration", color: new vscode.ThemeColor("charts.orange") };
+    }
+    if (name.endsWith(".bicep") && dir === "infra") {
+      return { badge: "IaC", tooltip: "Infrastructure as Code (Bicep)", color: new vscode.ThemeColor("charts.blue") };
+    }
+
+    // Evaluation
+    if (dir === "evaluation" && (name.endsWith(".json") || name.endsWith(".py") || name.endsWith(".yaml"))) {
+      return { badge: "EV", tooltip: "Evaluation pipeline file", color: new vscode.ThemeColor("charts.yellow") };
+    }
+
     return undefined;
   }
 }
@@ -835,7 +903,7 @@ class FaiManifestCodeLensProvider implements vscode.CodeLensProvider {
     const topRange = new vscode.Range(0, 0, 0, 0);
 
     lenses.push(new vscode.CodeLens(topRange, {
-      title: "$(zap) Validate Manifest",
+      title: "$(checklist) Validate Manifest",
       command: "frootai.validateManifest",
       tooltip: "Validate this fai-manifest.json against the FAI Protocol schema",
     }));

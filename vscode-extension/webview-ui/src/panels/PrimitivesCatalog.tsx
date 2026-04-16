@@ -209,7 +209,7 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
           return (
             <button
               key={sc.id}
-              className="btn btn-sm btn-ghost"
+              className={`btn btn-sm ${active ? "" : "btn-ghost"}`}
               onClick={() => switchSubCat(sc.id)}
               style={{
                 fontSize: 11,
@@ -235,7 +235,7 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
             return (
               <button
                 key={key}
-                className="btn btn-sm btn-ghost"
+                className={`btn btn-sm ${active ? "" : "btn-ghost"}`}
                 onClick={() => setWafFilter(active ? null : key)}
                 style={{
                   fontSize: 10,

@@ -15,12 +15,12 @@ const DEVKIT_FILES = [
   "spec/fai-manifest.json",
 ];
 
-interface Props { plays: SolutionPlay[]; }
+interface Props { plays: SolutionPlay[]; initialPlay?: SolutionPlay | null; }
 
-export default function ScaffoldWizard({ plays }: Props) {
-  const [step, setStep] = useState(1);
+export default function ScaffoldWizard({ plays, initialPlay }: Props) {
+  const [step, setStep] = useState(initialPlay ? 2 : 1);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<SolutionPlay | null>(null);
+  const [selected, setSelected] = useState<SolutionPlay | null>(initialPlay || null);
   const [projectName, setProjectName] = useState("");
 
   const filtered = useMemo(() => {
