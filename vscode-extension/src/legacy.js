@@ -312,7 +312,7 @@ function createModuleWebview(context, moduleId, title, content) {
 function markdownToHtml(markdown, title) {
   // Extract mermaid blocks before processing
   const mermaidBlocks = [];
-  let processed = markdown.replace(/```mermaid\n([\s\S]*?)```/g, (match, code) => {
+  let processed = markdown.replace(/`{2,3}\s*mermaid\s*\n([\s\S]*?)`{2,3}/g, (match, code) => {
     mermaidBlocks.push(code.trim());
     return `%%MERMAID_${mermaidBlocks.length - 1}%%`;
   });
@@ -366,8 +366,16 @@ function markdownToHtml(markdown, title) {
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primaryColor: '#1a1a2e', primaryTextColor: '#e0e0e0', primaryBorderColor: '#6366f1', lineColor: '#818cf8', background: 'transparent' } });</script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'unsafe-inline'; img-src https: data:;">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"><\/script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primaryColor: '#1a1a2e', primaryTextColor: '#e0e0e0', primaryBorderColor: '#6366f1', lineColor: '#818cf8', background: 'transparent' } });
+        mermaid.run();
+      }
+    });
+  <\/script>
   <style>
     body { 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
