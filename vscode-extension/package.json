@@ -2,7 +2,7 @@
   "name": "frootai-vscode",
   "displayName": "FrootAI — AI Architecture Knowledge Engine",
   "description": "45 MCP tools · 104 solution plays · 830+ primitives · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
-  "version": "8.5.3",
+  "version": "9.0.0",
   "publisher": "frootai",
   "engines": {
     "vscode": "^1.95.0"
@@ -325,6 +325,16 @@
         "command": "frootai.searchAll",
         "key": "ctrl+shift+f9",
         "mac": "cmd+shift+f9"
+      },
+      {
+        "command": "frootai.browsePlays",
+        "key": "ctrl+shift+f10",
+        "mac": "cmd+shift+f10"
+      },
+      {
+        "command": "frootai.openWelcome",
+        "key": "ctrl+shift+f11",
+        "mac": "cmd+shift+f11"
       }
     ],
     "configuration": {
@@ -423,6 +433,7 @@
     "watch": "node esbuild.config.mjs --watch",
     "package": "npm run check-types && node esbuild.config.mjs --production",
     "lint": "eslint src/",
+    "test": "npx tsx src/test/extension.test.ts",
     "vsce:package": "vsce package",
     "vsce:publish": "vsce publish"
   },

@@ -1,5 +1,39 @@
 # Changelog
 
+## [9.0.0] — 2026-04-16
+
+### Phase 5: Polish & Production Hardening
+- **File decorations** — FAI files (fai-manifest.json, .agent.md, .instructions.md, SKILL.md) get badges in Explorer
+- **CodeLens** on fai-manifest.json — inline "Validate Manifest" + wiring summary (play ID, primitive count, WAF pillars)
+- **Keybindings** — `Ctrl+Shift+F10` Browse Plays, `Ctrl+Shift+F11` Welcome
+- **CHANGELOG** updated with full Phase 1–4 history
+
+### Phase 4: Getting Started & Onboarding
+- **Welcome panel** — React webview with 6-card feature grid, Quick Start, ecosystem links; auto-opens on first install
+- **What's New notification** — detects version updates via globalState, shows changelog highlights
+- **Interactive tooltips** — rich Markdown tooltips on all tree items (plays, modules, MCP tools, glossary)
+- **Enhanced walkthrough media** — 5 markdown guides with tables, code blocks, tips
+
+### Phase 3: Rich Webview Panels
+- **Recently Used** — top 5 last-opened plays in sidebar, persisted via workspaceState
+- **PlayDetail enhancements** — Azure services grid, tuning params table, WAF checklist, Init DevKit/TuneKit buttons
+- **Evaluation Dashboard** — trend sparklines, delta badges, summary stats, CSV export
+- **Scaffold Wizard** — 4-step wizard with play picker, config, file preview, create
+- **MCP Explorer** — TryIt modal with schema-aware parameter forms, Copy MCP Config, Install Config
+
+### Phase 2: Enhanced Tree Views & Search
+- **SolutionPlayProvider** — category grouping by FROOT layers, multi-word search, view mode toggle, complexity badges
+- **Search All** — live QuickPick with real-time filtering across plays, tools, glossary, modules
+- **6 tree header buttons** — filter, refresh, toggle, configurator, welcome, MCP
+- **src/types.ts** — shared TypeScript type definitions
+
+### Phase 1: Solution Plays Data Foundation
+- **SolutionPlay interface** expanded 11→20 fields (azure, waf, tuning, evaluation, category)
+- **categories.ts** — 21 categories with FROOT layer mapping
+- **101 plays enriched** — all plays have category, complexity, azure services, WAF pillars
+- **PlayBrowser.tsx** — filterable, paginated play catalog with category cards
+- **Configurator.tsx** — 5-question recommendation wizard
+
 ## [6.0.0] — 2026-04-14
 
 ### Architecture

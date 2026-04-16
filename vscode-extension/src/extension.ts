@@ -399,7 +399,7 @@ ${bodyHtml}
   });
 
   // ─── First Install: Show Welcome panel ───
-  const CURRENT_VERSION = "8.5.3";
+  const CURRENT_VERSION = "9.0.0";
   const lastVersion = context.globalState.get<string>("frootai.lastVersion");
 
   if (!lastVersion) {
@@ -426,6 +426,88 @@ ${bodyHtml}
         vscode.commands.executeCommand("frootai.openWelcome");
       }
     });
+  }
+  // ─── File Decorations for FAI files ───
+  context.subscriptions.push(
+    vscode.window.registerFileDecorationProvider(new FaiFileDecorationProvider())
+  );
+
+  // ─── CodeLens for fai-manifest.json ───
+  context.subscriptions.push(
+    vscode.languages.registerCodeLensProvider(
+      { pattern: "**/fai-manifest.json" },
+      new FaiManifestCodeLensProvider()
+    )
+  );
+}
+
+// ─── File Decoration Provider ───
+class FaiFileDecorationProvider implements vscode.FileDecorationProvider {
+  provideFileDecoration(uri: vscode.Uri): vscode.FileDecoration | undefined {
+    const name = uri.path.split("/").pop() || "";
+    if (name === "fai-manifest.json") {
+      return { badge: "⚡", tooltip: "FAI Protocol Manifest — wiring context for this play", color: new vscode.ThemeColor("charts.green") };
+    }
+    if (name.endsWith(".agent.md")) {
+      return { badge: "🤖", tooltip: "FAI Agent definition" };
+    }
+    if (name.endsWith(".instructions.md")) {
+      return { badge: "📋", tooltip: "FAI Instructions file" };
+    }
+    if (name === "fai-context.json") {
+      return { badge: "🧩", tooltip: "FAI Context — LEGO block wiring" };
+    }
+    if (name === "SKILL.md") {
+      return { badge: "⚙️", tooltip: "FAI Skill definition" };
+    }
+    return undefined;
+  }
+}
+
+// ─── CodeLens for fai-manifest.json ───
+class FaiManifestCodeLensProvider implements vscode.CodeLensProvider {
+  provideCodeLenses(document: vscode.TextDocument): vscode.CodeLens[] {
+    const lenses: vscode.CodeLens[] = [];
+    const topRange = new vscode.Range(0, 0, 0, 0);
+
+    lenses.push(new vscode.CodeLens(topRange, {
+      title: "$(zap) Validate Manifest",
+      command: "frootai.validateManifest",
+      tooltip: "Validate this fai-manifest.json against the FAI Protocol schema",
+    }));
+
+    // Parse to show wiring summary
+    try {
+      const json = JSON.parse(document.getText());
+      const playId = json.play || "unknown";
+      const primCount = Object.values(json.primitives || {}).reduce((a: number, v: any) => a + (Array.isArray(v) ? v.length : 0), 0);
+      const wafCount = (json.context?.waf || []).length;
+      lenses.push(new vscode.CodeLens(topRange, {
+        title: `$(info) Play: ${playId} · ${primCount} primitives · ${wafCount} WAF pillars`,
+        command: "",
+        tooltip: `Manifest for play ${playId}`,
+      }));
+    } catch {
+      lenses.push(new vscode.CodeLens(topRange, {
+        title: "$(warning) Invalid JSON — cannot parse manifest",
+        command: "",
+      }));
+    }
+
+    // Find "primitives" key for a lens on that line
+    for (let i = 0; i < document.lineCount; i++) {
+      const line = document.lineAt(i).text;
+      if (line.includes('"primitives"')) {
+        lenses.push(new vscode.CodeLens(new vscode.Range(i, 0, i, 0), {
+          title: "$(symbol-structure) View Wiring",
+          command: "frootai.openWelcome",
+          tooltip: "Open FrootAI to explore wired primitives",
+        }));
+        break;
+      }
+    }
+
+    return lenses;
   }
 }
 

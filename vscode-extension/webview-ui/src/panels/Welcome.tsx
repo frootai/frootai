@@ -1,6 +1,6 @@
 import { vscode } from "../vscode";
 
-const VERSION = "8.5.3";
+const VERSION = "9.0.0";
 
 const FEATURES = [
   { icon: "🏗️", title: "101 Solution Plays", desc: "Pre-architected AI solutions from Enterprise RAG to Swarm Orchestration", action: "browsePlays" },

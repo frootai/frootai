@@ -51,13 +51,18 @@ The VS Code extension brings this entire ecosystem directly into your editor —
 
 | Feature | Description |
 |---------|-------------|
-| **4 Sidebar Panels** | Solution Plays, Primitives Catalog, FAI Protocol, MCP Tools |
-| **Global Search** | `Ctrl+Shift+F9` — fuzzy search across plays, tools, glossary |
-| **Play Detail Panel** | Rich webview with WAF alignment, quick actions, FAI Protocol |
-| **Evaluation Dashboard** | 5 metric cards with pass/fail visualization |
-| **Scaffold Wizard** | 4-step interactive wizard to bootstrap a play |
-| **MCP Tool Explorer** | Filterable grid of all 45 tools with copy-config |
-| **Getting Started** | 5-step walkthrough for new users |
+| **5 Sidebar Panels** | Solution Plays, Primitives Catalog, FAI Protocol, MCP Tools, Glossary |
+| **Global Search** | `Ctrl+Shift+F9` — real-time search across plays, tools, glossary, modules |
+| **Play Browser** | `Ctrl+Shift+F10` — filterable catalog with categories, complexity badges, pagination |
+| **Welcome Panel** | `Ctrl+Shift+F11` — feature overview, quick start, ecosystem links |
+| **Play Detail Panel** | Rich webview with WAF checklist, Azure services grid, tuning params, cost breakdown |
+| **Evaluation Dashboard** | Trend sparklines, delta badges, summary stats, CSV export |
+| **Scaffold Wizard** | 4-step wizard: pick play → name → preview files → create |
+| **MCP Tool Explorer** | Filterable grid of 45 tools with Try It modal, copy config, install config |
+| **Solution Configurator** | 5-question wizard → personalized play recommendation |
+| **Getting Started** | 5-step walkthrough with rich guides, auto-completion tracking |
+| **File Decorations** | Badges on fai-manifest.json, .agent.md, .instructions.md, SKILL.md in Explorer |
+| **CodeLens** | Inline wiring summary + validate action on fai-manifest.json |
 | **Scaffold in One Click** | Init DevKit, TuneKit, SpecKit (WAF alignment) |
 | **Estimate Azure Costs** | Pick a play + scale = monthly cost breakdown |
 | **Run Evaluations** | Auto-runs eval.py and shows quality dashboard |
@@ -240,15 +245,20 @@ solution-play/
 
 | Command | What |
 |---------|------|
-| `FrootAI: Search Everything` | Global search (plays, tools, glossary) |
-| `FrootAI: Browse All Plays` | Quick pick from all plays |
+| `FrootAI: Search Everything` | Global search across plays, tools, glossary, modules |
+| `FrootAI: Browse All Plays` | Full catalog with categories, search, pagination |
+| `FrootAI: Solution Configurator` | 5-question wizard → personalized recommendation |
+| `FrootAI: Welcome` | Feature overview, quick start, ecosystem links |
 | `FrootAI: Initialize DevKit` | .github Agentic OS files |
 | `FrootAI: Initialize TuneKit` | AI config + evaluation files |
 | `FrootAI: Initialize SpecKit` | Architecture spec + WAF alignment |
 | `FrootAI: Initialize Hooks` | guardrails.json |
 | `FrootAI: Initialize Prompts` | Slash commands |
 | `FrootAI: Setup MCP Server` | npm / pip / Docker / .vscode config |
-| `FrootAI: Quick Cost Estimate` | Azure cost breakdown |
+| `FrootAI: Open MCP Explorer` | 45 tools with Try It modal + copy config |
+| `FrootAI: Open Evaluation` | Trend sparklines, delta badges, CSV export |
+| `FrootAI: Open Scaffold Wizard` | 4-step interactive wizard to bootstrap a play |
+| `FrootAI: Quick Cost Estimate` | Azure cost breakdown by tier |
 | `FrootAI: Run Evaluation` | Auto-run eval.py + dashboard |
 | `FrootAI: Auto-Chain Agents` | Build → Review → Tune workflow |
 | `FrootAI: Validate Config` | Check config/*.json |
