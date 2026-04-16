@@ -15,7 +15,8 @@ const FEATURES = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Documentation", url: "https://frootai.dev", Icon: BookOpen },
+  { label: "frootai.dev", url: "https://frootai.dev", Icon: ExternalLink },
+  { label: "Documentation", url: "https://frootai.dev/learning-hub/quick-start", Icon: BookOpen },
   { label: "GitHub", url: "https://github.com/frootai/frootai", Icon: ExternalLink },
   { label: "npm", url: "https://www.npmjs.com/package/frootai-mcp", Icon: Package },
 ];
@@ -31,10 +32,16 @@ export default function Welcome() {
         <h1 style={{ fontSize: 26, margin: 0, fontWeight: 800, letterSpacing: -0.5 }}>
           Welcome to <span style={{ color: "#fff" }}>Froot</span><span style={{ color: "#10b981" }}>AI</span>
         </h1>
-        <p style={{ opacity: 0.4, fontSize: 12, marginTop: 4 }}>v{VERSION} — The Open Glue for GenAI on Azure</p>
-        <p style={{ fontSize: 13, marginTop: 10, opacity: 0.6, lineHeight: 1.5 }}>
+        <p style={{ color: "#94a3b8", fontSize: 12, marginTop: 6 }}>
+          <em>From the Roots to the Fruits. It's connected, it's simply Frootful.</em>
+        </p>
+        <p style={{ color: "#85859d", fontSize: 11, marginTop: 4 }}>
+          The open glue for GenAI ecosystem · The tooling layer for AI primitives
+        </p>
+        <p style={{ fontSize: 13, marginTop: 10, color: "#c4c4d4", lineHeight: 1.5 }}>
           45 MCP tools · 101 solution plays · 830+ primitives · FAI Protocol
         </p>
+        <p style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>v{VERSION}</p>
       </div>
 
       {/* Feature Grid */}
@@ -53,7 +60,7 @@ export default function Welcome() {
             </div>
             <div>
               <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 3, color: "#e2e8f0" }}>{f.title}</div>
-              <div style={{ fontSize: 11, opacity: 0.5, lineHeight: 1.4 }}>{f.desc}</div>
+              <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.4 }}>{f.desc}</div>
             </div>
           </button>
         ))}
@@ -76,14 +83,14 @@ export default function Welcome() {
       <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
         {QUICK_LINKS.map(l => (
           <button key={l.url} onClick={() => openUrl(l.url)}
-            style={{ background: "none", border: "1px solid var(--border)", color: "inherit", padding: "6px 14px", borderRadius: 8, cursor: "pointer", fontSize: 11, opacity: 0.6, display: "flex", alignItems: "center", gap: 5 }}>
+            style={{ background: "none", border: "1px solid var(--border)", color: "#94a3b8", padding: "6px 14px", borderRadius: 8, cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", gap: 5 }}>
             <l.Icon size={12} /> {l.label} ↗
           </button>
         ))}
       </div>
 
       {/* Footer */}
-      <p style={{ textAlign: "center", fontSize: 10, opacity: 0.3, marginTop: 24, letterSpacing: 0.3 }}>
+      <p style={{ textAlign: "center", fontSize: 10, color: "#64748b", marginTop: 24, letterSpacing: 0.3 }}>
         From the Roots to the Fruits — The industry standard for AI primitive unification
       </p>
     </div>
