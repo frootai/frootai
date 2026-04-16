@@ -229,6 +229,22 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
 
+/* ─── Light Theme ─── */
+body.vscode-light {
+  --surface: #f5f5f8;
+  --elevated: #ffffff;
+  --border: #e0e0e8;
+  --fg: #1a1a2e;
+  --fg-muted: #555570;
+  --fg-dim: #9898ad;
+}
+body.vscode-light .btn-secondary { background: #f0f0f5; color: #1a1a2e; border-color: #d0d0dd; }
+body.vscode-light .btn-secondary:hover { background: #e5e5ee; }
+body.vscode-light .btn-ghost:hover { background: rgba(0, 0, 0, 0.05); }
+body.vscode-light .card:hover { box-shadow: 0 0 16px rgba(16, 185, 129, 0.1), 0 4px 20px rgba(0, 0, 0, 0.08); }
+body.vscode-light ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
+body.vscode-light ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
+
 /* ─── Icon wrapper ─── */
 .icon-box {
   display: flex;

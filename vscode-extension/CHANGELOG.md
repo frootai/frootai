@@ -1,19 +1,57 @@
 # Changelog
 
-## [9.2.0] — 2026-04-16
+## [9.3.0] — 2026-04-16
 
-### Phase 7: Primitives Catalog
-- **Primitives Catalog webview** — rich React panel with 823 primitives across 5 tabs (Agents 238, Skills 322, Instructions 176, Hooks 10, Plugins 77)
-- **Search** — real-time full-text search across id, name, description, keywords
-- **Domain filters** — 10 sub-categories (RAG & Search, Azure Cloud, Security, Multi-Agent, DevOps, Data & ML, Web & Code, Platform & MCP, Infrastructure, All)
-- **WAF pillar filters** — filter agents/plugins by 6 WAF pillars (Reliability, Security, Cost, Ops, Perf, RAI)
-- **Detail view** — full metadata: description, WAF tags, file path, size, install command, GitHub link, website link
-- **One-click install** — agents install via `vscode://github.copilot-chat/createAgent` protocol
-- **Pagination** — 30 items per page with prev/next
-- **Tree upgrade** — "Open Full Catalog" button at top of Primitives sidebar tree
-- **Data bundle** — 275KB of JSON data (agents, skills, instructions, hooks, plugins) bundled with extension
-- **Test suite** — 50 tests (was 34), new tests validate all 5 primitives JSON files
-- **README** — 19 features (was 18), 25 commands (was 24)
+### Phase A-F: Complete UI Overhaul
+
+#### Agent FAI — Embedded AI Chat
+- **Streaming chat panel** — SSE-powered AI chat with full FrootAI ecosystem knowledge
+- **Rich system prompt** — maps all VS Code ecosystem URLs (plays, primitives, MCP, modules)
+- **Typing indicator** — 3-dot bounce animation + streaming cursor
+- **Sticky header** — identity bar with ecosystem tagline pills (Solution Plays, Primitives, Developer Tools, Learning Hub)
+- **Smart link grounding** — VS Code commands for internal nav, ↗ symbol for external links
+- **Inline markdown rendering** — styled tables, headers, code blocks, lists
+- **@fai Chat Participant** — offline knowledge search in Copilot Chat (plays, modules, glossary, tools)
+
+#### Plugin Marketplace
+- **77 FAI plugins** — search, domain category filters, detail view with metadata
+- **One-click install** — plugin installation commands
+- **Unified hero header** — FrootAI logo + branded layout
+
+#### FAI Protocol & Architecture Explainer
+- **4-tab interactive panel** — Protocol, Layer, Engine, Factory
+- **Protocol tab** — fai-manifest.json structure, fai-context.json, 7 schema cards, auto-wiring flow
+- **Layer tab** — FROOT tree (5 layers, 16 modules), WAF 6-pillar grid
+- **Engine tab** — 7 engine modules with pipeline visualization
+- **Factory tab** — distribution channels, 15 GitHub Actions, validation pipeline
+- **Sidebar integration** — 15+ tree items now open native panels instead of external URLs
+
+#### Evaluation Dashboard Enhancement
+- **3-mode dashboard** — empty state guide, demo data, real workspace data
+- **Workspace scanning** — auto-detects eval-config.json, eval-results.json, results/*.json
+- **Setup guide** — file structure reference, template code blocks, Create Config/Results buttons
+- **Live/demo toggle** — switch between real workspace data and demo reference
+- **Workspace status pills** — detection indicators for each eval file
+
+#### Design System Overhaul
+- **Emojis → Lucide icons** — all 8 panel files upgraded to lucide-react SVGs
+- **CSS design system** — brand variables, glow-card with hover lift, gradient buttons, icon-box utilities
+- **Unified hero headers** — FrootAI logo SVG + hero section on all panels
+- **Consistent theming** — all panels (Primitives, Marketplace, MCP, Welcome) match same visual language
+
+#### Bug Fixes (Phase C)
+- **Install Agent** — now uses QuickPick + `vscode://github.copilot-chat/createAgent` protocol (was broken URL)
+- **Install Instruction** — new command for instruction installation
+- **Filter highlight** — subcategory buttons now correctly styled (was inverted)
+- **File decorations** — expanded to 12 types with 2-letter text badges
+- **CodeLens icon** — changed from `$(zap)` to `$(checklist)`
+- **Scaffold auto-select** — `initialPlay` arg auto-jumps to step 2
+- **MCP Run Tool** — connection instructions + copy command button
+
+#### Tests & Polish
+- **60 tests** (was 50) — new tests for Agent FAI, Marketplace, Protocol Explainer, chat participant, file decorations
+- **44 commands** (was ~30), 5 sidebar views, 1 chat participant, 3 keybindings
+- **11 React panels** — playDetail, evaluation, scaffold, mcpExplorer, playBrowser, configurator, welcome, primitivesCatalog, marketplace, agentFai, protocolExplainer
 
 ## [9.1.0] — 2026-04-16
 

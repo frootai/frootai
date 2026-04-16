@@ -21,7 +21,7 @@ function renderMarkdown(md: string): string {
   let html = md
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     // Code blocks — dark with emerald syntax
-    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:#0d1117;border:1px solid #10b98120;padding:12px 14px;border-radius:10px;overflow-x:auto;font-size:11px;margin:10px 0;line-height:1.6;font-family:monospace"><code style="color:#10b981">$2</code></pre>')
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:var(--surface);border:1px solid #10b98120;padding:12px 14px;border-radius:10px;overflow-x:auto;font-size:11px;margin:10px 0;line-height:1.6;font-family:monospace"><code style="color:#10b981">$2</code></pre>')
     // Inline code
     .replace(/`([^`]+)`/g, '<code style="background:#10b98110;color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;font-family:monospace">$1</code>')
     // Headers — emerald h2, amber h3, white h4
@@ -41,7 +41,7 @@ function renderMarkdown(md: string): string {
     // Unordered lists
     .replace(/^- (.+)$/gm, '<div style="padding-left:4px;margin:4px 0;font-size:12px;display:flex;gap:8px;line-height:1.5"><span style="color:#10b981">•</span><span>$1</span></div>')
     // HR
-    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #1a1a2e;margin:16px 0">')
+    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:16px 0">')
     // Links — VS Code ecosystem (data-fai attributes for event delegation)
     .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d430;cursor:pointer;transition:color 0.2s">$1</a>')
     .replace(/\[([^\]]+)\]\(\/user-guide\?play=(\d{2})\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf630;cursor:pointer">$1</a>')
@@ -69,10 +69,10 @@ function renderMarkdown(md: string): string {
       const tag = idx === 0 ? 'th' : 'td';
       const style = idx === 0
         ? 'style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#10b981;background:#10b98108"'
-        : 'style="padding:7px 10px;border-top:1px solid #1a1a2e;font-size:12px;line-height:1.5"';
+        : 'style="padding:7px 10px;border-top:1px solid var(--border);font-size:12px;line-height:1.5"';
       return `<tr style="${idx > 0 ? 'transition:background 0.15s' : ''}" ${idx > 0 ? 'onmouseenter="this.style.background=\'#ffffff06\'" onmouseleave="this.style.background=\'none\'"' : ''}>${cells.map(c => `<${tag} ${style}>${c}</${tag}>`).join('')}</tr>`;
     }).join('');
-    return `<div style="overflow-x:auto;margin:10px 0;border:1px solid #1a1a2e;border-radius:10px;background:#0a0a12"><table style="width:100%;border-collapse:collapse">${tableRows}</table></div>`;
+    return `<div style="overflow-x:auto;margin:10px 0;border:1px solid var(--border);border-radius:10px;background:var(--surface)"><table style="width:100%;border-collapse:collapse">${tableRows}</table></div>`;
   });
 
   return `<div style="line-height:1.65;font-size:13px"><p style="margin:6px 0">${html}</p></div>`;
@@ -238,7 +238,7 @@ export default function AgentFai() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", padding: 0 }}>
       {/* Sticky Header — always visible identity */}
-      <div style={{ padding: "12px 16px", borderBottom: "1px solid #1a1a2e", background: "#0a0a12", position: "sticky", top: 0, zIndex: 10 }}>
+      <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)", background: "var(--surface)", position: "sticky", top: 0, zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, #10b98115, #06b6d415)", border: "1px solid #10b98125", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -252,7 +252,7 @@ export default function AgentFai() {
           </div>
           {messages.length > 0 && (
             <button onClick={() => setMessages([])} title="New conversation"
-              style={{ background: "none", border: "1px solid #1a1a2e", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#64748b", fontSize: 11 }}>
+              style={{ background: "none", border: "1px solid var(--border)", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "var(--fg-muted)", fontSize: 11 }}>
               New chat
             </button>
           )}
@@ -302,8 +302,8 @@ export default function AgentFai() {
           <div key={i} style={{ marginBottom: 14, display: "flex", flexDirection: "column", alignItems: m.role === "user" ? "flex-end" : "flex-start" }}>
             <div style={{
               maxWidth: "90%", padding: m.role === "user" ? "8px 14px" : "12px 16px", borderRadius: m.role === "user" ? "12px 12px 4px 12px" : "12px 12px 12px 4px", fontSize: 13, lineHeight: 1.65,
-              background: m.role === "user" ? "#10b98118" : "#0d1117",
-              border: `1px solid ${m.role === "user" ? "#10b98125" : "#1a1a2e"}`,
+              background: m.role === "user" ? "#10b98118" : "var(--surface)",
+              border: `1px solid ${m.role === "user" ? "#10b98125" : "var(--border)"}`,
             }}>
               {m.role === "user"
                 ? <span style={{ color: "#e2e8f0" }}>{m.text}</span>
@@ -318,7 +318,7 @@ export default function AgentFai() {
       </div>
 
       {/* Input */}
-      <div style={{ padding: "10px 16px 14px", borderTop: "1px solid #1a1a2e", background: "#0a0a12", display: "flex", gap: 8 }}>
+      <div style={{ padding: "10px 16px 14px", borderTop: "1px solid var(--border)", background: "var(--surface)", display: "flex", gap: 8 }}>
         <input
           className="input"
           value={input}
@@ -326,7 +326,7 @@ export default function AgentFai() {
           onKeyDown={e => e.key === "Enter" && send(input)}
           placeholder="Ask Agent FAI anything..."
           disabled={loading}
-          style={{ flex: 1, background: "#151520", border: "1px solid #1a1a2e", borderRadius: 8, padding: "8px 12px", fontSize: 13 }}
+          style={{ flex: 1, background: "var(--elevated)", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 12px", fontSize: 13 }}
         />
         <button onClick={() => send(input)} disabled={loading || !input.trim()}
           style={{ background: loading ? "#333" : "linear-gradient(135deg, #10b981, #06b6d4)", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: !input.trim() ? 0.4 : 1 }}>

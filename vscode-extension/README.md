@@ -47,29 +47,29 @@ FrootAI is an intelligent way of packaging skills, knowledge, and the essential 
 
 ## What You Get
 
-The VS Code extension brings this entire ecosystem directly into your editor — no browser needed.
+The VS Code extension brings the entire FrootAI ecosystem directly into your editor — no browser needed.
 
 | Feature | Description |
 |---------|-------------|
 | **5 Sidebar Panels** | Solution Plays, Primitives Catalog, FAI Protocol, MCP Tools, Glossary |
-| **Global Search** | `Ctrl+Shift+F9` — real-time search across plays, tools, glossary, modules |
+| **Agent FAI Chat** | Streaming AI chat with full ecosystem knowledge — ask anything about FrootAI |
+| **@fai Chat Participant** | `@fai` in Copilot Chat — offline knowledge search across plays, modules, glossary |
+| **Plugin Marketplace** | Browse 77 FAI plugins with search, domain filters, detail view, one-click install |
+| **FAI Protocol Explainer** | Interactive 4-tab panel: Protocol, Layer, Engine, Factory — native architecture docs |
 | **Play Browser** | `Ctrl+Shift+F10` — filterable catalog with categories, complexity badges, pagination |
+| **Solution Configurator** | 5-question wizard → personalized play recommendation |
 | **Welcome Panel** | `Ctrl+Shift+F11` — feature overview, quick start, ecosystem links |
 | **Play Detail Panel** | Rich webview with WAF checklist, Azure services grid, tuning params, cost breakdown |
-| **Evaluation Dashboard** | Trend sparklines, delta badges, summary stats, CSV export |
+| **Evaluation Dashboard** | 3 modes: empty state guide, demo data, real workspace data with trend sparklines |
 | **Scaffold Wizard** | 4-step wizard: pick play → name → preview files → create |
 | **MCP Tool Explorer** | Filterable grid of 45 tools with Try It modal, copy config, install config |
-| **Solution Configurator** | 5-question wizard → personalized play recommendation |
-| **Getting Started** | 5-step walkthrough with rich guides, auto-completion tracking |
-| **File Decorations** | Badges on fai-manifest.json, .agent.md, .instructions.md, SKILL.md in Explorer |
+| **Primitives Catalog** | Rich catalog: 830+ primitives across 5 tabs, search, WAF/domain filters, install |
+| **Global Search** | `Ctrl+Shift+F9` — real-time search across plays, tools, glossary, modules |
+| **File Decorations** | 12 badge types on FAI files (AG, SK, IN, HK, PR, WF, TK, IaC, EV, PL, MN, CT) |
 | **CodeLens** | Inline wiring summary + validate action on fai-manifest.json |
-| **Primitives Catalog** | Rich webview: 823 primitives across 5 tabs, search, WAF/domain filters, detail view, install |
-| **Workspace Detection** | Auto-detects fai-manifest.json → status bar shows active play with click-to-detail |
-| **Manifest Diagnostics** | Real-time validation — errors/warnings for missing fields, invalid WAF, bad references |
+| **Workspace Detection** | Auto-detects fai-manifest.json → status bar shows active play |
+| **Manifest Diagnostics** | Real-time validation — errors/warnings in Problems panel |
 | **Context Menus** | Right-click fai-manifest.json → Validate / Open Play Detail |
-| **Scaffold in One Click** | Init DevKit, TuneKit, SpecKit (WAF alignment) |
-| **Estimate Azure Costs** | Pick a play + scale = monthly cost breakdown |
-| **Run Evaluations** | Auto-runs eval.py and shows quality dashboard |
 
 > **Works standalone** — no need to clone the FrootAI repo. Install the extension and go.
 
@@ -253,27 +253,30 @@ solution-play/
 | `FrootAI: Browse All Plays` | Full catalog with categories, search, pagination |
 | `FrootAI: Solution Configurator` | 5-question wizard → personalized recommendation |
 | `FrootAI: Welcome` | Feature overview, quick start, ecosystem links |
+| `FrootAI: Agent FAI` | Streaming AI chat — ask anything about FrootAI |
+| `FrootAI: Plugin Marketplace` | Browse 77 FAI plugins with search and filters |
+| `FrootAI: FAI Protocol & Architecture` | Interactive 4-tab architecture explainer |
+| `FrootAI: Open Primitives Catalog` | 830+ primitives: agents, skills, instructions, hooks, plugins |
+| `FrootAI: Open MCP Explorer` | 45 tools with Try It modal + copy config |
+| `FrootAI: Open Evaluation` | 3-mode dashboard: empty guide, demo, real workspace data |
+| `FrootAI: Open Scaffold Wizard` | 4-step interactive wizard to bootstrap a play |
 | `FrootAI: Initialize DevKit` | .github Agentic OS files |
 | `FrootAI: Initialize TuneKit` | AI config + evaluation files |
 | `FrootAI: Initialize SpecKit` | Architecture spec + WAF alignment |
 | `FrootAI: Initialize Hooks` | guardrails.json |
 | `FrootAI: Initialize Prompts` | Slash commands |
+| `FrootAI: Install Agent` | Install FAI agent via QuickPick + createAgent protocol |
+| `FrootAI: Install Instruction` | Install FAI instruction via QuickPick |
 | `FrootAI: Setup MCP Server` | npm / pip / Docker / .vscode config |
-| `FrootAI: Open MCP Explorer` | 45 tools with Try It modal + copy config |
-| `FrootAI: Open Evaluation` | Trend sparklines, delta badges, CSV export |
-| `FrootAI: Open Scaffold Wizard` | 4-step interactive wizard to bootstrap a play |
 | `FrootAI: Quick Cost Estimate` | Azure cost breakdown by tier |
 | `FrootAI: Run Evaluation` | Auto-run eval.py + dashboard |
 | `FrootAI: Auto-Chain Agents` | Build → Review → Tune workflow |
 | `FrootAI: Validate Config` | Check config/*.json |
-| `FrootAI: Open Primitives Catalog` | Rich catalog: 823 primitives, search, WAF & domain filters, install |
 | `FrootAI: Validate Manifest` | Schema-validate fai-manifest.json with diagnostics |
-| `FrootAI: Open Play from Manifest` | Detect play ID in fai-manifest.json → open detail |
-| `FrootAI: Open Detected Play` | Open detail for workspace-detected play |
+| `FrootAI: Open Play from Manifest` | Detect play ID → open detail |
 | `FrootAI: Look Up AI Term` | AI glossary search |
 | `FrootAI: Search Knowledge Base` | Full-text search across modules |
 | `FrootAI: Architecture Patterns` | Decision guides |
-| `FrootAI: Install Plugin` | Community plugin installer |
 
 </details>
 

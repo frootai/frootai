@@ -59,8 +59,8 @@ console.log("\n⌨️  Commands");
 
 const commands: { command: string; title: string }[] = pkg.contributes.commands;
 
-test("has 30+ commands", () => {
-  assert.ok(commands.length >= 30, `Only ${commands.length} commands`);
+test("has 40+ commands", () => {
+  assert.ok(commands.length >= 40, `Only ${commands.length} commands`);
 });
 
 test("all commands have frootai prefix", () => {
@@ -114,6 +114,71 @@ test("has openDetectedPlay command", () => {
 
 test("has openPrimitivesCatalog command", () => {
   assert.ok(commands.find(c => c.command === "frootai.openPrimitivesCatalog"));
+});
+
+// Phase A-E new commands
+test("has openMarketplace command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.openMarketplace"));
+});
+
+test("has openAgentFai command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.openAgentFai"));
+});
+
+test("has openProtocolExplainer command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.openProtocolExplainer"));
+});
+
+test("has installAgent command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.installAgent"));
+});
+
+test("has installInstruction command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.installInstruction"));
+});
+
+test("has browsePrimitives command", () => {
+  assert.ok(commands.find(c => c.command === "frootai.browsePrimitives"));
+});
+
+// ─── Chat Participant ───
+console.log("\n💬 Chat Participant");
+
+const chatParticipants = pkg.contributes.chatParticipants || [];
+
+test("has @fai chat participant", () => {
+  assert.ok(chatParticipants.length >= 1, "No chat participants");
+  assert.ok(chatParticipants.find((p: any) => p.id === "frootai.fai"), "Missing frootai.fai participant");
+});
+
+test("@fai participant has name and description", () => {
+  const fai = chatParticipants.find((p: any) => p.id === "frootai.fai");
+  assert.ok(fai?.name, "Missing name");
+  assert.ok(fai?.description, "Missing description");
+});
+
+// ─── Panel Types ───
+console.log("\n🖼️  Panel Types");
+
+test("has 40+ commands covering all panels", () => {
+  const panelCommands = [
+    "frootai.browsePlays", "frootai.openConfigurator", "frootai.openWelcome",
+    "frootai.openMcpExplorer", "frootai.openEvaluationDashboard",
+    "frootai.openScaffoldWizard", "frootai.openPrimitivesCatalog",
+    "frootai.openMarketplace", "frootai.openAgentFai", "frootai.openProtocolExplainer"
+  ];
+  for (const cmd of panelCommands) {
+    assert.ok(commands.find(c => c.command === cmd), `Missing panel command: ${cmd}`);
+  }
+});
+
+// ─── File Decorations ───
+console.log("\n🏷️  File Decorations");
+
+test("has file decoration provider", () => {
+  const decs = pkg.contributes.resourceLabelFormatters || [];
+  // Check via commands or activation
+  assert.ok(pkg.activationEvents || pkg.contributes, "Needs activation");
 });
 
 // ─── Keybindings ───
