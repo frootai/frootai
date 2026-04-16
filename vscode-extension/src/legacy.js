@@ -568,9 +568,6 @@ class SolutionPlayProvider {
     const items = [
       { label: "Solution Configurator", desc: "Find the right play for your needs", icon: "settings-gear", color: "charts.yellow", cmd: "frootai.openConfigurator" },
       { label: "Browse All Plays", desc: "Search, filter, compare 101 plays", icon: "layout", color: "charts.green", cmd: "frootai.browsePlays" },
-      { label: "Primitives Catalog", desc: "823 agents, skills, instructions, hooks", icon: "extensions", color: "charts.blue", cmd: "frootai.openPrimitivesCatalog" },
-      { label: "MCP Tools Explorer", desc: "45 tools for AI agents", icon: "tools", color: "charts.purple", cmd: "frootai.openMcpExplorer" },
-      { label: "Welcome & Quick Start", desc: "Get started with FrootAI", icon: "home", color: "charts.orange", cmd: "frootai.openWelcome" },
     ];
     return items.map(l => {
       const item = new vscode.TreeItem(l.label, vscode.TreeItemCollapsibleState.None);
@@ -864,7 +861,14 @@ class McpToolProvider {
       { label: "Marketplace (13)", type: "marketplace", icon: "extensions", desc: "Plugin install, compose, publish" },
     ];
     if (!element) {
-      return groups.map(g => {
+      // MCP Explorer launcher at top
+      const explorer = new vscode.TreeItem("Open MCP Explorer", vscode.TreeItemCollapsibleState.None);
+      explorer.description = "Interactive tool browser";
+      explorer.iconPath = new vscode.ThemeIcon("tools", new vscode.ThemeColor("charts.purple"));
+      explorer.command = { command: "frootai.openMcpExplorer", title: "Open MCP Explorer" };
+      explorer.contextValue = "launcher";
+
+      const groupItems = groups.map(g => {
         const item = new vscode.TreeItem(g.label, vscode.TreeItemCollapsibleState.Collapsed);
         item.description = g.desc;
         item.iconPath = new vscode.ThemeIcon(g.icon);
@@ -872,6 +876,7 @@ class McpToolProvider {
         item._groupType = g.type;
         return item;
       });
+      return [explorer, ...groupItems];
     }
     const groupType = element._groupType;
     if (groupType) {
@@ -920,6 +925,27 @@ class GlossaryProvider {
   }
 }
 
+// ─── Welcome Tree Provider ──────────────────────────────────────────
+class WelcomeTreeProvider {
+  getTreeItem(element) { return element; }
+  getChildren() {
+    const items = [
+      { label: "Get Started", desc: "Welcome panel + quick start guide", icon: "home", color: "charts.orange", cmd: "frootai.openWelcome" },
+      { label: "Setup Guide", desc: "Install MCP, scaffold, deploy", icon: "book", color: "charts.green", cmd: "frootai.openSetupGuide" },
+      { label: "Scaffold a Project", desc: "4-step wizard to create a play project", icon: "file-add", color: "charts.blue", cmd: "frootai.openScaffoldWizard" },
+      { label: "Search Everything", desc: "Plays, tools, glossary — Ctrl+Shift+F9", icon: "search", color: "charts.yellow", cmd: "frootai.searchAll" },
+    ];
+    return items.map(l => {
+      const item = new vscode.TreeItem(l.label, vscode.TreeItemCollapsibleState.None);
+      item.description = l.desc;
+      item.iconPath = new vscode.ThemeIcon(l.icon, new vscode.ThemeColor(l.color));
+      item.command = { command: l.cmd, title: l.label };
+      item.contextValue = "welcomeItem";
+      return item;
+    });
+  }
+}
+
 // ─── Activate ──────────────────────────────────────────────────────
 
 function activate(context) {
@@ -944,12 +970,22 @@ function activate(context) {
   // Optional: find local repo if available (enhances but not required)
   const root = findFrootAIRoot();
 
-  // Register tree views (4 panels)
+  // Register tree views (5 panels)
   const playProvider = new SolutionPlayProvider(context);
+  vscode.window.registerTreeDataProvider("frootai.welcome", new WelcomeTreeProvider());
   vscode.window.registerTreeDataProvider("frootai.solutionPlays", playProvider);
   vscode.window.registerTreeDataProvider("frootai.primitivesCatalog", new PrimitivesCatalogProvider());
   vscode.window.registerTreeDataProvider("frootai.faiProtocol", new FaiProtocolProvider());
   vscode.window.registerTreeDataProvider("frootai.mcpTools", new McpToolProvider());
+
+  // Auto-show Welcome when sidebar first becomes visible
+  const welcomeView = vscode.window.createTreeView("frootai.welcome", { treeDataProvider: new WelcomeTreeProvider() });
+  welcomeView.onDidChangeVisibility(e => {
+    if (e.visible && !context.globalState.get("frootai.welcomeShownThisSession")) {
+      context.globalState.update("frootai.welcomeShownThisSession", true);
+      vscode.commands.executeCommand("frootai.openWelcome");
+    }
+  });
 
   // ── Filter/Search Plays command ──
   context.subscriptions.push(

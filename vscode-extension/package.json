@@ -66,6 +66,10 @@
     "views": {
       "frootai-sidebar": [
         {
+          "id": "frootai.welcome",
+          "name": "Welcome to FAI"
+        },
+        {
           "id": "frootai.solutionPlays",
           "name": "FAI Solution Plays (101)"
         },
