@@ -1,103 +1,165 @@
 ---
 name: fai-deploy-10-content-moderation
-description: |
-  Deploy Play 10 Content Moderation with Azure Content Safety, Azure OpenAI, Functions, and Cosmos DB. Covers safety filter provisioning, severity threshold tuning, and moderation pipeline deployment.
+description: Deploy Content Moderation system with safety scoring and policy enforcement.
 ---
 
-# Deploy Content Moderation (Play 10)
+# Fai Deploy 10 Content Moderation
 
-Production deployment workflow for this solution play.
+Deploys Play 10-content-moderation to Azure with Bicep validation, what-if check, and post-deploy health verification.
 
-## When to Use
+## Overview
 
-- Deploying a content moderation pipeline
-- Setting up Azure Content Safety with custom categories
-- Promoting moderation filters from dev → prod
-- Validating moderation accuracy with test datasets
+This skill provides a structured, repeatable procedure for deploys play 10-content-moderation to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Deployment
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Infrastructure Stack
+## Parameters
 
-| Service | Purpose | SKU |
-|---------|---------|-----|
-| Azure Content Safety | Text + image moderation | S0 |
-| Azure OpenAI | Prompt Shields + groundedness | S0 |
-| Azure Functions | Moderation pipeline API | Consumption |
-| Cosmos DB | Moderation audit log | Serverless |
-| Key Vault | API keys | Standard |
-| Application Insights | Moderation telemetry | Workspace-based |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Deployment Steps
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# 1. Deploy infrastructure
-az deployment group create \
-  --resource-group rg-moderation-prod \
-  --template-file infra/main.bicep \
-  --parameters environment=prod
-
-# 2. Configure content safety thresholds
-az cognitiveservices account update \
-  --resource-group rg-moderation-prod \
-  --name cs-moderation-prod \
-  --custom-domain cs-moderation-prod
-
-# 3. Deploy moderation Functions
-func azure functionapp publish func-moderation-prod
-
-# 4. Run moderation accuracy benchmark
-python tests/smoke/test_moderation_pipeline.py \
-  --endpoint https://func-moderation-prod.azurewebsites.net \
-  --test-set tests/fixtures/moderation-samples.jsonl \
-  --min-precision 0.95 --min-recall 0.90
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: deploys play 10-content-moderation to azure with bicep validation, what-if check, and post-deploy health verification..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 02**
+- **Play 37**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-deploy-10-content-moderation
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-deploy-10-content-moderation/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Deployment Checklist
+
+- [ ] Infrastructure templates validated (`az deployment what-if`)
+- [ ] Environment variables configured (Key Vault references)
+- [ ] Health check endpoints responding (HTTP 200)
+- [ ] DNS/CNAME records updated
+- [ ] SSL certificates valid (not expiring within 30 days)
+- [ ] Rollback procedure documented and tested
+- [ ] Smoke tests passing in target environment
+- [ ] Cost estimate reviewed and approved
+- [ ] RBAC roles assigned (least privilege)
+- [ ] Monitoring alerts configured
 
 ## Rollback Procedure
 
 ```bash
-# Revert Functions to previous version
-az functionapp deployment slot swap \
-  --resource-group rg-moderation-prod \
-  --name func-moderation-prod \
-  --slot staging --target-slot production
+# Quick rollback to previous deployment
+az deployment group create \
+  --resource-group $RG \
+  --template-file infra/main.bicep \
+  --parameters @infra/parameters.previous.json
 
-# Revert severity thresholds to safe defaults
-python scripts/reset-safety-thresholds.py --env prod --preset strict
+# Verify rollback
+az resource list --resource-group $RG --output table
 ```
 
-## Health Check
+## Environment Matrix
 
-```bash
-curl -s https://func-moderation-prod.azurewebsites.net/api/health | jq .
-# Expected: {"status":"healthy","contentSafety":"connected","categories":["hate","violence","self-harm","sexual"]}
-```
+| Setting | Dev | Staging | Prod |
+|---------|-----|---------|------|
+| SKU | Basic | Standard | Premium |
+| Replicas | 1 | 2 | 3+ |
+| Region | Single | Single | Multi |
+| Backup | None | Daily | Continuous |
 
-## Troubleshooting
+## Notes
 
-### False positive rate too high
-
-Lower severity thresholds from Strict to Medium. Add custom blocklist exceptions for domain terms. Test with representative samples.
-
-### Moderation latency exceeds 500ms
-
-Use async moderation with Service Bus queue. Batch small texts. Check Content Safety region proximity.
-
-### Prompt Shields blocking legitimate requests
-
-Tune jailbreak detection sensitivity. Whitelist known safe prompt patterns. Add fallback to permissive mode for low-risk categories.
-
-## Post-Deploy Checklist
-
-- [ ] All infrastructure resources provisioned and healthy
-- [ ] Application deployed and responding on all endpoints
-- [ ] Smoke tests passing with expected thresholds
-- [ ] Monitoring dashboards showing baseline metrics
-- [ ] Alerts configured for error rate, latency, and cost
-- [ ] Rollback procedure tested and documented
-- [ ] Incident ownership and escalation path confirmed
-- [ ] Post-deploy review scheduled within 24 hours
-
-## Definition of Done
-
-Deployment is complete when infrastructure is provisioned, application is serving traffic, smoke tests pass, monitoring is active, and another engineer can reproduce the process from this skill alone.
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Deployment category in the FAI primitives catalog

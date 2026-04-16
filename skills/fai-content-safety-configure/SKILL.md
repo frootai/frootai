@@ -1,6 +1,6 @@
 ---
-name: fai-content-safety-configure
-description: "Configure Azure Content Safety API with custom categories and thresholds"
+name: content-safety-configure
+description: "Configure Azure Content Safety thresholds, blocklists, and prompt shields for AI apps - block unsafe inputs, detect jailbreaks, and monitor moderation drift"
 ---
 
 # Content Safety Configure
@@ -48,7 +48,7 @@ output endpoint string = contentSafety.properties.endpoint
 
 ## Step 2: config/content-safety.json
 
-Define severity thresholds (0-6, where 0 = block nothing, 2 = block medium+):
+Define severity thresholds (0-6, where higher values are more severe and `0` means "do not block on that category"):
 
 ```json
 {
@@ -56,8 +56,8 @@ Define severity thresholds (0-6, where 0 = block nothing, 2 = block medium+):
   "thresholds": {
     "Hate": 2,
     "Violence": 2,
-    "Sexual": 0,
-    "SelfHarm": 0
+    "Sexual": 4,
+    "SelfHarm": 2
   },
   "promptShields": {
     "enabled": true,
@@ -73,7 +73,7 @@ Define severity thresholds (0-6, where 0 = block nothing, 2 = block medium+):
 }
 ```
 
-Thresholds map: 0 = allow all, 2 = block medium/high, 4 = block high only, 6 = block nothing.
+Threshold guidance: `0` disables blocking for that category, `2` blocks medium and above, `4` blocks high only, and `6` blocks only the most severe cases. Start stricter in production than in test environments and review false positives weekly.
 
 ## Step 3: Python SDK Setup & Client
 

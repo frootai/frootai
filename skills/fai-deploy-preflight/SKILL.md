@@ -1,6 +1,6 @@
 ---
 name: fai-deploy-preflight
-description: 'Validates Bicep templates, checks Azure resource availability, verifies quota, and runs what-if deployment before any Azure infrastructure changes. A safety gate for all FAI play deployments.'
+description: Run preflight checks before deploying solution play infrastructure.
 ---
 
 # FAI Deploy Preflight
@@ -105,3 +105,4 @@ Add the preflight step before any Azure deployment in your pipeline:
 | PF006 | Security check failed | Enable private endpoints and managed identity |
 | PF007 | Region not available | Choose different Azure region |
 | PF008 | API version mismatch | Update Bicep to latest provider versions |
+

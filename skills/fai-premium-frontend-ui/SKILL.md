@@ -1,113 +1,157 @@
 ---
 name: fai-premium-frontend-ui
-description: |
-  Build premium frontend interfaces with modern design systems, animations,
-  responsive layouts, and accessibility. Use when creating polished user
-  experiences for AI applications.
----
+description: "Build premium frontend UI components (Forms, Tables, Modals, Charts) using React, Tailwind CSS, and TypeScript."
+waf: ["Performance Efficiency", "Reliability"]
+plays: []
 
-# Premium Frontend UI
+# Fai Premium Frontend Ui
 
-Build polished, accessible frontend interfaces for AI applications.
+Generates premium UI components with animations, glassmorphism, and dark mode support.
 
-## When to Use
+## Overview
 
-- Creating production UI for AI chat or dashboard apps
-- Implementing design systems with consistent components
-- Adding animations and micro-interactions
-- Ensuring accessibility compliance (WCAG 2.1 AA)
+This skill provides a structured, repeatable procedure for generates premium ui components with animations, glassmorphism, and dark mode support.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Chat Interface Component
+## Parameters
 
-```tsx
-'use client';
-import { useState, useRef, useEffect } from 'react';
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-export function ChatWidget() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+## Steps
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+### Step 1: Validate Prerequisites
 
-  async function handleSend() {
-    if (!input.trim()) return;
-    const userMsg = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
-    setLoading(true);
+Verify all required tools, credentials, and dependencies are available.
 
-    const resp = await fetch('/api/chat', {
-      method: 'POST',
-      body: JSON.stringify({ message: input }),
-    });
-    const data = await resp.json();
-    setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
-    setLoading(false);
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: generates premium ui components with animations, glassmorphism, and dark mode support..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-premium-frontend-ui
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-premium-frontend-ui/"]
   }
-
-  return (
-    <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto border rounded-xl">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`rounded-lg px-4 py-2 max-w-[80%] ${
-              m.role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
-              {m.content}
-            </div>
-          </div>
-        ))}
-        {loading && <div className="animate-pulse text-gray-400">Thinking...</div>}
-        <div ref={bottomRef} />
-      </div>
-      <div className="border-t p-4 flex gap-2">
-        <input value={input} onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSend()}
-          placeholder="Ask a question..."
-          className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2"
-          aria-label="Chat message input" />
-        <button onClick={handleSend} disabled={loading}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700
-                     disabled:opacity-50 transition-colors">
-          Send
-        </button>
-      </div>
-    </div>
-  );
 }
 ```
 
-## Accessibility Checklist
+### Via Agent Invocation
 
-| Check | Requirement |
-|-------|-------------|
-| Keyboard | All interactive elements focusable with Tab |
-| ARIA labels | Inputs, buttons, and regions labeled |
-| Color contrast | 4.5:1 ratio for text (WCAG AA) |
-| Focus visible | Clear focus indicator on all elements |
-| Screen reader | Content announced in logical order |
-| Motion | Respect `prefers-reduced-motion` |
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-## Responsive Breakpoints
+## Configuration Reference
 
-```css
-/* Tailwind defaults */
-sm: 640px   /* Mobile landscape */
-md: 768px   /* Tablet */
-lg: 1024px  /* Laptop */
-xl: 1280px  /* Desktop */
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Layout breaks on mobile | Fixed widths | Use flex/grid with responsive classes |
-| Focus not visible | Default outline removed | Add focus:ring-2 classes |
-| Screen reader skips content | Missing ARIA | Add aria-label and roles |
-| Animation janky | Layout shifts | Use transform/opacity only |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

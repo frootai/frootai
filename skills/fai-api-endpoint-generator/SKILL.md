@@ -1,146 +1,180 @@
 ---
 name: fai-api-endpoint-generator
-description: |
-  Scaffold production API endpoints with input validation, structured errors, idempotency,
-  auth policies, and observability. Supports FastAPI, ASP.NET Minimal API, and Express.
+description: Generate typed REST API endpoints with Zod/Pydantic input validation, RFC 7807 error responses, OpenAPI annotation, and Managed Identity auth — eliminating schema drift and IDOR vulnerabilities.
 ---
 
-# API Endpoint Generator
+# FAI API Endpoint Generator
 
-Scaffold secure, production-ready API endpoints with validation, error contracts, and observability.
+Builds production-ready REST API endpoints that combine strict schema validation, standardised error envelopes, and OpenAPI documentation in a single pass. Prevents the three most common API issues in AI services: missing input bounds (which enable prompt injection), inconsistent error surfaces, and docs that lag behind code.
 
-## When to Use
+## When to Invoke
 
-- Creating new API endpoints for a service
-- Standardizing error responses across an API surface
-- Adding idempotency to mutation endpoints
-- Wiring auth policies and rate limiting
+| Signal | Example |
+|--------|---------|
+| Building a new AI service route | POST /completions, GET /documents/{id} |
+| Existing endpoint lacks validation | No Pydantic model or Zod schema present |
+| Error responses are inconsistent | Mix of plain strings and JSON objects |
+| OpenAPI spec is missing or stale | Swagger shows wrong request shape |
 
----
+## Workflow
 
-## Pattern 1: FastAPI with Validation and Structured Errors
+### Step 1 — Define the Contract
 
-```python
-from fastapi import FastAPI, HTTPException, Request, Depends
-from pydantic import BaseModel, Field
-from typing import Optional
-import uuid, time
-
-app = FastAPI()
-
-class CreateItemRequest(BaseModel):
-    name: str = Field(..., min_length=1, max_length=200)
-    category: str = Field(..., pattern=r"^[a-z-]+$")
-    metadata: Optional[dict] = None
-
-class ProblemDetail(BaseModel):
-    type: str
-    title: str
-    status: int
-    detail: str
-    instance: Optional[str] = None
-
-@app.exception_handler(HTTPException)
-async def problem_details_handler(request: Request, exc: HTTPException):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content=ProblemDetail(
-            type=f"/errors/{exc.status_code}",
-            title=exc.detail,
-            status=exc.status_code,
-            detail=exc.detail,
-            instance=str(request.url),
-        ).model_dump(),
-    )
-
-@app.post("/items", status_code=201)
-async def create_item(
-    req: CreateItemRequest,
-    idempotency_key: str = Header(..., alias="Idempotency-Key"),
-):
-    # Check idempotency cache
-    cached = await cache.get(f"idem:{idempotency_key}")
-    if cached:
-        return cached
-
-    item = {"id": str(uuid.uuid4()), **req.model_dump()}
-    await db.insert(item)
-    await cache.set(f"idem:{idempotency_key}", item, ttl=86400)
-    return item
-```
-
-## Pattern 2: ASP.NET Minimal API
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddProblemDetails();
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("per-user", opt =>
-    {
-        opt.PermitLimit = 100;
-        opt.Window = TimeSpan.FromMinutes(1);
-    });
-});
-
-var app = builder.Build();
-
-app.MapPost("/items", async (CreateItemRequest req, IValidator<CreateItemRequest> validator) =>
-{
-    var result = await validator.ValidateAsync(req);
-    if (!result.IsValid)
-        return Results.ValidationProblem(result.ToDictionary());
-
-    var item = new Item { Id = Guid.NewGuid(), Name = req.Name };
-    await db.InsertAsync(item);
-    return Results.Created($"/items/{item.Id}", item);
-})
-.RequireAuthorization("api-user")
-.RequireRateLimiting("per-user");
-```
-
-## Pattern 3: Express with Zod Validation
+Before writing any code, capture the request shape, success payload, and failure modes.
 
 ```typescript
-import express from 'express';
-import { z } from 'zod';
+// TypeScript — Zod contract first
+import { z } from "zod";
 
-const CreateItemSchema = z.object({
-  name: z.string().min(1).max(200),
-  category: z.string().regex(/^[a-z-]+$/),
+export const CompletionRequestSchema = z.object({
+  prompt:      z.string().min(1).max(4000),
+  model:       z.enum(["gpt-4o", "gpt-4o-mini"]).default("gpt-4o-mini"),
+  max_tokens:  z.number().int().min(1).max(2000).default(512),
+  temperature: z.number().min(0).max(2).default(0.7),
+  stream:      z.boolean().default(false),
 });
 
-app.post('/items', async (req, res) => {
-  const parsed = CreateItemSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res.status(400).json({
-      type: '/errors/validation',
-      title: 'Validation failed',
-      status: 400,
-      errors: parsed.error.flatten().fieldErrors,
-    });
+export type CompletionRequest = z.infer<typeof CompletionRequestSchema>;
+```
+
+```python
+# Python — Pydantic contract first
+from pydantic import BaseModel, Field
+from typing import Literal
+
+class CompletionRequest(BaseModel):
+    prompt:      str  = Field(min_length=1, max_length=4000)
+    model:       Literal["gpt-4o", "gpt-4o-mini"] = "gpt-4o-mini"
+    max_tokens:  int  = Field(default=512, ge=1, le=2000)
+    temperature: float = Field(default=0.7, ge=0, le=2)
+    stream:      bool  = False
+```
+
+### Step 2 — Implement the Route Handler
+
+```typescript
+// Express route with Zod middleware
+import express from "express";
+import { DefaultAzureCredential } from "@azure/identity";
+import { AzureOpenAI } from "openai";
+
+const router = express.Router();
+const credential = new DefaultAzureCredential();   // Managed Identity — no API key
+
+router.post("/completions",
+  validateBody(CompletionRequestSchema),            // Zod middleware
+  async (req, res, next) => {
+    try {
+      const { prompt, model, max_tokens, temperature } = req.body as CompletionRequest;
+      const client = new AzureOpenAI({ azureADTokenProvider: () => credential.getToken("https://cognitiveservices.azure.com/.default").then(t => t.token) });
+      const result = await client.chat.completions.create({
+        model, messages: [{ role: "user", content: prompt }],
+        max_tokens, temperature,
+      });
+      res.json({ status: "success", data: result.choices[0] });
+    } catch (err) {
+      next(err);                                   // Centralised error handler
+    }
   }
-  const item = { id: crypto.randomUUID(), ...parsed.data };
-  await db.insert(item);
-  res.status(201).json(item);
+);
+```
+
+### Step 3 — Standardise Error Responses (RFC 7807)
+
+```typescript
+// Centralised error handler — all errors become Problem Details
+interface ProblemDetails {
+  type:      string;
+  title:     string;
+  status:    number;
+  detail?:   string;
+  instance?: string;
+}
+
+function errorHandler(err: unknown, req: express.Request, res: express.Response) {
+  const problem: ProblemDetails = {
+    type:     "https://frootai.dev/errors/internal",
+    title:    "Internal Server Error",
+    status:   500,
+    instance: req.path,
+  };
+
+  if (err instanceof z.ZodError) {
+    problem.type   = "https://frootai.dev/errors/validation";
+    problem.title  = "Request Validation Failed";
+    problem.status = 400;
+    problem.detail = err.errors.map(e => `${e.path.join(".")}: ${e.message}`).join("; ");
+  }
+  res.status(problem.status).json(problem);
+}
+```
+
+### Step 4 — Add OpenAPI Annotation
+
+```typescript
+/**
+ * @openapi
+ * /completions:
+ *   post:
+ *     summary: Generate an AI completion
+ *     tags: [Completions]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CompletionRequest'
+ *     responses:
+ *       200:
+ *         description: Successful completion
+ *       400:
+ *         description: Validation error (RFC 7807 Problem Details)
+ *       429:
+ *         description: Rate limited
+ */
+```
+
+### Step 5 — Request ID Propagation
+
+```typescript
+// Middleware — inject correlation ID for distributed tracing
+app.use((req, res, next) => {
+  const requestId = (req.headers["x-request-id"] as string) ?? crypto.randomUUID();
+  res.setHeader("x-request-id", requestId);
+  (req as any).requestId = requestId;
+  next();
 });
 ```
 
-## Endpoint Checklist
+## Output Envelope
 
-| Concern | Requirement |
-|---------|-------------|
-| Input validation | Schema-based (Pydantic, FluentValidation, Zod) |
-| Error format | RFC 9457 Problem Details |
-| Idempotency | Idempotency-Key header for mutations |
-| Auth | Policy-based (role/scope, not hardcoded checks) |
-| Rate limiting | Per-user or per-API-key window |
-| Observability | Request ID in response headers + structured logging |
+```json
+{
+  "status": "success",
+  "data": { "text": "...", "model": "gpt-4o-mini", "usage": { "total_tokens": 213 } },
+  "meta": { "request_id": "a1b2c3d4", "duration_ms": 187, "cached": false }
+}
+```
 
-## Troubleshooting
+## WAF Alignment
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Duplicate side effects | Missing idempotency | Add Idempotency-Key + cached response |
-| Inconsistent errors | No shared error handler | Register global ProblemDetails handler |
-| Auth bypass | Missing policy decorator | Require auth at route or group level |
+| Pillar | Contribution |
+|--------|-------------|
+| Security | Zod/Pydantic bounds prevent over-size prompt injection; Managed Identity eliminates API key exposure |
+| Reliability | RFC 7807 error envelope enables consistent retry logic on the client side |
+| Performance Efficiency | Typed schemas reduce deserialization overhead; stream=true enables token-level streaming |
+| Operational Excellence | OpenAPI annotation keeps docs in sync with code; request ID enables distributed trace correlation |
+
+## Compatible Solution Plays
+
+- **Play 01** — Enterprise RAG (POST /query endpoint)
+- **Play 14** — Cost-Optimized AI Gateway (routing endpoints)
+- **Play 29** — MCP Server (tool registration endpoints)
+
+## Notes
+
+- Always leave the `name` field unquoted per agentskills.io spec
+- Zod errors -> 400 with Problem Details; unhandled exceptions -> 500
+- Use `DefaultAzureCredential` not an API key — avoids key rotation risk and supports local dev via `az login`

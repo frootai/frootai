@@ -1,154 +1,195 @@
 ---
 name: fai-az-cost-optimize
-description: |
-  Analyze Azure AI workload costs and generate optimization recommendations. Use this skill when:
-  - Reviewing Azure resource costs for AI workloads
-  - Implementing model routing to reduce token spend
-  - Right-sizing compute for GPU/CPU workloads
-  - Setting up budget alerts and cost anomaly detection
-  - Evaluating PAYG vs PTU for Azure OpenAI
+description: Analyze Azure AI workload spend with Cost Management API queries, flag overprovisioned PTU, identify semantic cache gaps, right-size model SKUs, and produce actionable FinOps recommendations with ROI estimates.
 ---
 
-# Azure Cost Optimization for AI Workloads
+# FAI Azure Cost Optimize
 
-Analyze infrastructure and AI costs, then generate actionable optimization recommendations.
+Conducts a structured FinOps review of Azure AI workloads -- from raw billing data to prioritised recommendations. Targets the three highest-cost levers in AI deployments: overprovisioned PTU, uncached repeated queries, and oversized model selection for simple tasks.
 
-## When to Use
+## When to Invoke
 
-- Monthly cost review for AI workloads
-- Before scaling up (PTU purchase, GPU node pools)
-- After traffic changes that affect token consumption
-- Setting up FinOps practices for a new AI project
+| Signal | Example |
+|--------|---------|
+| Monthly AI spend exceeds budget alert | Cost alert fired for Cognitive Services |
+| PTU utilization is below 60% | Provisioned Throughput Units sitting idle |
+| Cache hit rate is 0% | Every query hitting the model cold |
+| gpt-4o used for all tasks | Simple classification using an expensive model |
 
----
+## Workflow
 
-## Step 1: Discover Current Costs
-
-```bash
-# Get cost breakdown by resource group
-az consumption usage list \
-  --subscription $SUB_ID \
-  --start-date 2026-03-01 --end-date 2026-03-31 \
-  --query "[].{Resource:instanceName, Cost:pretaxCost, Currency:currency}" \
-  --output table
-
-# Get Azure OpenAI token consumption
-az monitor metrics list \
-  --resource $OPENAI_RESOURCE_ID \
-  --metric "TokenTransaction" \
-  --interval PT1H \
-  --start-time 2026-03-01 \
-  --output table
-```
-
-## Step 2: Model Routing
-
-Route requests to the cheapest model that meets quality requirements:
+### Step 1 — Query Azure Cost Management API
 
 ```python
-from dataclasses import dataclass
+from azure.mgmt.costmanagement import CostManagementClient
+from azure.identity import DefaultAzureCredential
+from datetime import datetime, timedelta
 
-@dataclass
-class ModelTier:
-    name: str
-    cost_per_1k_tokens: float
-    quality_threshold: float  # min complexity score to use this model
+credential = DefaultAzureCredential()
+client     = CostManagementClient(credential)
+scope      = f"/subscriptions/{SUBSCRIPTION_ID}"
+end        = datetime.utcnow()
+start      = end - timedelta(days=30)
 
-TIERS = [
-    ModelTier("gpt-4o-mini", 0.00015, 0.0),   # Default for simple tasks
-    ModelTier("gpt-4o", 0.0025, 0.6),           # Complex reasoning
-]
+result = client.query.usage(scope, {
+    "type": "Usage",
+    "timeframe": "Custom",
+    "timePeriod": {"from": start.isoformat(), "to": end.isoformat()},
+    "dataset": {
+        "granularity": "Daily",
+        "aggregation": {"totalCost": {"name": "Cost", "function": "Sum"}},
+        "grouping": [
+            {"type": "Dimension", "name": "ServiceName"},
+            {"type": "Dimension", "name": "ResourceId"},
+        ],
+    },
+})
 
-def select_model(prompt: str, complexity_score: float) -> str:
-    """Route to cheapest model that meets quality requirements."""
-    eligible = [t for t in TIERS if complexity_score >= t.quality_threshold]
-    return min(eligible, key=lambda t: t.cost_per_1k_tokens).name
-
-def estimate_complexity(prompt: str) -> float:
-    """Quick heuristic for prompt complexity (0-1)."""
-    signals = [
-        len(prompt) > 2000,          # Long context
-        "analyze" in prompt.lower(),  # Analytical task
-        "compare" in prompt.lower(),  # Comparison task
-        prompt.count("\n") > 20,     # Multi-part
-    ]
-    return sum(signals) / len(signals)
+# Print top 10 resources by cost
+rows = sorted(result.rows, key=lambda r: r[0], reverse=True)[:10]
+for cost, service, resource, *_ in rows:
+    print(f"${cost:>8.2f}  {service:<30}  {resource}")
 ```
 
-## Step 3: Semantic Caching
-
-Cache responses for semantically similar queries:
+### Step 2 — PTU Utilization Analysis
 
 ```python
-import hashlib, json
+from azure.monitor.query import MetricsQueryClient, MetricAggregationType
+from azure.identity import DefaultAzureCredential
+from datetime import timedelta
 
-class SemanticCache:
-    def __init__(self, similarity_threshold: float = 0.95):
-        self.threshold = similarity_threshold
-        self.cache = {}
+monitor_client = MetricsQueryClient(DefaultAzureCredential())
 
-    def get(self, prompt: str) -> str | None:
-        key = self._hash(prompt)
-        entry = self.cache.get(key)
-        if entry and not self._is_expired(entry):
-            return entry["response"]
-        return None
+resource_id = (
+    f"/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RG_NAME}"
+    f"/providers/Microsoft.CognitiveServices/accounts/{AOAI_NAME}"
+)
 
-    def set(self, prompt: str, response: str, ttl_hours: int = 24):
-        self.cache[self._hash(prompt)] = {
-            "response": response,
-            "expires": time.time() + ttl_hours * 3600,
-        }
+result = monitor_client.query_resource(
+    resource_id,
+    metric_names=["ProvisionedManagedAvailability", "TokenTransaction"],
+    timespan=timedelta(days=7),
+    granularity=timedelta(hours=1),
+    aggregations=[MetricAggregationType.AVERAGE],
+)
 
-    def _hash(self, text: str) -> str:
-        normalized = " ".join(text.lower().split())
-        return hashlib.sha256(normalized.encode()).hexdigest()[:16]
+for metric in result.metrics:
+    values   = [ts.average for ts in metric.timeseries[0].data if ts.average is not None]
+    avg_util = (sum(values) / len(values)) * 100 if values else 0
+    print(f"{metric.name}: avg utilization = {avg_util:.1f}%")
+    if avg_util < 60:
+        print("  -> RECOMMENDATION: Reduce PTU tier or shift non-peak traffic to PAYG")
 ```
 
-## Step 4: PTU vs PAYG Decision Matrix
+### Step 3 — Semantic Cache Gap Analysis
 
-| Utilization | Recommendation | Why |
-|-------------|---------------|-----|
-| < 30% | PAYG | PTU waste at low utilization |
-| 30-60% | Evaluate PTU | Break-even zone — model with actual traffic |
-| > 60% sustained | PTU | 40-60% cost savings at high utilization |
-| Bursty (low avg, high peak) | PAYG + APIM throttle | PTU under-utilized between bursts |
+```python
+from azure.monitor.query import LogsQueryClient
+from azure.identity import DefaultAzureCredential
+from datetime import timedelta
+import pandas as pd
 
-```bash
-# Calculate effective PTU utilization
-az monitor metrics list \
-  --resource $OPENAI_RESOURCE_ID \
-  --metric "ProvisionedManagedUtilizationV2" \
-  --interval PT1H \
-  --aggregation Average \
-  --output table
+logs_client = LogsQueryClient(DefaultAzureCredential())
+
+query = """
+requests
+| where timestamp > ago(7d)
+| extend cached = tostring(customDimensions["cached"])
+| summarize
+    total = count(),
+    hits  = countif(cached == "true"),
+    misses = countif(cached == "false")
+| extend hit_rate = round(toreal(hits) / total * 100, 1)
+"""
+
+response = logs_client.query_workspace(
+    workspace_id=LOG_ANALYTICS_WORKSPACE_ID,
+    query=query,
+    timespan=timedelta(days=7),
+)
+df = pd.DataFrame(response.tables[0].rows,
+                  columns=[c.name for c in response.tables[0].columns])
+print(df.to_string(index=False))
+# hit_rate = 0  -> add semantic cache (Redis + cosine similarity check at 0.90)
+# hit_rate < 20 -> lower similarity threshold (0.90 -> 0.86) to capture more variants
 ```
 
-## Step 5: Budget Alerts
+### Step 4 — Model Routing Recommendations
 
-```bicep
-resource budget 'Microsoft.Consumption/budgets@2023-11-01' = {
-  name: 'ai-workload-monthly'
-  properties: {
-    category: 'Cost'
-    amount: 10000
-    timeGrain: 'Monthly'
-    timePeriod: { startDate: '2026-04-01' }
-    notifications: {
-      alert50: { enabled: true, threshold: 50, operator: 'GreaterThan'
-        contactEmails: ['team@org.com'] }
-      alert90: { enabled: true, threshold: 90, operator: 'GreaterThan'
-        contactEmails: ['team@org.com', 'finance@org.com'] }
+| Task Type | Recommended Model | Cost/1M tokens (input/output) | vs gpt-4o Savings |
+|-----------|------------------|-------------------------------|------------------|
+| Intent classification, routing | gpt-4o-mini | $0.15 / $0.60 | 93% cheaper |
+| Short Q&A, summarisation | gpt-4o-mini | $0.15 / $0.60 | 93% cheaper |
+| Complex reasoning, long-form code | gpt-4o | $2.50 / $10.00 | baseline |
+| Embedding generation | text-embedding-3-small | $0.02 / 1M tokens | 5x cheaper than large |
+| Non-real-time batch jobs | gpt-4o Batch API | 50% discount | 50% off synchronous |
+
+```python
+def route_model(prompt: str, complexity_threshold: float = 0.7) -> str:
+    """Route simple prompts to gpt-4o-mini, complex to gpt-4o."""
+    complexity = estimate_complexity(prompt)   # 0.0-1.0 score from classifier
+    return "gpt-4o" if complexity >= complexity_threshold else "gpt-4o-mini"
+```
+
+### Step 5 — Generate FinOps Report
+
+```python
+from datetime import datetime
+
+def generate_finops_report(spend_df, ptu_util: float, cache_hit_rate: float) -> dict:
+    recommendations = []
+
+    if ptu_util < 60:
+        monthly_ptu_cost = spend_df.loc[spend_df.service == "Azure OpenAI", "cost"].sum()
+        savings = monthly_ptu_cost * (1 - ptu_util / 100) * 0.5
+        recommendations.append({
+            "priority": "HIGH",
+            "finding": f"PTU utilization {ptu_util:.0f}% -- underutilised",
+            "action": "Reduce PTU tier by 30% or shift non-peak traffic to PAYG",
+            "estimated_monthly_savings_usd": round(savings, 2),
+        })
+
+    if cache_hit_rate < 20:
+        recommendations.append({
+            "priority": "HIGH",
+            "finding": f"Semantic cache hit rate {cache_hit_rate:.0f}%",
+            "action": "Add Redis semantic cache with cosine similarity threshold 0.90",
+            "estimated_monthly_savings_usd": "varies by repeat-query rate",
+        })
+
+    return {
+        "generated_utc": datetime.utcnow().isoformat(),
+        "total_recommendations": len(recommendations),
+        "recommendations": recommendations,
     }
-  }
-}
 ```
 
-## Optimization Checklist
+## PTU Break-Even Analysis
 
-- [ ] Model routing configured (mini for simple, 4o for complex)
-- [ ] Semantic caching reduces duplicate token spend by 20%+
-- [ ] PTU vs PAYG evaluated with actual utilization data
-- [ ] Budget alerts at 50%, 75%, 90% thresholds
-- [ ] Cost-per-request tracked in Application Insights
-- [ ] Unused/oversized resources identified and right-sized
+| Monthly Queries | Avg Input Tokens | PTU Utilization | Recommendation |
+|----------------|-----------------|-----------------|---------------|
+| < 500K | Any | Any | PAYG -- PTU overhead not justified |
+| 500K-2M | < 1K | < 60% | PAYG -- PTU underutilised |
+| 500K-2M | < 1K | >= 60% | PTU -- break-even achieved |
+| > 2M | Any | Any | PTU + PAYG overflow |
+
+## WAF Alignment
+
+| Pillar | Contribution |
+|--------|-------------|
+| Cost Optimization | PTU right-sizing and model routing are the two highest-ROI levers in AI workload FinOps |
+| Operational Excellence | Automated cost queries enable weekly FinOps reviews without manual portal navigation |
+| Reliability | Identifying PAYG fallback gaps prevents quota exhaustion under PTU burst conditions |
+
+## Compatible Solution Plays
+
+- **Play 14** — Cost-Optimized AI Gateway
+- **Play 52** — FinOps AI Dashboard
+- **Play 02** — AI Landing Zone (budget alert configuration)
+
+## Notes
+
+- PTU break-even vs PAYG depends on sustained utilization >= 60%; below that, PAYG is cheaper
+- Semantic cache threshold of 0.90 gives ~25% hit rate; lower to 0.85 for ~35% at risk of returning stale results
+- Apply the Batch API for any non-real-time workload (eval jobs, bulk embeddings) -- 50% cost reduction
+- Run this analysis monthly; PTU utilization changes as traffic patterns evolve

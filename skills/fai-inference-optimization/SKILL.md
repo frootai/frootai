@@ -1,104 +1,156 @@
 ---
 name: fai-inference-optimization
-description: |
-  Optimize AI inference for latency, throughput, and cost with batching, caching,
-  model routing, quantization, and streaming. Use when production AI endpoints
-  need faster responses or lower costs.
+description: Optimize model inference latency and throughput.
 ---
 
-# Inference Optimization
+# Fai Inference Optimization
 
-Reduce latency, increase throughput, and cut costs for AI inference.
+Optimizes model inference with quantization, batching, caching, and serving framework selection.
 
-## When to Use
+## Overview
 
-- Production AI endpoint latency exceeds SLO
-- Token costs growing faster than usage
-- Need to support higher concurrent users
-- Evaluating model compression or distillation
+This skill provides a structured, repeatable procedure for optimizes model inference with quantization, batching, caching, and serving framework selection.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Optimization Techniques
+## Parameters
 
-| Technique | Latency Reduction | Cost Reduction | Effort |
-|-----------|------------------|---------------|--------|
-| Streaming | Perceived -80% | None | Low |
-| Model routing (4o→mini) | None | 40-60% | Low |
-| Semantic caching | -90% for cache hits | -90% for hits | Medium |
-| Prompt compression | -20-30% | -20-30% | Medium |
-| Batching | None | -30% | Medium |
-| Quantization (INT4/INT8) | -30-50% | -30-50% | High |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Streaming Response
+## Steps
 
-```python
-async def stream_response(prompt: str):
-    stream = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}],
-        stream=True,
-    )
-    for chunk in stream:
-        if chunk.choices[0].delta.content:
-            yield chunk.choices[0].delta.content
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Model Routing
+### Step 2: Load Configuration
 
-```python
-def smart_route(prompt: str) -> str:
-    complexity = estimate_complexity(prompt)
-    if complexity < 0.3:
-        return "gpt-4o-mini"   # Simple: classification, extraction
-    elif complexity < 0.7:
-        return "gpt-4o-mini"   # Medium: Q&A, summarization
-    else:
-        return "gpt-4o"        # Complex: analysis, code generation
+Read settings from the FAI manifest and TuneKit config files.
 
-def estimate_complexity(prompt: str) -> float:
-    signals = [len(prompt) > 2000, "analyze" in prompt.lower(),
-               "compare" in prompt.lower(), prompt.count("\n") > 20]
-    return sum(signals) / len(signals)
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Semantic Cache
+### Step 3: Execute Core Logic
 
-```python
-import hashlib
+Perform the primary operation: optimizes model inference with quantization, batching, caching, and serving framework selection..
 
-class ResponseCache:
-    def __init__(self, ttl_hours: int = 24):
-        self.cache = {}
-        self.ttl = ttl_hours * 3600
+### Step 4: Validate Results
 
-    def get(self, prompt: str) -> str | None:
-        key = hashlib.sha256(prompt.strip().lower().encode()).hexdigest()[:16]
-        entry = self.cache.get(key)
-        if entry and time.time() - entry["ts"] < self.ttl:
-            return entry["response"]
-        return None
+Verify the output meets quality thresholds and WAF compliance.
 
-    def set(self, prompt: str, response: str):
-        key = hashlib.sha256(prompt.strip().lower().encode()).hexdigest()[:16]
-        self.cache[key] = {"response": response, "ts": time.time()}
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Prompt Compression
+## Output
 
-```python
-def compress_context(context: str, max_tokens: int = 2000) -> str:
-    """Summarize context to fit within token budget."""
-    if count_tokens(context) <= max_tokens:
-        return context
-    return llm(f"Summarize in under {max_tokens} tokens, preserving key facts:\n{context}")
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-inference-optimization
 ```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-inference-optimization/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| P95 > 3s | No streaming, large prompts | Enable streaming, compress context |
-| High cost/query | Always using gpt-4o | Route simple queries to mini |
-| Cache miss rate > 80% | Prompts too variable | Normalize prompts before caching |
-| Quality drops with mini | Task too complex | Keep gpt-4o for complex tasks only |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

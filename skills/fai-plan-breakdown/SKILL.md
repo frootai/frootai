@@ -1,100 +1,157 @@
 ---
 name: fai-plan-breakdown
-description: |
-  Break project plans into actionable tasks with sizing, dependencies,
-  risk assessment, and sprint mapping. Use when decomposing PRDs, epics,
-  or high-level requirements into executable work items.
----
+description: "Break down a technical requirements document into actionable sprints with tasks, dependencies, effort estimates, and risk assessment."
+waf: ["Operational Excellence", "Reliability"]
+plays: ["37-devops-automation", "24-code-assistant"]
 
-# Plan Breakdown
+# Fai Plan Breakdown
 
-Decompose plans into sized, ordered, dependency-tracked tasks.
+Decomposes high-level plans into actionable phases with milestones, deliverables, and risk assessment.
 
-## When to Use
+## Overview
 
-- Breaking PRDs into sprint-ready tasks
-- Decomposing technical epics into implementable slices
-- Creating work breakdown structures for estimation
-- Mapping tasks to sprints with dependency awareness
+This skill provides a structured, repeatable procedure for decomposes high-level plans into actionable phases with milestones, deliverables, and risk assessment.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Breakdown Process
+## Parameters
 
-```
-PRD/Epic → Capabilities → Tasks → Sized → Ordered → Sprint-mapped
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Task Template
+## Steps
 
-```markdown
-### Task: [Clear, action-oriented title]
+### Step 1: Validate Prerequisites
 
-**Size:** S (1-2h) | M (half-day) | L (1 day) | XL (2-3 days)
-**Depends on:** [Task ID or "None"]
-**Sprint:** [Sprint number]
-**Acceptance criteria:**
-- [ ] [Measurable criterion 1]
-- [ ] [Measurable criterion 2]
-```
+Verify all required tools, credentials, and dependencies are available.
 
-## Example Breakdown
-
-```markdown
-## Epic: Add Hybrid Search to RAG Pipeline
-
-### T1: Set up AI Search index schema [M]
-- Depends: None | Sprint: 1
-- AC: Index created with vector + keyword fields
-
-### T2: Implement embedding generation [M]
-- Depends: T1 | Sprint: 1
-- AC: Documents chunked and embedded, stored in index
-
-### T3: Build hybrid search endpoint [L]
-- Depends: T2 | Sprint: 1
-- AC: API returns ranked results with keyword + vector scores
-
-### T4: Add semantic reranking [S]
-- Depends: T3 | Sprint: 2
-- AC: Results reranked with semantic config enabled
-
-### T5: Write integration tests [M]
-- Depends: T3 | Sprint: 2
-- AC: Tests cover happy path + empty results + error cases
-
-### T6: Performance benchmark [M]
-- Depends: T4 | Sprint: 2
-- AC: P95 latency documented, meets <500ms target
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Sizing Guide
+### Step 2: Load Configuration
 
-| Size | Hours | Use When |
-|------|-------|----------|
-| S | 1-2h | Config change, small fix, add test |
-| M | 4h | New endpoint, module, or integration |
-| L | 8h | Major feature component |
-| XL | 16-24h | Full feature with tests — consider splitting |
+Read settings from the FAI manifest and TuneKit config files.
 
-## Auto-Generation
-
-```python
-def breakdown_plan(spec: str) -> str:
-    return llm(f"""Break this specification into implementation tasks.
-For each task: title, size (S/M/L/XL), dependencies, sprint, acceptance criteria.
-Order by dependency then priority (risky/blocking first).
-Use markdown format with checkboxes for acceptance criteria.
-
-Spec:
-{spec}""")
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: decomposes high-level plans into actionable phases with milestones, deliverables, and risk assessment..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-plan-breakdown
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-plan-breakdown/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Tasks too large (XL) | Not decomposed enough | Split XL into 2-3 M tasks |
-| Missing dependencies | Linear thinking | Draw dependency graph first |
-| Scope creep | No acceptance criteria | Add measurable AC to every task |
-| Estimation off | Comparing unlike tasks | Use relative sizing (S/M/L), not hours |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

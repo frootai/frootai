@@ -2,14 +2,33 @@
   "name": "sap-ai-gateway",
   "version": "1.0.0",
   "description": "SAP integration — AI gateway for S/4HANA, BTP, document processing, supply chain optimization.",
-  "author": { "name": "FAI Community", "url": "https://frootai.dev" },
+  "author": {
+    "name": "FAI Community",
+    "url": "https://frootai.dev"
+  },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "homepage": "https://frootai.dev",
-  "keywords": ["sap", "erp", "supply-chain", "enterprise", "integration"],
-  "plays": ["14-cost-optimized-ai-gateway"],
-  "agents": [".github/agents/sap-agent.agent.md"],
-  "instructions": [".github/instructions/sap-integration.instructions.md"],
-  "hooks": [".github/workflows/sap-sync.yml"],
-  "dependencies": ["frootai-mcp"]
+  "keywords": [
+    "sap",
+    "erp",
+    "supply-chain",
+    "enterprise",
+    "integration"
+  ],
+  "plays": [
+    "14-cost-optimized-ai-gateway"
+  ],
+  "agents": [
+    ".github/agents/sap-agent.agent.md"
+  ],
+  "instructions": [
+    ".github/instructions/sap-integration.instructions.md"
+  ],
+  "hooks": [
+    ".github/workflows/sap-sync.yml"
+  ],
+  "dependencies": [
+    "frootai-mcp"
+  ]
 }

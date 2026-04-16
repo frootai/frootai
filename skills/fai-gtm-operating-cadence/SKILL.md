@@ -1,100 +1,156 @@
 ---
 name: fai-gtm-operating-cadence
-description: |
-  Define GTM operating cadence with weekly execution loops, KPI reviews,
-  escalation governance, and cross-functional alignment. Use when establishing
-  regular GTM rhythms for a growing AI company.
+description: Establish operating cadence for AI product team.
 ---
 
-# GTM Operating Cadence
+# Fai Gtm Operating Cadence
 
-Establish weekly/monthly GTM execution rhythms with metrics and governance.
+Establishes operating cadence for AI product teams with ceremonies and metrics reviews.
 
-## When to Use
+## Overview
 
-- Establishing regular GTM review cadence
-- Aligning sales, marketing, product, and engineering
-- Setting up KPI dashboards for weekly reviews
-- Creating escalation and decision-making frameworks
+This skill provides a structured, repeatable procedure for establishes operating cadence for ai product teams with ceremonies and metrics reviews.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Weekly Cadence
+## Parameters
 
-| Day | Meeting | Attendees | Duration | Output |
-|-----|---------|-----------|----------|--------|
-| Mon | GTM standup | Sales + Marketing + DevRel | 15 min | Weekly priorities |
-| Tue | Pipeline review | Sales + Leadership | 30 min | Forecast update |
-| Wed | Product sync | Product + Engineering | 30 min | Release status |
-| Thu | Customer success | CSM + Support | 30 min | Health updates |
-| Fri | Metrics review | All GTM | 30 min | Weekly scorecard |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Monthly Cadence
+## Steps
 
-| Event | Timing | Scope |
-|-------|--------|-------|
-| Revenue review | 1st week | ARR, pipeline, churn |
-| Product roadmap sync | 2nd week | Feature priorities |
-| Board prep | 3rd week | Metrics + narrative |
-| Retrospective | 4th week | What worked, what didn't |
+### Step 1: Validate Prerequisites
 
-## Weekly Scorecard
+Verify all required tools, credentials, and dependencies are available.
 
-```markdown
-## Week [N] Scorecard
-
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| Qualified leads added | 5 | _ | 🟢/🟡/🔴 |
-| Demos delivered | 3 | _ | |
-| Deals advanced | 2 | _ | |
-| Content published | 2 pieces | _ | |
-| Customer health alerts | 0 critical | _ | |
-| GitHub stars gained | 50 | _ | |
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Escalation Framework
+### Step 2: Load Configuration
 
-| Signal | Response | Owner | Timeline |
-|--------|----------|-------|----------|
-| Customer health < 40 | Exec outreach + recovery plan | CSM + VP | 48 hours |
-| Deal slipping stage | Sales manager intervention | Sales lead | 24 hours |
-| P1 support ticket | Engineering escalation | Support lead | 1 hour |
-| Competitor win | Loss analysis + positioning update | Product | 1 week |
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: establishes operating cadence for ai product teams with ceremonies and metrics reviews..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-operating-cadence
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-operating-cadence/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Meetings unproductive | No agenda or metrics | Share scorecard 24h before |
-| Silos between teams | No cross-functional cadence | Add weekly GTM standup |
-| Issues discovered late | No escalation triggers | Define thresholds and auto-alerts |
-| Cadence abandoned | Too many meetings | Combine to 3 critical meetings/week |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

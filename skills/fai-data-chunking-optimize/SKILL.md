@@ -1,6 +1,6 @@
 ---
-name: fai-data-chunking-optimize
-description: "Optimize document chunking strategy for RAG with semantic boundaries"
+name: data-chunking-optimize
+description: "Optimize RAG chunking, overlap, and metadata boundaries - improve retrieval recall, reduce noisy context, and preserve citation quality"
 ---
 
 # Data Chunking Optimize

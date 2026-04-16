@@ -1,111 +1,167 @@
 ---
 name: fai-evaluate-18-prompt-management
-description: |
-  Evaluate prompt management systems for quality, governance, versioning
-  compliance, and safe promotion readiness. Use when auditing prompt pipelines
-  or gating prompt version deployments.
+description: Evaluate prompt versioning and A/B test performance.
 ---
 
-# Evaluate Prompt Management (Play 18)
+# Fai Evaluate 18 Prompt Management
 
-Evaluate prompt quality, versioning compliance, and promotion readiness.
+Runs quality evaluation for Play 18-prompt-management against fai-manifest.json guardrails — groundedness, coherence, safety.
 
-## When to Use
+## Overview
 
-- Gating prompt version promotion to production
-- Auditing prompt governance (who changed what, when)
-- Measuring prompt quality regression across versions
-- Validating A/B test statistical significance
+This skill provides a structured, repeatable procedure for runs quality evaluation for play 18-prompt-management against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Evaluation
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Evaluation Dimensions
+## Parameters
 
-| Dimension | Metric | Threshold |
-|-----------|--------|-----------|
-| Output quality | Accuracy on test set | >= 0.85 |
-| Consistency | Same output for same input | >= 0.95 |
-| Safety | No harmful content generated | >= 0.99 |
-| Latency | Response time P95 | <= 2000ms |
-| Token efficiency | Avg tokens per response | Decreasing trend |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Quality Regression Test
+## Steps
 
-```python
-def evaluate_prompt_version(version: str, test_set: list[dict],
-                             generate_fn, judge_fn) -> dict:
-    scores = []
-    for row in test_set:
-        output = generate_fn(row["input"], prompt_version=version)
-        score = judge_fn(output, row["expected"])
-        scores.append(score)
-    avg = sum(scores) / len(scores)
-    return {"version": version, "avg_score": avg, "n": len(scores),
-            "passed": avg >= 0.85}
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Version Comparison
+### Step 2: Load Configuration
 
-```python
-def compare_versions(v_old: str, v_new: str, test_set, generate_fn, judge_fn):
-    old_result = evaluate_prompt_version(v_old, test_set, generate_fn, judge_fn)
-    new_result = evaluate_prompt_version(v_new, test_set, generate_fn, judge_fn)
-    delta = new_result["avg_score"] - old_result["avg_score"]
-    return {"old": old_result, "new": new_result, "delta": delta,
-            "improved": delta > 0, "safe_to_promote": delta >= -0.02}
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Governance Audit
+### Step 3: Execute Core Logic
 
-```python
-def audit_prompt_changes(registry, since_date: str) -> list[dict]:
-    changes = []
-    for name in registry.list_prompts():
-        for version in registry.list_versions(name):
-            meta = registry.get_metadata(name, version)
-            if meta["created_at"] >= since_date:
-                changes.append({"prompt": name, "version": version,
-                    "author": meta["author"], "date": meta["created_at"]})
-    return changes
+Perform the primary operation: runs quality evaluation for play 18-prompt-management against fai-manifest.json guardrails — groundedness, coherence, safety..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Troubleshooting
+## Output
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Quality regression on promote | No regression test | Gate promotion on eval threshold |
-| Can't reproduce scores | Non-deterministic eval | Set judge temperature=0, fix seed |
-| A/B test inconclusive | Too few samples | Run 1000+ requests per variant |
-| Prompt drift in prod | No version pinning | Pin version in config, not "latest" |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-## Best Practices
+## WAF Alignment
 
-| Practice | Rationale |
-|----------|-----------|
-| Use gpt-4o-mini as judge | Cost-effective, sufficient for scoring |
-| Set judge temperature to 0 | Reproducible evaluation scores |
-| Minimum 100 test cases | Statistical significance |
-| Version evaluation datasets | Track quality over time |
-| Run eval before every deploy | Gate promotion on quality |
-| Compare against baseline | Detect regressions, not just absolutes |
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
 
-## Evaluation Pipeline
+## Compatible Solution Plays
 
+- **Play 03**
+- **Play 60**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-evaluate-18-prompt-management
 ```
-Dataset (JSONL) → Generate predictions → Score with judge → Aggregate → Pass/Fail gate
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-evaluate-18-prompt-management/"]
+  }
+}
 ```
 
-## Metric Thresholds
+### Via Agent Invocation
 
-| Metric | Minimum | Target |
-|--------|---------|--------|
-| Groundedness | 0.80 | 0.90 |
-| Relevance | 0.80 | 0.90 |
-| Coherence | 0.75 | 0.85 |
-| Safety | 0.95 | 0.99 |
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-## Related Skills
+## Metrics Reference
 
-- `fai-evaluation-framework` — Reusable eval framework
-- `fai-build-llm-evaluator` — LLM-as-judge implementation
-- `fai-agentic-eval` — Agentic evaluation patterns
+| Metric | Range | Threshold | Description |
+|--------|-------|-----------|-------------|
+| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
+| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
+| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
+| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
+| Safety | 0-4 | 0 | Content safety violations |
+| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+
+## Test Set Format
+
+```jsonl
+{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
+{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
+```
+
+## CI/CD Integration
+
+```yaml
+# .github/workflows/eval.yml
+- name: Run FAI Evaluation
+  run: |
+    python evaluation/eval.py --test-set evaluation/test-set.jsonl
+    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
+```
+
+## Regression Tracking
+
+Track evaluation scores over time to detect quality regressions:
+
+```bash
+# Compare with baseline
+python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Evaluation category in the FAI primitives catalog

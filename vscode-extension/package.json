@@ -286,6 +286,11 @@
         "command": "frootai.openMarketplace",
         "title": "FrootAI: Open Plugin Marketplace",
         "icon": "$(package)"
+      },
+      {
+        "command": "frootai.openAgentFai",
+        "title": "FrootAI: Ask Agent FAI",
+        "icon": "$(comment-discussion)"
       }
     ],
     "menus": {

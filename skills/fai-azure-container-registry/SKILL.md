@@ -1,122 +1,177 @@
 ---
 name: fai-azure-container-registry
-description: |
-  Harden Azure Container Registry with content trust, vulnerability scanning, retention
-  policies, and geo-replication. Use when securing container image supply chains for
-  production AI workloads.
+description: Configure Azure Container Registry with geo-replication across regions, image scanning for vulnerabilities, Managed Identity pull access, and OCI artifact support — enabling secure, distributed container delivery.
 ---
 
-# Azure Container Registry Hardening
+# FAI Azure Container Registry
 
-Secure ACR with content trust, scanning, retention, and geo-replication.
+Sets up ACR with geo-replication, vulnerability scanning, RBAC Managed Identity pull, webhook triggers, and private endpoint networking. Prevents registry setup friction: replicas in wrong regions, manual image replication, pull requiring admin credentials, and no vulnerability checks before deployment.
 
-## When to Use
+## When to Invoke
 
-- Setting up container registry for production workloads
-- Hardening existing ACR against supply chain attacks
-- Configuring image retention to control storage costs
-- Enabling geo-replication for multi-region deployments
+| Signal | Example |
+|--------|---------|
+| Container images deployed across regions | AKS clusters in East US and West Europe |
+| Manual image promotion workflow exists | Pull from dev, retag, push to prod |
+| No pre-deployment security scan | Container images deployed without CVE check |
+| Registry pull uses admin key | Service principal managing image pull |
 
----
+## Workflow
 
-## Bicep Provisioning
+### Step 1 — Create Registry with Geo-Replication
 
 ```bicep
-resource acr 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' = {
+// infra/container-registry.bicep
+param location string
+param acrName string
+
+resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: acrName
   location: location
-  sku: { name: 'Premium' }  // Required for geo-replication, content trust
+  sku: { name: 'Premium' }
   identity: { type: 'SystemAssigned' }
   properties: {
-    adminUserEnabled: false  // Always disable admin user
     publicNetworkAccess: 'Disabled'
-    policies: {
-      trustPolicy: { type: 'Notary', status: 'enabled' }
-      retentionPolicy: { days: 30, status: 'enabled' }
-      quarantinePolicy: { status: 'enabled' }
-    }
+    adminUserEnabled: false          // Force Managed Identity
+    anonymousPullEnabled: false       // No anonymous access
   }
 }
 
-// Geo-replication
-resource replication 'Microsoft.ContainerRegistry/registries/replications@2023-11-01-preview' = {
-  name: 'westeurope'
-  parent: acr
-  location: 'westeurope'
-}
+// Geo-replication — images synced automatically
+resource replication 'Microsoft.ContainerRegistry/registries/replications@2023-07-01' = [
+  for region in ['East US', 'West Europe', 'Southeast Asia']: {
+    parent: acr
+    name: region
+    location: region
+    properties: { enabled: true }
+  }
+]
 ```
 
-## Vulnerability Scanning
+### Step 2 — Enable Image Scanning
 
 ```bash
-# Enable Defender for Containers
-az security pricing create --name Containers --tier Standard
+# Enable vulnerability scanning on each push
+az acr config content-trust update --registry $ACR_NAME --status Enabled
 
-# Check scan results for an image
-az acr repository show-manifests --name $ACR --repository myapp \
-  --query "[].{Digest:digest, Tags:tags, LastUpdated:lastUpdateTime}" -o table
+# Enable scan on push
+az acr task create \
+  --registry $ACR_NAME \
+  --name scan-on-push \
+  --image '{{.Run.Registry}}/{{.Run.Repository}}:{{.Run.Tag}}' \
+  --cmd 'trivy image --exit-code 0 $Registry/$Repository:$Tag'
 ```
 
-## CI/CD Integration
+### Step 3 — Managed Identity Pull Configuration
+
+```python
+from azure.containerregistry import ContainerRegistryClient
+from azure.identity import DefaultAzureCredential, ClientSecretCredential
+
+# Grant app's MSI AcrPull role
+az role assignment create \
+  --assignee $APP_IDENTITY_ID \
+  --role AcrPull \
+  --scope "/subscriptions/$SUB_ID/resourceGroups/$RG_NAME/providers/Microsoft.ContainerRegistry/registries/$ACR_NAME"
+
+# Application code — pull images via Managed Identity
+client = ContainerRegistryClient(
+    endpoint=f"https://{ACR_NAME}.azurecr.io",
+    credential=DefaultAzureCredential(),
+)
+
+# Verify ability to read repositories
+for repository in client.list_repository_names():
+    print(f"  {repository}")
+```
+
+### Step 4 — CI/CD Push and Scan Pipeline
 
 ```yaml
-# GitHub Actions — build, scan, push
-- name: Build and push to ACR
-  uses: azure/docker-login@v1
-  with:
-    login-server: myacr.azurecr.io
-    username: ${{ secrets.ACR_USERNAME }}
-    password: ${{ secrets.ACR_PASSWORD }}
+# .github/workflows/acr-push.yml
+name: Build and Push to ACR
 
-- run: |
-    docker build -t myacr.azurecr.io/myapp:${{ github.sha }} .
-    docker push myacr.azurecr.io/myapp:${{ github.sha }}
+on:
+  push:
+    branches: [main]
 
-- name: Scan image
-  run: |
-    az acr task run --name scan-image --registry $ACR \
-      --arg IMAGE=myapp:${{ github.sha }}
+env:
+  REGISTRY: ${{ secrets.ACR_NAME }}.azurecr.io
+  IMAGE_NAME: myapp
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Login to ACR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Scan image for CVEs
+        run: |
+          trivy image --severity HIGH,CRITICAL \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 ```
 
-## Retention Policy
+### Step 5 — Webhook on Successful Scan
 
 ```bash
-# Purge untagged images older than 7 days
-az acr run --cmd "acr purge --filter 'myapp:.*' \
-  --untagged --ago 7d" --registry $ACR /dev/null
+# Trigger deployment only if scan passes
+az acr webhook create \
+  --registry $ACR_NAME \
+  --name deploy-on-scan-pass \
+  --actions push \
+  --scope "$IMAGE_NAME:*" \
+  --uri "https://your-deployment-api/webhook/acr"
 ```
 
-## Troubleshooting
+## Image Scanning Results
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Image pull fails cross-region | No replication in target region | Enable geo-replication for consuming region |
-| Push denied | Missing AcrPush role | Grant AcrPush RBAC on registry to CI/CD identity |
-| Vulnerability scan not running | Defender not enabled | Enable Microsoft Defender for Containers |
-| Storage costs growing | No retention policy | Enable retention policy and scheduled purge |
+Example `trivy` output:
 
-## Best Practices
+```
+IMAGE: acr-name.azurecr.io/myapp:v1.0.0
+Vulnerabilities (HIGH/CRITICAL):
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
+  2024-001234 (CRITICAL): OpenSSL remote code execution
+    - Package: openssl (1.1.1a)
+    - Fixed in: openssl (1.1.1q)
+    - CVE URL: https://nvd.nist.gov/vuln/detail/CVE-2024-001234
+```
 
-## Quality Checklist
+## WAF Alignment
 
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
+| Pillar | Contribution |
+|--------|-------------|
+| Security | Managed Identity pull (no hardcoded admin keys); vulnerability scanning prevents bad images reaching prod |
+| Reliability | Geo-replication ensures image availability in all regions automatically |
+| Cost Optimization | Premium tier with replication is cost-effective for multi-region deployments |
 
-## Related Skills
+## Compatible Solution Plays
 
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- **Play 02** — AI Landing Zone (centralized registry)
+- **Play 12** — Model Serving AKS (image pulls)
+- **Play 37** — DevOps AI (CI/CD scanning)
+
+## Notes
+
+- Premium SKU required for geo-replication; Standard sufficient for single-region
+- `adminUserEnabled: false` forces all access through Managed Identity or SPN
+- Trivy scanning can be integrated into `az acr task` for automated image analysis on push
+- Set webhook scan action to `fail` to reject images with HIGH/CRITICAL CVEs

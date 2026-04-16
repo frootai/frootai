@@ -2,14 +2,33 @@
   "name": "servicenow-ai-agent",
   "version": "1.0.0",
   "description": "ServiceNow ITSM integration — AI-powered ticket routing, auto-resolution, knowledge base search.",
-  "author": { "name": "FAI Community", "url": "https://frootai.dev" },
+  "author": {
+    "name": "FAI Community",
+    "url": "https://frootai.dev"
+  },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "homepage": "https://frootai.dev",
-  "keywords": ["servicenow", "itsm", "ticketing", "enterprise", "integration"],
-  "plays": ["05-it-ticket-resolution"],
-  "agents": [".github/agents/servicenow-agent.agent.md"],
-  "instructions": [".github/instructions/servicenow-integration.instructions.md"],
-  "hooks": [".github/workflows/servicenow-sync.yml"],
-  "dependencies": ["frootai-mcp"]
+  "keywords": [
+    "servicenow",
+    "itsm",
+    "ticketing",
+    "enterprise",
+    "integration"
+  ],
+  "plays": [
+    "05-it-ticket-resolution"
+  ],
+  "agents": [
+    ".github/agents/servicenow-agent.agent.md"
+  ],
+  "instructions": [
+    ".github/instructions/servicenow-integration.instructions.md"
+  ],
+  "hooks": [
+    ".github/workflows/servicenow-sync.yml"
+  ],
+  "dependencies": [
+    "frootai-mcp"
+  ]
 }

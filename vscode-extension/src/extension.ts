@@ -434,6 +434,11 @@ ${bodyHtml}
     });
   });
 
+  // ─── Agent FAI Chat Panel ───
+  safeRegister("frootai.openAgentFai", () => {
+    createReactPanel(context.extensionUri, "frootai.agentFai", "Agent FAI", { panel: "agentFai" as any });
+  });
+
   // ─── Marketplace Panel ───
   safeRegister("frootai.openMarketplace", () => {
     const dataDir = path.join(context.extensionPath, "data");

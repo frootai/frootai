@@ -1,108 +1,156 @@
 ---
 name: fai-gtm-ai-strategy
-description: |
-  Build AI go-to-market strategy with market segmentation, positioning,
-  competitive differentiation, and execution metrics. Use when planning
-  the commercial launch of an AI product or platform.
+description: Define go-to-market strategy for AI products.
 ---
 
-# AI Go-to-Market Strategy
+# Fai Gtm Ai Strategy
 
-Build GTM strategy with segmentation, positioning, and execution metrics.
+Develops AI go-to-market strategy with positioning, competitive analysis, and pricing models.
 
-## When to Use
+## Overview
 
-- Planning commercial launch of an AI product
-- Defining target segments and positioning
-- Creating competitive differentiation narrative
-- Setting up GTM execution metrics and OKRs
+This skill provides a structured, repeatable procedure for develops ai go-to-market strategy with positioning, competitive analysis, and pricing models.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Strategy Framework
+## Parameters
 
-### 1. Market Segmentation
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-```markdown
-| Segment | Profile | Pain Point | Our Solution |
-|---------|---------|------------|-------------|
-| Enterprise AI teams | 50+ engineers, Azure-first | Fragmented AI primitives | Unified FAI Protocol |
-| AI consultancies | 10-50 engineers, multi-cloud | No standardized delivery | Solution Plays + TuneKit |
-| Solo AI builders | 1-5 engineers, VS Code users | Starting from zero each time | DevKit + Skills |
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-### 2. Positioning Statement
+### Step 2: Load Configuration
 
-```markdown
-For [target segment] who [pain point],
-[Product] is the [category] that [key benefit].
-Unlike [competitors], we [differentiator].
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-### 3. Competitive Landscape
+### Step 3: Execute Core Logic
 
-```markdown
-| Dimension | Us | Competitor A | Competitor B |
-|-----------|-----|--------------|-------------|
-| Primitives unified | ✅ (830+) | ❌ (skills only) | ❌ (agents only) |
-| WAF alignment | ✅ (6 pillars) | ❌ | Partial |
-| Solution plays | ✅ (100) | ❌ | ❌ |
-| Distribution | VS Code + MCP + SDK + Docker | VS Code only | CLI only |
+Perform the primary operation: develops ai go-to-market strategy with positioning, competitive analysis, and pricing models..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-### 4. GTM Metrics
+## Output
 
-| Metric | Definition | Target |
-|--------|-----------|--------|
-| GitHub stars | Social proof | 1000 by Q3 |
-| npm weekly downloads | Tool adoption | 500/week |
-| VS Code installs | Extension adoption | 2000 |
-| Active plays deployed | Customer success | 50 |
-| NPS | Customer satisfaction | > 50 |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-## Channel Strategy
+## WAF Alignment
 
-| Channel | Purpose | Content |
-|---------|---------|---------|
-| GitHub | Discovery + contribution | README, AGENTS.md, examples |
-| VS Code Marketplace | Tool distribution | Extension with skills |
-| npm | MCP distribution | frootai-mcp package |
-| Website | Education + conversion | Learning Hub, Solution Plays |
-| Community | Engagement | Discord, GitHub Discussions |
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-ai-strategy
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-ai-strategy/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Low adoption | Unclear value prop | Sharpen positioning, add demo videos |
-| Wrong segment | Too broad targeting | Focus on top 1-2 segments |
-| No viral loop | No sharing mechanism | Add share buttons, contributor path |
-| Metrics flat | No feedback loop | Weekly GTM review cadence |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

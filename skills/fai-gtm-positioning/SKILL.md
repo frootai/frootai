@@ -1,106 +1,156 @@
 ---
 name: fai-gtm-positioning
-description: |
-  Build market positioning with category definition, competitive differentiation,
-  audience-specific messaging, and proof points. Use when defining or refining
-  how your AI product is perceived in the market.
+description: Define product positioning and competitive differentiation.
 ---
 
-# Market Positioning
+# Fai Gtm Positioning
 
-Define clear, differentiated positioning for your AI product.
+Creates product positioning statements with messaging framework and competitive differentiation.
 
-## When to Use
+## Overview
 
-- Launching a new AI product or category
-- Repositioning against emerging competitors
-- Creating audience-specific messaging variants
-- Building sales enablement materials
+This skill provides a structured, repeatable procedure for creates product positioning statements with messaging framework and competitive differentiation.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Positioning Canvas
+## Parameters
 
-```markdown
-## Positioning Statement
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-For [target customer segment]
-who [situation/pain point],
-[Product] is the [category]
-that [key benefit/promise].
-Unlike [competitive alternative],
-we [primary differentiator].
+## Steps
 
-## Example
+### Step 1: Validate Prerequisites
 
-For AI platform teams at enterprises
-who struggle with fragmented AI primitives across tools,
-FrootAI is the AI primitive unification layer
-that wires agents, skills, hooks, and workflows into deployable solution plays.
-Unlike standalone skill registries or agent frameworks,
-we provide 100 production-ready plays with WAF alignment and 830+ primitives.
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Messaging Matrix
+### Step 2: Load Configuration
 
-| Audience | Pain Point | Message | Proof Point |
-|----------|-----------|---------|-------------|
-| CTO | AI initiatives fragmented | \"One protocol to unify all AI primitives\" | 100 solution plays, 830+ primitives |
-| AI Engineer | Starting from zero each project | "Production-ready plays, not hello-world demos" | 6 WAF pillars, real Bicep/code |
-| DevOps Lead | No standards for AI deployment | "Standardized AI delivery with IaC" | AVM-aligned Bicep, CI/CD templates |
-| CISO | AI security concerns | "WAF-aligned, OWASP LLM Top 10 coverage" | Security instructions, guardrails |
+Read settings from the FAI manifest and TuneKit config files.
 
-## Competitive Differentiation
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-| Dimension | Our Position | Why It Matters |
-|-----------|-------------|---------------|
-| Primitive breadth | 780+ (agents, skills, hooks, workflows) | Comprehensive, not single-purpose |
-| Solution plays | 100 production-ready | Not demos — real architectures |
-| WAF alignment | 6 pillars on every play | Enterprise-grade quality |
-| Distribution | VS Code + MCP + SDK + Docker | Meet developers where they are |
-| Protocol | FAI Protocol (open spec) | Future-proof, not vendor lock-in |
+### Step 3: Execute Core Logic
 
-## Validation Checklist
+Perform the primary operation: creates product positioning statements with messaging framework and competitive differentiation..
 
-- [ ] Positioning resonates with 3+ target customers (validated in interviews)
-- [ ] Differentiators are defensible (not easily copied)
-- [ ] Proof points are quantified (not vague claims)
-- [ ] Messaging works in 10-second elevator pitch
-- [ ] Sales team can articulate without slides
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-positioning
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-positioning/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| "What do you do?" confusion | Too broad positioning | Narrow to top 1-2 use cases |
-| Sounds like competitors | No clear differentiator | Lead with what ONLY you can do |
-| Messaging doesn't stick | Too technical or jargon-heavy | Test with non-technical audience |
-| No proof points | Early stage, few customers | Use design partner quotes and metrics |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

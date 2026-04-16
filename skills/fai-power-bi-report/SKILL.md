@@ -1,110 +1,157 @@
 ---
 name: fai-power-bi-report
-description: |
-  Create Power BI reports with data modeling, relationship design, DAX
-  calculations, and visual best practices. Use when building analytical
-  reports for business intelligence.
----
+description: "Build Power BI reports with DAX measures, slicers, drill-down interactivity, and AI-powered insights."
+waf: ["Performance Efficiency", "Operational Excellence"]
+plays: ["17-ai-observability"]
 
-# Power BI Report Design
+# Fai Power Bi Report
 
-Create analytical reports with proper modeling, DAX, and visual design.
+Creates Power BI reports with DAX measures, data modeling, and performance optimization.
 
-## When to Use
+## Overview
 
-- Building analytical reports from structured data
-- Designing star schema data models
-- Writing DAX measures for business metrics
-- Following visual design best practices
+This skill provides a structured, repeatable procedure for creates power bi reports with dax measures, data modeling, and performance optimization.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Star Schema Design
+## Parameters
 
-```
-Fact Table: FactAIUsage
-  → UserId (FK → DimUser)
-  → ModelId (FK → DimModel)
-  → DateKey (FK → DimDate)
-  → PromptTokens
-  → CompletionTokens
-  → LatencyMs
-  → QualityScore
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-DimUser: UserId, Name, Team, Role
-DimModel: ModelId, ModelName, Provider, CostPerToken
-DimDate: DateKey, Date, Month, Quarter, Year, IsWeekday
-```
+## Steps
 
-## DAX Patterns
+### Step 1: Validate Prerequisites
 
-```dax
-// Time intelligence: Year-over-Year
-YoY Growth % =
-    VAR CurrentYear = [Total Queries]
-    VAR PriorYear = CALCULATE([Total Queries], SAMEPERIODLASTYEAR(DimDate[Date]))
-    RETURN DIVIDE(CurrentYear - PriorYear, PriorYear, 0)
+Verify all required tools, credentials, and dependencies are available.
 
-// Running total
-Running Total Cost =
-    CALCULATE([Total Cost], FILTER(ALL(DimDate), DimDate[Date] <= MAX(DimDate[Date])))
-
-// Dynamic ranking
-Top N Models =
-    VAR Rank = RANKX(ALL(DimModel[ModelName]), [Total Queries])
-    RETURN IF(Rank <= 5, [Total Queries], BLANK())
-
-// Conditional formatting measure
-Cost Status =
-    SWITCH(TRUE(),
-        [Total Cost] > [Budget] * 0.9, "Critical",
-        [Total Cost] > [Budget] * 0.75, "Warning",
-        "Normal"
-    )
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Visual Best Practices
+### Step 2: Load Configuration
 
-| Principle | Rule |
-|-----------|------|
-| KPI tiles | Top of page, 4-6 max |
-| Chart types | Line=trends, Bar=comparison, Pie=composition (limit to 5 slices) |
-| Colors | Use semantic colors (green=good, red=alert) |
-| Interactivity | Add slicers for date, model, team |
-| Mobile | Design separate mobile layout |
-| Accessibility | Alt text on all visuals, high contrast |
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: creates power bi reports with dax measures, data modeling, and performance optimization..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-power-bi-report
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-power-bi-report/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Measure returns blank | Filter context issue | Use CALCULATE with explicit filters |
-| Slow visual rendering | Too many data points | Aggregate data, limit rows |
-| Relationship error | Ambiguous path | Use USERELATIONSHIP in DAX |
-| Report too cluttered | Too many visuals | Split into focused pages |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

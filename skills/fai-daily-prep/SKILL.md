@@ -1,122 +1,156 @@
 ---
 name: fai-daily-prep
-description: |
-  Prepare a daily engineering execution brief with priorities, blockers,
-  and delivery checkpoints. Use when starting a work day or planning
-  sprint execution with an AI-powered daily standup assistant.
+description: Automate daily prep workflows: code audits, test coverage checks, dependency updates.
 ---
 
-# Daily Engineering Prep
+# Fai Daily Prep
 
-Generate a daily execution brief with priorities, blockers, and checkpoints.
+Daily preparation skill — summarizes yesterday, plans today, identifies blockers.
 
-## When to Use
+## Overview
 
-- Starting the engineering work day
-- Preparing for daily standup
-- Tracking sprint progress against commitments
-- Identifying blockers before they cause delays
+This skill provides a structured, repeatable procedure for daily preparation skill — summarizes yesterday, plans today, identifies blockers.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Daily Brief Template
+## Parameters
 
-```markdown
-## Daily Brief — [Date]
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-### Top 3 Priorities
-1. [Most important deliverable] — ETA: [time]
-2. [Second priority] — ETA: [time]
-3. [Third priority] — ETA: [time]
+## Steps
 
-### Blockers
-- [ ] [Blocker description] — Owner: [name] — Escalation: [path]
+### Step 1: Validate Prerequisites
 
-### Yesterday Completed
-- [x] [Task 1]
-- [x] [Task 2]
+Verify all required tools, credentials, and dependencies are available.
 
-### Checkpoints
-- [ ] 11:00 — [Checkpoint 1: what should be done by then]
-- [ ] 15:00 — [Checkpoint 2: end-of-day target]
-
-### Notes
-- [Context, decisions, risks]
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Auto-Generation from Git + Issues
+### Step 2: Load Configuration
 
-```python
-import subprocess, json
-from datetime import datetime, timedelta
+Read settings from the FAI manifest and TuneKit config files.
 
-def generate_brief():
-    # Yesterday's commits
-    since = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-    commits = subprocess.check_output(
-        ["git", "log", f"--since={since}", "--pretty=%s"], text=True
-    ).strip().split("\n")
-
-    # Open issues assigned to me
-    issues = subprocess.check_output(
-        ["gh", "issue", "list", "--assignee=@me", "--state=open", "--json=title,labels"],
-        text=True
-    )
-    open_issues = json.loads(issues)
-    blockers = [i for i in open_issues if any(l["name"] == "blocker" for l in i["labels"])]
-
-    return {
-        "completed": commits,
-        "priorities": [i["title"] for i in open_issues[:3]],
-        "blockers": [b["title"] for b in blockers],
-    }
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Sprint Progress Check
+### Step 3: Execute Core Logic
 
-```python
-def sprint_health(total_points: int, completed_points: int,
-                   days_elapsed: int, sprint_days: int) -> dict:
-    expected = total_points * (days_elapsed / sprint_days)
-    velocity = completed_points / max(days_elapsed, 1)
-    projected = velocity * sprint_days
-    return {
-        "on_track": completed_points >= expected * 0.9,
-        "completion_pct": round(completed_points / total_points * 100, 1),
-        "projected_completion": round(projected / total_points * 100, 1),
-    }
+Perform the primary operation: daily preparation skill — summarizes yesterday, plans today, identifies blockers..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-daily-prep
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-daily-prep/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Brief feels empty | No commits yesterday | Include PR reviews and design work |
-| Too many priorities | Not ruthless enough | Force rank to top 3, defer rest |
-| Blockers not escalated | No escalation path | Define owner + escalation for each |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

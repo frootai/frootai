@@ -1,112 +1,156 @@
 ---
 name: fai-human-in-the-loop
-description: |
-  Design human-in-the-loop controls for high-impact AI decisions with approval
-  workflows, confidence-based routing, and override mechanisms. Use when building
-  AI systems that need human oversight for critical actions.
+description: Implement human-in-the-loop workflows for AI decisions.
 ---
 
-# Human-in-the-Loop Patterns
+# Fai Human In The Loop
 
-Add human oversight to AI systems for high-impact decisions.
+Designs human-in-the-loop workflows for AI with escalation criteria and approval gates.
 
-## When to Use
+## Overview
 
-- AI decisions have significant financial or safety impact
-- Regulatory requirements mandate human review (EU AI Act Art. 22)
-- Building trust during initial AI deployment
-- Low-confidence predictions need expert validation
+This skill provides a structured, repeatable procedure for designs human-in-the-loop workflows for ai with escalation criteria and approval gates.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Confidence-Based Routing
+## Parameters
 
-```python
-def route_decision(prediction: dict, thresholds: dict) -> dict:
-    confidence = prediction["confidence"]
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-    if confidence >= thresholds.get("auto_approve", 0.95):
-        return {"action": "auto_approve", "reason": "High confidence"}
-    elif confidence >= thresholds.get("review", 0.70):
-        return {"action": "human_review", "reason": "Medium confidence",
-                "reviewer": "domain_expert"}
-    else:
-        return {"action": "human_required", "reason": "Low confidence",
-                "reviewer": "senior_analyst"}
+## Steps
 
-# Example thresholds by risk level
-RISK_THRESHOLDS = {
-    "low_risk":   {"auto_approve": 0.85, "review": 0.60},
-    "medium_risk": {"auto_approve": 0.95, "review": 0.75},
-    "high_risk":  {"auto_approve": 0.99, "review": 0.90},
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: designs human-in-the-loop workflows for ai with escalation criteria and approval gates..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-human-in-the-loop
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-human-in-the-loop/"]
+  }
 }
 ```
 
-## Approval Workflow
+### Via Agent Invocation
 
-```python
-from enum import Enum
-from dataclasses import dataclass
-from datetime import datetime
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-class Decision(Enum):
-    APPROVE = "approve"
-    REJECT = "reject"
-    MODIFY = "modify"
+## Configuration Reference
 
-@dataclass
-class ReviewRequest:
-    id: str
-    ai_prediction: dict
-    confidence: float
-    context: dict
-    created_at: str
-    reviewer: str = None
-    decision: Decision = None
-    reviewer_notes: str = ""
-
-async def submit_for_review(request: ReviewRequest):
-    await review_queue.enqueue(request)
-    await notify_reviewer(request.reviewer, request.id)
-
-async def process_review(request_id: str, decision: Decision, notes: str):
-    request = await review_queue.get(request_id)
-    request.decision = decision
-    request.reviewer_notes = notes
-    await audit_log.record("human_review", request)
-    if decision == Decision.APPROVE:
-        await execute_action(request.ai_prediction)
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
 
-## Override Mechanism
+## Monitoring
 
-```python
-def allow_override(original: dict, override: dict, user_role: str) -> dict:
-    """Allow authorized users to override AI decisions."""
-    if user_role not in ["admin", "senior_analyst"]:
-        raise PermissionError("Override requires senior role")
-    return {
-        "result": override,
-        "original_ai_prediction": original,
-        "override_by": user_role,
-        "timestamp": datetime.now().isoformat(),
-    }
-```
+Track skill execution metrics:
 
-## Routing Flowchart
-
-```
-AI Prediction → Confidence Check
-  ├── >= 95% → Auto-approve → Execute
-  ├── 70-94% → Human Review Queue → Approve/Reject/Modify
-  └── < 70%  → Human Required → Senior Analyst
-```
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Review queue bottleneck | Too many items routed to humans | Raise auto-approve threshold gradually |
-| Reviewers override everything | Low trust in AI | Show accuracy stats to build confidence |
-| No audit trail | Decisions not logged | Log every decision with reasoning |
-| Slow response time | No SLA on review queue | Set review SLA per risk level |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

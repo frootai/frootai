@@ -1,120 +1,160 @@
 ---
 name: fai-cost-estimator
-description: |
-  Build workload cost estimates with scenario modeling, assumption tracking,
-  and optimization levers for Azure AI deployments. Use when budgeting for
-  new AI projects or reviewing existing spend.
+description: Build cost estimation models for AI workloads across Azure, models, and infrastructure.
 ---
 
-# AI Workload Cost Estimator
+# Fai Cost Estimator
 
-Build cost estimates with scenario ranges, assumptions, and optimization paths.
+name: fai-cost-estimator
 
-## When to Use
+## Overview
 
-- Budgeting for a new AI workload on Azure
-- Comparing PAYG vs PTU for Azure OpenAI
-- Presenting cost projections to stakeholders
-- Identifying top cost optimization levers
+This skill provides a structured, repeatable procedure for name: fai-cost-estimator. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Cost Management
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Cost Estimation Template
+## Parameters
 
-```markdown
-## Cost Estimate: [Project Name]
-**Date:** YYYY-MM-DD | **Author:** [name] | **Environment:** production
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-### Assumptions
-- Daily active users: 1,000
-- Avg queries/user/day: 10
-- Avg prompt tokens: 500, completion tokens: 300
-- Peak:average ratio: 3:1
+## Steps
 
-### Monthly Estimate
+### Step 1: Validate Prerequisites
 
-| Service | SKU | Unit Cost | Usage | Monthly |
-|---------|-----|-----------|-------|---------|
-| Azure OpenAI (GPT-4o) | PAYG | $2.50/M in, $10/M out | 15M in, 9M out | $127.50 |
-| Azure OpenAI (Embedding) | PAYG | $0.02/M | 30M | $0.60 |
-| Azure AI Search | S1 | $250/mo | 1 unit | $250 |
-| App Service | P1v3 | $138/mo | 2 instances | $276 |
-| Cosmos DB | Autoscale | $0.008/RU/hr | 4000 RU | $23 |
-| Storage | Hot LRS | $0.018/GB | 100 GB | $1.80 |
-| **Total** | | | | **$679/mo** |
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Scenario Modeling
+### Step 2: Load Configuration
 
-```python
-def estimate_openai_cost(daily_users: int, queries_per_user: int,
-                          avg_prompt_tokens: int, avg_completion_tokens: int,
-                          model: str = "gpt-4o") -> dict:
-    rates = {
-        "gpt-4o": {"input": 2.50, "output": 10.00},
-        "gpt-4o-mini": {"input": 0.15, "output": 0.60},
-    }
-    r = rates[model]
-    monthly_queries = daily_users * queries_per_user * 30
-    input_cost = (monthly_queries * avg_prompt_tokens / 1_000_000) * r["input"]
-    output_cost = (monthly_queries * avg_completion_tokens / 1_000_000) * r["output"]
-    return {"model": model, "monthly_queries": monthly_queries,
-            "input_cost": round(input_cost, 2), "output_cost": round(output_cost, 2),
-            "total": round(input_cost + output_cost, 2)}
+Read settings from the FAI manifest and TuneKit config files.
 
-# Compare models
-for model in ["gpt-4o", "gpt-4o-mini"]:
-    print(estimate_openai_cost(1000, 10, 500, 300, model))
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## PTU vs PAYG Decision
+### Step 3: Execute Core Logic
 
-| Utilization | Recommendation | Savings |
-|-------------|---------------|---------|
-| < 30% | PAYG | N/A |
-| 30-60% | Evaluate PTU | Break-even zone |
-| > 60% sustained | PTU | 40-60% savings |
+Perform the primary operation: name: fai-cost-estimator.
 
-## Optimization Levers
+### Step 4: Validate Results
 
-| Lever | Savings | Effort |
-|-------|---------|--------|
-| Route simple queries to mini | 40-60% | Low |
-| Semantic caching | 20-30% | Medium |
-| Reduce chunk size (fewer tokens) | 10-20% | Low |
-| PTU for sustained traffic | 40-60% | Medium |
-| Right-size App Service plan | 20-40% | Low |
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
+
+## Compatible Solution Plays
+
+- **Play 14**
+- **Play 66**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-cost-estimator
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-cost-estimator/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Estimate way off actual | Missing system prompt tokens | Count full message chain |
-| Stakeholder sticker shock | No optimization plan | Present with cost optimization levers |
-| PTU underutilized | Overestimated steady traffic | Start PAYG, switch at sustained 60% |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Cost Management category in the FAI primitives catalog

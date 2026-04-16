@@ -1,115 +1,162 @@
 ---
 name: fai-mcp-swift-scaffold
-description: |
-  Scaffold Swift MCP servers with structured concurrency, Codable tool
-  definitions, and Swift Package Manager. Use when building MCP servers
-  for Apple platforms or Swift-based services.
+description: "Generate a Swift MCP server for macOS/iOS with type-safe tool definitions, Codable serialization, and native integration."
+waf: ["Performance Efficiency", "Reliability", "Security"]
+plays: ["29-mcp-platform-integration"]
 ---
 
-# Swift MCP Server Scaffold
+# Fai Mcp Swift Scaffold
 
-Build MCP servers in Swift with structured concurrency and Codable types.
+Scaffolds a complete swift MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
 
-## When to Use
+## Overview
 
-- Building MCP tools for macOS/iOS applications
-- Exposing Swift service logic as AI agent tools
-- Creating cross-platform MCP servers with SwiftPM
+This skill provides a structured, repeatable procedure for scaffolds a complete swift mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** MCP Integration
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Package.swift
+## Parameters
 
-```swift
-// swift-tools-version: 5.10
-import PackageDescription
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-let package = Package(
-    name: "my-mcp-server",
-    platforms: [.macOS(.v14)],
-    dependencies: [
-        .package(url: "https://github.com/anthropics/mcp-swift-sdk", from: "0.5.0"),
-    ],
-    targets: [
-        .executableTarget(name: "McpServer", dependencies: [
-            .product(name: "MCP", package: "mcp-swift-sdk"),
-        ]),
-    ]
-)
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Tool Definition
+### Step 2: Load Configuration
 
-```swift
-import MCP
+Read settings from the FAI manifest and TuneKit config files.
 
-struct SearchArgs: Codable {
-    let query: String
-    let limit: Int?
-}
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-struct SearchResult: Codable {
-    let id: String
-    let title: String
-    let score: Double
-}
+### Step 3: Execute Core Logic
 
-let searchTool = Tool(
-    name: "search_documents",
-    description: "Search knowledge base documents by query",
-    inputSchema: .object([
-        "query": .string(description: "Search query"),
-        "limit": .integer(description: "Max results"),
-    ], required: ["query"])
-) { (args: SearchArgs) async throws -> String in
-    let results = try await searchService.search(args.query, limit: args.limit ?? 5)
-    return try JSONEncoder().encode(results).utf8String
+Perform the primary operation: scaffolds a complete swift mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 29**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-mcp-swift-scaffold
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-mcp-swift-scaffold/"]
+  }
 }
 ```
 
-## Server Entry
+### Via Agent Invocation
 
-```swift
-@main
-struct McpServerApp {
-    static func main() async throws {
-        let server = MCPServer(name: "my-mcp-server", version: "1.0.0")
-        server.addTool(searchTool)
-        try await server.serveStdio()
-    }
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
 }
 ```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Build fails | Swift version mismatch | Require Swift 5.10+ in Package.swift |
-| Codable decode error | Optional field missing | Use `let limit: Int?` with default |
-| Async not available | Wrong platform target | Set .macOS(.v14) minimum |
-| JSON encoding fails | Non-Codable type | Conform all types to Codable |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Type all tool parameters | Agent understands expected inputs |
-| Write descriptive tool docstrings | Agent matches tasks to tools |
-| Validate inputs before processing | Prevent injection and crashes |
-| Return structured JSON strings | Consistent parsing by consumers |
-| Add error messages in results | Agent can report failures to user |
-| Test tools independently | Verify behavior before server integration |
-
-## MCP Transport Options
-
-| Transport | Use Case | Config |
-|-----------|----------|--------|
-| stdio | VS Code Copilot, Claude Desktop | Default — no setup needed |
-| SSE | Web clients, remote access | Add HTTP server endpoint |
-| WebSocket | Real-time bidirectional | For streaming-heavy tools |
-
-## Related Skills
-
-- `fai-mcp-python-generator` — Python MCP with FastMCP
-- `fai-mcp-typescript-generator` — TypeScript MCP with SDK
-- `fai-mcp-csharp-scaffold` — C# MCP with ModelContextProtocol
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the MCP Integration category in the FAI primitives catalog

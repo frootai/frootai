@@ -1,6 +1,6 @@
 ---
-name: fai-evaluation-pipeline-create
-description: "Create an evaluation pipeline with Azure AI Evaluation SDK and CI gate logic"
+name: evaluation-pipeline-create
+description: "Create evaluation pipelines, CI gates, and regression checks for AI systems - score groundedness, block regressions, and publish release verdicts"
 ---
 
 # Evaluation Pipeline Create

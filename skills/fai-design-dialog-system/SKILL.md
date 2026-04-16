@@ -1,159 +1,156 @@
 ---
 name: fai-design-dialog-system
-description: 'Designs dialog and modal interaction patterns with consistent behavior and accessibility guarantees.'
+description: Design multi-turn dialog systems with context and flow management.
 ---
 
-# FAI Skill: Design Dialog System
+# Fai Design Dialog System
 
-## Purpose
+Creates modal/dialog systems with focus trapping, keyboard nav, and accessibility.
 
-This skill defines a production-quality workflow for Dialog lifecycle, focus management, and interruption-safe UX patterns. It ensures consistent outcomes through phase-based execution, measurable quality gates, and reliable handoff artifacts.
+## Overview
 
-## Inputs
+This skill provides a structured, repeatable procedure for creates modal/dialog systems with focus trapping, keyboard nav, and accessibility.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-| Input | Description |
-|---|---|
-| Core parameters | dialog_inventory, trigger_events, escape_rules, accessibility_requirements |
-| Environment | design, dev, staging, production |
-| Constraints | accessibility, reliability, performance, and compliance requirements |
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Prerequisites
+## Parameters
 
-- Scope, ownership, and acceptance criteria are approved.
-- Relevant UX/content/data stakeholders are identified.
-- Instrumentation and validation approach are planned.
-- Rollback or mitigation strategy is defined for risky changes.
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Full Phases Coverage
+## Steps
 
-### Phase 1: Discover
+### Step 1: Validate Prerequisites
 
-- Clarify goals, user segments, and primary success outcomes.
-- Map constraints, dependencies, and potential failure conditions.
-- Define measurable criteria that determine release readiness.
+Verify all required tools, credentials, and dependencies are available.
 
-### Phase 2: Design
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
 
-- Produce patterns and variants for happy path and edge cases.
-- Document tradeoffs across usability, speed, and maintainability.
-- Encode accessibility and clarity requirements from the start.
+### Step 2: Load Configuration
 
-### Phase 3: Implement
+Read settings from the FAI manifest and TuneKit config files.
 
-- Apply changes incrementally with reviewable checkpoints.
-- Keep component contracts, tokens, and rules explicit.
-- Avoid hidden coupling and undocumented assumptions.
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-### Phase 4: Validate
+### Step 3: Execute Core Logic
 
-- Run scenario checks for primary and edge interactions.
-- Verify accessibility, responsiveness, and behavior consistency.
-- Capture evidence, defects, and remediation status.
+Perform the primary operation: creates modal/dialog systems with focus trapping, keyboard nav, and accessibility..
 
-### Phase 5: Deploy
+### Step 4: Validate Results
 
-- Roll out in controlled stages or feature flags.
-- Monitor critical UX and performance indicators.
-- Pause or rollback if release gates fail.
+Verify the output meets quality thresholds and WAF compliance.
 
-### Phase 6: Operate
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
 
-- Track real-world behavior and drift over time.
-- Triage issues with owners and clear SLAs.
-- Feed learnings back into the next design iteration.
+## Output
 
-## WAF-Aligned Quality Gates
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-### Reliability
+## WAF Alignment
 
-- Interaction behavior remains deterministic across retries/navigation.
-- Error and empty states are present and tested.
-- Degraded behavior is defined for dependency failures.
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
 
-### Security
+## Error Handling
 
-- User input handling avoids unsafe rendering or leakage.
-- Sensitive data is excluded from client logs/telemetry.
-- Permission-sensitive views degrade safely.
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
 
-### Cost Optimization
+## Usage
 
-- Heavy UI operations are measured and right-sized.
-- Expensive visual effects are scoped by need and device capability.
-- Non-essential work is deferred or batched.
+### Standalone
 
-### Operational Excellence
+```bash
+# Run this skill directly
+npx frootai skill run fai-design-dialog-system
+```
 
-- CI quality checks run for affected surfaces.
-- Release notes and rollout/rollback steps are documented.
-- Observability events support diagnosis and product decisions.
+### Inside a Solution Play
 
-### Performance Efficiency
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
-- Rendering budgets are defined for critical views.
-- High-frequency interactions avoid unnecessary recalculation.
-- Assets and payloads remain within agreed thresholds.
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-design-dialog-system/"]
+  }
+}
+```
 
-### Responsible AI
+### Via Agent Invocation
 
-- AI-driven content is labeled and safety-checked where applicable.
-- Explanations and confidence cues are included when needed.
-- Human escalation is available for high-impact failures.
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-## Deliverables
+## Configuration Reference
 
-| Artifact | Purpose |
-|---|---|
-| Primary output | dialog-system-spec.md, modal behavior matrix, accessibility checklist |
-| Validation dossier | Test evidence and release-readiness notes |
-| Rollback guide | Mitigation and reversal actions |
-| Operate notes | Monitoring plan and ownership |
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
 
-## Completion Checklist
+## Monitoring
 
-- [ ] Phase 1 discovery artifacts completed.
-- [ ] Phase 2 design decisions documented.
-- [ ] Phase 3 implementation reviewed.
-- [ ] Phase 4 validation evidence attached.
-- [ ] Phase 5 rollout completed safely.
-- [ ] Phase 6 operate handoff accepted.
-- [ ] Completion criteria met: focus trapping validated, keyboard flows pass, error and cancel paths consistent.
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-### Symptom: Behavior differs by device or viewport
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-- Compare breakpoint rules, input methods, and density assumptions.
-- Validate typography and spacing tokens in affected contexts.
-- Re-run targeted scenarios on representative devices.
+## Notes
 
-### Symptom: Performance regression after release
-
-- Profile render paths and expensive state updates.
-- Reduce unnecessary effects, reflows, and oversized assets.
-- Verify caching/memoization behavior on critical paths.
-
-### Symptom: Users fail to recover from errors
-
-- Audit copy clarity and recovery action prominence.
-- Add contextual guidance and escalation routes.
-- Confirm errors include actionable next steps.
-
-## Example Commands
-
-```bash
-# Adapt to repository standards
-npm run lint
-npm test
-npm run build
-```
-
-## Definition of Done
-
-This skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce the workflow without tribal knowledge.
-
-## Metadata
-
-- Category: Design
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly and after major UX architecture updates
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

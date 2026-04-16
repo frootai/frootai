@@ -1,6 +1,6 @@
 ---
-name: fai-cost-dashboard-create
-description: "Create a cost attribution dashboard for AI workloads with Azure Cost Management"
+name: cost-dashboard-create
+description: "Create cost dashboards, budget alerts, and attribution views for AI workloads - track token spend by model, team, and tenant before overruns hit production"
 ---
 
 # Cost Dashboard Create
@@ -93,10 +93,18 @@ AzureDiagnostics
 | where TimeGenerated > ago(7d)
 | extend props = parse_json(properties_s)
 | extend cacheHit = tobool(props.cacheHit), model = tostring(props.modelName)
-| summarize hits = countif(cacheHit), misses = countif(not(cacheHit)) by model
+| extend tokens = toint(props.promptTokens) + toint(props.completionTokens)
+| summarize hits = countif(cacheHit),
+            misses = countif(not(cacheHit)),
+            avgMissTokens = avgif(tokens, not(cacheHit))
+    by model
 | extend hitRate = round(100.0 * hits / (hits + misses), 1),
-         estimatedSavings = misses * 0.0  // replace 0.0 with avg cost per miss
-| project model, hits, misses, hitRate
+         avgMissCost = case(
+             model == "gpt-4o", (avgMissTokens / 1000.0) * 0.0035,
+             model == "gpt-4o-mini", (avgMissTokens / 1000.0) * 0.000375,
+             0.0),
+         estimatedSavings = round(hits * avgMissCost, 2)
+| project model, hits, misses, hitRate, estimatedSavings
 ```
 
 **Tab 4 — Per-Team Allocation** (pie chart + table):

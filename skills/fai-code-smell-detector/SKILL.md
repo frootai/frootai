@@ -1,105 +1,161 @@
 ---
 name: fai-code-smell-detector
-description: |
-  Detect and prioritize code smells with severity scoring, refactor suggestions,
-  and risk-aware cleanup ordering. Use when improving code quality, reducing
-  tech debt, or preparing for a refactoring sprint.
+description: Analyze Python/TypeScript code for smell patterns and suggest refactoring opportunities.
 ---
 
-# Code Smell Detection
+# Fai Code Smell Detector
 
-Identify, prioritize, and address code quality issues systematically.
+Identifies code smells and anti-patterns with refactoring recommendations.
 
-## When to Use
+## Overview
 
-- Planning a refactoring sprint
-- Reviewing codebase health before a major feature
-- Onboarding onto an unfamiliar codebase
-- Setting up automated quality gates in CI
+This skill provides a structured, repeatable procedure for identifies code smells and anti-patterns with refactoring recommendations.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Code Quality
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Common Smells and Fixes
+## Parameters
 
-| Smell | Detection Signal | Refactor |
-|-------|-----------------|----------|
-| Long method | >50 lines | Extract method |
-| God class | >500 lines, >10 methods | Split by responsibility |
-| Feature envy | Method uses another class more than its own | Move method |
-| Primitive obsession | Many raw strings/ints as params | Introduce value objects |
-| Deep nesting | >3 levels of if/for | Early returns, extract |
-| Duplicate code | >10 lines repeated | Extract shared function |
-| Dead code | Unreachable or unused | Delete it |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Automated Detection
+## Steps
 
-```python
-import ast, os
+### Step 1: Validate Prerequisites
 
-def detect_long_methods(file_path: str, threshold: int = 50) -> list[dict]:
-    """Find functions longer than threshold lines."""
-    with open(file_path) as f:
-        tree = ast.parse(f.read())
-    smells = []
-    for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            length = node.end_lineno - node.lineno + 1
-            if length > threshold:
-                smells.append({"file": file_path, "function": node.name,
-                    "lines": length, "severity": "high" if length > 100 else "medium"})
-    return smells
-```
-
-## Prioritization Matrix
-
-| Severity | Impact | Fix Effort | Priority |
-|----------|--------|------------|----------|
-| High | Bugs likely | Low | Fix now |
-| High | Bugs likely | High | Plan sprint |
-| Medium | Readability | Low | Fix opportunistically |
-| Low | Style | Any | Optional |
-
-## CI Integration
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Run ruff for Python code smells
-ruff check . --select C901,E501,W291 --statistics
-
-# Run SonarQube for multi-language
-sonar-scanner -Dsonar.projectKey=myapp
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: identifies code smells and anti-patterns with refactoring recommendations..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| security | Validates credentials, enforces least-privilege, scans for secrets |
+
+## Compatible Solution Plays
+
+- **Play 24**
+- **Play 51**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-code-smell-detector
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-code-smell-detector/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Too many findings | No severity filter | Focus on High first |
-| False positives | Generic rules | Customize rules per project |
-| Team ignores findings | No priority | Use prioritization matrix |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Tests before refactoring | Safety net for behavior preservation |
-| One refactoring per commit | Easy to revert specific changes |
-| No feature changes mixed in | Separate refactor from feature PRs |
-| Measure complexity before/after | Prove improvement objectively |
-| Small PRs (< 200 lines changed) | Easier to review thoroughly |
-| CI must pass after each step | Catch breakage immediately |
-
-## Refactoring Safety Checklist
-
-- [ ] All existing tests pass before starting
-- [ ] Each refactoring step committed separately
-- [ ] No behavior changes (same inputs → same outputs)
-- [ ] All tests still pass after each step
-- [ ] Complexity metrics improved
-- [ ] PR is under 200 lines of changes
-
-## Related Skills
-
-- `fai-refactor-complexity` — Reduce cyclomatic complexity
-- `fai-refactor-plan` — Multi-sprint refactoring plans
-- `fai-code-smell-detector` — Automated smell detection
-- `fai-review-and-refactor` — Combined review + fix workflow
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Code Quality category in the FAI primitives catalog

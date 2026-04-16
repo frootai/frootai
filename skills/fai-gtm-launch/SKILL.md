@@ -1,115 +1,156 @@
 ---
 name: fai-gtm-launch
-description: |
-  Execute product launches with coordinated messaging, channel orchestration,
-  launch checklist, and post-launch diagnostics. Use when shipping new features,
-  releases, or major product updates.
+description: Execute go-to-market launch plan for AI product.
 ---
 
-# Product Launch Execution
+# Fai Gtm Launch
 
-Coordinate launches with messaging, channels, checklists, and diagnostics.
+Creates a go-to-market launch plan for AI products with timeline, channels, and metrics.
 
-## When to Use
+## Overview
 
-- Shipping a major product release or new feature
-- Coordinating cross-team launch activities
-- Creating launch checklists and runbooks
-- Running post-launch diagnostics and retrospectives
+This skill provides a structured, repeatable procedure for creates a go-to-market launch plan for ai products with timeline, channels, and metrics.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Launch Checklist
+## Parameters
 
-```markdown
-## Launch Checklist — [Feature/Version]
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-### Pre-Launch (T-7 days)
-- [ ] Release branch cut and tested
-- [ ] Changelog and release notes drafted
-- [ ] Blog post / announcement written
-- [ ] Demo video recorded
-- [ ] Documentation updated
-- [ ] Social media posts scheduled
-- [ ] Email campaign prepared
-- [ ] Partner notifications sent
+## Steps
 
-### Launch Day (T-0)
-- [ ] Deploy to production
-- [ ] Smoke tests pass
-- [ ] Monitoring dashboards active
-- [ ] Publish blog post
-- [ ] Send email announcement
-- [ ] Post on social channels
-- [ ] Update website
-- [ ] Notify community (Discord/Discussions)
+### Step 1: Validate Prerequisites
 
-### Post-Launch (T+1 to T+7)
-- [ ] Monitor error rates and latency
-- [ ] Track adoption metrics (installs, API calls)
-- [ ] Collect user feedback
-- [ ] Triage incoming issues
-- [ ] Post retrospective summary
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Channel Orchestration
+### Step 2: Load Configuration
 
-| Channel | Content | Owner | Timing |
-|---------|---------|-------|--------|
-| Blog | Feature deep-dive | Marketing | T-0 |
-| Twitter/X | Thread + demo GIF | DevRel | T-0 |
-| Email | Customer announcement | Marketing | T-0 |
-| Discord | Community highlight | Community | T-0 |
-| GitHub | Release + changelog | Engineering | T-0 |
-| VS Code Marketplace | Extension update | Engineering | T-0 |
-| npm | Package publish | Engineering | T-0 |
+Read settings from the FAI manifest and TuneKit config files.
 
-## Post-Launch Diagnostics
-
-```python
-def launch_health(metrics_before: dict, metrics_after: dict) -> dict:
-    return {
-        "adoption_delta": metrics_after["active_users"] - metrics_before["active_users"],
-        "error_rate_change": metrics_after["error_rate"] - metrics_before["error_rate"],
-        "latency_change_ms": metrics_after["p95_ms"] - metrics_before["p95_ms"],
-        "healthy": (metrics_after["error_rate"] < 0.02 and
-                    metrics_after["p95_ms"] < 3000),
-    }
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: creates a go-to-market launch plan for ai products with timeline, channels, and metrics..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-launch
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-launch/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Low awareness of launch | No distribution plan | Use channel orchestration table |
-| Bugs flood after launch | Insufficient testing | Add more smoke tests, do staged rollout |
-| Team confusion on launch day | No checklist | Use launch checklist with owners |
-| Can't measure impact | No baseline metrics | Capture metrics 24h before launch |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

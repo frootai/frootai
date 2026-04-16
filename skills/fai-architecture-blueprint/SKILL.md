@@ -1,147 +1,163 @@
 ---
 name: fai-architecture-blueprint
-description: |
-  Generate architecture blueprints with service boundaries, data flows, trust zones,
-  deployment topology, and cost profiles. Analyzes codebases to produce diagrams and
-  component documentation. Use when starting a new project, onboarding, or reviewing architecture.
+description: Generate solution architecture blueprints with Mermaid service topology, component responsibility tables, data flow annotations, and WAF pillar mapping — bridging system design to implementation.
 ---
 
-# Architecture Blueprint Generator
+# FAI Architecture Blueprint
 
-Analyze codebases and produce comprehensive architecture documentation.
+Creates living, commit-tracked architecture blueprints that combine visual diagrams, component responsibility matrices, data flow descriptions, and WAF alignment in a single document. Prevents the gap between "what was designed" and "what was built" by making blueprints pull from the same source of truth as the infrastructure code.
 
-## When to Use
+## When to Invoke
 
-- Starting a new project — define the target architecture
-- Onboarding — document an existing system's architecture
-- Architecture review — identify gaps, single points of failure, security boundaries
-- Before major refactoring — capture current state for comparison
+| Signal | Example |
+|--------|---------|
+| Starting a new solution play | No architecture doc exists yet |
+| Services have drifted from original design | Code added components not in any diagram |
+| Onboarding a new team member | Need a visual walkthrough of the system |
+| Preparing for a WAF review | Need pillar mapping per component |
 
----
+## Workflow
 
-## Step 1: Detect Technology Stack
+### Step 1 — Discover Existing Components
 
-Scan the repository for framework indicators:
+Scan the repository for service definitions, infrastructure files, and API contracts.
 
-```python
-from pathlib import Path
+```bash
+# Discover services from Bicep resources
+grep -r "resource " infra/ --include="*.bicep" | \
+  grep -v "//" | awk '{print $2, $3}' | sort -u
 
-INDICATORS = {
-    "package.json": "Node.js",
-    "requirements.txt": "Python",
-    "pyproject.toml": "Python",
-    "*.csproj": ".NET",
-    "go.mod": "Go",
-    "Cargo.toml": "Rust",
-    "pom.xml": "Java (Maven)",
-    "build.gradle": "Java/Kotlin (Gradle)",
-    "main.bicep": "Azure IaC (Bicep)",
-    "main.tf": "Terraform",
-    "docker-compose.yml": "Docker Compose",
-    "azure.yaml": "Azure Developer CLI",
-}
+# From docker-compose
+grep "^  [a-z]" docker-compose.yml | tr -d ':' | sort
 
-def detect_stack(root: Path) -> list[str]:
-    detected = []
-    for pattern, tech in INDICATORS.items():
-        if list(root.rglob(pattern)):
-            detected.append(tech)
-    return detected
+# From solution-play manifest
+cat fai-manifest.json | node -e "
+  const d = JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'));
+  console.log(JSON.stringify(d.infrastructure?.resources ?? [], null, 2));
+"
 ```
 
-## Step 2: Map Service Boundaries
-
-Identify microservices or modules from directory structure:
-
-```python
-def discover_services(root: Path) -> list[dict]:
-    """Find service boundaries by looking for entry points and Dockerfiles."""
-    services = []
-    for dockerfile in root.rglob("Dockerfile"):
-        svc_dir = dockerfile.parent
-        services.append({
-            "name": svc_dir.name,
-            "path": str(svc_dir.relative_to(root)),
-            "has_tests": bool(list(svc_dir.rglob("test*"))),
-            "has_infra": bool(list(svc_dir.rglob("*.bicep")))
-                         or bool(list(svc_dir.rglob("*.tf"))),
-            "endpoints": extract_routes(svc_dir),
-        })
-    return services
-```
-
-## Step 3: Generate Architecture Diagram
-
-Produce Mermaid diagrams at multiple abstraction levels:
-
-```python
-def generate_c4_context(services: list[dict], external: list[str]) -> str:
-    """Generate C4 Context diagram in Mermaid."""
-    lines = ["graph TB"]
-    lines.append('    User["👤 User"]')
-    for svc in services:
-        lines.append(f'    {svc["name"]}["{svc["name"]}"]')
-        lines.append(f'    User --> {svc["name"]}')
-    for ext in external:
-        lines.append(f'    {ext}[("{ext}")]')
-    return "\n".join(lines)
-```
-
-### Example Output
+### Step 2 — Generate Service Topology Diagram
 
 ```mermaid
-graph TB
-    User["👤 User"]
-    API["API Gateway"]
-    Worker["Background Worker"]
-    Search["Azure AI Search"]
-    OpenAI["Azure OpenAI"]
-    User --> API
-    API --> Worker
-    API --> Search
-    Worker --> OpenAI
+graph TD
+    Client[Browser / Mobile Client]
+    APIM[Azure API Management]
+    FuncApp[Azure Functions -- AI Gateway]
+    AOAI[Azure OpenAI gpt-4o]
+    AISearch[Azure AI Search]
+    CosmosDB[Cosmos DB -- Conversation History]
+    Redis[Redis Cache -- Semantic Cache]
+    KeyVault[Azure Key Vault]
+    ContentSafety[Azure Content Safety]
+
+    Client -->|HTTPS + Bearer| APIM
+    APIM -->|rate-limit + auth| FuncApp
+    FuncApp -->|semantic cache check| Redis
+    FuncApp -->|moderation| ContentSafety
+    FuncApp -->|hybrid search| AISearch
+    FuncApp -->|chat completion| AOAI
+    FuncApp -->|store turn| CosmosDB
+    FuncApp -->|read secrets| KeyVault
 ```
 
-## Step 4: Document Trust Zones
+### Step 3 — Component Responsibility Table
 
-```markdown
-## Trust Zones
+| Component | Responsibility | Owner | SLA | Data Class |
+|-----------|---------------|-------|-----|------------|
+| API Management | Auth, rate limiting, routing | Platform | 99.95% | Public |
+| AI Gateway (Functions) | Orchestration, caching, safety | App | 99.9% | Internal |
+| Azure OpenAI | Text generation | Azure | 99.9% | Confidential |
+| AI Search | Hybrid retrieval | App | 99.9% | Internal |
+| Cosmos DB | Conversation persistence | App | 99.999% | Confidential |
+| Redis Cache | Semantic cache | App | 99.9% | Internal |
+| Key Vault | Secret management | Platform | 99.99% | Restricted |
+| Content Safety | Input/output moderation | App | 99.9% | Confidential |
 
-| Zone | Services | Network | Auth |
-|------|----------|---------|------|
-| Public | API Gateway, CDN | Internet-facing, WAF-protected | OAuth2 / API Key |
-| Application | API, Workers | Private VNet subnet | Managed Identity |
-| Data | SQL, Storage, Search | Private endpoints only | RBAC + Private Link |
-| Management | Bastion, Monitor | Hub VNet | AAD + MFA |
+### Step 4 — Data Flow Annotation
+
+```yaml
+# data-flows.yaml — machine-readable flow registry
+flows:
+  - id: user-query
+    type: sync
+    path: [Client, APIM, FuncApp, ContentSafety, Redis, AISearch, AOAI]
+    latency_budget_ms: 3000
+    pii: true
+    encryption: tls1.3
+
+  - id: history-write
+    type: async
+    path: [FuncApp, CosmosDB]
+    latency_budget_ms: 500
+    pii: true
+    encryption: at-rest-aes256
 ```
 
-## Step 5: Cost Profile
+### Step 5 — WAF Pillar Mapping
 
-```markdown
-## Cost Estimate (Monthly)
+| Component | Reliability | Security | Cost | Performance | OpEx | Resp. AI |
+|-----------|------------|---------|------|-------------|------|----------|
+| APIM | circuit-breaker | RBAC, JWT | pay-per-call | caching | API versioning | rate limiting |
+| AI Gateway | retry + DLQ | Managed Identity | semantic cache | streaming | App Insights | content safety |
+| Azure OpenAI | PTU fallback | private endpoint | model routing | TPM quota | audit logs | content filter |
 
-| Service | SKU | Est. Cost | Notes |
-|---------|-----|-----------|-------|
-| Azure OpenAI | S0 80K TPM | $X | PAYG, consider PTU if >60% util |
-| AI Search | Standard S1 | $X | 1 replica, 1 partition for dev |
-| App Service | P1v3 | $X | Auto-scale 1-4 instances |
-| SQL Database | S2 (50 DTU) | $X | Consider serverless for dev |
-| **Total** | | **$X/mo** | |
+### Step 6 — Key Design Decisions
+
+| ID | Decision | Reason | Trade-off |
+|----|----------|--------|-----------|
+| D-01 | Semantic cache in Redis | 40% cost reduction on repeated queries | Cache invalidation complexity |
+| D-02 | Azure Functions for gateway | Serverless scaling, low ops overhead | Cold start on first request |
+| D-03 | Hybrid search (BM25 + vector) | Better recall than pure vector | Slightly higher latency |
+
+## Output Files
+
+```
+docs/
+  architecture-blueprint.md        <- This document (human-readable)
+  data-flows.yaml                   <- Machine-readable flow registry
+  architecture-blueprint.mermaid    <- Standalone diagram for tooling
 ```
 
-## Checklist
+## WAF Alignment
 
-- [ ] Technology stack detected and documented
-- [ ] Service boundaries mapped with entry points
-- [ ] C4 diagrams generated (Context, Container, Component)
-- [ ] Trust zones defined with network and auth controls
-- [ ] Data flow documented with sensitivity classification
-- [ ] Cost profile estimated per environment
+| Pillar | Contribution |
+|--------|-------------|
+| Operational Excellence | Blueprints committed to repo ensure design and code stay in sync |
+| Reliability | Data flow annotations include latency budgets enabling SLO definition |
+| Security | Data classification per component drives encryption and access decisions |
 
-## Troubleshooting
+## Compatible Solution Plays
 
-| Issue | Fix |
-|-------|-----|
-| Blueprint too abstract | Add specific SKUs, regions, SLAs, and policy constraints |
-| Missing services | Check for serverless functions and background jobs beyond Dockerfiles |
-| Stale diagrams | Generate diagrams from code in CI, not manually |
+- **Play 02** — AI Landing Zone (infrastructure topology)
+- **Play 01** — Enterprise RAG (service topology)
+- **Play 11** — AI Landing Zone Advanced
+
+## Blueprint Freshness Check
+
+Run this script in CI to flag components in deployment that are not documented in the blueprint:
+
+```bash
+#!/usr/bin/env bash
+# Check for undocumented resources
+DEPLOYED=$(az resource list --resource-group "$RG_NAME" \
+  --query "[].name" --output tsv | sort)
+
+DOCUMENTED=$(grep -oP '(?<=\[)[A-Za-z ]+(?=\])' docs/architecture-blueprint.md | \
+  tr '[:upper:]' '[:lower:]' | sort)
+
+UNDOCUMENTED=$(comm -23 <(echo "$DEPLOYED") <(echo "$DOCUMENTED"))
+if [ -n "$UNDOCUMENTED" ]; then
+  echo "WARNING: undocumented resources detected:"
+  echo "$UNDOCUMENTED"
+  exit 1
+fi
+echo "Blueprint is up to date with deployed resources."
+```
+
+## Notes
+
+- Blueprints are living documents — update the decision log (Step 6) for every significant architecture change
+- Use Mermaid for diagrams; they render natively in GitHub, VS Code, and frootai.dev
+- `data-flows.yaml` can be consumed by scripts to auto-generate network security group rules
+- Run the freshness check in CI to catch undocumented resources before they become architecture drift

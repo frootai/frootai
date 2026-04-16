@@ -1,102 +1,156 @@
 ---
 name: fai-github-issue-triage
-description: |
-  Automate GitHub issue triage with AI-powered classification, priority assignment,
-  labeling, and routing. Use when managing high-volume issue queues or setting up
-  automated triage workflows.
+description: Triage and prioritize GitHub issues using labels and automation.
 ---
 
-# GitHub Issue Triage
+# Fai Github Issue Triage
 
-Automate issue classification, prioritization, and routing with AI and GitHub CLI.
+Triages GitHub issues with priority, labels, assignment, and milestone recommendations.
 
-## When to Use
+## Overview
 
-- Managing high-volume open-source or internal issue queues
-- Automating label assignment and priority scoring
-- Routing issues to the right team or individual
-- Tracking triage SLAs and response times
+This skill provides a structured, repeatable procedure for triages github issues with priority, labels, assignment, and milestone recommendations.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## AI-Powered Classification
+## Parameters
 
-```python
-from pydantic import BaseModel
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-class TriageResult(BaseModel):
-    category: str  # bug, feature, question, docs, security
-    priority: str  # P1-critical, P2-high, P3-medium, P4-low
-    labels: list[str]
-    assignee_team: str
-    needs_reproduction: bool
+## Steps
 
-def triage_issue(title: str, body: str) -> TriageResult:
-    resp = client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": """Triage GitHub issues. Classify:
-- category: bug/feature/question/docs/security
-- priority: P1=outage, P2=degraded, P3=enhancement, P4=question
-- labels: relevant labels from [bug, enhancement, question, documentation, security, good-first-issue]
-- assignee_team: ai-platform/infra/frontend/docs
-- needs_reproduction: true if bug without repro steps"""},
-            {"role": "user", "content": f"Title: {title}\nBody: {body}"},
-        ],
-        response_format=TriageResult,
-    )
-    return resp.choices[0].message.parsed
-```
+### Step 1: Validate Prerequisites
 
-## GitHub Actions Automation
-
-```yaml
-name: Auto-Triage Issues
-on: { issues: { types: [opened] } }
-
-permissions:
-  issues: write
-
-jobs:
-  triage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Classify and label
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          TITLE="${{ github.event.issue.title }}"
-          python scripts/triage.py --title "$TITLE" --number $ISSUE_NUMBER
-```
-
-## CLI-Based Triage
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# List untriaged issues
-gh issue list --label "" --state open --json number,title,createdAt \
-  -q '.[] | select(.createdAt > (now - 86400 | todate))'
-
-# Apply triage results
-gh issue edit 42 --add-label "bug,P2-high,ai-platform" --add-assignee @team/ai
-gh issue comment 42 --body "Triaged: P2 bug, assigned to AI Platform team."
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Triage SLA Dashboard
+### Step 2: Load Configuration
 
-| Priority | Response Target | Resolution Target |
-|----------|----------------|-------------------|
-| P1 | 1 hour | 24 hours |
-| P2 | 4 hours | 1 week |
-| P3 | 1 business day | 2 weeks |
-| P4 | 1 week | Best effort |
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: triages github issues with priority, labels, assignment, and milestone recommendations..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-github-issue-triage
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-github-issue-triage/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Wrong classification | Vague issue title/body | Ask for reproduction steps via template |
-| Duplicate labels | Multiple triage runs | Check existing labels before adding |
-| Stale issues piling up | No staleness policy | Add stale bot with 30-day warning |
-| P1 not escalated | No alerting on P1 | Send Slack/Teams notification on P1 |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

@@ -1,127 +1,219 @@
 ---
 name: fai-azure-cosmos-modeling
-description: |
-  Model Cosmos DB containers with partition key strategy, RU budgets, indexing policies,
-  and consistency levels. Use when designing NoSQL data models for AI applications
-  with high throughput and global distribution requirements.
+description: Design Cosmos DB data models with optimal partition keys, Request Unit (RU) estimation, vector search embedding storage, and analytical workload isolation — exceeding relational DB performance on RAG and time-series queries.
 ---
 
-# Cosmos DB Data Modeling
+# FAI Azure Cosmos DB Modeling
 
-Design Cosmos DB containers with optimal partitioning, indexing, and consistency for AI workloads.
+Designs Cosmos DB schemas that maximize throughput, minimise cross-partition queries, and integrate vector search for RAG workloads. Prevents data model mistakes: wrong partition key causing hot partitions, no analytical isolation leading to OLTP query degradation, and oversized RU provisioning.
 
-## When to Use
+## When to Invoke
 
-- Designing a new Cosmos DB data model for an AI application
-- Optimizing partition keys to avoid hot partitions
-- Tuning RU consumption with selective indexing
-- Choosing consistency levels for multi-region deployments
+| Signal | Example |
+|--------|---------|
+| Query latency is high | Conversation history queries touching 100M docs |
+| RU usage spikes unpredictably | Partition is hot; some sessions timeout |
+| Vector search results are slow | 10M embeddings in same partition as chat history |
+| Analytical queries block OLTP | Long-running aggregation on prod container |
 
----
+## Workflow
 
-## Container Design
+### Step 1 — Partition Key Selection
 
-```bicep
-resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
-  name: cosmosName
-  location: location
-  kind: 'GlobalDocumentDB'
-  properties: {
-    databaseAccountOfferType: 'Standard'
-    consistencyPolicy: { defaultConsistencyLevel: 'Session' }
-    locations: [{ locationName: location, failoverPriority: 0 }]
-    capabilities: [{ name: 'EnableServerless' }]  // or use provisioned throughput
-  }
-}
-
-resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-05-15' = {
-  name: 'appdb'
-  parent: cosmosAccount
-  properties: { resource: { id: 'appdb' } }
-}
-
-resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/sqlContainers@2024-05-15' = {
-  name: 'events'
-  parent: database
-  properties: {
-    resource: {
-      id: 'events'
-      partitionKey: { paths: ['/tenantId'], kind: 'Hash', version: 2 }
-      indexingPolicy: {
-        indexingMode: 'consistent'
-        includedPaths: [{ path: '/category/?' }, { path: '/timestamp/?' }]
-        excludedPaths: [{ path: '/payload/*' }, { path: '/"_etag"/?' }]
-      }
-      defaultTtl: 7776000  // 90 days in seconds
+```python
+def analyze_partition_distribution(documents: list[dict]) -> dict:
+    """Score potential partition keys."""
+    scores = {}
+    
+    # Candidate 1: userId (high cardinality)
+    user_ids = len(set(d["userId"] for d in documents))
+    avg_docs_per_user = len(documents) / user_ids
+    scores["userId"] = {
+        "cardinality": user_ids,
+        "avg_docs_per_partition": avg_docs_per_user,
+        "hot_partition_risk": "LOW" if avg_docs_per_user < 1000 else "HIGH",
     }
-    options: { autoscaleSettings: { maxThroughput: 10000 } }
-  }
-}
+    
+    # Candidate 2: date (temporal)
+    dates = len(set(d["date"][:10] for d in documents))
+    avg_docs_per_date = len(documents) / dates
+    scores["date"] = {
+        "cardinality": dates,
+        "avg_docs_per_partition": avg_docs_per_date,
+        "hot_partition_risk": "MEDIUM",  # Today's partition is always hot
+    }
+    
+    # Candidate 3: category (low cardinality) — AVOID
+    categories = len(set(d["category"] for d in documents))
+    scores["category"] = {
+        "cardinality": categories,
+        "risk": "DO NOT USE — too few partitions will cause imbalance"
+    }
+    
+    return {k: v for k, v in sorted(scores.items(), 
+            key=lambda x: x[1].get("cardinality", 0), reverse=True)}
 ```
 
-## Partition Key Selection
-
-| Pattern | Good Key | Why |
-|---------|----------|-----|
-| Multi-tenant SaaS | `/tenantId` | Even distribution, natural isolation |
-| IoT telemetry | `/deviceId` | High cardinality, co-located reads |
-| E-commerce | `/customerId` | Most queries scoped to one customer |
-| Chat/session | `/sessionId` | Co-locates conversation history |
-| **Avoid** | `/status`, `/country` | Low cardinality → hot partitions |
-
-## Query with SDK
+### Step 2 — Container Design for RAG
 
 ```python
 from azure.cosmos import CosmosClient
-from azure.identity import DefaultAzureCredential
 
-client = CosmosClient(
-    url="https://cosmos-prod.documents.azure.com:443/",
-    credential=DefaultAzureCredential()
+client = CosmosClient(COSMOS_ENDPOINT, DefaultAzureCredential())
+database = client.get_database_client(DATABASE_NAME)
+
+# Container 1: Embeddings (vector search heavy)
+embeddings_container = database.create_container(
+    id="embeddings",
+    partition_key="/user_id",       # Separate by user for multi-tenancy
+    indexing_policy={
+        "indexingMode": "consistent",
+        "included_paths": [
+            {"path": "/user_id"},
+            {"path": "/vector_.*",  "kind": "VectorIndex"},
+        ],
+        "vector_indexes": [{
+            "path": "/vector_embedding",
+            "dimensions": 3072,
+            "similarity": "cosine",
+        }]
+    }
 )
-container = client.get_database_client("appdb").get_container_client("events")
 
-# Efficient: partition key in query
-items = container.query_items(
-    query="SELECT * FROM c WHERE c.tenantId = @tenant AND c.category = @cat",
-    parameters=[
-        {"name": "@tenant", "value": "tenant-123"},
-        {"name": "@cat", "value": "inference"},
-    ],
-    partition_key="tenant-123",  # Single-partition query = low RU
+# Container 2: Conversation history (OLTP)
+history_container = database.create_container(
+    id="conversations",
+    partition_key="/session_id",    # One session = one partition
+    indexing_policy={
+        "included_paths": [
+            {"path": "/session_id"},
+            {"path": "/timestamp"},
+        ]
+    }
 )
 
-for item in items:
-    print(f"{item['id']}: {item['category']}")
+# Container 3: Aggregated metrics (analytical workload isolation)
+metrics_container = database.create_container(
+    id="metrics",
+    partition_key="/date",          # Temporal partitioning
+    throughput=400,                 # Shared throughput for analytics
+)
 ```
 
-## Indexing Policy Optimization
+### Step 3 — RU Estimation
 
-Exclude large fields and fields you never filter/sort on:
+```python
+def estimate_daily_rus(
+    sessions_per_day: int = 1000,
+    embeddings_per_session: int = 10,
+    history_lookback_days: int = 30,
+) -> dict:
+    """Estimate daily RU consumption."""
+    
+    # Embedding search: 2 RU per query
+    embedding_searches = sessions_per_day * embeddings_per_session
+    embedding_rue = embedding_searches * 2
+    
+    # History read (paginate through chat): 3 RU per page * sessions
+    history_pages = sessions_per_day * 3
+    history_rue = history_pages * 3
+    
+    # Daily aggregation query: 100 RU once per day
+    aggregation_rue = 100
+    
+    total_hourly = (embedding_rue + history_rue + aggregation_rue) / 24
+    total_daily = embedding_rue + history_rue + aggregation_rue
+    
+    return {
+        "embedding_searches_daily": embedding_searches,
+        "embedding_rue": embedding_rue,
+        "history_rue": history_rue,
+        "aggregation_rue": aggregation_rue,
+        "total_daily_rue": total_daily,
+        "recommended_provisioned_rue": total_daily * 1.3,  # 30% headroom
+    }
 
-```json
-{
-  "indexingMode": "consistent",
-  "includedPaths": [
-    { "path": "/category/?" },
-    { "path": "/timestamp/?" },
-    { "path": "/status/?" }
-  ],
-  "excludedPaths": [
-    { "path": "/payload/*" },
-    { "path": "/embedding/*" },
-    { "path": "/*" }
-  ]
+est = estimate_daily_rus()
+print(f"Estimated daily RU: {est['total_daily_rue']}")
+print(f"Recommended provisioned: {est['recommended_provisioned_rue']}")
+```
+
+### Step 4 — Query Patterns and Indexes
+
+```python
+# Pattern 1: Vector similarity search (5 most relevant)
+vector_query = """
+    SELECT c.id, c.text, VectorDistance(c.vector_embedding, @input_vector) as distance
+    FROM c
+    WHERE c.user_id = @user_id
+    ORDER BY distance
+    OFFSET 0 LIMIT 5
+"""
+
+# Pattern 2: Conversation history with pagination
+history_query = """
+    SELECT c.id, c.message, c.role, c.timestamp
+    FROM c
+    WHERE c.session_id = @session_id
+    ORDER BY c.timestamp DESC
+    OFFSET @offset LIMIT 20
+"""
+
+# Add composite index for pattern 2
+indexing_policy = {
+    "composite_indexes": [[
+        {"path": "/session_id", "order": "ascending"},
+        {"path": "/timestamp", "order": "descending"},
+    ]]
 }
 ```
 
-**Rule of thumb:** Exclude everything, then include only paths you query on. This can reduce write RU by 50%+.
+### Step 5 — Partition Size and Lifecycle
 
-## Troubleshooting
+```bicep
+// infra/cosmos-containers.bicep
+param databaseName string
+param containerName string
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Hot partitions (429s on some) | Low-cardinality partition key | Choose high-cardinality key, use hierarchical partitioning |
-| High RU charges | Cross-partition queries or over-indexing | Add partition key to queries, trim indexing policy |
-| Stale reads in multi-region | Consistency level too weak | Upgrade from Eventual to Session or Bounded Staleness |
-| TTL not deleting expired items | defaultTtl not set or ttl field missing | Set defaultTtl on container, add ttl field to documents |
+resource cosmosContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
+  name: '${accountName}/${databaseName}/${containerName}'
+  properties: {
+    resource: {
+      id: containerName
+      partitionKey: { paths: ['/user_id'] }
+      maxClientForwardedByteSize: 100  // Keep partitions < 100GB
+      indexingPolicy: { indexingMode: 'consistent' }
+    }
+    options: { throughput: 4000 }
+  }
+}
+
+// Time-to-live: auto-delete old embeddings after 90 days
+resource ttl 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/ttl@2023-04-15' = {
+  name: '${containerName}/default'
+  properties: {
+    ttl: 7776000  // 90 days in seconds
+  }
+}
+```
+
+## WAF Alignment
+
+| Pillar | Contribution |
+|--------|-------------|
+| Performance Efficiency | Vector indexes enable <100ms similarity search on 10M embeddings |
+| Cost Optimization | Correct partition key avoids hot partitions and RU waste |
+| Reliability | Temporal partitioning (analytics isolated) prevents OLTP query interference |
+
+## Compatible Solution Plays
+
+- **Play 01** — Enterprise RAG (conversation + embedding storage)
+- **Play 20** — Real-Time Analytics (time-series data)
+- **Play 02** — AI Landing Zone (shared database infrastructure)
+
+## Notes
+
+- Partition key should have cardinality >= number of documents / 10GB partition max
+- Vector indexes require dimension count to match embedding model output exactly
+- Hot partition risk increases if avg docs per partition > 1000; consider multiple partition keys
+- TTL policy prevents unbounded container growth for conversation history

@@ -1,156 +1,180 @@
 ---
 name: fai-fastapi-scaffold
-description: |
-  Scaffold FastAPI services with async endpoints, Pydantic validation, middleware
-  stack, health checks, and OpenAPI generation. Use when building Python APIs
-  for AI inference, data processing, or microservices.
+description: Scaffold FastAPI microservices with async handlers and OpenAPI.
 ---
 
-# FastAPI Scaffold
+# Fai Fastapi Scaffold
 
-Scaffold production-ready FastAPI services with validation, middleware, and observability.
+Scaffolds a FastAPI Python project with Pydantic models, async endpoints, and pytest configuration.
 
-## When to Use
+## Overview
 
-- Building Python APIs for AI inference endpoints
-- Creating microservices with structured validation
-- Setting up health checks and OpenAPI documentation
-- Adding middleware for logging, CORS, and rate limiting
+This skill provides a structured, repeatable procedure for scaffolds a fastapi python project with pydantic models, async endpoints, and pytest configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** API Development
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Project Structure
+## Parameters
 
-```
-src/
-  main.py           # App factory + routes
-  config.py          # Settings from environment
-  models.py          # Pydantic request/response models
-  middleware.py       # Logging, CORS, error handling
-  routes/
-    chat.py          # Chat endpoint
-    health.py        # Health check
-  services/
-    openai_client.py # Azure OpenAI wrapper
-tests/
-  test_chat.py
-  test_health.py
-Dockerfile
-requirements.txt
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## main.py
+## Steps
 
-```python
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-from .routes import chat, health
-from .middleware import setup_middleware
+### Step 1: Validate Prerequisites
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup: initialize clients
-    app.state.oai_client = create_openai_client()
-    yield
-    # Shutdown: cleanup
+Verify all required tools, credentials, and dependencies are available.
 
-app = FastAPI(title="AI API", version="1.0.0", lifespan=lifespan)
-setup_middleware(app)
-app.include_router(health.router)
-app.include_router(chat.router, prefix="/api")
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## models.py
+### Step 2: Load Configuration
 
-```python
-from pydantic import BaseModel, Field
+Read settings from the FAI manifest and TuneKit config files.
 
-class ChatRequest(BaseModel):
-    message: str = Field(..., min_length=1, max_length=4000)
-    model: str = Field(default="gpt-4o-mini", pattern=r"^gpt-4o(-mini)?$")
-    temperature: float = Field(default=0.3, ge=0, le=2)
-
-class ChatResponse(BaseModel):
-    answer: str
-    model: str
-    tokens: int
-    latency_ms: float
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## routes/chat.py
+### Step 3: Execute Core Logic
 
-```python
-from fastapi import APIRouter, Request
-from ..models import ChatRequest, ChatResponse
-import time
+Perform the primary operation: scaffolds a fastapi python project with pydantic models, async endpoints, and pytest configuration..
 
-router = APIRouter()
+### Step 4: Validate Results
 
-@router.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest, request: Request):
-    start = time.monotonic()
-    client = request.app.state.oai_client
-    resp = client.chat.completions.create(
-        model=req.model,
-        messages=[{"role": "user", "content": req.message}],
-        temperature=req.temperature,
-    )
-    elapsed = (time.monotonic() - start) * 1000
-    return ChatResponse(
-        answer=resp.choices[0].message.content,
-        model=req.model,
-        tokens=resp.usage.total_tokens,
-        latency_ms=round(elapsed, 1),
-    )
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## routes/health.py
+## Output
 
-```python
-from fastapi import APIRouter
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-router = APIRouter()
+## WAF Alignment
 
-@router.get("/health")
-async def health():
-    return {"status": "healthy"}
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+| security | Validates credentials, enforces least-privilege, scans for secrets |
 
-@router.get("/ready")
-async def ready(request: Request):
-    try:
-        request.app.state.oai_client.models.list()
-        return {"status": "ready", "openai": "connected"}
-    except Exception as e:
-        return JSONResponse({"status": "not_ready", "error": str(e)}, status_code=503)
+## Compatible Solution Plays
+
+- **Play 14**
+- **Play 52**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-fastapi-scaffold
 ```
 
-## middleware.py
+### Inside a Solution Play
 
-```python
-from fastapi.middleware.cors import CORSMiddleware
-import logging, time, uuid
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
-def setup_middleware(app):
-    app.add_middleware(CORSMiddleware, allow_origins=["*"],
-        allow_methods=["*"], allow_headers=["*"])
-
-    @app.middleware("http")
-    async def log_requests(request, call_next):
-        req_id = str(uuid.uuid4())[:8]
-        start = time.monotonic()
-        response = await call_next(request)
-        elapsed = (time.monotonic() - start) * 1000
-        logging.info(f"[{req_id}] {request.method} {request.url.path} "
-                     f"{response.status_code} {elapsed:.0f}ms")
-        response.headers["X-Request-ID"] = req_id
-        return response
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-fastapi-scaffold/"]
+  }
+}
 ```
 
-## Troubleshooting
+### Via Agent Invocation
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Validation errors not helpful | Default error format | FastAPI auto-returns 422 with field details |
-| CORS blocked | Missing middleware | Add CORSMiddleware with allowed origins |
-| Slow startup | Sync initialization | Use lifespan for async init |
-| OpenAPI not showing | Routes not included | Check app.include_router() calls |
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## API Patterns
+
+### Request Validation
+
+```typescript
+import { z } from "zod";
+
+const RequestSchema = z.object({
+  query: z.string().min(1).max(2000),
+  top_k: z.number().int().min(1).max(50).default(5),
+  filters: z.record(z.string()).optional(),
+});
+```
+
+### Response Format
+
+```json
+{
+  "status": "success",
+  "data": { "results": [] },
+  "metadata": {
+    "duration_ms": 245,
+    "tokens_used": 150,
+    "model": "gpt-4o",
+    "cached": false
+  }
+}
+```
+
+### Error Responses
+
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests. Retry after 30 seconds.",
+    "retry_after": 30
+  }
+}
+```
+
+## Rate Limiting
+
+| Tier | Requests/min | Tokens/min | Burst |
+|------|-------------|------------|-------|
+| Free | 10 | 5,000 | 20 |
+| Standard | 60 | 50,000 | 120 |
+| Enterprise | 300 | 500,000 | 600 |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the API Development category in the FAI primitives catalog

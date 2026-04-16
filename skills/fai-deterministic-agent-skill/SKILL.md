@@ -1,159 +1,170 @@
 ---
 name: fai-deterministic-agent-skill
-description: 'Implements deterministic agent behavior patterns with strict output guarantees and reproducibility.'
+description: Implement deterministic agents with structured output and validation.
 ---
 
-# FAI Skill: Deterministic Agent Skill
+# Fai Deterministic Agent Skill
 
-## Purpose
+Builds deterministic AI agents with grounding, structured output, and evaluation gates.
 
-This skill defines a production-grade workflow for Seeded responses, schema enforcement, and deterministic execution controls. It applies full phase execution, explicit quality gates, and clear delivery evidence so outcomes remain repeatable.
+## Overview
 
-## Inputs
+This skill provides a structured, repeatable procedure for builds deterministic ai agents with grounding, structured output, and evaluation gates.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-| Input | Description |
-|---|---|
-| Core parameters | determinism_policy, schema_contracts, seed_strategy, test_corpus |
-| Environment | design, dev, staging, production |
-| Constraints | security, reliability, latency, cost, and governance requirements |
+**Category:** Agent Tooling
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Prerequisites
+## Parameters
 
-- Scope and success criteria are approved by owners.
-- Dependencies and affected systems are documented.
-- Validation and observability approaches are prepared.
-- Rollback or mitigation strategy is ready for high-risk changes.
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Full Phases Coverage
+## Steps
 
-### Phase 1: Discover
+### Step 1: Validate Prerequisites
 
-- Clarify outcomes, constraints, and affected user/system journeys.
-- Identify risks, unknowns, and dependencies early.
-- Define measurable acceptance and release criteria.
-
-### Phase 2: Design
-
-- Produce architecture/pattern options with tradeoff analysis.
-- Select an approach balancing quality, speed, and maintainability.
-- Encode accessibility, security, and compliance expectations.
-
-### Phase 3: Implement
-
-- Ship incrementally with focused, reviewable changes.
-- Keep interfaces, contracts, and config explicit.
-- Minimize hidden coupling and side effects.
-
-### Phase 4: Validate
-
-- Run functional, edge-case, and regression validation.
-- Verify observability signals and operational readiness.
-- Capture evidence and unresolved risk notes.
-
-### Phase 5: Deploy
-
-- Roll out through controlled stages with stop conditions.
-- Confirm health/KPI checkpoints before progression.
-- Trigger rollback immediately when gates fail.
-
-### Phase 6: Operate
-
-- Monitor live behavior and drift against baseline.
-- Resolve incidents with owner and SLA clarity.
-- Feed lessons learned into next iteration.
-
-## WAF-Aligned Quality Gates
-
-### Reliability
-
-- Core flows behave consistently under transient failures.
-- Health and fallback paths are documented and tested.
-- Error/empty/degraded states remain actionable.
-
-### Security
-
-- Secrets are externalized and access is least-privilege.
-- Input and output handling avoids unsafe data exposure.
-- Auditability exists for critical operations.
-
-### Cost Optimization
-
-- Resource and model choices are right-sized to need.
-- High-cost paths are measured and optimized.
-- Budget thresholds and anomaly alerts are defined.
-
-### Operational Excellence
-
-- CI/CD and validation gates are mandatory.
-- Runbooks and rollback instructions are versioned.
-- Telemetry supports troubleshooting and continuous improvement.
-
-### Performance Efficiency
-
-- SLO targets are explicit and monitored.
-- Hot paths are benchmarked and tuned.
-- Payload, rendering, or compute footprints are controlled.
-
-### Responsible AI
-
-- Safety and grounding checks are applied where AI exists.
-- User-facing AI outputs include transparency cues.
-- Human escalation exists for high-impact outcomes.
-
-## Deliverables
-
-| Artifact | Purpose |
-|---|---|
-| Primary output | deterministic-agent-guide.md, conformance tests, failure policy |
-| Validation dossier | Release-readiness evidence |
-| Rollback guide | Mitigation and reversal actions |
-| Operate handoff | Monitoring and ownership notes |
-
-## Completion Checklist
-
-- [ ] Phase 1 discovery complete.
-- [ ] Phase 2 design approved.
-- [ ] Phase 3 implementation reviewed.
-- [ ] Phase 4 validation passed.
-- [ ] Phase 5 staged deployment completed.
-- [ ] Phase 6 operate handoff acknowledged.
-- [ ] Completion criteria met: repeatability threshold met, schema violations zero, fallback behavior deterministic.
-
-## Troubleshooting
-
-### Symptom: Outcomes are inconsistent across environments
-
-- Compare config, dependencies, and feature-flag parity.
-- Validate data shape and traffic assumptions.
-- Reproduce using representative scenarios.
-
-### Symptom: Performance or cost regresses after rollout
-
-- Profile hot paths and retry/caching behavior.
-- Rebalance routing, limits, and expensive operations.
-- Verify autoscaling and batching thresholds.
-
-### Symptom: Users fail to recover from failures
-
-- Improve clarity of recovery actions and messaging.
-- Add contextual diagnostics for support triage.
-- Validate escalation pathways end to end.
-
-## Example Commands
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Adapt to repository standards
-npm run lint
-npm test
-npm run build
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Definition of Done
+### Step 2: Load Configuration
 
-The skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce results without tribal knowledge.
+Read settings from the FAI manifest and TuneKit config files.
 
-## Metadata
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-- Category: Agent Engineering
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly and after major architecture changes
+### Step 3: Execute Core Logic
+
+Perform the primary operation: builds deterministic ai agents with grounding, structured output, and evaluation gates..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+
+## Compatible Solution Plays
+
+- **Play 03**
+- **Play 07**
+- **Play 22**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-deterministic-agent-skill
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-deterministic-agent-skill/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Evaluation Pipeline
+
+This skill integrates with the FAI evaluation framework:
+
+```python
+from frootai.evaluation import SkillEvaluator
+
+evaluator = SkillEvaluator(skill="agent-governance")
+results = evaluator.run(test_cases="evaluation/test-set.jsonl")
+
+# Check thresholds
+assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
+assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
+assert results.safety_violations == 0, "Safety violations detected"
+```
+
+## Advanced Configuration
+
+```json
+{
+  "max_iterations": 5,
+  "confidence_threshold": 0.7,
+  "fallback_strategy": "escalate",
+  "budget_per_request": 0.05,
+  "tools_allowed": ["search", "retrieve", "analyze"],
+  "human_in_the_loop": true,
+  "audit_trail": true
+}
+```
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|-----------------|
+| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
+| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
+| No cost tracking | Budget overruns | Enable budget_per_request |
+| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Agent Tooling category in the FAI primitives catalog

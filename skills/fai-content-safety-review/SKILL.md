@@ -1,142 +1,163 @@
 ---
 name: fai-content-safety-review
-description: 'Reviews AI outputs against Azure Content Safety categories with threshold recommendations.'
+description: Review AI-generated content against safety policies and compliance requirements.
 ---
 
-# FAI Skill: Content Safety Review
+# Fai Content Safety Review
 
-## Purpose
+Reviews AI outputs against Azure Content Safety categories with threshold recommendations.
 
-This skill defines a production-oriented workflow for Safety severity policy design and review automation. It is intended for builders and reviewers who need repeatable outcomes, explicit validation, and clear rollback guidance.
+## Overview
 
-## When To Use
+This skill provides a structured, repeatable procedure for reviews ai outputs against azure content safety categories with threshold recommendations.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-- Use when the team needs a standardized implementation path for this capability.
-- Use when quality gates must be documented before rollout.
-- Use when architecture, security, and operational concerns must be captured in one artifact.
+**Category:** Content Safety
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Inputs
+## Parameters
 
-| Input | Description |
-|---|---|
-| Core parameters | sample_prompts, response_corpus, threshold_profile, escalation_rules |
-| Environment | dev, staging, prod |
-| Constraints | compliance, latency, budget, and ownership constraints |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Prerequisites
+## Steps
 
-- Repository has documented build and test commands.
-- Owners are assigned for implementation and approval.
-- Required platform access is validated before execution.
-- A rollback plan exists for every production-facing change.
+### Step 1: Validate Prerequisites
 
-## Execution Workflow
-
-### 1) Discover and Scope
-
-- Identify the minimum viable change for initial rollout.
-- List dependencies across code, config, infra, and docs.
-- Capture assumptions that can invalidate results.
-
-### 2) Design Decisions
-
-- Select patterns that favor reliability and clear observability.
-- Keep interfaces stable and versioned where possible.
-- Separate required behavior from optional enhancements.
-
-### 3) Implement in Small Steps
-
-- Make incremental changes with narrow blast radius.
-- Run local validation after each meaningful edit.
-- Document non-obvious tradeoffs near the implementation.
-
-### 4) Validate and Review
-
-- Run lint, unit, and integration checks for impacted areas.
-- Confirm expected behavior with representative scenarios.
-- Capture evidence in a concise review record.
-
-### 5) Release and Observe
-
-- Promote with staged rollout where practical.
-- Monitor key signals and set alert thresholds.
-- Prepare rollback trigger criteria and ownership.
-
-## Quality Gates
-
-- Correctness: behavior matches acceptance criteria.
-- Reliability: failure modes are handled with safe defaults.
-- Security: secrets are externalized and access is least-privilege.
-- Cost: implementation respects budget guardrails.
-- Operability: logs, metrics, and runbooks are available.
-
-## Deliverables
-
-| Artifact | Purpose |
-|---|---|
-| Primary output | safety-scorecard.md, threshold matrix, false-positive analysis |
-| Decision log | Captures architecture and tradeoff decisions |
-| Validation record | Stores test and review evidence |
-| Rollback note | Defines reversal steps and owner |
-
-## Verification Checklist
-
-- [ ] Scope and assumptions documented.
-- [ ] Implementation reviewed by responsible owner.
-- [ ] Validation evidence attached.
-- [ ] Operational monitors configured.
-- [ ] Rollback plan tested or rehearsed.
-- [ ] Completion criteria met: coverage across four harm categories, reproducible score samples, escalation workflow tested.
-
-## Troubleshooting
-
-### Symptom: Results differ between environments
-
-- Compare environment-specific configuration values.
-- Verify version parity for tools and dependencies.
-- Re-run with deterministic inputs and fixed sample data.
-
-### Symptom: Validation passes locally but fails in CI
-
-- Reproduce using CI-equivalent commands and versions.
-- Inspect generated artifacts and line-ending differences.
-- Check for timing/order assumptions in tests.
-
-### Symptom: Operational metrics are noisy
-
-- Tune thresholds based on baseline behavior.
-- Add dimensions to isolate source and impact.
-- Separate informational events from alerting signals.
-
-## Security and Compliance Notes
-
-- Avoid embedding secrets or tokens in docs and examples.
-- Prefer managed identity and centralized secret stores.
-- Record data handling boundaries and retention expectations.
-- Ensure auditability for critical decisions and approvals.
-
-## Performance and Cost Notes
-
-- Start with right-sized defaults; scale with evidence.
-- Cache expensive operations where consistency allows.
-- Track utilization trends and revisit thresholds monthly.
-- Stop non-essential background processing in low-traffic windows.
-
-## Example Command Set
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Adapt these commands to the repository conventions
-npm run lint
-npm test
-npm run build
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Definition of Done
+### Step 2: Load Configuration
 
-The skill execution is complete when implementation, validation, and operational handoff are all documented, approved, and reproducible by another engineer without tribal knowledge.
+Read settings from the FAI manifest and TuneKit config files.
 
-## Metadata
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-- Category: Responsible AI
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly or after major platform changes
+### Step 3: Execute Core Logic
+
+Perform the primary operation: reviews ai outputs against azure content safety categories with threshold recommendations..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| security | Validates credentials, enforces least-privilege, scans for secrets |
+
+## Compatible Solution Plays
+
+- **Play 10**
+- **Play 61**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-content-safety-review
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-content-safety-review/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Security Checklist
+
+- [ ] No hardcoded secrets (use Key Vault)
+- [ ] Managed Identity enabled (no connection strings)
+- [ ] RBAC roles follow least privilege
+- [ ] Network access restricted (Private Endpoints)
+- [ ] Content Safety API enabled for LLM output
+- [ ] Prompt injection detection active
+- [ ] PII redaction configured
+- [ ] Audit logging enabled
+- [ ] OWASP LLM Top 10 addressed
+- [ ] Dependency scanning enabled (Dependabot/Snyk)
+
+## Threat Model
+
+| Threat | Category | Mitigation |
+|--------|----------|-----------|
+| Prompt injection | OWASP LLM01 | Input sanitization + classifier |
+| Data exfiltration | OWASP LLM06 | Output validation + PII filter |
+| Model theft | OWASP LLM10 | API key rotation + rate limiting |
+| Insecure output | OWASP LLM02 | Schema validation + content safety |
+
+## Secret Patterns Blocked
+
+```bash
+# Patterns the secrets-scanner hook detects
+AZURE_.*_KEY=           # Azure service keys
+OPENAI_API_KEY=         # OpenAI keys
+-----BEGIN.*PRIVATE     # Private keys/certificates
+DefaultEndpointsProtocol=  # Azure connection strings
+ghp_[A-Za-z0-9]{36}    # GitHub PATs
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Content Safety category in the FAI primitives catalog

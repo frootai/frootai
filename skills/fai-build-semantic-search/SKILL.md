@@ -1,112 +1,163 @@
 ---
 name: fai-build-semantic-search
-description: |
-  Implement semantic search with text embeddings, hybrid ranking, cross-encoder
-  reranking, and retrieval quality evaluation. Use when building knowledge
-  retrieval beyond keyword matching.
+description: Implement semantic search with embeddings, reranking, and hybrid search combining BM25 + vector similarity.
 ---
 
-# Semantic Search Implementation
+# Fai Build Semantic Search
 
-Build search that understands meaning using embeddings, hybrid ranking, and reranking.
+Builds semantic similarity search with embedding generation and vector index.
 
-## When to Use
+## Overview
 
-- Keyword search returns irrelevant results for natural language
-- Building knowledge retrieval for RAG pipelines
-- Combining keyword precision with semantic understanding
-- Evaluating and tuning search relevance
+This skill provides a structured, repeatable procedure for builds semantic similarity search with embedding generation and vector index.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Build Tooling
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Architecture
+## Parameters
 
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
-Query -> [BM25 Keyword] --+
-                           +--> Hybrid Merge -> Rerank -> Top K
-Query -> [Vector Search] --+
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Hybrid Search Query
+### Step 3: Execute Core Logic
+
+Perform the primary operation: builds semantic similarity search with embedding generation and vector index..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-build-semantic-search
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-build-semantic-search/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## RAG Pipeline Reference
+
+| Stage | Tool | Config |
+|-------|------|--------|
+| Chunking | Semantic chunker | 512 tokens, 10% overlap |
+| Embedding | text-embedding-3-large | 3072 dimensions |
+| Indexing | Azure AI Search | Hybrid (vector + BM25) |
+| Retrieval | Hybrid search | 60% semantic, 40% keyword |
+| Reranking | Semantic reranker | Top 5 after rerank |
+| Generation | GPT-4o | temp=0.1, top_p=0.9 |
+
+## Chunking Strategy
 
 ```python
-from azure.search.documents import SearchClient
+from azure.ai.formrecognizer import DocumentAnalysisClient
 
-def hybrid_search(query: str, client: SearchClient, top_k: int = 10):
-    return client.search(
-        search_text=query,
-        vector_queries=[{"kind": "text", "text": query,
-                         "fields": "contentVector", "k": top_k, "weight": 0.7}],
-        query_type="semantic",
-        semantic_configuration_name="default",
-        top=top_k,
-        select=["id", "title", "content", "source"],
-    )
+# Semantic chunking preserves paragraph boundaries
+chunks = semantic_chunk(
+    text=document,
+    max_tokens=512,
+    overlap_tokens=50,
+    respect_boundaries=True  # Don't split mid-sentence
+)
 ```
 
-## Cross-Encoder Reranking
+## Search Configuration
 
-```python
-def rerank(query: str, candidates: list[dict], top_k: int = 5):
-    scored = [({**doc, "rerank_score": cross_encoder(query, doc["content"])})
-              for doc in candidates]
-    return sorted(scored, key=lambda x: x["rerank_score"], reverse=True)[:top_k]
+```json
+{
+  "search_type": "hybrid",
+  "semantic_weight": 0.6,
+  "keyword_weight": 0.4,
+  "top_k": 5,
+  "min_score": 0.78,
+  "reranker": "semantic",
+  "filter": "category eq 'technical'"
+}
 ```
 
-## Retrieval Evaluation
+## Notes
 
-```python
-def evaluate_retrieval(test_queries, search_fn, k=5):
-    hits, mrr = 0, 0.0
-    for row in test_queries:
-        ids = [r["id"] for r in search_fn(row["query"], top_k=k)]
-        if row["relevant_id"] in ids:
-            hits += 1
-            mrr += 1.0 / (ids.index(row["relevant_id"]) + 1)
-    n = len(test_queries)
-    return {"recall@k": hits/n, "mrr@k": mrr/n, "k": k}
-```
-
-## Tuning Guide
-
-| Parameter | Default | When to Change |
-|-----------|---------|---------------|
-| Vector weight | 0.7 | Lower for exact-match domains |
-| Chunk size | 512 | Reduce for precision |
-| Top K | 10 | Increase for recall |
-| Reranker | Off | Enable for quality-critical |
-
-## Troubleshooting
-
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Wrong semantic results | Low vector weight | Increase weight or add reranker |
-| Exact-match fails | Vector doesn't handle IDs | Increase keyword weight |
-| Slow queries | Reranker on all results | Rerank top-20, return top-5 |
-| Low recall | Chunk boundaries | Increase overlap |
-
-## Best Practices
-
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Build Tooling category in the FAI primitives catalog

@@ -1,6 +1,6 @@
 ---
-name: fai-database-migrate-ai
-description: "Migrate data and embeddings between vector databases with zero downtime"
+name: database-migrate-ai
+description: "Migrate AI data, embeddings, and index schemas with zero-downtime cutovers - preserve compatibility, validate every step, and keep rollback ready"
 ---
 
 # Database Migration for AI Workloads

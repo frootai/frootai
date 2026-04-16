@@ -1,142 +1,156 @@
 ---
 name: fai-copilot-usage-metrics
-description: 'Defines and operationalizes Copilot usage metrics tied to developer outcomes.'
+description: Track Copilot usage metrics for cost attribution, productivity analysis, and adoption monitoring.
 ---
 
-# FAI Skill: Copilot Usage Metrics
+# Fai Copilot Usage Metrics
 
-## Purpose
+Generates Copilot usage analytics reports — adoption rates, acceptance rates, productivity impact.
 
-This skill defines a production-oriented workflow for Adoption and impact measurement. It is intended for builders and reviewers who need repeatable outcomes, explicit validation, and clear rollback guidance.
+## Overview
 
-## When To Use
+This skill provides a structured, repeatable procedure for generates copilot usage analytics reports — adoption rates, acceptance rates, productivity impact.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-- Use when the team needs a standardized implementation path for this capability.
-- Use when quality gates must be documented before rollout.
-- Use when architecture, security, and operational concerns must be captured in one artifact.
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Inputs
+## Parameters
 
-| Input | Description |
-|---|---|
-| Core parameters | metric_definitions, event_sources, privacy_constraints, reporting_cadence |
-| Environment | dev, staging, prod |
-| Constraints | compliance, latency, budget, and ownership constraints |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Prerequisites
+## Steps
 
-- Repository has documented build and test commands.
-- Owners are assigned for implementation and approval.
-- Required platform access is validated before execution.
-- A rollback plan exists for every production-facing change.
+### Step 1: Validate Prerequisites
 
-## Execution Workflow
+Verify all required tools, credentials, and dependencies are available.
 
-### 1) Discover and Scope
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
 
-- Identify the minimum viable change for initial rollout.
-- List dependencies across code, config, infra, and docs.
-- Capture assumptions that can invalidate results.
+### Step 2: Load Configuration
 
-### 2) Design Decisions
+Read settings from the FAI manifest and TuneKit config files.
 
-- Select patterns that favor reliability and clear observability.
-- Keep interfaces stable and versioned where possible.
-- Separate required behavior from optional enhancements.
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-### 3) Implement in Small Steps
+### Step 3: Execute Core Logic
 
-- Make incremental changes with narrow blast radius.
-- Run local validation after each meaningful edit.
-- Document non-obvious tradeoffs near the implementation.
+Perform the primary operation: generates copilot usage analytics reports — adoption rates, acceptance rates, productivity impact..
 
-### 4) Validate and Review
+### Step 4: Validate Results
 
-- Run lint, unit, and integration checks for impacted areas.
-- Confirm expected behavior with representative scenarios.
-- Capture evidence in a concise review record.
+Verify the output meets quality thresholds and WAF compliance.
 
-### 5) Release and Observe
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
 
-- Promote with staged rollout where practical.
-- Monitor key signals and set alert thresholds.
-- Prepare rollback trigger criteria and ownership.
+## Output
 
-## Quality Gates
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-- Correctness: behavior matches acceptance criteria.
-- Reliability: failure modes are handled with safe defaults.
-- Security: secrets are externalized and access is least-privilege.
-- Cost: implementation respects budget guardrails.
-- Operability: logs, metrics, and runbooks are available.
+## WAF Alignment
 
-## Deliverables
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
 
-| Artifact | Purpose |
-|---|---|
-| Primary output | metrics-framework.md, dashboard spec, experiment plan |
-| Decision log | Captures architecture and tradeoff decisions |
-| Validation record | Stores test and review evidence |
-| Rollback note | Defines reversal steps and owner |
+## Error Handling
 
-## Verification Checklist
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
 
-- [ ] Scope and assumptions documented.
-- [ ] Implementation reviewed by responsible owner.
-- [ ] Validation evidence attached.
-- [ ] Operational monitors configured.
-- [ ] Rollback plan tested or rehearsed.
-- [ ] Completion criteria met: baseline captured, trend quality checks pass, metrics map to business outcomes.
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-copilot-usage-metrics
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-copilot-usage-metrics/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-### Symptom: Results differ between environments
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-- Compare environment-specific configuration values.
-- Verify version parity for tools and dependencies.
-- Re-run with deterministic inputs and fixed sample data.
+## Notes
 
-### Symptom: Validation passes locally but fails in CI
-
-- Reproduce using CI-equivalent commands and versions.
-- Inspect generated artifacts and line-ending differences.
-- Check for timing/order assumptions in tests.
-
-### Symptom: Operational metrics are noisy
-
-- Tune thresholds based on baseline behavior.
-- Add dimensions to isolate source and impact.
-- Separate informational events from alerting signals.
-
-## Security and Compliance Notes
-
-- Avoid embedding secrets or tokens in docs and examples.
-- Prefer managed identity and centralized secret stores.
-- Record data handling boundaries and retention expectations.
-- Ensure auditability for critical decisions and approvals.
-
-## Performance and Cost Notes
-
-- Start with right-sized defaults; scale with evidence.
-- Cache expensive operations where consistency allows.
-- Track utilization trends and revisit thresholds monthly.
-- Stop non-essential background processing in low-traffic windows.
-
-## Example Command Set
-
-```bash
-# Adapt these commands to the repository conventions
-npm run lint
-npm test
-npm run build
-```
-
-## Definition of Done
-
-The skill execution is complete when implementation, validation, and operational handoff are all documented, approved, and reproducible by another engineer without tribal knowledge.
-
-## Metadata
-
-- Category: Observability
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly or after major platform changes
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

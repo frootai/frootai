@@ -1,6 +1,6 @@
 ---
 name: fai-documentation-writer
-description: 'Generates documentation aligned with the FROOT knowledge framework — module-style docs with duration, audience, table of contents, mermaid diagrams, code examples, and key takeaways sections.'
+description: Auto-generate API and architecture documentation from code annotations.
 ---
 
 # FAI Documentation Writer
@@ -294,3 +294,4 @@ Before merging any documentation PR, verify:
 - [ ] API reference generated from code, not hand-written
 - [ ] WAF pillar alignment noted where applicable
 - [ ] Glossary terms link to definitions on first use
+

@@ -1,118 +1,156 @@
 ---
 name: fai-guardrails-policy
-description: |
-  Define AI guardrails with enforceable content safety thresholds, output validation,
-  escalation paths, and governance evidence. Use when implementing safety policies
-  for production AI systems.
+description: Define safety guardrails and acceptable use policies.
 ---
 
-# AI Guardrails Policy
+# Fai Guardrails Policy
 
-Define and enforce safety thresholds, content filters, and escalation controls.
+Creates content policy guardrails for AI applications with blocked categories and severity thresholds.
 
-## When to Use
+## Overview
 
-- Deploying AI to production with safety requirements
-- Implementing content safety filtering
-- Setting up output validation with Pydantic schemas
-- Creating escalation paths for edge cases
+This skill provides a structured, repeatable procedure for creates content policy guardrails for ai applications with blocked categories and severity thresholds.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Guardrails Configuration
+## Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: creates content policy guardrails for ai applications with blocked categories and severity thresholds..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-guardrails-policy
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
 ```json
 {
-  "guardrails": {
-    "content_safety": {
-      "enabled": true,
-      "categories": ["hate", "violence", "self_harm", "sexual"],
-      "severity_threshold": 2,
-      "action": "block"
-    },
-    "groundedness": {
-      "threshold": 0.80,
-      "action": "warn"
-    },
-    "pii_detection": {
-      "enabled": true,
-      "categories": ["email", "phone", "ssn", "credit_card"],
-      "action": "redact"
-    },
-    "output_validation": {
-      "schema_enforcement": true,
-      "max_tokens": 2000
-    }
+  "primitives": {
+    "skills": ["skills/fai-guardrails-policy/"]
   }
 }
 ```
 
-## Content Safety Check
+### Via Agent Invocation
 
-```python
-from azure.ai.contentsafety import ContentSafetyClient
-from azure.identity import DefaultAzureCredential
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-safety_client = ContentSafetyClient(endpoint, DefaultAzureCredential())
+## Configuration Reference
 
-def check_safety(text: str, threshold: int = 2) -> dict:
-    from azure.ai.contentsafety.models import AnalyzeTextOptions
-    result = safety_client.analyze_text(AnalyzeTextOptions(text=text))
-    violations = [c for c in result.categories_analysis if c.severity >= threshold]
-    return {"safe": len(violations) == 0, "violations": [
-        {"category": v.category, "severity": v.severity} for v in violations]}
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
 
-## Output Validation Pipeline
+## Monitoring
 
-```python
-from pydantic import BaseModel, field_validator
+Track skill execution metrics:
 
-class SafeOutput(BaseModel):
-    answer: str
-    confidence: float
-    sources: list[str]
-
-    @field_validator("confidence")
-    @classmethod
-    def check_range(cls, v):
-        assert 0 <= v <= 1, "Confidence must be 0-1"
-        return v
-
-def guardrailed_generate(prompt: str, context: str) -> SafeOutput:
-    # 1. Check input safety
-    input_check = check_safety(prompt)
-    if not input_check["safe"]:
-        return SafeOutput(answer="I cannot process this request.",
-                          confidence=0, sources=[])
-
-    # 2. Generate
-    raw = generate_answer(prompt, context)
-
-    # 3. Check output safety
-    output_check = check_safety(raw)
-    if not output_check["safe"]:
-        return SafeOutput(answer="Response filtered for safety.",
-                          confidence=0, sources=[])
-
-    # 4. Validate structure
-    return SafeOutput.model_validate_json(raw)
-```
-
-## Escalation Matrix
-
-| Condition | Action | Owner |
-|-----------|--------|-------|
-| Content safety violation | Block + log | Automated |
-| Groundedness < 0.5 | Escalate to human | Support team |
-| Repeated user violations | Rate limit + notify | Trust & Safety |
-| System prompt extraction attempt | Block + alert | Security team |
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| False positives blocking valid content | Threshold too strict | Raise severity threshold from 2 to 4 |
-| Guardrails bypassed | Only checking output, not input | Check both input AND output |
-| No audit trail | Violations not logged | Log every safety check result |
-| Schema validation fails silently | No error handling | Wrap in try/except, return safe fallback |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

@@ -1,125 +1,178 @@
 ---
 name: fai-aspire-orchestration
-description: |
-  Configure .NET Aspire app host for distributed AI services with health dependencies,
-  OpenTelemetry wiring, and environment-aware secret management. Use when building
-  multi-service .NET solutions with Aspire orchestration.
+description: Wire .NET Aspire AppHost for multi-container orchestration, automatic service discovery, distributed OpenTelemetry export, and local Azure emulator integration — eliminating hardcoded connection strings and manual container start order.
 ---
 
-# .NET Aspire Orchestration
+# FAI Aspire Orchestration
 
-Configure .NET Aspire to orchestrate distributed services with health checks, telemetry, and secrets.
+Configures .NET Aspire to compose multi-container AI applications with automatic service discovery, environment variable injection, OpenTelemetry pipeline, and local Azure emulators. Solves the dev-setup friction where developers spend a day configuring connection strings that Aspire injects automatically.
 
-## When to Use
+## When to Invoke
 
-- Building multi-service .NET applications (API + workers + cache + AI)
-- Setting up local development with service discovery
-- Configuring OpenTelemetry for distributed tracing
-- Wiring Azure services (OpenAI, AI Search, Storage) into local dev
+| Signal | Example |
+|--------|---------|
+| Running multiple .NET services locally | API + worker + Redis + PostgreSQL |
+| Hardcoded connection strings in appsettings | `"Host=localhost;Port=5432"` in source code |
+| No local Azure emulators wired up | Azurite, Service Bus emulator not running |
+| Distributed traces missing in local dev | No correlation between service calls |
 
----
+## Workflow
 
-## App Host Configuration
+### Step 1 — AppHost Setup
 
 ```csharp
-// AppHost/Program.cs
+// AppHost/Program.cs -- the orchestration entry point
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Infrastructure
-var cache = builder.AddRedis("cache");
-var storage = builder.AddAzureStorage("storage");
-var blobs = storage.AddBlobs("documents");
+// Backing services -- Aspire manages lifecycle and connection strings
+var redis      = builder.AddRedis("redis-cache");
+var cosmos     = builder.AddAzureCosmosDB("cosmos").AddDatabase("chatdb");
+var storage    = builder.AddAzureStorage("storage").AddBlobs("documents");
+var servicebus = builder.AddAzureServiceBus("servicebus").AddQueue("embedding-jobs");
 
-// AI Services
-var openai = builder.AddConnectionString("openai");
-var search = builder.AddConnectionString("search");
+// AI service endpoints from environment (Managed Identity in prod, env vars locally)
+var aoai   = builder.AddConnectionString("aoai-endpoint");
+var search = builder.AddConnectionString("search-endpoint");
 
-// API Service
+// Application projects -- Aspire injects all connection strings automatically
 var api = builder.AddProject<Projects.Api>("api")
-    .WithReference(cache)
-    .WithReference(openai)
+    .WithReference(redis)
+    .WithReference(cosmos)
+    .WithReference(aoai)
     .WithReference(search)
-    .WithExternalHttpEndpoints();
+    .WithReference(servicebus);
 
-// Background Worker
-builder.AddProject<Projects.Worker>("worker")
-    .WithReference(cache)
-    .WithReference(blobs)
-    .WithReference(openai)
-    .WaitFor(cache)          // Health dependency
-    .WaitFor(api);           // Start after API is ready
+var worker = builder.AddProject<Projects.EmbeddingWorker>("worker")
+    .WithReference(storage)
+    .WithReference(servicebus)
+    .WithReference(aoai);
 
 builder.Build().Run();
 ```
 
-## Health Dependency Ordering
-
-Use `WaitFor` to enforce startup order based on health checks:
+### Step 2 — Service Discovery in Application Code
 
 ```csharp
-// Worker waits for cache AND search to be healthy before starting
-var worker = builder.AddProject<Projects.Worker>("worker")
-    .WaitFor(cache)
-    .WaitFor(search);
+// api/Program.cs -- inject discovered endpoints, no hardcoded URLs
+var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();   // Aspire extension: health, OTEL, discovery
 
-// API waits only for cache (search is optional/degraded)
-var api = builder.AddProject<Projects.Api>("api")
-    .WaitFor(cache);
+// Redis -- name matches the AppHost reference name
+builder.AddRedisDistributedCache("redis-cache");
+
+// Cosmos DB -- connection string injected from AppHost
+builder.AddAzureCosmosClient("cosmos");
+
+// HTTP client to worker -- resolved via Aspire service discovery
+builder.Services.AddHttpClient<EmbeddingClient>(c =>
+    c.BaseAddress = new Uri("https+http://worker"));   // Aspire resolves this at runtime
+
+var app = builder.Build();
+app.MapDefaultEndpoints();   // /health/live, /health/ready
+app.Run();
 ```
 
-## OpenTelemetry Wiring
+### Step 3 — OpenTelemetry Pipeline
 
 ```csharp
-// ServiceDefaults/Extensions.cs — shared across all services
-public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+// ServiceDefaults/Extensions.cs -- generated by Aspire, customise here
+public static IHostApplicationBuilder AddServiceDefaults(
+    this IHostApplicationBuilder builder)
 {
     builder.ConfigureOpenTelemetry();
     builder.AddDefaultHealthChecks();
-    return builder;
-}
-
-public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
-{
-    builder.Logging.AddOpenTelemetry(logging =>
+    builder.Services.AddServiceDiscovery();
+    builder.Services.ConfigureHttpClientDefaults(http =>
     {
-        logging.IncludeFormattedMessage = true;
-        logging.IncludeScopes = true;
+        http.AddStandardResilienceHandler();   // Retry + circuit breaker
+        http.AddServiceDiscovery();
     });
-
-    builder.Services.AddOpenTelemetry()
-        .WithMetrics(metrics =>
-        {
-            metrics.AddAspNetCoreInstrumentation()
-                   .AddHttpClientInstrumentation()
-                   .AddRuntimeInstrumentation();
-        })
-        .WithTracing(tracing =>
-        {
-            tracing.AddAspNetCoreInstrumentation()
-                   .AddHttpClientInstrumentation()
-                   .AddSource("Azure.AI.OpenAI");
-        });
-
-    builder.AddOpenTelemetryExporters();
     return builder;
 }
+
+// OpenTelemetry -- traces, metrics, logs to OTEL collector
+builder.Services.AddOpenTelemetry()
+    .WithTracing(t => t
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRedisInstrumentation()
+        .AddOtlpExporter())
+    .WithMetrics(m => m
+        .AddAspNetCoreInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddOtlpExporter());
 ```
 
-## Secret Management
+### Step 4 — Local Azure Emulators
 
 ```csharp
-// In AppHost — wire Key Vault connection strings
-var openai = builder.AddConnectionString("openai");
+// AppHost -- use emulators locally, real Azure services in CI/prod
+var storage = builder.AddAzureStorage("storage")
+    .RunAsEmulator(cfg => cfg
+        .WithBlobPort(10000)
+        .WithQueuePort(10001));
 
-// In service — consume via DI (never hardcode)
-builder.Services.AddAzureOpenAI(builder.Configuration.GetConnectionString("openai"));
+var servicebus = builder.AddAzureServiceBus("servicebus")
+    .RunAsEmulator();   // Uses the Service Bus emulator Docker image
+
+var cosmos = builder.AddAzureCosmosDB("cosmos")
+    .RunAsEmulator(cfg => cfg.WithGatewayPort(8081));
 ```
 
-## Troubleshooting
+### Step 5 — Azure Container Apps Deployment
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Service startup flakiness | Missing WaitFor dependencies | Add WaitFor for all required services |
-| Telemetry not appearing | Missing OTLP exporter config | Ensure AddOpenTelemetryExporters is called |
-| Connection string missing | Secret not configured in AppHost | Add via AddConnectionString or user-secrets |
-| Port conflicts | Multiple services binding same port | Let Aspire assign ports automatically |
+```bash
+# Deploy Aspire manifest to Azure Container Apps
+azd init --template aspire
+azd env new prod
+azd env set AZURE_SUBSCRIPTION_ID <sub>
+azd env set AZURE_LOCATION eastus2
+azd up   # Provisions ACA environment, deploys all projects
+
+# Verify running services
+az containerapp list --resource-group rg-aspire-prod \
+  --query "[].{name:name, url:properties.configuration.ingress.fqdn}" \
+  --output table
+```
+
+## Aspire Developer Dashboard
+
+Aspire provides a local developer dashboard at `http://localhost:15888`:
+
+| View | What You See |
+|------|-------------|
+| Resources | All services with clickable endpoints and status |
+| Console | Real-time structured logs with trace correlation |
+| Traces | OpenTelemetry span waterfall across all services |
+| Metrics | Request rate, error rate, duration per service |
+| Environment | All injected environment variables per service |
+
+## Service Discovery Reference
+
+| Pattern | Resolution |
+|---------|-----------|
+| `https+http://worker` | HTTPS in prod, HTTP in dev; resolved by Aspire service discovery |
+| `redis-cache` | Redis connection string injected via `REDIS__CONNECTIONSTRING` env var |
+| `cosmos` | Cosmos connection string injected via `ConnectionStrings__cosmos` |
+
+## WAF Alignment
+
+| Pillar | Contribution |
+|--------|-------------|
+| Reliability | `AddStandardResilienceHandler()` adds retry + circuit breaker to all HTTP clients automatically |
+| Operational Excellence | Automatic OTEL correlation enables distributed trace analysis without per-service code changes |
+| Security | Service-to-service URLs injected at runtime -- no connection strings committed to source control |
+| Performance Efficiency | Local emulators eliminate cloud round-trips during development; faster inner dev loop |
+
+## Compatible Solution Plays
+
+- **Play 07** — Multi-Agent Service (.NET agent orchestration)
+- **Play 20** — Real-Time Analytics (event streaming pipeline)
+- **Play 37** — DevOps AI (CI/CD pipeline components)
+
+## Notes
+
+- Aspire requires .NET 8+ and Docker Desktop (or Podman) for container management
+- `AddServiceDefaults()` must be called as the first extension in every app project
+- Use `RunAsEmulator()` for local dev; emulators are not started in CI unless explicitly configured
+- `WithReference()` on a project creates both the connection string env var and a health dependency

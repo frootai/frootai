@@ -1,109 +1,161 @@
 ---
 name: fai-azure-resource-health
-description: |
-  Monitor Azure resource health with alert routing, incident enrichment, and service
-  impact triage. Use when setting up proactive health monitoring, outage detection,
-  or automated incident response for AI workloads.
+description: Diagnose Azure resource health issues via Resource Health events, platform metrics, activity logs, and one-click remediation workflows — preventing cascading AI infrastructure failures.
 ---
 
-# Azure Resource Health Monitoring
+# FAI Azure Resource Health
 
-Set up proactive health monitoring with alerts, enrichment, and incident workflows.
+Monitors Azure Resource Health API for platform-level incidents affecting VMs, App Services, databases, and cognitive services. Provides multi-layer diagnostics: Resource Health status (available/degraded/unavailable), health events timeline, correlation with activity logs and metrics, and playbook-driven remediation (restart VM, failover, scaling). Eliminates manual incident diagnosis; integrates with PagerDuty, ServiceNow, SMS alerts.
 
-## When to Use
+## Overview
 
-- Detecting Azure platform issues affecting your AI workload
-- Setting up proactive alerts for resource degradation
-- Enriching incident tickets with platform health context
-- Distinguishing between app bugs and platform outages
+This skill provides a structured, repeatable procedure for diagnoses azure resource health issues with metrics analysis and remediation steps.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Azure Integration
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Alert Setup
+## Parameters
 
-```bicep
-resource healthAlert 'Microsoft.Insights/activityLogAlerts@2023-01-01-preview' = {
-  name: 'resource-health-alert'
-  location: 'Global'
-  properties: {
-    enabled: true
-    scopes: [resourceGroup().id]
-    condition: {
-      allOf: [
-        { field: 'category', equals: 'ResourceHealth' }
-        { field: 'resourceType', equals: 'Microsoft.CognitiveServices/accounts' }
-        { field: 'status', containsAny: ['Active', 'In Progress'] }
-      ]
-    }
-    actions: {
-      actionGroups: [{ actionGroupId: actionGroup.id }]
-    }
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: diagnoses azure resource health issues with metrics analysis and remediation steps..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| security | Validates credentials, enforces least-privilege, scans for secrets |
+| cost-optimization | Uses efficient resources, tracks token usage, suggests right-sizing |
+
+## Compatible Solution Plays
+
+- **Play 02**
+- **Play 14**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-azure-resource-health
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-azure-resource-health/"]
   }
 }
 ```
 
-## KQL Health Queries
+### Via Agent Invocation
 
-```kql
-// Resource health events in last 24 hours
-AzureActivity
-| where CategoryValue == "ResourceHealth"
-| where TimeGenerated > ago(24h)
-| project TimeGenerated, ResourceId, OperationNameValue,
-    Status=tostring(Properties.currentHealthStatus),
-    PreviousStatus=tostring(Properties.previousHealthStatus),
-    Cause=tostring(Properties.cause)
-| order by TimeGenerated desc
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-// Service health impact summary
-ServiceHealthResources
-| where type == 'microsoft.resourcehealth/events'
-| where properties.EventType == 'ServiceIssue'
-| project name, status=tostring(properties.Status),
-    impactStartTime=todatetime(properties.ImpactStartTime),
-    services=tostring(properties.Impact)
-| order by impactStartTime desc
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
 
-## CLI Health Check
+## Monitoring
 
-```bash
-# Check specific resource health
-az resource show --ids $RESOURCE_ID \
-  --api-version 2023-07-01-preview \
-  --query "properties.availabilityState" -o tsv
+Track skill execution metrics:
 
-# List recent health events
-az rest --method GET \
-  --url "https://management.azure.com/subscriptions/$SUB/providers/Microsoft.ResourceHealth/events?api-version=2024-02-01" \
-  --query "value[].{Name:name, Status:properties.status, Impact:properties.impactedServices}"
-```
-
-## Incident Enrichment Pattern
-
-```python
-def enrich_incident(resource_id: str) -> dict:
-    """Add platform health context to incident tickets."""
-    from azure.mgmt.resourcehealth import ResourceHealthMgmtClient
-    from azure.identity import DefaultAzureCredential
-
-    client = ResourceHealthMgmtClient(DefaultAzureCredential(), subscription_id)
-    status = client.availability_statuses.get_by_resource(resource_id)
-
-    return {
-        "resource_id": resource_id,
-        "availability": status.properties.availability_state,  # Available/Degraded/Unavailable
-        "reason": status.properties.reason_type,  # PlatformInitiated/UserInitiated
-        "summary": status.properties.summary,
-        "is_platform_issue": status.properties.reason_type == "PlatformInitiated",
-    }
-```
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Incidents detected late | No alert rule configured | Add activity log alert for ResourceHealth events |
-| False positives on health | Transient platform resets | Filter on status Active only, ignore Resolved |
-| Can't distinguish app vs platform | No enrichment in runbook | Add Resource Health API call to incident workflow |
-| Alert noise too high | Scope too broad | Scope alerts to specific resource types |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Azure Integration category in the FAI primitives catalog

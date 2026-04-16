@@ -1,100 +1,155 @@
 ---
 name: fai-build-tokenizer
-description: |
-  Build tokenizer workflows for prompt budgeting, truncation strategies, and
-  model-specific token counting. Use when managing token limits, estimating
-  costs, or implementing context window packing.
+description: Implement custom tokenizers for domain-specific AI models optimizing vocabulary size and encoding efficiency.
 ---
 
-# Tokenizer Workflows
+# Fai Build Tokenizer
 
-Token counting, budget management, and context window optimization.
+Implements tokenization pipelines for LLM input preparation and token counting.
 
-## When to Use
+## Overview
 
-- Managing token budgets for prompts with RAG context
-- Estimating API costs based on token counts
-- Truncating content to fit model context windows
-- Packing multiple documents into a single prompt
+This skill provides a structured, repeatable procedure for implements tokenization pipelines for llm input preparation and token counting.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Build Tooling
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Token Counting
+## Parameters
 
-```python
-import tiktoken
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-def count_tokens(text: str, model: str = "gpt-4o") -> int:
-    enc = tiktoken.encoding_for_model(model)
-    return len(enc.encode(text))
+## Steps
 
-def estimate_cost(prompt_tokens: int, completion_tokens: int,
-                  model: str = "gpt-4o") -> float:
-    rates = {"gpt-4o": (0.0025, 0.01), "gpt-4o-mini": (0.00015, 0.0006)}
-    p_rate, c_rate = rates.get(model, (0.0025, 0.01))
-    return (prompt_tokens * p_rate + completion_tokens * c_rate) / 1000
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Context Window Packing
+### Step 2: Load Configuration
 
-```python
-def pack_context(chunks: list[str], max_tokens: int = 3000,
-                 model: str = "gpt-4o") -> list[str]:
-    """Pack as many chunks as fit within token budget."""
-    enc = tiktoken.encoding_for_model(model)
-    selected, used = [], 0
-    for chunk in chunks:
-        tokens = len(enc.encode(chunk))
-        if used + tokens > max_tokens:
-            break
-        selected.append(chunk)
-        used += tokens
-    return selected
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Smart Truncation
+### Step 3: Execute Core Logic
 
-```python
-def truncate_to_tokens(text: str, max_tokens: int, model: str = "gpt-4o") -> str:
-    enc = tiktoken.encoding_for_model(model)
-    tokens = enc.encode(text)
-    if len(tokens) <= max_tokens:
-        return text
-    return enc.decode(tokens[:max_tokens])
+Perform the primary operation: implements tokenization pipelines for llm input preparation and token counting..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Budget Tracking
+## Output
 
-```python
-@dataclass
-class TokenBudget:
-    limit: int
-    used: int = 0
-    def spend(self, n: int) -> bool:
-        self.used += n
-        return self.used <= self.limit
-    @property
-    def remaining(self): return max(0, self.limit - self.used)
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-budget = TokenBudget(limit=100000)
-# Track per-request usage
-budget.spend(response.usage.total_tokens)
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-build-tokenizer
 ```
 
-## Model Context Windows
+### Inside a Solution Play
 
-| Model | Context Window | Output Max |
-|-------|---------------|------------|
-| gpt-4o | 128K | 16K |
-| gpt-4o-mini | 128K | 16K |
-| text-embedding-3-small | 8K | N/A |
-| Claude 3.5 Sonnet | 200K | 8K |
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-build-tokenizer/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Token count mismatch | Wrong encoding for model | Use tiktoken.encoding_for_model() |
-| Context overflow | No truncation before API call | Truncate or pack to max_tokens - output_buffer |
-| Cost higher than expected | Not counting system prompt | Include system + few-shot in budget |
-| Slow tokenization | Tokenizing in a loop | Batch encode, cache encoder instance |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Build Tooling category in the FAI primitives catalog

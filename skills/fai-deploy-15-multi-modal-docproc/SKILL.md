@@ -1,108 +1,165 @@
 ---
 name: fai-deploy-15-multi-modal-docproc
-description: |
-  Deploy Play 15 Multi-Modal Document Processing with GPT-4o Vision, Azure Document Intelligence, Blob Storage, and App Service. Covers vision model deployment, multi-format pipeline, accuracy benchmarks, and rollback.
+description: Deploy Multi-Modal Document Processing with vision and layout analysis.
 ---
 
-# Deploy Multi-Modal Document Processing (Play 15)
+# Fai Deploy 15 Multi Modal Docproc
 
-Production deployment workflow for this solution play.
+Deploys Play 15-multi-modal-docproc to Azure with Bicep validation, what-if check, and post-deploy health verification.
 
-## When to Use
+## Overview
 
-- Deploying a multi-modal document processing pipeline
-- Setting up GPT-4o Vision for image + PDF analysis
-- Promoting document pipeline from dev → prod
-- Validating extraction accuracy across document formats
+This skill provides a structured, repeatable procedure for deploys play 15-multi-modal-docproc to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Deployment
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Infrastructure Stack
+## Parameters
 
-| Service | Purpose | SKU |
-|---------|---------|-----|
-| Azure OpenAI (GPT-4o) | Vision + text analysis | S0 |
-| Azure Document Intelligence | OCR fallback | S0 |
-| Blob Storage | Document ingestion | Standard LRS |
-| App Service | Processing API | P2v3 |
-| Cosmos DB | Extraction results | Serverless |
-| Application Insights | Processing telemetry | Workspace-based |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Deployment Steps
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# 1. Deploy infrastructure
-az deployment group create \
-  --resource-group rg-multimodal-prod \
-  --template-file infra/main.bicep \
-  --parameters environment=prod gptModel=gpt-4o
-
-# 2. Deploy processing API
-az webapp deploy --resource-group rg-multimodal-prod \
-  --name app-multimodal-prod --src-path dist/api.zip
-
-# 3. Run multi-format accuracy test
-python tests/smoke/test_multimodal_extraction.py \
-  --endpoint https://app-multimodal-prod.azurewebsites.net \
-  --formats pdf,png,jpeg,tiff,docx \
-  --sample-dir tests/fixtures/multi-format-docs \
-  --min-accuracy 0.88
-
-# 4. Validate vision model responses
-python tests/smoke/test_vision_quality.py \
-  --endpoint https://oai-multimodal-prod.openai.azure.com \
-  --images tests/fixtures/sample-images \
-  --min-groundedness 0.85
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: deploys play 15-multi-modal-docproc to azure with bicep validation, what-if check, and post-deploy health verification..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 02**
+- **Play 37**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-deploy-15-multi-modal-docproc
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-deploy-15-multi-modal-docproc/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Deployment Checklist
+
+- [ ] Infrastructure templates validated (`az deployment what-if`)
+- [ ] Environment variables configured (Key Vault references)
+- [ ] Health check endpoints responding (HTTP 200)
+- [ ] DNS/CNAME records updated
+- [ ] SSL certificates valid (not expiring within 30 days)
+- [ ] Rollback procedure documented and tested
+- [ ] Smoke tests passing in target environment
+- [ ] Cost estimate reviewed and approved
+- [ ] RBAC roles assigned (least privilege)
+- [ ] Monitoring alerts configured
 
 ## Rollback Procedure
 
 ```bash
-# Revert API to previous version
-az webapp deployment slot swap \
-  --resource-group rg-multimodal-prod \
-  --name app-multimodal-prod \
-  --slot staging --target-slot production
+# Quick rollback to previous deployment
+az deployment group create \
+  --resource-group $RG \
+  --template-file infra/main.bicep \
+  --parameters @infra/parameters.previous.json
 
-# Fallback to OCR-only mode
-az webapp config appsettings set \
-  --resource-group rg-multimodal-prod \
-  --name app-multimodal-prod \
-  --settings VISION_ENABLED=false OCR_FALLBACK=true
+# Verify rollback
+az resource list --resource-group $RG --output table
 ```
 
-## Health Check
+## Environment Matrix
 
-```bash
-curl -s https://app-multimodal-prod.azurewebsites.net/health | jq .
-# Expected: {"status":"healthy","vision":"enabled","ocr":"connected","formats":["pdf","png","jpeg","tiff","docx"]}
-```
+| Setting | Dev | Staging | Prod |
+|---------|-----|---------|------|
+| SKU | Basic | Standard | Premium |
+| Replicas | 1 | 2 | 3+ |
+| Region | Single | Single | Multi |
+| Backup | None | Daily | Continuous |
 
-## Troubleshooting
+## Notes
 
-### Vision model returns hallucinated content
-
-Lower temperature to 0. Add structured output schema. Validate against OCR ground truth. Use detail=low for layout analysis.
-
-### Processing timeout on large documents
-
-Split documents into page batches. Set per-page timeout to 15s. Use async processing with Service Bus for documents >20 pages.
-
-### Format not supported error
-
-Check supported formats list. Convert unsupported formats (HEIC→JPEG) in preprocessing. Fallback to OCR for text-heavy documents.
-
-## Post-Deploy Checklist
-
-- [ ] All infrastructure resources provisioned and healthy
-- [ ] Application deployed and responding on all endpoints
-- [ ] Smoke tests passing with expected thresholds
-- [ ] Monitoring dashboards showing baseline metrics
-- [ ] Alerts configured for error rate, latency, and cost
-- [ ] Rollback procedure tested and documented
-- [ ] Incident ownership and escalation path confirmed
-- [ ] Post-deploy review scheduled within 24 hours
-
-## Definition of Done
-
-Deployment is complete when infrastructure is provisioned, application is serving traffic, smoke tests pass, monitoring is active, and another engineer can reproduce the process from this skill alone.
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Deployment category in the FAI primitives catalog

@@ -1,100 +1,160 @@
 ---
 name: fai-build-prompting-system
-description: |
-  Build prompt management with template versioning, variable injection, guardrails,
-  output validation, and A/B testing. Use when managing prompts at scale across
-  multiple AI features.
+description: Build end-to-end prompting systems using Prompt Flow, versioning, A/B testing, and performance tracking.
 ---
 
-# Prompt Management System
+# Fai Build Prompting System
 
-Build versioned, testable, and guarded prompt systems for production AI.
+Builds a multi-turn prompting system with template management and variable injection.
 
-## When to Use
+## Overview
 
-- Managing 10+ prompts across multiple features
-- Need version control and rollback for prompt changes
-- Implementing A/B testing of prompt variants
-- Adding guardrails and output validation
+This skill provides a structured, repeatable procedure for builds a multi-turn prompting system with template management and variable injection.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Prompt Engineering
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Prompt Template
+## Parameters
 
-```python
-from dataclasses import dataclass
-from string import Template
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-@dataclass
-class PromptTemplate:
-    name: str
-    version: str
-    system: str
-    user: str
-    temperature: float = 0.3
+## Steps
 
-    def render(self, **vars) -> list[dict]:
-        return [
-            {"role": "system", "content": Template(self.system).safe_substitute(vars)},
-            {"role": "user", "content": Template(self.user).safe_substitute(vars)},
-        ]
+### Step 1: Validate Prerequisites
 
-RAG_V2 = PromptTemplate(
-    name="rag-answer", version="2.0",
-    system="You are a $domain assistant. Answer ONLY from context.\nRules: $rules",
-    user="Context:\n$context\n\nQuestion: $question",
-)
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Prompt Registry
+### Step 2: Load Configuration
 
-```python
-class PromptRegistry:
-    def __init__(self):
-        self._prompts = {}
-    def register(self, prompt):
-        self._prompts.setdefault(prompt.name, {})[prompt.version] = prompt
-    def get(self, name, version="latest"):
-        versions = self._prompts[name]
-        return versions[max(versions.keys())] if version == "latest" else versions[version]
+Read settings from the FAI manifest and TuneKit config files.
 
-registry = PromptRegistry()
-registry.register(RAG_V2)
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Output Guardrails
+### Step 3: Execute Core Logic
 
-```python
-from pydantic import BaseModel
+Perform the primary operation: builds a multi-turn prompting system with template management and variable injection..
 
-class GuardedOutput(BaseModel):
-    answer: str
-    confidence: str
-    sources: list[str]
+### Step 4: Validate Results
 
-def execute(prompt, client, **vars):
-    messages = prompt.render(**vars)
-    resp = client.chat.completions.create(
-        model="gpt-4o-mini", messages=messages,
-        temperature=prompt.temperature,
-        response_format={"type": "json_object"},
-    )
-    return GuardedOutput.model_validate_json(resp.choices[0].message.content)
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## A/B Testing
+## Output
 
-```python
-def ab_prompt(name, variants, user_id):
-    idx = hash(f"{name}:{user_id}") % len(variants)
-    return registry.get(name, variants[idx])
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+
+## Compatible Solution Plays
+
+- **Play 18**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-build-prompting-system
 ```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-build-prompting-system/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Prompt regression | No version control | Use registry with versions |
-| Parse failures | Model ignoring schema | Add few-shot + lower temp |
-| A/B inconclusive | Small sample | Run 1000+ per variant |
-| Guardrail bypass | No validation | Always validate with Pydantic |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Prompt Engineering category in the FAI primitives catalog

@@ -1,6 +1,8 @@
 ---
 name: fai-mcp-csharp-generator
-description: 'Scaffolds a complete C#/.NET MCP server project with ModelContextProtocol NuGet, dependency injection, [McpServerTool] attributes, IHostedService lifecycle, and Azure Managed Identity integration.'
+description: "Scaffold a production-ready C#/.NET MCP server with ModelContextProtocol NuGet, dependency injection, async tools, and Azure Managed Identity."
+waf: ["Security", "Reliability", "Operational Excellence", "Performance Efficiency"]
+plays: ["29-mcp-platform-integration", "02-ai-landing-zone"]
 ---
 
 # FAI MCP C# Generator

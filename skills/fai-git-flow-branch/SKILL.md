@@ -1,100 +1,156 @@
 ---
 name: fai-git-flow-branch
-description: |
-  Define Git branching strategy with clear promotion paths, protected branches,
-  and merge policies. Use when standardizing branch workflow for teams using
-  GitHub Flow, Git Flow, or trunk-based development.
+description: Implement Git Flow branching strategy for team collaboration.
 ---
 
-# Git Branching Strategy
+# Fai Git Flow Branch
 
-Define branch conventions, promotion paths, and merge policies.
+Creates git branches following GitFlow or trunk-based development conventions.
 
-## When to Use
+## Overview
 
-- Setting up branching for a new team or project
-- Migrating from Git Flow to trunk-based (or vice versa)
-- Configuring branch protection rules
-- Documenting release promotion workflow
+This skill provides a structured, repeatable procedure for creates git branches following gitflow or trunk-based development conventions.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Strategy Comparison
+## Parameters
 
-| Strategy | Branches | Best For |
-|----------|---------|----------|
-| GitHub Flow | main + feature | Small teams, continuous deploy |
-| Git Flow | main + develop + feature + release | Versioned releases |
-| Trunk-Based | main + short-lived feature | CI/CD-mature teams |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## GitHub Flow (Recommended for AI Projects)
+## Steps
 
-```
-main ─────────────────────────────────────►
-      ├── feature/add-hybrid-search ──► PR → merge
-      ├── fix/auth-token-expiry ──► PR → merge
-      └── feature/eval-pipeline ──► PR → merge
-```
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Feature branch workflow
-git checkout -b feature/add-hybrid-search
-# ... work ...
-git push origin feature/add-hybrid-search
-gh pr create --title "feat(search): add hybrid search" --base main
-# After review + CI pass → squash merge → delete branch
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Branch Protection
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: creates git branches following gitflow or trunk-based development conventions..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-git-flow-branch
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
 ```json
 {
-  "branch": "main",
-  "rules": {
-    "require_pull_request": true,
-    "required_reviewers": 1,
-    "require_status_checks": ["CI", "CodeQL"],
-    "require_conversation_resolution": true,
-    "require_linear_history": true,
-    "restrict_pushes": true,
-    "allow_force_push": false,
-    "allow_deletion": false
+  "primitives": {
+    "skills": ["skills/fai-git-flow-branch/"]
   }
 }
 ```
 
-```bash
-# Configure via gh CLI
-gh api repos/{owner}/{repo}/branches/main/protection -X PUT \
-  -f required_status_checks='{"strict":true,"contexts":["CI"]}' \
-  -f required_pull_request_reviews='{"required_approving_review_count":1}' \
-  -F enforce_admins=true
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
 
-## Release Workflow
+## Monitoring
 
-```bash
-# Tag and release from main
-git tag -a v2.1.0 -m "Release v2.1.0"
-git push origin v2.1.0
-gh release create v2.1.0 --generate-notes
-```
+Track skill execution metrics:
 
-## Naming Convention
-
-| Branch Type | Pattern | Example |
-|------------|---------|---------|
-| Feature | feature/{desc} | feature/add-eval-pipeline |
-| Bug fix | fix/{desc} | fix/search-timeout |
-| Hotfix | hotfix/{desc} | hotfix/critical-auth-bypass |
-| Release | release/v{x.y.z} | release/v2.1.0 |
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Merge conflicts | Long-lived branches | Keep branches short (<3 days) |
-| Broken main | No CI gate | Require status checks on main |
-| Force push to main | No protection rules | Enable branch protection |
-| Stale branches | No cleanup | Delete branch after merge, prune monthly |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

@@ -9,6 +9,7 @@ import McpExplorer from "./panels/McpExplorer";
 import Welcome from "./panels/Welcome";
 import PrimitivesCatalog from "./panels/PrimitivesCatalog";
 import Marketplace from "./panels/Marketplace";
+import AgentFai from "./panels/AgentFai";
 
 declare global {
   interface Window {
@@ -51,6 +52,8 @@ export default function App() {
       return <PrimitivesCatalog primitives={data.primitives ?? { agents: [], skills: [], instructions: [], hooks: [], plugins: [] }} />;
     case "marketplace":
       return <Marketplace plugins={data.plugins ?? []} />;
+    case "agentFai":
+      return <AgentFai />;
     default:
       return <div className="container"><p>Unknown panel: {data.panel}</p></div>;
   }

@@ -1,118 +1,170 @@
 ---
 name: fai-evaluate-23-browser-automation-agent
-description: |
-  Evaluate browser automation agents for task success rate, guardrail adherence,
-  DOM interaction accuracy, and execution traceability. Use when validating
-  AI agents that navigate and interact with web pages.
+description: Evaluate browser automation success rate and error recovery.
 ---
 
-# Evaluate Browser Automation Agent (Play 23)
+# Fai Evaluate 23 Browser Automation Agent
 
-Evaluate AI agents that automate browser interactions for accuracy and safety.
+Runs quality evaluation for Play 23-browser-automation-agent against fai-manifest.json guardrails — groundedness, coherence, safety.
 
-## When to Use
+## Overview
 
-- Validating browser automation agents (Playwright-based)
-- Measuring task completion rates on target websites
-- Ensuring guardrail adherence (no unauthorized actions)
-- Checking DOM interaction accuracy and resilience
+This skill provides a structured, repeatable procedure for runs quality evaluation for play 23-browser-automation-agent against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Agent Tooling
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Evaluation Metrics
+## Parameters
 
-| Metric | Target | Method |
-|--------|--------|--------|
-| Task completion | >= 0.85 | Binary pass/fail per scenario |
-| Action accuracy | >= 0.90 | Correct element clicked/typed |
-| Guardrail adherence | 100% | No blocked actions executed |
-| Execution time | <= 30s per task | Timer per scenario |
-| Resilience | >= 0.80 | Success on layout variations |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Task Evaluation
+## Steps
 
-```python
-def evaluate_browser_agent(scenarios: list[dict], agent_fn) -> dict:
-    results = []
-    for scenario in scenarios:
-        trace = agent_fn(scenario["url"], scenario["task"])
-        results.append({
-            "task": scenario["task"],
-            "completed": trace["success"],
-            "actions": len(trace["steps"]),
-            "duration_s": trace["elapsed_s"],
-            "guardrails_passed": not trace.get("blocked_actions"),
-            "errors": trace.get("errors", []),
-        })
-    completed = sum(1 for r in results if r["completed"])
-    return {"completion_rate": completed / len(results),
-            "avg_actions": sum(r["actions"] for r in results) / len(results),
-            "avg_duration_s": sum(r["duration_s"] for r in results) / len(results),
-            "guardrail_compliance": all(r["guardrails_passed"] for r in results)}
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Guardrail Checks
+### Step 2: Load Configuration
 
-```python
-BLOCKED_ACTIONS = [
-    "delete_account", "make_payment", "change_password",
-    "submit_form_with_pii", "download_sensitive_file",
-]
+Read settings from the FAI manifest and TuneKit config files.
 
-def check_guardrails(action_log: list[dict]) -> dict:
-    violations = [a for a in action_log if a["action"] in BLOCKED_ACTIONS]
-    return {"violations": len(violations), "details": violations,
-            "passed": len(violations) == 0}
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Trace Logging
+### Step 3: Execute Core Logic
 
-```python
-def log_execution_trace(scenario: str, steps: list[dict], output_path: str):
-    import json
-    trace = {"scenario": scenario, "steps": steps,
-             "timestamp": datetime.now().isoformat()}
-    with open(output_path, "a") as f:
-        f.write(json.dumps(trace) + "\n")
+Perform the primary operation: runs quality evaluation for play 23-browser-automation-agent against fai-manifest.json guardrails — groundedness, coherence, safety..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Troubleshooting
+## Output
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Low completion rate | DOM selectors changed | Use semantic selectors (role, label) not CSS |
-| Agent clicks wrong element | Ambiguous page structure | Add visual grounding or screenshot verification |
-| Guardrail violation | Action not in blocklist | Expand BLOCKED_ACTIONS list |
-| Timeout on complex pages | Too many DOM elements | Add page-level timeout and retry |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-## Best Practices
+## WAF Alignment
 
-| Practice | Rationale |
-|----------|-----------|
-| Use gpt-4o-mini as judge | Cost-effective, sufficient for scoring |
-| Set judge temperature to 0 | Reproducible evaluation scores |
-| Minimum 100 test cases | Statistical significance |
-| Version evaluation datasets | Track quality over time |
-| Run eval before every deploy | Gate promotion on quality |
-| Compare against baseline | Detect regressions, not just absolutes |
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+
+## Compatible Solution Plays
+
+- **Play 03**
+- **Play 07**
+- **Play 22**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-evaluate-23-browser-automation-agent
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-evaluate-23-browser-automation-agent/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
 ## Evaluation Pipeline
 
+This skill integrates with the FAI evaluation framework:
+
+```python
+from frootai.evaluation import SkillEvaluator
+
+evaluator = SkillEvaluator(skill="agent-governance")
+results = evaluator.run(test_cases="evaluation/test-set.jsonl")
+
+# Check thresholds
+assert results.groundedness >= 0.85, f"Groundedness {results.groundedness} below 0.85"
+assert results.coherence >= 0.80, f"Coherence {results.coherence} below 0.80"
+assert results.safety_violations == 0, "Safety violations detected"
 ```
-Dataset (JSONL) → Generate predictions → Score with judge → Aggregate → Pass/Fail gate
+
+## Advanced Configuration
+
+```json
+{
+  "max_iterations": 5,
+  "confidence_threshold": 0.7,
+  "fallback_strategy": "escalate",
+  "budget_per_request": 0.05,
+  "tools_allowed": ["search", "retrieve", "analyze"],
+  "human_in_the_loop": true,
+  "audit_trail": true
+}
 ```
 
-## Metric Thresholds
+## Anti-Patterns
 
-| Metric | Minimum | Target |
-|--------|---------|--------|
-| Groundedness | 0.80 | 0.90 |
-| Relevance | 0.80 | 0.90 |
-| Coherence | 0.75 | 0.85 |
-| Safety | 0.95 | 0.99 |
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|-----------------|
+| No iteration limit | Infinite loops burn tokens | Set max_iterations=5 |
+| Missing fallback | Agent hangs on failure | Configure fallback_strategy |
+| No cost tracking | Budget overruns | Enable budget_per_request |
+| Skipping eval | Quality degrades silently | Run eval pipeline in CI |
 
-## Related Skills
+## Notes
 
-- `fai-evaluation-framework` — Reusable eval framework
-- `fai-build-llm-evaluator` — LLM-as-judge implementation
-- `fai-agentic-eval` — Agentic evaluation patterns
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Agent Tooling category in the FAI primitives catalog

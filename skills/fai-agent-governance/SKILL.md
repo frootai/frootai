@@ -1,228 +1,224 @@
 ---
 name: fai-agent-governance
-description: |
-  Patterns for adding governance, safety, and trust controls to AI agent systems. Use this skill when:
-  - Building agents that call external tools (APIs, databases, file systems)
-  - Implementing policy-based access controls for agent tool usage
-  - Adding intent classification to detect dangerous prompts
-  - Creating audit trails for agent actions and decisions
-  - Enforcing rate limits, content filters, or tool restrictions
+description: "Review agent safety controls, budget limits, and human escalation paths - approve only agents that stay bounded, observable, and policy-compliant"
 ---
 
-# Agent Governance Patterns
+# FAI Agent Governance
 
-Patterns for adding safety, trust, and policy enforcement to AI agent systems.
+Review agent implementations before they ship. This skill covers tool allowlists, approval boundaries, token budgets, audit trails, escalation paths, and the evidence needed to sign off a production agent.
 
-## Overview
+## Governance Scope
 
-Governance patterns ensure AI agents operate within defined boundaries — controlling which tools they can call, what content they can process, and maintaining accountability through audit trails.
+A governed agent should answer five questions clearly:
 
-```
-User Request → Intent Classification → Policy Check → Tool Execution → Audit Log
-                     ↓                      ↓               ↓
-              Threat Detection         Allow/Deny      Trust Update
-```
+| Question | What to Verify | Evidence |
+|----------|----------------|----------|
+| What can the agent do? | Tool list, write permissions, network reach | `.agent.md` frontmatter, hooks, MCP config |
+| What can it spend? | Token ceilings, retries, concurrency | `config/*.json`, routing rules |
+| When must it stop? | Iteration caps, timeout, escalation | prompt instructions, orchestration code |
+| Who can approve sensitive actions? | Human-in-the-loop for deploy, delete, secrets, prod access | approval workflow, hook policy |
+| How is it observed? | Logs, traces, evaluation, incident trail | App Insights, audit logs, eval reports |
 
-## When to Use
+## Phase 1: Inventory the Agent Surface
 
-- **Agents with tool access**: Any agent calling external tools, APIs, databases, or shell commands
-- **Multi-agent systems**: Agents delegating to other agents need trust boundaries
-- **Production deployments**: Compliance, audit, and safety requirements
-- **Sensitive operations**: Financial transactions, data access, infrastructure changes
+Start by collecting the files that define agent behavior.
 
----
-
-## Pattern 1: Governance Policy
-
-Define what an agent is allowed to do as a composable, serializable policy object.
-
-```python
-from dataclasses import dataclass, field
-from enum import Enum
-import re
-
-class PolicyAction(Enum):
-    ALLOW = "allow"
-    DENY = "deny"
-    REVIEW = "review"
-
-@dataclass
-class GovernancePolicy:
-    """Declarative policy controlling agent behavior."""
-    name: str
-    allowed_tools: list[str] = field(default_factory=list)
-    blocked_tools: list[str] = field(default_factory=list)
-    blocked_patterns: list[str] = field(default_factory=list)
-    max_calls_per_request: int = 100
-    require_approval: list[str] = field(default_factory=list)
-
-    def check_tool(self, tool_name: str) -> PolicyAction:
-        if tool_name in self.blocked_tools:
-            return PolicyAction.DENY
-        if tool_name in self.require_approval:
-            return PolicyAction.REVIEW
-        if self.allowed_tools and tool_name not in self.allowed_tools:
-            return PolicyAction.DENY
-        return PolicyAction.ALLOW
-
-    def check_content(self, content: str) -> str | None:
-        for pattern in self.blocked_patterns:
-            if re.search(pattern, content, re.IGNORECASE):
-                return pattern
-        return None
+```bash
+Get-ChildItem .github/agents -Filter *.agent.md | Select-Object Name
+Get-ChildItem .github/hooks -Filter *.json | Select-Object Name
+Get-ChildItem config -Filter *.json | Select-Object Name
 ```
 
-### Policy as YAML Configuration
+Read the agent file and capture:
+- declared tools
+- model list and fallback order
+- references to skills, prompts, or hooks
+- instructions about production actions, secrets, or approvals
 
-Store policies as configuration, not code:
+## Phase 2: Validate Tool and Action Boundaries
+
+Every high-risk action needs a hard boundary, not just a polite instruction.
+
+| High-risk action | Required control |
+|------------------|------------------|
+| Deploying to production | explicit approval or gated workflow |
+| Editing infra or security policy | reviewer or tuner approval |
+| Reading secrets | Managed Identity plus scoped data-plane role |
+| Calling destructive tools | hook blocklist or human confirmation |
+| Opening network egress | allowlist at runtime or MCP scope restriction |
+
+Example agent frontmatter with bounded tools:
 
 ```yaml
-# governance-policy.yaml
-name: production-agent
-allowed_tools:
-  - search_documents
-  - query_database
-  - send_email
-blocked_tools:
-  - shell_exec
-  - delete_record
-blocked_patterns:
-  - "(?i)(api[_-]?key|secret|password)\\s*[:=]"
-  - "(?i)(drop|truncate|delete from)\\s+\\w+"
-max_calls_per_request: 25
-require_approval:
-  - send_email
+---
+description: "Builds and validates a solution play implementation"
+model: ["gpt-4o", "gpt-4o-mini"]
+tools: ["codebase", "terminal"]
+---
 ```
 
----
+If an agent asks for broad tools such as unrestricted shell plus deployment plus secret access, treat that as a governance finding until the boundaries are narrowed.
 
-## Pattern 2: Tool-Level Governance Decorator
+## Phase 3: Check Token and Iteration Budgets
 
-Wrap tool functions with governance enforcement:
+Agents fail operationally when they can loop forever, retry endlessly, or silently route all work to expensive models.
+
+```json
+{
+  "agentGovernance": {
+    "maxIterations": 6,
+    "maxRetriesPerTool": 3,
+    "requestTimeoutSeconds": 90,
+    "tokenBudget": {
+      "builder": 60000,
+      "reviewer": 25000,
+      "tuner": 15000
+    },
+    "requiresApprovalFor": ["production-deploy", "delete-resource", "read-secret"]
+  }
+}
+```
+
+Audit checks:
+- Every loop has a max iteration count.
+- Every external call has retry and timeout bounds.
+- Expensive models are deliberate, not default everywhere.
+- Budget overrun behavior is defined: stop, fallback, or escalate.
+
+## Phase 4: Require Human Escalation for Sensitive Paths
+
+Use a lightweight policy file when the agent crosses trust boundaries.
+
+```json
+{
+  "approvalPolicy": {
+    "humanRequired": [
+      "deploy:prod",
+      "rotate:key-vault-secret",
+      "delete:resource-group",
+      "disable:guardrail"
+    ],
+    "notify": ["security-team", "platform-team"],
+    "recordAuditEvent": true
+  }
+}
+```
+
+Your governance review should fail if the agent can perform these operations directly with no approval checkpoint.
+
+## Phase 5: Produce a Governance Scorecard
+
+Use a repeatable scorecard so every agent is judged the same way.
 
 ```python
-import functools, time
-from collections import defaultdict
+from dataclasses import dataclass
 
-_counters: dict[str, int] = defaultdict(int)
+@dataclass
+class GovernanceFinding:
+    category: str
+    severity: str
+    message: str
+    remediation: str
 
-def govern(policy: GovernancePolicy, audit=None):
-    """Decorator that enforces governance policy on a tool function."""
-    def decorator(func):
-        @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
-            tool = func.__name__
-            action = policy.check_tool(tool)
-            if action == PolicyAction.DENY:
-                raise PermissionError(f"Policy '{policy.name}' blocks '{tool}'")
-            if action == PolicyAction.REVIEW:
-                raise PermissionError(f"'{tool}' requires human approval")
 
-            _counters[policy.name] += 1
-            if _counters[policy.name] > policy.max_calls_per_request:
-                raise PermissionError("Rate limit exceeded")
-
-            for arg in list(args) + list(kwargs.values()):
-                if isinstance(arg, str):
-                    matched = policy.check_content(arg)
-                    if matched:
-                        raise PermissionError(f"Blocked pattern: {matched}")
-
-            start = time.monotonic()
-            try:
-                result = await func(*args, **kwargs)
-                if audit is not None:
-                    audit.append({"tool": tool, "action": "allowed",
-                                  "ms": (time.monotonic()-start)*1000})
-                return result
-            except Exception as e:
-                if audit is not None:
-                    audit.append({"tool": tool, "action": "error", "error": str(e)})
-                raise
-        return wrapper
-    return decorator
-
-# Usage
-policy = GovernancePolicy(
-    name="search-agent",
-    allowed_tools=["search", "summarize"],
-    blocked_patterns=[r"(?i)password"],
-    max_calls_per_request=10
-)
-
-@govern(policy)
-async def search(query: str) -> str:
-    return f"Results for: {query}"
+def review_agent(agent_text: str) -> list[GovernanceFinding]:
+    findings = []
+    if "tools:" not in agent_text:
+        findings.append(GovernanceFinding(
+            category="tool-boundary",
+            severity="high",
+            message="Agent does not declare an explicit tool list.",
+            remediation="Add a minimal tools allowlist in the frontmatter.",
+        ))
+    if "gpt-4o" in agent_text and "gpt-4o-mini" not in agent_text:
+        findings.append(GovernanceFinding(
+            category="cost-control",
+            severity="medium",
+            message="Primary model has no cheaper fallback.",
+            remediation="Add a fallback model or routing policy for low-risk tasks.",
+        ))
+    if "approval" not in agent_text.lower():
+        findings.append(GovernanceFinding(
+            category="human-in-the-loop",
+            severity="high",
+            message="No approval or escalation language found for sensitive actions.",
+            remediation="Add approval boundaries and hook enforcement for risky operations.",
+        ))
+    return findings
 ```
 
----
+## Governance Report Format
 
-## Pattern 3: Semantic Intent Classification
+```markdown
+# Agent Governance Review
 
-Detect dangerous intent before tool execution:
+## Summary
+- Agent: fai-example-builder
+- Verdict: CONDITIONAL_PASS
+- High findings: 1
+- Medium findings: 2
+
+## Findings
+1. High - No human approval path for production deploy.
+2. Medium - No cheaper fallback model defined.
+3. Medium - Retry limits missing for external API calls.
+
+## Required Remediation
+- Add approval gate for prod deploy.
+- Add `gpt-4o-mini` fallback.
+- Bound retries to 3 with exponential backoff.
+```
+
+## Logging and Audit Trail
+
+A governed agent should emit auditable events for:
+- session start
+- tool invocation on sensitive tools
+- approval request and approval result
+- model fallback activation
+- final verdict and artifacts changed
 
 ```python
-THREAT_SIGNALS = [
-    (r"(?i)send\s+(all|every)\s+\w+\s+to\s+", "data_exfiltration", 0.8),
-    (r"(?i)(sudo|as\s+root|admin\s+access)", "privilege_escalation", 0.8),
-    (r"(?i)(rm\s+-rf|drop\s+database)", "system_destruction", 0.95),
-    (r"(?i)ignore\s+(previous|above)\s+(instructions?|rules?)", "prompt_injection", 0.9),
-]
+import json
+from datetime import datetime, timezone
 
-def classify_intent(content: str) -> list[dict]:
-    signals = []
-    for pattern, category, weight in THREAT_SIGNALS:
-        if re.search(pattern, content):
-            signals.append({"category": category, "confidence": weight})
-    return signals
 
-def is_safe(content: str, threshold: float = 0.7) -> bool:
-    return not any(s["confidence"] >= threshold for s in classify_intent(content))
+def audit_event(action: str, agent: str, detail: dict) -> str:
+    payload = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "agent": agent,
+        "action": action,
+        "detail": detail,
+    }
+    return json.dumps(payload)
 ```
 
----
+## Failure Conditions
 
-## Pattern 4: Append-Only Audit Trail
+Fail governance review if any of these are true:
+- destructive action path has no approval
+- secrets access relies on embedded credentials
+- iteration and retry limits are undefined
+- no observable logs or eval output exist
+- content safety or prompt injection controls are absent for public-facing agents
 
-```python
-import json, time
+## Troubleshooting
 
-class AuditTrail:
-    def __init__(self):
-        self._entries = []
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| Agent keeps looping | no max iteration setting | add an explicit loop ceiling |
+| Costs spike during review | no model routing or budget caps | define per-role budgets and fallbacks |
+| Reviewer cannot prove actions taken | no audit trail | emit structured events for approvals and tool use |
+| Agent can deploy directly to prod | approvals are advisory only | enforce with hooks or workflow gates |
 
-    def log(self, agent_id: str, tool: str, action: str, **details):
-        self._entries.append({
-            "timestamp": time.time(), "agent_id": agent_id,
-            "tool": tool, "action": action, **details
-        })
+## Final Verdict
 
-    def denied(self):
-        return [e for e in self._entries if e["action"] == "denied"]
+Use these release outcomes:
 
-    def export_jsonl(self, path: str):
-        with open(path, "w") as f:
-            for entry in self._entries:
-                f.write(json.dumps(entry) + "\n")
-```
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| `PASS` | Boundaries, budgets, approvals, and audit trail are all present | allow rollout |
+| `CONDITIONAL_PASS` | Core controls exist, but one or two non-blocking gaps remain | fix before next release |
+| `FAIL` | Sensitive actions are unbounded or unobservable | block release |
 
----
-
-## Governance Levels
-
-| Level | Controls | Use Case |
-|-------|----------|----------|
-| **Open** | Audit only | Internal dev/testing |
-| **Standard** | Tool allowlist + content filters | General production |
-| **Strict** | All controls + human approval | Financial, healthcare |
-| **Locked** | Allowlist only, full audit | Compliance-critical |
-
-## Best Practices
-
-| Practice | Rationale |
-|----------|-----------|
-| Policy as configuration | Enables change without deploys |
-| Most-restrictive-wins | Deny always overrides allow when composing policies |
-| Pre-flight intent check | Classify before execution, not after |
-| Append-only audit | Immutability enables compliance |
-| Fail closed | If governance check errors, deny the action |
+A governance review is complete only when the verdict, findings, owner, and remediation due dates are recorded in the play or repo audit trail.

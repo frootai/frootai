@@ -1,7 +1,8 @@
 ---
 name: fai-play-initializer
-description: 'Scaffolds a complete FAI solution play with DevKit, TuneKit, SpecKit, infrastructure templates, and fai-manifest.json — the full FAI Protocol structure ready for development.'
----
+description: "Scaffold a new solution play with FAI Protocol wiring, directory structure, primitives stubs, and deployment config."
+waf: ["Operational Excellence", "Reliability"]
+plays: []
 
 # FAI Play Initializer
 

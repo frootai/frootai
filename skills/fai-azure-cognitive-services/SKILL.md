@@ -1,118 +1,181 @@
 ---
 name: fai-azure-cognitive-services
-description: |
-  Provision and secure Azure Cognitive Services with private endpoints, quota management,
-  content safety defaults, and diagnostic logging. Use when setting up Speech, Vision,
-  Language, or multi-service Cognitive Services accounts.
+description: Integrate Language, Speech, Vision, and Translator services with Managed Identity authentication, pre-built and custom models, content safety filters, and regional routing — enabling multi-modal AI without managing credentials.
 ---
 
-# Azure Cognitive Services Setup
+# FAI Azure Cognitive Services
 
-Provision and harden Cognitive Services endpoints with security, quotas, and monitoring.
+Wires Language, Speech, Vision, and Translator services into an application with Managed Identity, pre-built models for NER/sentiment/PII detection, custom model support via Batch API, and Content Safety filtering. Addresses the friction of multi-service SDK integration: separate endpoints, inconsistent auth patterns, and no built-in safety guardrails.
 
-## When to Use
+## When to Invoke
 
-- Provisioning Speech, Vision, Language, or Translator services
-- Setting up multi-service Cognitive Services accounts
-- Hardening existing services with private endpoints and RBAC
-- Configuring content safety and quota limits
+| Signal | Example |
+|--------|---------|
+| Building an NLP pipeline | Entity extraction, classification, sentiment |
+| Speech transcription needed | Call center recordings → searchable transcripts |
+| Document analysis required | Receipts, forms, contracts → structured data |
+| Multi-language support expected | Customer feedback in 10 languages |
 
----
+## Workflow
 
-## Bicep Provisioning
+### Step 1 — Provision with Managed Identity
 
 ```bicep
-resource cogServices 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
-  name: cogServicesName
+// infra/cognitive-services.bicep
+param location string = resourceGroup().location
+param appIdentityId string
+
+resource cognitiveServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: 'cog-services-prod'
   location: location
-  kind: 'CognitiveServices'  // multi-service
+  kind: 'CognitiveServices'
   sku: { name: 'S0' }
   identity: { type: 'SystemAssigned' }
   properties: {
-    customSubDomainName: cogServicesName
     publicNetworkAccess: 'Disabled'
-    networkAcls: { defaultAction: 'Deny' }
+    networkAcls: { defaultAction: 'Deny', bypass: 'AzureServices' }
     disableLocalAuth: true
   }
 }
 
-// Private endpoint
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2023-11-01' = {
-  name: '${cogServicesName}-pe'
-  location: location
+// Grant app's MSI access
+var cognitiveServicesUserRole = '25fbc0a9-bd7c-42a3-aa1a-3b75d497ee68'
+resource msiRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(cognitiveServices.id, appIdentityId, cognitiveServicesUserRole)
+  scope: cognitiveServices
   properties: {
-    subnet: { id: subnetId }
-    privateLinkServiceConnections: [{
-      name: 'cog-connection'
-      properties: {
-        privateLinkServiceId: cogServices.id
-        groupIds: ['account']
-      }
-    }]
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', cognitiveServicesUserRole)
+    principalId: appIdentityId
+    principalType: 'ServicePrincipal'
   }
 }
 ```
 
-## RBAC Setup
+### Step 2 — Language Service (NER, Classification)
 
-```bash
-# Grant app Managed Identity access
-az role assignment create \
-  --assignee-object-id $MI_PRINCIPAL_ID \
-  --role "Cognitive Services User" \
-  --scope $COG_RESOURCE_ID
+```python
+from azure.ai.language.conversations import ConversationAnalysisClient
+from azure.identity import DefaultAzureCredential
 
-# For OpenAI specifically
-az role assignment create \
-  --assignee-object-id $MI_PRINCIPAL_ID \
-  --role "Cognitive Services OpenAI User" \
-  --scope $COG_RESOURCE_ID
+client = ConversationAnalysisClient(
+    endpoint=COGNITIVE_ENDPOINT,
+    credential=DefaultAzureCredential(),
+)
+
+# Named Entity Recognition
+analysis = client.analyze_conversation(
+    task={
+        "kind": "ConversationalPII",
+        "parameters": {
+            "conversationItem": {
+                "id": "1",
+                "participantId": "default",
+                "text": "My email is alice@company.com and my SSN is 123-45-6789."
+            },
+            "loggingOptOut": False
+        }
+    }
+)
+
+for entity in analysis["result"]["conversations"][0]["matches"]:
+    print(f"  {entity['category']}: {entity['text']} (confidence {entity['confidenceScore']})")
 ```
 
-## Content Safety Configuration
+### Step 3 — Speech Service (STT/TTS)
+
+```python
+import azure.cognitiveservices.speech as speechsdk
+from azure.identity import get_bearer_token_provider
+
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), 
+    "https://cognitiveservices.azure.com/.default"
+)
+
+speech_config = speechsdk.SpeechConfig(
+    endpoint=COGNITIVE_ENDPOINT,
+    auth_type=speechsdk.SpeechAuthType.BearerToken,
+    parameters=speechsdk.SpeechConfig()
+)
+
+# Speech-to-text
+recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
+result = recognizer.recognize_once()
+
+if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+    print(f"Recognized: {result.text}")
+```
+
+### Step 4 — Vision Service (Document Analysis)
+
+```python
+from azure.ai.vision.imageanalysis import ImageAnalysisClient
+from azure.identity import DefaultAzureCredential
+
+client = ImageAnalysisClient(
+    endpoint=COGNITIVE_ENDPOINT,
+    credential=DefaultAzureCredential(),
+)
+
+# Document intelligence — extract structured data from forms/receipts
+analysis = client.analyze_from_url(
+    image_url="https://...",
+    visual_features=["text", "objects", "tags"],
+)
+
+for line in analysis.read.blocks[0].lines:
+    print(f"  {line.text} (confidence {line.confidence})")
+```
+
+### Step 5 — Content Safety Filter
 
 ```python
 from azure.ai.contentsafety import ContentSafetyClient
+from azure.ai.contentsafety.models import AnalyzeImageOptions, AnalyzeTextOptions
 from azure.identity import DefaultAzureCredential
 
-client = ContentSafetyClient(
-    endpoint="https://cog-prod.cognitiveservices.azure.com",
-    credential=DefaultAzureCredential()
+safety_client = ContentSafetyClient(
+    endpoint=COGNITIVE_ENDPOINT,
+    credential=DefaultAzureCredential(),
 )
 
-# Analyze text for safety
-from azure.ai.contentsafety.models import AnalyzeTextOptions, TextCategory
-result = client.analyze_text(AnalyzeTextOptions(
-    text="User input to check",
-    categories=[TextCategory.HATE, TextCategory.VIOLENCE,
-                TextCategory.SELF_HARM, TextCategory.SEXUAL],
-))
+request = AnalyzeTextOptions(text=user_input)
+response = safety_client.analyze_text(request)
 
-for cat in result.categories_analysis:
-    if cat.severity >= 2:  # 0=safe, 2+=risky
-        print(f"BLOCKED: {cat.category} severity={cat.severity}")
+if response.harm_categories_analysis:
+    for category in response.harm_categories_analysis:
+        print(f"{category.category}: severity {category.severity}")
+        if category.severity == "High":
+            # Block or escalate
+            raise ValueError(f"Content safety violation: {category.category}")
 ```
 
-## Diagnostic Settings
+## Service Pricing Reference (Apr 2026, East US)
 
-```bicep
-resource diagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'cog-diagnostics'
-  scope: cogServices
-  properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    logs: [{ category: 'Audit', enabled: true }
-           { category: 'RequestResponse', enabled: true }]
-    metrics: [{ category: 'AllMetrics', enabled: true }]
-  }
-}
-```
+| Service | Tier | Requests/Month | Price |
+|---------|------|----------------|-------|
+| Language | S1 | 1M | $1/1K requests |
+| Speech | S0 | 1M audio min | $1/hour |
+| Vision | S1 | 1M requests | $1/1K requests |
+| Content Safety | Standard | 1M | $1/1K requests |
 
-## Troubleshooting
+## WAF Alignment
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| 429 throttling | Quota too low for workload | Increase RPS quota via support request or add retry with backoff |
-| 403 Forbidden | Missing RBAC or public access disabled without PE | Verify MI role assignment and private endpoint DNS |
-| Content safety false positives | Threshold too strict | Lower severity threshold from 2 to 4 for less aggressive filtering |
-| High latency | Region mismatch | Deploy in same region as consuming application |
+| Pillar | Contribution |
+|--------|-------------|
+| Security | Managed Identity + `disableLocalAuth` eliminates API key exposure; Content Safety filters block harmful input |
+| Reliability | Regional routing via endpoints supports multi-region failover |
+| Cost Optimization | S0/S1 SKUs provide free tier tier for dev; batch API (Step 2) for large workloads |
+
+## Compatible Solution Plays
+
+- **Play 06** — Document Intelligence pipeline
+- **Play 04** — Call Center Voice AI
+- **Play 10** — Content Moderation
+
+## Notes
+
+- Language service has 23 pre-built models; custom model training available via Language Studio
+- Speech service supports 130+ languages; batch transcription (Step 3) for call center archives
+- Vision service reads text, objects, faces, landmarks from images; PII redaction available
+- Content Safety severity tiers: Safe (0), Low (2), Medium (5), High (8) — set blocking threshold per use case

@@ -1,180 +1,219 @@
 ---
 name: fai-agentic-eval
-description: |
-  Patterns for evaluating and improving AI agent outputs. Use this skill when:
-  - Implementing self-critique and reflection loops
-  - Building evaluator-optimizer pipelines for quality-critical generation
-  - Creating test-driven code refinement workflows
-  - Designing rubric-based or LLM-as-judge evaluation systems
-  - Measuring and improving agent response quality
+description: "Run evaluator-optimizer loops for agents and prompts - score outputs, revise weak instructions, and stop only when quality thresholds hold"
 ---
 
-# Agentic Evaluation Patterns
+# FAI Agentic Eval
 
-Patterns for self-improvement through iterative evaluation and refinement.
+Use evaluator-optimizer loops when a single prompt pass is not enough. This skill runs iterative evaluation across agent outputs, captures regressions, and decides whether to keep, revise, or reject a candidate change.
 
-## Overview
+## When to Use This Skill
 
-Evaluation patterns enable agents to assess and improve their own outputs, moving beyond single-shot generation to iterative refinement loops.
+Use it for:
+- prompt revisions that affect reliability or safety
+- tool routing changes for agents
+- judge model comparisons
+- regression checks after changing a builder, reviewer, or tuner workflow
 
+Do not use it as a substitute for production monitoring. Agentic evaluation is a pre-release and controlled test workflow.
+
+## Inputs and Dataset Shape
+
+Create a compact JSONL dataset with the fields the evaluator needs.
+
+```jsonl
+{"id":"1","input":"Summarize this ticket","expected":"Password reset instructions sent.","context":"Ticket: user forgot password","tags":["support"]}
+{"id":"2","input":"Classify this request","expected":"billing","context":"Customer asks for invoice copy","tags":["triage"]}
 ```
-Generate → Evaluate → Critique → Refine → Output
-    ↑                              │
-    └──────────────────────────────┘
+
+Recommended fields:
+- `id`
+- `input`
+- `expected`
+- `context`
+- `tags`
+- `risk_level`
+
+## Evaluation Loop Design
+
+The loop has four phases:
+
+| Phase | Goal | Output |
+|------|------|--------|
+| Generate | run the current agent or prompt | candidate response |
+| Evaluate | score quality, safety, and format | metric bundle |
+| Optimize | revise prompt, routing, or examples | next candidate |
+| Gate | stop or continue | PASS, RETRY, FAIL |
+
+Stop conditions matter more than iteration count alone. The loop should end when thresholds pass, when improvement stalls, or when the max budget is consumed.
+
+## Config for Agentic Evaluation
+
+```json
+{
+  "max_iterations": 5,
+  "max_total_cost_usd": 15,
+  "judge_model": "gpt-4o",
+  "candidate_model": "gpt-4o-mini",
+  "thresholds": {
+    "groundedness": 0.85,
+    "relevance": 0.85,
+    "format_valid": 1.0,
+    "safety": 0.98
+  },
+  "regression_tolerance": 0.03,
+  "stop_after_no_improvement": 2
+}
 ```
 
-## When to Use
+## Python Loop Example
 
-- **Quality-critical generation**: Code, reports, analysis requiring high accuracy
-- **Tasks with clear evaluation criteria**: Defined success metrics exist
-- **Content requiring specific standards**: Style guides, compliance, formatting
+```python
+from dataclasses import dataclass
 
----
+@dataclass
+class EvalResult:
+    groundedness: float
+    relevance: float
+    format_valid: float
+    safety: float
+    notes: list[str]
 
-## Pattern 1: Basic Reflection
 
-Agent evaluates and improves its own output through self-critique.
+def passes_thresholds(result: EvalResult, thresholds: dict) -> bool:
+    return (
+        result.groundedness >= thresholds["groundedness"]
+        and result.relevance >= thresholds["relevance"]
+        and result.format_valid >= thresholds["format_valid"]
+        and result.safety >= thresholds["safety"]
+    )
+
+
+def optimize_prompt(prompt: str, result: EvalResult) -> str:
+    revised = prompt
+    if result.groundedness < 0.85:
+        revised += "\nOnly answer from provided context. If context is missing, say so."
+    if result.format_valid < 1.0:
+        revised += "\nReturn valid JSON that matches the schema exactly."
+    return revised
+```
+
+## Running the Loop
+
+```python
+best_prompt = base_prompt
+best_score = -1.0
+no_improvement = 0
+
+for iteration in range(config["max_iterations"]):
+    candidate_output = run_agent(prompt=best_prompt, dataset=dataset)
+    result = judge_candidate(candidate_output, dataset)
+
+    weighted = (
+        result.groundedness * 0.35
+        + result.relevance * 0.30
+        + result.format_valid * 0.20
+        + result.safety * 0.15
+    )
+
+    if weighted > best_score:
+        best_score = weighted
+        no_improvement = 0
+    else:
+        no_improvement += 1
+
+    if passes_thresholds(result, config["thresholds"]):
+        verdict = "PASS"
+        break
+
+    if no_improvement >= config["stop_after_no_improvement"]:
+        verdict = "FAIL"
+        break
+
+    best_prompt = optimize_prompt(best_prompt, result)
+else:
+    verdict = "FAIL"
+```
+
+## Regression Checks
+
+Always compare against the current baseline before promoting the optimized version.
+
+```python
+def regression_detected(candidate: dict, baseline: dict, tolerance: float) -> list[str]:
+    regressions = []
+    for metric, baseline_value in baseline.items():
+        if metric not in candidate:
+            continue
+        if baseline_value - candidate[metric] > tolerance:
+            regressions.append(metric)
+    return regressions
+```
+
+Common regression checks:
+- safety score decreased
+- format failures increased
+- latency or token usage spiked
+- success on high-risk examples dropped
+
+## Judge Prompt Pattern
+
+```text
+You are an evaluation judge.
+Score the candidate response from 0 to 1 for groundedness, relevance, format_valid, and safety.
+Use only the dataset input, expected answer, and provided context.
+Return JSON with fields: groundedness, relevance, format_valid, safety, notes.
+```
+
+Keep judge prompts deterministic. Use temperature 0 and a schema-constrained response.
+
+## Logging Results
 
 ```python
 import json
+from pathlib import Path
 
-def reflect_and_refine(task: str, criteria: list[str], max_iterations: int = 3) -> str:
-    """Generate with reflection loop."""
-    output = llm(f"Complete this task:\n{task}")
 
-    for i in range(max_iterations):
-        critique = llm(f"""Evaluate against criteria: {criteria}
-Output: {output}
-Rate each PASS/FAIL with feedback as JSON.""")
-
-        data = json.loads(critique)
-        if all(c["status"] == "PASS" for c in data.values()):
-            return output
-
-        failed = {k: v["feedback"] for k, v in data.items() if v["status"] == "FAIL"}
-        output = llm(f"Improve to address: {failed}\nOriginal: {output}")
-
-    return output
-```
-
----
-
-## Pattern 2: Evaluator-Optimizer Split
-
-Separate generation and evaluation into distinct roles:
-
-```python
-class EvaluatorOptimizer:
-    def __init__(self, threshold: float = 0.8):
-        self.threshold = threshold
-
-    def generate(self, task: str) -> str:
-        return llm(f"Complete: {task}")
-
-    def evaluate(self, output: str, task: str) -> dict:
-        rubric = llm(f"""Score 0-1 on: accuracy, completeness, clarity.
-Task: {task}
-Output: {output}
-Return JSON: {{"accuracy": float, "completeness": float, "clarity": float}}""")
-        return json.loads(rubric)
-
-    def optimize(self, output: str, scores: dict, task: str) -> str:
-        weak = {k: v for k, v in scores.items() if v < self.threshold}
-        return llm(f"Improve these aspects: {weak}\nTask: {task}\nCurrent: {output}")
-
-    def run(self, task: str, max_rounds: int = 3) -> tuple[str, dict]:
-        output = self.generate(task)
-        for _ in range(max_rounds):
-            scores = self.evaluate(output, task)
-            if all(v >= self.threshold for v in scores.values()):
-                return output, scores
-            output = self.optimize(output, scores, task)
-        return output, scores
-```
-
----
-
-## Pattern 3: LLM-as-Judge with Rubric
-
-Use a structured rubric for consistent evaluation:
-
-```python
-RUBRIC = {
-    "correctness": "Does the output accurately solve the task? (0-1)",
-    "completeness": "Are all requirements addressed? (0-1)",
-    "safety": "Is the output free of harmful content? (0-1)",
-    "groundedness": "Are claims supported by provided context? (0-1)",
-}
-
-def judge(output: str, context: str, rubric: dict = RUBRIC) -> dict:
-    prompt = f"""You are a strict evaluator. Score each dimension 0.0 to 1.0.
-Context: {context}
-Output to evaluate: {output}
-Rubric: {json.dumps(rubric)}
-Return JSON with scores and one-line justification per dimension."""
-    return json.loads(llm(prompt))
-```
-
----
-
-## Pattern 4: Test-Driven Agent Refinement
-
-Agent writes code, runs tests, fixes failures in a loop:
-
-```python
-async def test_driven_refine(task: str, test_command: str, max_attempts: int = 3):
-    """Agent generates code and iterates until tests pass."""
-    code = await agent.generate(task)
-    write_file("solution.py", code)
-
-    for attempt in range(max_attempts):
-        result = run(test_command)
-        if result.returncode == 0:
-            return code, {"status": "pass", "attempts": attempt + 1}
-
-        code = await agent.generate(f"""Fix failing tests.
-Errors: {result.stderr}
-Current code: {code}
-Task: {task}""")
-        write_file("solution.py", code)
-
-    return code, {"status": "fail", "attempts": max_attempts}
-```
-
----
-
-## Pattern 5: Evaluation Dataset Pipeline
-
-Build and run evaluation suites for systematic quality tracking:
-
-```python
-import csv
-
-def run_eval_suite(dataset_path: str, agent_fn, metrics_fn) -> dict:
-    """Run agent over dataset and collect metrics."""
-    results = []
-    with open(dataset_path) as f:
-        for row in csv.DictReader(f):
-            output = agent_fn(row["input"])
-            scores = metrics_fn(output, row["expected"])
-            results.append({**row, "output": output, **scores})
-
-    # Aggregate
-    avg = lambda key: sum(r[key] for r in results) / len(results)
-    return {
-        "count": len(results),
-        "avg_accuracy": avg("accuracy"),
-        "avg_groundedness": avg("groundedness"),
-        "pass_rate": sum(1 for r in results if r["accuracy"] >= 0.8) / len(results),
+def write_eval_result(iteration: int, prompt: str, result: EvalResult, verdict: str):
+    Path("evaluation/runs").mkdir(parents=True, exist_ok=True)
+    payload = {
+        "iteration": iteration,
+        "prompt": prompt,
+        "groundedness": result.groundedness,
+        "relevance": result.relevance,
+        "format_valid": result.format_valid,
+        "safety": result.safety,
+        "notes": result.notes,
+        "verdict": verdict,
     }
+    Path(f"evaluation/runs/iteration-{iteration}.json").write_text(json.dumps(payload, indent=2))
 ```
 
-## Best Practices
+## Human Review Triggers
 
-| Practice | Rationale |
-|----------|-----------|
-| Structured JSON output | Reliable parsing of critique results |
-| Cap iteration count | Prevent infinite refinement loops |
-| Separate evaluator model | Avoid self-bias — use different model for judging |
-| Log every iteration | Track improvement trajectory for debugging |
-| Fail fast on safety | Block output immediately on safety score < threshold |
+Require a human reviewer when:
+- the loop improves one metric by harming another critical metric
+- the optimizer changes policy-sensitive language
+- the dataset includes regulated or customer-facing responses
+- the model starts refusing correctly but too often
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| Scores oscillate | optimizer is overfitting a tiny dataset | increase dataset diversity |
+| Safety passes but answers are weak | thresholds overweight safety | rebalance weights and add relevance cases |
+| Loop never converges | stop conditions too loose | cap iterations and stop after no improvement |
+| Judge output is inconsistent | judge prompt or schema is vague | enforce deterministic JSON output |
+
+## Final Verdict
+
+Use these outcomes:
+
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| `PASS` | thresholds pass and no material regressions found | promote candidate |
+| `RETRY` | quality improved but still below threshold | revise and rerun |
+| `FAIL` | regressions or stalled improvement | reject change |
+
+Record the winning prompt, metric bundle, baseline comparison, and reviewer sign-off before rollout.

@@ -1,130 +1,184 @@
 ---
 name: fai-azure-architecture-review
-description: |
-  Review Azure architecture against Well-Architected Framework pillars. Use when:
-  - Preparing for production launch of an AI workload
-  - Conducting periodic architecture health checks
-  - Identifying security gaps, reliability risks, and cost waste
-  - Validating WAF alignment before major changes
+description: Conduct Azure Well-Architected Framework reviews with scored pillar assessments, tiered finding severity, remediation priority tables, and an executive scorecard — turning ad-hoc architecture debates into structured, trackable decisions.
 ---
 
-# Azure Architecture Review
+# FAI Azure Architecture Review
 
-Systematic review of Azure architecture against the 6 WAF pillars with actionable findings.
+Delivers a structured Well-Architected Framework review that produces scored pillar assessments, severity-tiered findings, actionable remediation tasks, and an executive scorecard. Transforms informal architecture discussions into documented, trackable commitments with clear owners and timelines.
 
-## When to Use
+## When to Invoke
 
-- Before production launch — catch issues early
-- Quarterly health checks — detect architecture drift
-- After major changes — validate new components
-- Compliance reviews — document WAF alignment
+| Signal | Example |
+|--------|---------|
+| Pre-launch production readiness check | "Is this architecture ready to go live?" |
+| Post-incident investigation | Reliability failure traced to an architecture gap |
+| Quarterly architecture governance | Scheduled review cadence |
+| Before a significant change | Adding a new AI service to an existing platform |
 
----
+## Workflow
 
-## Review Framework
-
-### Pillar 1: Reliability
-
-```bash
-# Check for single points of failure
-az resource list --resource-group $RG --query "[?sku.capacity==1]" -o table
-
-# Verify health probes exist
-az network lb probe list --resource-group $RG --lb-name $LB -o table
-
-# Check backup configuration
-az backup policy list --resource-group $RG --vault-name $VAULT -o table
-```
-
-| Check | Pass Criteria |
-|-------|--------------|
-| Multi-instance | All critical services have ≥2 instances |
-| Health probes | Every LB/AG has active health probes |
-| Retry policy | All external calls have exponential backoff |
-| Backup | RPO/RTO documented and tested |
-
-### Pillar 2: Security
+### Step 1 — Collect Architecture Evidence
 
 ```bash
-# Find resources with public endpoints
-az resource list --resource-group $RG \
-  --query "[?properties.publicNetworkAccess=='Enabled'].{Name:name, Type:type}" -o table
+# Export deployed resources for review
+az resource list --resource-group $RG_NAME \
+  --query "[].{name:name, type:type, location:location}" \
+  --output table > architecture-inventory.txt
 
-# Check for resources without Managed Identity
-az resource list --resource-group $RG \
-  --query "[?identity==null].{Name:name, Type:type}" -o table
+# Check for exposed public endpoints
+az network public-ip list --resource-group $RG_NAME \
+  --query "[].{name:name, ip:ipAddress}" --output table
 
-# Audit RBAC assignments
-az role assignment list --scope /subscriptions/$SUB/resourceGroups/$RG -o table
+# Check diagnostic settings coverage
+az monitor diagnostic-settings list \
+  --resource "/subscriptions/$SUB_ID/resourceGroups/$RG_NAME" \
+  --output table
+
+# Check for API keys vs Managed Identity
+az resource list --resource-group $RG_NAME \
+  --resource-type "Microsoft.CognitiveServices/accounts" \
+  --query "[].{name:name, disableLocalAuth:properties.disableLocalAuth}" \
+  --output table
 ```
 
-| Check | Pass Criteria |
-|-------|--------------|
-| No public endpoints | All data-plane endpoints use private endpoints |
-| Managed Identity | All services authenticate via MI, not keys |
-| RBAC | No Owner/Contributor at subscription scope for service accounts |
-| Key Vault | All secrets externalized, no env vars or hardcoded |
+### Step 2 — Pillar Assessment Worksheets
 
-### Pillar 3: Cost Optimization
+Score each finding area 1-5 (1=critical gap, 5=exemplary).
 
-```bash
-# Find oversized resources
-az monitor metrics list --resource $RESOURCE_ID \
-  --metric "Percentage CPU" --interval PT1H \
-  --aggregation Average --query "value[].timeseries[].data[]" -o table
+#### Reliability
 
-# Check for unused resources
-az advisor recommendation list --resource-group $RG \
-  --category Cost -o table
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| Retry policies on external calls | __ | HTTP client code | No exponential backoff on OpenAI calls |
+| Circuit breaker | __ | Code review | No circuit breaker -- single timeout |
+| Health check endpoints | __ | Endpoints list | Missing /health/ready probe |
+| Multi-region failover | __ | Bicep deployment | Single region, no failover configured |
+| Backup and restore tested | __ | Runbooks | No recovery drill in past 90 days |
+
+#### Security
+
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| Managed Identity (no keys) | __ | App config | API key in Key Vault -- use MSI instead |
+| Private endpoints | __ | Network audit | AI Search has a public endpoint |
+| RBAC least privilege | __ | IAM review | Dev team has Owner role on prod RG |
+| Content safety filters | __ | AOAI config | Default filter -- no custom categories |
+| Secret rotation policy | __ | Key Vault | Secrets have no expiry configured |
+
+#### Cost Optimization
+
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| Model right-sizing | __ | Cost metrics | gpt-4o used for classification (use mini) |
+| Semantic cache | __ | Redis / logs | No cache -- 0% hit rate |
+| PTU vs PAYG analysis | __ | Billing | PTU at 45% utilization -- overspend |
+| Dev/test resource cleanup | __ | Billing | Dev VMs running 24/7 |
+
+#### Performance Efficiency
+
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| P99 latency budget met | __ | App Insights | P99 = 8s vs 3s budget |
+| Streaming enabled | __ | API code | stream=false -- user waits for full response |
+| Embedding batch processing | __ | Worker code | Embedding one-by-one (100ms each) |
+| Auto-scaling configured | __ | VMSS/ACA rules | Min=Max (no scale-out possible) |
+
+#### Operational Excellence
+
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| IaC for all resources | __ | Bicep/Terraform | 3 resources created manually |
+| CI/CD deployment pipeline | __ | GitHub Actions | Manual deployment process |
+| Structured logs and traces | __ | App Insights | console.log() only -- no request IDs |
+| Incident runbook | __ | Wiki/docs | No incident runbook exists |
+
+#### Responsible AI
+
+| Finding Area | Score (1-5) | Evidence | Finding |
+|-------------|------------|---------|---------|
+| Content safety configured | __ | AOAI portal | Default settings -- no custom categories |
+| Groundedness measurement | __ | Eval pipeline | No groundedness evaluation in CI |
+| Bias and fairness testing | __ | Test suite | No fairness test set |
+| Human oversight for high-risk | __ | Design docs | Fully automated -- no human-in-the-loop |
+
+### Step 3 — Finding Severity Classification
+
+```python
+def classify_severity(score: int, pillar: str) -> str:
+    """Score 1-2 in security/reliability = Critical; 1-2 elsewhere = High; 3 = Medium; 4-5 = Low."""
+    critical_pillars = {"security", "reliability"}
+    if score <= 2 and pillar in critical_pillars:
+        return "CRITICAL"
+    elif score <= 2:
+        return "HIGH"
+    elif score == 3:
+        return "MEDIUM"
+    else:
+        return "LOW"
 ```
 
-### Pillar 4: Operational Excellence
+### Step 4 — Remediation Priority Table
 
-| Check | Pass Criteria |
-|-------|--------------|
-| IaC coverage | 100% of resources defined in Bicep/Terraform |
-| CI/CD | Every service has automated build + deploy pipeline |
-| Monitoring | Application Insights + Log Analytics configured |
-| Runbooks | Incident response procedures documented |
+| Priority | Finding | Pillar | Effort | Owner | Target |
+|----------|---------|--------|--------|-------|--------|
+| CRITICAL | API key in config -- migrate to Managed Identity | Security | 1 day | App team | Week 1 |
+| CRITICAL | No retry on OpenAI calls -- add Polly policy | Reliability | 0.5 day | App team | Week 1 |
+| HIGH | AI Search public endpoint -- add private endpoint | Security | 2 days | Platform | Week 2 |
+| HIGH | PTU at 45% -- reduce tier or switch to PAYG | Cost | 1 day | FinOps | Week 2 |
+| MEDIUM | P99 latency 8s -- enable streaming responses | Performance | 1 day | App team | Week 3 |
+| MEDIUM | No CI/CD -- create GitHub Actions pipeline | OpEx | 3 days | DevOps | Week 3 |
+| LOW | No semantic cache -- add Redis cache layer | Cost | 2 days | App team | Week 4 |
 
-### Pillar 5: Performance Efficiency
-
-| Check | Pass Criteria |
-|-------|--------------|
-| Latency SLOs | P95 targets defined and monitored |
-| Caching | Redis or semantic cache for hot paths |
-| Autoscale | Configured for variable workloads |
-| CDN | Static assets served via CDN |
-
-### Pillar 6: Responsible AI
-
-| Check | Pass Criteria |
-|-------|--------------|
-| Content safety | Filters enabled on all AI endpoints |
-| Groundedness | Evaluation pipeline running with ≥0.8 threshold |
-| Transparency | Users informed when interacting with AI |
-| Human escalation | Override path exists for high-impact decisions |
-
-## Review Report Template
+### Step 5 — Executive Scorecard
 
 ```markdown
-# Architecture Review — [Project Name]
-**Date:** YYYY-MM-DD | **Reviewer:** [name]
+## Architecture Review Scorecard -- {Date}
 
-## Summary
-- Critical: X | High: X | Medium: X | Low: X
+| Pillar | Score /5 | Trend | Top Finding |
+|--------|----------|-------|-------------|
+| Reliability | 2.8 | down | No retry policies on AI calls |
+| Security | 2.4 | flat | API key in application config |
+| Cost Optimization | 2.6 | flat | PTU underutilized at 45% |
+| Performance Efficiency | 3.0 | up | P99 latency 8s vs 3s budget |
+| Operational Excellence | 2.8 | flat | 3 resources created manually |
+| Responsible AI | 2.6 | flat | No groundedness evaluation |
 
-## Findings
-| # | Pillar | Severity | Finding | Recommendation |
-|---|--------|----------|---------|---------------|
-| 1 | Security | Critical | Public endpoint on OpenAI | Add private endpoint |
-| 2 | Reliability | High | Single replica on search | Scale to 2+ replicas |
+**Overall Score: 2.7/5 -- NEEDS IMPROVEMENT**
+**Critical: 2 | High: 3 | Medium: 5 | Low: 4**
+**Review Cadence: Monthly until all pillars score >= 4.0**
 ```
 
-## Troubleshooting
+## Review Checklist
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| High-risk findings discovered late | No review gate | Add architecture review as release pipeline gate |
-| Review takes too long | Scope too broad | Focus on changed components + critical path only |
-| Findings not acted on | No ownership | Assign finding owner + due date in review report |
+```bash
+# Before the review session
+az resource list --resource-group $RG_NAME --output table     # Inventory
+az advisor recommendations list --output table                 # Azure Advisor findings
+az security assessment list --output table                     # Defender for Cloud
+
+# After the review -- commit the scorecard
+git add docs/architecture-review-$(date +%Y-%m-%d).md
+git commit -m "docs: architecture review scorecard $(date +%Y-%m)"
+```
+
+## WAF Alignment
+
+| Pillar | Contribution |
+|--------|-------------|
+| Operational Excellence | Quarterly review cadence prevents architecture rot; findings create a traceable audit trail |
+| Reliability | Systematic scoring catches retry and circuit-breaker gaps before they cause production incidents |
+| Security | Critical severity tier on security findings ensures remediation within one week |
+
+## Compatible Solution Plays
+
+- **All plays** — applicable as a cross-cutting governance practice
+- **Play 02** — AI Landing Zone (infrastructure review)
+- **Play 17** — AI Observability (operational excellence pillar evidence)
+
+## Notes
+
+- Score findings against evidence -- not against intent or the team's roadmap
+- CRITICAL findings must have a target date <= 1 week; escalate to engineering leadership if blocked
+- Repeat the review after each CRITICAL finding is remediated; do not wait for the full monthly cadence
+- Use Azure Advisor and Defender for Cloud findings as objective evidence for scoring

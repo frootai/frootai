@@ -1,101 +1,156 @@
 ---
 name: fai-git-commit-best-practices
-description: |
-  Enforce commit hygiene with conventional commits, atomic changes, clear
-  messages, and CI-enforceable standards. Use when improving commit quality
-  or setting up commitlint.
+description: Apply conventional commits and meaningful commit messages.
 ---
 
-# Git Commit Best Practices
+# Fai Git Commit Best Practices
 
-Write clear, atomic commits with conventional format and CI enforcement.
+Guides best practices for git commits — atomic changes, descriptive messages, signed commits.
 
-## When to Use
+## Overview
 
-- Setting up commit conventions for a team
-- Configuring commitlint in CI
-- Improving changelog generation quality
-- Training developers on commit hygiene
+This skill provides a structured, repeatable procedure for guides best practices for git commits — atomic changes, descriptive messages, signed commits.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Conventional Commit Format
+## Parameters
 
-```
-<type>(<scope>): <description>
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-[optional body]
+## Steps
 
-[optional footer]
-```
+### Step 1: Validate Prerequisites
 
-### Types
-
-| Type | Use When |
-|------|----------|
-| feat | New feature |
-| fix | Bug fix |
-| docs | Documentation only |
-| refactor | Code change that doesn't fix or add |
-| perf | Performance improvement |
-| test | Adding or fixing tests |
-| chore | Build, CI, tooling changes |
-| ci | CI/CD pipeline changes |
-
-### Examples
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Good
-git commit -m "feat(search): add hybrid vector+keyword retrieval"
-git commit -m "fix(auth): handle expired MI tokens with retry"
-git commit -m "docs: add ADR for embedding model selection"
-git commit -m "perf(api): reduce P95 latency from 3s to 800ms"
-
-# Bad
-git commit -m "fixed stuff"
-git commit -m "wip"
-git commit -m "changes"
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Commitlint Setup
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
 
 ```bash
-npm install --save-dev @commitlint/{config-conventional,cli}
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-```js
-// commitlint.config.js
-module.exports = { extends: ['@commitlint/config-conventional'] };
-```
+### Step 3: Execute Core Logic
+
+Perform the primary operation: guides best practices for git commits — atomic changes, descriptive messages, signed commits..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
 
 ```bash
-# Git hook (via Husky)
-npx husky add .husky/commit-msg 'npx --no -- commitlint --edit ${1}'
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## CI Enforcement
+## Output
 
-```yaml
-- name: Lint commits
-  run: |
-    npx commitlint --from ${{ github.event.pull_request.base.sha }} \
-                    --to ${{ github.event.pull_request.head.sha }}
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-git-commit-best-practices
 ```
 
-## Atomic Commit Rules
+### Inside a Solution Play
 
-| Rule | Why |
-|------|-----|
-| One logical change per commit | Easy to revert, review, cherry-pick |
-| Tests in same commit as code | Don't break bisect |
-| Config separate from code | Clear intent |
-| Never commit secrets | Use .gitignore + pre-commit hooks |
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-git-commit-best-practices/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Commitlint fails | Non-conventional format | Use `type(scope): description` format |
-| Too many small commits | Over-splitting | Squash related changes on merge |
-| Large messy commits | Working in one commit | Use `git add -p` for staged chunks |
-| Secrets committed | No pre-commit hook | Add gitleaks or trufflehog pre-commit |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

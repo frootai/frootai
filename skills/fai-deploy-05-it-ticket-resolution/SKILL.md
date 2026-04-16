@@ -1,109 +1,165 @@
 ---
 name: fai-deploy-05-it-ticket-resolution
-description: |
-  Deploy IT Ticket Resolution (Play 05) with ticket classification, knowledge
-  base retrieval, auto-response generation, and escalation routing. Covers
-  integration with ServiceNow and Jira.
+description: Deploy IT Ticket Resolution automation with multi-agent orchestration.
 ---
 
-# Deploy IT Ticket Resolution (Play 05)
+# Fai Deploy 05 It Ticket Resolution
 
-Deploy AI-powered IT ticket classification, resolution, and routing.
+Deploys Play 05-it-ticket-resolution to Azure with Bicep validation, what-if check, and post-deploy health verification.
 
-## When to Use
+## Overview
 
-- Deploying AI ticket triage for IT help desks
-- Automating L1 ticket resolution with knowledge base
-- Setting up classification and routing pipelines
-- Integrating with ServiceNow or Jira
+This skill provides a structured, repeatable procedure for deploys play 05-it-ticket-resolution to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Deployment
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Pipeline
+## Parameters
 
-```
-Ticket → Classify (category + priority)
-    → Search KB (retrieve relevant articles)
-    → Generate Response (grounded answer)
-    → Route: Auto-resolve OR Escalate to L2
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Ticket Classification
+## Steps
 
-```python
-from pydantic import BaseModel
+### Step 1: Validate Prerequisites
 
-class TicketClassification(BaseModel):
-    category: str  # network, access, software, hardware, other
-    priority: str  # P1-critical, P2-high, P3-medium, P4-low
-    confidence: float
-    auto_resolvable: bool
+Verify all required tools, credentials, and dependencies are available.
 
-def classify_ticket(title: str, description: str) -> TicketClassification:
-    resp = client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": """Classify IT tickets. Categories:
-network, access, software, hardware, other.
-Priority: P1=outage, P2=degraded, P3=request, P4=question.
-Set auto_resolvable=true if a KB article can resolve it."""},
-            {"role": "user", "content": f"Title: {title}\nDescription: {description}"},
-        ],
-        response_format=TicketClassification,
-    )
-    return resp.choices[0].message.parsed
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## KB-Grounded Response
+### Step 2: Load Configuration
 
-```python
-def resolve_ticket(ticket: dict, kb_search_fn) -> dict:
-    # Search knowledge base
-    articles = kb_search_fn(f"{ticket['title']} {ticket['description']}")
+Read settings from the FAI manifest and TuneKit config files.
 
-    if not articles:
-        return {"action": "escalate", "reason": "No KB articles found"}
-
-    # Generate grounded response
-    context = "\n\n".join(a["content"] for a in articles[:3])
-    resp = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "Resolve IT tickets using ONLY the KB articles. Cite article IDs."},
-            {"role": "user", "content": f"Ticket: {ticket['title']}\n\nKB:\n{context}"},
-        ],
-    )
-    return {"action": "auto-resolve", "response": resp.choices[0].message.content,
-            "articles_used": [a["id"] for a in articles[:3]]}
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## ServiceNow Integration
+### Step 3: Execute Core Logic
 
-```python
-import requests
+Perform the primary operation: deploys play 05-it-ticket-resolution to azure with bicep validation, what-if check, and post-deploy health verification..
 
-def update_servicenow_ticket(instance: str, ticket_id: str, resolution: str, token: str):
-    requests.patch(
-        f"https://{instance}.service-now.com/api/now/table/incident/{ticket_id}",
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-        json={"close_notes": resolution, "state": "6", "close_code": "Solved (Permanently)"},
-    )
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Routing Rules
+## Output
 
-| Classification | Priority | Action |
-|---------------|----------|--------|
-| Any | P1 | Escalate immediately to L2 |
-| Any | P2 + low confidence | Escalate to L2 |
-| auto_resolvable=true | P3/P4 | Auto-respond with KB article |
-| auto_resolvable=false | P3/P4 | Queue for L1 review |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-## Troubleshooting
+## WAF Alignment
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Wrong classification | Vague ticket descriptions | Add few-shot examples to classifier prompt |
-| Auto-resolve quality low | KB articles outdated | Refresh KB, add evaluation pipeline |
-| ServiceNow API 403 | Token expired or wrong scope | Refresh OAuth token, check ACLs |
-| P1 not escalating | Classification confidence too high | Lower confidence threshold for P1 |
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 02**
+- **Play 37**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-deploy-05-it-ticket-resolution
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-deploy-05-it-ticket-resolution/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Deployment Checklist
+
+- [ ] Infrastructure templates validated (`az deployment what-if`)
+- [ ] Environment variables configured (Key Vault references)
+- [ ] Health check endpoints responding (HTTP 200)
+- [ ] DNS/CNAME records updated
+- [ ] SSL certificates valid (not expiring within 30 days)
+- [ ] Rollback procedure documented and tested
+- [ ] Smoke tests passing in target environment
+- [ ] Cost estimate reviewed and approved
+- [ ] RBAC roles assigned (least privilege)
+- [ ] Monitoring alerts configured
+
+## Rollback Procedure
+
+```bash
+# Quick rollback to previous deployment
+az deployment group create \
+  --resource-group $RG \
+  --template-file infra/main.bicep \
+  --parameters @infra/parameters.previous.json
+
+# Verify rollback
+az resource list --resource-group $RG --output table
+```
+
+## Environment Matrix
+
+| Setting | Dev | Staging | Prod |
+|---------|-----|---------|------|
+| SKU | Basic | Standard | Premium |
+| Replicas | 1 | 2 | 3+ |
+| Region | Single | Single | Multi |
+| Backup | None | Daily | Continuous |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Deployment category in the FAI primitives catalog

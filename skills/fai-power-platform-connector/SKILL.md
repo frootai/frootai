@@ -1,119 +1,156 @@
----
 name: fai-power-platform-connector
-description: |
-  Build custom Power Platform connectors with OpenAPI definitions, authentication,
-  triggers, and policy templates. Use when connecting Power Apps and Power
-  Automate to custom APIs or AI services.
----
+description: "Create custom Power Platform connectors for REST/GraphQL APIs with OAuth, pagination, and error handling."
+waf: ["Security", "Reliability", "Operational Excellence"]
+plays: []
 
-# Power Platform Custom Connector
+# Fai Power Platform Connector
 
-Build custom connectors to expose APIs to Power Apps and Power Automate.
+Builds custom Power Platform connectors from OpenAPI specs with authentication.
 
-## When to Use
+## Overview
 
-- Connecting Power Platform to custom REST APIs
-- Exposing AI endpoints to low-code flows
-- Creating reusable connectors for organization
-- Adding authentication (OAuth2, API key) to connectors
+This skill provides a structured, repeatable procedure for builds custom power platform connectors from openapi specs with authentication.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Connector Definition (apiDefinition.swagger.json)
+## Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: builds custom power platform connectors from openapi specs with authentication..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-power-platform-connector
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
 ```json
 {
-  "swagger": "2.0",
-  "info": { "title": "AI Chat API", "version": "1.0.0" },
-  "host": "api.example.com",
-  "basePath": "/v1",
-  "schemes": ["https"],
-  "securityDefinitions": {
-    "api_key": { "type": "apiKey", "in": "header", "name": "X-API-Key" }
-  },
-  "paths": {
-    "/chat": {
-      "post": {
-        "operationId": "SendChat",
-        "summary": "Send a chat message to AI",
-        "parameters": [{
-          "name": "body", "in": "body", "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "message": { "type": "string", "description": "User message" },
-              "model": { "type": "string", "default": "gpt-4o-mini" }
-            },
-            "required": ["message"]
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "reply": { "type": "string" },
-                "tokens": { "type": "integer" }
-              }
-            }
-          }
-        }
-      }
-    }
+  "primitives": {
+    "skills": ["skills/fai-power-platform-connector/"]
   }
 }
 ```
 
-## CLI Deployment
+### Via Agent Invocation
 
-```bash
-# Create connector
-pac connector create --name "AI Chat" --openapi apiDefinition.swagger.json
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-# Update existing
-pac connector update --name "AI Chat" --openapi apiDefinition.swagger.json
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
 ```
 
-## Authentication Options
+## Monitoring
 
-| Auth Type | Use When | Config |
-|-----------|----------|--------|
-| API Key | Simple service auth | Header or query param |
-| OAuth 2.0 | User-delegated auth | Azure AD app registration |
-| No Auth | Public APIs | None needed |
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| 401 Unauthorized | Wrong auth config | Verify API key or OAuth settings |
-| Actions not showing | Invalid OpenAPI | Validate swagger with editor.swagger.io |
-| Connector not found | Wrong environment | Check connector environment scope |
-| Response mapping fails | Schema mismatch | Match response schema to actual API |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

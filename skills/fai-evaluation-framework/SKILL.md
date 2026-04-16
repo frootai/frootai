@@ -1,122 +1,167 @@
 ---
 name: fai-evaluation-framework
-description: |
-  Define a reusable evaluation framework with scoring rubrics, dataset management,
-  judge configuration, and reproducible run patterns. Use when standardizing
-  AI evaluation across multiple projects or teams.
+description: Build comprehensive evaluation frameworks for AI system quality gates.
 ---
 
-# AI Evaluation Framework
+# Fai Evaluation Framework
 
-Build a reusable evaluation framework with rubrics, datasets, and reproducible runs.
+Sets up an AI evaluation framework with metrics, test sets, and CI/CD integration.
 
-## When to Use
+## Overview
 
-- Standardizing evaluation across multiple AI projects
-- Creating reusable judge functions and scoring rubrics
-- Managing evaluation datasets with versioning
-- Setting up CI-integrated quality gates
+This skill provides a structured, repeatable procedure for sets up an ai evaluation framework with metrics, test sets, and ci/cd integration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Evaluation
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Framework Architecture
+## Parameters
 
-```
-eval/
-  datasets/
-    v1.0/test-set.jsonl
-    v1.1/test-set.jsonl
-  rubrics/
-    groundedness.py
-    relevance.py
-    safety.py
-  runners/
-    run_eval.py
-    compare.py
-  reports/
-    2026-04-15-run.json
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Rubric Definition
+## Steps
 
-```python
-from dataclasses import dataclass
-from typing import Callable
+### Step 1: Validate Prerequisites
 
-@dataclass
-class Rubric:
-    name: str
-    description: str
-    score_fn: Callable[[str, str, any], float]
-    threshold: float
-
-    def evaluate(self, output: str, reference: str, judge=None) -> dict:
-        score = self.score_fn(output, reference, judge)
-        return {"rubric": self.name, "score": score,
-                "passed": score >= self.threshold}
-
-groundedness_rubric = Rubric(
-    name="groundedness",
-    description="Are all claims supported by provided context?",
-    score_fn=lambda out, ref, judge: judge_groundedness(out, ref, judge),
-    threshold=0.80,
-)
-```
-
-## Evaluation Runner
-
-```python
-import json
-from datetime import datetime
-
-def run_evaluation(dataset_path: str, predict_fn, rubrics: list[Rubric],
-                    judge=None) -> dict:
-    with open(dataset_path) as f:
-        dataset = [json.loads(l) for l in f]
-
-    all_scores = {r.name: [] for r in rubrics}
-    for row in dataset:
-        output = predict_fn(row["input"])
-        for rubric in rubrics:
-            result = rubric.evaluate(output, row.get("expected", ""), judge)
-            all_scores[rubric.name].append(result["score"])
-
-    summary = {}
-    for name, scores in all_scores.items():
-        avg = sum(scores) / len(scores)
-        rubric = next(r for r in rubrics if r.name == name)
-        summary[name] = {"avg": round(avg, 3), "passed": avg >= rubric.threshold}
-
-    report = {"timestamp": datetime.now().isoformat(), "dataset": dataset_path,
-              "n": len(dataset), "metrics": summary,
-              "overall_passed": all(m["passed"] for m in summary.values())}
-    return report
-```
-
-## Dataset Versioning
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Create new dataset version
-cp eval/datasets/v1.0/test-set.jsonl eval/datasets/v1.1/test-set.jsonl
-# Edit v1.1, then update runner config
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## CI Gate
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: sets up an ai evaluation framework with metrics, test sets, and ci/cd integration..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 03**
+- **Play 60**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-evaluation-framework
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-evaluation-framework/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Metrics Reference
+
+| Metric | Range | Threshold | Description |
+|--------|-------|-----------|-------------|
+| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
+| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
+| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
+| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
+| Safety | 0-4 | 0 | Content safety violations |
+| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+
+## Test Set Format
+
+```jsonl
+{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
+{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
+```
+
+## CI/CD Integration
 
 ```yaml
-- name: Run AI Evaluation
+# .github/workflows/eval.yml
+- name: Run FAI Evaluation
   run: |
-    python eval/runners/run_eval.py \
-      --dataset eval/datasets/v1.1/test-set.jsonl \
-      --threshold-groundedness 0.80 \
-      --threshold-relevance 0.80
+    python evaluation/eval.py --test-set evaluation/test-set.jsonl
+    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
 ```
 
-## Troubleshooting
+## Regression Tracking
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Scores not reproducible | Random seed not set | Fix judge seed and temperature=0 |
-| Dataset too small | <50 rows | Expand to 100+ for statistical significance |
-| Eval too expensive | Running full dataset on every PR | Sample 50 rows for PR, full on merge |
-| Rubric too strict | Threshold set without baseline | Run baseline eval first, then set threshold |
+Track evaluation scores over time to detect quality regressions:
+
+```bash
+# Compare with baseline
+python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Evaluation category in the FAI primitives catalog

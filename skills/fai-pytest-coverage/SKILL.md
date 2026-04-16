@@ -1,112 +1,169 @@
 ---
 name: fai-pytest-coverage
-description: |
-  Configure pytest with coverage reporting, threshold enforcement, and CI
-  integration. Use when setting up Python test infrastructure with coverage
-  gates and reporting.
----
+description: "Generate Python pytest test suites with fixtures, parametrization, mocking (pytest-mock), and coverage reports."
+waf: ["Reliability", "Operational Excellence"]
+plays: ["32-test-generation", "24-code-assistant"]
 
-# Pytest Coverage Configuration
+# Fai Pytest Coverage
 
-Set up pytest with coverage reporting, thresholds, and CI gates.
+Generates pytest test suites with fixtures, parametrize, mocks, and coverage configuration.
 
-## When to Use
+## Overview
 
-- Setting up test coverage for Python projects
-- Enforcing minimum coverage thresholds in CI
-- Generating HTML and XML coverage reports
-- Identifying untested code paths
+This skill provides a structured, repeatable procedure for generates pytest test suites with fixtures, parametrize, mocks, and coverage configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Testing
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Setup
+## Parameters
 
-```bash
-pip install pytest pytest-cov pytest-asyncio
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## pyproject.toml Configuration
+## Steps
 
-```toml
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-asyncio_mode = "auto"
-addopts = "--cov=src --cov-report=term-missing --cov-report=xml --cov-fail-under=80"
+### Step 1: Validate Prerequisites
 
-[tool.coverage.run]
-source = ["src"]
-omit = ["src/__main__.py", "src/**/test_*.py"]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "if __name__ == .__main__.",
-    "if TYPE_CHECKING:",
-    "raise NotImplementedError",
-]
-show_missing = true
-```
-
-## Running Tests
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Basic with coverage
-pytest --cov=src --cov-report=term-missing
-
-# With HTML report
-pytest --cov=src --cov-report=html
-open htmlcov/index.html
-
-# Fail if under threshold
-pytest --cov=src --cov-fail-under=80
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## CI Integration
+### Step 2: Load Configuration
 
-```yaml
-- name: Run tests with coverage
-  run: pytest --cov=src --cov-report=xml --cov-fail-under=80
-- name: Upload coverage
-  uses: codecov/codecov-action@v4
-  with: { files: coverage.xml }
-```
-
-## Coverage by Module
+Read settings from the FAI manifest and TuneKit config files.
 
 ```bash
-# See per-file breakdown
-pytest --cov=src --cov-report=term-missing | grep -E "^src/"
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Testing Patterns
+### Step 3: Execute Core Logic
+
+Perform the primary operation: generates pytest test suites with fixtures, parametrize, mocks, and coverage configuration..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Compatible Solution Plays
+
+- **Play 32**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-pytest-coverage
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-pytest-coverage/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## RAG Pipeline Reference
+
+| Stage | Tool | Config |
+|-------|------|--------|
+| Chunking | Semantic chunker | 512 tokens, 10% overlap |
+| Embedding | text-embedding-3-large | 3072 dimensions |
+| Indexing | Azure AI Search | Hybrid (vector + BM25) |
+| Retrieval | Hybrid search | 60% semantic, 40% keyword |
+| Reranking | Semantic reranker | Top 5 after rerank |
+| Generation | GPT-4o | temp=0.1, top_p=0.9 |
+
+## Chunking Strategy
 
 ```python
-import pytest
+from azure.ai.formrecognizer import DocumentAnalysisClient
 
-@pytest.fixture
-def sample_docs():
-    return [{"id": "1", "content": "Test document"}]
-
-@pytest.mark.asyncio
-async def test_search_returns_results(sample_docs):
-    results = await search(sample_docs, "test")
-    assert len(results) >= 1
-    assert results[0]["id"] == "1"
-
-@pytest.mark.parametrize("input,expected", [
-    ("hello", "hello"),
-    ("HELLO", "hello"),
-    ("", ""),
-])
-def test_normalize(input, expected):
-    assert normalize(input) == expected
+# Semantic chunking preserves paragraph boundaries
+chunks = semantic_chunk(
+    text=document,
+    max_tokens=512,
+    overlap_tokens=50,
+    respect_boundaries=True  # Don't split mid-sentence
+)
 ```
 
-## Troubleshooting
+## Search Configuration
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Coverage below threshold | Untested error paths | Add tests for exceptions and edge cases |
-| Wrong source measured | source config missing | Set [tool.coverage.run] source |
-| Async tests not found | Missing asyncio_mode | Add asyncio_mode = "auto" to config |
-| HTML report empty | Wrong report path | Check --cov-report=html output dir |
+```json
+{
+  "search_type": "hybrid",
+  "semantic_weight": 0.6,
+  "keyword_weight": 0.4,
+  "top_k": 5,
+  "min_score": 0.78,
+  "reranker": "semantic",
+  "filter": "category eq 'technical'"
+}
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Testing category in the FAI primitives catalog

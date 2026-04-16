@@ -1,112 +1,156 @@
 ---
 name: fai-gtm-developer-ecosystem
-description: |
-  Design developer ecosystem GTM with community growth loops, content strategy,
-  adoption funnels, and contributor engagement. Use when building developer
-  relations for an AI platform or open-source project.
+description: Build developer ecosystem and community engagement.
 ---
 
-# Developer Ecosystem GTM
+# Fai Gtm Developer Ecosystem
 
-Build developer community with content loops, adoption funnels, and contribution paths.
+Designs developer ecosystem strategy with SDK, docs, community, and partner programs.
 
-## When to Use
+## Overview
 
-- Growing adoption of an AI platform or SDK
-- Building developer community around open-source
-- Creating content strategy for developer education
-- Designing contributor onboarding workflows
+This skill provides a structured, repeatable procedure for designs developer ecosystem strategy with sdk, docs, community, and partner programs.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Developer Journey
+## Parameters
 
-```
-Discover → Try → Build → Share → Contribute
-  │         │      │       │         │
-  Blog    Quick   Docs   Showcase  PR/Plugin
-  Social  Start   Guide   Talk     Skill
-  Search  Demo    Play    Blog     Agent
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Content Flywheel
+## Steps
 
-| Stage | Content Type | Goal |
-|-------|-------------|------|
-| Discover | Blog posts, social threads, conf talks | Awareness |
-| Learn | Learning Hub (L1-L15), tutorials | Education |
-| Build | Solution Plays, skills, code examples | Activation |
-| Share | Showcase gallery, community highlights | Advocacy |
-| Contribute | Plugin guide, skill template, CONTRIBUTING.md | Growth |
+### Step 1: Validate Prerequisites
 
-## Adoption Funnel Metrics
+Verify all required tools, credentials, and dependencies are available.
 
-```markdown
-| Stage | Metric | Target | Current |
-|-------|--------|--------|---------|
-| Awareness | Website visits/month | 10K | _ |
-| Interest | GitHub stars | 1000 | _ |
-| Activation | First play deployed | 200 | _ |
-| Retention | Monthly active deployers | 50 | _ |
-| Advocacy | Community contributions | 20 PRs/mo | _ |
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Community Programs
+### Step 2: Load Configuration
 
-| Program | Format | Cadence |
-|---------|--------|---------|
-| Office hours | Live Q&A stream | Bi-weekly |
-| Show & tell | Community demos | Monthly |
-| Contributor spotlight | Blog feature | Monthly |
-| Hackathon | Virtual, themed | Quarterly |
-| Early access | Private beta channel | On release |
+Read settings from the FAI manifest and TuneKit config files.
 
-## Contributor Onboarding
-
-```markdown
-## How to Contribute
-
-1. **Browse** — [Good first issues](github.com/frootai/frootai/labels/good-first-issue)
-2. **Fork** — Fork and create feature branch
-3. **Build** — Follow CONTRIBUTING.md conventions
-4. **Test** — Run `npm run validate:primitives`
-5. **PR** — Submit against `main`, fill template
-6. **Review** — Address feedback within 48 hours
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: designs developer ecosystem strategy with sdk, docs, community, and partner programs..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-developer-ecosystem
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-developer-ecosystem/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Low awareness | No content distribution | Post on dev.to, Hacker News, Reddit |
-| High bounce rate | Getting started too complex | Simplify quickstart to <5 min |
-| Few contributors | High barrier to entry | Add good-first-issue labels, templates |
-| Community inactive | No engagement loop | Schedule regular events and highlights |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

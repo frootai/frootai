@@ -1,102 +1,167 @@
 ---
 name: fai-evaluate-19-edge-ai-phi4
-description: |
-  Evaluate Edge AI with Phi-4 for on-device inference performance, offline
-  resilience, model size constraints, and quality parity with cloud models.
-  Use when deploying small language models to edge devices.
+description: Evaluate edge AI model performance and resource utilization on devices.
 ---
 
-# Evaluate Edge AI — Phi-4 (Play 19)
+# Fai Evaluate 19 Edge Ai Phi4
 
-Evaluate on-device AI performance, offline capability, and quality tradeoffs.
+Runs quality evaluation for Play 19-edge-ai-phi4 against fai-manifest.json guardrails — groundedness, coherence, safety.
 
-## When to Use
+## Overview
 
-- Benchmarking Phi-4 vs cloud models for edge deployment
-- Measuring inference latency on constrained hardware
-- Validating offline mode reliability
-- Assessing quality parity between edge and cloud
+This skill provides a structured, repeatable procedure for runs quality evaluation for play 19-edge-ai-phi4 against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Evaluation
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Benchmark Framework
+## Parameters
 
-```python
-import time
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-def benchmark_edge_model(model_path: str, test_prompts: list[str],
-                          device: str = "cpu") -> dict:
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    import torch
+## Steps
 
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
-    model = AutoModelForCausalLM.from_pretrained(model_path,
-        torch_dtype=torch.float16, device_map=device)
+### Step 1: Validate Prerequisites
 
-    latencies, token_counts = [], []
-    for prompt in test_prompts:
-        inputs = tokenizer(prompt, return_tensors="pt").to(device)
-        start = time.monotonic()
-        outputs = model.generate(**inputs, max_new_tokens=256)
-        elapsed = (time.monotonic() - start) * 1000
-        latencies.append(elapsed)
-        token_counts.append(outputs.shape[-1])
+Verify all required tools, credentials, and dependencies are available.
 
-    return {
-        "model": model_path, "device": device,
-        "latency_p50_ms": sorted(latencies)[len(latencies)//2],
-        "latency_p95_ms": sorted(latencies)[int(len(latencies)*0.95)],
-        "avg_tokens": sum(token_counts) / len(token_counts),
-        "n": len(test_prompts),
-    }
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Cloud vs Edge Quality Comparison
+### Step 2: Load Configuration
 
-```python
-def compare_edge_cloud(edge_fn, cloud_fn, test_set, judge_fn) -> dict:
-    edge_scores, cloud_scores = [], []
-    for row in test_set:
-        edge_out = edge_fn(row["input"])
-        cloud_out = cloud_fn(row["input"])
-        edge_scores.append(judge_fn(edge_out, row["expected"]))
-        cloud_scores.append(judge_fn(cloud_out, row["expected"]))
-    return {
-        "edge_avg": sum(edge_scores) / len(edge_scores),
-        "cloud_avg": sum(cloud_scores) / len(cloud_scores),
-        "quality_gap": (sum(cloud_scores) - sum(edge_scores)) / len(edge_scores),
-    }
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Model Size Comparison
+### Step 3: Execute Core Logic
 
-| Model | Parameters | Size (FP16) | Target Device |
-|-------|-----------|-------------|---------------|
-| Phi-4-mini | 3.8B | ~7.5 GB | Laptop, workstation |
-| Phi-4 | 14B | ~28 GB | Server, high-end GPU |
-| GPT-4o-mini (cloud) | — | API | Any (needs internet) |
+Perform the primary operation: runs quality evaluation for play 19-edge-ai-phi4 against fai-manifest.json guardrails — groundedness, coherence, safety..
 
-## Offline Resilience Test
+### Step 4: Validate Results
 
-```python
-def test_offline_mode(model_fn, prompts: list[str]) -> dict:
-    """Test that edge model works without network."""
-    import socket
-    original = socket.socket.connect
-    socket.socket.connect = lambda *a: (_ for _ in ()).throw(ConnectionError("Offline"))
-    try:
-        results = [model_fn(p) for p in prompts]
-        success = sum(1 for r in results if r and len(r) > 10)
-        return {"offline_success_rate": success / len(prompts)}
-    finally:
-        socket.socket.connect = original
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Troubleshooting
+## Output
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Inference too slow | Model too large for device | Use quantized (INT4) version |
-| Quality gap >15% | Task too complex for small model | Keep complex tasks on cloud, simple on edge |
-| OOM on device | Insufficient RAM | Reduce batch size or use streaming |
-| Inconsistent outputs | No seed in generation | Set torch.manual_seed() |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 03**
+- **Play 60**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-evaluate-19-edge-ai-phi4
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-evaluate-19-edge-ai-phi4/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Metrics Reference
+
+| Metric | Range | Threshold | Description |
+|--------|-------|-----------|-------------|
+| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
+| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
+| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
+| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
+| Safety | 0-4 | 0 | Content safety violations |
+| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+
+## Test Set Format
+
+```jsonl
+{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
+{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
+```
+
+## CI/CD Integration
+
+```yaml
+# .github/workflows/eval.yml
+- name: Run FAI Evaluation
+  run: |
+    python evaluation/eval.py --test-set evaluation/test-set.jsonl
+    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
+```
+
+## Regression Tracking
+
+Track evaluation scores over time to detect quality regressions:
+
+```bash
+# Compare with baseline
+python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Evaluation category in the FAI primitives catalog

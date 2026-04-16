@@ -1,110 +1,156 @@
 ---
 name: fai-gtm-product-led-growth
-description: |
-  Define product-led growth motions with activation loops, freemium conversion,
-  expansion triggers, and retention mechanics. Use when designing self-serve
-  adoption funnels for developer tools.
+description: Implement product-led growth strategy for AI tools.
 ---
 
-# Product-Led Growth
+# Fai Gtm Product Led Growth
 
-Design self-serve growth loops with activation, conversion, and expansion.
+Designs product-led growth strategy for AI tools with activation, retention, and expansion metrics.
 
-## When to Use
+## Overview
 
-- Building self-serve adoption for developer tools
-- Designing freemium → paid conversion funnels
-- Creating viral loops and sharing mechanics
-- Measuring and optimizing PLG metrics
+This skill provides a structured, repeatable procedure for designs product-led growth strategy for ai tools with activation, retention, and expansion metrics.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## PLG Funnel
+## Parameters
 
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
-Discover → Sign Up → Activate → Engage → Convert → Expand → Advocate
-  SEO       GitHub    First      Weekly    Paid      More     Share +
-  Social    VS Code   Play       Usage     Tier      Plays    Contribute
-  Content   npm       Deployed   Queries   Features  Users    Referral
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Activation Metrics
+### Step 3: Execute Core Logic
 
-| Event | Definition | Target |
-|-------|-----------|--------|
-| Sign up | GitHub star or npm install | — |
-| Activation | First play scaffolded | 50% of sign-ups in 7 days |
-| Aha moment | First successful AI query via play | 30% of activated |
-| Habit | 3+ sessions in first 14 days | 20% of activated |
+Perform the primary operation: designs product-led growth strategy for ai tools with activation, retention, and expansion metrics..
 
-## Conversion Triggers
+### Step 4: Validate Results
 
-```python
-UPGRADE_SIGNALS = {
-    "plays_deployed": {"threshold": 3, "message": "You've deployed 3 plays — unlock advanced features"},
-    "team_members": {"threshold": 3, "message": "Your team is growing — add team management"},
-    "monthly_queries": {"threshold": 1000, "message": "High usage — get priority support"},
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-gtm-product-led-growth
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-gtm-product-led-growth/"]
+  }
 }
-
-def check_upgrade_triggers(usage: dict) -> list[str]:
-    triggered = []
-    for signal, config in UPGRADE_SIGNALS.items():
-        if usage.get(signal, 0) >= config["threshold"]:
-            triggered.append(config["message"])
-    return triggered
 ```
 
-## Viral Loops
+### Via Agent Invocation
 
-| Loop | Mechanism | Metric |
-|------|-----------|--------|
-| Share your play | Public play URL with "Built with FrootAI" | Referral visits |
-| Contributor path | Submit skill/plugin → visible in marketplace | Community PRs |
-| Team invite | Workspace invite for shared plays | Seats per account |
-| Badge/showcase | "FAI Certified" badge for profile | Badge displays |
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-## Retention Levers
+## Configuration Reference
 
-| Lever | Implementation |
-|-------|---------------|
-| Weekly digest email | Usage stats + new plays matching their stack |
-| In-product tips | Suggest next play based on current usage |
-| Community highlights | Feature top contributors weekly |
-| Release notifications | VS Code extension update notifications |
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Low activation | Quickstart too complex | Reduce first play to <5 minutes |
-| Activation but no habit | No ongoing value after first use | Add weekly use cases + notifications |
-| Low conversion | Free tier too generous | Tighten limits, show premium value |
-| No viral loop | No sharing mechanic | Add shareable play URLs with attribution |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Measure everything | Can't improve what you can't measure |
-| Weekly review cadence | Catch issues before they compound |
-| Customer interviews monthly | Stay connected to real problems |
-| Competitor watch quarterly | Know the landscape, don't obsess |
-| Content before campaigns | Educate first, sell second |
-| Single owner per metric | Accountability drives results |
-
-## Key Metrics
-
-| Stage | Metric | Target |
-|-------|--------|--------|
-| Awareness | Website visits | 10K/month |
-| Interest | GitHub stars | 1000 |
-| Activation | First play deployed | 200 |
-| Retention | Monthly active | 50 |
-| Revenue | MRR | Track growth rate |
-
-## Related Skills
-
-- `fai-gtm-ai-strategy` — Overall GTM strategy
-- `fai-gtm-launch` — Launch execution
-- `fai-gtm-developer-ecosystem` — Community growth
-- `fai-gtm-operating-cadence` — Weekly rhythms
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

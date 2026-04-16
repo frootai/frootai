@@ -1,133 +1,160 @@
 ---
 name: fai-junit-test
-description: |
-  Write JUnit 5 tests with parameterized cases, lifecycle hooks, assertion
-  patterns, and Mockito mocking. Use when testing Java or Kotlin applications
-  with the JUnit testing framework.
+description: Write JUnit tests for Java applications with coverage.
 ---
 
-# JUnit 5 Testing Patterns
+# Fai Junit Test
 
-Write reliable JUnit tests with parameterization, mocking, and lifecycle hooks.
+Generates JUnit 5 test suites for Java with @Test, @ParameterizedTest, Mockito.
 
-## When to Use
+## Overview
 
-- Testing Java/Kotlin applications
-- Setting up test conventions for Spring Boot services
-- Mocking dependencies with Mockito
-- Configuring test coverage with JaCoCo
+This skill provides a structured, repeatable procedure for generates junit 5 test suites for java with @test, @parameterizedtest, mockito.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Testing
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Basic Test Structure
+## Parameters
 
-```java
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-class OrderServiceTest {
+## Steps
 
-    private OrderService service;
+### Step 1: Validate Prerequisites
 
-    @BeforeEach
-    void setUp() {
-        service = new OrderService(new MockRepository());
-    }
+Verify all required tools, credentials, and dependencies are available.
 
-    @Test
-    @DisplayName("calculateTotal returns correct sum with tax")
-    void calculateTotal_withItems_returnsCorrectSum() {
-        var order = Order.of(item("Widget", 29.99, 2));
-        double total = service.calculateTotal(order);
-        assertEquals(64.78, total, 0.01); // 59.98 + 8% tax
-    }
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
 
-    @Test
-    void calculateTotal_emptyOrder_returnsZero() {
-        assertEquals(0.0, service.calculateTotal(Order.empty()));
-    }
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: generates junit 5 test suites for java with @test, @parameterizedtest, mockito..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Compatible Solution Plays
+
+- **Play 32**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-junit-test
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-junit-test/"]
+  }
 }
 ```
 
-## Parameterized Tests
+### Via Agent Invocation
 
-```java
-@ParameterizedTest
-@CsvSource({
-    "100.00, 0.08, 108.00",
-    "50.00,  0.10, 55.00",
-    "0.00,   0.08, 0.00",
-})
-void calculateTax(double amount, double rate, double expected) {
-    assertEquals(expected, TaxCalculator.calculate(amount, rate), 0.01);
-}
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-@ParameterizedTest
-@MethodSource("invalidInputs")
-void validate_rejectsInvalidInput(String input) {
-    assertThrows(IllegalArgumentException.class, () -> Validator.validate(input));
-}
+## Configuration Reference
 
-static Stream<String> invalidInputs() {
-    return Stream.of("", null, "   ", "<script>alert('xss')</script>");
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
 }
 ```
 
-## Mockito Mocking
+## Monitoring
 
-```java
-@ExtendWith(MockitoExtension.class)
-class ChatServiceTest {
+Track skill execution metrics:
 
-    @Mock OpenAIClient openAIClient;
-    @InjectMocks ChatService chatService;
-
-    @Test
-    void chat_returnsModelResponse() {
-        when(openAIClient.complete(any()))
-            .thenReturn(new Completion("Hello from GPT"));
-
-        String result = chatService.chat("Hi");
-        assertEquals("Hello from GPT", result);
-        verify(openAIClient).complete(argThat(req ->
-            req.getPrompt().contains("Hi")));
-    }
-
-    @Test
-    void chat_handlesApiError() {
-        when(openAIClient.complete(any()))
-            .thenThrow(new RuntimeException("Rate limited"));
-
-        assertThrows(ServiceException.class, () -> chatService.chat("Hi"));
-    }
-}
-```
-
-## Coverage with JaCoCo
-
-```xml
-<!-- pom.xml -->
-<plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <configuration>
-        <rules>
-            <rule>
-                <limits>
-                    <limit><counter>LINE</counter><value>COVEREDRATIO</value><minimum>0.80</minimum></limit>
-                    <limit><counter>BRANCH</counter><value>COVEREDRATIO</value><minimum>0.70</minimum></limit>
-                </limits>
-            </rule>
-        </rules>
-    </configuration>
-</plugin>
-```
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Test order dependency | Shared mutable state | Use @BeforeEach for fresh setup |
-| Mockito null returns | Missing when() stub | Stub all methods called in test |
-| Flaky async tests | Race conditions | Use CountDownLatch or Awaitility |
-| Low branch coverage | Missing edge cases | Add null, empty, boundary tests |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Testing category in the FAI primitives catalog

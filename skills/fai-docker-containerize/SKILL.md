@@ -1,6 +1,6 @@
 ---
-name: fai-docker-containerize
-description: "Containerize an AI application with multi-stage Docker build and health checks"
+name: docker-containerize
+description: "Containerize AI applications with multi-stage images, health probes, and secure runtime settings - ship smaller containers and safer deployments"
 ---
 
 # Docker Containerize
@@ -47,9 +47,11 @@ ENTRYPOINT ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--p
 ## Health Check Endpoint
 
 ```python
-# app/health.py — wire into FastAPI
-from fastapi import APIRouter
+# app/health.py - wire into FastAPI
 from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -59,7 +61,7 @@ async def health():
 
 @router.get("/ready")
 async def readiness(model_registry=Depends(get_model_registry)):
-    """Readiness probe — fails if model not loaded or downstream unavailable."""
+    """Readiness probe - fails if model not loaded or downstream unavailable."""
     checks = {
         "model_loaded": model_registry.is_loaded(),
         "azure_openai": await ping_openai(),

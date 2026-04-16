@@ -1,101 +1,225 @@
 ---
 name: fai-azure-event-grid-setup
-description: |
-  Configure Azure Event Grid topics and subscriptions with dead-lettering, retry policies,
-  subject filters, and secure webhook delivery. Use when building event-driven architectures
-  for AI pipelines or system integration.
+description: Configure Azure Event Grid for event-driven AI pipelines with topic subscriptions, dead-letter queues, retry policies, and role-based filtering — routing document uploads to embeddings to RAG queries without polling.
 ---
 
-# Azure Event Grid Setup
+# FAI Azure Event Grid
 
-Configure Event Grid for reliable event-driven architecture with filtering, retries, and dead-letters.
+Sets up Event Grid topics and subscriptions for event-driven AI workflows. Routes blob uploads to embedding pipelines, model evaluations to notification services, and failures to dead-letter queues. Prevents the friction of polling-based workflows: wasted compute, race conditions, and N-minute latency before action.
 
-## When to Use
+## When to Invoke
 
-- Building event-driven AI pipelines (document uploaded → process → index)
-- Integrating Azure services via events (Blob → Function → Search)
-- Implementing pub/sub patterns with filtering and fanout
-- Setting up dead-letter queues for failed event delivery
+| Signal | Example |
+|--------|---------|
+| Polling for new documents exists | Cron job checks blob storage every 5 minutes |
+| End-to-end latency is high | Document uploaded at 10:00, indexed at 10:05 |
+| Failure handling is manual | Failed embeding jobs accumulate in a folder |
+| Cross-service coordination is complex | Embedding → RAG index → refresh dashboard |
 
----
+## Workflow
 
-## Bicep Provisioning
+### Step 1 — Create Event Grid Topic
 
 ```bicep
-resource topic 'Microsoft.EventGrid/topics@2024-06-01-preview' = {
+// infra/event-grid.bicep
+param location string
+param topicName string
+
+resource topic 'Microsoft.EventGrid/topics@2023-12-15-preview' = {
   name: topicName
   location: location
   identity: { type: 'SystemAssigned' }
   properties: {
-    inputSchema: 'CloudEventSchemaV1_0'
     publicNetworkAccess: 'Disabled'
+    inputSchema: 'CloudEventSchema'
   }
 }
 
-resource subscription 'Microsoft.EventGrid/topics/eventSubscriptions@2024-06-01-preview' = {
-  name: 'process-documents'
-  parent: topic
+// System topic for Blob Storage events
+resource blobTopic 'Microsoft.EventGrid/systemTopics@2023-12-15-preview' = {
+  name: '${storageAccountName}-blob-topic'
+  location: location
+  properties: {
+    source: storageAccountId
+    topicType: 'Microsoft.Storage.StorageAccounts'
+  }
+}
+```
+
+### Step 2 — Define Subscriptions
+
+```bicep
+// Subscription 1: Route blob uploads to embedding pipeline
+resource embeddingSubscription 'Microsoft.EventGrid/topics/eventSubscriptions@2023-12-15-preview' = {
+  parent: blobTopic
+  name: 'to-embedding-queue'
   properties: {
     destination: {
-      endpointType: 'AzureFunction'
-      properties: { resourceId: functionId }
+      endpointType: 'ServiceBusQueue'
+      properties: {
+        resourceId: embeddingQueueId
+      }
     }
     filter: {
-      subjectBeginsWith: '/documents/'
+      subjectBeginsWith: '/blobServices/default/containers/documents'
       subjectEndsWith: '.pdf'
-      advancedFilters: [{
-        operatorType: 'StringIn'
-        key: 'data.category'
-        values: ['invoice', 'contract', 'report']
-      }]
+      includedEventTypes: ['Microsoft.Storage.BlobCreated']
     }
-    retryPolicy: { maxDeliveryAttempts: 30, eventTimeToLiveInMinutes: 1440 }
+    retryPolicy: {
+      maxDeliveryAttempts: 30
+      eventTimeToLiveInMinutes: 1440  // 24 hours
+    }
     deadLetterDestination: {
       endpointType: 'StorageBlob'
       properties: {
-        resourceId: storageAccount.id
-        blobContainerName: 'dead-letters'
+        resourceId: deadLetterStorageId
+        blobContainerName: 'event-grid-deadletter'
       }
     }
   }
 }
+
+// Subscription 2: Route completion events to notification service
+resource notificationSubscription 'Microsoft.EventGrid/topics/eventSubscriptions@2023-12-15-preview' = {
+  parent: topic
+  name: 'to-notifications'
+  properties: {
+    destination: {
+      endpointType: 'WebHook'
+      properties: {
+        endpointUrl: 'https://notification-service.azurewebsites.net/webhooks/embedding-complete'
+      }
+    }
+    filter: {
+      advancedFilters: [
+        {
+          operatorType: 'StringIn'
+          key: 'data.status'
+          values: ['completed']
+        },
+        {
+          operatorType: 'NumberGreaterThan'
+          key: 'data.embedding_count'
+          value: 100
+        }
+      ]
+    }
+  }
+}
 ```
 
-## Publishing Events
+### Step 3 — Emit Custom Events
 
 ```python
-from azure.eventgrid import EventGridPublisherClient
-from azure.core.messaging import CloudEvent
+from azure.eventgrid import EventGridPublisherClient, CloudEvent
 from azure.identity import DefaultAzureCredential
+import json
 
 client = EventGridPublisherClient(
-    endpoint="https://topic-prod.eastus-1.eventgrid.azure.net",
-    credential=DefaultAzureCredential()
+    endpoint=EVENT_GRID_ENDPOINT,
+    credential=DefaultAzureCredential(),
 )
 
+# Publish embedding completion event
 event = CloudEvent(
-    type="FrootAI.Documents.Uploaded",
-    source="/documents/invoices",
-    data={"blobUrl": "https://storage.blob.core.windows.net/docs/inv-001.pdf",
-          "category": "invoice", "pages": 5},
+    type="ai.embedding.completed",
+    source="/embeddings/batch-001",
+    data={
+        "batch_id": "batch-001",
+        "document_id": "doc-12345",
+        "embedding_count": 250,
+        "status": "completed",
+        "duration_ms": 3420,
+        "cost_usd": 0.15,
+    }
 )
 
-client.send([event])
+client.send(event)
 ```
 
-## Event-Driven Pipeline Pattern
+### Step 4 — Dead-Letter Queue Processing
 
+```python
+from azure.storage.queue import QueueClient
+from azure.identity import DefaultAzureCredential
+import json
+
+queue_client = QueueClient(
+    account_url=f"https://{STORAGE_ACCOUNT}.queue.core.windows.net",
+    queue_name="eventgrid-deadletter",
+    credential=DefaultAzureCredential(),
+)
+
+def process_deadletter():
+    """Retry or log failed events."""
+    while True:
+        message = queue_client.receive_message()
+        if not message:
+            break
+        
+        event_data = json.loads(message.content)
+        print(f"Dead-lettered event: {event_data['data']['eventType']}")
+        print(f"  Reason: {event_data.get('deadLetterReason')}")
+        print(f"  Details: {event_data.get('deadLetterErrorCode')}")
+        
+        # Log to monitoring system or retry with backoff
+        queue_client.delete_message(message)
 ```
-Blob Upload → Event Grid → Function (extract) → Event Grid → Function (embed) → AI Search
-                                                                                      ↓
-                                              Dead Letter ← retry failures ← Event Grid
+
+### Step 5 — Test Event Distribution
+
+```bash
+# Send test event
+az eventgrid topic event-subscription test \
+  --resource-group $RG_NAME \
+  --topic-name $TOPIC_NAME
+
+# Verify events in dead-letter storage
+az storage blob list \
+  --account-name $DLQ_STORAGE \
+  --container-name event-grid-deadletter \
+  --query "[].name"
+
+# Monitor subscription metrics
+az monitor metrics list \
+  --resource "/subscriptions/$SUB_ID/resourceGroups/$RG_NAME/providers/Microsoft.EventGrid/topics/$TOPIC_NAME" \
+  --metric MatchedEventCount DeliveryFailureCount \
+  --interval PT5M
 ```
 
-## Troubleshooting
+## Event Filter Patterns
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Dropped events | No dead-letter configured | Enable dead-letter destination on storage |
-| Events not matching | Filter too restrictive | Check subject/advanced filters, test with broad filter first |
-| Webhook 403 | Validation handshake failed | Implement CloudEvents validation endpoint |
-| Duplicate processing | No idempotency in handler | Use event ID for deduplication in consumer |
+| Filter | Example | Use Case |
+|--------|---------|----------|
+| Subject prefix | `/documents/raw` | Only documents in specific folder |
+| Event type | `Microsoft.Storage.BlobCreated` | Only new uploads, not deletes |
+| Advanced filter | `data.priority = "high"` | Route based on custom event properties |
+
+## Retry and Dead-Letter Strategy
+
+| Setting | Default | Recommended |
+|---------|---------|------------|
+| Max delivery attempts | 30 | 30 (exponential backoff to 3600s) |
+| Event TTL minutes | 1440 (24h) | 1440 (let Event Grid store for 24h) |
+| Dead-letter on first failure | false | true (capture and inspect failures) |
+
+## WAF Alignment
+
+| Pillar | Contribution |
+|--------|-------------|
+| Reliability | Exponential backoff + dead-letter prevents event loss; retry policy handles transient failures |
+| Operational Excellence | Event Grid logs all deliveries; audit trail for compliance |
+| Performance Efficiency | Event-driven avoids polling overhead; triggers fire in <5s of event publish |
+
+## Compatible Solution Plays
+
+- **Play 01** — Enterprise RAG (document upload → embedding pipeline)
+- **Play 07** — Multi-Agent Service (async agent coordination)
+- **Play 20** — Real-Time Analytics (event ingestion)
+
+## Notes
+
+- CloudEventSchema is recommended (vs. EventGridSchema) for CNCF interoperability
+- Advanced filters support StringIn, NumberGreaterThan, NumberLessThan, BoolEquals, StringBeginsWith
+- Webhook subscriptions require HTTPS and validation handshake on creation
+- Dead-letter storage must have a Managed Identity role assignment: `Storage Blob Data Contributor`

@@ -1,159 +1,156 @@
 ---
 name: fai-epic-breakdown-pm
-description: 'Breaks product epics into execution-ready streams with dependency, risk, and delivery sequencing.'
+description: Break down epics into product management stories and features.
 ---
 
-# FAI Skill: Epic Breakdown Pm
+# Fai Epic Breakdown Pm
 
-## Purpose
+Decomposes epics into user stories from a product management perspective with acceptance criteria.
 
-This skill defines a production-grade workflow for Product management decomposition and cross-team execution mapping. It uses full six-phase execution with explicit validation gates so outcomes remain reproducible and auditable.
+## Overview
 
-## Inputs
+This skill provides a structured, repeatable procedure for decomposes epics into user stories from a product management perspective with acceptance criteria.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-| Input | Description |
-|---|---|
-| Core parameters | epic_goals, constraints, stakeholders, dependency_graph |
-| Environment | dev, staging, prod |
-| Constraints | security, reliability, latency, cost, and governance limits |
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Prerequisites
+## Parameters
 
-- Scope and quality objectives are approved.
-- Required datasets, configs, and dependencies are versioned.
-- Ownership and approval responsibilities are assigned.
-- Rollback/mitigation strategy exists for failed outcomes.
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Full Phases Coverage
+## Steps
 
-### Phase 1: Discover
+### Step 1: Validate Prerequisites
 
-- Confirm goals, constraints, and critical user/system journeys.
-- Identify dependencies, assumptions, and risk hotspots.
-- Define measurable acceptance thresholds.
+Verify all required tools, credentials, and dependencies are available.
 
-### Phase 2: Design
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
+```
 
-- Choose evaluation or implementation approach with tradeoff notes.
-- Define control points for reliability, safety, and observability.
-- Specify fallback behavior and escalation criteria.
+### Step 2: Load Configuration
 
-### Phase 3: Implement
+Read settings from the FAI manifest and TuneKit config files.
 
-- Apply incremental changes with review checkpoints.
-- Keep contracts, prompts, and configs explicit and versioned.
-- Minimize hidden coupling and side effects.
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-### Phase 4: Validate
+### Step 3: Execute Core Logic
 
-- Run quality, regression, and edge-case checks.
-- Verify telemetry, traceability, and evidence capture.
-- Record unresolved risks and remediation actions.
+Perform the primary operation: decomposes epics into user stories from a product management perspective with acceptance criteria..
 
-### Phase 5: Deploy
+### Step 4: Validate Results
 
-- Roll out through staged gates or controlled promotion.
-- Validate KPIs and health checks at each stage.
-- Stop rollout and rollback when thresholds fail.
+Verify the output meets quality thresholds and WAF compliance.
 
-### Phase 6: Operate
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
 
-- Monitor drift and post-release behavior continuously.
-- Route incidents via defined owner and SLA.
-- Feed lessons back into next iteration cycle.
+## Output
 
-## WAF-Aligned Quality Gates
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-### Reliability
+## WAF Alignment
 
-- Retry/timeout/fallback behavior is tested.
-- Health and dependency checks are operational.
-- Degraded-mode responses remain actionable.
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
 
-### Security
+## Error Handling
 
-- Secrets are externalized and access is least-privilege.
-- Data exposure in logs and outputs is controlled.
-- Audit trails exist for critical actions.
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
 
-### Cost Optimization
+## Usage
 
-- Resource/model usage is right-sized to workload.
-- High-cost operations are measured and optimized.
-- Budget thresholds and anomaly signals are configured.
+### Standalone
 
-### Operational Excellence
+```bash
+# Run this skill directly
+npx frootai skill run fai-epic-breakdown-pm
+```
 
-- CI/CD and repeatable run steps are mandatory.
-- Runbooks and rollback instructions are current.
-- Metrics and traces support incident triage.
+### Inside a Solution Play
 
-### Performance Efficiency
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
-- SLO targets are explicit and monitored.
-- Hot paths are benchmarked and tuned.
-- Payload and compute overhead are controlled.
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-epic-breakdown-pm/"]
+  }
+}
+```
 
-### Responsible AI
+### Via Agent Invocation
 
-- Safety, grounding, and fairness checks are applied where AI exists.
-- User-facing outputs are transparent about AI involvement.
-- Human escalation paths are available for high-impact outcomes.
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
 
-## Deliverables
+## Configuration Reference
 
-| Artifact | Purpose |
-|---|---|
-| Primary output | epic-breakdown-pm.md, sequencing plan, risk register |
-| Validation dossier | Evidence for readiness decisions |
-| Rollback guide | Mitigation and reversal actions |
-| Operate handoff | Monitoring and ownership instructions |
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
 
-## Completion Checklist
+## Monitoring
 
-- [ ] Phase 1 discovery evidence captured.
-- [ ] Phase 2 design decisions documented.
-- [ ] Phase 3 implementation reviewed.
-- [ ] Phase 4 validation passed.
-- [ ] Phase 5 staged rollout completed.
-- [ ] Phase 6 operate handoff accepted.
-- [ ] Completion criteria met: all streams are actionable, dependency risks visible, milestones realistic.
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-### Symptom: Score quality regresses after updates
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-- Compare data/prompt/config version deltas.
-- Validate threshold calibration and scenario coverage.
-- Re-run with fixed baselines for controlled comparison.
+## Notes
 
-### Symptom: Cost or latency spikes during runs
-
-- Inspect hot paths, retries, and caching effectiveness.
-- Right-size model/resource choices for workload class.
-- Tune timeouts, concurrency, and batching policies.
-
-### Symptom: Inconsistent outcomes between environments
-
-- Verify environment parity for dependencies and flags.
-- Check data residency and endpoint routing differences.
-- Execute representative smoke suites pre-release.
-
-## Example Commands
-
-```bash
-# Adapt to repository conventions
-npm run lint
-npm test
-npm run build
-```
-
-## Definition of Done
-
-The skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce the workflow without tribal knowledge.
-
-## Metadata
-
-- Category: Planning
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly and after major platform changes
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

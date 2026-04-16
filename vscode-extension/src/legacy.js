@@ -955,7 +955,12 @@ class WelcomeTreeProvider {
     search.iconPath = new vscode.ThemeIcon("search", new vscode.ThemeColor("charts.yellow"));
     search.command = { command: "frootai.searchAll", title: "Search" };
 
-    return [hi, scaffold, setup, search];
+    const agent = new vscode.TreeItem("Ask Agent FAI", vscode.TreeItemCollapsibleState.None);
+    agent.description = "AI assistant — powered by Azure";
+    agent.iconPath = new vscode.ThemeIcon("comment-discussion", new vscode.ThemeColor("charts.purple"));
+    agent.command = { command: "frootai.openAgentFai", title: "Ask Agent FAI" };
+
+    return [hi, agent, scaffold, setup, search];
   }
 }
 

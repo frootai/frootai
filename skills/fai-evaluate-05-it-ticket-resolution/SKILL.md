@@ -1,159 +1,167 @@
 ---
 name: fai-evaluate-05-it-ticket-resolution
-description: 'Evaluates Solution Play 05 IT Ticket Resolution for routing precision, escalation quality, and auditability.'
+description: Evaluate ticket resolution quality and automation effectiveness.
 ---
 
-# FAI Skill: Evaluate 05 It Ticket Resolution
+# Fai Evaluate 05 It Ticket Resolution
 
-## Purpose
+Runs quality evaluation for Play 05-it-ticket-resolution against fai-manifest.json guardrails — groundedness, coherence, safety.
 
-This skill defines a production-grade workflow for Ticket automation quality and escalation integrity. It uses full six-phase execution with explicit validation gates so outcomes remain reproducible and auditable.
+## Overview
 
-## Inputs
+This skill provides a structured, repeatable procedure for runs quality evaluation for play 05-it-ticket-resolution against fai-manifest.json guardrails — groundedness, coherence, safety.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
-| Input | Description |
-|---|---|
-| Core parameters | ticket_set, routing_labels, escalation_policy, audit_requirements |
-| Environment | dev, staging, prod |
-| Constraints | security, reliability, latency, cost, and governance limits |
+**Category:** Evaluation
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Prerequisites
+## Parameters
 
-- Scope and quality objectives are approved.
-- Required datasets, configs, and dependencies are versioned.
-- Ownership and approval responsibilities are assigned.
-- Rollback/mitigation strategy exists for failed outcomes.
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Full Phases Coverage
+## Steps
 
-### Phase 1: Discover
+### Step 1: Validate Prerequisites
 
-- Confirm goals, constraints, and critical user/system journeys.
-- Identify dependencies, assumptions, and risk hotspots.
-- Define measurable acceptance thresholds.
-
-### Phase 2: Design
-
-- Choose evaluation or implementation approach with tradeoff notes.
-- Define control points for reliability, safety, and observability.
-- Specify fallback behavior and escalation criteria.
-
-### Phase 3: Implement
-
-- Apply incremental changes with review checkpoints.
-- Keep contracts, prompts, and configs explicit and versioned.
-- Minimize hidden coupling and side effects.
-
-### Phase 4: Validate
-
-- Run quality, regression, and edge-case checks.
-- Verify telemetry, traceability, and evidence capture.
-- Record unresolved risks and remediation actions.
-
-### Phase 5: Deploy
-
-- Roll out through staged gates or controlled promotion.
-- Validate KPIs and health checks at each stage.
-- Stop rollout and rollback when thresholds fail.
-
-### Phase 6: Operate
-
-- Monitor drift and post-release behavior continuously.
-- Route incidents via defined owner and SLA.
-- Feed lessons back into next iteration cycle.
-
-## WAF-Aligned Quality Gates
-
-### Reliability
-
-- Retry/timeout/fallback behavior is tested.
-- Health and dependency checks are operational.
-- Degraded-mode responses remain actionable.
-
-### Security
-
-- Secrets are externalized and access is least-privilege.
-- Data exposure in logs and outputs is controlled.
-- Audit trails exist for critical actions.
-
-### Cost Optimization
-
-- Resource/model usage is right-sized to workload.
-- High-cost operations are measured and optimized.
-- Budget thresholds and anomaly signals are configured.
-
-### Operational Excellence
-
-- CI/CD and repeatable run steps are mandatory.
-- Runbooks and rollback instructions are current.
-- Metrics and traces support incident triage.
-
-### Performance Efficiency
-
-- SLO targets are explicit and monitored.
-- Hot paths are benchmarked and tuned.
-- Payload and compute overhead are controlled.
-
-### Responsible AI
-
-- Safety, grounding, and fairness checks are applied where AI exists.
-- User-facing outputs are transparent about AI involvement.
-- Human escalation paths are available for high-impact outcomes.
-
-## Deliverables
-
-| Artifact | Purpose |
-|---|---|
-| Primary output | evaluate-05-report.md, precision/recall summary, escalation audit |
-| Validation dossier | Evidence for readiness decisions |
-| Rollback guide | Mitigation and reversal actions |
-| Operate handoff | Monitoring and ownership instructions |
-
-## Completion Checklist
-
-- [ ] Phase 1 discovery evidence captured.
-- [ ] Phase 2 design decisions documented.
-- [ ] Phase 3 implementation reviewed.
-- [ ] Phase 4 validation passed.
-- [ ] Phase 5 staged rollout completed.
-- [ ] Phase 6 operate handoff accepted.
-- [ ] Completion criteria met: classification quality gate passed, escalation path valid, audit trail complete.
-
-## Troubleshooting
-
-### Symptom: Score quality regresses after updates
-
-- Compare data/prompt/config version deltas.
-- Validate threshold calibration and scenario coverage.
-- Re-run with fixed baselines for controlled comparison.
-
-### Symptom: Cost or latency spikes during runs
-
-- Inspect hot paths, retries, and caching effectiveness.
-- Right-size model/resource choices for workload class.
-- Tune timeouts, concurrency, and batching policies.
-
-### Symptom: Inconsistent outcomes between environments
-
-- Verify environment parity for dependencies and flags.
-- Check data residency and endpoint routing differences.
-- Execute representative smoke suites pre-release.
-
-## Example Commands
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Adapt to repository conventions
-npm run lint
-npm test
-npm run build
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Definition of Done
+### Step 2: Load Configuration
 
-The skill is complete when all six phases are evidenced, quality gates are met, and another engineer can reproduce the workflow without tribal knowledge.
+Read settings from the FAI manifest and TuneKit config files.
 
-## Metadata
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
 
-- Category: Evaluation
-- Maintainer: FAI Skill System
-- Review cadence: Quarterly and after major platform changes
+### Step 3: Execute Core Logic
+
+Perform the primary operation: runs quality evaluation for play 05-it-ticket-resolution against fai-manifest.json guardrails — groundedness, coherence, safety..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| responsible-ai | Validates content safety, checks for bias, enforces groundedness |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 03**
+- **Play 60**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-evaluate-05-it-ticket-resolution
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-evaluate-05-it-ticket-resolution/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Metrics Reference
+
+| Metric | Range | Threshold | Description |
+|--------|-------|-----------|-------------|
+| Groundedness | 0.0-1.0 | ≥ 0.85 | Answer supported by retrieved context |
+| Coherence | 0.0-1.0 | ≥ 0.80 | Logical flow and consistency |
+| Relevance | 0.0-1.0 | ≥ 0.80 | Answer addresses the question |
+| Fluency | 0.0-1.0 | ≥ 0.75 | Natural language quality |
+| Safety | 0-4 | 0 | Content safety violations |
+| Faithfulness | 0.0-1.0 | ≥ 0.90 | No hallucinated facts |
+
+## Test Set Format
+
+```jsonl
+{"question": "What is RAG?", "context": "RAG combines...", "expected": "Retrieval-Augmented Generation..."}
+{"question": "How does chunking work?", "context": "Documents are split...", "expected": "Chunking divides..."}
+```
+
+## CI/CD Integration
+
+```yaml
+# .github/workflows/eval.yml
+- name: Run FAI Evaluation
+  run: |
+    python evaluation/eval.py --test-set evaluation/test-set.jsonl
+    python evaluation/check-thresholds.py --groundedness 0.85 --coherence 0.80
+```
+
+## Regression Tracking
+
+Track evaluation scores over time to detect quality regressions:
+
+```bash
+# Compare with baseline
+python evaluation/regression.py --baseline results/baseline.json --current results/latest.json
+```
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Evaluation category in the FAI primitives catalog

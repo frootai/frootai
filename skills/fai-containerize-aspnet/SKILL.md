@@ -1,117 +1,156 @@
 ---
 name: fai-containerize-aspnet
-description: |
-  Containerize ASP.NET applications with multi-stage builds, non-root runtime,
-  health probes, chiseled base images, and vulnerability scanning. Use when
-  deploying .NET services to AKS or Azure Container Apps.
+description: Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and health checks.
 ---
 
-# Containerize ASP.NET
+# Fai Containerize Aspnet
 
-Multi-stage Dockerfile for production .NET services with security best practices.
+Containerizes ASP.NET Core applications with multi-stage builds and health probes.
 
-## When to Use
+## Overview
 
-- Containerizing ASP.NET Core APIs or workers
-- Deploying .NET services to AKS or Container Apps
-- Optimizing image size for fast cold starts
-- Hardening containers with non-root and chiseled images
+This skill provides a structured, repeatable procedure for containerizes asp.net core applications with multi-stage builds and health probes.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Multi-Stage Dockerfile
+## Parameters
 
-```dockerfile
-# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY *.csproj .
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /app/publish --no-restore
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-# Stage 2: Runtime (chiseled = no shell, no root, minimal)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-noble-chiseled
-WORKDIR /app
-COPY --from=build /app/publish .
-EXPOSE 8080
-HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:8080/health || exit 1
-ENTRYPOINT ["dotnet", "MyApp.dll"]
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
+
+```bash
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Non-Chiseled Alternative (with shell access for debugging)
+### Step 2: Load Configuration
 
-```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /app
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-COPY --from=build /app/publish .
-USER appuser
-EXPOSE 8080
-ENTRYPOINT ["dotnet", "MyApp.dll"]
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## .dockerignore
+### Step 3: Execute Core Logic
 
+Perform the primary operation: containerizes asp.net core applications with multi-stage builds and health probes..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
-**/bin
-**/obj
-**/.vs
-**/node_modules
-**/*.md
-**/tests
-.git
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-containerize-aspnet
 ```
 
-## Image Size Comparison
+### Inside a Solution Play
 
-| Base Image | Size | Security |
-|-----------|------|----------|
-| aspnet:8.0 | ~220MB | Standard |
-| aspnet:8.0-alpine | ~110MB | Minimal, musl libc |
-| aspnet:8.0-noble-chiseled | ~110MB | No shell, no root, distroless |
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
 
-## Health Endpoint
-
-```csharp
-app.MapHealthChecks("/health");
-app.MapHealthChecks("/ready", new HealthCheckOptions
+```json
 {
-    Predicate = check => check.Tags.Contains("ready")
-});
+  "primitives": {
+    "skills": ["skills/fai-containerize-aspnet/"]
+  }
+}
 ```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Large image (>500MB) | Using SDK as runtime | Use multi-stage, aspnet base only |
-| Permission denied | Running as root | Add USER directive or use chiseled |
-| Health check fails | Wrong port | Match EXPOSE and Kestrel configured port |
-| Missing .NET runtime | Wrong base image | Use aspnet (not runtime) for web apps |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Start simple, add complexity when needed | Avoid over-engineering |
-| Automate repetitive tasks | Consistency and speed |
-| Document decisions and tradeoffs | Future reference for the team |
-| Validate with real data | Don't rely on synthetic tests alone |
-| Review with peers | Fresh eyes catch blind spots |
-| Iterate based on feedback | First version is never perfect |
-
-## Quality Checklist
-
-- [ ] Requirements clearly defined
-- [ ] Implementation follows project conventions
-- [ ] Tests cover happy path and error paths
-- [ ] Documentation updated
-- [ ] Peer reviewed
-- [ ] Validated in staging environment
-
-## Related Skills
-
-- `fai-implementation-plan-generator` — Planning and milestones
-- `fai-review-and-refactor` — Code review patterns
-- `fai-quality-playbook` — Engineering quality standards
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

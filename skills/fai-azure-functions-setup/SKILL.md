@@ -1,145 +1,248 @@
 ---
 name: fai-azure-functions-setup
-description: |
-  Configure Azure Functions for AI workloads with Managed Identity, plan sizing,
-  durable orchestrations, and OpenTelemetry observability. Use when building
-  serverless AI endpoints, background processors, or event-driven pipelines.
+description: Scaffold Azure Functions apps with HTTP/Event Hub/Service Bus triggers, input/output bindings, Managed Identity, Application Insights, and local development setup — enabling serverless AI microservices in minutes.
 ---
 
-# Azure Functions for AI Workloads
+# FAI Azure Functions
 
-Configure Functions for serverless AI with identity, scaling, retries, and observability.
+Provisions Azure Functions with Common Language Runtime (CLR), Python, or Node.js; wires triggers and bindings for HTTP, Event Grid, and Service Bus; integrates Managed Identity, structured logging, and Application Insights. Prevents Functions setup friction: boilerplate trigger code, credential management, and local debugging setup.
 
-## When to Use
+## When to Invoke
 
-- Building serverless API endpoints for AI inference
-- Creating event-driven document processing pipelines
-- Running background jobs (embedding generation, evaluation)
-- Orchestrating multi-step AI workflows with Durable Functions
+| Signal | Example |
+|--------|---------|
+| Serverless microservices needed | Document embedding function on blob upload |
+| Event-driven workflows missing | Manual polling instead of trigger-based functions |
+| CI/CD deployment is manual | Functions deployed via portal or local CLI |
+| Observability is unclear | No structured traces or custom metrics |
 
----
+## Workflow
 
-## Bicep Provisioning
+### Step 1 — Create Function App
 
 ```bicep
-resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+// infra/functions.bicep
+param location string
+param functionAppName string
+param storageAccountId string
+param appInsightsId string
+
+resource hostingPlan 'Microsoft.Web/serverfarms@2023-01-01' = {
+  name: '${functionAppName}-plan'
+  location: location
+  kind: 'Linux'
+  sku: {
+    name: 'EP1'  // Elastic Premium for serverless scaling
+    tier: 'ElasticPremium'
+  }
+}
+
+resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp,linux'
   identity: { type: 'SystemAssigned' }
   properties: {
-    serverFarmId: appServicePlan.id
     httpsOnly: true
+    serverFarmId: hostingPlan.id
     siteConfig: {
-      linuxFxVersion: 'PYTHON|3.11'
       appSettings: [
-        { name: 'AzureWebJobsStorage__accountName', value: storageAccount.name }
-        { name: 'FUNCTIONS_EXTENSION_VERSION', value: '~4' }
+        { name: 'AzureWebJobsStorage', value: 'DefaultEndpointsProtocol=https;...' }
         { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'python' }
-        { name: 'AZURE_OPENAI_ENDPOINT', value: openAI.properties.endpoint }
-        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
+        { name: 'APPINSIGHTS_INSTRUMENTATIONKEY', value: reference(appInsightsId).InstrumentationKey }
       ]
+      linuxFxVersion: 'PYTHON|3.11'
+      functionAppScaleLimit: 200
     }
   }
 }
-
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
-  name: planName
-  location: location
-  sku: { name: 'EP1', tier: 'ElasticPremium' }
-  properties: {
-    reserved: true
-    maximumElasticWorkerCount: 10
-  }
-}
 ```
 
-## Python Function with OpenAI
+### Step 2 — HTTP Trigger with Managed Identity
 
 ```python
+# functions/CompletionHandler/__init__.py
 import azure.functions as func
-from openai import AzureOpenAI
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-import json, logging
+from azure.ai.openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential
+import logging
 
-app = func.FunctionApp()
-
-token_provider = get_bearer_token_provider(
-    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
-)
+# Initialize client once (outside function for warm start)
 client = AzureOpenAI(
+    api_version="2024-02-01",
     azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_ad_token_provider=token_provider,
-    api_version="2024-10-21",
+    azure_ad_token_provider=lambda: DefaultAzureCredential().get_token(
+        "https://cognitiveservices.azure.com/.default"
+    ).token,
 )
 
-@app.route(route="chat", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
-async def chat(req: func.HttpRequest) -> func.HttpResponse:
-    body = req.get_json()
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": body["message"]}],
-        temperature=0.3,
-        max_tokens=1024,
-    )
-    return func.HttpResponse(
-        json.dumps({"reply": response.choices[0].message.content}),
-        mimetype="application/json",
-    )
-
-@app.blob_trigger(arg_name="blob", path="documents/{name}",
-                   connection="AzureWebJobsStorage")
-async def process_document(blob: func.InputStream):
-    logging.info(f"Processing: {blob.name}, size: {blob.length}")
-    content = blob.read().decode("utf-8")
-    # Embed and index the document...
+async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    logger = logging.getLogger(context.function_name)
+    
+    try:
+        req_body = req.get_json()
+        prompt = req_body["prompt"]
+        
+        logger.info(f"Processing completion request: {context.invocation_id}")
+        
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=512,
+        )
+        
+        return func.HttpResponse(
+            json.dumps({
+                "status": "success",
+                "response": response.choices[0].message.content,
+                "request_id": context.invocation_id,
+            }),
+            status_code=200,
+            mimetype="application/json"
+        )
+    
+    except ValueError as e:
+        logger.error(f"Validation error: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": "Invalid request", "details": str(e)}),
+            status_code=400,
+        )
 ```
 
-## Plan Sizing
+### Step 3 — Event Hub Trigger for Streaming Ingestion
 
-| Plan | Min Instances | Scale-out | Cold Start | Best For |
-|------|--------------|-----------|------------|----------|
-| Consumption | 0 | 200 | Yes (seconds) | Dev, low-traffic |
-| Flex Consumption | 0 | 1000 | Reduced | Variable traffic |
-| Elastic Premium (EP1) | 1 | 20 | None | Production AI |
-| Dedicated (P1v3) | 1 | 30 | None | Sustained high load |
+```python
+# functions/EmbeddingBatchProcessor/__init__.py
+import azure.functions as func
+from azure.ai.openai import AzureOpenAI
+import json
 
-**For AI workloads:** Use Elastic Premium with `min_instances=1` to eliminate cold starts.
+async def main(events: func.EventHubEvent):
+    for event in events:
+        documents = json.loads(event.get_body().decode('utf-8'))
+        
+        embeddings = client.embeddings.create(
+            input=[d["text"] for d in documents],
+            model="text-embedding-3-large",
+        )
+        
+        for doc, embedding in zip(documents, embeddings.data):
+            # Store in Cosmos DB with vector index
+            container.upsert_item({
+                "id": doc["id"],
+                "content": doc["text"],
+                "vector_embedding": embedding.embedding,
+            })
+```
 
-## Retry Policy
+### Step 4 — Service Bus Trigger for Reliability
+
+```python
+# functions/ReliableWorker/__init__.py
+import azure.functions as func
+from azure.service bus import ServiceBusClient
+from azure.identity import DefaultAzureCredential
+import logging
+
+async def main(msg: func.ServiceBusMessage):
+    logger = logging.getLogger("ReliableWorker")
+    
+    try:
+        payload = json.loads(msg.get_body().decode('utf-8'))
+        logger.info(f"Processing job: {payload['job_id']}")
+        
+        # Process work
+        result = await do_work(payload)
+        
+        # Mark complete
+        await msg.complete()
+        logger.info(f"Job {payload['job_id']} completed")
+        
+    except Exception as e:
+        # Automatic retry (Service Bus default: 10 times, exponential backoff)
+        logger.error(f"Job failed: {str(e)}")
+        # Message goes back to queue on exception
+        raise
+```
+
+### Step 5 — Output Binding to Cosmos
+
+```python
+# functions/SaveResults/__init__.py
+import azure.functions as func
+import json
+
+def main(
+    req: func.HttpRequest,
+    outputDocument: func.Out[func.AsJson],
+) -> func.HttpResponse:
+    
+    document_id = req.params.get('id')
+    result_data = req.get_json()
+    
+    # Output binding automatically saves to Cosmos DB
+    outputDocument.set(func.AsJson({
+        "id": document_id,
+        "timestamp": datetime.utcnow().isoformat(),
+        "results": result_data,
+    }))
+    
+    return func.HttpResponse("Saved", status_code=200)
+```
+
+Output binding declaration in `function.json`:
 
 ```json
 {
-  "retry": {
-    "strategy": "exponentialBackoff",
-    "maxRetryCount": 5,
-    "minimumInterval": "00:00:04",
-    "maximumInterval": "00:15:00"
-  }
+  "scriptFile": "function_app.py",
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req"
+    },
+    {
+      "type": "cosmosDB",
+      "direction": "out",
+      "name": "outputDocument",
+      "databaseName": "ai-workload",
+      "collectionName": "results",
+      "connectionStringSetting": "AzureCosmosDBConnectionString",
+      "createIfNotExists": false
+    }
+  ]
 }
 ```
 
-## RBAC for Managed Identity
+## Trigger Reference
 
-```bash
-# Grant Function MI access to OpenAI
-az role assignment create \
-  --assignee-object-id $FUNC_MI_ID \
-  --role "Cognitive Services OpenAI User" \
-  --scope $OPENAI_RESOURCE_ID
+| Trigger | Use Case | Scalability |
+|---------|----------|------------|
+| HTTP | REST API, webhooks | Auto-scale (Elastic Premium: 200 instances) |
+| Event Hub | Streaming telemetry | Partition-based parallel processing |
+| Service Bus | Reliable async work | Competing consumers with dead-letter |
+| Blob | Document processing | One function per blob write |
+| Timer | Scheduled tasks | Single instance only |
 
-# Grant access to Storage (for blob trigger)
-az role assignment create \
-  --assignee-object-id $FUNC_MI_ID \
-  --role "Storage Blob Data Contributor" \
-  --scope $STORAGE_RESOURCE_ID
-```
+## WAF Alignment
 
-## Troubleshooting
+| Pillar | Contribution |
+|--------|-------------|
+| Security | Managed Identity eliminates API key exposure; no local auth needed |
+| Reliability | Service Bus dead-letter queue captures failed messages; retry policies built-in |
+| Cost Optimization | Serverless scales to zero when idle; pay-per-execution pricing |
+| Operational Excellence | Application Insights captures traces automatically; correlation IDs for request tracing |
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Cold start latency >5s | Consumption plan, no pre-warmed instances | Switch to Premium with min_instances ≥ 1 |
-| 403 on OpenAI calls | MI missing RBAC role | Grant Cognitive Services OpenAI User |
-| Blob trigger not firing | Storage connection using keys, not MI | Set AzureWebJobsStorage__accountName (MI-based) |
-| Function timeout (5 min) | Long AI processing on Consumption | Increase timeout or use Durable Functions |
+## Compatible Solution Plays
+
+- **Play 01** — Enterprise RAG (embedding function on doc upload)
+- **Play 07** — Multi-Agent Service (agent orchestration function)
+- **Play 37** — DevOps AI (automated remediation function)
+
+## Notes
+
+- Elastic Premium plan enables reserved instances and auto-scaling
+- Avoid storing credentials in app settings; use Managed Identity for all Azure service access
+- Application Insights integration is automatic with runtime extensions; no instrumentation code needed
+- Local debugging: `func start --build` to debug locally; use Azure Storage Emulator for bindings

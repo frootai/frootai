@@ -2,14 +2,33 @@
   "name": "salesforce-ai-copilot",
   "version": "1.0.0",
   "description": "Salesforce CRM integration — AI copilot for sales forecasting, lead scoring, account summarization.",
-  "author": { "name": "FAI Community", "url": "https://frootai.dev" },
+  "author": {
+    "name": "FAI Community",
+    "url": "https://frootai.dev"
+  },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
   "homepage": "https://frootai.dev",
-  "keywords": ["salesforce", "crm", "sales", "enterprise", "integration"],
-  "plays": ["07-multi-agent-service"],
-  "agents": [".github/agents/salesforce-agent.agent.md"],
-  "instructions": [".github/instructions/salesforce-integration.instructions.md"],
-  "hooks": [".github/workflows/salesforce-sync.yml"],
-  "dependencies": ["frootai-mcp"]
+  "keywords": [
+    "salesforce",
+    "crm",
+    "sales",
+    "enterprise",
+    "integration"
+  ],
+  "plays": [
+    "07-multi-agent-service"
+  ],
+  "agents": [
+    ".github/agents/salesforce-agent.agent.md"
+  ],
+  "instructions": [
+    ".github/instructions/salesforce-integration.instructions.md"
+  ],
+  "hooks": [
+    ".github/workflows/salesforce-sync.yml"
+  ],
+  "dependencies": [
+    "frootai-mcp"
+  ]
 }

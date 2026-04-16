@@ -57,7 +57,7 @@ export interface WafPillar {
   color: string;
 }
 
-export type PanelType = "playDetail" | "evaluation" | "scaffold" | "mcpExplorer" | "playBrowser" | "configurator" | "welcome" | "primitivesCatalog" | "marketplace";
+export type PanelType = "playDetail" | "evaluation" | "scaffold" | "mcpExplorer" | "playBrowser" | "configurator" | "welcome" | "primitivesCatalog" | "marketplace" | "agentFai";
 
 export interface PrimitiveItem {
   id: string;

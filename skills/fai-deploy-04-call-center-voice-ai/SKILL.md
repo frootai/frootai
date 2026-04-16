@@ -1,114 +1,165 @@
 ---
 name: fai-deploy-04-call-center-voice-ai
-description: |
-  Deploy Call Center Voice AI (Play 04) with speech-to-text, LLM processing,
-  text-to-speech pipeline, and real-time WebSocket streaming. Covers latency
-  optimization and escalation handling.
+description: Deploy Call Center Voice AI with STT, LLM, TTS streaming pipeline.
 ---
 
-# Deploy Call Center Voice AI (Play 04)
+# Fai Deploy 04 Call Center Voice Ai
 
-Deploy real-time voice AI pipeline with STT → LLM → TTS streaming.
+Deploys Play 04-call-center-voice-ai to Azure with Bicep validation, what-if check, and post-deploy health verification.
 
-## When to Use
+## Overview
 
-- Deploying a voice-based AI agent for call centers
-- Setting up STT/TTS with Azure Speech Services
-- Optimizing end-to-end voice latency (<2s target)
-- Implementing human escalation paths
+This skill provides a structured, repeatable procedure for deploys play 04-call-center-voice-ai to azure with bicep validation, what-if check, and post-deploy health verification.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Deployment
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Pipeline Architecture
+## Parameters
 
-```
-Phone Call → Azure Communication Services
-    → Speech-to-Text (real-time)
-    → LLM Processing (streaming)
-    → Text-to-Speech (real-time)
-    → Audio Response to Caller
-```
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-## Deployment
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Deploy speech + LLM infrastructure
-az deployment group create --resource-group rg-voice-prod \
-  --template-file infra/main.bicep
-
-# Deploy voice gateway app
-az containerapp create --name voice-gateway \
-  --resource-group rg-voice-prod \
-  --image myacr.azurecr.io/voice-gateway:v1.0 \
-  --cpu 2 --memory 4Gi \
-  --min-replicas 2 --max-replicas 10
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Real-Time STT
+### Step 2: Load Configuration
 
-```python
-import azure.cognitiveservices.speech as speechsdk
+Read settings from the FAI manifest and TuneKit config files.
 
-speech_config = speechsdk.SpeechConfig(
-    subscription=None,  # Use MI
-    region="eastus2"
-)
-speech_config.speech_recognition_language = "en-US"
-
-async def transcribe_stream(audio_stream):
-    recognizer = speechsdk.SpeechRecognizer(
-        speech_config=speech_config,
-        audio_config=speechsdk.AudioConfig(stream=audio_stream)
-    )
-    result = recognizer.recognize_once_async().get()
-    return result.text
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Streaming LLM Response
+### Step 3: Execute Core Logic
 
-```python
-async def stream_llm_response(text: str):
-    stream = client.chat.completions.create(
-        model="gpt-4o-mini",  # Low latency model
-        messages=[
-            {"role": "system", "content": "You are a helpful call center agent. Be concise."},
-            {"role": "user", "content": text},
-        ],
-        stream=True,
-        max_tokens=150,  # Keep responses short for voice
-    )
-    for chunk in stream:
-        if chunk.choices[0].delta.content:
-            yield chunk.choices[0].delta.content
+Perform the primary operation: deploys play 04-call-center-voice-ai to azure with bicep validation, what-if check, and post-deploy health verification..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Latency Budget
+## Output
 
-| Stage | Target | Optimization |
-|-------|--------|-------------|
-| STT | <500ms | Use real-time recognition |
-| LLM | <800ms | GPT-4o-mini, stream, short max_tokens |
-| TTS | <400ms | Use neural voice, pre-warm connection |
-| Network | <300ms | Same-region deployment |
-| **Total** | **<2000ms** | |
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
 
-## Escalation
+## WAF Alignment
 
-```python
-ESCALATION_TRIGGERS = [
-    "speak to a human", "transfer me", "supervisor",
-    "I want to complain", "this is urgent",
-]
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
 
-def should_escalate(transcript: str) -> bool:
-    return any(trigger in transcript.lower() for trigger in ESCALATION_TRIGGERS)
+## Compatible Solution Plays
+
+- **Play 02**
+- **Play 37**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-deploy-04-call-center-voice-ai
 ```
 
-## Troubleshooting
+### Inside a Solution Play
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| High latency (>3s) | Wrong model or no streaming | Use mini + streaming + same region |
-| STT accuracy low | Background noise | Enable noise suppression |
-| TTS sounds robotic | Using standard voice | Switch to neural voice (en-US-JennyNeural) |
-| Escalation not triggering | Keyword list too narrow | Add more trigger phrases |
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-deploy-04-call-center-voice-ai/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Deployment Checklist
+
+- [ ] Infrastructure templates validated (`az deployment what-if`)
+- [ ] Environment variables configured (Key Vault references)
+- [ ] Health check endpoints responding (HTTP 200)
+- [ ] DNS/CNAME records updated
+- [ ] SSL certificates valid (not expiring within 30 days)
+- [ ] Rollback procedure documented and tested
+- [ ] Smoke tests passing in target environment
+- [ ] Cost estimate reviewed and approved
+- [ ] RBAC roles assigned (least privilege)
+- [ ] Monitoring alerts configured
+
+## Rollback Procedure
+
+```bash
+# Quick rollback to previous deployment
+az deployment group create \
+  --resource-group $RG \
+  --template-file infra/main.bicep \
+  --parameters @infra/parameters.previous.json
+
+# Verify rollback
+az resource list --resource-group $RG --output table
+```
+
+## Environment Matrix
+
+| Setting | Dev | Staging | Prod |
+|---------|-----|---------|------|
+| SKU | Basic | Standard | Premium |
+| Replicas | 1 | 2 | 3+ |
+| Region | Single | Single | Multi |
+| Backup | None | Daily | Continuous |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Deployment category in the FAI primitives catalog

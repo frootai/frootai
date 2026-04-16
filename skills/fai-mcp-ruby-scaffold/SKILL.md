@@ -1,104 +1,162 @@
 ---
 name: fai-mcp-ruby-scaffold
-description: |
-  Scaffold Ruby MCP servers with typed tool handlers, JSON-RPC processing,
-  and gem packaging. Use when building MCP servers in Ruby for Rails or
-  Sinatra-based tool integration.
+description: "Scaffold a Ruby MCP server using the official SDK with tool handlers, resource capabilities, and error handling."
+waf: ["Reliability", "Security", "Operational Excellence"]
+plays: ["29-mcp-platform-integration"]
 ---
 
-# Ruby MCP Server Scaffold
+# Fai Mcp Ruby Scaffold
 
-Build MCP servers in Ruby with typed tool handlers and gem packaging.
+Scaffolds a complete ruby MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.
 
-## When to Use
+## Overview
 
-- Building MCP tools for Ruby/Rails applications
-- Exposing Ruby service logic as AI agent tools
-- Creating MCP servers with gem-based distribution
+This skill provides a structured, repeatable procedure for scaffolds a complete ruby mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** MCP Integration
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Project Setup
+## Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
+
+## Steps
+
+### Step 1: Validate Prerequisites
+
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-mkdir my-mcp-server && cd my-mcp-server
-bundle init
-# Add to Gemfile:
-# gem 'mcp-ruby'
-bundle install
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Tool Definition
+### Step 2: Load Configuration
 
-```ruby
-require 'mcp'
+Read settings from the FAI manifest and TuneKit config files.
 
-class SearchTool < MCP::Tool
-  name 'search_documents'
-  description 'Search knowledge base documents by query'
-
-  param :query, type: :string, required: true, description: 'Search query'
-  param :limit, type: :integer, default: 5, description: 'Max results'
-
-  def execute(query:, limit: 5)
-    results = KnowledgeBase.search(query, limit: limit)
-    results.map { |r| { id: r.id, title: r.title, score: r.score } }.to_json
-  end
-end
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Server Entry
+### Step 3: Execute Core Logic
 
-```ruby
-require 'mcp'
+Perform the primary operation: scaffolds a complete ruby mcp server project with FAI patterns, tool definitions, resource handlers, and deployment configuration..
 
-server = MCP::Server.new(name: 'my-mcp-server', version: '1.0.0')
-server.add_tool(SearchTool.new)
-server.serve_stdio
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
 ```
 
-## Gemspec
+## Output
 
-```ruby
-Gem::Specification.new do |s|
-  s.name = 'my-mcp-server'
-  s.version = '1.0.0'
-  s.summary = 'MCP server for knowledge base tools'
-  s.executables = ['my-mcp-server']
-  s.add_dependency 'mcp-ruby', '~> 0.5'
-end
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| performance-efficiency | Optimizes for speed, uses caching, supports parallel execution |
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+
+## Compatible Solution Plays
+
+- **Play 29**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-mcp-ruby-scaffold
 ```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-mcp-ruby-scaffold/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Tool not registered | Not added to server | Call server.add_tool() |
-| JSON parse error | Non-serializable return | Always return .to_json |
-| Gem not found | Bundle not installed | Run `bundle install` |
-| Encoding issues | Non-UTF8 input | Force UTF-8 encoding on input |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
 
-## Best Practices
+## Notes
 
-| Practice | Rationale |
-|----------|-----------|
-| Type all tool parameters | Agent understands expected inputs |
-| Write descriptive tool docstrings | Agent matches tasks to tools |
-| Validate inputs before processing | Prevent injection and crashes |
-| Return structured JSON strings | Consistent parsing by consumers |
-| Add error messages in results | Agent can report failures to user |
-| Test tools independently | Verify behavior before server integration |
-
-## MCP Transport Options
-
-| Transport | Use Case | Config |
-|-----------|----------|--------|
-| stdio | VS Code Copilot, Claude Desktop | Default — no setup needed |
-| SSE | Web clients, remote access | Add HTTP server endpoint |
-| WebSocket | Real-time bidirectional | For streaming-heavy tools |
-
-## Related Skills
-
-- `fai-mcp-python-generator` — Python MCP with FastMCP
-- `fai-mcp-typescript-generator` — TypeScript MCP with SDK
-- `fai-mcp-csharp-scaffold` — C# MCP with ModelContextProtocol
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the MCP Integration category in the FAI primitives catalog

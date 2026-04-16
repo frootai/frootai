@@ -1,106 +1,156 @@
 ---
 name: fai-fine-tune-llm
-description: |
-  Design and execute LLM fine-tuning workflows with dataset preparation,
-  training configuration, evaluation gates, and model registry. Use when
-  customizing models for domain-specific tasks on Azure OpenAI.
+description: Prepare and execute LLM fine-tuning with quality evaluation.
 ---
 
-# LLM Fine-Tuning Workflow
+# Fai Fine Tune Llm
 
-Fine-tune models with curated datasets, training config, and evaluation gates.
+Guides LLM fine-tuning with data preparation, LoRA config, training, and evaluation.
 
-## When to Use
+## Overview
 
-- Customizing GPT models for domain-specific tasks
-- Improving quality beyond what prompting achieves
-- Reducing token costs by distilling from larger to smaller models
-- Creating specialized classification or extraction models
+This skill provides a structured, repeatable procedure for guides llm fine-tuning with data preparation, lora config, training, and evaluation.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** General
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Dataset Preparation
+## Parameters
 
-```python
-import json
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-def prepare_training_data(examples: list[dict], output_path: str):
-    """Convert to JSONL format for Azure OpenAI fine-tuning."""
-    with open(output_path, "w") as f:
-        for ex in examples:
-            entry = {
-                "messages": [
-                    {"role": "system", "content": ex["system_prompt"]},
-                    {"role": "user", "content": ex["input"]},
-                    {"role": "assistant", "content": ex["output"]},
-                ]
-            }
-            f.write(json.dumps(entry) + "\n")
+## Steps
 
-# Quality checks
-def validate_dataset(path: str) -> dict:
-    with open(path) as f:
-        rows = [json.loads(l) for l in f]
-    issues = []
-    for i, row in enumerate(rows):
-        msgs = row.get("messages", [])
-        if len(msgs) < 2:
-            issues.append(f"Row {i}: needs at least user + assistant")
-        for m in msgs:
-            if not m.get("content", "").strip():
-                issues.append(f"Row {i}: empty content in {m.get('role')}")
-    return {"total": len(rows), "issues": len(issues), "details": issues[:10]}
-```
+### Step 1: Validate Prerequisites
 
-## Azure OpenAI Fine-Tuning
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-# Upload training file
-az openai file create --file training.jsonl --purpose fine-tune
-
-# Create fine-tuning job
-az openai fine-tuning create \
-  --training-file file-abc123 \
-  --model gpt-4o-mini-2024-07-18 \
-  --hyperparameters '{"n_epochs": 3, "learning_rate_multiplier": 1.0}'
-
-# Monitor job
-az openai fine-tuning show --job ftjob-xyz789
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
 
-## Evaluation Gate
+### Step 2: Load Configuration
 
-```python
-def evaluate_fine_tuned(base_model: str, fine_tuned_model: str,
-                         test_set: list[dict], judge) -> dict:
-    base_scores, ft_scores = [], []
-    for row in test_set:
-        base_out = generate(base_model, row["input"])
-        ft_out = generate(fine_tuned_model, row["input"])
-        base_scores.append(judge(base_out, row["expected"]))
-        ft_scores.append(judge(ft_out, row["expected"]))
-    return {
-        "base_avg": sum(base_scores) / len(base_scores),
-        "fine_tuned_avg": sum(ft_scores) / len(ft_scores),
-        "improvement": (sum(ft_scores) - sum(base_scores)) / len(ft_scores),
-        "deploy_recommended": sum(ft_scores) > sum(base_scores),
-    }
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
 ```
 
-## Dataset Size Guide
+### Step 3: Execute Core Logic
 
-| Task | Min Examples | Recommended |
-|------|-------------|-------------|
-| Classification | 50 | 200-500 |
-| Extraction | 100 | 500-1000 |
-| Conversation style | 50 | 200-500 |
-| Code generation | 200 | 1000+ |
+Perform the primary operation: guides llm fine-tuning with data preparation, lora config, training, and evaluation..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-fine-tune-llm
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-fine-tune-llm/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| No improvement | Dataset too small or noisy | Clean data, increase to 500+ examples |
-| Overfitting | Too many epochs | Reduce to 2-3 epochs, add validation set |
-| Regression on general tasks | Catastrophic forgetting | Evaluate on general + domain test sets |
-| High training cost | Too many examples or epochs | Start with 200 examples, 2 epochs |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the General category in the FAI primitives catalog

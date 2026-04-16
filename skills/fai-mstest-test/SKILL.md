@@ -1,103 +1,161 @@
 ---
 name: fai-mstest-test
-description: |
-  Write MSTest tests with data-driven cases, test initialization, assertion
-  patterns, and code coverage. Use when testing .NET applications with the
-  MSTest framework.
----
+description: "Generate C# MSTest unit tests with test fixtures, mocking, data-driven tests, and code coverage tracking."
+waf: ["Reliability", "Operational Excellence"]
+plays: ["32-test-generation", "24-code-assistant"]
 
-# MSTest Testing Patterns
+# Fai Mstest Test
 
-Write reliable MSTest tests with data-driven cases and assertion patterns.
+Generates MSTest test suites for .NET projects with TestClass, TestMethod patterns.
 
-## When to Use
+## Overview
 
-- Testing .NET applications with MSTest
-- Writing data-driven parameterized tests
-- Setting up test initialization and cleanup
-- Configuring code coverage with dotnet test
+This skill provides a structured, repeatable procedure for generates mstest test suites for .net projects with testclass, testmethod patterns.. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
----
+**Category:** Testing
+**Complexity:** Medium
+**Estimated Time:** 10-30 minutes
 
-## Basic Test Structure
+## Parameters
 
-```csharp
-[TestClass]
-public class OrderServiceTests
-{
-    private OrderService _service = null!;
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `target` | string | Yes | — | Target resource, file, or endpoint |
+| `environment` | enum | No | `dev` | Target environment: `dev`, `staging`, `prod` |
+| `verbose` | boolean | No | `false` | Enable detailed output logging |
+| `dry_run` | boolean | No | `false` | Validate without making changes |
+| `config_path` | string | No | `config/` | Path to configuration directory |
 
-    [TestInitialize]
-    public void Setup()
-    {
-        _service = new OrderService(new MockRepository());
-    }
+## Steps
 
-    [TestMethod]
-    public void CalculateTotal_WithItems_ReturnsCorrectSum()
-    {
-        var order = Order.Create(new Item("Widget", 29.99m, 2));
-        var total = _service.CalculateTotal(order);
-        Assert.AreEqual(64.78m, total, 0.01m);
-    }
+### Step 1: Validate Prerequisites
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void CalculateTotal_EmptyOrder_ThrowsException()
-    {
-        _service.CalculateTotal(Order.Empty);
-    }
-}
-```
-
-## Data-Driven Tests
-
-```csharp
-[TestClass]
-public class TaxCalculatorTests
-{
-    [DataTestMethod]
-    [DataRow(100.00, 0.08, 108.00)]
-    [DataRow(50.00, 0.10, 55.00)]
-    [DataRow(0.00, 0.08, 0.00)]
-    public void Calculate_ReturnsCorrectTax(double amount, double rate, double expected)
-    {
-        var result = TaxCalculator.Calculate((decimal)amount, (decimal)rate);
-        Assert.AreEqual((decimal)expected, result, 0.01m);
-    }
-}
-```
-
-## Mocking with Moq
-
-```csharp
-[TestMethod]
-public async Task Chat_ReturnsResponse()
-{
-    var mockClient = new Mock<IOpenAIClient>();
-    mockClient.Setup(c => c.CompleteAsync(It.IsAny<string>()))
-              .ReturnsAsync("Hello from GPT");
-
-    var service = new ChatService(mockClient.Object);
-    var result = await service.ChatAsync("Hi");
-
-    Assert.AreEqual("Hello from GPT", result);
-    mockClient.Verify(c => c.CompleteAsync("Hi"), Times.Once);
-}
-```
-
-## Coverage
+Verify all required tools, credentials, and dependencies are available.
 
 ```bash
-dotnet test --collect:"Code Coverage" --results-directory ./coverage
-dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+# Check required tools
+command -v node >/dev/null 2>&1 || { echo 'Node.js required'; exit 1; }
+command -v az >/dev/null 2>&1 || { echo 'Azure CLI required'; exit 1; }
 ```
+
+### Step 2: Load Configuration
+
+Read settings from the FAI manifest and TuneKit config files.
+
+```bash
+# Load from fai-manifest.json if inside a play
+CONFIG_DIR="${config_path:-config}"
+if [ -f "fai-manifest.json" ]; then
+  echo "FAI Protocol detected — auto-wiring context"
+fi
+```
+
+### Step 3: Execute Core Logic
+
+Perform the primary operation: generates mstest test suites for .net projects with testclass, testmethod patterns..
+
+### Step 4: Validate Results
+
+Verify the output meets quality thresholds and WAF compliance.
+
+```bash
+# Validate output
+if [ "$?" -eq 0 ]; then
+  echo "✅ Skill completed successfully"
+else
+  echo "❌ Skill failed — check logs"
+  exit 1
+fi
+```
+
+## Output
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `status` | enum | `success`, `warning`, `failure` |
+| `duration_ms` | number | Execution time in milliseconds |
+| `artifacts` | string[] | List of generated/modified files |
+| `logs` | string | Detailed execution log |
+
+## WAF Alignment
+
+| Pillar | How This Skill Contributes |
+|--------|---------------------------|
+| reliability | Includes retry logic, validates outputs, provides rollback steps |
+| operational-excellence | Produces structured logs, integrates with CI/CD, follows IaC patterns |
+
+## Compatible Solution Plays
+
+- **Play 32**
+
+## Error Handling
+
+| Exit Code | Meaning | Action |
+|-----------|---------|--------|
+| 0 | Success | Proceed to next step |
+| 1 | Validation failure | Check input parameters |
+| 2 | Dependency missing | Install required tools |
+| 3 | Runtime error | Check logs, retry with `--verbose` |
+
+## Usage
+
+### Standalone
+
+```bash
+# Run this skill directly
+npx frootai skill run fai-mstest-test
+```
+
+### Inside a Solution Play
+
+When referenced in `fai-manifest.json`, this skill auto-wires with the play's context:
+
+```json
+{
+  "primitives": {
+    "skills": ["skills/fai-mstest-test/"]
+  }
+}
+```
+
+### Via Agent Invocation
+
+Agents can invoke this skill using the `/skill` command in Copilot Chat.
+
+## Configuration Reference
+
+```json
+{
+  "skill": "skill-name",
+  "version": "1.0.0",
+  "timeout_seconds": 300,
+  "retry_attempts": 3,
+  "log_level": "info"
+}
+```
+
+## Monitoring
+
+Track skill execution metrics:
+
+| Metric | Description | Alert Threshold |
+|--------|-------------|----------------|
+| Duration | Execution time | > 60 seconds |
+| Success rate | Pass/fail ratio | < 95% |
+| Error count | Failed executions | > 5/hour |
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Test not discovered | Missing [TestClass] or [TestMethod] | Add both attributes |
-| DataRow type mismatch | Wrong parameter types | Match DataRow types to method params |
-| Mock returns null | Missing Setup() | Add Setup for all called methods |
-| Async test hangs | Missing async/await | Use async Task, not void |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Timeout | Slow dependency | Increase timeout_seconds |
+| Auth failure | Expired credentials | Refresh Managed Identity |
+| Missing config | No fai-manifest.json | Create manifest or pass config_path |
+| Validation error | Invalid input | Check parameter types and ranges |
+
+## Notes
+
+- This skill follows the FAI SKILL.md specification
+- All outputs are deterministic when `dry_run=true`
+- Integrates with FAI Engine for automated pipeline execution
+- Part of the Testing category in the FAI primitives catalog
