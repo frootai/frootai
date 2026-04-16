@@ -37,19 +37,19 @@ function renderMarkdown(md: string): string {
     .replace(/^- (.+)$/gm, '<div style="padding-left:14px;margin:3px 0;font-size:12px"><span style="color:#10b981;margin-right:6px">•</span>$1</div>')
     // HR
     .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #1a1a2e;margin:14px 0">')
-    // Links — route FrootAI paths to VS Code commands
-    .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" onclick="handleFaiLink(\'play\',\'$2\')" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d440;cursor:pointer">$1 <span style="font-size:9px;background:#06b6d415;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/configurator\)/g, '<a href="#" onclick="handleFaiLink(\'configurator\')" style="color:#f59e0b;text-decoration:none;border-bottom:1px dashed #f59e0b40;cursor:pointer">$1 <span style="font-size:9px;background:#f59e0b15;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/solution-plays\)/g, '<a href="#" onclick="handleFaiLink(\'browse\')" style="color:#10b981;text-decoration:none;border-bottom:1px dashed #10b98140;cursor:pointer">$1 <span style="font-size:9px;background:#10b98115;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/user-guide[^)]*\)/g, '<a href="#" onclick="handleFaiLink(\'browse\')" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1 <span style="font-size:9px;background:#8b5cf615;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/setup-guide\)/g, '<a href="#" onclick="handleFaiLink(\'setup\')" style="color:#f97316;text-decoration:none;border-bottom:1px dashed #f9731640;cursor:pointer">$1 <span style="font-size:9px;background:#f9731615;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/docs\/([^)]+)\)/g, '<a href="#" onclick="handleFaiLink(\'module\',\'$2\')" style="color:#6366f1;text-decoration:none;border-bottom:1px dashed #6366f140;cursor:pointer">$1 <span style="font-size:9px;background:#6366f115;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/marketplace\)/g, '<a href="#" onclick="handleFaiLink(\'marketplace\')" style="color:#ec4899;text-decoration:none;border-bottom:1px dashed #ec489940;cursor:pointer">$1 <span style="font-size:9px;background:#ec489915;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    .replace(/\[([^\]]+)\]\(\/primitives[^)]*\)/g, '<a href="#" onclick="handleFaiLink(\'primitives\')" style="color:#3b82f6;text-decoration:none;border-bottom:1px dashed #3b82f640;cursor:pointer">$1 <span style="font-size:9px;background:#3b82f615;padding:1px 4px;border-radius:3px;margin-left:2px">VS Code</span></a>')
-    // External links (GitHub, etc.)
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="#" onclick="handleFaiLink(\'external\',\'$2\')" style="color:#94a3b8;text-decoration:none;border-bottom:1px dashed #94a3b830;cursor:pointer">$1 <span style="font-size:9px;background:#94a3b810;padding:1px 4px;border-radius:3px;margin-left:2px">↗</span></a>')
-    // Remaining relative links
-    .replace(/\[([^\]]+)\]\(\/([^)]+)\)/g, '<a href="#" onclick="handleFaiLink(\'external\',\'https://frootai.dev/$2\')" style="color:#94a3b8;text-decoration:none;cursor:pointer">$1 ↗</a>')
+    // Links — use data attributes for click handling (CSP blocks inline onclick)
+    .replace(/\[([^\]]+)\]\(\/solution-plays\/(\d{2})-[^)]+\)/g, '<a href="#" data-fai="play" data-arg="$2" style="color:#06b6d4;text-decoration:none;border-bottom:1px dashed #06b6d440;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/configurator\)/g, '<a href="#" data-fai="configurator" style="color:#f59e0b;text-decoration:none;border-bottom:1px dashed #f59e0b40;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/solution-plays\)/g, '<a href="#" data-fai="browse" style="color:#10b981;text-decoration:none;border-bottom:1px dashed #10b98140;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/user-guide[^)]*\)/g, '<a href="#" data-fai="browse" style="color:#8b5cf6;text-decoration:none;border-bottom:1px dashed #8b5cf640;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/setup-guide\)/g, '<a href="#" data-fai="setup" style="color:#f97316;text-decoration:none;border-bottom:1px dashed #f9731640;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/docs\/([^)]+)\)/g, '<a href="#" data-fai="module" data-arg="$2" style="color:#6366f1;text-decoration:none;border-bottom:1px dashed #6366f140;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/marketplace\)/g, '<a href="#" data-fai="marketplace" style="color:#ec4899;text-decoration:none;border-bottom:1px dashed #ec489940;cursor:pointer">$1</a>')
+    .replace(/\[([^\]]+)\]\(\/primitives[^)]*\)/g, '<a href="#" data-fai="primitives" style="color:#3b82f6;text-decoration:none;border-bottom:1px dashed #3b82f640;cursor:pointer">$1</a>')
+    // External links
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="#" data-fai="external" data-arg="$2" style="color:#94a3b8;text-decoration:none;border-bottom:1px dashed #94a3b830;cursor:pointer">$1 ↗</a>')
+    // Remaining relative links → external via frootai.dev
+    .replace(/\[([^\]]+)\]\(\/([^)]+)\)/g, '<a href="#" data-fai="external" data-arg="https://frootai.dev/$2" style="color:#94a3b8;text-decoration:none;cursor:pointer">$1 ↗</a>')
     .replace(/\n\n/g, '</p><p style="margin:6px 0;line-height:1.6">')
     .replace(/\n/g, '<br>');
 
@@ -79,21 +79,29 @@ export default function AgentFai() {
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
-  // Register global link handler for markdown links
-  useEffect(() => {
-    (window as any).handleFaiLink = (type: string, arg?: string) => {
-      switch (type) {
-        case "play": vscode.postMessage({ command: "openPlay", playId: arg }); break;
-        case "configurator": vscode.postMessage({ command: "openConfigurator" }); break;
-        case "browse": vscode.postMessage({ command: "browsePlays" }); break;
-        case "setup": vscode.postMessage({ command: "openSetup" }); break;
-        case "primitives": vscode.postMessage({ command: "openPrimitives" }); break;
-        case "marketplace": vscode.postMessage({ command: "openMarketplace" }); break;
-        case "module": vscode.postMessage({ command: "openModule", moduleId: arg }); break;
-        case "external": vscode.postMessage({ command: "openUrl", url: arg }); break;
-      }
-    };
+  // Click handler for data-fai links (event delegation — CSP safe)
+  const handleClick = useCallback((e: MouseEvent) => {
+    const link = (e.target as HTMLElement).closest("a[data-fai]") as HTMLElement | null;
+    if (!link) return;
+    e.preventDefault();
+    const type = link.getAttribute("data-fai") || "";
+    const arg = link.getAttribute("data-arg") || "";
+    switch (type) {
+      case "play": vscode.postMessage({ command: "openPlay", playId: arg }); break;
+      case "configurator": vscode.postMessage({ command: "openConfigurator" }); break;
+      case "browse": vscode.postMessage({ command: "browsePlays" }); break;
+      case "setup": vscode.postMessage({ command: "openSetup" }); break;
+      case "primitives": vscode.postMessage({ command: "openPrimitives" }); break;
+      case "marketplace": vscode.postMessage({ command: "openMarketplace" }); break;
+      case "module": vscode.postMessage({ command: "openModule", moduleId: arg }); break;
+      case "external": vscode.postMessage({ command: "openUrl", url: arg }); break;
+    }
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [handleClick]);
 
   const send = async (text: string) => {
     if (!text.trim() || loading) return;
