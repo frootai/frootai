@@ -285,8 +285,8 @@ export default function AgentFai() {
               {m.role === "user"
                 ? <span style={{ color: "#e2e8f0" }}>{m.text}</span>
                 : m.text
-                  ? <div dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }} />
-                  : (loading && i === messages.length - 1 ? <span style={{ color: "#10b981", fontSize: 12 }}>⏳ Agent FAI is thinking...</span> : "")
+                  ? <><div dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }} />{loading && i === messages.length - 1 && <span style={{ display: "inline-block", width: 2, height: 14, background: "#10b981", marginLeft: 2, animation: "fai-blink 0.8s step-end infinite", verticalAlign: "text-bottom" }} />}</>
+                  : (loading && i === messages.length - 1 ? <TypingIndicator /> : "")
               }
             </div>
           </div>
@@ -310,6 +310,34 @@ export default function AgentFai() {
           Send
         </button>
       </div>
+    </div>
+  );
+}
+
+// Animated typing indicator — three bouncing dots + blinking cursor
+function TypingIndicator() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        {[0, 1, 2].map(i => (
+          <span key={i} style={{
+            width: 6, height: 6, borderRadius: "50%", background: "#10b981",
+            display: "inline-block",
+            animation: `fai-bounce 1.4s ease-in-out ${i * 0.16}s infinite`,
+          }} />
+        ))}
+      </div>
+      <span style={{ fontSize: 12, color: "#10b981", opacity: 0.7 }}>Agent FAI is thinking</span>
+      <style>{`
+        @keyframes fai-bounce {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          40% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes fai-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
