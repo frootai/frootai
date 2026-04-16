@@ -279,7 +279,7 @@
       },
       {
         "command": "frootai.openPrimitivesCatalog",
-        "title": "FrootAI: Open Primitives Catalog",
+        "title": "FrootAI: Browse Primitives Catalog",
         "icon": "$(extensions)"
       },
       {

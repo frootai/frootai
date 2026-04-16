@@ -135,9 +135,31 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
 
   const getGithubUrl = (item: PrimitiveItem) => GITHUB_BASE + (item.file || item.folder || `${meta.githubPath}/${item.id}`);
   const getInstallUri = (item: PrimitiveItem) => {
-    if (activeTab !== "agents") return null;
-    const rawUrl = `${GITHUB_RAW}${item.file || `agents/${item.id}.agent.md`}`;
-    return `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
+    // Agents + instructions can install via VS Code protocol
+    if (activeTab === "agents") {
+      const rawUrl = `${GITHUB_RAW}${item.file || `agents/${item.id}.agent.md`}`;
+      return `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
+    }
+    if (activeTab === "instructions") {
+      const rawUrl = `${GITHUB_RAW}${item.file || `instructions/${item.id}.instructions.md`}`;
+      return `vscode://github.copilot-chat/createAgent?url=${encodeURIComponent(rawUrl)}`;
+    }
+    return null;
+  };
+  const handleInstall = (item: PrimitiveItem) => {
+    const uri = getInstallUri(item);
+    if (uri) {
+      vscode.postMessage({ command: "openUrl", url: uri });
+    } else {
+      // For skills, hooks, plugins — install via CLI in terminal
+      const typeMap: Record<string, string> = { skills: "skill", hooks: "hook", plugins: "plugin" };
+      const cliType = typeMap[activeTab] || activeTab;
+      vscode.postMessage({ command: "installPrimitive", primitiveType: cliType, primitiveId: item.id });
+    }
+  };
+  const getInstallLabel = () => {
+    if (activeTab === "agents" || activeTab === "instructions") return "Install";
+    return "Install via CLI";
   };
 
   // ─── Detail View ───
@@ -145,7 +167,7 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
     return (
       <div className="container">
         <button className="btn btn-sm" onClick={() => setSelectedItem(null)} style={{ marginBottom: 12 }}>← Back to {meta.label}</button>
-        <DetailView item={selectedItem} category={activeTab} meta={meta} onGithub={() => vscode.postMessage({ command: "openUrl", url: getGithubUrl(selectedItem) })} onInstall={() => { const uri = getInstallUri(selectedItem); if (uri) vscode.postMessage({ command: "openUrl", url: uri }); }} />
+        <DetailView item={selectedItem} category={activeTab} meta={meta} onGithub={() => vscode.postMessage({ command: "openUrl", url: getGithubUrl(selectedItem) })} onInstall={() => handleInstall(selectedItem)} installLabel={getInstallLabel()} />
       </div>
     );
   }
@@ -255,7 +277,7 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
       {/* Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
         {paged.map((item) => (
-          <PrimitiveCard key={item.id} item={item} category={activeTab} meta={meta} onClick={() => setSelectedItem(item)} onGithub={() => vscode.postMessage({ command: "openUrl", url: getGithubUrl(item) })} onInstall={() => { const uri = getInstallUri(item); if (uri) vscode.postMessage({ command: "openUrl", url: uri }); }} />
+          <PrimitiveCard key={item.id} item={item} category={activeTab} meta={meta} onClick={() => setSelectedItem(item)} onGithub={() => vscode.postMessage({ command: "openUrl", url: getGithubUrl(item) })} onInstall={() => handleInstall(item)} installLabel={getInstallLabel()} />
         ))}
       </div>
 
@@ -279,10 +301,10 @@ export default function PrimitivesCatalog({ primitives }: { primitives: Record<C
 }
 
 // ─── PrimitiveCard ───
-function PrimitiveCard({ item, category, meta, onClick, onGithub, onInstall }: {
+function PrimitiveCard({ item, category, meta, onClick, onGithub, onInstall, installLabel }: {
   item: PrimitiveItem; category: CategoryId; meta: CategoryMeta;
-  onClick: () => void; onGithub: () => void; onInstall: () => void;
-}) {
+  onClick: () => void; onGithub: () => void; onInstall: () => void; installLabel: string;
+}){
   const displayName = item.name || item.id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   const sizeKb = item.size ? `${(item.size / 1024).toFixed(1)}KB` : null;
 
@@ -344,21 +366,19 @@ function PrimitiveCard({ item, category, meta, onClick, onGithub, onInstall }: {
         <button className="btn btn-sm btn-ghost" onClick={onGithub} title="View on GitHub" style={{ fontSize: 10, padding: "2px 6px" }}>
           <ExternalLink size={10} style={{ verticalAlign: -1, marginRight: 2 }} /> GitHub
         </button>
-        {category === "agents" && (
-          <button className="btn btn-sm" onClick={onInstall} title="Install in VS Code" style={{ fontSize: 10, padding: "2px 6px", background: `${meta.color}25`, color: meta.color, borderColor: meta.color }}>
-            <Zap size={10} style={{ verticalAlign: -1, marginRight: 2 }} /> Install
-          </button>
-        )}
+        <button className="btn btn-sm" onClick={onInstall} title={installLabel} style={{ fontSize: 10, padding: "2px 6px", background: `${meta.color}25`, color: meta.color, borderColor: meta.color }}>
+          <Zap size={10} style={{ verticalAlign: -1, marginRight: 2 }} /> {installLabel}
+        </button>
       </div>
     </div>
   );
 }
 
 // ─── DetailView ───
-function DetailView({ item, category, meta, onGithub, onInstall }: {
+function DetailView({ item, category, meta, onGithub, onInstall, installLabel }: {
   item: PrimitiveItem; category: CategoryId; meta: CategoryMeta;
-  onGithub: () => void; onInstall: () => void;
-}) {
+  onGithub: () => void; onInstall: () => void; installLabel: string;
+}){
   const displayName = item.name || item.id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   const sizeKb = item.size ? `${(item.size / 1024).toFixed(1)}KB` : null;
 
@@ -431,14 +451,12 @@ function DetailView({ item, category, meta, onGithub, onInstall }: {
 
       {/* Action Buttons */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <button className="btn" onClick={onInstall} style={{ background: "#10b98120", color: "#10b981", borderColor: "#10b981" }}>
+          <Zap size={12} style={{ verticalAlign: -2, marginRight: 4 }} /> {installLabel}
+        </button>
         <button className="btn" onClick={onGithub} style={{ background: `${meta.color}20`, color: meta.color, borderColor: meta.color }}>
           <ExternalLink size={12} style={{ verticalAlign: -2, marginRight: 4 }} /> View on GitHub
         </button>
-        {category === "agents" && (
-          <button className="btn" onClick={onInstall} style={{ background: "#10b98120", color: "#10b981", borderColor: "#10b981" }}>
-            <Zap size={12} style={{ verticalAlign: -2, marginRight: 4 }} /> Install in VS Code
-          </button>
-        )}
         <button className="btn btn-ghost" onClick={() => vscode.postMessage({ command: "openUrl", url: `https://frootai.dev/primitives/${category}#${item.id}` })}>
           <Globe size={12} style={{ verticalAlign: -2, marginRight: 4 }} /> View on Website
         </button>

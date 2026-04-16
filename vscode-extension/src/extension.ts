@@ -581,6 +581,11 @@ ${bodyHtml}
       if (msg.command === "openUrl" && msg.url) {
         vscode.env.openExternal(vscode.Uri.parse(msg.url));
       }
+      if (msg.command === "installPrimitive" && msg.primitiveType && msg.primitiveId) {
+        const term = vscode.window.createTerminal("FAI Install");
+        term.sendText(`npx frootai install ${msg.primitiveType} ${msg.primitiveId}`);
+        term.show();
+      }
     });
   });
 
@@ -639,16 +644,9 @@ ${bodyHtml}
     });
   });
 
-  // ─── Marketplace Panel ───
+  // ─── Marketplace → redirect to Primitives Catalog ───
   safeRegister("frootai.openMarketplace", () => {
-    const dataDir = path.join(context.extensionPath, "data");
-    let plugins: any[] = [];
-    try { plugins = JSON.parse(fs.readFileSync(path.join(dataDir, "plugins.json"), "utf-8")); } catch {}
-    const panel = createReactPanel(context.extensionUri, "frootai.marketplace", `FAI Marketplace (${plugins.length} plugins)`, { panel: "marketplace" as any, plugins });
-    panel.webview.onDidReceiveMessage((msg: any) => {
-      if (msg.command === "openUrl" && msg.url) vscode.env.openExternal(vscode.Uri.parse(msg.url));
-      if (msg.command === "installPlugin" && msg.pluginId) vscode.commands.executeCommand("frootai.installPlugin");
-    });
+    vscode.commands.executeCommand("frootai.openPrimitivesCatalog");
   });
 
   // ─── FAI Protocol & Architecture Panel (D1-D3) ───
