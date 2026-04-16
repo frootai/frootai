@@ -1,7 +1,8 @@
 import Badge from "../components/Badge";
 import WafPills from "../components/WafPills";
 import { vscode } from "../vscode";
-import { FileText, LayoutList, Shield, Zap, BookOpen, Puzzle, Layers, Link2, Package, Wrench, BarChart3, ChevronRight, ExternalLink } from "lucide-react";
+import type { SolutionPlay } from "../types";
+import { FileText, LayoutList, Shield, Zap, BookOpen, Puzzle, Layers, Link2, Package, Wrench, BarChart3, ChevronRight, ChevronLeft, ExternalLink, DollarSign, Cpu, Settings } from "lucide-react";
 
 const LAYER_NAMES: Record<string, string> = { F: "Foundations", R: "Reasoning", O: "Orchestration", T: "Transformation" };
 const CX_COLORS: Record<string, string> = { Foundation: "#0ea5e9", Low: "#10b981", Medium: "#f59e0b", High: "#ef4444", "Very High": "#7c3aed" };
@@ -114,23 +115,27 @@ const PLAY_GUIDES: Record<string, string> = {
   "101": "Scaffold a standardized solution play using the golden template with DevKit, TuneKit, SpecKit, and Infra kits. Provides canonical file structure, agent triads, and FAI Protocol wiring powered by PowerShell Pester and GitHub Actions. Real-world: New play bootstrapping, team onboarding templates, standardized AI project initialization.",
 };
 
-interface Play {
-  id: string; name: string; codicon?: string; icon?: string; dir: string;
-  layer: string; status?: string; desc?: string; cx?: string; infra?: string;
-}
-interface Props { play?: Play; }
+interface Props { play?: SolutionPlay; }
 
 export default function PlayDetail({ play }: Props) {
-  const p = play ?? { id: "01", name: "Enterprise RAG Q&A", dir: "01-enterprise-rag", layer: "R", desc: "Production RAG pipeline", cx: "Medium", infra: "AI Search · Azure OpenAI" };
+  const p: SolutionPlay = play ?? { id: "01", name: "Enterprise RAG Q&A", dir: "01-enterprise-rag", layer: "R", desc: "Production RAG pipeline", cx: "Medium", infra: "AI Search · Azure OpenAI" };
   const layerName = LAYER_NAMES[p.layer] ?? p.layer;
   const cx = p.cx ?? "Medium";
   const cxColor = CX_COLORS[cx] ?? "#6b7280";
   const logoUri = (window as any).panelData?.logoUri;
   const cmd = (command: string) => vscode.postMessage({ command, playId: p.id, playDir: p.dir });
   const openUrl = (url: string) => vscode.postMessage({ command: "openUrl", url });
+  const goBack = () => vscode.postMessage({ command: "navigate", panel: "playBrowser" });
 
   return (
     <div className="container">
+      {/* Back to All Plays */}
+      <div style={{ marginBottom: 8 }}>
+        <button onClick={goBack} style={{ background: "none", border: "none", color: "var(--vscode-textLink-foreground, #3794ff)", cursor: "pointer", fontSize: 12, fontFamily: "inherit", padding: "4px 0", display: "flex", alignItems: "center", gap: 4 }}>
+          <ChevronLeft size={14} /> All Solution Plays
+        </button>
+      </div>
+
       {/* FrootAI branding */}
       <div style={{ textAlign: "center", padding: "16px 16px 8px" }}>
         {logoUri && <img src={logoUri} alt="FrootAI" style={{ width: 48, height: 48, marginBottom: 8 }} />}
@@ -184,22 +189,86 @@ export default function PlayDetail({ play }: Props) {
         <WafPills />
       </div>
 
-      {/* What's Inside — AFTER FAI Pillars */}
-      <div className="section">
-        <div className="section-title"><Icon><Puzzle size={16} /></Icon> What's Inside Play {p.id}</div>
-        <div className="card" style={{ padding: 16 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 12px", fontSize: 12, lineHeight: 1.6 }}>
-            <code>agents/</code><span style={{ opacity: 0.8 }}>AI personas — @builder builds, @reviewer audits, @tuner optimizes</span>
-            <code>instructions/</code><span style={{ opacity: 0.8 }}>Coding standards auto-applied to matching files via glob patterns</span>
-            <code>skills/</code><span style={{ opacity: 0.8 }}>Reusable LEGO blocks for specific tasks (deploy, evaluate, scaffold)</span>
-            <code>hooks/</code><span style={{ opacity: 0.8 }}>Policy gates — secrets scanning, PII redaction, cost limits, safety</span>
-            <code>prompts/</code><span style={{ opacity: 0.8 }}>Slash commands — /deploy, /test, /review, /evaluate</span>
-            <code>workflows/</code><span style={{ opacity: 0.8 }}>CI/CD GitHub Actions for automated testing and deployment</span>
-            <code>copilot-instructions.md</code><span style={{ opacity: 0.8 }}>The knowledge hub — Copilot reads this for domain context</span>
-            <code>fai-manifest.json</code><span style={{ opacity: 0.8 }}>The wiring spec — connects all primitives with shared context</span>
+      {/* Architecture Pattern */}
+      {p.pattern && (
+        <div className="section">
+          <div className="section-title"><Icon><Cpu size={16} /></Icon> Architecture Pattern</div>
+          <div className="card" style={{ padding: 14, borderLeft: "3px solid #6366f1" }}>
+            <p style={{ fontSize: 13, lineHeight: 1.7, margin: 0 }}>{p.pattern}</p>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* DevKit */}
+      {p.devkit && p.devkit.length > 0 ? (
+        <div className="section">
+          <div className="section-title"><Icon><Package size={16} /></Icon> DevKit — What Gets Scaffolded</div>
+          <div className="card" style={{ padding: 14 }}>
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, lineHeight: 2 }}>
+              {p.devkit.map((item, i) => <li key={i}>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div className="section">
+          <div className="section-title"><Icon><Puzzle size={16} /></Icon> What's Inside Play {p.id}</div>
+          <div className="card" style={{ padding: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 12px", fontSize: 12, lineHeight: 1.6 }}>
+              <code>agents/</code><span style={{ opacity: 0.8 }}>AI personas — @builder builds, @reviewer audits, @tuner optimizes</span>
+              <code>instructions/</code><span style={{ opacity: 0.8 }}>Coding standards auto-applied to matching files via glob patterns</span>
+              <code>skills/</code><span style={{ opacity: 0.8 }}>Reusable LEGO blocks for specific tasks (deploy, evaluate, scaffold)</span>
+              <code>hooks/</code><span style={{ opacity: 0.8 }}>Policy gates — secrets scanning, PII redaction, cost limits, safety</span>
+              <code>prompts/</code><span style={{ opacity: 0.8 }}>Slash commands — /deploy, /test, /review, /evaluate</span>
+              <code>workflows/</code><span style={{ opacity: 0.8 }}>CI/CD GitHub Actions for automated testing and deployment</span>
+              <code>copilot-instructions.md</code><span style={{ opacity: 0.8 }}>The knowledge hub — Copilot reads this for domain context</span>
+              <code>fai-manifest.json</code><span style={{ opacity: 0.8 }}>The wiring spec — connects all primitives with shared context</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TuneKit */}
+      {p.tunekit && p.tunekit.length > 0 && (
+        <div className="section">
+          <div className="section-title"><Icon><Settings size={16} /></Icon> TuneKit — Configuration</div>
+          <div className="card" style={{ padding: 14 }}>
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, lineHeight: 2 }}>
+              {p.tunekit.map((item, i) => <li key={i}>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Tuning Parameters */}
+      {p.tuningParams && p.tuningParams.length > 0 && (
+        <div className="section">
+          <div className="section-title"><Icon><Wrench size={16} /></Icon> Tuning Parameters</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {p.tuningParams.map((param, i) => (
+              <span key={i} style={{ padding: "4px 10px", borderRadius: 12, fontSize: 11, fontWeight: 500, background: "var(--vscode-badge-background, #333)", color: "var(--vscode-badge-foreground, #ccc)" }}>
+                {param}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Estimated Cost */}
+      {p.costDev && (
+        <div className="section">
+          <div className="section-title"><Icon><DollarSign size={16} /></Icon> Estimated Monthly Cost</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div className="card" style={{ padding: 14, textAlign: "center" }}>
+              <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 0.5, opacity: 0.5, fontWeight: 600, marginBottom: 6 }}>Dev / Test</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#10b981" }}>{p.costDev}</div>
+            </div>
+            <div className="card" style={{ padding: 14, textAlign: "center" }}>
+              <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 0.5, opacity: 0.5, fontWeight: 600, marginBottom: 6 }}>Production</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#f59e0b" }}>{p.costProd}</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Start Guide */}
       <div className="section">

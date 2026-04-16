@@ -350,6 +350,51 @@ ${bodyHtml}
   safeRegister("frootai.openMcpExplorer", () => {
     createReactPanel(context.extensionUri, "frootai.mcpExplorer", "MCP Tool Explorer", { panel: "mcpExplorer" });
   });
+
+  // ─── Play Browser: browse all plays with search, categories, pagination ───
+  safeRegister("frootai.browsePlays", () => {
+    const panel = createReactPanel(context.extensionUri, "frootai.playBrowser", "Solution Plays", { panel: "playBrowser", plays: SOLUTION_PLAYS });
+    setupNavigationHandler(panel, context);
+  });
+
+  // ─── Solution Configurator: 3-question wizard ───
+  safeRegister("frootai.openConfigurator", () => {
+    const panel = createReactPanel(context.extensionUri, "frootai.configurator", "Solution Configurator", { panel: "configurator", plays: SOLUTION_PLAYS });
+    setupNavigationHandler(panel, context);
+  });
+}
+
+/** Shared message handler for panels that support navigation between views */
+function setupNavigationHandler(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
+  panel.webview.onDidReceiveMessage(async (msg: any) => {
+    switch (msg.command) {
+      case "navigate":
+        if (msg.panel === "playDetail" && msg.play) {
+          // Update the panel to show play detail
+          panel.title = `Play ${msg.play.id} — ${msg.play.name}`;
+          panel.webview.postMessage({ type: "update", data: { panel: "playDetail", play: msg.play } });
+        } else if (msg.panel === "playBrowser") {
+          panel.title = "Solution Plays";
+          panel.webview.postMessage({ type: "update", data: { panel: "playBrowser", plays: SOLUTION_PLAYS } });
+        } else if (msg.panel === "configurator") {
+          panel.title = "Solution Configurator";
+          panel.webview.postMessage({ type: "update", data: { panel: "configurator", plays: SOLUTION_PLAYS } });
+        }
+        break;
+      case "initDevKit":
+        vscode.commands.executeCommand("frootai.initDevKit", msg.playId ? SOLUTION_PLAYS.find(p => p.id === msg.playId) : undefined);
+        break;
+      case "initTuneKit":
+        vscode.commands.executeCommand("frootai.initTuneKit", msg.playId ? SOLUTION_PLAYS.find(p => p.id === msg.playId) : undefined);
+        break;
+      case "initSpecKit":
+        vscode.commands.executeCommand("frootai.initSpecKit", msg.playId ? SOLUTION_PLAYS.find(p => p.id === msg.playId) : undefined);
+        break;
+      case "openUrl":
+        if (msg.url) vscode.env.openExternal(vscode.Uri.parse(msg.url));
+        break;
+    }
+  });
 }
 
 export function deactivate(): void {

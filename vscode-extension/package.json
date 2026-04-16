@@ -217,14 +217,34 @@
       {
         "command": "frootai.openMcpExplorer",
         "title": "FrootAI: Explore MCP Tools"
+      },
+      {
+        "command": "frootai.browsePlays",
+        "title": "FrootAI: Browse Solution Plays",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "frootai.openConfigurator",
+        "title": "FrootAI: Solution Configurator",
+        "icon": "$(settings-gear)"
       }
     ],
     "menus": {
       "view/title": [
         {
+          "command": "frootai.browsePlays",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation@1"
+        },
+        {
+          "command": "frootai.openConfigurator",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation@2"
+        },
+        {
           "command": "frootai.browseSolutionPlays",
           "when": "view == frootai.solutionPlays",
-          "group": "navigation"
+          "group": "navigation@3"
         },
         {
           "command": "frootai.installMcpServer",

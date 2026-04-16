@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import type { PanelData } from "./types";
 import PlayDetail from "./panels/PlayDetail";
+import PlayBrowser from "./panels/PlayBrowser";
+import Configurator from "./panels/Configurator";
 import Evaluation from "./panels/Evaluation";
 import ScaffoldWizard from "./panels/ScaffoldWizard";
 import McpExplorer from "./panels/McpExplorer";
@@ -30,6 +32,10 @@ export default function App() {
   switch (data.panel) {
     case "playDetail":
       return <PlayDetail play={data.play} />;
+    case "playBrowser":
+      return <PlayBrowser plays={data.plays ?? []} />;
+    case "configurator":
+      return <Configurator plays={data.plays ?? []} />;
     case "evaluation":
       return <Evaluation scores={data.scores} />;
     case "scaffold":
