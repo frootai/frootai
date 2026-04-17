@@ -11,7 +11,7 @@ const FEATURES = [
   { Icon: Wrench, title: "45 MCP Tools", desc: "Architecture tools for AI agents and Copilot", action: "mcpExplorer", color: "#7c3aed" },
   { Icon: BarChart3, title: "Evaluation & Cost", desc: "Quality scoring, Azure cost estimates", action: "evaluation", color: "#ec4899" },
   { Icon: Zap, title: "One-Click Scaffold", desc: "DevKit, TuneKit, SpecKit — agents, config, IaC", action: "scaffold", color: "#f97316" },
-  { Icon: Package, title: "Plugin Marketplace", desc: "77 composable plugin packages", action: "openMarketplace", color: "#6366f1" },
+  { Icon: Package, title: "FAI Ecosystem", desc: "Factory · Packages · Toolkit · Engine · Protocol · Layer", action: "openProtocol", color: "#6366f1" },
 ];
 
 const QUICK_LINKS = [
