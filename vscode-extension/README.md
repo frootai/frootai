@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media/frootai-mark.png" width="48" alt="FrootAI">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/frootai-mark.png" width="48" alt="FrootAI">
 </p>
 
 <h1 align="center">FrootAI — VS Code Extension</h1>
@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <strong>101 Solution Plays</strong> · <strong>830+ Primitives</strong> · <strong>45 MCP Tools</strong> · <strong>16 Knowledge Modules</strong> · <strong>200+ Glossary Terms</strong>
+  <strong>101 Solution Plays</strong> · <strong>830+ Primitives</strong> · <strong>25 MCP Tools</strong> · <strong>16 Knowledge Modules</strong> · <strong>200+ Glossary Terms</strong>
 </p>
 
 ---
@@ -43,13 +43,13 @@ The extension adds a **FrootAI** icon to your activity bar with **7 sidebar sect
 ## 🏠 Welcome & Agent FAI
 
 <p align="center">
-  <img src="media/welcome_FAI.png" width="680" alt="Welcome panel">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/welcome_FAI.png" width="680" alt="Welcome panel">
 </p>
 
 The **Welcome** panel is your starting point — quick-start actions, feature overview, and ecosystem links all in one place. Open it anytime with `Ctrl+Shift+F11`.
 
 <p align="center">
-  <img src="media/agent_FAI.png" width="680" alt="Agent FAI chat">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/agent_FAI.png" width="680" alt="Agent FAI chat">
 </p>
 
 **Agent FAI** is your AI-powered assistant that knows the entire FrootAI ecosystem. Ask about solution plays, architecture patterns, Azure best practices, primitives — anything. Responses stream in real-time with full context awareness.
@@ -59,13 +59,13 @@ The **Welcome** panel is your starting point — quick-start actions, feature ov
 ## 🎯 Solution Plays
 
 <p align="center">
-  <img src="media/configurator_FAI.png" width="680" alt="Solution Configurator">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/configurator_FAI.png" width="680" alt="Solution Configurator">
 </p>
 
 The **Solution Configurator** walks you through 5 questions to recommend the best play for your scenario — industry, complexity, team size, and more.
 
 <p align="center">
-  <img src="media/solutionplay_FAI.png" width="680" alt="Solution Play browser">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/solutionplay_FAI.png" width="680" alt="Solution Play browser">
 </p>
 
 **Browse All Plays** gives you a searchable, filterable catalog of all 101 solution plays. Click any play for a rich detail panel with WAF checklist, Azure services grid, tuning parameters, and cost breakdown.
@@ -88,7 +88,7 @@ solution-play/
 ## 🧩 Primitives Catalog
 
 <p align="center">
-  <img src="media/catalog_FAI.png" width="680" alt="Primitives Catalog">
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/catalog_FAI.png" width="680" alt="Primitives Catalog">
 </p>
 
 Browse **830+ reusable AI primitives** across 5 tabs with search, WAF pillar filters, and domain filters:
@@ -138,7 +138,7 @@ Set up the FAI ecosystem in your preferred format:
 | **VS Code** | This extension | `code --install-extension frootai.frootai-vscode` |
 | **Website** | frootai.dev | [frootai.dev](https://frootai.dev) |
 
-All channels ship the same 101 plays, 830+ primitives, and 45 MCP tools.
+All channels ship the same 101 plays, 830+ primitives, and 25 MCP tools.
 
 ---
 
@@ -220,16 +220,16 @@ That's it — you're ready to build AI solutions with FrootAI.
 
 ## 🔬 FAI Ecosystem Architecture
 
-```mermaid
-graph LR
-    A["🏭 FAI Factory<br><sub>CI/CD · Validation · Publishing</sub>"]
-    B["📦 FAI Packages<br><sub>npm · PyPI · Docker · VS Code</sub>"]
-    C["🧰 FAI Toolkit<br><sub>DevKit · TuneKit · SpecKit</sub>"]
-    D["⚙️ FAI Engine<br><sub>Runtime · Wiring · Resolution</sub>"]
-    E["📋 FAI Protocol<br><sub>fai-manifest.json · fai-context.json</sub>"]
-    F["🧬 FAI Layer<br><sub>The Open Glue — Context Wiring</sub>"]
-    A --> B --> C --> D --> E --> F
-```
+| Layer | Component | Role |
+|:-----:|-----------|------|
+| 🏭 | **FAI Factory** | CI/CD · Validation · Publishing |
+| 📦 | **FAI Packages** | npm · PyPI · Docker · VS Code |
+| 🧰 | **FAI Toolkit** | DevKit · TuneKit · SpecKit |
+| ⚙️ | **FAI Engine** | Runtime · Wiring · Resolution |
+| 📋 | **FAI Protocol** | fai-manifest.json · fai-context.json |
+| 🧬 | **FAI Layer** | The Open Glue — Context Wiring |
+
+> **Flow:** Factory → Packages → Toolkit → Engine → Protocol → Layer
 
 ---
 
@@ -249,7 +249,7 @@ graph LR
 ---
 
 <p align="center">
-  <img src="media/frootai-mark.png" width="32" alt="FrootAI"><br>
+  <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/frootai-mark.png" width="32" alt="FrootAI"><br>
   <strong>From the Roots to the Fruits.</strong><br>
   <em>It's connected, it's simply Frootful.</em><br><br>
   <sub>MIT License · © 2026 FrootAI</sub>

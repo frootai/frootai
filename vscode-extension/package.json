@@ -1,8 +1,8 @@
 {
   "name": "frootai-vscode",
-  "displayName": "FrootAI — AI Architecture Knowledge Engine",
-  "description": "104 solution plays · 830+ primitives · FAI Packages · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
-  "version": "5.1.1",
+  "displayName": "FrootAI — From the Roots to the Fruits",
+  "description": "101 solution plays · 830+ primitives · FAI Packages · FAI Engine. The open glue for GenAI on Azure. Scaffold DevKit, TuneKit, SpecKit in one click.",
+  "version": "5.1.2",
   "publisher": "frootai",
   "engines": {
     "vscode": "^1.95.0"
@@ -31,7 +31,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/frootai/frootai"
+    "url": "https://github.com/frootai/frootai",
+    "directory": "vscode-extension"
   },
   "homepage": "https://frootai.dev",
   "bugs": {
