@@ -22,43 +22,6 @@
 
 ---
 
-## 🖼️ Screenshots
-
-<p align="center">
-  <img src="media/welcome_FAI.png" width="720" alt="Welcome — Get Started panel"><br>
-  <em>Welcome — Your FrootAI hub with quick-start actions and ecosystem links</em>
-</p>
-
-<br>
-
-<p align="center">
-  <img src="media/agent_FAI.png" width="720" alt="Agent FAI streaming chat"><br>
-  <em>Agent FAI — Streaming AI assistant with full ecosystem knowledge</em>
-</p>
-
-<br>
-
-<p align="center">
-  <img src="media/configurator_FAI.png" width="720" alt="Solution Configurator wizard"><br>
-  <em>Solution Configurator — 5-question wizard to find the right play for your scenario</em>
-</p>
-
-<br>
-
-<p align="center">
-  <img src="media/solutionplay_FAI.png" width="720" alt="Solution Play browser and detail view"><br>
-  <em>Solution Play Browser — Browse, search, and explore 101 deployable AI architectures</em>
-</p>
-
-<br>
-
-<p align="center">
-  <img src="media/catalog_FAI.png" width="720" alt="FAI Primitives Catalog"><br>
-  <em>Primitives Catalog — 830+ agents, instructions, skills, hooks, and plugins</em>
-</p>
-
----
-
 ## 📦 What's Inside
 
 The extension adds a **FrootAI** icon to your activity bar with **7 sidebar sections**:
@@ -270,19 +233,6 @@ graph LR
 
 ---
 
-## 🔌 Distribution Channels
-
-| Channel | Package | Version |
-|---------|---------|---------|
-| **VS Code** | `frootai.frootai-vscode` | v9.3.0 |
-| **npm** | `frootai-mcp` | v3.5.0 |
-| **PyPI** | `frootai-mcp` | v3.5.0 |
-| **Docker** | `ghcr.io/frootai/frootai-mcp` | v3.5.0 |
-| **CLI** | `npx frootai` | v5.4.0 |
-| **Website** | [frootai.dev](https://frootai.dev) | — |
-
----
-
 ## 🔗 Links
 
 | | |
@@ -303,94 +253,4 @@ graph LR
   <strong>From the Roots to the Fruits.</strong><br>
   <em>It's connected, it's simply Frootful.</em><br><br>
   <sub>MIT License · © 2026 FrootAI</sub>
-</p>
-
-    A --> B --> C --> D --> E --> F
-```
-
-The FAI ecosystem is a **6-layer stack**: Factory builds and validates → Packages distribute across channels → Toolkit equips developers (DevKit + TuneKit + SpecKit) → Engine wires primitives at runtime → Protocol defines the manifest schema → Layer is the conceptual glue that connects everything.
-
----
-
-## 🗂️ Solution Plays at a Glance
-
-<details>
-<summary><strong>First 23 Plays</strong> — click to expand (101 total)</summary>
-<br>
-
-| # | Play | What It Deploys |
-|:-:|------|----------------|
-| 01 | Enterprise RAG Q&A | AI Search + OpenAI + Container App |
-| 02 | AI Landing Zone | VNet + Private Endpoints + RBAC + GPU |
-| 03 | Deterministic Agent | Reliable agent with guardrails + eval |
-| 04 | Call Center Voice AI | Real-time speech + sentiment |
-| 05 | IT Ticket Resolution | Auto-triage + KB resolution |
-| 06 | Document Intelligence | PDF/image extraction pipeline |
-| 07 | Multi-Agent Service | Orchestrated agent collaboration |
-| 08 | Copilot Studio Bot | Low-code conversational AI |
-| 09 | AI Search Portal | Enterprise search with facets |
-| 10 | Content Moderation | Safety filters + classification |
-| 11 | Landing Zone Advanced | Multi-region + DR + compliance |
-| 12 | Model Serving AKS | GPU clusters + model endpoints |
-| 13 | Fine-Tuning Workflow | Data prep → train → eval → deploy |
-| 14 | Cost-Optimized Gateway | Smart routing + token budgets |
-| 15 | Multi-Modal DocProc | Images + tables + handwriting |
-| 16 | Copilot Teams Extension | Teams bot with AI backend |
-| 17 | AI Observability | Tracing + metrics + alerting |
-| 18 | Prompt Management | Versioning + A/B testing |
-| 19 | Edge AI Phi-4 | On-device inference, no cloud |
-| 20 | Anomaly Detection | Time-series + pattern recognition |
-| 21 | Agentic RAG | Autonomous retrieval + self-evaluation |
-| 22 | Multi-Agent Swarm | Supervisor, pipeline, debate patterns |
-| 23 | Browser Automation | Vision + Playwright web navigation |
-
-Browse all 101 plays in the extension sidebar or at [frootai.dev/solution-plays](https://frootai.dev/solution-plays).
-
-</details>
-
----
-
-## 🌐 Distribution Channels
-
-| Channel | Package | Version | Link |
-|---------|---------|:-------:|------|
-| **VS Code** | `frootai.frootai-vscode` | 9.3.0 | [Marketplace](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode) |
-| **npm** | `frootai-mcp` | 3.5.0 | [npmjs.com](https://www.npmjs.com/package/frootai-mcp) |
-| **PyPI** | `frootai-mcp` | 3.5.0 | [pypi.org](https://pypi.org/project/frootai-mcp/) |
-| **Docker** | `ghcr.io/frootai/frootai-mcp` | 3.5.0 | [GitHub Packages](https://github.com/frootai/frootai/pkgs/container/frootai-mcp) |
-| **CLI** | `frootai` | latest | `npx frootai` |
-| **Website** | frootai.dev | — | [frootai.dev](https://frootai.dev) |
-
----
-
-## 🔗 Links
-
-| Resource | URL |
-|----------|-----|
-| **Website** | [frootai.dev](https://frootai.dev) |
-| **GitHub** | [github.com/frootai/frootai](https://github.com/frootai/frootai) |
-| **Solution Plays** | [frootai.dev/solution-plays](https://frootai.dev/solution-plays) |
-| **Primitives** | [frootai.dev/primitives](https://frootai.dev/primitives) |
-| **MCP Server** | [frootai.dev/mcp-tooling](https://frootai.dev/mcp-tooling) |
-| **Setup Guide** | [frootai.dev/setup-guide](https://frootai.dev/setup-guide) |
-| **Python SDK** | [frootai.dev/python](https://frootai.dev/python) |
-| **CLI** | [frootai.dev/cli](https://frootai.dev/cli) |
-| **Community** | [frootai.dev/community](https://frootai.dev/community) |
-| **npm** | [npmjs.com/package/frootai-mcp](https://www.npmjs.com/package/frootai-mcp) |
-| **PyPI** | [pypi.org/project/frootai-mcp](https://pypi.org/project/frootai-mcp/) |
-| **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
-
----
-
-<p align="center">
-  <img src="media/frootai-mark.png" width="32" alt="FrootAI">
-</p>
-
-<p align="center">
-  <strong>From the Roots to the Fruits. It's connected, it's simply Frootful.</strong><br>
-  <sub>The Open Glue for GenAI Ecosystem</sub>
-</p>
-
-<p align="center">
-  <sub>© 2026 FrootAI — MIT License</sub>
 </p>
