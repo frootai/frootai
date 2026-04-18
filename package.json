@@ -40,7 +40,11 @@
     "factory:unify": "node scripts/factory/unify.js",
     "factory:adapt:sk": "node scripts/factory/adapters/semantic-kernel.js",
     "factory:adapt:langchain": "node scripts/factory/adapters/langchain.js",
-    "factory:adapt:all": "node scripts/factory/adapters/semantic-kernel.js && node scripts/factory/adapters/langchain.js"
+    "factory:adapt:all": "node scripts/factory/adapters/semantic-kernel.js && node scripts/factory/adapters/langchain.js",
+    "factory:docs": "node scripts/factory/adapters/docs.js",
+    "factory:docs:learning": "node scripts/factory/adapters/docs.js --section=learning",
+    "factory:docs:plays": "node scripts/factory/adapters/docs.js --section=solution-plays",
+    "factory:docs:api": "node scripts/factory/adapters/docs.js --section=api-reference"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
