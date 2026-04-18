@@ -1,4 +1,10 @@
 node scripts/sync-content.js
 node scripts/validate-consistency.js --fix
+
+# FAI Factory — incremental catalog update
+node scripts/factory/harvest.js
+node scripts/factory/catalog.js
+node scripts/factory/transform.js
+
 git add -A
 node scripts/validate-consistency.js

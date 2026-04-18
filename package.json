@@ -31,6 +31,8 @@
     "factory:harvest": "node scripts/factory/harvest.js",
     "factory:catalog": "node scripts/factory/catalog.js",
     "factory:diff": "node scripts/factory/diff.js",
+    "factory:transform": "node scripts/factory/transform.js",
+    "factory:validate": "node scripts/factory/validate.js",
     "factory:status": "node scripts/factory/index.js --status"
   },
   "devDependencies": {

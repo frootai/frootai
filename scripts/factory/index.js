@@ -14,6 +14,8 @@ const path = require("path");
 const { harvest } = require("./harvest");
 const { catalog } = require("./catalog");
 const { diff } = require("./diff");
+const { transform } = require("./transform");
+const { validate } = require("./validate");
 
 const REPO_ROOT = process.env.FROOTAI_PUBLIC_REPO || path.resolve(__dirname, "../..");
 const args = process.argv.slice(2);
@@ -100,6 +102,14 @@ function run() {
 
   // Step 3: Diff
   diff();
+  console.log("");
+
+  // Step 4: Transform (run all channel adapters)
+  transform();
+  console.log("");
+
+  // Step 5: Validate
+  validate();
   console.log("");
 
   const elapsed = Date.now() - t0;

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "frootai"
 version = "5.1.0"
-description = "FrootAI SDK — 101 solution plays, 830+ primitives, 45 MCP tools. Offline access to knowledge modules, BM25 search, FAI Protocol wiring, scaffold, evaluation, A/B testing, and CLI."
+description = "FrootAI SDK — 104 solution plays, 862+ primitives, 45 MCP tools. Offline access to knowledge modules, BM25 search, FAI Protocol wiring, scaffold, evaluation, A/B testing, and CLI."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Pavleen Bali", email = "pavleenbali@frootai.dev"}]
