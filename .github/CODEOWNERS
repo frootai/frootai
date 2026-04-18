@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════
+# FrootAI CODEOWNERS — Automated Review Assignment
+# ═══════════════════════════════════════════════════════════
+#
+# GitHub uses this file to automatically request reviews from
+# the appropriate teams when PRs touch specific areas.
+#
+# Syntax: <pattern> <owner1> <owner2> ...
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# ═══════════════════════════════════════════════════════════
+
+# ── Default: Co-founders review everything ──
+*                                   @frootai/core
+
+# ── FAI Protocol & Schemas (Breaking changes need extra review) ──
+/schemas/                           @frootai/core @frootai/protocol
+/fai-protocol/                      @frootai/core @frootai/protocol
+/engine/                            @frootai/core @frootai/protocol
+/engine/moonshot/                   @frootai/core @frootai/protocol
+
+# ── Distribution Channels ──
+/npm-mcp/                           @frootai/core @frootai/distribution
+/python-mcp/                        @frootai/core @frootai/distribution
+/python-sdk/                        @frootai/core @frootai/distribution
+/npm-sdk/                           @frootai/core @frootai/distribution
+/vscode-extension/                  @frootai/core @frootai/distribution
+/cli/                               @frootai/core @frootai/distribution
+
+# ── FAI Factory (Shipping Pipeline) ──
+/scripts/factory/                   @frootai/core
+/.factory/                          @frootai/core
+
+# ── CI/CD Workflows ──
+/.github/workflows/                 @frootai/core
+/.github/                           @frootai/core
+
+# ── Community Primitives (Broader review welcome) ──
+/agents/                            @frootai/core @frootai/community
+/skills/                            @frootai/core @frootai/community
+/instructions/                      @frootai/core @frootai/community
+/hooks/                             @frootai/core @frootai/community
+/plugins/                           @frootai/core @frootai/community
+/workflows/                         @frootai/core @frootai/community
+/cookbook/                           @frootai/core @frootai/community
+
+# ── Solution Plays ──
+/solution-plays/                    @frootai/core @frootai/community
+
+# ── Documentation ──
+/docs/                              @frootai/core
+/README.md                          @frootai/core
+/AGENTS.md                          @frootai/core
+
+# ── Security-sensitive files ──
+/.env*                              @frootai/core
+/marketplace.json                   @frootai/core
