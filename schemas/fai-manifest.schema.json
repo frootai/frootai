@@ -2,14 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://frootai.dev/schemas/fai-manifest.schema.json",
   "title": "FAI Manifest Schema",
-  "description": "The FAI Protocol glue file — a single JSON that wires all primitives together for a solution play. Describes context, primitive connections, quality gates, infrastructure, and toolkit. This is what makes FrootAI unique: no competitor has a context-wiring protocol.",
+  "description": "The FAI Protocol glue file — a single JSON that wires all primitives together for a solution play. Describes context, primitive connections, quality gates, infrastructure, toolkit, and v2.0 moonshot contracts (memory, observability, cost, identity, compliance, providers, modalities, prompts, evaluation, privacy). This is what makes FrootAI unique: no competitor has a context-wiring protocol.",
   "type": "object",
   "required": ["play", "version", "context", "primitives"],
   "properties": {
     "play": {
       "type": "string",
-      "pattern": "^[0-9]{2}-[a-z0-9-]+$",
-      "description": "Solution play identifier (e.g., '01-enterprise-rag', '14-cost-optimized-ai-gateway')."
+      "pattern": "^[0-9]{2,3}-[a-z0-9-]+$",
+      "description": "Solution play identifier (e.g., '01-enterprise-rag', '100-meta-orchestrator'). Supports 2–3 digit play IDs."
     },
     "version": {
       "type": "string",
@@ -169,6 +169,178 @@
       },
       "additionalProperties": false,
       "description": "FAI Toolkit paths — the three kits that equip every play."
+    },
+
+    "memory": {
+      "type": "object",
+      "description": "M-1: Cross-agent memory federation contract. Declares memory topology, PII handling, and federation rules.",
+      "properties": {
+        "scope":       { "type": "string", "enum": ["play-local", "session", "shared", "federated", "global"] },
+        "backend":     { "type": "string", "enum": ["in-memory", "redis", "cosmos-db", "postgres", "custom"] },
+        "retention":   { "type": "string", "description": "Retention duration: '1h', '1d', '90d', 'permanent'" },
+        "pii":         { "type": "string", "enum": ["allow", "redact-before-store", "block"] },
+        "encryption":  { "type": "boolean" },
+        "maxSizeKB":   { "type": "number", "minimum": 0 },
+        "eviction":    { "type": "string", "enum": ["lru", "ttl", "priority", "none"] },
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["agent", "access"],
+            "properties": {
+              "agent":  { "type": "string" },
+              "access": { "type": "string", "enum": ["read", "write", "admin"] }
+            }
+          }
+        },
+        "federation": {
+          "type": "object",
+          "properties": {
+            "enabled":      { "type": "boolean" },
+            "peers":        { "type": "array", "items": { "type": "string" } },
+            "syncInterval": { "type": "string" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "observability": {
+      "type": "object",
+      "description": "M-2: Cross-agent distributed tracing contract. OpenTelemetry-compatible with per-agent metric collection.",
+      "properties": {
+        "traceProvider":       { "type": "string", "enum": ["opentelemetry", "langfuse", "appinsights", "datadog", "console", "none"] },
+        "correlationHeader":   { "type": "string", "default": "x-fai-trace-id" },
+        "requiredMetrics":     { "type": "array", "items": { "type": "string" } },
+        "samplingRate":        { "type": "number", "minimum": 0, "maximum": 1 },
+        "redactPii":           { "type": "boolean" },
+        "exportInterval":      { "type": "string" },
+        "endpoint":            { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": false
+    },
+
+    "cost": {
+      "type": "object",
+      "description": "M-3: Recursive cost attribution contract. Per-query, per-session, and per-day budgets with automatic attribution.",
+      "properties": {
+        "maxPerQuery":   { "type": "number", "minimum": 0 },
+        "maxPerSession": { "type": "number", "minimum": 0 },
+        "maxPerDay":     { "type": "number", "minimum": 0 },
+        "attribution":   { "type": "string", "enum": ["flat", "recursive", "proportional"] },
+        "alertAt":       { "type": "number", "minimum": 0, "maximum": 1 },
+        "currency":      { "type": "string", "default": "USD" },
+        "tags":          { "type": "object", "additionalProperties": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "identity": {
+      "type": "object",
+      "description": "M-4: DID-based agent identity and capability tokens. Enables verifiable agent authentication in multi-agent systems.",
+      "properties": {
+        "issuer":                { "type": "string" },
+        "capabilities":          { "type": "array", "items": { "type": "string" } },
+        "maxCallDepth":          { "type": "integer", "minimum": 1, "maximum": 10 },
+        "revocable":             { "type": "boolean" },
+        "tokenTtl":              { "type": "string", "description": "e.g. '1h', '30m', '1d'" },
+        "requireSignedRequests": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+
+    "compliance": {
+      "type": "object",
+      "description": "M-5: Continuous compliance monitoring contract. Enforces GDPR, HIPAA, EU-AI-Act, and other frameworks.",
+      "properties": {
+        "frameworks": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["GDPR", "HIPAA", "EU-AI-Act", "SOC2", "ISO27001", "NIST-AI-RMF", "CCPA"] }
+        },
+        "riskLevel":            { "type": "string", "enum": ["minimal", "limited", "high", "unacceptable"] },
+        "preDeploymentChecks":  { "type": "boolean" },
+        "auditTrail":           { "type": "string", "enum": ["immutable", "mutable", "none"] },
+        "dataRetentionDays":    { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+
+    "providers": {
+      "type": "object",
+      "description": "M-6: Provider agility contract. Primary model + ordered fallback chain with routing strategy.",
+      "required": ["primary"],
+      "properties": {
+        "primary":       { "type": "string", "description": "e.g. 'azure-openai/gpt-4o', 'openai/gpt-4o-mini'" },
+        "fallback":      { "type": "array", "items": { "type": "string" } },
+        "routing":       { "type": "string", "enum": ["cost-optimized", "latency-optimized", "quality-optimized", "round-robin", "primary-only"] },
+        "dataResidency": { "type": "string", "enum": ["eu", "us", "global", "local"] },
+        "timeout":       { "type": "integer", "minimum": 1000 },
+        "retries":       { "type": "integer", "minimum": 0, "maximum": 10 }
+      },
+      "additionalProperties": false
+    },
+
+    "modalities": {
+      "type": "object",
+      "description": "M-7: Multi-modal agent chain contract. Declares input/output modalities and transform pipeline.",
+      "properties": {
+        "input": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["text", "image", "audio", "video", "document", "structured", "json"] }
+        },
+        "output": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["text", "json", "image", "audio", "structured"] }
+        },
+        "transforms":   { "type": "object", "additionalProperties": { "type": "string" } },
+        "maxFileSize":  { "type": "string", "description": "e.g. '10MB', '100MB'" },
+        "allowedMimeTypes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "prompts": {
+      "type": "object",
+      "description": "M-8: Prompt artifact versioning contract. Portable .prompt.md with version locking and eval binding.",
+      "properties": {
+        "registry":      { "type": "string" },
+        "signing":       { "type": "boolean" },
+        "versionLock":   { "type": "boolean" },
+        "minEvalScore":  { "type": "number", "minimum": 0, "maximum": 5 },
+        "allowedModels": { "type": "array", "items": { "type": "string" } },
+        "artifacts":     { "type": "array", "items": { "type": "string", "description": "Paths to .prompt.md files" } }
+      },
+      "additionalProperties": false
+    },
+
+    "evaluation": {
+      "type": "object",
+      "description": "M-9: Reproducible evaluation benchmark contract. Universal metrics, golden test sets, regression gates.",
+      "properties": {
+        "goldenSet":         { "type": "string" },
+        "metrics":           { "type": "array", "items": { "type": "string" } },
+        "weights":           { "type": "object", "additionalProperties": { "type": "number" } },
+        "thresholds":        { "type": "object", "additionalProperties": { "type": "number" } },
+        "regressionGate":    { "type": "boolean" },
+        "baselineVersion":   { "type": "string" },
+        "outputDir":         { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "privacy": {
+      "type": "object",
+      "description": "M-10: Privacy consent protocol. GDPR/CCPA compliant consent lifecycle, PII categorization, right-to-deletion.",
+      "properties": {
+        "dataResidency":    { "type": "string", "enum": ["eu-west", "eu-central", "us-east", "us-west", "ap-southeast", "global"] },
+        "consentRequired":  { "type": "boolean" },
+        "rightToDeletion":  { "type": "string", "enum": ["automated", "manual", "none"] },
+        "piiCategories":    { "type": "array", "items": { "type": "string" } },
+        "retentionPolicy":  { "type": "string" },
+        "frameworks":       { "type": "array", "items": { "type": "string", "enum": ["GDPR", "CCPA", "HIPAA"] } },
+        "anonymization":    { "type": "string", "enum": ["redact", "pseudonymize", "none"] }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

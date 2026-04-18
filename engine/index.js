@@ -22,6 +22,11 @@ import { buildContext } from './context-resolver.js';
 import { wirePrimitives } from './primitive-wirer.js';
 import { createEvaluator } from './evaluator.js';
 import { runHooksForEvent } from './hook-runner.js';
+import { createRequire } from 'module';
+
+// Moonshot uses CommonJS — bridge via createRequire
+const _require = createRequire(import.meta.url);
+const moonshot = _require('./moonshot/index.js');
 
 /**
  * Initialize the FAI Engine with a manifest file.
@@ -62,6 +67,18 @@ function initEngine(manifestPath) {
   const guardrails = manifest.primitives?.guardrails || {};
   const evaluator = createEvaluator(guardrails);
 
+  // Step 6: Initialize moonshot contracts (v2.0 — optional, backwards-compatible)
+  let moonshotSuite = null;
+  const moonshotContracts = ['memory','observability','cost','identity','compliance','providers','modalities','prompts','evaluation','privacy'];
+  const hasAnyContract = moonshotContracts.some(k => manifest[k]);
+  if (hasAnyContract) {
+    try {
+      moonshotSuite = moonshot.createMoonshotSuite(manifest, { playId: manifest.play });
+    } catch (err) {
+      allErrors.push(`Moonshot suite error: ${err.message}`);
+    }
+  }
+
   return {
     success: allErrors.length === 0,
     manifest,
@@ -77,6 +94,7 @@ function initEngine(manifestPath) {
       primitives: wiring.primitives
     },
     evaluator,
+    moonshot: moonshotSuite,
     hookPaths: resolved.hooks,
     errors: allErrors,
     duration: Date.now() - startTime
@@ -132,6 +150,20 @@ function printStatus(engine) {
     console.log('  ✅ All primitives wired, context resolved, guardrails set');
   }
 
+  // Moonshot contracts (v2.0)
+  if (engine.moonshot) {
+    const active = engine.moonshot._initialized || [];
+    console.log('');
+    console.log(`  🚀 Moonshot Contracts (v2.0): ${active.length} active`);
+    active.forEach(m => console.log(`    ✓ ${m}`));
+    const preCheck = engine.moonshot.preDeploymentCheck();
+    const checkCount = Object.keys(preCheck.checks).length;
+    if (checkCount > 0) {
+      const passed = Object.values(preCheck.checks).filter(c => c.ok !== false).length;
+      console.log(`    Pre-deployment: ${passed}/${checkCount} checks passed`);
+    }
+  }
+
   console.log('');
   console.log(`  Engine loaded in ${engine.duration}ms`);
   console.log('═'.repeat(50));
@@ -181,4 +213,4 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\\\/g,
   process.exit(engine.success ? 0 : 1);
 }
 
-export { initEngine, printStatus };
+export { initEngine, printStatus, moonshot };
