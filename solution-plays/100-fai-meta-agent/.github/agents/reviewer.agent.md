@@ -1,11 +1,11 @@
 ---
 name: "FAI Meta-Agent Reviewer"
 description: "FAI Meta-Agent reviewer - audits recommendation quality, play compatibility, coverage"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "reliability", "security"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","reliability","security"]
 plays: ["100-fai-meta-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - FAI Meta-Agent
 

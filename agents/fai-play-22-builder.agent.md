@@ -1,24 +1,11 @@
 ---
-description: "Swarm Orchestration builder — mesh/star/hierarchical agent topologies, supervisor task decomposition, agent specialization, shared memory via Cosmos DB, and conflict resolution."
 name: "FAI Swarm Orchestration Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-  - "security"
-plays:
-  - "22-swarm-orchestration"
+description: "Swarm Orchestration builder — mesh/star/hierarchical agent topologies, supervisor task decomposition, agent specialization, shared memory via Cosmos DB, and conflict resolution."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","security"]
+plays: ["22-swarm-orchestration"]
 handoffs:
-  - label: "Review swarm architecture"
-    agent: "fai-play-22-reviewer"
-    prompt: "Review the swarm orchestration for topology, loop safety, and agent boundaries."
-  - label: "Tune swarm config"
-    agent: "fai-play-22-tuner"
-    prompt: "Optimize agent budgets, topology, and coordination parameters."
 ---
 
 # FAI Swarm Orchestration Builder

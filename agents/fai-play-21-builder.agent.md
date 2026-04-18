@@ -1,23 +1,11 @@
 ---
-description: "Agentic RAG builder — autonomous retrieval agent, multi-source fusion (Search+web+DB), iterative query refinement, citation pipeline, and reflection-based quality gates."
 name: "FAI Agentic RAG Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-plays:
-  - "21-agentic-rag"
+description: "Agentic RAG builder — autonomous retrieval agent, multi-source fusion (Search+web+DB), iterative query refinement, citation pipeline, and reflection-based quality gates."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency"]
+plays: ["21-agentic-rag"]
 handoffs:
-  - label: "Review agentic RAG"
-    agent: "fai-play-21-reviewer"
-    prompt: "Review the agentic RAG for retrieval quality, iteration limits, and citation accuracy."
-  - label: "Tune retrieval config"
-    agent: "fai-play-21-tuner"
-    prompt: "Optimize iteration depth, source weights, reflection threshold, and citation config."
 ---
 
 # FAI Agentic RAG Builder

@@ -1,9 +1,9 @@
 ---
 name: "Multimodal Search V2 Builder"
 description: "Multimodal Search V2 builder - implements multimodal indexing, cross-modal search, fusion"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization"]
 plays: ["95-multimodal-search-v2"]
 ---
 # Builder Agent - Multimodal Search V2

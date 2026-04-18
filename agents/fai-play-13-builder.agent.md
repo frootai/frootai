@@ -1,24 +1,11 @@
 ---
-description: "Fine-Tuning Workflow builder — Azure OpenAI fine-tuning, JSONL data preparation, LoRA/QLoRA techniques, MLflow experiment tracking, evaluation-driven iteration, and A/B deployment."
 name: "FAI Fine-Tuning Workflow Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "cost-optimization"
-  - "responsible-ai"
-plays:
-  - "13-fine-tuning-workflow"
+description: "Fine-Tuning Workflow builder — Azure OpenAI fine-tuning, JSONL data preparation, LoRA/QLoRA techniques, MLflow experiment tracking, evaluation-driven iteration, and A/B deployment."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","cost-optimization","responsible-ai"]
+plays: ["13-fine-tuning-workflow"]
 handoffs:
-  - label: "Review fine-tuning results"
-    agent: "fai-play-13-reviewer"
-    prompt: "Review the fine-tuning data quality, evaluation results, and safety checks."
-  - label: "Tune hyperparameters"
-    agent: "fai-play-13-tuner"
-    prompt: "Optimize learning rate, epochs, LoRA rank, and batch size."
 ---
 
 # FAI Fine-Tuning Workflow Builder

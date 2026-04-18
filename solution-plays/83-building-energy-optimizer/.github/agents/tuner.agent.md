@@ -1,11 +1,11 @@
 ---
 name: "Building Energy Tuner"
 description: "Building Energy tuner - optimizes setpoints, prediction, savings/comfort"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["83-building-energy-optimizer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Building Energy
 

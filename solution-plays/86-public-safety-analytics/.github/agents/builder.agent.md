@@ -1,9 +1,9 @@
 ---
 name: "Public Safety Builder"
 description: "Public Safety builder - implements pattern analysis, resource optimization"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "responsible-ai", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","responsible-ai","security"]
 plays: ["86-public-safety-analytics"]
 ---
 # Builder Agent - Public Safety

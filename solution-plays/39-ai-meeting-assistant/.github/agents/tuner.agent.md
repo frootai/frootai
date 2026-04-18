@@ -1,11 +1,11 @@
 ---
 name: "Meeting Assistant Tuner"
 description: "Meeting Assistant tuner - optimizes diarization, summary conciseness, integration"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["39-ai-meeting-assistant"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Meeting Assistant
 

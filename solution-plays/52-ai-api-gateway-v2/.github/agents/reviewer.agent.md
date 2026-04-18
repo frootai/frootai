@@ -1,11 +1,11 @@
 ---
 name: "AI Gateway V2 Reviewer"
 description: "AI Gateway V2 reviewer - audits failover logic, rate limiting, security"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","operational-excellence"]
 plays: ["52-ai-api-gateway-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - AI Gateway V2
 

@@ -1,11 +1,11 @@
 ---
 name: "Moderation V2 Tuner"
 description: "Moderation V2 tuner - optimizes per-category thresholds, latency"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["61-content-moderation-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Moderation V2
 

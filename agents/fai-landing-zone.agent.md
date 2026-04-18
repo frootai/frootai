@@ -1,18 +1,10 @@
 ---
-description: "Azure AI Landing Zone architect — hub-spoke networking, private endpoints for all PaaS, managed identity, GPU quotas, governance policies, and Bicep-based enterprise AI infrastructure."
 name: "FAI Landing Zone"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "reliability"
-  - "operational-excellence"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
+description: "Azure AI Landing Zone architect — hub-spoke networking, private endpoints for all PaaS, managed identity, GPU quotas, governance policies, and Bicep-based enterprise AI infrastructure."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","operational-excellence"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced"]
 ---
 
 # FAI Landing Zone

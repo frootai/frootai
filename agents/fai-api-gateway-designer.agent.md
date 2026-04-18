@@ -1,18 +1,10 @@
 ---
-description: "API gateway architect — Azure APIM patterns, rate limiting, token-based throttling, multi-region load balancing, backend circuit breakers, and cost-aware routing for LLM endpoints."
 name: "FAI API Gateway Designer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "reliability"
-  - "performance-efficiency"
-plays:
-  - "01-enterprise-rag"
-  - "14-cost-optimized-ai-gateway"
+description: "API gateway architect — Azure APIM patterns, rate limiting, token-based throttling, multi-region load balancing, backend circuit breakers, and cost-aware routing for LLM endpoints."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","reliability","performance-efficiency"]
+plays: ["01-enterprise-rag","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI API Gateway Designer

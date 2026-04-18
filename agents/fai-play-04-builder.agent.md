@@ -1,24 +1,11 @@
 ---
-description: "Call Center Voice AI builder — STT→LLM→TTS streaming pipeline, Azure Communication Services, real-time transcription, intent classification, PII redaction, and escalation triggers."
 name: "FAI Call Center Voice AI Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "04-call-center-voice-ai"
+description: "Call Center Voice AI builder — STT→LLM→TTS streaming pipeline, Azure Communication Services, real-time transcription, intent classification, PII redaction, and escalation triggers."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["04-call-center-voice-ai"]
 handoffs:
-  - label: "Review voice pipeline"
-    agent: "fai-play-04-reviewer"
-    prompt: "Review the voice AI pipeline for quality, security, and compliance."
-  - label: "Tune voice config"
-    agent: "fai-play-04-tuner"
-    prompt: "Optimize speech config, voice selection, and latency parameters."
 ---
 
 # FAI Call Center Voice AI Builder

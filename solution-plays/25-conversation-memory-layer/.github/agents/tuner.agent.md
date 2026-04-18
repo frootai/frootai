@@ -1,11 +1,11 @@
 ---
 name: "Memory Layer Tuner"
 description: "Memory Layer tuner - optimizes compression, retrieval, storage costs"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["25-conversation-memory-layer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Memory Layer
 

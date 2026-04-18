@@ -1,11 +1,11 @@
 ---
 name: "Edge AI Deploy Tuner"
 description: "Edge AI Deploy tuner - optimizes quantization, container size, rollout"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["34-edge-ai-deployment"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Edge AI Deploy
 

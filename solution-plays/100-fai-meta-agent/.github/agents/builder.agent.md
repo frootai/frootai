@@ -1,9 +1,9 @@
 ---
 name: "FAI Meta-Agent Builder"
 description: "FAI Meta-Agent builder - implements play routing, DevKit initialization, cross-play wiring"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["100-fai-meta-agent"]
 ---
 # Builder Agent - FAI Meta-Agent

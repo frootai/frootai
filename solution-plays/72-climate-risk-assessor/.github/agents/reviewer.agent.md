@@ -1,11 +1,11 @@
 ---
 name: "Climate Risk Reviewer"
 description: "Climate Risk reviewer - audits data sources, model assumptions, TCFD alignment"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["72-climate-risk-assessor"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Climate Risk
 

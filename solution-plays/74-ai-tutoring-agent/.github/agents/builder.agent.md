@@ -1,9 +1,9 @@
 ---
 name: "AI Tutor Builder"
 description: "AI Tutor builder - implements Socratic tutoring, knowledge tracking, adaptive difficulty"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "responsible-ai", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","responsible-ai","performance-efficiency"]
 plays: ["74-ai-tutoring-agent"]
 ---
 # Builder Agent - AI Tutor

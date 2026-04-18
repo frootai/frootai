@@ -1,20 +1,10 @@
 ---
-description: "Azure Functions specialist — event-driven AI processing, Durable Functions for long-running agent orchestration, timer triggers for batch inference, and cold start optimization."
 name: "FAI Azure Functions Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "reliability"
-  - "operational-excellence"
-plays:
-  - "01-enterprise-rag"
-  - "05-it-ticket-resolution"
-  - "06-document-intelligence"
-  - "10-content-moderation"
+description: "Azure Functions specialist — event-driven AI processing, Durable Functions for long-running agent orchestration, timer triggers for batch inference, and cold start optimization."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","reliability","operational-excellence"]
+plays: ["01-enterprise-rag","05-it-ticket-resolution","06-document-intelligence","10-content-moderation"]
 ---
 
 # FAI Azure Functions Expert

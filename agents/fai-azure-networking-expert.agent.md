@@ -1,18 +1,10 @@
 ---
-description: "Azure networking specialist — hub-spoke VNet design, Private Link for AI services, NSGs, Azure Firewall, DNS private zones, and zero-trust network architecture."
 name: "FAI Azure Networking Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "reliability"
-  - "performance-efficiency"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
+description: "Azure networking specialist — hub-spoke VNet design, Private Link for AI services, NSGs, Azure Firewall, DNS private zones, and zero-trust network architecture."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","performance-efficiency"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced"]
 ---
 
 # FAI Azure Networking Expert

@@ -1,11 +1,11 @@
 ---
 name: "Foundry Local Reviewer"
 description: "Foundry Local reviewer - audits hardware compatibility, fallback, offline"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["44-foundry-local-on-device"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Foundry Local
 

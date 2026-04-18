@@ -1,9 +1,9 @@
 ---
 name: "Semantic Search Builder"
 description: "Semantic Search builder - designs index, scoring profiles, hybrid search"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","security"]
 plays: ["26-semantic-search-engine"]
 ---
 # Builder Agent - Semantic Search

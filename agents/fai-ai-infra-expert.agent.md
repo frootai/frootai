@@ -1,18 +1,10 @@
 ---
-description: "AI infrastructure expert — GPU compute sizing (A100/H100), VRAM estimation, model serving (vLLM/TensorRT-LLM/Triton), AKS node pool design, PTU vs PAYG cost modeling, and quantization strategies."
 name: "FAI AI Infra Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "cost-optimization"
-  - "reliability"
-plays:
-  - "02-ai-landing-zone"
-  - "12-model-serving-aks"
+description: "AI infrastructure expert — GPU compute sizing (A100/H100), VRAM estimation, model serving (vLLM/TensorRT-LLM/Triton), AKS node pool design, PTU vs PAYG cost modeling, and quantization strategies."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","cost-optimization","reliability"]
+plays: ["02-ai-landing-zone","12-model-serving-aks"]
 ---
 
 # FAI AI Infra Expert

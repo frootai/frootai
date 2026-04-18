@@ -211,6 +211,8 @@ if (!cmd || cmd === "help" || cmd === "--help" || cmd === "-h") {
     runScript("scripts/factory/ship.js", args.slice(2));
   } else if (sub === "validate") {
     runScript("scripts/factory/validate.js", args.slice(2));
+  } else if (sub === "unify") {
+    runScript("scripts/factory/unify.js", args.slice(2));
   } else if (sub === "harvest") {
     runScript("scripts/factory/harvest.js");
   } else if (sub === "catalog") {

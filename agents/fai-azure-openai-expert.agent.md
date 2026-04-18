@@ -1,20 +1,10 @@
 ---
-description: "Azure OpenAI specialist — model deployment types (PTU/PAYG/Global), content filtering, structured output, token optimization, multi-region load balancing, and production inference patterns."
 name: "FAI Azure OpenAI Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "security"
-  - "responsible-ai"
-plays:
-  - "01-enterprise-rag"
-  - "03-deterministic-agent"
-  - "14-cost-optimized-ai-gateway"
+description: "Azure OpenAI specialist — model deployment types (PTU/PAYG/Global), content filtering, structured output, token optimization, multi-region load balancing, and production inference patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency","security","responsible-ai"]
+plays: ["01-enterprise-rag","03-deterministic-agent","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Azure OpenAI Expert

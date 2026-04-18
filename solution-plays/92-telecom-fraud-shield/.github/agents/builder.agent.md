@@ -1,9 +1,9 @@
 ---
 name: "Telecom Fraud Builder"
 description: "Telecom Fraud builder - implements fraud detection, pattern engines, CDR analysis"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","performance-efficiency"]
 plays: ["92-telecom-fraud-shield"]
 ---
 # Builder Agent - Telecom Fraud

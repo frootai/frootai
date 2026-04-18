@@ -1,23 +1,11 @@
 ---
-description: "Real-Time Analytics builder — Event Hub partitioned ingestion, Stream Analytics windowing, LLM-powered anomaly explanation, multi-signal scoring, and live dashboards."
 name: "FAI Real-Time Analytics Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-plays:
-  - "20-real-time-analytics"
+description: "Real-Time Analytics builder — Event Hub partitioned ingestion, Stream Analytics windowing, LLM-powered anomaly explanation, multi-signal scoring, and live dashboards."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability"]
+plays: ["20-real-time-analytics"]
 handoffs:
-  - label: "Review analytics pipeline"
-    agent: "fai-play-20-reviewer"
-    prompt: "Review the streaming pipeline for ingestion, anomaly detection, and alerting quality."
-  - label: "Tune analytics config"
-    agent: "fai-play-20-tuner"
-    prompt: "Optimize window sizes, anomaly thresholds, and baseline configuration."
 ---
 
 # FAI Real-Time Analytics Builder

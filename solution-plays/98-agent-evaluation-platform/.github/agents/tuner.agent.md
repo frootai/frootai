@@ -1,11 +1,11 @@
 ---
 name: "Agent Eval Platform Tuner"
 description: "Agent Eval Platform tuner - optimizes scoring weights, test generation, baselines"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["98-agent-evaluation-platform"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Agent Eval Platform
 

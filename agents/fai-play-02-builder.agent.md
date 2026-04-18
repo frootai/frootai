@@ -1,24 +1,11 @@
 ---
-description: "AI Landing Zone builder — hub-spoke networking, private endpoints, Azure Firewall, DNS architecture, identity foundation, and governance baseline for enterprise AI workloads."
 name: "FAI AI Landing Zone Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "02-ai-landing-zone"
+description: "AI Landing Zone builder — hub-spoke networking, private endpoints, Azure Firewall, DNS architecture, identity foundation, and governance baseline for enterprise AI workloads."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["02-ai-landing-zone"]
 handoffs:
-  - label: "Review this infrastructure"
-    agent: "fai-play-02-reviewer"
-    prompt: "Review the AI Landing Zone Bicep and networking implementation above."
-  - label: "Tune SKU sizing"
-    agent: "fai-play-02-tuner"
-    prompt: "Optimize SKU sizing and cost parameters for the landing zone above."
 ---
 
 # FAI AI Landing Zone Builder

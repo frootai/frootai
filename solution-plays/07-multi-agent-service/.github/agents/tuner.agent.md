@@ -1,11 +1,11 @@
 ---
 name: "Multi-Agent Tuner"
 description: "Multi-Agent tuner - optimizes routing, per-agent model selection"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["07-multi-agent-service"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Multi-Agent
 

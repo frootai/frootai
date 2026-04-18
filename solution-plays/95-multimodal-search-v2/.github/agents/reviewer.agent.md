@@ -1,11 +1,11 @@
 ---
 name: "Multimodal Search V2 Reviewer"
 description: "Multimodal Search V2 reviewer - audits search relevance, cross-modal accuracy, safety"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["95-multimodal-search-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Multimodal Search V2
 

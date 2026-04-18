@@ -1,11 +1,11 @@
 ---
 name: "Model Governance Reviewer"
 description: "Model Governance reviewer - audits model cards, bias testing, compliance, lineage"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "security", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","security","operational-excellence"]
 plays: ["48-ai-model-governance"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Model Governance
 

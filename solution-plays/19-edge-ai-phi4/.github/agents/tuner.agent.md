@@ -1,11 +1,11 @@
 ---
 name: "Edge AI Phi-4 Tuner"
 description: "Edge AI Phi-4 tuner - optimizes quantization, inference speed, prompts"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["19-edge-ai-phi4"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Edge AI Phi-4
 

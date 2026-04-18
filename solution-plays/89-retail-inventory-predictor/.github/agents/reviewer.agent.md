@@ -1,11 +1,11 @@
 ---
 name: "Inventory Predictor Reviewer"
 description: "Inventory Predictor reviewer - audits forecast accuracy, stockout rates, overstock"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["reliability", "cost-optimization", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["reliability","cost-optimization","operational-excellence"]
 plays: ["89-retail-inventory-predictor"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Inventory Predictor
 

@@ -1,24 +1,11 @@
 ---
-description: "IT Ticket Resolution builder — event-driven classification pipeline, auto-resolution via knowledge base, ServiceNow/Jira integration, skill-based routing, and SLA monitoring."
 name: "FAI IT Ticket Resolution Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "05-it-ticket-resolution"
+description: "IT Ticket Resolution builder — event-driven classification pipeline, auto-resolution via knowledge base, ServiceNow/Jira integration, skill-based routing, and SLA monitoring."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["05-it-ticket-resolution"]
 handoffs:
-  - label: "Review ticket pipeline"
-    agent: "fai-play-05-reviewer"
-    prompt: "Review the IT ticket resolution pipeline for classification accuracy and security."
-  - label: "Tune thresholds"
-    agent: "fai-play-05-tuner"
-    prompt: "Optimize classification thresholds, routing rules, and SLA config."
 ---
 
 # FAI IT Ticket Resolution Builder

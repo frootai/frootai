@@ -1,9 +1,9 @@
 ---
 name: "Exam Engine Builder"
 description: "Exam Engine builder - implements question generation, distractors, Bloom's taxonomy"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "responsible-ai", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","responsible-ai","performance-efficiency"]
 plays: ["75-exam-generation-engine"]
 ---
 # Builder Agent - Exam Engine

@@ -1,11 +1,11 @@
 ---
 name: "Edge AI Phi-4 Reviewer"
 description: "Edge AI Phi-4 reviewer - audits model size, memory, offline capability"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "performance-efficiency"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","performance-efficiency"]
 plays: ["19-edge-ai-phi4"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Edge AI Phi-4
 

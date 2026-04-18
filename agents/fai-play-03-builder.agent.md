@@ -1,24 +1,11 @@
 ---
-description: "Deterministic Agent builder — zero-temperature architecture, seed pinning, structured JSON output, multi-layer guardrails, confidence scoring, and anti-hallucination defense."
 name: "FAI Deterministic Agent Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "03-deterministic-agent"
+description: "Deterministic Agent builder — zero-temperature architecture, seed pinning, structured JSON output, multi-layer guardrails, confidence scoring, and anti-hallucination defense."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["03-deterministic-agent"]
 handoffs:
-  - label: "Review this implementation"
-    agent: "fai-play-03-reviewer"
-    prompt: "Review the deterministic agent implementation for guardrail completeness and reproducibility."
-  - label: "Tune thresholds"
-    agent: "fai-play-03-tuner"
-    prompt: "Optimize confidence thresholds, guardrail config, and evaluation metrics."
 ---
 
 # FAI Deterministic Agent Builder

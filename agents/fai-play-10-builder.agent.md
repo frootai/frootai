@@ -1,23 +1,11 @@
 ---
-description: "Content Moderation builder — Azure Content Safety API integration, 4-category severity scoring, custom blocklists, APIM gateway middleware, and severity-based routing."
 name: "FAI Content Moderation Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "responsible-ai"
-  - "security"
-plays:
-  - "10-content-moderation"
+description: "Content Moderation builder — Azure Content Safety API integration, 4-category severity scoring, custom blocklists, APIM gateway middleware, and severity-based routing."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["responsible-ai","security"]
+plays: ["10-content-moderation"]
 handoffs:
-  - label: "Review moderation pipeline"
-    agent: "fai-play-10-reviewer"
-    prompt: "Review the content moderation pipeline for coverage, thresholds, and bypass prevention."
-  - label: "Tune severity thresholds"
-    agent: "fai-play-10-tuner"
-    prompt: "Optimize severity thresholds, blocklists, and routing configuration."
 ---
 
 # FAI Content Moderation Builder

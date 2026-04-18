@@ -1,9 +1,9 @@
 ---
 name: "Prompt Management Builder"
 description: "Prompt Management builder - implements prompt registry, templates, A/B testing"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["operational-excellence", "security", "reliability"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","security","reliability"]
 plays: ["18-prompt-management"]
 ---
 # Builder Agent - Prompt Management

@@ -1,11 +1,11 @@
 ---
 name: "Deterministic Agent Reviewer"
 description: "Deterministic Agent reviewer — audits reproducibility, abstention logic, structured output validation, guardrail coverage"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["03-deterministic-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent — Deterministic Agent
 

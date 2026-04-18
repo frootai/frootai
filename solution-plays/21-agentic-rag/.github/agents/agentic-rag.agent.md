@@ -1,19 +1,10 @@
 ---
-description: "Agentic RAG orchestrator — autonomously decides when to retrieve, which sources to query, iterates on insufficient results, and synthesizes grounded answers with citations across multiple knowledge bases."
 name: "Agentic RAG Orchestrator"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-  - "frootai_mcp"
-waf:
-  - "security"
-  - "reliability"
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "responsible-ai"
-plays:
-  - "21-agentic-rag"
+description: "Agentic RAG orchestrator — autonomously decides when to retrieve, which sources to query, iterates on insufficient results, and synthesizes grounded answers with citations across multiple knowledge bases."
+tools: ["codebase","terminal","azure","frootai_mcp"]
+waf: ["security","reliability","cost-optimization","performance-efficiency","responsible-ai"]
+plays: ["21-agentic-rag"]
+model: ["gpt-4o", "gpt-4o-mini"]
 ---
 
 # Agentic RAG Orchestrator

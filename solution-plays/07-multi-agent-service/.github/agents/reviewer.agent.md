@@ -1,11 +1,11 @@
 ---
 name: "Multi-Agent Reviewer"
 description: "Multi-Agent reviewer - audits agent interactions, loop detection"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["07-multi-agent-service"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Multi-Agent
 

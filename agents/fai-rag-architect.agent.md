@@ -1,19 +1,10 @@
 ---
-description: "Enterprise RAG architecture specialist — designs end-to-end retrieval-augmented generation pipelines with Azure AI Search, OpenAI embeddings, chunking strategies, grounding, citation, evaluation, and production deployment."
 name: "FAI RAG Architect"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "reliability"
-  - "cost-optimization"
-  - "performance-efficiency"
-plays:
-  - "01-enterprise-rag"
-  - "21-agentic-rag"
+description: "Enterprise RAG architecture specialist — designs end-to-end retrieval-augmented generation pipelines with Azure AI Search, OpenAI embeddings, chunking strategies, grounding, citation, evaluation, and production deployment."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","cost-optimization","performance-efficiency"]
+plays: ["01-enterprise-rag","21-agentic-rag"]
 ---
 
 # FAI RAG Architect

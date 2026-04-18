@@ -1,11 +1,11 @@
 ---
 name: "Accessibility AI Reviewer"
 description: "Accessibility AI reviewer - audits compliance completeness, false positive rate"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["76-accessibility-learning-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Accessibility AI
 

@@ -1,9 +1,9 @@
 ---
 name: "AI Recruiter Builder"
 description: "AI Recruiter builder - implements resume parsing, scoring, job description gen"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["responsible-ai", "security", "reliability"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["responsible-ai","security","reliability"]
 plays: ["59-ai-recruiter-agent"]
 ---
 # Builder Agent - AI Recruiter

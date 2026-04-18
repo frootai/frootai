@@ -1,9 +1,9 @@
 ---
 name: "AI DevOps Builder"
 description: "AI DevOps builder - implements incident pipeline, risk scoring, auto-remediation"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["operational-excellence", "reliability", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","security"]
 plays: ["37-ai-powered-devops"]
 ---
 # Builder Agent - AI DevOps

@@ -1,11 +1,11 @@
 ---
 name: "AI DevOps Tuner"
 description: "AI DevOps tuner - optimizes correlation window, risk weights, false positives"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["37-ai-powered-devops"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - AI DevOps
 

@@ -1,23 +1,11 @@
 ---
-description: "Enterprise RAG tuner — config optimization for search quality, token costs, chunking parameters, evaluation thresholds, and model selection economics."
 name: "FAI Enterprise RAG Tuner"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-plays:
-  - "01-enterprise-rag"
+description: "Enterprise RAG tuner — config optimization for search quality, token costs, chunking parameters, evaluation thresholds, and model selection economics."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency"]
+plays: ["01-enterprise-rag"]
 handoffs:
-  - label: "Implement these changes"
-    agent: "fai-play-01-builder"
-    prompt: "Implement the config changes recommended by the tuning analysis above."
-  - label: "Review tuned config"
-    agent: "fai-play-01-reviewer"
-    prompt: "Review the tuned config values for correctness and safety compliance."
 ---
 
 # FAI Enterprise RAG Tuner

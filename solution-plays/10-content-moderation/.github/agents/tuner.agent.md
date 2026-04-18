@@ -1,11 +1,11 @@
 ---
 name: "Content Moderation Tuner"
 description: "Content Moderation tuner - optimizes category thresholds, latency"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["10-content-moderation"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Content Moderation
 

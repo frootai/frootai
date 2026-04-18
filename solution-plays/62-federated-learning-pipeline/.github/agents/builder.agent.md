@@ -1,9 +1,9 @@
 ---
 name: "Federated Learning Builder"
 description: "Federated Learning builder - implements federated server, client training, aggregation"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["62-federated-learning-pipeline"]
 ---
 # Builder Agent - Federated Learning

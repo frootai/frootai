@@ -1,18 +1,10 @@
 ---
-description: "Azure identity and access management specialist — Entra ID, Managed Identity, DefaultAzureCredential, workload identity federation, RBAC, Conditional Access, and zero-trust architecture for AI services."
 name: "FAI Azure Identity Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "operational-excellence"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
-  - "30-security-hardening"
+description: "Azure identity and access management specialist — Entra ID, Managed Identity, DefaultAzureCredential, workload identity federation, RBAC, Conditional Access, and zero-trust architecture for AI services."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","operational-excellence"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced","30-security-hardening"]
 ---
 
 # FAI Azure Identity Expert

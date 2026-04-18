@@ -1,11 +1,11 @@
 ---
 name: "Voice Agent V2 Reviewer"
 description: "Voice Agent V2 reviewer - audits latency, barge-in, language switching, compliance"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["96-realtime-voice-agent-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Voice Agent V2
 

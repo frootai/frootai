@@ -1,9 +1,9 @@
 ---
 name: "Agent Eval Platform Builder"
 description: "Agent Eval Platform builder - implements eval framework, test suites, scoring pipeline"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "responsible-ai", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","responsible-ai","performance-efficiency"]
 plays: ["98-agent-evaluation-platform"]
 ---
 # Builder Agent - Agent Eval Platform

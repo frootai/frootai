@@ -1,11 +1,11 @@
 ---
 name: "Copilot Studio Reviewer"
 description: "Copilot Studio reviewer - audits conversation flows, security"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["08-copilot-studio-bot"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Copilot Studio
 

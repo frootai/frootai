@@ -1,11 +1,11 @@
 ---
 name: "Document Understanding Tuner"
 description: "Document Understanding tuner - optimizes model selection, throughput, cost"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["38-document-understanding-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Document Understanding
 

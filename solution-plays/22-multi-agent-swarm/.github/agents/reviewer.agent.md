@@ -1,11 +1,11 @@
 ---
 name: "Agent Swarm Reviewer"
 description: "Agent Swarm reviewer - audits consensus quality, cost, deduplication"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["22-multi-agent-swarm"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Agent Swarm
 

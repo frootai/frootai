@@ -12,6 +12,7 @@ waf:
   - "responsible-ai"
 plays:
   - "23-browser-automation-agent"
+model: ["gpt-4o", "gpt-4o-mini"]
 ---
 
 # Browser Automation Agent

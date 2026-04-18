@@ -1,11 +1,11 @@
 ---
 name: "Carbon Tracker Reviewer"
 description: "Carbon Tracker reviewer - audits calculation accuracy, factor currency, completeness"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","reliability","operational-excellence"]
 plays: ["69-carbon-footprint-tracker"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Carbon Tracker
 

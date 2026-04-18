@@ -1,9 +1,9 @@
 ---
 name: "AI Search Builder"
 description: "AI Search builder - designs search index, hybrid search, scoring"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["09-ai-search-portal"]
 ---
 # Builder Agent - AI Search

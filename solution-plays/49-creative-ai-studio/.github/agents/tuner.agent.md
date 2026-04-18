@@ -1,11 +1,11 @@
 ---
 name: "Creative AI Tuner"
 description: "Creative AI tuner - optimizes content quality, variation diversity, performance"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["49-creative-ai-studio"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Creative AI
 

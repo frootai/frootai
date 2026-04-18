@@ -1,11 +1,11 @@
 ---
 name: "Predictive Maintenance Tuner"
 description: "Predictive Maintenance tuner - optimizes RUL thresholds, feature selection"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "reliability", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","reliability","performance-efficiency"]
 plays: ["68-predictive-maintenance-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Predictive Maintenance
 

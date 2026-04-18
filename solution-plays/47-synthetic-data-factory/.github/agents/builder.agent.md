@@ -1,9 +1,9 @@
 ---
 name: "Synthetic Data Builder"
 description: "Synthetic Data builder - implements generation pipelines, statistical models, validation"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["47-synthetic-data-factory"]
 ---
 # Builder Agent - Synthetic Data

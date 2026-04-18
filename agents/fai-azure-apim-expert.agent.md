@@ -1,19 +1,10 @@
 ---
-description: "Azure API Management specialist — AI Gateway patterns, semantic caching, token metering, multi-backend load balancing, circuit breaker, rate limiting, and FinOps for LLM API layers."
 name: "FAI Azure APIM Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "reliability"
-  - "performance-efficiency"
-  - "security"
-plays:
-  - "01-enterprise-rag"
-  - "14-cost-optimized-ai-gateway"
+description: "Azure API Management specialist — AI Gateway patterns, semantic caching, token metering, multi-backend load balancing, circuit breaker, rate limiting, and FinOps for LLM API layers."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","reliability","performance-efficiency","security"]
+plays: ["01-enterprise-rag","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Azure APIM Expert

@@ -1,11 +1,11 @@
 ---
 name: "Creative AI Reviewer"
 description: "Creative AI reviewer - audits brand consistency, content safety, copyright"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "security", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","security","reliability"]
 plays: ["49-creative-ai-studio"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Creative AI
 

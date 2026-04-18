@@ -1,11 +1,11 @@
 ---
 name: "Exam Engine Reviewer"
 description: "Exam Engine reviewer - audits question quality, Bloom's alignment, answer accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["75-exam-generation-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Exam Engine
 

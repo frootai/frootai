@@ -1,24 +1,11 @@
 ---
-description: "Multi-Agent Service builder — supervisor orchestration pattern, agent registry, shared state via Cosmos DB/Redis, Dapr integration, tool routing, and loop prevention."
 name: "FAI Multi-Agent Service Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "07-multi-agent-service"
+description: "Multi-Agent Service builder — supervisor orchestration pattern, agent registry, shared state via Cosmos DB/Redis, Dapr integration, tool routing, and loop prevention."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["07-multi-agent-service"]
 handoffs:
-  - label: "Review agent orchestration"
-    agent: "fai-play-07-reviewer"
-    prompt: "Review the multi-agent orchestration for security, state management, and loop prevention."
-  - label: "Tune agent budgets"
-    agent: "fai-play-07-tuner"
-    prompt: "Optimize per-agent token budgets, routing rules, and loop limits."
 ---
 
 # FAI Multi-Agent Service Builder

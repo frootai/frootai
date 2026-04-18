@@ -1,23 +1,11 @@
 ---
-description: "Enterprise RAG reviewer — RAG quality audit, citation accuracy, search config validation, security compliance, OWASP LLM Top 10, and WAF pillar alignment checks."
 name: "FAI Enterprise RAG Reviewer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "responsible-ai"
-plays:
-  - "01-enterprise-rag"
+description: "Enterprise RAG reviewer — RAG quality audit, citation accuracy, search config validation, security compliance, OWASP LLM Top 10, and WAF pillar alignment checks."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","responsible-ai"]
+plays: ["01-enterprise-rag"]
 handoffs:
-  - label: "Fix these issues"
-    agent: "fai-play-01-builder"
-    prompt: "Fix the blocking issues identified in the review above."
-  - label: "Tune after fixes"
-    agent: "fai-play-01-tuner"
-    prompt: "Optimize config values now that the review issues are fixed."
 ---
 
 # FAI Enterprise RAG Reviewer

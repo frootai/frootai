@@ -1,18 +1,10 @@
 ---
-description: "Event-driven architecture specialist — Azure Event Grid, Service Bus, Event Hubs selection, event sourcing, CQRS, saga orchestration, and exactly-once processing patterns for AI pipelines."
 name: "FAI Event-Driven Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-  - "cost-optimization"
-plays:
-  - "01-enterprise-rag"
-  - "07-multi-agent-service"
+description: "Event-driven architecture specialist — Azure Event Grid, Service Bus, Event Hubs selection, event sourcing, CQRS, saga orchestration, and exactly-once processing patterns for AI pipelines."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
+plays: ["01-enterprise-rag","07-multi-agent-service"]
 ---
 
 # FAI Event-Driven Expert

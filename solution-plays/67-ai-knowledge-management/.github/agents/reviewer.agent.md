@@ -1,11 +1,11 @@
 ---
 name: "Knowledge Mgmt Reviewer"
 description: "Knowledge Mgmt reviewer - audits knowledge quality, access control, freshness"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","operational-excellence"]
 plays: ["67-ai-knowledge-management"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Knowledge Mgmt
 

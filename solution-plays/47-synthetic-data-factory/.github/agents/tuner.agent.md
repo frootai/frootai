@@ -1,11 +1,11 @@
 ---
 name: "Synthetic Data Tuner"
 description: "Synthetic Data tuner - optimizes diversity, statistical accuracy, generation cost"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["47-synthetic-data-factory"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Synthetic Data
 

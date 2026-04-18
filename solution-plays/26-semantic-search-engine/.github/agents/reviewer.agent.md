@@ -1,11 +1,11 @@
 ---
 name: "Semantic Search Reviewer"
 description: "Semantic Search reviewer - audits relevance, access control, freshness"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "performance-efficiency"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","performance-efficiency"]
 plays: ["26-semantic-search-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Semantic Search
 

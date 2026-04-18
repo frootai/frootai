@@ -1,24 +1,11 @@
 ---
-description: "AI Observability builder — Application Insights distributed tracing, KQL query library for AI metrics, Azure Workbooks dashboards, alerting rules, and FinOps telemetry."
 name: "FAI AI Observability Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "cost-optimization"
-  - "reliability"
-plays:
-  - "17-ai-observability"
+description: "AI Observability builder — Application Insights distributed tracing, KQL query library for AI metrics, Azure Workbooks dashboards, alerting rules, and FinOps telemetry."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","cost-optimization","reliability"]
+plays: ["17-ai-observability"]
 handoffs:
-  - label: "Review observability setup"
-    agent: "fai-play-17-reviewer"
-    prompt: "Review the observability pipeline for telemetry coverage, KQL accuracy, and alert quality."
-  - label: "Tune monitoring config"
-    agent: "fai-play-17-tuner"
-    prompt: "Optimize Log Analytics tier, sampling, alert thresholds, and dashboard refresh."
 ---
 
 # FAI AI Observability Builder

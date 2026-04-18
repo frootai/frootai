@@ -1,9 +1,9 @@
 ---
 name: "Creative AI Builder"
 description: "Creative AI builder - implements content pipeline, brand voice, multi-platform gen"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","responsible-ai"]
 plays: ["49-creative-ai-studio"]
 ---
 # Builder Agent - Creative AI

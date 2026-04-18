@@ -1,9 +1,9 @@
 ---
 name: "Knowledge Mgmt Builder"
 description: "Knowledge Mgmt builder - implements capture pipeline, taxonomy, expertise finder"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["operational-excellence", "reliability", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","performance-efficiency"]
 plays: ["67-ai-knowledge-management"]
 ---
 # Builder Agent - Knowledge Mgmt

@@ -1,9 +1,9 @@
 ---
 name: "Food Safety AI Builder"
 description: "Food Safety AI builder - implements HACCP monitoring, traceability, patterns"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","responsible-ai"]
 plays: ["79-food-safety-inspector-ai"]
 ---
 # Builder Agent - Food Safety AI

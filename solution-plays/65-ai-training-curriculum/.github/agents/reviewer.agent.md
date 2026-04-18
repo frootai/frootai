@@ -1,11 +1,11 @@
 ---
 name: "Training Curriculum Reviewer"
 description: "Training Curriculum reviewer - audits content accuracy, assessment quality, accessibility"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","reliability","operational-excellence"]
 plays: ["65-ai-training-curriculum"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Training Curriculum
 

@@ -1,9 +1,9 @@
 ---
 name: "Translation Engine Builder"
 description: "Translation Engine builder - implements translation pipeline, glossary, post-editing"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
 plays: ["57-ai-translation-engine"]
 ---
 # Builder Agent - Translation Engine

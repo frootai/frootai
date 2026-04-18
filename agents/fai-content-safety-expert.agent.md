@@ -1,18 +1,10 @@
 ---
-description: "Content safety specialist — Azure AI Content Safety API, 4 harm categories with severity scoring, Prompt Shields for jailbreak defense, groundedness detection, PII redaction, and moderation pipeline design."
 name: "FAI Content Safety Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "responsible-ai"
-  - "security"
-plays:
-  - "10-content-moderation"
-  - "30-security-hardening"
-  - "60-responsible-ai"
+description: "Content safety specialist — Azure AI Content Safety API, 4 harm categories with severity scoring, Prompt Shields for jailbreak defense, groundedness detection, PII redaction, and moderation pipeline design."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["responsible-ai","security"]
+plays: ["10-content-moderation","30-security-hardening","60-responsible-ai"]
 ---
 
 # FAI Content Safety Expert

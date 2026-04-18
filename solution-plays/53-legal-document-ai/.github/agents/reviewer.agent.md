@@ -1,11 +1,11 @@
 ---
 name: "Legal AI Reviewer"
 description: "Legal AI reviewer - audits UPL compliance, privilege handling, accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "security", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","security","operational-excellence"]
 plays: ["53-legal-document-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Legal AI
 

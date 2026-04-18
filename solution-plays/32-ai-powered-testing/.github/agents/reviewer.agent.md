@@ -1,11 +1,11 @@
 ---
 name: "AI Testing Reviewer"
 description: "AI Testing reviewer - audits test quality, mock completeness, coverage"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","operational-excellence"]
 plays: ["32-ai-powered-testing"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - AI Testing
 

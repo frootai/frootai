@@ -1,9 +1,9 @@
 ---
 name: "Autonomous Coding Builder"
 description: "Autonomous Coding builder - implements issue-to-PR, multi-file changes, test gen"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["51-autonomous-coding-agent"]
 ---
 # Builder Agent - Autonomous Coding

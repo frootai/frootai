@@ -1,9 +1,9 @@
 ---
 name: "Climate Risk Builder"
 description: "Climate Risk builder - implements risk models, scenario analysis, financial quantification"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","responsible-ai"]
 plays: ["72-climate-risk-assessor"]
 ---
 # Builder Agent - Climate Risk

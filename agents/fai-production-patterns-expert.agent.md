@@ -1,19 +1,10 @@
 ---
-description: "Production AI patterns expert — hosting selection (Container Apps/AKS/Functions), APIM gateway patterns, streaming SSE, retry/circuit-breaker, health checks, and multi-region deployment for production AI workloads."
 name: "FAI Production Patterns Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-  - "cost-optimization"
-  - "operational-excellence"
-plays:
-  - "01-enterprise-rag"
-  - "14-cost-optimized-ai-gateway"
+description: "Production AI patterns expert — hosting selection (Container Apps/AKS/Functions), APIM gateway patterns, streaming SSE, retry/circuit-breaker, health checks, and multi-region deployment for production AI workloads."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization","operational-excellence"]
+plays: ["01-enterprise-rag","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Production Patterns Expert

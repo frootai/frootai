@@ -1,18 +1,10 @@
 ---
-description: "DevOps lifecycle specialist — GitHub Actions OIDC, Infrastructure as Code (Bicep/Terraform), deployment strategies (blue-green/canary), SRE practices, DORA metrics, and incident management for AI systems."
 name: "FAI DevOps Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "reliability"
-  - "security"
-plays:
-  - "37-devops-agent"
-  - "02-ai-landing-zone"
+description: "DevOps lifecycle specialist — GitHub Actions OIDC, Infrastructure as Code (Bicep/Terraform), deployment strategies (blue-green/canary), SRE practices, DORA metrics, and incident management for AI systems."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","security"]
+plays: ["37-devops-agent","02-ai-landing-zone"]
 ---
 
 # FAI DevOps Expert

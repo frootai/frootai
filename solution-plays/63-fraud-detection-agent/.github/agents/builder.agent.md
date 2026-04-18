@@ -1,9 +1,9 @@
 ---
 name: "Fraud Detection Builder"
 description: "Fraud Detection builder - implements detection pipeline, rules, ML, graph analysis"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","performance-efficiency"]
 plays: ["63-fraud-detection-agent"]
 ---
 # Builder Agent - Fraud Detection

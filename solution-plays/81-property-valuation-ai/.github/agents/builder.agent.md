@@ -1,9 +1,9 @@
 ---
 name: "Property Valuation Builder"
 description: "Property Valuation builder - implements AVM, comp search, adjustment engine"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "responsible-ai", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","responsible-ai","performance-efficiency"]
 plays: ["81-property-valuation-ai"]
 ---
 # Builder Agent - Property Valuation

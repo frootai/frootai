@@ -1,9 +1,9 @@
 ---
 name: "Memory Layer Builder"
 description: "Memory Layer builder - implements memory tiers, compression, vector storage"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["25-conversation-memory-layer"]
 ---
 # Builder Agent - Memory Layer

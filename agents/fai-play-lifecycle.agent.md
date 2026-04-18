@@ -1,15 +1,9 @@
 ---
-description: "FAI play lifecycle manager — handles play initialization (scaffold file structure), Bicep deployment, evaluation quality gates, and config tuning for any of the 101 solution plays."
 name: "FAI Play Lifecycle"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "reliability"
-  - "cost-optimization"
+description: "FAI play lifecycle manager — handles play initialization (scaffold file structure), Bicep deployment, evaluation quality gates, and config tuning for any of the 101 solution plays."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","cost-optimization"]
 ---
 
 # FAI Play Lifecycle

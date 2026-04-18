@@ -1,9 +1,9 @@
 ---
 name: "Copilot Studio Builder"
 description: "Copilot Studio builder - designs topics, connectors, authentication"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["08-copilot-studio-bot"]
 ---
 # Builder Agent - Copilot Studio

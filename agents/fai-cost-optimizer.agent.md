@@ -1,17 +1,10 @@
 ---
-description: "FinOps cost optimizer for AI workloads — model routing economics, semantic caching ROI, token budget design, PTU vs PAYG analysis, right-sizing recommendations, and Azure cost attribution."
 name: "FAI Cost Optimizer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-plays:
-  - "14-cost-optimized-ai-gateway"
-  - "52-finops"
+description: "FinOps cost optimizer for AI workloads — model routing economics, semantic caching ROI, token budget design, PTU vs PAYG analysis, right-sizing recommendations, and Azure cost attribution."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency"]
+plays: ["14-cost-optimized-ai-gateway","52-finops"]
 ---
 
 # FAI Cost Optimizer

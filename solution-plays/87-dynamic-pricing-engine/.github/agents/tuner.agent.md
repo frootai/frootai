@@ -1,11 +1,11 @@
 ---
 name: "Dynamic Pricing Tuner"
 description: "Dynamic Pricing tuner - optimizes elasticity model, change limits, revenue"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["87-dynamic-pricing-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Dynamic Pricing
 

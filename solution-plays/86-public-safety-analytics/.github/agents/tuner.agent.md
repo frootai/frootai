@@ -1,11 +1,11 @@
 ---
 name: "Public Safety Tuner"
 description: "Public Safety tuner - optimizes resource allocation, response time"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "responsible-ai", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","responsible-ai","operational-excellence"]
 plays: ["86-public-safety-analytics"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Public Safety
 

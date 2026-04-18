@@ -1,11 +1,11 @@
 ---
 name: "Research Paper AI Tuner"
 description: "Research Paper AI tuner - optimizes search relevance, extraction quality"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["77-research-paper-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Research Paper AI
 

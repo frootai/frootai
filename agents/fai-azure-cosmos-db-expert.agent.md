@@ -1,21 +1,10 @@
 ---
-description: "Azure Cosmos DB specialist — partition key design, DiskANN vector search, multi-region writes, RU optimization, change feed processing, and conversation/session storage for AI agents."
 name: "FAI Azure Cosmos DB Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-  - "security"
-plays:
-  - "01-enterprise-rag"
-  - "05-it-ticket-resolution"
-  - "21-agentic-rag"
-  - "28-knowledge-graph"
+description: "Azure Cosmos DB specialist — partition key design, DiskANN vector search, multi-region writes, RU optimization, change feed processing, and conversation/session storage for AI agents."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization","security"]
+plays: ["01-enterprise-rag","05-it-ticket-resolution","21-agentic-rag","28-knowledge-graph"]
 ---
 
 # FAI Azure Cosmos DB Expert

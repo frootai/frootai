@@ -1,9 +1,9 @@
 ---
 name: "Deterministic Agent Builder"
 description: "Deterministic Agent builder — implements zero-temperature pipelines, structured output, abstention logic, reproducibility, guardrails"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","responsible-ai"]
 plays: ["03-deterministic-agent"]
 ---
 # Builder Agent — Deterministic Agent

@@ -1,11 +1,11 @@
 ---
 name: "Digital Twin Reviewer"
 description: "Digital Twin reviewer - audits twin accuracy, security, telemetry coverage"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","operational-excellence"]
 plays: ["58-digital-twin-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Digital Twin
 

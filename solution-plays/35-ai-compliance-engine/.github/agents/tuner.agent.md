@@ -1,11 +1,11 @@
 ---
 name: "AI Compliance Tuner"
 description: "AI Compliance tuner - optimizes check frequency, false positives, scoring"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "operational-excellence", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","operational-excellence","responsible-ai"]
 plays: ["35-ai-compliance-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - AI Compliance
 

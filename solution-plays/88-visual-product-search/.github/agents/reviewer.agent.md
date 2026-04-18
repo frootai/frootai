@@ -1,11 +1,11 @@
 ---
 name: "Visual Search Reviewer"
 description: "Visual Search reviewer - audits search relevance, content safety, performance"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["88-visual-product-search"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Visual Search
 

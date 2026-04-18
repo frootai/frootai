@@ -1,9 +1,9 @@
 ---
 name: "Supply Chain AI Builder"
 description: "Supply Chain AI builder - implements forecasting, risk scoring, optimization"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
 plays: ["55-supply-chain-ai"]
 ---
 # Builder Agent - Supply Chain AI

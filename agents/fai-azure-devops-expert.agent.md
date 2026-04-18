@@ -1,18 +1,10 @@
 ---
-description: "Azure DevOps specialist — YAML multi-stage pipelines, environment protection rules, artifact feeds, workload identity federation, and AI-specific deployment quality gates."
 name: "FAI Azure DevOps Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "reliability"
-  - "security"
-plays:
-  - "37-devops-agent"
-  - "32-test-automation"
+description: "Azure DevOps specialist — YAML multi-stage pipelines, environment protection rules, artifact feeds, workload identity federation, and AI-specific deployment quality gates."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","security"]
+plays: ["37-devops-agent","32-test-automation"]
 ---
 
 # FAI Azure DevOps Expert

@@ -1,9 +1,9 @@
 ---
 name: "Energy Grid AI Builder"
 description: "Energy Grid AI builder - implements load forecasting, renewable optimization, demand response"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
 plays: ["71-smart-energy-grid-ai"]
 ---
 # Builder Agent - Energy Grid AI

@@ -1,18 +1,10 @@
 ---
-description: "Azure Front Door & CDN specialist — global content delivery, WAF policies, caching rules, edge optimization, SSL/TLS management, and Private Link origins for AI application frontends."
 name: "FAI Azure CDN Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "security"
-  - "reliability"
-plays:
-  - "01-enterprise-rag"
-  - "09-ai-search-portal"
+description: "Azure Front Door & CDN specialist — global content delivery, WAF policies, caching rules, edge optimization, SSL/TLS management, and Private Link origins for AI application frontends."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","security","reliability"]
+plays: ["01-enterprise-rag","09-ai-search-portal"]
 ---
 
 # FAI Azure CDN Expert

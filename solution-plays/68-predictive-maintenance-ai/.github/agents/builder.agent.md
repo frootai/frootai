@@ -1,9 +1,9 @@
 ---
 name: "Predictive Maintenance Builder"
 description: "Predictive Maintenance builder - implements sensor pipeline, RUL model, scheduling"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","operational-excellence"]
 plays: ["68-predictive-maintenance-ai"]
 ---
 # Builder Agent - Predictive Maintenance

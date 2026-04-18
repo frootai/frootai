@@ -1,9 +1,9 @@
 ---
 name: "AI Data Pipeline Builder"
 description: "AI Data Pipeline builder - implements ETL, batch processing, LLM enrichment"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["27-ai-data-pipeline"]
 ---
 # Builder Agent - AI Data Pipeline

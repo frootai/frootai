@@ -1,24 +1,11 @@
 ---
-description: "Enterprise RAG builder — hybrid search pipeline (BM25+vector), Azure AI Search indexing, OpenAI chat completions with citations, chunking strategies, and evaluation-driven quality gates."
 name: "FAI Enterprise RAG Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "01-enterprise-rag"
+description: "Enterprise RAG builder — hybrid search pipeline (BM25+vector), Azure AI Search indexing, OpenAI chat completions with citations, chunking strategies, and evaluation-driven quality gates."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["01-enterprise-rag"]
 handoffs:
-  - label: "Review this implementation"
-    agent: "fai-play-01-reviewer"
-    prompt: "Review the Enterprise RAG implementation above for security, WAF compliance, and quality."
-  - label: "Tune config values"
-    agent: "fai-play-01-tuner"
-    prompt: "Optimize the config/*.json values for production readiness based on the implementation above."
 ---
 
 # FAI Enterprise RAG Builder

@@ -1,11 +1,11 @@
 ---
 name: "Continual Learning Reviewer"
 description: "Continual Learning reviewer - audits memory quality, learning effectiveness, privacy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["93-continual-learning-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Continual Learning
 

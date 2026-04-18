@@ -1,11 +1,11 @@
 ---
 name: "Voice Agent V2 Tuner"
 description: "Voice Agent V2 tuner - optimizes TTFT, streaming quality, function call latency"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["96-realtime-voice-agent-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Voice Agent V2
 

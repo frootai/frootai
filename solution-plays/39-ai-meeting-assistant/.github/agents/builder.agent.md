@@ -1,9 +1,9 @@
 ---
 name: "Meeting Assistant Builder"
 description: "Meeting Assistant builder - implements transcription, diarization, action item extraction"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["39-ai-meeting-assistant"]
 ---
 # Builder Agent - Meeting Assistant

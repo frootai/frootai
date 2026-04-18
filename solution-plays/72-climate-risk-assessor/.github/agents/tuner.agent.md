@@ -1,11 +1,11 @@
 ---
 name: "Climate Risk Tuner"
 description: "Climate Risk tuner - optimizes scenario parameters, risk granularity"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["72-climate-risk-assessor"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Climate Risk
 

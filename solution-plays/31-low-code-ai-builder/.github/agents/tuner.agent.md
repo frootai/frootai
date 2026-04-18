@@ -1,11 +1,11 @@
 ---
 name: "Low-Code AI Tuner"
 description: "Low-Code AI tuner - optimizes step performance, model selection, cost"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["31-low-code-ai-builder"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Low-Code AI
 

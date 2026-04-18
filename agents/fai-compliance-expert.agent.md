@@ -1,19 +1,10 @@
 ---
-description: "AI compliance specialist — EU AI Act risk classification, NIST AI RMF, GDPR data subject rights, HIPAA PHI handling, SOC 2 evidence collection, and Azure compliance tooling."
 name: "FAI Compliance Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "responsible-ai"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "35-compliance-automation"
-  - "70-eu-ai-act"
-  - "99-governance-framework"
+description: "AI compliance specialist — EU AI Act risk classification, NIST AI RMF, GDPR data subject rights, HIPAA PHI handling, SOC 2 evidence collection, and Azure compliance tooling."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["responsible-ai","security","operational-excellence"]
+plays: ["35-compliance-automation","70-eu-ai-act","99-governance-framework"]
 ---
 
 # FAI Compliance Expert

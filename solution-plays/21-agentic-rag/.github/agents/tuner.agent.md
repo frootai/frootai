@@ -1,11 +1,11 @@
 ---
 name: "Agentic RAG Tuner"
 description: "Agentic RAG tuner - optimizes source selection, iteration thresholds"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["21-agentic-rag"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Agentic RAG
 

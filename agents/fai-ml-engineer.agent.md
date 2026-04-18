@@ -1,18 +1,10 @@
 ---
-description: "ML engineering specialist — model training pipelines, LoRA/QLoRA fine-tuning, evaluation metrics, MLOps with Azure AI Foundry, model registry, and serving optimization for production AI."
 name: "FAI ML Engineer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "operational-excellence"
-plays:
-  - "13-fine-tuning-workflow"
-  - "48-model-governance"
+description: "ML engineering specialist — model training pipelines, LoRA/QLoRA fine-tuning, evaluation metrics, MLOps with Azure AI Foundry, model registry, and serving optimization for production AI."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
+plays: ["13-fine-tuning-workflow","48-model-governance"]
 ---
 
 # FAI ML Engineer

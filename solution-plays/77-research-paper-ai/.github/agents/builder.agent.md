@@ -1,9 +1,9 @@
 ---
 name: "Research Paper AI Builder"
 description: "Research Paper AI builder - implements paper search, extraction, synthesis pipeline"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","responsible-ai"]
 plays: ["77-research-paper-ai"]
 ---
 # Builder Agent - Research Paper AI

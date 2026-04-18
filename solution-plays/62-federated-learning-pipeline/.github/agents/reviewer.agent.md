@@ -1,11 +1,11 @@
 ---
 name: "Federated Learning Reviewer"
 description: "Federated Learning reviewer - audits privacy guarantees, DP params, data isolation"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["62-federated-learning-pipeline"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Federated Learning
 

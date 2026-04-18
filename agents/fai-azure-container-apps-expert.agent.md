@@ -1,19 +1,10 @@
 ---
-description: "Azure Container Apps specialist — serverless containers, Dapr sidecars, KEDA autoscaling, GPU workload profiles, scale-to-zero, and AI agent hosting patterns with blue/green deployments."
 name: "FAI Azure Container Apps Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "reliability"
-  - "operational-excellence"
-plays:
-  - "05-it-ticket-resolution"
-  - "07-multi-agent-service"
-  - "29-mcp-server"
+description: "Azure Container Apps specialist — serverless containers, Dapr sidecars, KEDA autoscaling, GPU workload profiles, scale-to-zero, and AI agent hosting patterns with blue/green deployments."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","reliability","operational-excellence"]
+plays: ["05-it-ticket-resolution","07-multi-agent-service","29-mcp-server"]
 ---
 
 # FAI Azure Container Apps Expert

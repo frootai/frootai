@@ -1,23 +1,10 @@
 ---
-description: "Azure AI Search specialist — HNSW vector indexes, hybrid keyword+vector retrieval, semantic ranker, integrated vectorization pipelines, custom skillsets, scoring profiles, and RAG optimization for production search experiences."
 name: "FAI Azure AI Search Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-  - "security"
-plays:
-  - "01-enterprise-rag"
-  - "09-ai-search-portal"
-  - "15-document-intelligence"
-  - "21-agentic-rag"
-  - "26-personalized-search"
-  - "52-hybrid-search"
+description: "Azure AI Search specialist — HNSW vector indexes, hybrid keyword+vector retrieval, semantic ranker, integrated vectorization pipelines, custom skillsets, scoring profiles, and RAG optimization for production search experiences."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization","security"]
+plays: ["01-enterprise-rag","09-ai-search-portal","15-document-intelligence","21-agentic-rag","26-personalized-search","52-hybrid-search"]
 ---
 
 # FAI Azure AI Search Expert

@@ -1,11 +1,11 @@
 ---
 name: "Low-Code AI Reviewer"
 description: "Low-Code AI reviewer - audits pipeline logic, error handling, security"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["31-low-code-ai-builder"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Low-Code AI
 

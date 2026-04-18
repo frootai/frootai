@@ -1,19 +1,10 @@
 ---
-description: "Azure Service Bus specialist — queues, topics/subscriptions, dead-letter handling, session-based ordered messaging, saga patterns, and agent-to-agent communication for AI workflows."
 name: "FAI Azure Service Bus Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-  - "security"
-plays:
-  - "05-it-ticket-resolution"
-  - "07-multi-agent-service"
-  - "22-swarm-orchestration"
+description: "Azure Service Bus specialist — queues, topics/subscriptions, dead-letter handling, session-based ordered messaging, saga patterns, and agent-to-agent communication for AI workflows."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","security"]
+plays: ["05-it-ticket-resolution","07-multi-agent-service","22-swarm-orchestration"]
 ---
 
 # FAI Azure Service Bus Expert

@@ -1,11 +1,11 @@
 ---
 name: "Teams Extension Reviewer"
 description: "Teams Extension reviewer - audits SSO, permissions, throttling"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["16-copilot-teams-extension"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Teams Extension
 

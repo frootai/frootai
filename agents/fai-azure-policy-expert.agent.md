@@ -1,18 +1,10 @@
 ---
-description: "Azure Policy specialist — built-in/custom policy definitions, AI governance initiatives, compliance scanning, remediation tasks, and policy-as-code deployment patterns."
 name: "FAI Azure Policy Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "operational-excellence"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
-  - "30-security-hardening"
+description: "Azure Policy specialist — built-in/custom policy definitions, AI governance initiatives, compliance scanning, remediation tasks, and policy-as-code deployment patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","operational-excellence"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced","30-security-hardening"]
 ---
 
 # FAI Azure Policy Expert

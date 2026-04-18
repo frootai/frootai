@@ -1,17 +1,10 @@
 ---
-description: "AI cost gateway specialist — APIM-based AI gateway with semantic caching, model routing by complexity, token budget enforcement, multi-region PTU load balancing, and FinOps telemetry."
 name: "FAI Cost Gateway"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "reliability"
-plays:
-  - "14-cost-optimized-ai-gateway"
+description: "AI cost gateway specialist — APIM-based AI gateway with semantic caching, model routing by complexity, token budget enforcement, multi-region PTU load balancing, and FinOps telemetry."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
+plays: ["14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Cost Gateway

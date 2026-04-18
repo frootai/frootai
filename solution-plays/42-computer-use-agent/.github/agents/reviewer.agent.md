@@ -1,11 +1,11 @@
 ---
 name: "Computer Use Agent Reviewer"
 description: "Computer Use Agent reviewer - audits sandbox, permissions, action safety, loops"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["42-computer-use-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Computer Use Agent
 

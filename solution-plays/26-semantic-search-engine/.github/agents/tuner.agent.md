@@ -1,11 +1,11 @@
 ---
 name: "Semantic Search Tuner"
 description: "Semantic Search tuner - optimizes scoring, embedding model, caching"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["26-semantic-search-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Semantic Search
 

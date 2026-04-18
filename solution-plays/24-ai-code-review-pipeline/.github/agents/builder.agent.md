@@ -1,9 +1,9 @@
 ---
 name: "Code Review Builder"
 description: "Code Review builder - implements review pipeline, static analysis, LLM review"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "operational-excellence", "reliability"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","operational-excellence","reliability"]
 plays: ["24-ai-code-review-pipeline"]
 ---
 # Builder Agent - Code Review

@@ -1,11 +1,11 @@
 ---
 name: "Translation Engine Reviewer"
 description: "Translation Engine reviewer - audits quality, glossary completeness, locale handling"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","reliability","operational-excellence"]
 plays: ["57-ai-translation-engine"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Translation Engine
 

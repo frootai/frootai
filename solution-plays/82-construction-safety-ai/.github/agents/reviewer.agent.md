@@ -1,11 +1,11 @@
 ---
 name: "Construction Safety Reviewer"
 description: "Construction Safety reviewer - audits detection accuracy, alert effectiveness"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["82-construction-safety-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Construction Safety
 

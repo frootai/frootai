@@ -1,11 +1,11 @@
 ---
 name: "Realtime Event AI Tuner"
 description: "Realtime Event AI tuner - optimizes batch size, anomaly thresholds, LLM ratio"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["45-realtime-event-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Realtime Event AI
 

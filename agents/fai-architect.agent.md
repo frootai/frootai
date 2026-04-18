@@ -1,21 +1,10 @@
 ---
-description: "Senior cloud-native solution architect — Azure Well-Architected Framework alignment, AI system design, multi-service integration, cost modeling, trade-off analysis, and production readiness assessment."
 name: "FAI Architect"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "operational-excellence"
-  - "responsible-ai"
-plays:
-  - "01-enterprise-rag"
-  - "02-ai-landing-zone"
+description: "Senior cloud-native solution architect — Azure Well-Architected Framework alignment, AI system design, multi-service integration, cost modeling, trade-off analysis, and production readiness assessment."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","cost-optimization","performance-efficiency","operational-excellence","responsible-ai"]
+plays: ["01-enterprise-rag","02-ai-landing-zone"]
 ---
 
 # FAI Architect

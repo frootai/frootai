@@ -1,18 +1,10 @@
 ---
-description: "Azure Key Vault specialist — secrets rotation, CMK encryption, certificate lifecycle, HSM-backed keys, Managed Identity integration, and zero-secret deployment patterns for AI workloads."
 name: "FAI Azure Key Vault Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "operational-excellence"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
-  - "30-security-hardening"
+description: "Azure Key Vault specialist — secrets rotation, CMK encryption, certificate lifecycle, HSM-backed keys, Managed Identity integration, and zero-secret deployment patterns for AI workloads."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","operational-excellence"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced","30-security-hardening"]
 ---
 
 # FAI Azure Key Vault Expert

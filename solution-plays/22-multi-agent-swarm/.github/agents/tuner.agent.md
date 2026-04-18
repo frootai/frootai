@@ -1,11 +1,11 @@
 ---
 name: "Agent Swarm Tuner"
 description: "Agent Swarm tuner - optimizes swarm size, agent selection, cost"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["22-multi-agent-swarm"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Agent Swarm
 

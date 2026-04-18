@@ -1,19 +1,10 @@
 ---
-description: "Azure Event Hubs specialist — partitioned event streaming, Kafka compatibility, Schema Registry governance, real-time AI inference pipelines, and high-throughput data ingestion."
 name: "FAI Azure Event Hubs Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-plays:
-  - "20-real-time-analytics"
-  - "63-fraud-detection"
-  - "50-financial-risk"
+description: "Azure Event Hubs specialist — partitioned event streaming, Kafka compatibility, Schema Registry governance, real-time AI inference pipelines, and high-throughput data ingestion."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization"]
+plays: ["20-real-time-analytics","63-fraud-detection","50-financial-risk"]
 ---
 
 # FAI Azure Event Hubs Expert

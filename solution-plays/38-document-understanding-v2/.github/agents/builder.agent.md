@@ -1,9 +1,9 @@
 ---
 name: "Document Understanding Builder"
 description: "Document Understanding builder - implements layout extraction, comparison, classification"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","security"]
 plays: ["38-document-understanding-v2"]
 ---
 # Builder Agent - Document Understanding

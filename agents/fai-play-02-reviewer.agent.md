@@ -1,23 +1,11 @@
 ---
-description: "AI Landing Zone reviewer — network security audit, private endpoint verification, identity compliance, Azure Policy enforcement, and Bicep infrastructure review."
 name: "FAI AI Landing Zone Reviewer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "responsible-ai"
-plays:
-  - "02-ai-landing-zone"
+description: "AI Landing Zone reviewer — network security audit, private endpoint verification, identity compliance, Azure Policy enforcement, and Bicep infrastructure review."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","responsible-ai"]
+plays: ["02-ai-landing-zone"]
 handoffs:
-  - label: "Fix infrastructure issues"
-    agent: "fai-play-02-builder"
-    prompt: "Fix the infrastructure issues identified in the review above."
-  - label: "Tune sizing/costs"
-    agent: "fai-play-02-tuner"
-    prompt: "Optimize the SKU sizing and cost config based on the review findings."
 ---
 
 # FAI AI Landing Zone Reviewer

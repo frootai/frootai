@@ -1,11 +1,11 @@
 ---
 name: "Multimodal Agent Reviewer"
 description: "Multimodal Agent reviewer - audits content safety, modality handling, image sizing"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["36-multimodal-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Multimodal Agent
 

@@ -1,11 +1,11 @@
 ---
 name: "Visual Search Tuner"
 description: "Visual Search tuner - optimizes embeddings, reranking, catalog indexing"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["88-visual-product-search"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Visual Search
 

@@ -1,24 +1,11 @@
 ---
-description: "Model Serving AKS builder — GPU cluster design, vLLM/TGI serving engines, NVIDIA device plugin, HPA/KEDA autoscaling, model versioning, and canary deployments."
 name: "FAI Model Serving AKS Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-plays:
-  - "12-model-serving-aks"
+description: "Model Serving AKS builder — GPU cluster design, vLLM/TGI serving engines, NVIDIA device plugin, HPA/KEDA autoscaling, model versioning, and canary deployments."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization"]
+plays: ["12-model-serving-aks"]
 handoffs:
-  - label: "Review GPU cluster"
-    agent: "fai-play-12-reviewer"
-    prompt: "Review the AKS GPU cluster for GPU utilization, security, and scaling configuration."
-  - label: "Tune serving config"
-    agent: "fai-play-12-tuner"
-    prompt: "Optimize GPU node sizing, batch config, and autoscaling parameters."
 ---
 
 # FAI Model Serving AKS Builder

@@ -1,9 +1,9 @@
 ---
 name: "Healthcare AI Builder"
 description: "Healthcare AI builder - implements clinical NLP, de-identification, decision support"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["46-healthcare-clinical-ai"]
 ---
 # Builder Agent - Healthcare AI

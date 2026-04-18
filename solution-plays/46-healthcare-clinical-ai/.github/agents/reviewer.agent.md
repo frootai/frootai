@@ -1,11 +1,11 @@
 ---
 name: "Healthcare AI Reviewer"
 description: "Healthcare AI reviewer - audits HIPAA compliance, PHI handling, clinical accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","operational-excellence"]
 plays: ["46-healthcare-clinical-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Healthcare AI
 

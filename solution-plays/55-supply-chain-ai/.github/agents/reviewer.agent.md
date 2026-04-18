@@ -1,11 +1,11 @@
 ---
 name: "Supply Chain AI Reviewer"
 description: "Supply Chain AI reviewer - audits forecast accuracy, risk model, data quality"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["reliability", "responsible-ai", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["reliability","responsible-ai","operational-excellence"]
 plays: ["55-supply-chain-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Supply Chain AI
 

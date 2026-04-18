@@ -1,19 +1,10 @@
 ---
-description: "Azure Storage specialist — Blob lifecycle tiers, ADLS Gen2 for data lakes, private endpoints, managed identity auth, and document/model artifact storage for AI pipelines."
 name: "FAI Azure Storage Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "security"
-  - "cost-optimization"
-  - "reliability"
-plays:
-  - "01-enterprise-rag"
-  - "02-ai-landing-zone"
-  - "06-document-intelligence"
+description: "Azure Storage specialist — Blob lifecycle tiers, ADLS Gen2 for data lakes, private endpoints, managed identity auth, and document/model artifact storage for AI pipelines."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","cost-optimization","reliability"]
+plays: ["01-enterprise-rag","02-ai-landing-zone","06-document-intelligence"]
 ---
 
 # FAI Azure Storage Expert

@@ -1,11 +1,11 @@
 ---
 name: "Document Understanding Reviewer"
 description: "Document Understanding reviewer - audits extraction accuracy, PII handling, cross-doc quality"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["38-document-understanding-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Document Understanding
 

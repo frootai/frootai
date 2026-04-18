@@ -1,11 +1,11 @@
 ---
 name: "AI Governance Hub Tuner"
 description: "AI Governance Hub tuner - optimizes review cadence, policy coverage, dashboard"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "operational-excellence", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","operational-excellence","responsible-ai"]
 plays: ["99-enterprise-ai-governance-hub"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - AI Governance Hub
 

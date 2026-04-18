@@ -1,11 +1,11 @@
 ---
 name: "Model Serving AKS Tuner"
 description: "Model Serving AKS tuner - optimizes GPU utilization, spot, autoscaling"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["12-model-serving-aks"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Model Serving AKS
 

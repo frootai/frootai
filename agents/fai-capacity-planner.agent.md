@@ -1,19 +1,10 @@
 ---
-description: "AI capacity planning specialist — GPU sizing, PTU allocation, token volume forecasting, cost modeling, scaling strategy, and FinOps for Azure AI workloads."
 name: "FAI Capacity Planner"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "reliability"
-plays:
-  - "02-ai-landing-zone"
-  - "12-model-serving-aks"
-  - "14-cost-optimized-ai-gateway"
+description: "AI capacity planning specialist — GPU sizing, PTU allocation, token volume forecasting, cost modeling, scaling strategy, and FinOps for Azure AI workloads."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
+plays: ["02-ai-landing-zone","12-model-serving-aks","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Capacity Planner

@@ -1,19 +1,10 @@
 ---
-description: "Azure SQL specialist — Hyperscale, serverless auto-pause, native vector search, geo-replication, intelligent performance tuning, and AI integration patterns with embeddings storage."
 name: "FAI Azure SQL Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-  - "security"
-plays:
-  - "01-enterprise-rag"
-  - "05-it-ticket-resolution"
+description: "Azure SQL specialist — Hyperscale, serverless auto-pause, native vector search, geo-replication, intelligent performance tuning, and AI integration patterns with embeddings storage."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization","security"]
+plays: ["01-enterprise-rag","05-it-ticket-resolution"]
 ---
 
 # FAI Azure SQL Expert

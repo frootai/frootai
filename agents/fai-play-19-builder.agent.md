@@ -1,24 +1,11 @@
 ---
-description: "Edge AI builder — Phi-4 on-device inference, ONNX quantization (INT4/INT8), Azure IoT Hub fleet management, offline-first architecture, and cloud fallback patterns."
 name: "FAI Edge AI Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "performance-efficiency"
-  - "cost-optimization"
-plays:
-  - "19-edge-ai"
+description: "Edge AI builder — Phi-4 on-device inference, ONNX quantization (INT4/INT8), Azure IoT Hub fleet management, offline-first architecture, and cloud fallback patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
+plays: ["19-edge-ai"]
 handoffs:
-  - label: "Review edge deployment"
-    agent: "fai-play-19-reviewer"
-    prompt: "Review the edge AI deployment for model quality, offline resilience, and fleet management."
-  - label: "Tune edge config"
-    agent: "fai-play-19-tuner"
-    prompt: "Optimize quantization, latency, sync schedule, and fallback thresholds."
 ---
 
 # FAI Edge AI Builder

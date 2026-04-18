@@ -1,9 +1,9 @@
 ---
 name: "Low-Code AI Builder"
 description: "Low-Code AI builder - designs pipelines, configures connectors, deployment"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["31-low-code-ai-builder"]
 ---
 # Builder Agent - Low-Code AI

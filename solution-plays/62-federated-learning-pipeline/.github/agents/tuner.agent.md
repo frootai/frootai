@@ -1,11 +1,11 @@
 ---
 name: "Federated Learning Tuner"
 description: "Federated Learning tuner - optimizes convergence, client selection, privacy/utility"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "security"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","security"]
 plays: ["62-federated-learning-pipeline"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Federated Learning
 

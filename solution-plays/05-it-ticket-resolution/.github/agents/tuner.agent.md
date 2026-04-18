@@ -1,11 +1,11 @@
 ---
 name: "IT Ticket Tuner"
 description: "IT Ticket tuner - optimizes routing rules, model selection"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["05-it-ticket-resolution"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - IT Ticket
 

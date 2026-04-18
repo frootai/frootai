@@ -1,16 +1,10 @@
 ---
-description: "Migration specialist — legacy-to-cloud, .NET Framework upgrade, database migration, AI-native re-architecture, 6R framework, Azure Migrate, and incremental migration patterns."
 name: "FAI Migration Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "reliability"
-plays:
-  - "02-ai-landing-zone"
+description: "Migration specialist — legacy-to-cloud, .NET Framework upgrade, database migration, AI-native re-architecture, 6R framework, Azure Migrate, and incremental migration patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability"]
+plays: ["02-ai-landing-zone"]
 ---
 
 # FAI Migration Expert

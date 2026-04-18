@@ -1,11 +1,11 @@
 ---
 name: "Energy Grid AI Reviewer"
 description: "Energy Grid AI reviewer - audits forecast accuracy, grid safety, compliance"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["71-smart-energy-grid-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Energy Grid AI
 

@@ -1,9 +1,9 @@
 ---
 name: "Podcast Generator Builder"
 description: "Podcast Generator builder - implements script generation, TTS pipeline, post-processing"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization"]
 plays: ["94-ai-podcast-generator"]
 ---
 # Builder Agent - Podcast Generator

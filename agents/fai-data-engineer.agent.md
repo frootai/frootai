@@ -1,19 +1,10 @@
 ---
-description: "Data engineering specialist for AI — RAG ingestion pipelines, document chunking, ETL/ELT patterns, PII detection with Presidio, data quality scoring, and Azure Data Factory orchestration."
 name: "FAI Data Engineer"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "operational-excellence"
-  - "performance-efficiency"
-plays:
-  - "01-enterprise-rag"
-  - "06-document-intelligence"
-  - "13-fine-tuning-workflow"
+description: "Data engineering specialist for AI — RAG ingestion pipelines, document chunking, ETL/ELT patterns, PII detection with Presidio, data quality scoring, and Azure Data Factory orchestration."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
+plays: ["01-enterprise-rag","06-document-intelligence","13-fine-tuning-workflow"]
 ---
 
 # FAI Data Engineer

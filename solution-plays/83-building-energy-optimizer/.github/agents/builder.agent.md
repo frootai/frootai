@@ -1,9 +1,9 @@
 ---
 name: "Building Energy Builder"
 description: "Building Energy builder - implements occupancy prediction, HVAC optimization, faults"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "cost-optimization", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","cost-optimization","performance-efficiency"]
 plays: ["83-building-energy-optimizer"]
 ---
 # Builder Agent - Building Energy

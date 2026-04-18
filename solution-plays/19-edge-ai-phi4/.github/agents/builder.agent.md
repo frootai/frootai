@@ -1,9 +1,9 @@
 ---
 name: "Edge AI Phi-4 Builder"
 description: "Edge AI Phi-4 builder - sets up ONNX Runtime, quantization, IoT Hub sync"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","security"]
 plays: ["19-edge-ai-phi4"]
 ---
 # Builder Agent - Edge AI Phi-4

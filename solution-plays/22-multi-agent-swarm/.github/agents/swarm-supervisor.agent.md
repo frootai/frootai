@@ -11,6 +11,7 @@ waf:
   - "cost-optimization"
 plays:
   - "22-multi-agent-swarm"
+model: ["gpt-4o", "gpt-4o-mini"]
 ---
 
 # Swarm Supervisor Agent

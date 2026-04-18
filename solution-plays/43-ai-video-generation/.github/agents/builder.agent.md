@@ -1,9 +1,9 @@
 ---
 name: "Video Generation Builder"
 description: "Video Generation builder - implements generation pipeline, batch processing, safety"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
 plays: ["43-ai-video-generation"]
 ---
 # Builder Agent - Video Generation

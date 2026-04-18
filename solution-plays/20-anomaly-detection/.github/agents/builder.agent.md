@@ -1,9 +1,9 @@
 ---
 name: "Anomaly Detection Builder"
 description: "Anomaly Detection builder - implements detection pipeline, alerting, root cause"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["20-anomaly-detection"]
 ---
 # Builder Agent - Anomaly Detection

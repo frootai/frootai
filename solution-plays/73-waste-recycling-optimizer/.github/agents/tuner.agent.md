@@ -1,11 +1,11 @@
 ---
 name: "Waste Optimizer Tuner"
 description: "Waste Optimizer tuner - optimizes model accuracy, route efficiency"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["73-waste-recycling-optimizer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Waste Optimizer
 

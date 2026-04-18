@@ -1,20 +1,10 @@
 ---
-description: "Azure Kubernetes Service specialist — GPU node pools (A100/H100), NVIDIA device plugin, model serving with vLLM/TGI/Triton, HPA/KEDA autoscaling, and production AI inference workload patterns."
 name: "FAI Azure AKS Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "cost-optimization"
-  - "security"
-plays:
-  - "02-ai-landing-zone"
-  - "11-ai-landing-zone-advanced"
-  - "12-model-serving-aks"
+description: "Azure Kubernetes Service specialist — GPU node pools (A100/H100), NVIDIA device plugin, model serving with vLLM/TGI/Triton, HPA/KEDA autoscaling, and production AI inference workload patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization","security"]
+plays: ["02-ai-landing-zone","11-ai-landing-zone-advanced","12-model-serving-aks"]
 ---
 
 # FAI Azure AKS Expert

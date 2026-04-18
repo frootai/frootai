@@ -105,24 +105,91 @@ function validate(checkUnification = false) {
     }
   }
 
-  // ── Check 6: Unification (optional) ──
+  // ── Check 6: Unification compliance ──
   if (checkUnification) {
     console.log("\n  6️⃣  Unification compliance:");
-    // Check embedded agents have full frontmatter
-    let embeddedMissingWaf = 0;
-    let embeddedMissingModel = 0;
-    for (const play of catalog.plays) {
-      // We check the devkit counts — actual frontmatter check requires re-scanning
-      if (play.devkit && play.devkit.agents > 0 && (!play.speckit?.waf || play.speckit.waf.length === 0)) {
-        embeddedMissingWaf++;
+    let unifyWarnings = 0;
+
+    // 6a: Embedded agents have full frontmatter (via unify engine)
+    try {
+      const { checkU1, checkU2, checkU3 } = require("./unify.js");
+
+      // Suppress console for sub-checks
+      const origLog = console.log;
+      console.log = () => {};
+
+      const u1 = checkU1(false, false);
+      const u2 = checkU2(false, false);
+      const u3 = checkU3(false, false);
+
+      console.log = origLog;
+
+      // Report results
+      if (u1.problems === 0) {
+        console.log("     ✅ All embedded agents have complete frontmatter");
+      } else {
+        console.log(`     ⚠️  ${u1.problems} embedded agents with incomplete frontmatter`);
+        unifyWarnings += u1.problems;
+      }
+
+      if (u2.problems === 0) {
+        console.log("     ✅ All agents use canonical tool vocabulary");
+      } else {
+        console.log(`     ⚠️  ${u2.problems} agents use non-canonical tool names`);
+        console.log("        Fix: npm run factory:unify -- --fix");
+        unifyWarnings += u2.problems;
+      }
+
+      if (u3.problems === 0) {
+        console.log("     ✅ All plays have root agent.md with handoffs");
+      } else {
+        if (u3.missingRoot?.length) {
+          console.log(`     ⚠️  ${u3.missingRoot.length} plays missing root agent.md`);
+        }
+        if (u3.missingHandoffs?.length) {
+          console.log(`     ⚠️  ${u3.missingHandoffs.length} root agents missing handoff pattern`);
+        }
+        console.log("        Fix: npm run factory:unify -- --fix --check U-3");
+        unifyWarnings += u3.problems;
+      }
+    } catch {
+      console.log("     ⏭️  Unification engine not available (scripts/factory/unify.js)");
+    }
+
+    // 6b: Instruction name collisions
+    const standaloneInstr = path.join(REPO_ROOT, "instructions");
+    if (fs.existsSync(standaloneInstr)) {
+      const standaloneNames = new Set(
+        fs.readdirSync(standaloneInstr)
+          .filter(f => f.endsWith(".instructions.md"))
+          .map(f => f.replace(".instructions.md", ""))
+      );
+
+      let collisionCount = 0;
+      const playsDir = path.join(REPO_ROOT, "solution-plays");
+      if (fs.existsSync(playsDir)) {
+        const scanDir = (dir) => {
+          const entries = fs.readdirSync(dir, { withFileTypes: true });
+          for (const e of entries) {
+            const full = path.join(dir, e.name);
+            if (e.isDirectory()) scanDir(full);
+            else if (e.name.endsWith(".instructions.md") && full.includes("instructions")) {
+              const name = e.name.replace(".instructions.md", "");
+              if (standaloneNames.has(name)) collisionCount++;
+            }
+          }
+        };
+        scanDir(playsDir);
+      }
+
+      if (collisionCount === 0) {
+        console.log("     ✅ No instruction name collisions");
+      } else {
+        console.log(`     ℹ️  ${collisionCount} instruction filename collisions (play-specific overrides)`);
       }
     }
-    if (embeddedMissingWaf > 0) {
-      console.log(`     ⚠️  ${embeddedMissingWaf} plays with agents but no WAF alignment in manifest`);
-      warnings += embeddedMissingWaf;
-    } else {
-      console.log("     ✅ All plays with agents have WAF alignment");
-    }
+
+    warnings += unifyWarnings;
   }
 
   // ── Summary ──

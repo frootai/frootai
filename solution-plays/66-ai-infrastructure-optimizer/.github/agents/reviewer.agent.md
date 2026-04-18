@@ -1,11 +1,11 @@
 ---
 name: "Infra Optimizer Reviewer"
 description: "Infra Optimizer reviewer - audits recommendation safety, cost accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["reliability", "security", "cost-optimization"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["reliability","security","cost-optimization"]
 plays: ["66-ai-infrastructure-optimizer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Infra Optimizer
 

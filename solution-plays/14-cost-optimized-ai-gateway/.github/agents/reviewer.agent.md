@@ -1,11 +1,11 @@
 ---
 name: "AI Gateway Reviewer"
 description: "AI Gateway reviewer - audits routing accuracy, cache hits, security"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "cost-optimization", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","cost-optimization","reliability"]
 plays: ["14-cost-optimized-ai-gateway"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - AI Gateway
 

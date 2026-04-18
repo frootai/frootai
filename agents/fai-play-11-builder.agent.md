@@ -1,24 +1,11 @@
 ---
-description: "AI Landing Zone Advanced builder — multi-region hub-spoke, Azure Firewall Premium with TLS/IDPS, policy-driven governance at scale, GPU quota orchestration, and disaster recovery automation."
 name: "FAI AI Landing Zone Advanced Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "11-ai-landing-zone-advanced"
+description: "AI Landing Zone Advanced builder — multi-region hub-spoke, Azure Firewall Premium with TLS/IDPS, policy-driven governance at scale, GPU quota orchestration, and disaster recovery automation."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["11-ai-landing-zone-advanced"]
 handoffs:
-  - label: "Review infrastructure"
-    agent: "fai-play-11-reviewer"
-    prompt: "Review the advanced landing zone for multi-region networking, policy compliance, and DR."
-  - label: "Tune sizing"
-    agent: "fai-play-11-tuner"
-    prompt: "Optimize network sizing, GPU allocation, and firewall configuration."
 ---
 
 # FAI AI Landing Zone Advanced Builder

@@ -1,11 +1,11 @@
 ---
 name: "Moderation V2 Reviewer"
 description: "Moderation V2 reviewer - audits false positive rates, threshold calibration"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","reliability","operational-excellence"]
 plays: ["61-content-moderation-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Moderation V2
 

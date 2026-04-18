@@ -1,11 +1,11 @@
 ---
 name: "Agentic RAG Reviewer"
 description: "Agentic RAG reviewer - audits retrieval quality, citation accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["21-agentic-rag"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Agentic RAG
 

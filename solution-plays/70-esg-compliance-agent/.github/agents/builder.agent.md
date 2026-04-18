@@ -1,9 +1,9 @@
 ---
 name: "ESG Compliance Builder"
 description: "ESG Compliance builder - implements scoring engine, evidence matching, reports"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["responsible-ai", "operational-excellence", "reliability"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["responsible-ai","operational-excellence","reliability"]
 plays: ["70-esg-compliance-agent"]
 ---
 # Builder Agent - ESG Compliance

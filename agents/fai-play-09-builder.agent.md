@@ -1,24 +1,11 @@
 ---
-description: "AI Search Portal builder — Azure AI Search index design, hybrid search with scoring profiles, faceted navigation, answer generation with citations, and auto-suggest."
 name: "FAI AI Search Portal Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "performance-efficiency"
-  - "reliability"
-  - "security"
-plays:
-  - "09-ai-search-portal"
+description: "AI Search Portal builder — Azure AI Search index design, hybrid search with scoring profiles, faceted navigation, answer generation with citations, and auto-suggest."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","security"]
+plays: ["09-ai-search-portal"]
 handoffs:
-  - label: "Review search portal"
-    agent: "fai-play-09-reviewer"
-    prompt: "Review the search portal for relevance quality, performance, and security."
-  - label: "Tune search config"
-    agent: "fai-play-09-tuner"
-    prompt: "Optimize hybrid weights, scoring profiles, and reranker configuration."
 ---
 
 # FAI AI Search Portal Builder

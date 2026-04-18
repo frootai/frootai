@@ -1,11 +1,11 @@
 ---
 name: "Voice AI Agent Tuner"
 description: "Voice AI Agent tuner - optimizes response speed, voice quality, accuracy"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["33-voice-ai-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Voice AI Agent
 

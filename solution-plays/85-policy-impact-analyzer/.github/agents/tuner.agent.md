@@ -1,11 +1,11 @@
 ---
 name: "Policy Impact Tuner"
 description: "Policy Impact tuner - optimizes stakeholder identification, cost estimation"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["85-policy-impact-analyzer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Policy Impact
 

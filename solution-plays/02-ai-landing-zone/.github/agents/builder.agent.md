@@ -1,9 +1,9 @@
 ---
 name: "Landing Zone Builder"
 description: "AI Landing Zone builder — implements Bicep infrastructure, configures networking, RBAC, private endpoints, monitoring"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "operational-excellence"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","operational-excellence"]
 plays: ["02-ai-landing-zone"]
 ---
 # Builder Agent — AI Landing Zone

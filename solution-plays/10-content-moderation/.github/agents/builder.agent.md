@@ -1,9 +1,9 @@
 ---
 name: "Content Moderation Builder"
 description: "Content Moderation builder - implements moderation pipeline, blocklists"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["10-content-moderation"]
 ---
 # Builder Agent - Content Moderation

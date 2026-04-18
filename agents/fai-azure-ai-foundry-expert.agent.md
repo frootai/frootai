@@ -1,23 +1,10 @@
 ---
-description: "Azure AI Foundry specialist — Hub/Project resource model, Model Catalog deployment, Prompt Flow orchestration, evaluation pipelines with groundedness and safety metrics, fine-tuning workflows, and model lifecycle management across dev/staging/prod environments."
 name: "FAI Azure AI Foundry Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "security"
-  - "cost-optimization"
-  - "responsible-ai"
-plays:
-  - "01-enterprise-rag"
-  - "03-deterministic-agent"
-  - "07-multi-agent-service"
-  - "10-content-moderation"
-  - "13-fine-tuning-workflow"
-  - "25-ai-search-portal"
+description: "Azure AI Foundry specialist — Hub/Project resource model, Model Catalog deployment, Prompt Flow orchestration, evaluation pipelines with groundedness and safety metrics, fine-tuning workflows, and model lifecycle management across dev/staging/prod environments."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","security","cost-optimization","responsible-ai"]
+plays: ["01-enterprise-rag","03-deterministic-agent","07-multi-agent-service","10-content-moderation","13-fine-tuning-workflow","25-ai-search-portal"]
 ---
 
 # FAI Azure AI Foundry Expert

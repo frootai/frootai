@@ -1,16 +1,10 @@
 ---
-description: "Incident response specialist — severity classification (P0-P4), triage protocols, automated runbooks, war room coordination, root cause analysis, blameless post-mortems, and AI-specific incident patterns."
 name: "FAI Incident Responder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "operational-excellence"
-plays:
-  - "37-devops-agent"
+description: "Incident response specialist — severity classification (P0-P4), triage protocols, automated runbooks, war room coordination, root cause analysis, blameless post-mortems, and AI-specific incident patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","operational-excellence"]
+plays: ["37-devops-agent"]
 ---
 
 # FAI Incident Responder

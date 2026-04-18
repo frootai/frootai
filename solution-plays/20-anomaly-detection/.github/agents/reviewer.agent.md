@@ -1,11 +1,11 @@
 ---
 name: "Anomaly Detection Reviewer"
 description: "Anomaly Detection reviewer - audits sensitivity, false positives, alert routing"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "operational-excellence"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","operational-excellence"]
 plays: ["20-anomaly-detection"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Anomaly Detection
 

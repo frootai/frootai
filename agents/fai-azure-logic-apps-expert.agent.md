@@ -1,19 +1,10 @@
 ---
-description: "Azure Logic Apps specialist — low-code workflow automation, 1400+ connectors, AI integration actions, Durable orchestration, B2B/EDI, and enterprise integration patterns."
 name: "FAI Azure Logic Apps Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "reliability"
-  - "cost-optimization"
-plays:
-  - "05-it-ticket-resolution"
-  - "06-document-intelligence"
-  - "08-copilot-studio-bot"
+description: "Azure Logic Apps specialist — low-code workflow automation, 1400+ connectors, AI integration actions, Durable orchestration, B2B/EDI, and enterprise integration patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","cost-optimization"]
+plays: ["05-it-ticket-resolution","06-document-intelligence","08-copilot-studio-bot"]
 ---
 
 # FAI Azure Logic Apps Expert

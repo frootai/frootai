@@ -1,11 +1,11 @@
 ---
 name: "Accessibility AI Tuner"
 description: "Accessibility AI tuner - optimizes check accuracy, prioritizes fixes"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "responsible-ai"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","responsible-ai"]
 plays: ["76-accessibility-learning-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Accessibility AI
 

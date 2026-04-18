@@ -1,9 +1,9 @@
 ---
 name: "Multi-Modal DocProc Builder"
 description: "Multi-Modal DocProc builder - implements vision+OCR pipeline, table extraction"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","security"]
 plays: ["15-multi-modal-docproc"]
 ---
 # Builder Agent - Multi-Modal DocProc

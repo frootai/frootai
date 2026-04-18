@@ -1,11 +1,11 @@
 ---
 name: "Healthcare AI Tuner"
 description: "Healthcare AI tuner - optimizes de-identification, response quality, latency"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "security"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","security"]
 plays: ["46-healthcare-clinical-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Healthcare AI
 

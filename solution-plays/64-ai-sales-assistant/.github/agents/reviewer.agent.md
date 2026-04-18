@@ -1,11 +1,11 @@
 ---
 name: "Sales Assistant Reviewer"
 description: "Sales Assistant reviewer - audits scoring fairness, email quality, data accuracy"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "security", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","security","reliability"]
 plays: ["64-ai-sales-assistant"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Sales Assistant
 

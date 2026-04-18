@@ -1,11 +1,11 @@
 ---
 name: "Customer Support V2 Reviewer"
 description: "Customer Support V2 reviewer - audits response quality, escalation logic, CSAT"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["responsible-ai", "security", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["responsible-ai","security","reliability"]
 plays: ["54-ai-customer-support-v2"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Customer Support V2
 

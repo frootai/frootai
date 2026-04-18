@@ -1,19 +1,10 @@
 ---
-description: "Azure Monitor specialist — Application Insights for AI distributed tracing, KQL for token analytics, custom dashboards for groundedness/coherence metrics, cost alerting, and AI-specific observability patterns."
 name: "FAI Azure Monitor Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "operational-excellence"
-  - "cost-optimization"
-  - "reliability"
-plays:
-  - "17-ai-observability"
-  - "01-enterprise-rag"
-  - "14-cost-optimized-ai-gateway"
+description: "Azure Monitor specialist — Application Insights for AI distributed tracing, KQL for token analytics, custom dashboards for groundedness/coherence metrics, cost alerting, and AI-specific observability patterns."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","cost-optimization","reliability"]
+plays: ["17-ai-observability","01-enterprise-rag","14-cost-optimized-ai-gateway"]
 ---
 
 # FAI Azure Monitor Expert

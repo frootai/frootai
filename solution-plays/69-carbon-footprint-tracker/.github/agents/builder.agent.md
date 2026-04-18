@@ -1,9 +1,9 @@
 ---
 name: "Carbon Tracker Builder"
 description: "Carbon Tracker builder - implements calculation engine, data connectors, reporting"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["operational-excellence", "reliability", "responsible-ai"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["operational-excellence","reliability","responsible-ai"]
 plays: ["69-carbon-footprint-tracker"]
 ---
 # Builder Agent - Carbon Tracker

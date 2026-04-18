@@ -1,7 +1,7 @@
 {
   "version": "5.2.0",
-  "generated": "2026-04-18T07:51:48.684Z",
-  "commit": "2f8d6624",
+  "generated": "2026-04-18T10:21:58.327Z",
+  "commit": "efd82eab",
   "stats": {
     "agents": 238,
     "skills": 333,
@@ -168,7 +168,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -183,7 +183,7 @@
         "02-ai-landing-zone",
         "12-model-serving-aks"
       ],
-      "lines": 115
+      "lines": 107
     },
     {
       "id": "fai-angular-expert",
@@ -215,7 +215,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -230,7 +230,7 @@
         "01-enterprise-rag",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 88
+      "lines": 80
     },
     {
       "id": "fai-architect",
@@ -240,7 +240,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -258,7 +258,7 @@
         "01-enterprise-rag",
         "02-ai-landing-zone"
       ],
-      "lines": 89
+      "lines": 78
     },
     {
       "id": "fai-autogen-expert",
@@ -293,7 +293,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -313,7 +313,7 @@
         "13-fine-tuning-workflow",
         "25-ai-search-portal"
       ],
-      "lines": 137
+      "lines": 124
     },
     {
       "id": "fai-azure-ai-search-expert",
@@ -323,7 +323,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -343,7 +343,7 @@
         "26-personalized-search",
         "52-hybrid-search"
       ],
-      "lines": 135
+      "lines": 122
     },
     {
       "id": "fai-azure-aks-expert",
@@ -353,7 +353,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -370,7 +370,7 @@
         "11-ai-landing-zone-advanced",
         "12-model-serving-aks"
       ],
-      "lines": 149
+      "lines": 139
     },
     {
       "id": "fai-azure-apim-expert",
@@ -380,7 +380,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -396,7 +396,7 @@
         "01-enterprise-rag",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 152
+      "lines": 143
     },
     {
       "id": "fai-azure-cdn-expert",
@@ -406,7 +406,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -421,7 +421,7 @@
         "01-enterprise-rag",
         "09-ai-search-portal"
       ],
-      "lines": 138
+      "lines": 130
     },
     {
       "id": "fai-azure-container-apps-expert",
@@ -431,7 +431,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -447,7 +447,7 @@
         "07-multi-agent-service",
         "29-mcp-server"
       ],
-      "lines": 156
+      "lines": 147
     },
     {
       "id": "fai-azure-cosmos-db-expert",
@@ -457,7 +457,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -475,7 +475,7 @@
         "21-agentic-rag",
         "28-knowledge-graph"
       ],
-      "lines": 157
+      "lines": 146
     },
     {
       "id": "fai-azure-devops-expert",
@@ -485,7 +485,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -500,7 +500,7 @@
         "37-devops-agent",
         "32-test-automation"
       ],
-      "lines": 175
+      "lines": 167
     },
     {
       "id": "fai-azure-event-hubs-expert",
@@ -510,7 +510,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -526,7 +526,7 @@
         "63-fraud-detection",
         "50-financial-risk"
       ],
-      "lines": 172
+      "lines": 163
     },
     {
       "id": "fai-azure-functions-expert",
@@ -536,7 +536,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -553,7 +553,7 @@
         "06-document-intelligence",
         "10-content-moderation"
       ],
-      "lines": 158
+      "lines": 148
     },
     {
       "id": "fai-azure-identity-expert",
@@ -563,7 +563,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -578,7 +578,7 @@
         "11-ai-landing-zone-advanced",
         "30-security-hardening"
       ],
-      "lines": 140
+      "lines": 132
     },
     {
       "id": "fai-azure-key-vault-expert",
@@ -588,7 +588,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -603,7 +603,7 @@
         "11-ai-landing-zone-advanced",
         "30-security-hardening"
       ],
-      "lines": 156
+      "lines": 148
     },
     {
       "id": "fai-azure-logic-apps-expert",
@@ -613,7 +613,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -629,7 +629,7 @@
         "06-document-intelligence",
         "08-copilot-studio-bot"
       ],
-      "lines": 166
+      "lines": 157
     },
     {
       "id": "fai-azure-monitor-expert",
@@ -639,7 +639,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -655,7 +655,7 @@
         "01-enterprise-rag",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 205
+      "lines": 196
     },
     {
       "id": "fai-azure-networking-expert",
@@ -665,7 +665,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -680,7 +680,7 @@
         "02-ai-landing-zone",
         "11-ai-landing-zone-advanced"
       ],
-      "lines": 158
+      "lines": 150
     },
     {
       "id": "fai-azure-openai-expert",
@@ -690,7 +690,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -707,7 +707,7 @@
         "03-deterministic-agent",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 174
+      "lines": 164
     },
     {
       "id": "fai-azure-policy-expert",
@@ -717,7 +717,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -732,7 +732,7 @@
         "11-ai-landing-zone-advanced",
         "30-security-hardening"
       ],
-      "lines": 159
+      "lines": 151
     },
     {
       "id": "fai-azure-service-bus-expert",
@@ -742,7 +742,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -758,7 +758,7 @@
         "07-multi-agent-service",
         "22-swarm-orchestration"
       ],
-      "lines": 152
+      "lines": 143
     },
     {
       "id": "fai-azure-sql-expert",
@@ -768,7 +768,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -784,7 +784,7 @@
         "01-enterprise-rag",
         "05-it-ticket-resolution"
       ],
-      "lines": 163
+      "lines": 154
     },
     {
       "id": "fai-azure-storage-expert",
@@ -794,7 +794,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -810,7 +810,7 @@
         "02-ai-landing-zone",
         "06-document-intelligence"
       ],
-      "lines": 126
+      "lines": 117
     },
     {
       "id": "fai-batch-processing-expert",
@@ -913,7 +913,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -929,7 +929,7 @@
         "12-model-serving-aks",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 128
+      "lines": 119
     },
     {
       "id": "fai-cicd-pipeline-expert",
@@ -1153,7 +1153,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1169,7 +1169,7 @@
         "70-eu-ai-act",
         "99-governance-framework"
       ],
-      "lines": 145
+      "lines": 136
     },
     {
       "id": "fai-content-safety-expert",
@@ -1179,7 +1179,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1194,7 +1194,7 @@
         "30-security-hardening",
         "60-responsible-ai"
       ],
-      "lines": 175
+      "lines": 167
     },
     {
       "id": "fai-copilot-ecosystem-expert",
@@ -1228,7 +1228,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1242,7 +1242,7 @@
       "plays": [
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 163
+      "lines": 156
     },
     {
       "id": "fai-cost-optimizer",
@@ -1252,7 +1252,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1266,7 +1266,7 @@
         "14-cost-optimized-ai-gateway",
         "52-finops"
       ],
-      "lines": 154
+      "lines": 147
     },
     {
       "id": "fai-crewai-expert",
@@ -1370,7 +1370,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1386,7 +1386,7 @@
         "06-document-intelligence",
         "13-fine-tuning-workflow"
       ],
-      "lines": 191
+      "lines": 182
     },
     {
       "id": "fai-datadog-expert",
@@ -1485,7 +1485,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1500,7 +1500,7 @@
         "37-devops-agent",
         "02-ai-landing-zone"
       ],
-      "lines": 135
+      "lines": 127
     },
     {
       "id": "fai-docker-expert",
@@ -1648,7 +1648,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1663,7 +1663,7 @@
         "01-enterprise-rag",
         "07-multi-agent-service"
       ],
-      "lines": 151
+      "lines": 143
     },
     {
       "id": "fai-fine-tuning-expert",
@@ -1673,7 +1673,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1687,7 +1687,7 @@
       "plays": [
         "13-fine-tuning-workflow"
       ],
-      "lines": 179
+      "lines": 172
     },
     {
       "id": "fai-genai-foundations-expert",
@@ -1945,7 +1945,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -1958,7 +1958,7 @@
       "plays": [
         "37-devops-agent"
       ],
-      "lines": 152
+      "lines": 146
     },
     {
       "id": "fai-java-expert",
@@ -2104,7 +2104,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2119,7 +2119,7 @@
         "02-ai-landing-zone",
         "11-ai-landing-zone-advanced"
       ],
-      "lines": 163
+      "lines": 155
     },
     {
       "id": "fai-langchain-expert",
@@ -2285,7 +2285,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2298,7 +2298,7 @@
       "plays": [
         "02-ai-landing-zone"
       ],
-      "lines": 164
+      "lines": 158
     },
     {
       "id": "fai-ml-engineer",
@@ -2308,7 +2308,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2323,7 +2323,7 @@
         "13-fine-tuning-workflow",
         "48-model-governance"
       ],
-      "lines": 152
+      "lines": 144
     },
     {
       "id": "fai-mlflow-expert",
@@ -2556,7 +2556,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2570,7 +2570,7 @@
       "plays": [
         "01-enterprise-rag"
       ],
-      "lines": 89
+      "lines": 76
     },
     {
       "id": "fai-play-01-reviewer",
@@ -2580,7 +2580,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2593,7 +2593,7 @@
       "plays": [
         "01-enterprise-rag"
       ],
-      "lines": 95
+      "lines": 83
     },
     {
       "id": "fai-play-01-tuner",
@@ -2603,7 +2603,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2616,7 +2616,7 @@
       "plays": [
         "01-enterprise-rag"
       ],
-      "lines": 86
+      "lines": 74
     },
     {
       "id": "fai-play-02-builder",
@@ -2626,7 +2626,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2640,7 +2640,7 @@
       "plays": [
         "02-ai-landing-zone"
       ],
-      "lines": 119
+      "lines": 106
     },
     {
       "id": "fai-play-02-reviewer",
@@ -2650,7 +2650,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2663,7 +2663,7 @@
       "plays": [
         "02-ai-landing-zone"
       ],
-      "lines": 56
+      "lines": 44
     },
     {
       "id": "fai-play-02-tuner",
@@ -2673,7 +2673,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2686,7 +2686,7 @@
       "plays": [
         "02-ai-landing-zone"
       ],
-      "lines": 56
+      "lines": 44
     },
     {
       "id": "fai-play-03-builder",
@@ -2696,7 +2696,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2710,7 +2710,7 @@
       "plays": [
         "03-deterministic-agent"
       ],
-      "lines": 60
+      "lines": 47
     },
     {
       "id": "fai-play-03-reviewer",
@@ -2764,7 +2764,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2778,7 +2778,7 @@
       "plays": [
         "04-call-center-voice-ai"
       ],
-      "lines": 60
+      "lines": 47
     },
     {
       "id": "fai-play-04-reviewer",
@@ -2832,7 +2832,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2846,7 +2846,7 @@
       "plays": [
         "05-it-ticket-resolution"
       ],
-      "lines": 60
+      "lines": 47
     },
     {
       "id": "fai-play-05-reviewer",
@@ -2900,7 +2900,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2914,7 +2914,7 @@
       "plays": [
         "06-document-intelligence"
       ],
-      "lines": 59
+      "lines": 46
     },
     {
       "id": "fai-play-06-reviewer",
@@ -2968,7 +2968,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -2982,7 +2982,7 @@
       "plays": [
         "07-multi-agent-service"
       ],
-      "lines": 60
+      "lines": 47
     },
     {
       "id": "fai-play-07-reviewer",
@@ -3103,7 +3103,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3117,7 +3117,7 @@
       "plays": [
         "09-ai-search-portal"
       ],
-      "lines": 57
+      "lines": 44
     },
     {
       "id": "fai-play-09-reviewer",
@@ -3171,7 +3171,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3184,7 +3184,7 @@
       "plays": [
         "10-content-moderation"
       ],
-      "lines": 58
+      "lines": 46
     },
     {
       "id": "fai-play-10-reviewer",
@@ -3238,7 +3238,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3252,7 +3252,7 @@
       "plays": [
         "11-ai-landing-zone-advanced"
       ],
-      "lines": 58
+      "lines": 45
     },
     {
       "id": "fai-play-11-reviewer",
@@ -3306,7 +3306,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3320,7 +3320,7 @@
       "plays": [
         "12-model-serving-aks"
       ],
-      "lines": 59
+      "lines": 46
     },
     {
       "id": "fai-play-12-reviewer",
@@ -3374,7 +3374,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3388,7 +3388,7 @@
       "plays": [
         "13-fine-tuning-workflow"
       ],
-      "lines": 59
+      "lines": 46
     },
     {
       "id": "fai-play-13-reviewer",
@@ -3442,7 +3442,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3456,7 +3456,7 @@
       "plays": [
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 59
+      "lines": 46
     },
     {
       "id": "fai-play-14-reviewer",
@@ -3510,7 +3510,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3523,7 +3523,7 @@
       "plays": [
         "15-document-processing"
       ],
-      "lines": 58
+      "lines": 46
     },
     {
       "id": "fai-play-15-reviewer",
@@ -3644,7 +3644,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3658,7 +3658,7 @@
       "plays": [
         "17-ai-observability"
       ],
-      "lines": 58
+      "lines": 45
     },
     {
       "id": "fai-play-17-reviewer",
@@ -3779,7 +3779,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3793,7 +3793,7 @@
       "plays": [
         "19-edge-ai"
       ],
-      "lines": 58
+      "lines": 45
     },
     {
       "id": "fai-play-19-reviewer",
@@ -3847,7 +3847,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3860,7 +3860,7 @@
       "plays": [
         "20-real-time-analytics"
       ],
-      "lines": 57
+      "lines": 45
     },
     {
       "id": "fai-play-20-reviewer",
@@ -3914,7 +3914,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3927,7 +3927,7 @@
       "plays": [
         "21-agentic-rag"
       ],
-      "lines": 57
+      "lines": 45
     },
     {
       "id": "fai-play-21-reviewer",
@@ -3981,7 +3981,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -3995,7 +3995,7 @@
       "plays": [
         "22-swarm-orchestration"
       ],
-      "lines": 58
+      "lines": 45
     },
     {
       "id": "fai-play-22-reviewer",
@@ -4138,7 +4138,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -4150,7 +4150,7 @@
         "cost-optimization"
       ],
       "plays": [],
-      "lines": 164
+      "lines": 158
     },
     {
       "id": "fai-postgresql-expert",
@@ -4274,7 +4274,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -4290,7 +4290,7 @@
         "01-enterprise-rag",
         "14-cost-optimized-ai-gateway"
       ],
-      "lines": 184
+      "lines": 175
     },
     {
       "id": "fai-prompt-engineer",
@@ -4417,7 +4417,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -4433,7 +4433,7 @@
         "01-enterprise-rag",
         "21-agentic-rag"
       ],
-      "lines": 153
+      "lines": 144
     },
     {
       "id": "fai-rag-expert",
@@ -4902,7 +4902,7 @@
       "tools": [
         "codebase",
         "terminal",
-        "azure_development"
+        "azure"
       ],
       "model": [
         "gpt-4o",
@@ -4918,7 +4918,7 @@
         "01-enterprise-rag",
         "02-ai-landing-zone"
       ],
-      "lines": 156
+      "lines": 147
     },
     {
       "id": "fai-specification-writer",
@@ -13402,10 +13402,10 @@
     {
       "id": "24",
       "slug": "24-ai-code-review",
-      "name": "24-ai-code-review",
-      "description": "",
+      "name": "Optimize Ai Code Review configuration, thresholds, and performance",
+      "description": "Optimize Ai Code Review configuration, thresholds, and performance",
       "hasManifest": false,
-      "hasRootAgent": false,
+      "hasRootAgent": true,
       "devkit": {
         "agents": 0,
         "skills": 0,
@@ -13473,10 +13473,10 @@
     {
       "id": "25",
       "slug": "25-conversation-memory",
-      "name": "25-conversation-memory",
-      "description": "",
+      "name": "Optimize Conversation Memory configuration, thresholds, and performance",
+      "description": "Optimize Conversation Memory configuration, thresholds, and performance",
       "hasManifest": false,
-      "hasRootAgent": false,
+      "hasRootAgent": true,
       "devkit": {
         "agents": 0,
         "skills": 0,
@@ -14412,10 +14412,10 @@
     {
       "id": "45",
       "slug": "45-real-time-event-ai",
-      "name": "45-real-time-event-ai",
-      "description": "",
+      "name": "Optimize Real Time Event Ai configuration, thresholds, and performance",
+      "description": "Optimize Real Time Event Ai configuration, thresholds, and performance",
       "hasManifest": false,
-      "hasRootAgent": false,
+      "hasRootAgent": true,
       "devkit": {
         "agents": 0,
         "skills": 0,

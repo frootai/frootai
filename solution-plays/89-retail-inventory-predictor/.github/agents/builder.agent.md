@@ -1,9 +1,9 @@
 ---
 name: "Inventory Predictor Builder"
 description: "Inventory Predictor builder - implements forecasting, replenishment, promotion modeling"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "cost-optimization", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","cost-optimization","performance-efficiency"]
 plays: ["89-retail-inventory-predictor"]
 ---
 # Builder Agent - Inventory Predictor

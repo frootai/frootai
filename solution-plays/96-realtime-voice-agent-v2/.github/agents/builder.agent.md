@@ -1,9 +1,9 @@
 ---
 name: "Voice Agent V2 Builder"
 description: "Voice Agent V2 builder - implements streaming pipeline, function calling, emotion"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "security"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","security"]
 plays: ["96-realtime-voice-agent-v2"]
 ---
 # Builder Agent - Voice Agent V2

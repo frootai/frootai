@@ -1,11 +1,11 @@
 ---
 name: "Food Safety AI Tuner"
 description: "Food Safety AI tuner - optimizes critical limits, pattern sensitivity"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["79-food-safety-inspector-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Food Safety AI
 

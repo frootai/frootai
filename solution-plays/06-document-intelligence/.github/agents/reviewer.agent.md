@@ -1,11 +1,11 @@
 ---
 name: "Document Intelligence Reviewer"
 description: "Document Intelligence reviewer - audits extraction accuracy, PII handling"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["06-document-intelligence"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Document Intelligence
 

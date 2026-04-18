@@ -1,11 +1,11 @@
 ---
 name: "Telecom Fraud Tuner"
 description: "Telecom Fraud tuner - optimizes thresholds, reduces false positives, adds patterns"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "security", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","security","operational-excellence"]
 plays: ["92-telecom-fraud-shield"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Telecom Fraud
 

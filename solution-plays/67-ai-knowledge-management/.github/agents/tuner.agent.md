@@ -1,11 +1,11 @@
 ---
 name: "Knowledge Mgmt Tuner"
 description: "Knowledge Mgmt tuner - optimizes capture rate, dedup accuracy"
-tools: ["read","edit","search","execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "reliability"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
 plays: ["67-ai-knowledge-management"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent - Knowledge Mgmt
 

@@ -1,9 +1,9 @@
 ---
 name: "Sales Assistant Builder"
 description: "Sales Assistant builder - implements lead scoring, CRM integration, email generation"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["performance-efficiency", "reliability", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["performance-efficiency","reliability","cost-optimization"]
 plays: ["64-ai-sales-assistant"]
 ---
 # Builder Agent - Sales Assistant

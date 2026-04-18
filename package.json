@@ -36,7 +36,8 @@
     "factory:website": "node scripts/factory/transform.js --channel website",
     "factory:status": "node scripts/factory/status.js",
     "factory:watch": "node scripts/factory/watch.js",
-    "factory:ship": "node scripts/factory/ship.js"
+    "factory:ship": "node scripts/factory/ship.js",
+    "factory:unify": "node scripts/factory/unify.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

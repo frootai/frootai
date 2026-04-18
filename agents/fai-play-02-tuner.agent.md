@@ -1,23 +1,11 @@
 ---
-description: "AI Landing Zone tuner — network sizing, firewall rule optimization, SKU right-sizing, cost analysis, DR configuration, and production readiness verification."
 name: "FAI AI Landing Zone Tuner"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-plays:
-  - "02-ai-landing-zone"
+description: "AI Landing Zone tuner — network sizing, firewall rule optimization, SKU right-sizing, cost analysis, DR configuration, and production readiness verification."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency"]
+plays: ["02-ai-landing-zone"]
 handoffs:
-  - label: "Implement these changes"
-    agent: "fai-play-02-builder"
-    prompt: "Implement the infrastructure tuning changes recommended above."
-  - label: "Review tuned config"
-    agent: "fai-play-02-reviewer"
-    prompt: "Review the tuned infrastructure for security and compliance."
 ---
 
 # FAI AI Landing Zone Tuner

@@ -1,11 +1,11 @@
 ---
 name: "Policy Impact Reviewer"
 description: "Policy Impact reviewer - audits evidence quality, balance, methodology"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["85-policy-impact-analyzer"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Policy Impact
 

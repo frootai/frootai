@@ -1,11 +1,11 @@
 ---
 name: "AI Tutor Reviewer"
 description: "AI Tutor reviewer - audits pedagogical quality, misconception handling, safety"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "responsible-ai", "reliability"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","responsible-ai","reliability"]
 plays: ["74-ai-tutoring-agent"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - AI Tutor
 

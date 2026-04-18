@@ -1,11 +1,11 @@
 ---
 name: "Landing Zone Tuner"
 description: "AI Landing Zone tuner — optimizes SKU sizing, cost, quota, monitoring thresholds, network configuration"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["cost-optimization", "performance-efficiency", "operational-excellence"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["cost-optimization","performance-efficiency","operational-excellence"]
 plays: ["02-ai-landing-zone"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Tuner Agent — AI Landing Zone
 

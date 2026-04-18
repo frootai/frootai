@@ -1,11 +1,11 @@
 ---
 name: "Pester Test Tuner"
 description: "Pester Test Development tuner — optimizes code coverage, eliminates flaky tests, configures CI/CD pipelines, tunes test performance"
-tools: ["read", "edit", "search", "execute"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["reliability", "operational-excellence", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["reliability","operational-excellence","performance-efficiency"]
 plays: ["101-pester-test-development"]
-user-invocable: false
+user-invocable: "false"
 ---
 
 # Pester Test Development — Tuner Agent

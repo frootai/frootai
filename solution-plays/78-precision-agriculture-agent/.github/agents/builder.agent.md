@@ -1,9 +1,9 @@
 ---
 name: "Precision Agriculture Builder"
 description: "Precision Agriculture builder - implements crop monitoring, stress detection, recommendations"
-tools: ["read","edit","search","execute","agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "performance-efficiency", "cost-optimization"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","performance-efficiency","cost-optimization"]
 plays: ["78-precision-agriculture-agent"]
 ---
 # Builder Agent - Precision Agriculture

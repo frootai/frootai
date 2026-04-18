@@ -1,11 +1,11 @@
 ---
 name: "RAG Reviewer"
 description: "Enterprise RAG reviewer — audits security (Managed Identity, Content Safety), RAG quality (grounding, citations), and WAF compliance"
-tools: ["read", "search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["01-enterprise-rag"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent — Enterprise RAG
 

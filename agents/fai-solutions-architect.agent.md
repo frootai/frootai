@@ -1,19 +1,10 @@
 ---
-description: "Cloud solutions architect — end-to-end AI solution design, Azure service selection, multi-service integration, cost estimation, WAF trade-off analysis, and architecture decision records."
 name: "FAI Solutions Architect"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "security"
-plays:
-  - "01-enterprise-rag"
-  - "02-ai-landing-zone"
+description: "Cloud solutions architect — end-to-end AI solution design, Azure service selection, multi-service integration, cost estimation, WAF trade-off analysis, and architecture decision records."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","cost-optimization","performance-efficiency","security"]
+plays: ["01-enterprise-rag","02-ai-landing-zone"]
 ---
 
 # FAI Solutions Architect

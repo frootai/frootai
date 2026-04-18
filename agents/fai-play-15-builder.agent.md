@@ -1,23 +1,11 @@
 ---
-description: "Document Processing builder — GPT-4o Vision multi-modal analysis, Azure Document Intelligence, table extraction, classification pipeline, and PII-aware storage."
 name: "FAI Document Processing Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-plays:
-  - "15-document-processing"
+description: "Document Processing builder — GPT-4o Vision multi-modal analysis, Azure Document Intelligence, table extraction, classification pipeline, and PII-aware storage."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security"]
+plays: ["15-document-processing"]
 handoffs:
-  - label: "Review document pipeline"
-    agent: "fai-play-15-reviewer"
-    prompt: "Review the document processing pipeline for extraction quality and PII handling."
-  - label: "Tune processing config"
-    agent: "fai-play-15-tuner"
-    prompt: "Optimize extraction thresholds, classification config, and batch performance."
 ---
 
 # FAI Document Processing Builder

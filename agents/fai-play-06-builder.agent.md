@@ -1,24 +1,11 @@
 ---
-description: "Document Intelligence builder — Azure AI Document Intelligence OCR, multi-format processing, GPT-4o field extraction, Cosmos DB storage, and validation pipeline."
 name: "FAI Document Intelligence Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "reliability"
-  - "security"
-  - "operational-excellence"
-plays:
-  - "06-document-intelligence"
+description: "Document Intelligence builder — Azure AI Document Intelligence OCR, multi-format processing, GPT-4o field extraction, Cosmos DB storage, and validation pipeline."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","operational-excellence"]
+plays: ["06-document-intelligence"]
 handoffs:
-  - label: "Review document pipeline"
-    agent: "fai-play-06-reviewer"
-    prompt: "Review the document processing pipeline for extraction accuracy and PII handling."
-  - label: "Tune extraction config"
-    agent: "fai-play-06-tuner"
-    prompt: "Optimize OCR settings, confidence thresholds, and extraction prompts."
 ---
 
 # FAI Document Intelligence Builder

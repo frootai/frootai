@@ -1,9 +1,9 @@
 ---
 name: "Document Intelligence Builder"
 description: "Document Intelligence builder - implements OCR extraction, form processing, validation"
-tools: ["read", "edit", "search", "execute", "agent"]
-model: ["gpt-4o", "gpt-4o-mini"]
-waf: ["reliability", "security", "performance-efficiency"]
+tools: ["codebase","editFiles","terminal","agent"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["reliability","security","performance-efficiency"]
 plays: ["06-document-intelligence"]
 ---
 # Builder Agent - Document Intelligence

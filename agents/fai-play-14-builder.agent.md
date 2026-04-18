@@ -1,24 +1,11 @@
 ---
-description: "Cost-Optimized AI Gateway builder — APIM AI gateway, semantic caching with Redis, smart model routing by complexity, token budget enforcement, and multi-region load balancing."
 name: "FAI Cost-Optimized AI Gateway Builder"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "performance-efficiency"
-  - "reliability"
-plays:
-  - "14-cost-optimized-ai-gateway"
+description: "Cost-Optimized AI Gateway builder — APIM AI gateway, semantic caching with Redis, smart model routing by complexity, token budget enforcement, and multi-region load balancing."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","performance-efficiency","reliability"]
+plays: ["14-cost-optimized-ai-gateway"]
 handoffs:
-  - label: "Review gateway config"
-    agent: "fai-play-14-reviewer"
-    prompt: "Review the AI gateway for routing accuracy, cache quality, and budget enforcement."
-  - label: "Tune gateway thresholds"
-    agent: "fai-play-14-tuner"
-    prompt: "Optimize cache thresholds, routing rules, and token budgets."
 ---
 
 # FAI Cost-Optimized AI Gateway Builder

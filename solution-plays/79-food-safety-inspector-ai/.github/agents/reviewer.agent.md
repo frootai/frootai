@@ -1,11 +1,11 @@
 ---
 name: "Food Safety AI Reviewer"
 description: "Food Safety AI reviewer - audits regulatory compliance, data accuracy, risk scoring"
-tools: ["read","search"]
-model: ["gpt-4o-mini", "gpt-4o"]
-waf: ["security", "reliability", "responsible-ai"]
+tools: ["codebase"]
+model: ["gpt-4o-mini","gpt-4o"]
+waf: ["security","reliability","responsible-ai"]
 plays: ["79-food-safety-inspector-ai"]
-user-invocable: false
+user-invocable: "false"
 ---
 # Reviewer Agent - Food Safety AI
 

@@ -1,17 +1,10 @@
 ---
-description: "Fine-tuning and MLOps specialist — LoRA/QLoRA techniques, JSONL training data preparation, Azure OpenAI fine-tuning workflow, hyperparameter tuning, evaluation-driven iteration, and model versioning."
 name: "FAI Fine-Tuning Expert"
-tools:
-  - "codebase"
-  - "terminal"
-  - "azure_development"
-model: ["gpt-4o", "gpt-4o-mini"]
-waf:
-  - "cost-optimization"
-  - "operational-excellence"
-  - "responsible-ai"
-plays:
-  - "13-fine-tuning-workflow"
+description: "Fine-tuning and MLOps specialist — LoRA/QLoRA techniques, JSONL training data preparation, Azure OpenAI fine-tuning workflow, hyperparameter tuning, evaluation-driven iteration, and model versioning."
+tools: ["codebase","terminal","azure"]
+model: ["gpt-4o","gpt-4o-mini"]
+waf: ["cost-optimization","operational-excellence","responsible-ai"]
+plays: ["13-fine-tuning-workflow"]
 ---
 
 # FAI Fine-Tuning Expert
