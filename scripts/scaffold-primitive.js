@@ -259,6 +259,28 @@ if (!type || !['agent', 'skill', 'instruction', 'hook'].includes(type)) {
       case 'hook': await scaffoldHook(); break;
     }
     console.log('\n🎯 Run: node scripts/validate-primitives.js — to verify');
+
+    // Auto-rebuild factory catalog
+    console.log('\n🏭 Rebuilding FAI Factory catalog...');
+    try {
+      const { harvest } = require('./factory/harvest');
+      const { catalog } = require('./factory/catalog');
+      const origLog = console.log;
+      const origErr = console.error;
+      console.log = () => {};
+      console.error = () => {};
+      harvest();
+      catalog();
+      console.log = origLog;
+      console.error = origErr;
+      const catPath = join(ROOT, '.factory', 'fai-catalog.json');
+      if (existsSync(catPath)) {
+        const cat = JSON.parse(require('fs').readFileSync(catPath, 'utf8'));
+        console.log(`   ✅ Catalog updated: ${cat.stats.totalPrimitives} primitives`);
+      }
+    } catch {
+      console.log('   ⚠️  Factory rebuild skipped (run: npm run factory)');
+    }
   } catch (err) {
     console.error('Error:', err.message);
     process.exit(1);

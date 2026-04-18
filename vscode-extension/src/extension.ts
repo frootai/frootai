@@ -665,6 +665,62 @@ ${bodyHtml}
     });
   });
 
+  // ─── Factory Status Command ───
+  safeRegister("frootai.factoryStatus", async () => {
+    const ws = vscode.workspace.workspaceFolders?.[0];
+    if (!ws) {
+      vscode.window.showWarningMessage("Open a FrootAI workspace to view factory status.");
+      return;
+    }
+
+    const catalogPath = path.join(ws.uri.fsPath, ".factory", "fai-catalog.json");
+    if (!fs.existsSync(catalogPath)) {
+      const action = await vscode.window.showInformationMessage(
+        "No factory catalog found. Run the factory pipeline first.",
+        "Run Factory"
+      );
+      if (action === "Run Factory") {
+        const terminal = vscode.window.createTerminal("FAI Factory");
+        terminal.show();
+        terminal.sendText("npm run factory");
+      }
+      return;
+    }
+
+    try {
+      const cat = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
+      const s = cat.stats;
+      const age = Date.now() - new Date(cat.generated).getTime();
+      const ageStr = age > 86400000 ? `${Math.floor(age / 86400000)}d ago` :
+                     age > 3600000 ? `${Math.floor(age / 3600000)}h ago` :
+                     `${Math.floor(age / 60000)}m ago`;
+      const stale = age > 86400000;
+
+      const msg = `🍊 FAI Factory: ${s.totalPrimitives} primitives | ` +
+        `${s.agents} agents, ${s.skills} skills, ${s.instructions} instructions | ` +
+        `${s.plays} plays, ${s.mcpTools} MCP tools | ` +
+        `v${cat.version} @ ${cat.commit} (${ageStr})`;
+
+      const action = await vscode.window.showInformationMessage(
+        msg,
+        stale ? "⚠️ Stale — Rebuild" : "Rebuild",
+        "Show Terminal Status"
+      );
+
+      if (action?.includes("Rebuild")) {
+        const terminal = vscode.window.createTerminal("FAI Factory");
+        terminal.show();
+        terminal.sendText("npm run factory");
+      } else if (action === "Show Terminal Status") {
+        const terminal = vscode.window.createTerminal("FAI Factory Status");
+        terminal.show();
+        terminal.sendText("npm run factory:status");
+      }
+    } catch {
+      vscode.window.showErrorMessage("Failed to read factory catalog.");
+    }
+  });
+
   safeRegister("frootai.openScaffoldWizard", (initialPlay?: unknown) => {
     const panel = createReactPanel(context.extensionUri, "frootai.scaffold", "Scaffold Wizard", { panel: "scaffold", plays: SOLUTION_PLAYS, initialPlay: (initialPlay as typeof SOLUTION_PLAYS[number]) ?? null });
     panel.webview.onDidReceiveMessage((msg: any) => {

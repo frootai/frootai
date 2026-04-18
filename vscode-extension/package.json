@@ -230,6 +230,10 @@
         "title": "FrootAI: Open Evaluation Dashboard"
       },
       {
+        "command": "frootai.factoryStatus",
+        "title": "FrootAI: Factory Status Dashboard"
+      },
+      {
         "command": "frootai.openScaffoldWizard",
         "title": "FrootAI: Open Scaffold Wizard"
       },

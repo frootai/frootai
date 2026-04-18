@@ -107,22 +107,42 @@ const LAYERS: ProtocolLayer[] = [
   {
     label: "FAI Factory",
     icon: "rocket",
-    desc: "CI/CD — build, test, publish",
+    desc: "CI/CD pipeline — harvest, catalog, transform, validate, ship",
     children: [
       {
-        label: "validate-primitives.js",
-        desc: "2,800+ checks across all primitives",
+        label: "Harvester",
+        desc: "Scans 862+ primitives across 9 directories in ~250ms",
+        icon: "search",
+      },
+      {
+        label: "Cataloger",
+        desc: "Builds fai-catalog.json (525KB) with stats + cross-refs",
+        icon: "database",
+      },
+      {
+        label: "Transform (6 adapters)",
+        desc: "npm-mcp, vscode, python-mcp, npm-sdk, python-sdk, website",
+        icon: "arrow-swap",
+      },
+      {
+        label: "Validator (6 gates)",
+        desc: "Structure, counts, agent quality, play integrity, cross-channel, unification",
         icon: "check-all",
       },
       {
-        label: "GitHub Actions (15)",
-        desc: "Automated CI/CD workflows",
-        icon: "github-action",
+        label: "Ship (factory-gated)",
+        desc: "Factory pre-flight → release-channel.js → tag → per-channel workflows",
+        icon: "cloud-upload",
       },
       {
-        label: "npm publish",
-        desc: "frootai-mcp on npm registry",
-        icon: "package",
+        label: "Watch mode",
+        desc: "Live dev: auto-rebuild on primitive changes with debounce",
+        icon: "eye",
+      },
+      {
+        label: "GitHub Actions (4)",
+        desc: "factory.yml, unified-release.yml, factory-sync.yml, weekly-audit.yml",
+        icon: "github-action",
       },
     ],
   },
