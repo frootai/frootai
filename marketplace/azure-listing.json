@@ -1,13 +1,15 @@
 {
   "$schema": "https://raw.githubusercontent.com/Azure/azure-marketplace/master/schema.json",
   "name": "FrootAI",
-  "displayName": "FrootAI — AI Architecture Power Kit",
+  "displayName": "FrootAI — AI Primitive Unification Platform",
   "publisher": "pavleenbali",
-  "description": "The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem. 20 pre-packaged solution plays with DevKit (.github Agentic OS) + TuneKit (AI fine-tuning configs). From RAG pipelines to multi-agent systems.",
+  "description": "The open glue for the GenAI ecosystem — context-wires 862+ AI primitives across 104 solution plays via the FAI Protocol. 45 MCP tools for architecture guidance, model comparison, cost estimation, evaluation, and primitive orchestration. Includes Bicep + Terraform IaC, Semantic Kernel and LangChain adapters, and 6 distribution channels.",
   "categories": [
     "AI + Machine Learning",
     "Developer Tools",
-    "Azure Architecture"
+    "Azure Architecture",
+    "DevOps",
+    "Infrastructure as Code"
   ],
   "keywords": [
     "AI",
@@ -19,32 +21,78 @@
     "agents",
     "infrastructure as code",
     "Bicep",
+    "Terraform",
     "AI landing zone",
-    "solution accelerator"
+    "solution accelerator",
+    "FAI Protocol",
+    "primitives",
+    "Semantic Kernel",
+    "LangChain",
+    "responsible AI",
+    "evaluation"
   ],
   "links": {
     "website": "https://frootai.dev",
     "repository": "https://github.com/frootai/frootai",
     "npm": "https://www.npmjs.com/package/frootai-mcp",
-    "vscode": "https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"
+    "pypi": "https://pypi.org/project/frootai-mcp/",
+    "vscode": "https://marketplace.visualstudio.com/items?itemName=frootai.frootai",
+    "docker": "https://github.com/frootai/frootai/pkgs/container/mcp-server",
+    "documentation": "https://frootai.dev/mcp"
   },
   "artifacts": {
     "mcpServer": {
       "name": "frootai-mcp",
-      "version": "2.2.0",
-      "install": "npm install -g frootai-mcp",
-      "run": "npx frootai-mcp",
-      "tools": 16
+      "version": "5.2.0",
+      "install": "npx frootai-mcp@5.2.0",
+      "run": "npx frootai-mcp@5.2.0",
+      "tools": 45,
+      "transports": ["stdio", "streamable-http"],
+      "capabilities": ["tools", "resources", "prompts"]
     },
     "vscodeExtension": {
-      "name": "frootai.frootai-vscode",
-      "version": "0.9.0",
-      "commands": 13,
-      "standalone": true
+      "name": "frootai.frootai",
+      "marketplaceUrl": "https://marketplace.visualstudio.com/items?itemName=frootai.frootai"
     },
-    "solutionPlays": 20,
-    "knowledgeModules": 18,
-    "glossaryTerms": "200+"
+    "container": {
+      "registry": "ghcr.io",
+      "image": "frootai/mcp-server",
+      "tag": "5.2.0",
+      "run": "docker run -p 3001:3001 ghcr.io/frootai/mcp-server:5.2.0"
+    },
+    "bicepTemplate": {
+      "description": "Azure Verified Module-compatible Bicep templates for each solution play",
+      "location": "infra/",
+      "plays": 104
+    },
+    "terraformModule": {
+      "description": "Terraform modules for Azure-based solution plays",
+      "location": "infra/terraform/",
+      "registry": "registry.terraform.io/modules/frootai"
+    },
+    "githubAction": {
+      "name": "frootai/frootai",
+      "version": "v5",
+      "commands": ["validate", "cost", "search", "doctor", "evaluate", "primitives", "factory"]
+    },
+    "solutionPlays": 104,
+    "primitives": {
+      "agents": 238,
+      "instructions": 176,
+      "skills": 333,
+      "hooks": 10,
+      "plugins": 77,
+      "workflows": 12,
+      "cookbook": 16,
+      "total": 862
+    },
+    "knowledgeModules": 24,
+    "glossaryTerms": "200+",
+    "faiProtocol": {
+      "version": "2.0",
+      "contractTypes": 10,
+      "description": "Declarative context-wiring standard for AI primitive orchestration"
+    }
   },
   "license": "MIT"
 }

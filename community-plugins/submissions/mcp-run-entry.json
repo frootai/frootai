@@ -2,26 +2,28 @@
   "$schema": "https://mcp.run/schemas/entry.json",
   "name": "frootai-mcp",
   "displayName": "FrootAI — AI Primitive Unification MCP Server",
-  "description": "The open glue for the GenAI ecosystem. 25 tools for architecture guidance, 100 solution plays, 830+ primitives, model comparison, cost estimation, and AI evaluation. FAI Protocol context-wires agents, instructions, skills, hooks, and plugins into deployable systems.",
-  "version": "3.5.0",
+  "description": "The open glue for the GenAI ecosystem. 45 tools for architecture guidance, 104 solution plays, 862+ primitives (238 agents, 176 instructions, 333 skills, 77 plugins), model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires primitives into deployable systems with Bicep + Terraform IaC.",
+  "version": "5.2.0",
   "protocol": "mcp",
-  "protocolVersion": "2024-11-05",
+  "protocolVersion": "2025-03-26",
   "author": "FrootAI Contributors",
   "license": "MIT",
   "sourceUrl": "https://github.com/frootai/frootai",
   "documentationUrl": "https://frootai.dev/mcp",
   "installation": {
-    "npx": "npx frootai-mcp@latest",
-    "docker": "docker run -p 3001:3001 ghcr.io/frootai/mcp-server:latest",
+    "npx": "npx frootai-mcp@5.2.0",
+    "docker": "docker run -p 3001:3001 ghcr.io/frootai/mcp-server:5.2.0",
     "pip": "pip install frootai-mcp && python -m frootai_mcp"
   },
   "transports": ["stdio", "streamable-http"],
   "capabilities": {
     "tools": true,
-    "resources": false,
-    "prompts": false
+    "resources": true,
+    "prompts": true
   },
-  "toolCount": 25,
-  "categories": ["developer-tools", "ai-architecture", "code-generation"],
-  "tags": ["ai", "agents", "rag", "azure", "primitives", "architecture", "evaluation"]
+  "toolCount": 45,
+  "primitiveCount": 862,
+  "playCount": 104,
+  "categories": ["developer-tools", "ai-architecture", "code-generation", "infrastructure", "ai-evaluation"],
+  "tags": ["ai", "agents", "rag", "azure", "primitives", "architecture", "evaluation", "fai-protocol", "semantic-kernel", "langchain", "bicep", "terraform"]
 }

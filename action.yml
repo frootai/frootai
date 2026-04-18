@@ -1,6 +1,6 @@
 name: 'FrootAI MCP Server'
-description: 'Add AI architecture knowledge to your GitHub Actions workflow. 23 MCP tools, 20 solution plays, cost estimation, WAF validation.'
-author: 'Pavleen Bali'
+description: 'AI architecture knowledge for GitHub Actions — 45 MCP tools, 104 solution plays, 862+ primitives. Validate configs, estimate costs, run evaluations, and enforce WAF alignment in CI/CD.'
+author: 'FrootAI'
 
 branding:
   icon: 'cpu'
@@ -8,11 +8,11 @@ branding:
 
 inputs:
   command:
-    description: 'FrootAI CLI command to run (validate, cost, search, doctor)'
+    description: 'FrootAI CLI command to run (validate, cost, search, doctor, evaluate, primitives, factory)'
     required: true
     default: 'validate'
   play:
-    description: 'Solution play ID for cost estimation (e.g. 01-enterprise-rag)'
+    description: 'Solution play ID (e.g. 01-enterprise-rag). Used by cost, evaluate, and primitives commands.'
     required: false
   scale:
     description: 'Scale tier for cost estimation (dev or prod)'
@@ -22,40 +22,92 @@ inputs:
     description: 'Run WAF alignment check (true/false)'
     required: false
     default: 'false'
+  format:
+    description: 'Output format (json, markdown, table). Default: json for CI, table for interactive.'
+    required: false
+    default: 'json'
+  threshold:
+    description: 'Minimum evaluation score threshold (0.0-1.0). Used by evaluate command.'
+    required: false
+    default: '0.8'
+  version:
+    description: 'FrootAI MCP Server version to use'
+    required: false
+    default: '5.2.0'
+
+outputs:
+  result:
+    description: 'JSON output from the FrootAI command'
+    value: ${{ steps.run-frootai.outputs.result }}
+  status:
+    description: 'Exit status (pass/fail) for CI gate integration'
+    value: ${{ steps.run-frootai.outputs.status }}
+  cost-estimate:
+    description: 'Monthly cost estimate in USD (only for cost command)'
+    value: ${{ steps.run-frootai.outputs.cost }}
+  eval-score:
+    description: 'Evaluation score (only for evaluate command)'
+    value: ${{ steps.run-frootai.outputs.score }}
 
 runs:
   using: 'composite'
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@1d817b8ab0d3e8b4c6ae4b2ea6bdf44e7d99c54b  # v4.2.0
       with:
         node-version: '22'
 
     - name: Run FrootAI
+      id: run-frootai
       shell: bash
       run: |
-        npx frootai-mcp@latest &
+        npx frootai-mcp@${{ inputs.version }} &
         sleep 2
-        
+
+        RESULT=""
+        STATUS="pass"
+
         case "${{ inputs.command }}" in
           validate)
             if [ "${{ inputs.waf }}" = "true" ]; then
-              npx frootai validate --waf
+              RESULT=$(npx frootai validate --waf --format ${{ inputs.format }} 2>&1) || STATUS="fail"
             else
-              npx frootai validate
+              RESULT=$(npx frootai validate --format ${{ inputs.format }} 2>&1) || STATUS="fail"
             fi
             ;;
           cost)
-            npx frootai cost ${{ inputs.play }} --scale ${{ inputs.scale }}
+            RESULT=$(npx frootai cost ${{ inputs.play }} --scale ${{ inputs.scale }} --format ${{ inputs.format }} 2>&1) || STATUS="fail"
+            COST=$(echo "$RESULT" | jq -r '.totalMonthly // empty' 2>/dev/null || echo "")
+            echo "cost=$COST" >> $GITHUB_OUTPUT
             ;;
           search)
-            npx frootai search "${{ inputs.play }}"
+            RESULT=$(npx frootai search "${{ inputs.play }}" --format ${{ inputs.format }} 2>&1) || STATUS="fail"
             ;;
           doctor)
-            npx frootai doctor
+            RESULT=$(npx frootai doctor --format ${{ inputs.format }} 2>&1) || STATUS="fail"
+            ;;
+          evaluate)
+            RESULT=$(npx frootai evaluate ${{ inputs.play }} --threshold ${{ inputs.threshold }} --format ${{ inputs.format }} 2>&1) || STATUS="fail"
+            SCORE=$(echo "$RESULT" | jq -r '.overallScore // empty' 2>/dev/null || echo "")
+            echo "score=$SCORE" >> $GITHUB_OUTPUT
+            ;;
+          primitives)
+            RESULT=$(npx frootai primitives --play ${{ inputs.play }} --format ${{ inputs.format }} 2>&1) || STATUS="fail"
+            ;;
+          factory)
+            RESULT=$(npx frootai factory --play ${{ inputs.play }} --format ${{ inputs.format }} 2>&1) || STATUS="fail"
             ;;
           *)
-            echo "Unknown command: ${{ inputs.command }}"
+            echo "::error::Unknown command: ${{ inputs.command }}. Valid commands: validate, cost, search, doctor, evaluate, primitives, factory"
             exit 1
             ;;
         esac
+
+        echo "result<<EOF" >> $GITHUB_OUTPUT
+        echo "$RESULT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+        if [ "$STATUS" = "fail" ]; then
+          echo "::warning::FrootAI ${{ inputs.command }} completed with issues"
+        fi

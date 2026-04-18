@@ -2,8 +2,8 @@
   "$schema": "https://smithery.ai/schemas/registry-entry.json",
   "name": "frootai-mcp",
   "displayName": "FrootAI MCP Server",
-  "description": "The open glue for the GenAI ecosystem — 25 MCP tools spanning architecture guidance, solution plays, primitive management, model comparison, cost estimation, and AI evaluation. Context-wires 830+ primitives (238 agents, 176 instructions, 322 skills, 77 plugins) across 100 solution plays via the FAI Protocol.",
-  "version": "3.5.0",
+  "description": "The open glue for the GenAI ecosystem — 45 MCP tools spanning architecture guidance, solution plays, primitive management, model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires 862+ primitives (238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins) across 104 solution plays via the FAI Protocol.",
+  "version": "5.2.0",
   "author": {
     "name": "FrootAI",
     "url": "https://frootai.dev",
@@ -17,28 +17,35 @@
     "Developer Tools",
     "Code Generation",
     "Knowledge Base",
-    "DevOps"
+    "DevOps",
+    "AI Evaluation"
   ],
   "tags": [
     "ai", "mcp", "agents", "rag", "azure", "architecture",
     "solution-plays", "primitives", "waf", "evaluation",
-    "semantic-kernel", "langchain", "multi-agent"
+    "semantic-kernel", "langchain", "multi-agent", "fai-protocol",
+    "bicep", "terraform", "cost-estimation", "responsible-ai"
   ],
   "transport": {
     "stdio": {
       "command": "npx",
-      "args": ["frootai-mcp@latest"]
+      "args": ["frootai-mcp@5.2.0"]
     },
     "http": {
       "url": "https://mcp.frootai.dev",
-      "note": "Streamable HTTP transport"
+      "note": "Streamable HTTP transport (MCP 2025-03-26)"
     }
   },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": true
+  },
   "tools": [
-    { "name": "search_knowledge", "description": "BM25 search across 16 FROOT knowledge modules" },
+    { "name": "search_knowledge", "description": "BM25 search across 24 FROOT knowledge modules" },
     { "name": "get_module", "description": "Retrieve full module content by ID (F1-T3)" },
-    { "name": "get_play_detail", "description": "Architecture, services, and config for any of 100 plays" },
-    { "name": "list_community_plays", "description": "Browse all 100 solution plays with filters" },
+    { "name": "get_play_detail", "description": "Architecture, services, and config for any of 104 plays" },
+    { "name": "list_community_plays", "description": "Browse all 104 solution plays with filters" },
     { "name": "semantic_search_plays", "description": "Natural language play discovery with BM25 ranking" },
     { "name": "compare_plays", "description": "Side-by-side comparison of 2-3 plays" },
     { "name": "estimate_cost", "description": "Azure cost estimation for any play at dev/prod scale" },
@@ -50,25 +57,49 @@
     { "name": "agent_review", "description": "Reviewer agent for security + quality checks" },
     { "name": "agent_tune", "description": "Tuner agent for config validation" },
     { "name": "run_evaluation", "description": "Check AI quality scores against thresholds" },
-    { "name": "validate_config", "description": "Validate TuneKit config files" },
+    { "name": "validate_config", "description": "Validate TuneKit config files (openai.json, guardrails.json)" },
     { "name": "get_architecture_pattern", "description": "Architecture guidance for 7 scenarios" },
-    { "name": "get_froot_overview", "description": "Complete FROOT framework overview" },
-    { "name": "list_modules", "description": "All 16 modules organized by FROOT layer" },
-    { "name": "list_primitives", "description": "Browse 830+ primitives by type" },
+    { "name": "get_froot_overview", "description": "Complete FROOT framework overview (5 layers, 24 modules)" },
+    { "name": "list_modules", "description": "All 24 modules organized by FROOT layer" },
+    { "name": "list_primitives", "description": "Browse 862+ primitives by type with WAF alignment" },
     { "name": "embedding_playground", "description": "Semantic similarity comparison tool" },
     { "name": "generate_architecture_diagram", "description": "Mermaid.js diagram for any play" },
     { "name": "fetch_azure_docs", "description": "Latest Azure documentation retrieval" },
-    { "name": "marketplace_search", "description": "Search 77+ FAI plugins" },
-    { "name": "marketplace_browse", "description": "Browse plugin marketplace with pagination" }
+    { "name": "marketplace_search", "description": "Search 77+ FAI plugins by keyword" },
+    { "name": "marketplace_browse", "description": "Browse plugin marketplace with pagination" },
+    { "name": "get_github_agentic_os", "description": "GitHub Copilot .github folder primitives guide" },
+    { "name": "validate_manifest", "description": "Validate fai-manifest.json against FAI Protocol schema" },
+    { "name": "scaffold_play", "description": "Scaffold a new solution play from template (4-kit structure)" },
+    { "name": "get_primitive_detail", "description": "Deep-dive into any agent, skill, instruction, or hook" },
+    { "name": "list_workflows", "description": "Browse 12 reusable CI/CD workflow templates" },
+    { "name": "list_cookbook", "description": "Browse 16 cookbook recipes with step-by-step guides" },
+    { "name": "get_moonshot_contracts", "description": "FAI Protocol v2.0 moonshot contract definitions" },
+    { "name": "export_play_iac", "description": "Export Bicep or Terraform IaC for a solution play" },
+    { "name": "get_waf_guidance", "description": "Well-Architected Framework guidance by pillar" },
+    { "name": "compare_primitives", "description": "Side-by-side comparison of two primitives" },
+    { "name": "get_adapter_config", "description": "Framework adapter config (Semantic Kernel, LangChain)" },
+    { "name": "run_factory_pipeline", "description": "FAI Factory CI/CD pipeline execution" },
+    { "name": "get_distribution_status", "description": "Check sync status across 6 distribution channels" },
+    { "name": "validate_primitives", "description": "Validate all primitives against naming + schema rules" },
+    { "name": "get_eval_template", "description": "Evaluation pipeline template for a solution play" },
+    { "name": "search_agents", "description": "Search 238 agents by domain, WAF pillar, or play" },
+    { "name": "get_skill_detail", "description": "Full content of a skill (150+ lines) with usage examples" },
+    { "name": "list_hooks", "description": "Browse 10 SessionStart hooks with event bindings" },
+    { "name": "get_play_primitives", "description": "All primitives wired to a specific solution play" },
+    { "name": "fetch_external_mcp", "description": "Search external MCP server registries" }
   ],
   "requirements": {
     "runtime": "Node.js >= 18",
-    "install": "npx frootai-mcp@latest"
+    "install": "npx frootai-mcp@5.2.0"
   },
   "screenshots": [
     {
       "url": "https://frootai.dev/screenshots/mcp-tools.png",
-      "caption": "25 MCP tools in action"
+      "caption": "45 MCP tools powering AI architecture decisions"
+    },
+    {
+      "url": "https://frootai.dev/screenshots/play-detail.png",
+      "caption": "Solution play deep-dive with architecture diagrams"
     }
   ]
 }
