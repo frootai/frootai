@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_responsible_ai_dashboard",
+      "description": "Deploy Responsible AI Dashboard — centralized fairness monitoring, content safety incident tracking, model card registry, compliance evidence hub, executive scorecards, multi-system aggregation.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-responsible-ai-dashboard/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_responsible_ai_dashboard",
+      "description": "Evaluate Responsible AI Dashboard quality — fairness metric coverage, incident tracking completeness, compliance evidence gaps, executive summary quality, alert reliability.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-responsible-ai-dashboard/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_responsible_ai_dashboard",
+      "description": "Tune Responsible AI Dashboard — monitoring cadence, fairness thresholds, alert rules, compliance frameworks, executive summary style, incident severity classification.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-responsible-ai-dashboard/"
+      }
+    }
+  ]
+}

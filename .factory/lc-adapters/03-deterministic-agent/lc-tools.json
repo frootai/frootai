@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_deterministic_agent",
+      "description": "Deploy deterministic agent to Azure — configure zero-temperature model, set up structured output, deploy guardrails, configure abstention logic. Use when: deploy, provision, configure, Azure, deterministic, agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-deterministic-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_deterministic_agent",
+      "description": "Evaluate deterministic agent quality — test reproducibility, abstention accuracy, confidence calibration, guardrail coverage, latency consistency. Use when: evaluate, test, audit, reproducibility, determinism, quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-deterministic-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_deterministic_agent",
+      "description": "Tune deterministic agent — optimize confidence thresholds, abstention rates, latency, model routing, response caching, cost. Use when: tune, optimize, confidence, threshold, latency, cost, cache.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-deterministic-agent/"
+      }
+    }
+  ]
+}

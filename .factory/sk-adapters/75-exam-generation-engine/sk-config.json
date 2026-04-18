@@ -1,0 +1,96 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.621Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "75-exam-generation-engine",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\75-exam-generation-engine\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-75-exam-generation-engine",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-75",
+        "description": "Skill: deploy-75",
+        "functions": [
+          {
+            "name": "deploy-75",
+            "description": "Skill: deploy-75",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-75",
+        "description": "Skill: evaluate-75",
+        "functions": [
+          {
+            "name": "evaluate-75",
+            "description": "Skill: evaluate-75",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-75",
+        "description": "Skill: tune-75",
+        "functions": [
+          {
+            "name": "tune-75",
+            "description": "Skill: tune-75",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "R1-Prompt-Engineering",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "performance-efficiency"
+    ],
+    "scope": "75-exam-generation-engine"
+  }
+}

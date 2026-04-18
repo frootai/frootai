@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_document_understanding_v2",
+      "description": "Deploy Document Understanding V2 — configure layout-aware extraction, cross-document comparison, automatic classification, document workflow automation. Use when: deploy, provision advanced doc processing.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-document-understanding-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_document_understanding_v2",
+      "description": "Evaluate Document Understanding V2 — measure classification accuracy, layout extraction quality, cross-doc comparison accuracy, workflow routing, PII detection. Use when: evaluate, audit doc processing.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-document-understanding-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_document_understanding_v2",
+      "description": "Tune Document Understanding V2 — optimize classification thresholds, layout model selection, comparison sensitivity, workflow routing, throughput, cost per document. Use when: tune, optimize doc processing.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-document-understanding-v2/"
+      }
+    }
+  ]
+}

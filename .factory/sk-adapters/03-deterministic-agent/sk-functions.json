@@ -1,0 +1,100 @@
+{
+  "functions": [
+    {
+      "name": "deploy-deterministic-agent",
+      "description": "Deploy deterministic agent to Azure — configure zero-temperature model, set up structured output, deploy guardrails, configure abstention logic. Use when: deploy, provision, configure, Azure, deterministic, agent.",
+      "functions": [
+        {
+          "name": "deploy-deterministic-agent",
+          "description": "Deploy deterministic agent to Azure — configure zero-temperature model, set up structured output, deploy guardrails, configure abstention logic. Use when: deploy, provision, configure, Azure, deterministic, agent.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-deterministic-agent",
+      "description": "Evaluate deterministic agent quality — test reproducibility, abstention accuracy, confidence calibration, guardrail coverage, latency consistency. Use when: evaluate, test, audit, reproducibility, determinism, quality.",
+      "functions": [
+        {
+          "name": "evaluate-deterministic-agent",
+          "description": "Evaluate deterministic agent quality — test reproducibility, abstention accuracy, confidence calibration, guardrail coverage, latency consistency. Use when: evaluate, test, audit, reproducibility, determinism, quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-deterministic-agent",
+      "description": "Tune deterministic agent — optimize confidence thresholds, abstention rates, latency, model routing, response caching, cost. Use when: tune, optimize, confidence, threshold, latency, cost, cache.",
+      "functions": [
+        {
+          "name": "tune-deterministic-agent",
+          "description": "Tune deterministic agent — optimize confidence thresholds, abstention rates, latency, model routing, response caching, cost. Use when: tune, optimize, confidence, threshold, latency, cost, cache.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

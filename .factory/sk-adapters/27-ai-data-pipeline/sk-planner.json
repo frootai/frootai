@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Data-Pipeline-Builder",
+        "agentRole": "builder",
+        "description": "AI Data Pipeline builder - implements ETL, batch processing, LLM enrichment",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "operational-excellence",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Data-Pipeline-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Data Pipeline reviewer - audits data quality, idempotency, error handling",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Data-Pipeline-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Data Pipeline tuner - optimizes batch size, parallelism, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

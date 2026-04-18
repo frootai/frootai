@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_knowledge_management",
+      "description": "Deploy AI Knowledge Management — auto-capture from conversations/docs/tickets, taxonomy generation, semantic dedup, knowledge graph, expertise finder, freshness scoring, access control.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-knowledge-management/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_knowledge_management",
+      "description": "Evaluate AI Knowledge Management quality — capture rate, dedup accuracy, taxonomy coverage, expertise finder precision, freshness compliance, retrieval relevance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-knowledge-management/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_knowledge_management",
+      "description": "Tune AI Knowledge Management — capture sources, dedup threshold, taxonomy depth, freshness TTL, expertise weights, retrieval boost, cost per knowledge item.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-knowledge-management/"
+      }
+    }
+  ]
+}

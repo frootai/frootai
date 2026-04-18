@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-computer-use-agent",
+      "description": "Deploy Computer Use Agent — vision-based desktop/web automation with screenshot→reason→act loop, sandbox VM isolation, accessibility API integration, and action replay.",
+      "functions": [
+        {
+          "name": "deploy-computer-use-agent",
+          "description": "Deploy Computer Use Agent — vision-based desktop/web automation with screenshot→reason→act loop, sandbox VM isolation, accessibility API integration, and action replay.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-computer-use-agent",
+      "description": "Evaluate Computer Use Agent quality — task completion rate, action accuracy, step efficiency, loop detection, safety compliance, vision token cost.",
+      "functions": [
+        {
+          "name": "evaluate-computer-use-agent",
+          "description": "Evaluate Computer Use Agent quality — task completion rate, action accuracy, step efficiency, loop detection, safety compliance, vision token cost.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-computer-use-agent",
+      "description": "Tune Computer Use Agent configuration — screenshot resolution, vision detail level, action timing, loop detection, coordinate calibration, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-computer-use-agent",
+          "description": "Tune Computer Use Agent configuration — screenshot resolution, vision detail level, action timing, loop detection, coordinate calibration, cost optimization.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

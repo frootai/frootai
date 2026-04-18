@@ -1,0 +1,217 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.426Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "22-multi-agent-swarm",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\22-multi-agent-swarm\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-22-multi-agent-swarm",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_multi_agent_swarm",
+        "description": "Deploy Multi-Agent Swarm — configure decentralized agent topology, bidding protocol, consensus voting, parallel execution, conflict resolution, swarm state store. Use when: deploy, provision swarm.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string",
+              "description": "Conversation context"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/deploy-multi-agent-swarm/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_multi_agent_swarm",
+        "description": "Evaluate Multi-Agent Swarm — measure consensus quality, bidding efficiency, vote agreement rate, parallel speedup, cost per swarm task. Use when: evaluate, benchmark swarm.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/evaluate-multi-agent-swarm/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_multi_agent_swarm",
+        "description": "Tune Multi-Agent Swarm — optimize swarm size, bidding strategy, voting thresholds, agent model selection, parallel execution limits, cost per task. Use when: tune, optimize swarm.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/tune-multi-agent-swarm/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [
+      {
+        "id": "Swarm_Supervisor",
+        "type": "agent",
+        "role": "reviewer",
+        "name": "Swarm Supervisor",
+        "description": "Multi-agent swarm supervisor — routes tasks to specialist agents (researcher, analyst, coder, reviewer), manages handoffs, enforces turn limits, and synthesizes multi-perspective results.",
+        "model": "gpt-4o",
+        "tools": [],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/swarm-supervisor.agent.md",
+          "waf": []
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "__start__",
+        "target": "Swarm_Supervisor",
+        "condition": null
+      },
+      {
+        "source": "Swarm_Supervisor",
+        "target": "__end__",
+        "condition": null
+      }
+    ],
+    "entryPoint": "Swarm_Supervisor",
+    "finishPoint": "Swarm_Supervisor"
+  },
+  "callbacks": [
+    {
+      "handler": "guardrail_groundedness",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.9",
+      "threshold": 0.9,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "QAEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_coherence",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.92",
+      "threshold": 0.92,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_relevance",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.88",
+      "threshold": 0.88,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_safety",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "CriteriaEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_costPerQuery",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.05",
+      "threshold": 0.05,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "class": "ChatPromptTemplate",
+      "name": "python_waf",
+      "description": "Python coding standards aligned with Azure Well-Architected Framework pillars — secure credential handling, async patterns, structured error handling, cost-aware AI integration, and production-ready testing.",
+      "template": "# Python — FAI Standards\r\n\r\nWhen writing or reviewing Python code in FAI projects, enforce these standards.\r\n\r\n## Security (WAF: Security Pillar)\r\n\r\n- NEVER hardcode secrets, API keys, connection strings, or tokens in Python files\r\n- Use `os.environ` or `azure.identity.DefaultAzureCredential` for all credentials\r\n- Use `python-dotenv` only in development — production uses Managed Identity or Key Vault\r\n- Validate all external input with Pydantic models or explicit type checks at system boundaries\r\n- Use `secrets` module for generating tokens, not `random`\r\n- Pin all dependency versions in `requirements.txt` or `pyproject.toml` — no floating versions\r\n- Run `pip audit` or `safety check` as part of CI\r\n\r\n## Reliability (WAF: Reliability Pillar)\r\n\r\n- Use `tenacity` for retry logic with exponential backoff on external API calls\r\n- Set explicit timeouts on ALL HTTP calls: `httpx.AsyncClient(timeout=30.0)`\r\n- Implement circuit breaker patterns for Azure OpenAI and AI Search calls\r\n- Use structured logging (`structlog` or `logging` with JSON formatter) — never bare `print()`\r\n- Handle specific exceptions, not bare `except:` — catch `httpx.TimeoutException`, `openai.RateLimitError`, etc.\r\n- Add health check endpoints for FastAPI/Flask services: `/health` returning `{\"status\": \"ok\"}`\r\n\r\n## Cost Optimization (WAF: Cost Pillar)\r\n\r\n- Use `max_tokens` parameter on all OpenAI API calls — never allow unbounded generation\r\n- Implement model routing: `gpt-4o-mini` for classification/simple tasks, `gpt-4o` for complex reasoning\r\n- Cache AI responses using TTL-based caching (`cachetools`, Redis, or Azure Cache)\r\n- Batch embedding calls: `openai.embeddings.create(input=[list_of_texts])` not one-by-one\r\n- Monitor token usage: log `usage.total_tokens` from every API response\r\n- Use `async` for I/O-bound operations — do not block on sequential API calls\r\n\r\n## Performance (WAF: Performance Pillar)\r\n\r\n- Use `async`/`await` for all I/O operations (HTTP, database, file)\r\n- Prefer `httpx.AsyncClient` over `requests` for async HTTP\r\n- Use connection pooling for database connections (`asyncpg`, `sqlalchemy` async)\r\n- Stream large LLM responses: `openai.chat.completions.create(stream=True)`\r\n- Use `asyncio.gather()` for concurrent independent operations\r\n- Profile before optimizing — use `cProfile` or `py-spy`, not intuition\r\n\r\n## Code Quality\r\n\r\n- Type hints on all function signatures — `def process(query: str, limit: int = 10) -> list[dict]:`\r\n- Use Pydantic `BaseModel` for data classes, not raw dicts\r\n- Follow PEP 8 naming: `snake_case` for variables/functions, `PascalCase` for classes\r\n- Maximum function length: 30 lines. Extract helper functions for readability\r\n- Docstrings on public functions (Google style): parameters, returns, raises\r\n- Use `pathlib.Path` instead of `os.path` for file operations\r\n\r\n## Testing\r\n\r\n- Use `pytest` as the test runner — not `unittest`\r\n- Minimum 80% code coverage for AI pipeline code\r\n- Mock external services in unit tests: `pytest-httpx` for HTTP, `unittest.mock` for SDK calls\r\n- Test edge cases: empty input, rate limit responses, timeout scenarios, malformed AI output\r\n- Use `pytest.mark.parametrize` for testing multiple input variations\r\n\r\n## Project Structure\r\n\r\n```\r\nproject/\r\n├── src/\r\n│   ├── __init__.py\r\n│   ├── main.py           # Entry point\r\n│   ├── config.py          # Settings via pydantic-settings\r\n│   ├── models/            # Pydantic models\r\n│   ├── services/          # Business logic\r\n│   └── utils/             # Shared utilities\r\n├── tests/\r\n│   ├── conftest.py        # Shared fixtures\r\n│   ├── test_services/\r\n│   └── test_utils/\r\n├── pyproject.toml         # Dependencies + tool config\r\n└── .env.example           # Template (never .env in git)\r\n```",
+      "input_variables": [
+        "input"
+      ],
+      "template_format": "f-string",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "../../instructions/python-waf.instructions.md",
+        "applyTo": "**/*.py, **/pyproject.toml, **/requirements.txt"
+      }
+    }
+  ],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "O1-Semantic-Kernel",
+      "O3-MCP-Tools-Functions",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "operational-excellence"
+    ],
+    "scope": "multi-agent-swarm-orchestration"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.613Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "70-esg-compliance-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\70-esg-compliance-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-70-esg-compliance-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-70",
+        "description": "Skill: deploy-70",
+        "functions": [
+          {
+            "name": "deploy-70",
+            "description": "Skill: deploy-70",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-70",
+        "description": "Skill: evaluate-70",
+        "functions": [
+          {
+            "name": "evaluate-70",
+            "description": "Skill: evaluate-70",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-70",
+        "description": "Skill: tune-70",
+        "functions": [
+          {
+            "name": "tune-70",
+            "description": "Skill: tune-70",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T2-Responsible-AI",
+      "T3-Production-Patterns",
+      "R2-RAG-Architecture"
+    ],
+    "waf": [
+      "responsible-ai",
+      "security",
+      "operational-excellence",
+      "reliability"
+    ],
+    "scope": "70-esg-compliance-agent"
+  }
+}

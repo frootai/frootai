@@ -1,0 +1,88 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-code-review-pipeline",
+      "description": "Deploy AI Code Review Pipeline — configure GitHub Actions for automated PR review, static analysis, LLM-powered code comments, OWASP scanning, merge gates. Use when: deploy, configure CI/CD review.",
+      "functions": [
+        {
+          "name": "deploy-ai-code-review-pipeline",
+          "description": "Deploy AI Code Review Pipeline — configure GitHub Actions for automated PR review, static analysis, LLM-powered code comments, OWASP scanning, merge gates. Use when: deploy, configure CI/CD review.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-code-review-pipeline",
+      "description": "Evaluate AI Code Review — measure comment quality, false positive rate, developer trust, OWASP coverage, review latency. Use when: evaluate, assess review quality.",
+      "functions": [
+        {
+          "name": "evaluate-ai-code-review-pipeline",
+          "description": "Evaluate AI Code Review — measure comment quality, false positive rate, developer trust, OWASP coverage, review latency. Use when: evaluate, assess review quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-code-review-pipeline",
+      "description": "Tune AI Code Review — optimize review prompts, reduce false positives, configure severity routing, model selection per file type, cost per review. Use when: tune, optimize review quality.",
+      "functions": [
+        {
+          "name": "tune-ai-code-review-pipeline",
+          "description": "Tune AI Code Review — optimize review prompts, reduce false positives, configure severity routing, model selection per file type, cost per review. Use when: tune, optimize review quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

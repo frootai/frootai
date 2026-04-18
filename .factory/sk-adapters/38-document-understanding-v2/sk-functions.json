@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-document-understanding-v2",
+      "description": "Deploy Document Understanding V2 — configure layout-aware extraction, cross-document comparison, automatic classification, document workflow automation. Use when: deploy, provision advanced doc processing.",
+      "functions": [
+        {
+          "name": "deploy-document-understanding-v2",
+          "description": "Deploy Document Understanding V2 — configure layout-aware extraction, cross-document comparison, automatic classification, document workflow automation. Use when: deploy, provision advanced doc processing.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-document-understanding-v2",
+      "description": "Evaluate Document Understanding V2 — measure classification accuracy, layout extraction quality, cross-doc comparison accuracy, workflow routing, PII detection. Use when: evaluate, audit doc processing.",
+      "functions": [
+        {
+          "name": "evaluate-document-understanding-v2",
+          "description": "Evaluate Document Understanding V2 — measure classification accuracy, layout extraction quality, cross-doc comparison accuracy, workflow routing, PII detection. Use when: evaluate, audit doc processing.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-document-understanding-v2",
+      "description": "Tune Document Understanding V2 — optimize classification thresholds, layout model selection, comparison sensitivity, workflow routing, throughput, cost per document. Use when: tune, optimize doc processing.",
+      "functions": [
+        {
+          "name": "tune-document-understanding-v2",
+          "description": "Tune Document Understanding V2 — optimize classification thresholds, layout model selection, comparison sensitivity, workflow routing, throughput, cost per document. Use when: tune, optimize doc processing.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

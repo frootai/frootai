@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Financial-Risk-Builder",
+        "agentRole": "builder",
+        "description": "Financial Risk builder - implements risk scoring, fraud detection, regulatory reporting",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Financial-Risk-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Financial Risk reviewer - audits explainability, bias testing, regulatory compliance",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Financial-Risk-Tuner",
+        "agentRole": "tuner",
+        "description": "Financial Risk tuner - optimizes decision thresholds, model accuracy, latency",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  }
+}

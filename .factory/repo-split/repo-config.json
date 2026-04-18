@@ -1,0 +1,145 @@
+{
+  "_comment": "FAI Factory — Multi-Repo Configuration",
+  "_generated": "2026-04-18T11:19:30.214Z",
+  "_version": "1.0.0",
+  "repos": {
+    "public": {
+      "name": "frootai/frootai",
+      "localPath": "${FROOTAI_PUBLIC_REPO:-../frootai}",
+      "url": "https://github.com/frootai/frootai.git",
+      "license": "MIT",
+      "description": "Open standard — primitives, protocol, plays, engine, docs",
+      "contains": [
+        "agents",
+        "instructions",
+        "skills",
+        "hooks",
+        "plugins",
+        "workflows",
+        "cookbook",
+        "solution-plays",
+        "docs",
+        "schemas",
+        "engine",
+        "fai-protocol",
+        "community-plugins",
+        "workshops",
+        "evaluation",
+        ".github"
+      ]
+    },
+    "core": {
+      "name": "frootai/frootai-core",
+      "localPath": "${FROOTAI_CORE_REPO:-../frootai-core}",
+      "url": "https://github.com/frootai/frootai-core.git",
+      "license": "Proprietary",
+      "description": "Distribution intelligence — factory, channels, SDKs, tooling",
+      "contains": [
+        "vscode-extension",
+        "npm-mcp",
+        "npm-sdk",
+        "python-mcp",
+        "python-sdk",
+        "cli",
+        "sdk",
+        "scripts",
+        "functions",
+        "config",
+        "foundry-agent",
+        "infra-registry",
+        "bicep-registry",
+        "marketplace",
+        "website-data"
+      ]
+    },
+    "website": {
+      "name": "frootai/frootai.dev",
+      "localPath": "${FROOTAI_WEBSITE_REPO:-../frootai.dev}",
+      "url": "https://github.com/frootai/frootai.dev.git",
+      "license": "Proprietary",
+      "description": "Storefront — Next.js website, branding, UX"
+    }
+  },
+  "factory": {
+    "catalogSource": "public",
+    "catalogOutput": "core",
+    "adapters": {
+      "npm-mcp": {
+        "source": "core",
+        "publishTo": "npm",
+        "package": "frootai-mcp"
+      },
+      "npm-sdk": {
+        "source": "core",
+        "publishTo": "npm",
+        "package": "frootai"
+      },
+      "python-mcp": {
+        "source": "core",
+        "publishTo": "pypi",
+        "package": "frootai-mcp"
+      },
+      "python-sdk": {
+        "source": "core",
+        "publishTo": "pypi",
+        "package": "frootai"
+      },
+      "vscode": {
+        "source": "core",
+        "publishTo": "vsce",
+        "package": "frootai"
+      },
+      "docker": {
+        "source": "core",
+        "publishTo": "ghcr.io",
+        "package": "frootai/mcp-server"
+      },
+      "website": {
+        "source": "core",
+        "publishTo": "website",
+        "target": "website"
+      },
+      "docs": {
+        "source": "core",
+        "publishTo": "docs",
+        "target": "docs.frootai.dev"
+      }
+    }
+  },
+  "bridge": {
+    "syncDirection": "public → core (primitives feed factory)",
+    "triggerMechanism": "repository_dispatch",
+    "syncEvents": [
+      "push-to-main",
+      "release-published",
+      "workflow-dispatch"
+    ],
+    "healthCheck": "npm run factory:validate --from-public"
+  },
+  "cicd": {
+    "publicRepo": {
+      "onPush": [
+        "validate-primitives",
+        "lint-markdown",
+        "schema-check"
+      ],
+      "onRelease": [
+        "trigger-core-rebuild"
+      ]
+    },
+    "coreRepo": {
+      "onPush": [
+        "factory-harvest",
+        "factory-catalog",
+        "factory-validate"
+      ],
+      "onRelease": [
+        "publish-npm",
+        "publish-pypi",
+        "publish-vsce",
+        "publish-docker",
+        "update-website"
+      ]
+    }
+  }
+}

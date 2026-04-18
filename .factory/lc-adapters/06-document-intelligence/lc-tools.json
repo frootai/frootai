@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_document_intelligence",
+      "description": "Deploy Document Intelligence — configure Azure Document Intelligence, prebuilt/custom models, indexers, validation rules, PII masking. Use when: deploy, provision.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-document-intelligence/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_document_intelligence",
+      "description": "Evaluate Document Intelligence — test field extraction accuracy, table recognition, confidence scores, processing time, human review rate. Use when: evaluate, test.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-document-intelligence/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_document_intelligence",
+      "description": "Tune Document Intelligence — optimize model selection, confidence thresholds, page range processing, batch throughput, cost per document. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-document-intelligence/"
+      }
+    }
+  ]
+}

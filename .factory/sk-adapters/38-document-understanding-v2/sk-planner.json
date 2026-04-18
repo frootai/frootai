@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Document-Understanding-Builder",
+        "agentRole": "builder",
+        "description": "Document Understanding builder - implements layout extraction, comparison, classification",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "security"
+          ]
+        }
+      },
+      {
+        "stepName": "Document-Understanding-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Document Understanding reviewer - audits extraction accuracy, PII handling, cross-doc quality",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Document-Understanding-Tuner",
+        "agentRole": "tuner",
+        "description": "Document Understanding tuner - optimizes model selection, throughput, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

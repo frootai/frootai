@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_meeting_assistant",
+      "description": "Deploy AI Meeting Assistant — real-time transcription, speaker diarization, action item extraction, summary generation with Teams/Outlook integration on Azure.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-meeting-assistant/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_meeting_assistant",
+      "description": "Evaluate AI Meeting Assistant quality — transcription accuracy, diarization DER, action item extraction precision, summary quality scoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-meeting-assistant/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_meeting_assistant",
+      "description": "Tune AI Meeting Assistant configuration — diarization accuracy, summarization quality, action item extraction, cost optimization, Teams/Outlook integration.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-meeting-assistant/"
+      }
+    }
+  ]
+}

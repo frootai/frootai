@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-agentic-rag",
+      "description": "Deploy Agentic RAG — configure autonomous retrieval agent with multi-source routing (AI Search, Bing, SQL, APIs), iterative search, self-evaluation, semantic caching. Use when: deploy, provision.",
+      "functions": [
+        {
+          "name": "deploy-agentic-rag",
+          "description": "Deploy Agentic RAG — configure autonomous retrieval agent with multi-source routing (AI Search, Bing, SQL, APIs), iterative search, self-evaluation, semantic caching. Use when: deploy, provision.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-agentic-rag",
+      "description": "Evaluate Agentic RAG — measure retrieval quality, source selection accuracy, iteration efficiency, groundedness, citation accuracy, cost per query. Use when: evaluate, benchmark.",
+      "functions": [
+        {
+          "name": "evaluate-agentic-rag",
+          "description": "Evaluate Agentic RAG — measure retrieval quality, source selection accuracy, iteration efficiency, groundedness, citation accuracy, cost per query. Use when: evaluate, benchmark.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-agentic-rag",
+      "description": "Tune Agentic RAG — optimize source routing weights, iteration thresholds, self-evaluation sensitivity, semantic cache, cost per query. Use when: tune, optimize retrieval.",
+      "functions": [
+        {
+          "name": "tune-agentic-rag",
+          "description": "Tune Agentic RAG — optimize source routing weights, iteration thresholds, self-evaluation sensitivity, semantic cache, cost per query. Use when: tune, optimize retrieval.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

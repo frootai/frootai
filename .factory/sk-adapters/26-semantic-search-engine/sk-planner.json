@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Semantic-Search-Builder",
+        "agentRole": "builder",
+        "description": "Semantic Search builder - designs index, scoring profiles, hybrid search",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "performance-efficiency",
+            "reliability",
+            "security"
+          ]
+        }
+      },
+      {
+        "stepName": "Semantic-Search-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Semantic Search reviewer - audits relevance, access control, freshness",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Semantic-Search-Tuner",
+        "agentRole": "tuner",
+        "description": "Semantic Search tuner - optimizes scoring, embedding model, caching",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

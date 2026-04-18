@@ -1,0 +1,54 @@
+---
+title: "Enterprise Deployment"
+description: "Landing zones, RBAC, compliance, and production-grade deployment patterns"
+icon: "🏢"
+order: 6
+tags: ["guide", "enterprise-deployment"]
+category: "guides"
+---
+# Enterprise Deployment
+
+Deploy FrootAI in production with enterprise-grade security, compliance, and governance.
+
+## Architecture: AI Landing Zone
+
+```
+Hub VNet (Shared Services)
+├── Azure Firewall
+├── Azure Bastion
+├── Log Analytics Workspace
+└── Key Vault (shared secrets)
+    │
+Spoke VNet (AI Workload)
+├── Azure OpenAI (private endpoint)
+├── Azure AI Search (private endpoint)
+├── Azure Container Apps (workload)
+├── Cosmos DB (state store)
+└── Application Insights (telemetry)
+```
+
+## RBAC Configuration
+
+| Role | Scope | Purpose |
+|------|-------|---------|
+| Cognitive Services User | OpenAI resource | AI model access |
+| Search Index Data Reader | AI Search | Read search indexes |
+| Key Vault Secrets User | Key Vault | Read secrets |
+| Monitoring Reader | App Insights | Read telemetry |
+
+## Compliance Checklist
+
+- [ ] All secrets in Azure Key Vault (never in code)
+- [ ] Private endpoints for all PaaS services
+- [ ] Azure Policy assignments for AI governance
+- [ ] Content Safety filters on all AI endpoints
+- [ ] Audit logging enabled (diagnostic settings)
+- [ ] Data residency requirements met
+- [ ] GDPR right-to-deletion implemented
+- [ ] SOC 2 audit trail in place
+
+## Reference Plays
+
+- [Play 02: AI Landing Zone](/solution-plays/02-ai-landing-zone)
+- [Play 11: Advanced Landing Zone](/solution-plays/11-ai-landing-zone-advanced)
+- [Play 14: Cost-Optimized Gateway](/solution-plays/14-cost-optimized-ai-gateway)

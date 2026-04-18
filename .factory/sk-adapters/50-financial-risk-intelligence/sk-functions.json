@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-financial-risk-intelligence",
+      "description": "Deploy Financial Risk Intelligence — explainable credit risk scoring, real-time fraud detection (rules→ML→LLM), market sentiment analysis, regulatory reporting (ECOA/GDPR/Basel III), audit trails.",
+      "functions": [
+        {
+          "name": "deploy-financial-risk-intelligence",
+          "description": "Deploy Financial Risk Intelligence — explainable credit risk scoring, real-time fraud detection (rules→ML→LLM), market sentiment analysis, regulatory reporting (ECOA/GDPR/Basel III), audit trails.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-financial-risk-intelligence",
+      "description": "Evaluate Financial Risk Intelligence quality — credit scoring accuracy, fraud detection precision/recall, explainability compliance, fairness across protected attributes, regulatory audit readiness.",
+      "functions": [
+        {
+          "name": "evaluate-financial-risk-intelligence",
+          "description": "Evaluate Financial Risk Intelligence quality — credit scoring accuracy, fraud detection precision/recall, explainability compliance, fairness across protected attributes, regulatory audit readiness.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-financial-risk-intelligence",
+      "description": "Tune Financial Risk Intelligence — fraud decision thresholds, risk score calibration, LLM usage ratio, fairness constraints, explainability depth, latency optimization, cost per transaction.",
+      "functions": [
+        {
+          "name": "tune-financial-risk-intelligence",
+          "description": "Tune Financial Risk Intelligence — fraud decision thresholds, risk score calibration, LLM usage ratio, fairness constraints, explainability depth, latency optimization, cost per transaction.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

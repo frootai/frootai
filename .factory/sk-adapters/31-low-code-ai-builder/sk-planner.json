@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Low-Code-AI-Builder",
+        "agentRole": "builder",
+        "description": "Low-Code AI builder - designs pipelines, configures connectors, deployment",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "operational-excellence",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Low-Code-AI-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Low-Code AI reviewer - audits pipeline logic, error handling, security",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Low-Code-AI-Tuner",
+        "agentRole": "tuner",
+        "description": "Low-Code AI tuner - optimizes step performance, model selection, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

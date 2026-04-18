@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.657Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "98-agent-evaluation-platform",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\98-agent-evaluation-platform\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-98-agent-evaluation-platform",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-98",
+        "description": "Skill: deploy-98",
+        "functions": [
+          {
+            "name": "deploy-98",
+            "description": "Skill: deploy-98",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-98",
+        "description": "Skill: evaluate-98",
+        "functions": [
+          {
+            "name": "evaluate-98",
+            "description": "Skill: evaluate-98",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-98",
+        "description": "Skill: tune-98",
+        "functions": [
+          {
+            "name": "tune-98",
+            "description": "Skill: tune-98",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "T2-Responsible-AI",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "operational-excellence",
+      "cost-optimization"
+    ],
+    "scope": "98-agent-evaluation-platform"
+  }
+}

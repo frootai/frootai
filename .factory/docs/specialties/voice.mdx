@@ -1,0 +1,108 @@
+---
+title: "FAI Voice"
+description: "Protocol-level Voice"
+icon: "🎤"
+order: 10
+editUrl: "engine/specialties/voice.js"
+category: "specialties"
+---
+# FAI Voice
+
+🎤 S-10 — Protocol-level voice.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    stt: {
+      type: 'object',
+      properties: {
+        provider: { type: 'string', enum: ['azure-speech', 'whisper', 'google-stt', 'deepgram'], default: 'azure-speech' },
+        language: { type: 'string', default: 'en-US' },
+        continuous: { type: 'boolean', default: true },
+        profanityFilter: { type: 'string', enum: ['none', 'masked', 'removed'], default: 'masked' },
+        diarization: { type: 'boolean', default: false, description: 'Speaker identification for multi-party calls.' }
+      },
+      additionalProperties: false
+    },
+    llm: {
+      type: 'object',
+      properties: {
+        provider: { type: 'string', default: 'azure-openai' },
+        model: { type: 'string', default: 'gpt-4o' },
+        streaming: { type: 'boolean', default: true },
+        maxTokens: { type: 'integer', default: 500, description: 'Keep responses concise for voice.' },
+        systemPrompt: { type: 'string', description: 'Agent persona and instructions.' }
+      },
+      additionalProperties: false
+    },
+    tts: {
+      type: 'object',
+      properties: {
+        provider: { type: 'string', enum: ['azure-speech', 'elevenlabs', 'google-tts', 'openai-tts'], default: 'azure-speech' },
+        voice: { type: 'string', default: 'en-US-JennyNeural' },
+        speed: { type: 'number', minimum: 0.5, maximum: 2.0, default: 1.0 },
+        style: { type: 'string', enum: ['neutral', 'cheerful', 'empathetic', 'professional'], default: 'professional' }
+      },
+      additionalProperties: false
+    },
+    latency: {
+      type: 'object',
+      properties: {
+        sttTarget: { type: 'string', default: '< 1s', description: 'STT recognition latency target.' },
+        llmTarget: { type: 'string', default: '< 2s', description: 'LLM first-token latency target.' },
+        ttsTarget: { type: 'string', default: '< 1s', description: 'TTS synthesis latency target.' },
+        endToEnd: { type: 'string', default: '< 3s', description: 'Total pipeline latency target.' }
+      },
+      additionalProperties: false
+    },
+    interruption: {
+      type: 'object',
+      properties: {
+        handling: { type: 'string', enum: ['graceful', 'immediate-stop', 'queue', 'ignore'], default: 'graceful' },
+        minSpeechMs: { type: 'integer', default: 500, description: 'Minimum speech duration before treating as interruption.' },
+        silenceTimeoutMs: { type: 'integer', default: 2000, description: 'Silence duration before considering turn complete.' }
+      },
+      additionalProperties: false
+    },
+    recording: {
+      type: 'object',
+      properties: {
+        enabled: { type: 'boolean', default: false },
+        format: { type: 'string', enum: ['wav', 'mp3', 'ogg'], default: 'wav' },
+        transcriptEnabled: { type: 'boolean', default: true },
+        retention: { type: 'string', pattern: '^[0-9]+(d|m|y)$', default: '90d' }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `voice` section to your `fai-manifest.json`:
+
+```json
+{
+  "voice": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.voice
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/voice.js)

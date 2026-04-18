@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Legal-AI-Builder",
+        "agentRole": "builder",
+        "description": "Legal AI builder - implements clause extraction, risk scoring, redlining",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Legal-AI-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Legal AI reviewer - audits UPL compliance, privilege handling, accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Legal-AI-Tuner",
+        "agentRole": "tuner",
+        "description": "Legal AI tuner - optimizes clause detection, risk calibration",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

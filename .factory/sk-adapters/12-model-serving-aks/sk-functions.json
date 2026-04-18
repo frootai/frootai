@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-model-serving-aks",
+      "description": "Deploy Model Serving on AKS — provision GPU node pools, deploy vLLM/TGI containers, configure HPA, health probes, ACR, and ingress. Use when: deploy, provision, configure GPU cluster.",
+      "functions": [
+        {
+          "name": "deploy-model-serving-aks",
+          "description": "Deploy Model Serving on AKS — provision GPU node pools, deploy vLLM/TGI containers, configure HPA, health probes, ACR, and ingress. Use when: deploy, provision, configure GPU cluster.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-model-serving-aks",
+      "description": "Evaluate Model Serving AKS — benchmark inference throughput (tokens/sec), latency (TTFT, TPS), GPU utilization, pod health, scaling behavior. Use when: evaluate, benchmark, load test.",
+      "functions": [
+        {
+          "name": "evaluate-model-serving-aks",
+          "description": "Evaluate Model Serving AKS — benchmark inference throughput (tokens/sec), latency (TTFT, TPS), GPU utilization, pod health, scaling behavior. Use when: evaluate, benchmark, load test.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-model-serving-aks",
+      "description": "Tune Model Serving AKS — optimize GPU utilization, quantization level, batch size, spot node pools, auto-scaling rules, cost per inference. Use when: tune, optimize, reduce cost.",
+      "functions": [
+        {
+          "name": "tune-model-serving-aks",
+          "description": "Tune Model Serving AKS — optimize GPU utilization, quantization level, batch size, spot node pools, auto-scaling rules, cost per inference. Use when: tune, optimize, reduce cost.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_knowledge_graph_rag",
+      "description": "Deploy Knowledge Graph RAG — configure entity extraction, relationship mapping, Cosmos DB Gremlin graph, graph traversal retrieval, hybrid graph+vector search. Use when: deploy, provision graph RAG.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-knowledge-graph-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_knowledge_graph_rag",
+      "description": "Evaluate Knowledge Graph RAG — measure entity extraction accuracy, relationship precision, graph traversal quality, hybrid retrieval effectiveness, multi-hop reasoning. Use when: evaluate, benchmark graph RAG.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-knowledge-graph-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_knowledge_graph_rag",
+      "description": "Tune Knowledge Graph RAG — optimize graph traversal depth, entity resolution, hybrid graph+vector weights, extraction prompt, Gremlin query performance, cost. Use when: tune, optimize graph RAG.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-knowledge-graph-rag/"
+      }
+    }
+  ]
+}

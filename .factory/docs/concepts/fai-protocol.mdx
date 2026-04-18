@@ -1,0 +1,632 @@
+---
+title: "FAI Protocol"
+description: "The declarative standard for wiring AI primitives"
+icon: "📜"
+order: 1
+editUrl: "fai-protocol/README.md"
+tags: ["protocol", "manifest", "standard"]
+category: "concepts"
+---
+# FAI Protocol — v0.1 Specification
+
+> The declarative context-wiring standard for AI primitive orchestration.
+
+## Abstract
+
+The FAI Protocol defines a JSON-based manifest format (`fai-manifest.json`) for declaring how AI primitives — agents, instructions, skills, hooks, workflows, plugins, tools, prompts, and guardrails — are wired together into a coherent, evaluated, deployable system. It provides the missing "glue layer" between isolated AI building blocks, enabling them to share context, enforce quality gates, and compose into reproducible solutions. The protocol is model-agnostic, framework-agnostic, and cloud-agnostic.
+
+## Status
+
+| Field | Value |
+|-------|-------|
+| Version | 0.1 (Draft) |
+| Date | 2026-04-06 |
+| Authors | FrootAI Contributors |
+| License | MIT |
+| Reference Implementation | [FAI Engine](../engine/) |
+| Validated Against | 100+ solution plays, 830+ primitives |
+
+This specification is at **v0.1 (Draft)**. It is implemented by the FAI Engine reference implementation and validated across 100 solution plays comprising 238 agents, 176 instructions, 322 skills, and 77 plugins.
+
+---
+
+## 1. Introduction
+
+### 1.1 Problem
+
+The AI tooling ecosystem has produced hundreds of capable building blocks — agents, retrieval pipelines, prompt templates, guardrails, evaluation harnesses, infrastructure modules — but no standard for wiring them together. Each framework (LangChain, Semantic Kernel, AutoGen, CrewAI) defines its own composition model, and each platform (Azure AI Foundry, AWS Bedrock, Vertex AI) adds its own orchestration layer. The result is fragmented, non-portable AI systems where changing one component requires rewiring everything manually.
+
+Protocols like MCP (Model Context Protocol) standardize tool calling. A2A (Agent-to-Agent) standardizes delegation. AG-UI standardizes rendering. But none of them address the fundamental question: *how do you declare which primitives a system uses, how they share context, and what quality thresholds they must meet?*
+
+### 1.2 Solution
+
+The FAI Protocol introduces `fai-manifest.json` — a single declarative file that serves as the Dockerfile equivalent for AI systems. Just as a Dockerfile declares base images, dependencies, and build steps for a container, `fai-manifest.json` declares knowledge context, primitives, quality guardrails, infrastructure, and toolkit paths for an AI solution. A conformant runtime reads the manifest, resolves all paths, injects shared context into every primitive, and evaluates outputs against declared thresholds.
+
+### 1.3 Scope
+
+The FAI Protocol **covers**:
+
+- Declaration of the 9 primitive types and their file paths
+- Shared context wiring (knowledge modules + WAF pillars)
+- Quality guardrail thresholds (groundedness, coherence, relevance, safety, cost)
+- Infrastructure-as-Code references (Bicep, Terraform, Pulumi, Docker, Helm, Kubernetes)
+- Toolkit structure (DevKit, TuneKit, SpecKit)
+- Standalone primitive context via the companion `fai-context.json` format
+
+The FAI Protocol **delegates to other standards**:
+
+| Concern | Delegated To |
+|---------|-------------|
+| Tool invocation | MCP (Model Context Protocol) |
+| Agent-to-agent delegation | A2A (Agent-to-Agent Protocol) |
+| UI rendering | AG-UI |
+| Model inference | Provider APIs (OpenAI, Azure OpenAI, Anthropic, etc.) |
+| Infrastructure provisioning | Bicep, Terraform, Pulumi |
+| Package distribution | npm, PyPI, Docker Hub |
+
+---
+
+## 2. Terminology
+
+| Term | Definition |
+|------|-----------|
+| **Primitive** | One of 9 building block types: agent, instruction, skill, hook, workflow, plugin, tool, prompt, or guardrail. Each primitive is a file or folder following a defined naming convention. |
+| **Manifest** | A `fai-manifest.json` file that declares all primitives and their wiring for a play. Every conformant play MUST contain exactly one manifest at its root. |
+| **Context** | Shared knowledge and WAF alignment inherited by all primitives in a play. Context flows downward from the manifest to every loaded primitive. |
+| **Play** | A self-contained, deployable AI solution composed of wired primitives. Identified by a two-digit number and kebab-case name (e.g., `01-enterprise-rag`). |
+| **Guardrail** | A quality threshold enforced at the protocol level. Values are normalized to the 0–1 range (except `safety`, which MUST be 0 for production, and `costPerQuery`, which is a USD decimal). |
+| **WAF Pillar** | One of 6 Well-Architected Framework dimensions: security, reliability, cost-optimization, operational-excellence, performance-efficiency, responsible-ai. |
+| **Knowledge Module** | A unit of domain knowledge identified by a FROOT layer prefix and numeric ID (e.g., `R2-RAG-Architecture`). The runtime resolves module IDs to actual content. |
+| **Context Inheritance** | The mechanism by which standalone primitives (declaring `fai-context.json`) receive context when embedded in a play's manifest. |
+| **FAI Engine** | The reference runtime that reads manifests, resolves paths, wires context, and evaluates guardrails. |
+
+---
+
+## 3. Manifest Format
+
+A manifest is a JSON file named `fai-manifest.json` located at the root of a play directory. It MUST conform to the JSON Schema at [`../schemas/fai-manifest.schema.json`](../schemas/fai-manifest.schema.json).
+
+### 3.1 Required Fields
+
+Every manifest MUST include four top-level fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `play` | `string` | Play identifier matching `^[0-9]{2}-[a-z0-9-]+$` |
+| `version` | `string` | Semantic version matching `^[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.]+)?$` |
+| `context` | `object` | Shared context (see §3.2) |
+| `primitives` | `object` | Primitive declarations (see §3.3) |
+
+**Example — Minimal manifest:**
+
+```json
+{
+  "play": "01-enterprise-rag",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture", "O4-Azure-AI-Services"],
+    "waf": ["security", "reliability", "cost-optimization"]
+  },
+  "primitives": {
+    "agents": [
+      "./agent.md",
+      "./.github/agents/builder.agent.md"
+    ],
+    "instructions": [
+      "./.github/copilot-instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/rag-indexer"
+    ]
+  }
+}
+```
+
+### 3.2 Context Section
+
+The `context` object declares shared knowledge and governance that applies to every primitive loaded from this manifest. It is the mechanism that transforms isolated building blocks into a coherent system.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `knowledge` | `string[]` | Yes | FROOT knowledge module IDs (min 1). See §4.1 for valid IDs. |
+| `waf` | `string[]` | Yes | WAF pillars to enforce (min 1, unique). See §4.2 for valid values. |
+| `scope` | `string` | No | Scenario scope identifier for context isolation (e.g., `enterprise-rag-qa`). |
+
+**Example:**
+
+```json
+{
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "R2-RAG-Architecture",
+      "O4-Azure-AI-Services",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "responsible-ai"
+    ],
+    "scope": "enterprise-rag-qa"
+  }
+}
+```
+
+When the FAI Engine loads a primitive, it injects the resolved knowledge content and WAF constraints into the primitive's execution context. This ensures that an agent designed for RAG automatically receives RAG architecture knowledge and enforces the security pillar, without the agent needing to declare these dependencies itself.
+
+### 3.3 Primitives Section
+
+The `primitives` object maps each primitive type to an array of file or folder paths, relative to the manifest's directory.
+
+| Field | Type | Path Target | Description |
+|-------|------|-------------|-------------|
+| `agents` | `string[]` | `.agent.md` files | Agent definitions with YAML frontmatter |
+| `instructions` | `string[]` | `.instructions.md` files | Behavioral instructions scoped by `applyTo` globs |
+| `skills` | `string[]` | Folders containing `SKILL.md` | Reusable, multi-step capability definitions |
+| `hooks` | `string[]` | Folders containing `hooks.json` | Event-driven scripts triggered by lifecycle events |
+| `workflows` | `string[]` | `.yml` files | Multi-agent orchestration workflows |
+| `guardrails` | `object` | Inline thresholds | Quality gates (see §3.4) |
+
+Paths follow the resolution rules defined in §5.
+
+### 3.4 Guardrails Section
+
+Guardrails are inline quality thresholds declared within the `primitives` object. The FAI Engine evaluates every agent response against these thresholds and reports pass/fail per metric.
+
+| Field | Type | Range | Description |
+|-------|------|-------|-------------|
+| `groundedness` | `number` | 0–1 | Minimum groundedness score. Measures whether the response is supported by retrieved sources. Recommended: ≥ 0.95 for enterprise. |
+| `coherence` | `number` | 0–1 | Minimum coherence score. Measures logical consistency and readability. Recommended: ≥ 0.90. |
+| `relevance` | `number` | 0–1 | Minimum relevance score. Measures whether the response addresses the user's query. Recommended: ≥ 0.85. |
+| `safety` | `integer` | 0 | Maximum allowed safety violations. MUST be 0 for production deployments. |
+| `costPerQuery` | `number` | ≥ 0 | Maximum cost per query in USD. Enforced by the cost-optimization WAF pillar. |
+
+**Example:**
+
+```json
+{
+  "primitives": {
+    "agents": ["./agent.md"],
+    "guardrails": {
+      "groundedness": 0.95,
+      "coherence": 0.90,
+      "relevance": 0.85,
+      "safety": 0,
+      "costPerQuery": 0.02
+    }
+  }
+}
+```
+
+A conformant engine MUST evaluate at least `groundedness` and `safety` when guardrails are declared. Engines MAY skip metrics that require infrastructure not available in the runtime environment (e.g., `costPerQuery` requires a billing API).
+
+### 3.5 Infrastructure Section (Optional)
+
+The `infrastructure` object references Infrastructure-as-Code templates for provisioning cloud resources. This section is OPTIONAL — plays that are framework-only (no cloud resources) omit it.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `bicep` | `string` | Path to Azure Bicep entry template (e.g., `./infra/main.bicep`) |
+| `parameters` | `string` | Path to Bicep/ARM parameter file |
+| `terraform` | `string` | Path to Terraform configuration (e.g., `./infra/main.tf`) |
+| `pulumi` | `string` | Path to Pulumi program entry point |
+| `docker` | `string` | Path to Docker Compose file |
+| `kubernetes` | `string` | Path to Kubernetes manifests directory |
+| `helm` | `string` | Path to Helm chart directory |
+
+A manifest MAY declare multiple infrastructure formats simultaneously, enabling multi-cloud deployment from a single play.
+
+**Example:**
+
+```json
+{
+  "infrastructure": {
+    "bicep": "./infra/main.bicep",
+    "parameters": "./infra/main.bicepparam",
+    "docker": "./docker-compose.yml"
+  }
+}
+```
+
+### 3.6 Toolkit Section (Optional)
+
+The `toolkit` object declares paths to the three kits that equip every play. This section is OPTIONAL but RECOMMENDED for plays that follow the full FAI structure.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `devkit` | `string` | Path to DevKit — contains agents, instructions, prompts, skills, hooks (typically `./.github/`) |
+| `tunekit` | `string` | Path to TuneKit — contains customer-tunable AI parameters, evaluation configs, guardrails (typically `./config/`) |
+| `speckit` | `string` | Path to SpecKit — contains architecture docs, WAF alignment records, the manifest itself (typically `./spec/`) |
+
+**Example:**
+
+```json
+{
+  "toolkit": {
+    "devkit": "./.github",
+    "tunekit": "./config",
+    "speckit": "./spec"
+  }
+}
+```
+
+---
+
+## 4. Context Resolution
+
+### 4.1 Knowledge Module IDs
+
+Knowledge modules are identified by a layer prefix, numeric ID, and descriptive name, following the FROOT taxonomy:
+
+| Layer | Prefix | Modules |
+|-------|--------|---------|
+| **F**oundations | `F` | F1-GenAI-Foundations, F2-LLMs, F3-Glossary, F4-Agentic-OS |
+| **R**easoning | `R` | R1-Prompts, R2-RAG-Architecture, R3-Deterministic-AI |
+| **O**rchestration | `O` | O1-Semantic-Kernel, O2-Agents, O3-MCP-Tools, O4-Azure-AI-Services, O5-Infrastructure, O6-Copilot |
+| **T**ransformation | `T` | T1-Fine-Tuning, T2-Responsible-AI, T3-Production-Patterns |
+
+A conformant engine MUST recognize all module IDs listed above. Engines MAY support additional custom module IDs prefixed with `X` (e.g., `X1-Custom-Domain`).
+
+### 4.2 WAF Pillar Values
+
+The following six values are the only valid entries in the `context.waf` and `fai-context.json` `waf` arrays:
+
+| Value | Pillar |
+|-------|--------|
+| `security` | Identity, network, data protection, AI-specific security |
+| `reliability` | Retry, circuit breaker, health checks, graceful degradation |
+| `cost-optimization` | Model routing, token budgets, right-sizing, FinOps |
+| `operational-excellence` | CI/CD, observability, IaC, incident management |
+| `performance-efficiency` | Caching, streaming, async patterns, bundle optimization |
+| `responsible-ai` | Content safety, groundedness, fairness, transparency |
+
+### 4.3 Context Inheritance
+
+When a primitive is loaded into a play, context flows as follows:
+
+1. The FAI Engine reads the manifest's `context.knowledge` and resolves each module ID to content.
+2. The engine reads the manifest's `context.waf` to determine which pillars are enforced.
+3. For each primitive path in `primitives.*`, the engine loads the primitive file.
+4. If the primitive has a sibling `fai-context.json`, the engine merges the standalone context with the play context. Play context takes precedence on conflict.
+5. The merged context is injected into the primitive's runtime environment.
+
+**Precedence rules:**
+
+- Play-level `waf` pillars are additive: a standalone primitive declaring `["security"]` in its `fai-context.json`, loaded into a play declaring `["security", "reliability"]`, will have both pillars enforced.
+- Play-level `knowledge` modules replace standalone `assumes`: if the play declares knowledge, the engine resolves play-level modules, not the primitive's assumed modules.
+- Play-level guardrails override any `evaluation` thresholds in `fai-context.json`.
+
+---
+
+## 5. Path Resolution
+
+### 5.1 Relative Paths
+
+All paths in the manifest are resolved relative to the directory containing `fai-manifest.json`.
+
+| Prefix | Resolution |
+|--------|-----------|
+| `./` | Play-local: resolved within the play's directory tree |
+| `../../` | Catalog reference: resolved to the standalone primitive catalog |
+| No prefix | Treated as `./` (play-local) |
+
+**Example — Mixed paths:**
+
+```json
+{
+  "primitives": {
+    "agents": [
+      "./agent.md",
+      "./.github/agents/builder.agent.md",
+      "../../agents/fai-rag-architect.agent.md"
+    ],
+    "skills": [
+      "./.github/skills/rag-indexer",
+      "../../skills/fai-play-initializer"
+    ]
+  }
+}
+```
+
+A conformant engine MUST resolve all paths and report an error if any path does not point to an existing file or directory.
+
+### 5.2 Standalone vs Embedded
+
+Primitives can be authored in two modes:
+
+| Mode | Location | Context Source | Use Case |
+|------|----------|---------------|----------|
+| **Embedded** | Inside a play's `.github/` directory | Inherits from the play's manifest | Play-specific behavior |
+| **Standalone** | In the top-level `agents/`, `skills/`, `instructions/` catalogs | Declares its own `fai-context.json` | Reusable across multiple plays |
+
+A standalone primitive becomes embedded when referenced from a play's manifest. The FAI Engine handles context injection transparently — the primitive's code does not need to change.
+
+**DRY Principle:** If a primitive is used by 2 or more plays, it SHOULD be authored as standalone and referenced via `../../` paths. If it is specific to a single play, it SHOULD be embedded.
+
+---
+
+## 6. Companion Format: fai-context.json
+
+The `fai-context.json` file is a lightweight context descriptor for standalone primitives. It is the "LEGO connector" that makes an isolated building block aware of the broader FAI ecosystem.
+
+A `fai-context.json` file MUST conform to the JSON Schema at [`../schemas/fai-context.schema.json`](../schemas/fai-context.schema.json).
+
+### 6.1 Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `assumes` | `string[]` | Knowledge module IDs this primitive assumes are available |
+| `waf` | `string[]` | WAF pillars this primitive respects or enforces |
+| `compatiblePlays` | `string[]` | Play IDs this primitive is tested with (e.g., `"01"`, `"01-enterprise-rag"`) |
+| `evaluation` | `object` | Expected quality thresholds when this primitive runs |
+| `requires` | `string[]` | Other primitives this one depends on (relative paths) |
+
+### 6.2 Example
+
+```json
+{
+  "assumes": ["R2-RAG-Architecture", "O3-MCP-Tools"],
+  "waf": ["security", "reliability"],
+  "compatiblePlays": ["01-enterprise-rag", "21-agentic-rag", "28-graphrag"],
+  "evaluation": {
+    "groundedness": 0.95,
+    "coherence": 0.90,
+    "relevance": 0.85,
+    "costPerQuery": 0.01
+  },
+  "requires": []
+}
+```
+
+### 6.3 Placement
+
+The `fai-context.json` file MUST be placed as a sibling of the primitive it describes, or inside the primitive's folder:
+
+```
+agents/
+├── fai-rag-architect.agent.md
+└── fai-rag-architect/
+    └── fai-context.json          ← context for the agent above
+skills/
+└── fai-play-initializer/
+    ├── SKILL.md
+    └── fai-context.json          ← context for this skill
+```
+
+---
+
+## 7. Schemas
+
+The FAI Protocol is formally defined by two JSON Schema files:
+
+| Schema | Location | Purpose |
+|--------|----------|---------|
+| `fai-manifest.schema.json` | [`../schemas/fai-manifest.schema.json`](../schemas/fai-manifest.schema.json) | Validates the full play manifest |
+| `fai-context.schema.json` | [`../schemas/fai-context.schema.json`](../schemas/fai-context.schema.json) | Validates standalone primitive context |
+
+Both schemas use JSON Schema Draft-07 and are published at:
+
+- `https://frootai.dev/schemas/fai-manifest.schema.json`
+- `https://frootai.dev/schemas/fai-context.schema.json`
+
+Manifests SHOULD include a `$schema` reference for editor validation:
+
+```json
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "01-enterprise-rag",
+  "version": "1.0.0"
+}
+```
+
+---
+
+## 8. Reference Implementation
+
+The FAI Engine at [`../engine/`](../engine/) implements this specification as six cooperating modules:
+
+| Module | File | Responsibility |
+|--------|------|---------------|
+| **Manifest Reader** | `manifest-reader.js` | Parses `fai-manifest.json`, validates against schema, extracts fields |
+| **Context Resolver** | `context-resolver.js` | Resolves knowledge module IDs to content, merges WAF pillars |
+| **Primitive Wirer** | `primitive-wirer.js` | Resolves all primitive paths, loads files, injects context |
+| **Hook Runner** | `hook-runner.js` | Executes hooks at lifecycle events (SessionStart, Stop, etc.) |
+| **Evaluator** | `evaluator.js` | Evaluates agent outputs against guardrail thresholds, reports pass/fail |
+| **MCP Bridge** | `mcp-bridge.js` | Exposes manifest-wired primitives as MCP-compatible tools |
+
+### 8.1 Processing Pipeline
+
+```
+fai-manifest.json
+       │
+       ▼
+┌──────────────┐     ┌──────────────────┐     ┌────────────────┐
+│  Manifest    │────▶│  Context         │────▶│  Primitive     │
+│  Reader      │     │  Resolver        │     │  Wirer         │
+└──────────────┘     └──────────────────┘     └────────────────┘
+                                                      │
+                                                      ▼
+                                              ┌────────────────┐
+                                              │  Hook Runner   │
+                                              │  (lifecycle)   │
+                                              └────────────────┘
+                                                      │
+                                                      ▼
+                                              ┌────────────────┐
+                                              │  Evaluator     │
+                                              │  (guardrails)  │
+                                              └────────────────┘
+                                                      │
+                                                      ▼
+                                              ┌────────────────┐
+                                              │  MCP Bridge    │
+                                              │  (tool export) │
+                                              └────────────────┘
+```
+
+---
+
+## 9. Conformance
+
+### 9.1 Conformance Levels
+
+| Level | Name | Requirements |
+|-------|------|-------------|
+| **Level 1** | Parser | Parse `fai-manifest.json` without error; validate against schema |
+| **Level 2** | Resolver | Level 1 + resolve all primitive paths to existing files |
+| **Level 3** | Wirer | Level 2 + inject shared context into all loaded primitives |
+| **Level 4** | Evaluator | Level 3 + evaluate outputs against declared guardrails |
+| **Level 5** | Full | Level 4 + report pass/fail per guardrail, support hooks, and export via MCP Bridge |
+
+### 9.2 Conformance Requirements
+
+A conformant implementation MUST:
+
+1. **Parse** — Read `fai-manifest.json` and validate it against `fai-manifest.schema.json`. Report all validation errors with field paths.
+2. **Resolve paths** — Resolve every entry in `primitives.agents`, `primitives.instructions`, `primitives.skills`, `primitives.hooks`, and `primitives.workflows` to an existing file or directory. Report missing paths as errors.
+3. **Inject context** — Make `context.knowledge` module content and `context.waf` pillar list available to all loaded primitives during execution.
+4. **Evaluate guardrails** — After each agent response, evaluate the output against each declared guardrail threshold. A response with a score below the threshold MUST be flagged as a guardrail violation.
+5. **Report results** — Produce a structured report indicating pass/fail for each guardrail metric, including the measured score and the threshold.
+
+A conformant implementation SHOULD:
+
+6. **Merge context** — When a loaded primitive has a sibling `fai-context.json`, merge its context with the play-level context following the precedence rules in §4.3.
+7. **Run hooks** — Execute hook scripts at the lifecycle events declared in `hooks.json`.
+8. **Bridge to MCP** — Expose wired primitives as MCP-compatible tools for external consumption.
+
+### 9.3 Error Handling
+
+| Error Class | Behavior |
+|-------------|----------|
+| Schema validation failure | MUST halt and report all validation errors |
+| Missing primitive path | MUST report as error; MAY continue loading remaining primitives |
+| Unknown knowledge module ID | SHOULD warn; MUST NOT halt |
+| Guardrail violation | MUST flag in report; MAY retry with fallback model |
+| Missing `fai-context.json` | MUST NOT error — context files are optional |
+
+---
+
+## 10. Security Considerations
+
+- Manifests MUST NOT contain secrets, API keys, or connection strings. Use environment variables or secret managers.
+- Primitive paths MUST be confined to the play directory or the known catalog directories. Path traversal beyond the repository root MUST be rejected.
+- Hook scripts execute with the permissions of the runtime process. Conformant engines SHOULD sandbox hook execution.
+- Guardrail evaluation results SHOULD be logged for audit, but MUST NOT include PII from user queries.
+
+---
+
+## 11. Versioning
+
+The FAI Protocol uses semantic versioning. The `version` field in the manifest refers to the play's version, not the protocol version. The protocol version is identified by the `$schema` URI.
+
+| Protocol Version | Schema URI | Status |
+|-----------------|------------|--------|
+| 0.1 | `https://frootai.dev/schemas/fai-manifest.schema.json` | Draft |
+
+Breaking changes to the schema (removing required fields, changing field types) will increment the major protocol version. Additive changes (new optional fields) will increment the minor version.
+
+---
+
+## 12. Full Example
+
+A complete `fai-manifest.json` for an enterprise RAG solution:
+
+```json
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "01-enterprise-rag",
+  "version": "2.0.0",
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "F2-LLMs",
+      "R2-RAG-Architecture",
+      "O4-Azure-AI-Services",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "enterprise-rag-qa"
+  },
+  "primitives": {
+    "agents": [
+      "./agent.md",
+      "./.github/agents/builder.agent.md",
+      "./.github/agents/reviewer.agent.md",
+      "./.github/agents/tuner.agent.md",
+      "../../agents/fai-rag-architect.agent.md"
+    ],
+    "instructions": [
+      "./.github/copilot-instructions.md",
+      "./.github/instructions/rag-domain.instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/rag-indexer",
+      "./.github/skills/rag-evaluator"
+    ],
+    "hooks": [
+      "./.github/hooks/rag-guardrails"
+    ],
+    "workflows": [
+      "./.github/workflows/rag-pipeline.yml"
+    ],
+    "guardrails": {
+      "groundedness": 0.95,
+      "coherence": 0.90,
+      "relevance": 0.85,
+      "safety": 0,
+      "costPerQuery": 0.02
+    }
+  },
+  "infrastructure": {
+    "bicep": "./infra/main.bicep",
+    "parameters": "./infra/main.bicepparam",
+    "docker": "./docker-compose.yml"
+  },
+  "toolkit": {
+    "devkit": "./.github",
+    "tunekit": "./config",
+    "speckit": "./spec"
+  }
+}
+```
+
+---
+
+## Appendix A: Relationship to Other Protocols
+
+| Protocol | Relationship to FAI |
+|----------|-------------------|
+| **MCP** (Model Context Protocol) | FAI declares *which* tools to wire; MCP defines *how* to call them. The MCP Bridge module exports FAI-wired primitives as MCP tools. |
+| **A2A** (Agent-to-Agent) | FAI declares agent composition within a play; A2A handles delegation between plays or external agents. |
+| **AG-UI** | FAI is backend-only; AG-UI handles how agent outputs are rendered to users. |
+| **OpenAI Assistants API** | FAI is a superset — it can wire OpenAI assistants as one of many agent types. |
+| **LangChain / LangGraph** | Framework-specific orchestration. FAI wraps these as implementation details inside agents. |
+| **Semantic Kernel** | FAI can declare SK plugins as skills and SK planners as agents. |
+
+## Appendix B: Primitive File Conventions
+
+| Primitive | File Pattern | Naming Rule |
+|-----------|-------------|-------------|
+| Agent | `*.agent.md` | lowercase-hyphen (e.g., `fai-rag-architect.agent.md`) |
+| Instruction | `*.instructions.md` | lowercase-hyphen (e.g., `rag-domain.instructions.md`) |
+| Skill | `folder/SKILL.md` | Folder name = kebab-case, must match `name` in SKILL.md frontmatter |
+| Hook | `folder/hooks.json` | Folder name = kebab-case |
+| Workflow | `*.yml` | lowercase-hyphen |
+| Plugin | `folder/plugin.json` | Folder name = kebab-case, must match `name` in plugin.json |
+| Prompt | `*.prompt.md` | lowercase-hyphen |
+
+---
+
+## License
+
+MIT — FrootAI Contributors
+
+See [LICENSE](../LICENSE) for the full license text.

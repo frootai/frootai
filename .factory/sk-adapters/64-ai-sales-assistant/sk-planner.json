@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Sales-Assistant-Builder",
+        "agentRole": "builder",
+        "description": "Sales Assistant builder - implements lead scoring, CRM integration, email generation",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "performance-efficiency",
+            "reliability",
+            "cost-optimization"
+          ]
+        }
+      },
+      {
+        "stepName": "Sales-Assistant-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Sales Assistant reviewer - audits scoring fairness, email quality, data accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Sales-Assistant-Tuner",
+        "agentRole": "tuner",
+        "description": "Sales Assistant tuner - optimizes scoring model, conversion correlation",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 2,
+    "steps": [
+      {
+        "stepName": "Agentic-RAG-Orchestrator",
+        "agentRole": "orchestrator",
+        "description": "Agentic RAG orchestrator — autonomously decides when to retrieve, which sources to query, iterates on insufficient results, and synthesizes grounded answers with citations across multiple knowledge bases.",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "terminal",
+          "azure",
+          "frootai_mcp"
+        ],
+        "order": 0,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/agentic-rag.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "cost-optimization",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  }
+}

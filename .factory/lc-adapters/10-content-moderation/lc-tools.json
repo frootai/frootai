@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_content_moderation",
+      "description": "Deploy Content Moderation — configure Azure Content Safety, custom blocklists, severity thresholds, input+output pipeline, image moderation. Use when: deploy.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-content-moderation/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_content_moderation",
+      "description": "Evaluate Content Moderation — test true positive rate, false positive rate, moderation latency, custom category detection, human review volume. Use when: evaluate.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-content-moderation/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_content_moderation",
+      "description": "Tune Content Moderation — optimize severity thresholds per category, reduce false positives, custom blocklist management, latency optimization. Use when: tune.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-content-moderation/"
+      }
+    }
+  ]
+}

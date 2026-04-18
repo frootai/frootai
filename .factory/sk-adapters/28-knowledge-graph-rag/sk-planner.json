@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Knowledge-Graph-RAG-Builder",
+        "agentRole": "builder",
+        "description": "Knowledge Graph RAG builder - implements graph construction, entity extraction, hybrid retrieval",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "security"
+          ]
+        }
+      },
+      {
+        "stepName": "Knowledge-Graph-RAG-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Knowledge Graph RAG reviewer - audits graph quality, relationship accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Knowledge-Graph-RAG-Tuner",
+        "agentRole": "tuner",
+        "description": "Knowledge Graph RAG tuner - optimizes graph depth, entity resolution, performance",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

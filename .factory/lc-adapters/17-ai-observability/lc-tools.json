@@ -1,0 +1,70 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_observability",
+      "description": "Deploy AI Observability — configure Application Insights, Log Analytics, KQL dashboards, distributed tracing, token/cost metrics, alert rules for AI workloads. Use when: deploy, configure monitoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-observability/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_observability",
+      "description": "Evaluate AI Observability — audit telemetry completeness, alert coverage, PII in logs, dashboard accuracy, data retention compliance. Use when: evaluate, audit monitoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-observability/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_observability",
+      "description": "Tune AI Observability — optimize sampling rates, alert thresholds, log retention tiers, KQL query performance, Log Analytics cost. Use when: tune, optimize monitoring cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-observability/"
+      }
+    }
+  ]
+}

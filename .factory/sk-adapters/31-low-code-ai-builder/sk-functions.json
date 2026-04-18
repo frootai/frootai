@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-low-code-ai-builder",
+      "description": "Deploy Low-Code AI Builder — configure visual pipeline designer, template library, connector framework, one-click deployment to Azure. Use when: deploy, provision builder platform.",
+      "functions": [
+        {
+          "name": "deploy-low-code-ai-builder",
+          "description": "Deploy Low-Code AI Builder — configure visual pipeline designer, template library, connector framework, one-click deployment to Azure. Use when: deploy, provision builder platform.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-low-code-ai-builder",
+      "description": "Evaluate Low-Code AI Builder — test pipeline execution accuracy, template quality, deployment success rate, user experience, connector reliability. Use when: evaluate, test builder platform.",
+      "functions": [
+        {
+          "name": "evaluate-low-code-ai-builder",
+          "description": "Evaluate Low-Code AI Builder — test pipeline execution accuracy, template quality, deployment success rate, user experience, connector reliability. Use when: evaluate, test builder platform.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-low-code-ai-builder",
+      "description": "Tune Low-Code AI Builder — optimize pipeline execution speed, model selection per step type, template quality, deployment configuration, cost per pipeline run. Use when: tune, optimize builder.",
+      "functions": [
+        {
+          "name": "tune-low-code-ai-builder",
+          "description": "Tune Low-Code AI Builder — optimize pipeline execution speed, model selection per step type, template quality, deployment configuration, cost per pipeline run. Use when: tune, optimize builder.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

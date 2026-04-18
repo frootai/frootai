@@ -1,0 +1,70 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_84",
+      "description": "FAI Skill: deploy-84",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "deploy-84/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_84",
+      "description": "FAI Skill: evaluate-84",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "evaluate-84/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_84",
+      "description": "FAI Skill: tune-84",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "tune-84/"
+      }
+    }
+  ]
+}

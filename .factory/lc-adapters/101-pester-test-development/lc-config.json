@@ -1,0 +1,105 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.383Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "101-pester-test-development",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\101-pester-test-development\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-101-pester-test-development",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_pester_test_development",
+        "description": "FAI Skill: deploy-pester-test-development",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-pester-test-development/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_pester_test_development",
+        "description": "FAI Skill: evaluate-pester-test-development",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-pester-test-development/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_pester_test_development",
+        "description": "FAI Skill: tune-pester-test-development",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-pester-test-development/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O3-MCP-Tools"
+    ],
+    "waf": [
+      "reliability",
+      "operational-excellence",
+      "security"
+    ],
+    "scope": "101-pester-test-development"
+  }
+}

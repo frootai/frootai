@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.651Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "94-ai-podcast-generator",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\94-ai-podcast-generator\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-94-ai-podcast-generator",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-94",
+        "description": "Skill: deploy-94",
+        "functions": [
+          {
+            "name": "deploy-94",
+            "description": "Skill: deploy-94",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-94",
+        "description": "Skill: evaluate-94",
+        "functions": [
+          {
+            "name": "evaluate-94",
+            "description": "Skill: evaluate-94",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-94",
+        "description": "Skill: tune-94",
+        "functions": [
+          {
+            "name": "tune-94",
+            "description": "Skill: tune-94",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "T3-Production-Patterns",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "performance-efficiency",
+      "cost-optimization",
+      "reliability"
+    ],
+    "scope": "94-ai-podcast-generator"
+  }
+}

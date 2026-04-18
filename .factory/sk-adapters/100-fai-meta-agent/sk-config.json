@@ -1,0 +1,101 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.448Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "100-fai-meta-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\100-fai-meta-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-100-fai-meta-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-100",
+        "description": "Skill: deploy-100",
+        "functions": [
+          {
+            "name": "deploy-100",
+            "description": "Skill: deploy-100",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-100",
+        "description": "Skill: evaluate-100",
+        "functions": [
+          {
+            "name": "evaluate-100",
+            "description": "Skill: evaluate-100",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-100",
+        "description": "Skill: tune-100",
+        "functions": [
+          {
+            "name": "tune-100",
+            "description": "Skill: tune-100",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "O3-MCP-Tools",
+      "T3-Production-Patterns",
+      "O4-Azure-AI",
+      "R2-RAG"
+    ],
+    "waf": [
+      "reliability",
+      "security",
+      "responsible-ai",
+      "cost-optimization",
+      "operational-excellence",
+      "performance-efficiency"
+    ],
+    "scope": "100-fai-meta-agent"
+  }
+}

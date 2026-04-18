@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_predictive_maintenance_ai",
+      "description": "Deploy Predictive Maintenance AI — IoT sensor ingestion, multivariate feature engineering, RUL model, condition-based scheduling, root cause analysis, failure pattern recognition.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-predictive-maintenance-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_predictive_maintenance_ai",
+      "description": "Evaluate Predictive Maintenance AI quality — RUL accuracy (MAE), false alarm rate, critical failure detection, downtime reduction, root cause quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-predictive-maintenance-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_predictive_maintenance_ai",
+      "description": "Tune Predictive Maintenance AI — RUL thresholds, feature selection, sensor sampling, model retrain frequency, alert aggregation, cost of downtime vs maintenance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-predictive-maintenance-ai/"
+      }
+    }
+  ]
+}

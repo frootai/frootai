@@ -1,0 +1,76 @@
+---
+title: "FAI Replay"
+description: "Protocol-level Replay"
+icon: "🔁"
+order: 7
+editUrl: "engine/specialties/replay.js"
+category: "specialties"
+---
+# FAI Replay
+
+🔁 S-7 — Protocol-level replay.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    enabled: { type: 'boolean', default: true },
+    storage: {
+      type: 'string',
+      enum: ['application-insights', 'file-system', 'cosmos-db', 'in-memory'],
+      default: 'in-memory'
+    },
+    retention: { type: 'string', pattern: '^[0-9]+(s|m|h|d)$', default: '30d' },
+    capabilities: {
+      type: 'object',
+      properties: {
+        replayExact: { type: 'boolean', default: true, description: 'Replay with same seed/temp.' },
+        replayModified: { type: 'boolean', default: true, description: 'Replay with different prompt.' },
+        diffComparison: { type: 'boolean', default: true, description: 'Compare two replay runs.' }
+      },
+      additionalProperties: false
+    },
+    tracing: {
+      type: 'object',
+      properties: {
+        provider: { type: 'string', enum: ['opentelemetry', 'application-insights', 'console', 'none'], default: 'opentelemetry' },
+        correlationHeader: { type: 'string', default: 'x-fai-trace-id' },
+        captureTokens: { type: 'boolean', default: true },
+        captureCost: { type: 'boolean', default: true },
+        capturePrompt: { type: 'boolean', default: false, description: 'Capture full prompts (PII risk).' },
+        captureResponse: { type: 'boolean', default: false, description: 'Capture full responses (PII risk).' },
+        sampleRate: { type: 'number', minimum: 0, maximum: 1, default: 1.0 }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `replay` section to your `fai-manifest.json`:
+
+```json
+{
+  "replay": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.replay
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/replay.js)

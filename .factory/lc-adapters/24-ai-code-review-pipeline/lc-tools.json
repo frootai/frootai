@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_code_review_pipeline",
+      "description": "Deploy AI Code Review Pipeline — configure GitHub Actions for automated PR review, static analysis, LLM-powered code comments, OWASP scanning, merge gates. Use when: deploy, configure CI/CD review.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-code-review-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_code_review_pipeline",
+      "description": "Evaluate AI Code Review — measure comment quality, false positive rate, developer trust, OWASP coverage, review latency. Use when: evaluate, assess review quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-code-review-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_code_review_pipeline",
+      "description": "Tune AI Code Review — optimize review prompts, reduce false positives, configure severity routing, model selection per file type, cost per review. Use when: tune, optimize review quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-code-review-pipeline/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_translation_engine",
+      "description": "Deploy AI Translation Engine — Azure Translator for bulk NMT, LLM post-editing for nuanced content, custom glossary enforcement, HTML/markdown preservation, batch processing, quality scoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-translation-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_translation_engine",
+      "description": "Evaluate AI Translation Engine quality — BLEU/COMET scores, glossary compliance, LLM refinement impact, locale correctness, markup preservation, throughput.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-translation-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_translation_engine",
+      "description": "Tune AI Translation Engine — LLM refinement ratio, quality thresholds, glossary coverage, content type routing, batch config, cost per 1K words.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-translation-engine/"
+      }
+    }
+  ]
+}

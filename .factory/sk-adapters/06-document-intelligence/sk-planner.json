@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Document-Intelligence-Builder",
+        "agentRole": "builder",
+        "description": "Document Intelligence builder - implements OCR extraction, form processing, validation",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Document-Intelligence-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Document Intelligence reviewer - audits extraction accuracy, PII handling",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Document-Intelligence-Tuner",
+        "agentRole": "tuner",
+        "description": "Document Intelligence tuner - optimizes model selection, throughput, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

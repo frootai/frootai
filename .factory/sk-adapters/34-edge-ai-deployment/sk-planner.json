@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Edge-AI-Deploy-Builder",
+        "agentRole": "builder",
+        "description": "Edge AI Deploy builder - packages models, containers, IoT Edge deployment",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "operational-excellence",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Edge-AI-Deploy-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Edge AI Deploy reviewer - audits model size, memory, rollback, offline mode",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Edge-AI-Deploy-Tuner",
+        "agentRole": "tuner",
+        "description": "Edge AI Deploy tuner - optimizes quantization, container size, rollout",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

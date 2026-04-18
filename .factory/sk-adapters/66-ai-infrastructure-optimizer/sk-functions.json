@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-infrastructure-optimizer",
+      "description": "Deploy AI Infrastructure Optimizer — Azure Monitor metrics, GPU utilization analysis, SKU right-sizing, cost anomaly detection, auto-scaling recommendations, FinOps dashboard.",
+      "functions": [
+        {
+          "name": "deploy-ai-infrastructure-optimizer",
+          "description": "Deploy AI Infrastructure Optimizer — Azure Monitor metrics, GPU utilization analysis, SKU right-sizing, cost anomaly detection, auto-scaling recommendations, FinOps dashboard.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-infrastructure-optimizer",
+      "description": "Evaluate AI Infrastructure Optimizer quality — recommendation accuracy, savings realized, anomaly detection precision, GPU analysis coverage, auto-scale effectiveness.",
+      "functions": [
+        {
+          "name": "evaluate-ai-infrastructure-optimizer",
+          "description": "Evaluate AI Infrastructure Optimizer quality — recommendation accuracy, savings realized, anomaly detection precision, GPU analysis coverage, auto-scale effectiveness.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-infrastructure-optimizer",
+      "description": "Tune AI Infrastructure Optimizer — utilization thresholds, cost anomaly sensitivity, analysis frequency, GPU migration criteria, auto-scale triggers, SKU mapping.",
+      "functions": [
+        {
+          "name": "tune-ai-infrastructure-optimizer",
+          "description": "Tune AI Infrastructure Optimizer — utilization thresholds, cost anomaly sensitivity, analysis frequency, GPU migration criteria, auto-scale triggers, SKU mapping.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

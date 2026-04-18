@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.592Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "85-policy-impact-analyzer",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\85-policy-impact-analyzer\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-85-policy-impact-analyzer",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_85",
+        "description": "FAI Skill: deploy-85",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-85/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_85",
+        "description": "FAI Skill: evaluate-85",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-85/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_85",
+        "description": "FAI Skill: tune-85",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-85/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "operational-excellence"
+    ],
+    "scope": "85-policy-impact-analyzer"
+  }
+}

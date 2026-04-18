@@ -1,0 +1,82 @@
+{
+  "functions": [
+    {
+      "name": "deploy-autonomous-coding-agent",
+      "description": "Deploy Autonomous Coding Agent — issue-to-PR pipeline, codebase indexing, multi-file implementation, test generation, GitHub integration, CI self-healing.",
+      "functions": [
+        {
+          "name": "deploy-autonomous-coding-agent",
+          "description": "Deploy Autonomous Coding Agent — issue-to-PR pipeline, codebase indexing, multi-file implementation, test generation, GitHub integration, CI self-healing.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-autonomous-coding-agent",
+      "description": "Evaluate Autonomous Coding Agent quality — issue resolution rate, code correctness, test coverage, PR acceptance rate, iteration count, cost per PR.",
+      "functions": [
+        {
+          "name": "evaluate-autonomous-coding-agent",
+          "description": "Evaluate Autonomous Coding Agent quality — issue resolution rate, code correctness, test coverage, PR acceptance rate, iteration count, cost per PR.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-autonomous-coding-agent",
+      "description": "Tune Autonomous Coding Agent — plan accuracy, iteration limits, test coverage requirements, auto-merge criteria, scope guards, cost per PR optimization.",
+      "functions": [
+        {
+          "name": "tune-autonomous-coding-agent",
+          "description": "Tune Autonomous Coding Agent — plan accuracy, iteration limits, test coverage requirements, auto-merge criteria, scope guards, cost per PR optimization.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

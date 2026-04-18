@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_api_gateway_v2",
+      "description": "Deploy AI API Gateway V2 — multi-provider routing (OpenAI/Anthropic/Google), semantic caching with Redis, circuit breakers, token metering, per-consumer rate limiting, APIM policies.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-api-gateway-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_api_gateway_v2",
+      "description": "Evaluate AI API Gateway V2 — cache hit rate, failover reliability, cost savings, latency distribution, rate limiting accuracy, provider health.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-api-gateway-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_api_gateway_v2",
+      "description": "Tune AI API Gateway V2 — provider routing priority, semantic cache TTL, circuit breaker thresholds, complexity routing rules, rate limit quotas, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-api-gateway-v2/"
+      }
+    }
+  ]
+}

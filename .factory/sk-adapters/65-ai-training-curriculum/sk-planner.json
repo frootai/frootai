@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Training-Curriculum-Builder",
+        "agentRole": "builder",
+        "description": "Training Curriculum builder - implements adaptive paths, content generation, assessments",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "responsible-ai",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Training-Curriculum-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Training Curriculum reviewer - audits content accuracy, assessment quality, accessibility",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "reliability",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Training-Curriculum-Tuner",
+        "agentRole": "tuner",
+        "description": "Training Curriculum tuner - optimizes path effectiveness, completion rates",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

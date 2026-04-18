@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.645Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "90-network-optimization-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\90-network-optimization-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-90-network-optimization-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-90",
+        "description": "Skill: deploy-90",
+        "functions": [
+          {
+            "name": "deploy-90",
+            "description": "Skill: deploy-90",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-90",
+        "description": "Skill: evaluate-90",
+        "functions": [
+          {
+            "name": "evaluate-90",
+            "description": "Skill: evaluate-90",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-90",
+        "description": "Skill: tune-90",
+        "functions": [
+          {
+            "name": "tune-90",
+            "description": "Skill: tune-90",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "performance-efficiency",
+      "reliability",
+      "cost-optimization",
+      "operational-excellence"
+    ],
+    "scope": "90-network-optimization-agent"
+  }
+}

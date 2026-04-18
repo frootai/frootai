@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_copilot_studio_advanced",
+      "description": "Deploy Copilot Studio Advanced — declarative agents, TypeSpec API plugins, Graph API data grounding, adaptive cards, SSO/OAuth2, Power Automate integration.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-copilot-studio-advanced/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_copilot_studio_advanced",
+      "description": "Evaluate Copilot Studio Advanced quality — plugin response accuracy, Graph grounding faithfulness, conversation coherence, adaptive card rendering, SSO reliability.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-copilot-studio-advanced/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_copilot_studio_advanced",
+      "description": "Tune Copilot Studio Advanced configuration — plugin latency, conversation context, Graph query efficiency, adaptive card templates, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-copilot-studio-advanced/"
+      }
+    }
+  ]
+}

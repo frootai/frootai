@@ -1,0 +1,106 @@
+{
+  "functions": [
+    {
+      "name": "deploy-enterprise-rag",
+      "description": "Deploy Enterprise RAG to Azure — provision AI Search + OpenAI + Storage with AVM Bicep, configure indexes, deploy application, run smoke tests. Use when: deploy, provision, infrastructure, Azure, Bicep, azd, CI/CD.",
+      "functions": [
+        {
+          "name": "deploy-enterprise-rag",
+          "description": "Deploy Enterprise RAG to Azure — provision AI Search + OpenAI + Storage with AVM Bicep, configure indexes, deploy application, run smoke tests. Use when: deploy, provision, infrastructure, Azure, Bicep, azd, CI/CD.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-enterprise-rag",
+      "description": "Evaluate Enterprise RAG quality — measure groundedness, relevance, coherence, fluency, content safety. Run evaluation pipeline, analyze gaps, set quality gates. Use when: evaluate, quality, groundedness, relevance, metrics, test, audit.",
+      "functions": [
+        {
+          "name": "evaluate-enterprise-rag",
+          "description": "Evaluate Enterprise RAG quality — measure groundedness, relevance, coherence, fluency, content safety. Run evaluation pipeline, analyze gaps, set quality gates. Use when: evaluate, quality, groundedness, relevance, metrics, test, audit.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-enterprise-rag",
+      "description": "Tune Enterprise RAG for production — optimize chunking, search config, model routing, caching, temperature, token budget, evaluation thresholds. Use when: tune, optimize, performance, cost, latency, quality, config.",
+      "functions": [
+        {
+          "name": "tune-enterprise-rag",
+          "description": "Tune Enterprise RAG for production — optimize chunking, search config, model routing, caching, temperature, token budget, evaluation thresholds. Use when: tune, optimize, performance, cost, latency, quality, config.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

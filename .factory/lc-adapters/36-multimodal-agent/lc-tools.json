@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_multimodal_agent",
+      "description": "Deploy Multimodal Agent — configure unified text+image+audio pipeline, GPT-4o vision, modality routing, cross-modal synthesis, content safety per modality. Use when: deploy, provision multimodal.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-multimodal-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_multimodal_agent",
+      "description": "Evaluate Multimodal Agent — measure per-modality accuracy, cross-modal quality, content safety coverage, processing latency, modality routing. Use when: evaluate, test multimodal quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-multimodal-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_multimodal_agent",
+      "description": "Tune Multimodal Agent — optimize image detail level, parallel modality processing, cross-modal prompts, content safety thresholds, cost per request. Use when: tune, optimize multimodal.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-multimodal-agent/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.588Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "59-ai-recruiter-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\59-ai-recruiter-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-59-ai-recruiter-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-ai-recruiter-agent",
+        "description": "Deploy AI Recruiter Agent — resume parsing with PII redaction, bias-aware candidate scoring, job description generation with bias check, explainable factors, fairness testing, EEOC compliance.",
+        "functions": [
+          {
+            "name": "deploy-ai-recruiter-agent",
+            "description": "Deploy AI Recruiter Agent — resume parsing with PII redaction, bias-aware candidate scoring, job description generation with bias check, explainable factors, fairness testing, EEOC compliance.",
+            "parameters": [
+              {
+                "name": "content",
+                "type": "string",
+                "description": "Document or content to process",
+                "required": false
+              },
+              {
+                "name": "temperature",
+                "type": "number",
+                "description": "Sampling temperature (0-1)",
+                "required": false
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-ai-recruiter-agent",
+        "description": "Evaluate AI Recruiter Agent quality — matching accuracy, fairness (disparate impact), PII redaction recall, score explainability, job description bias, EEOC compliance.",
+        "functions": [
+          {
+            "name": "evaluate-ai-recruiter-agent",
+            "description": "Evaluate AI Recruiter Agent quality — matching accuracy, fairness (disparate impact), PII redaction recall, score explainability, job description bias, EEOC compliance.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-ai-recruiter-agent",
+        "description": "Tune AI Recruiter Agent — scoring weights, PII detection sensitivity, bias thresholds, matching criteria, JD language rules, cost per screening.",
+        "functions": [
+          {
+            "name": "tune-ai-recruiter-agent",
+            "description": "Tune AI Recruiter Agent — scoring weights, PII detection sensitivity, bias thresholds, matching criteria, JD language rules, cost per screening.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Recruiter-Builder",
+        "agentRole": "builder",
+        "description": "AI Recruiter builder - implements resume parsing, scoring, job description gen",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Recruiter-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Recruiter reviewer - audits bias testing, PII redaction, explainability",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Recruiter-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Recruiter tuner - optimizes matching accuracy, bias reduction",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "responsible-ai",
+            "cost-optimization",
+            "performance-efficiency"
+          ]
+        }
+      }
+    ]
+  },
+  "filters": [
+    {
+      "name": "guardrail-groundedness",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-coherence",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-relevance",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-safety",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "block"
+      }
+    },
+    {
+      "name": "guardrail-costPerQuery",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.05",
+      "threshold": 0.05,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "ai-recruiter-agent-patterns",
+      "description": "Domain-specific coding patterns for Ai Recruiter Agent (Play 59)",
+      "applyTo": "**/*.{py,ts,js}",
+      "template": "# Ai Recruiter Agent — Domain Patterns & Best Practices\n\n## Architecture Pattern\nThis play implements a Ai Recruiter Agent architecture with these core components:\n\n### Request Flow\n1. Client sends request to API endpoint\n2. Input validation and sanitization\n3. Authentication check (Managed Identity / Bearer token)\n4. Core processing pipeline:\n   a. Pre-processing: data extraction, normalization, enrichment\n   b. AI processing: model inference, embedding, search, generation\n   c. Post-processing: output validation, formatting, safety check\n5. Response with structured output and metadata\n6. Async logging: metrics, traces, audit events\n\n### Component Responsibilities\n| Component | Responsibility | Key Patterns |\n|-----------|---------------|-------------|\n| API Gateway | Routing, rate limiting, auth | APIM policies, JWT validation |\n| Application | Business logic, orchestration | Async/await, dependency injection |\n| AI Services | Model inference, embeddings | Retry with backoff, circuit breaker |\n| Data Store | Persistence, caching | Connection pooling, read replicas |\n| Monitoring | Observability, alerting | Structured logs, custom metrics |\n\n## Domain-Specific Patterns\n\n### Data Processing Pipeline\n```python\nfrom dataclasses import dataclass\nfrom typing import List, Optional\nimport asyncio\n\n@dataclass\nclass ProcessingResult:\n    \"\"\"Result from the processing pipeline.\"\"\"\n    data: dict\n    metadata: dict\n    quality_score: float\n    processing_time_ms: float\n\nclass ProcessingPipeline:\n    \"\"\"Multi-stage processing pipeline for Ai Recruiter Agent.\"\"\"\n    \n    def __init__(self, config: dict):\n        self.config = config\n        self.stages = []\n    \n    def add_stage(self, stage_fn, name: str):\n        self.stages.append({\"fn\": stage_fn, \"name\": name})\n    \n    async def execute(self, input_data: dict) -> ProcessingResult:\n        import time\n        start = time.monotonic()\n        current = input_data\n        metadata = {\"stages\": []}\n        \n        for stage in self.stages:\n            stage_start = time.monotonic()\n            try:\n                current = await stage[\"fn\"](current)\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"success\",\n                    \"duration_ms\": round((time.monotonic() - stage_start) * 1000, 2)\n                })\n            except Exception as e:\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"error\",\n                    \"error\": str(e)\n                })\n                raise\n        \n        return ProcessingResult(\n            data=current,\n            metadata=metadata,\n            quality_score=current.get(\"quality_score\", 0.0),\n            processing_time_ms=round((time.monotonic() - start) * 1000, 2)\n        )\n```\n\n### Configuration Management\n```python\nimport json\nfrom pathlib import Path\nfrom functools import lru_cache\n\n@lru_cache(maxsize=1)\ndef load_play_config() -> dict:\n    \"\"\"Load all config files for this play.\"\"\"\n    config_dir = Path(__file__).parent.parent / \"config\"\n    configs = {}\n    for config_file in config_dir.glob(\"*.json\"):\n        with open(config_file) as f:\n            configs[config_file.stem] = json.load(f)\n    return configs\n\ndef get_model_config() -> dict:\n    \"\"\"Get OpenAI model configuration.\"\"\"\n    config = load_play_config()\n    return config.get(\"openai\", {\"model\": \"gpt-4o\", \"temperature\": 0.1, \"max_tokens\": 4096})\n\ndef get_guardrails() -> dict:\n    \"\"\"Get content safety and guardrail thresholds.\"\"\"\n    config = load_play_config()\n    return config.get(\"guardrails\", {\"content_safety_threshold\": 4, \"groundedness_min\": 0.8})\n```\n\n### Health Check Pattern\n```python\nfrom fastapi import FastAPI, Response\nfrom datetime import datetime\n\napp = FastAPI()\n\n@app.get(\"/health\")\nasync def health_check():\n    checks = {}\n    overall = True\n    \n    # Check Azure OpenAI\n    try:\n        await openai_client.models.list()\n        c",
+      "templateFormat": "handlebars",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "./.github/instructions/ai-recruiter-agent-patterns.instructions.md"
+      }
+    }
+  ],
+  "context": {
+    "knowledge": [
+      "O2-Agent-Coding",
+      "T2-Responsible-AI",
+      "R2-RAG-Architecture"
+    ],
+    "waf": [
+      "security",
+      "responsible-ai",
+      "reliability",
+      "cost-optimization"
+    ],
+    "scope": "ai-recruiter-agent-solution"
+  }
+}

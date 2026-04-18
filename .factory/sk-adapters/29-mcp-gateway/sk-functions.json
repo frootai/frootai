@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-mcp-gateway",
+      "description": "Deploy MCP Gateway — build MCP server with tool definitions, resource handlers, transport (stdio/HTTP/SSE), input validation, sandboxing. Use when: deploy, build MCP server.",
+      "functions": [
+        {
+          "name": "deploy-mcp-gateway",
+          "description": "Deploy MCP Gateway — build MCP server with tool definitions, resource handlers, transport (stdio/HTTP/SSE), input validation, sandboxing. Use when: deploy, build MCP server.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-mcp-gateway",
+      "description": "Evaluate MCP Gateway — test tool invocation accuracy, input validation, transport reliability, LLM tool selection quality, error handling. Use when: evaluate, test MCP server.",
+      "functions": [
+        {
+          "name": "evaluate-mcp-gateway",
+          "description": "Evaluate MCP Gateway — test tool invocation accuracy, input validation, transport reliability, LLM tool selection quality, error handling. Use when: evaluate, test MCP server.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-mcp-gateway",
+      "description": "Tune MCP Gateway — optimize tool descriptions for LLM accuracy, response schemas, transport performance, caching, rate limits. Use when: tune, optimize MCP server.",
+      "functions": [
+        {
+          "name": "tune-mcp-gateway",
+          "description": "Tune MCP Gateway — optimize tool descriptions for LLM accuracy, response schemas, transport performance, caching, rate limits. Use when: tune, optimize MCP server.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

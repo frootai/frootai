@@ -1,0 +1,17 @@
+# FrootAI Core Repository — CODEOWNERS (Private)
+
+# Default: core team only
+* @frootai/core-team
+
+# Distribution channels (high-security — 2 reviewers)
+/vscode-extension/           @frootai/core-team @frootai/security-team
+/npm-mcp/                    @frootai/core-team @frootai/security-team
+/npm-sdk/                    @frootai/core-team
+/python-mcp/                 @frootai/core-team
+/python-sdk/                 @frootai/core-team
+
+# Factory pipeline (critical infrastructure)
+/scripts/factory/            @frootai/core-team
+
+# Release workflows
+/.github/workflows/          @frootai/core-team @frootai/security-team

@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-copilot-studio-bot",
+      "description": "Deploy Copilot Studio Bot — configure topics, triggers, actions, knowledge sources, authentication, Microsoft Graph connectors. Use when: deploy, publish.",
+      "functions": [
+        {
+          "name": "deploy-copilot-studio-bot",
+          "description": "Deploy Copilot Studio Bot — configure topics, triggers, actions, knowledge sources, authentication, Microsoft Graph connectors. Use when: deploy, publish.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-copilot-studio-bot",
+      "description": "Evaluate Copilot Studio Bot — test intent recognition, resolution rate, CSAT, conversation turns, fallback rate, topic coverage. Use when: evaluate, test.",
+      "functions": [
+        {
+          "name": "evaluate-copilot-studio-bot",
+          "description": "Evaluate Copilot Studio Bot — test intent recognition, resolution rate, CSAT, conversation turns, fallback rate, topic coverage. Use when: evaluate, test.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-copilot-studio-bot",
+      "description": "Tune Copilot Studio Bot — optimize topic triggers, knowledge source relevance, conversation flow, generative answers quality. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-copilot-studio-bot",
+          "description": "Tune Copilot Studio Bot — optimize topic triggers, knowledge source relevance, conversation flow, generative answers quality. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

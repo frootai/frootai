@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.589Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "83-building-energy-optimizer",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\83-building-energy-optimizer\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-83-building-energy-optimizer",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_83",
+        "description": "FAI Skill: deploy-83",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-83/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_83",
+        "description": "FAI Skill: evaluate-83",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-83/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_83",
+        "description": "FAI Skill: tune-83",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-83/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "cost-optimization",
+      "performance-efficiency",
+      "reliability",
+      "responsible-ai"
+    ],
+    "scope": "83-building-energy-optimizer"
+  }
+}

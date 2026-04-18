@@ -1,0 +1,345 @@
+{
+  "classification": {
+    "public": [
+      {
+        "path": ".github/",
+        "type": "directory",
+        "rationale": "GitHub config, workflows, Copilot instructions",
+        "license": "MIT"
+      },
+      {
+        "path": ".gitignore",
+        "type": "file",
+        "rationale": "Git ignore rules",
+        "license": "MIT"
+      },
+      {
+        "path": "action.yml",
+        "type": "file",
+        "rationale": "GitHub Action definition",
+        "license": "MIT"
+      },
+      {
+        "path": "agents/",
+        "type": "directory",
+        "rationale": "Community-contributed agents — the ecosystem",
+        "license": "MIT"
+      },
+      {
+        "path": "AGENTS.md",
+        "type": "file",
+        "rationale": "Cross-platform agent discovery standard",
+        "license": "MIT"
+      },
+      {
+        "path": "community-plugins/",
+        "type": "directory",
+        "rationale": "Community plugin contributions + marketplace listings",
+        "license": "MIT"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "type": "file",
+        "rationale": "Contribution guidelines",
+        "license": "MIT"
+      },
+      {
+        "path": "cookbook/",
+        "type": "directory",
+        "rationale": "Community recipes",
+        "license": "MIT"
+      },
+      {
+        "path": "docs/",
+        "type": "directory",
+        "rationale": "FROOT knowledge modules — educational content drives adoption",
+        "license": "MIT"
+      },
+      {
+        "path": "engine/",
+        "type": "directory",
+        "rationale": "FAI Engine reference implementation — proves the protocol works",
+        "license": "MIT"
+      },
+      {
+        "path": "evaluation/",
+        "type": "directory",
+        "rationale": "Evaluation frameworks and datasets",
+        "license": "MIT"
+      },
+      {
+        "path": "fai-protocol/",
+        "type": "directory",
+        "rationale": "FAI Protocol specification — the core standard",
+        "license": "MIT"
+      },
+      {
+        "path": "hooks/",
+        "type": "directory",
+        "rationale": "Community-contributed hooks",
+        "license": "MIT"
+      },
+      {
+        "path": "instructions/",
+        "type": "directory",
+        "rationale": "Community-contributed instructions",
+        "license": "MIT"
+      },
+      {
+        "path": "LICENSE",
+        "type": "file",
+        "rationale": "MIT license text",
+        "license": "MIT"
+      },
+      {
+        "path": "marketplace.json",
+        "type": "file",
+        "rationale": "Plugin registry index",
+        "license": "MIT"
+      },
+      {
+        "path": "NOTICE",
+        "type": "file",
+        "rationale": "Attribution notices",
+        "license": "MIT"
+      },
+      {
+        "path": "plugins/",
+        "type": "directory",
+        "rationale": "Plugin definitions (templates)",
+        "license": "MIT"
+      },
+      {
+        "path": "README.md",
+        "type": "file",
+        "rationale": "Project documentation",
+        "license": "MIT"
+      },
+      {
+        "path": "schemas/",
+        "type": "directory",
+        "rationale": "FAI Protocol schemas — MUST be open for standard adoption",
+        "license": "MIT"
+      },
+      {
+        "path": "skills/",
+        "type": "directory",
+        "rationale": "Community-contributed skills",
+        "license": "MIT"
+      },
+      {
+        "path": "solution-plays/",
+        "type": "directory",
+        "rationale": "Showcase — the #1 reason people use FrootAI",
+        "license": "MIT"
+      },
+      {
+        "path": "workflows/",
+        "type": "directory",
+        "rationale": "Agentic workflow definitions",
+        "license": "MIT"
+      },
+      {
+        "path": "workshops/",
+        "type": "directory",
+        "rationale": "Educational workshops",
+        "license": "MIT"
+      }
+    ],
+    "private": [
+      {
+        "path": ".env.example",
+        "type": "file",
+        "rationale": "Environment variable template",
+        "license": "Proprietary"
+      },
+      {
+        "path": ".husky/",
+        "type": "directory",
+        "rationale": "Git hooks",
+        "license": "Proprietary"
+      },
+      {
+        "path": ".vscode/",
+        "type": "directory",
+        "rationale": "VS Code workspace settings",
+        "license": "Proprietary"
+      },
+      {
+        "path": "azure.yaml",
+        "type": "file",
+        "rationale": "Azure deployment config",
+        "license": "Proprietary"
+      },
+      {
+        "path": "bicep-registry/",
+        "type": "directory",
+        "rationale": "Bicep module registry",
+        "license": "Proprietary"
+      },
+      {
+        "path": "BingSiteAuth.xml",
+        "type": "file",
+        "rationale": "Bing verification",
+        "license": "Proprietary"
+      },
+      {
+        "path": "cli/",
+        "type": "directory",
+        "rationale": "FAI CLI — developer tooling",
+        "license": "Proprietary"
+      },
+      {
+        "path": "commitlint.config.js",
+        "type": "file",
+        "rationale": "Commit lint config",
+        "license": "Proprietary"
+      },
+      {
+        "path": "config/",
+        "type": "directory",
+        "rationale": "Internal configuration",
+        "license": "Proprietary"
+      },
+      {
+        "path": "foundry-agent/",
+        "type": "directory",
+        "rationale": "Microsoft Foundry agent integration",
+        "license": "Proprietary"
+      },
+      {
+        "path": "functions/",
+        "type": "directory",
+        "rationale": "Azure Functions — chatbot backend",
+        "license": "Proprietary"
+      },
+      {
+        "path": "infra-registry/",
+        "type": "directory",
+        "rationale": "Infrastructure module registry",
+        "license": "Proprietary"
+      },
+      {
+        "path": "marketplace/",
+        "type": "directory",
+        "rationale": "Marketplace UI/generation",
+        "license": "Proprietary"
+      },
+      {
+        "path": "mcp-server/",
+        "type": "directory",
+        "rationale": "Legacy MCP server",
+        "license": "Proprietary"
+      },
+      {
+        "path": "npm-mcp/",
+        "type": "directory",
+        "rationale": "MCP server — 25+ tools, knowledge bundling intelligence",
+        "license": "Proprietary"
+      },
+      {
+        "path": "npm-sdk/",
+        "type": "directory",
+        "rationale": "JavaScript SDK — consumption wrapper",
+        "license": "Proprietary"
+      },
+      {
+        "path": "package-lock.json",
+        "type": "file",
+        "rationale": "Dependency lock for private tooling",
+        "license": "Proprietary"
+      },
+      {
+        "path": "package.json",
+        "type": "file",
+        "rationale": "Has factory scripts — split into public/private versions",
+        "license": "Proprietary"
+      },
+      {
+        "path": "python-mcp/",
+        "type": "directory",
+        "rationale": "Python MCP server",
+        "license": "Proprietary"
+      },
+      {
+        "path": "python-sdk/",
+        "type": "directory",
+        "rationale": "Python SDK — consumption wrapper + FAI Engine port",
+        "license": "Proprietary"
+      },
+      {
+        "path": "scripts/",
+        "type": "directory",
+        "rationale": "FAI Factory pipeline — the shipping engine",
+        "license": "Proprietary"
+      },
+      {
+        "path": "sdk/",
+        "type": "directory",
+        "rationale": "SDK shared utilities",
+        "license": "Proprietary"
+      },
+      {
+        "path": "vscode-extension/",
+        "type": "directory",
+        "rationale": "VS Code extension — premium developer experience",
+        "license": "Proprietary"
+      },
+      {
+        "path": "website-data/",
+        "type": "directory",
+        "rationale": "Generated website data",
+        "license": "Proprietary"
+      }
+    ],
+    "website": [],
+    "internal": [
+      {
+        "path": ".git/",
+        "type": "directory",
+        "rationale": "Git database",
+        "license": "N/A"
+      },
+      {
+        "path": ".internal/",
+        "type": "directory",
+        "rationale": "Competitor analysis, strategy docs — NEVER public",
+        "license": "Internal"
+      }
+    ],
+    "generated": [
+      {
+        "path": ".factory/",
+        "type": "directory",
+        "rationale": "Build artifacts — gitignored",
+        "license": "N/A"
+      },
+      {
+        "path": ".next/",
+        "type": "directory",
+        "rationale": "Next.js build cache",
+        "license": "N/A"
+      },
+      {
+        "path": "validate-output.txt",
+        "type": "file",
+        "rationale": "Validation output artifact",
+        "license": "N/A"
+      }
+    ],
+    "unclassified": []
+  },
+  "stats": {
+    "public": {
+      "items": 24,
+      "files": 3028,
+      "sizeKB": 16756
+    },
+    "private": {
+      "items": 24,
+      "files": 31883,
+      "sizeKB": 331290
+    },
+    "unclassified": 0
+  }
+}

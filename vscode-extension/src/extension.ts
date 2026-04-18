@@ -32,6 +32,23 @@ interface KnowledgeData {
   [key: string]: unknown;
 }
 
+/** Messages received from webview panels */
+interface WebviewMessage {
+  command: string;
+  url?: string;
+  text?: string;
+  toolName?: string;
+  playId?: string;
+  primitiveType?: string;
+  primitiveId?: string;
+  file?: string;
+  folder?: string;
+  panel?: string;
+  play?: { id: string; name: string; [key: string]: unknown };
+  schema?: string;
+  [key: string]: unknown;
+}
+
 // Simple LRU cache for @fai search results
 interface FaiSearchResult {
   scoredPlays: { play: typeof SOLUTION_PLAYS[number]; score: number; ratio: number }[];
@@ -270,8 +287,7 @@ export function activate(context: vscode.ExtensionContext): void {
   }
 
   // New React panel commands — safe registration (skip if already exists)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const safeRegister = (id: string, fn: (...args: any[]) => any) => {
+  const safeRegister = (id: string, fn: (...args: unknown[]) => unknown) => {
     try { context.subscriptions.push(vscode.commands.registerCommand(id, fn)); }
     catch (e: unknown) { const msg = e instanceof Error ? e.message : String(e); console.warn(`FrootAI: skipped ${id} — ${msg}`); }
   };
@@ -285,7 +301,7 @@ export function activate(context: vscode.ExtensionContext): void {
     }
     if (!play) play = SOLUTION_PLAYS[0];
     const panel = createReactPanel(context.extensionUri, "frootai.playDetail", `Play ${play.id} — ${play.name}`, { panel: "playDetail", play });
-    panel.webview.onDidReceiveMessage(async (msg: any) => {
+    panel.webview.onDidReceiveMessage(async (msg: WebviewMessage) => {
       const fs = require("fs");
       const path = require("path");
 
@@ -594,8 +610,8 @@ ${bodyHtml}
   safeRegister("frootai.openEvaluationDashboard", () => {
     // E2: Scan workspace for real evaluation data
     const evalData = scanWorkspaceEvalData();
-    const panel = createReactPanel(context.extensionUri, "frootai.evaluation", "Evaluation Dashboard", { panel: "evaluation", evalData } as any);
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    const panel = createReactPanel(context.extensionUri, "frootai.evaluation", "Evaluation Dashboard", { panel: "evaluation", evalData });
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       switch (msg.command) {
         case "runEvaluation":
           vscode.commands.executeCommand("frootai.runEvaluation");
@@ -723,7 +739,7 @@ ${bodyHtml}
 
   safeRegister("frootai.openScaffoldWizard", (initialPlay?: unknown) => {
     const panel = createReactPanel(context.extensionUri, "frootai.scaffold", "Scaffold Wizard", { panel: "scaffold", plays: SOLUTION_PLAYS, initialPlay: (initialPlay as typeof SOLUTION_PLAYS[number]) ?? null });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       if (msg.command === "scaffold") vscode.commands.executeCommand("frootai.initDevKit");
       if (msg.command === "openFolder") vscode.commands.executeCommand("vscode.openFolder");
     });
@@ -731,10 +747,10 @@ ${bodyHtml}
 
   safeRegister("frootai.openMcpExplorer", () => {
     const panel = createReactPanel(context.extensionUri, "frootai.mcpExplorer", "MCP Tool Explorer", { panel: "mcpExplorer" });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       switch (msg.command) {
         case "copyToClipboard":
-          vscode.env.clipboard.writeText(msg.text).then(() =>
+          vscode.env.clipboard.writeText(String(msg.text)).then(() =>
             vscode.window.showInformationMessage("Copied to clipboard!"));
           break;
         case "tryTool":
@@ -767,7 +783,7 @@ ${bodyHtml}
   // ─── Welcome Panel ───
   safeRegister("frootai.openWelcome", () => {
     const panel = createReactPanel(context.extensionUri, "frootai.welcome", "Welcome to FrootAI", { panel: "welcome" });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       switch (msg.command) {
         case "browsePlays": vscode.commands.executeCommand("frootai.browsePlays"); break;
         case "searchAll": vscode.commands.executeCommand("frootai.searchAll"); break;
@@ -801,8 +817,8 @@ ${bodyHtml}
       plugins: loadJSON("plugins.json"),
     };
     const total = Object.values(primitives).reduce((s: number, a: unknown[]) => s + a.length, 0);
-    const panel = createReactPanel(context.extensionUri, "frootai.primitivesCatalog", `FAI Primitives (${total})`, { panel: "primitivesCatalog" as any, primitives });
-    panel.webview.onDidReceiveMessage(async (msg: any) => {
+    const panel = createReactPanel(context.extensionUri, "frootai.primitivesCatalog", `FAI Primitives (${total})`, { panel: "primitivesCatalog", primitives });
+    panel.webview.onDidReceiveMessage(async (msg: WebviewMessage) => {
       if (msg.command === "openUrl" && msg.url) {
         vscode.env.openExternal(vscode.Uri.parse(msg.url));
       }
@@ -821,14 +837,14 @@ ${bodyHtml}
           hooks:        { destDir: ".github/hooks",        repoPath: "hooks",        ext: "" },
           plugins:      { destDir: ".github/plugins",       repoPath: "plugins",           ext: "" },
         };
-        const cfg = typeConfig[msg.primitiveType];
+        const cfg = typeConfig[msg.primitiveType as string];
         if (!cfg) return;
 
         const destDir = path.join(wsRoot, cfg.destDir);
         if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
 
         await vscode.window.withProgress(
-          { location: vscode.ProgressLocation.Notification, title: `Installing ${msg.primitiveType.slice(0, -1)}: ${msg.primitiveId}...`, cancellable: false },
+          { location: vscode.ProgressLocation.Notification, title: `Installing ${String(msg.primitiveType).slice(0, -1)}: ${msg.primitiveId}...`, cancellable: false },
           async () => {
             try {
               // For single-file primitives (agents, instructions)
@@ -849,16 +865,16 @@ ${bodyHtml}
                   hooks: "hooks.json",
                   plugins: "plugin.json",
                 };
-                const primaryFile = primaryFiles[msg.primitiveType] || "README.md";
-                const folderName = msg.folder ? path.basename(msg.folder) : msg.primitiveId;
+                const primaryFile = primaryFiles[msg.primitiveType as string] || "README.md";
+                const folderName = msg.folder ? path.basename(String(msg.folder)) : String(msg.primitiveId);
                 // Use folder field as repo path if available (handles plugins/ vs community-plugins/)
-                const repoFolder = msg.folder ? msg.folder.replace(/\/+$/, "") : `${cfg.repoPath}/${folderName}`;
+                const repoFolder = msg.folder ? String(msg.folder).replace(/\/+$/, "") : `${cfg.repoPath}/${folderName}`;
                 const repoFile = `${repoFolder}/${primaryFile}`;
                 const url = `https://raw.githubusercontent.com/frootai/frootai/main/${repoFile}`;
                 const resp = await fetch(url, { headers: { "User-Agent": "FrootAI-VSCode" } });
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                 const content = await resp.text();
-                const primDir = path.join(destDir, folderName);
+                const primDir = path.join(destDir, String(folderName));
                 if (!fs.existsSync(primDir)) fs.mkdirSync(primDir, { recursive: true });
                 fs.writeFileSync(path.join(primDir, primaryFile), content, "utf-8");
                 vscode.window.showInformationMessage(`✅ Installed ${folderName}/${primaryFile} → ${cfg.destDir}/${folderName}/`);
@@ -915,11 +931,11 @@ ${bodyHtml}
 
   // ─── Agent FAI Chat Panel ───
   safeRegister("frootai.openAgentFai", () => {
-    const panel = createReactPanel(context.extensionUri, "frootai.agentFai", "Agent FAI", { panel: "agentFai" as any });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    const panel = createReactPanel(context.extensionUri, "frootai.agentFai", "Agent FAI", { panel: "agentFai" });
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       switch (msg.command) {
         case "openPlay": {
-          const play = SOLUTION_PLAYS.find(p => p.id === msg.playId || p.id.startsWith(msg.playId));
+          const play = SOLUTION_PLAYS.find(p => p.id === msg.playId || p.id.startsWith(String(msg.playId)));
           if (play) vscode.commands.executeCommand("frootai.openPlayDetail", play);
           break;
         }
@@ -940,8 +956,8 @@ ${bodyHtml}
 
   // ─── FAI Protocol & Architecture Panel (D1-D3) ───
   safeRegister("frootai.openProtocolExplainer", () => {
-    const panel = createReactPanel(context.extensionUri, "frootai.protocolExplainer", "FAI Ecosystem", { panel: "protocolExplainer" as any });
-    panel.webview.onDidReceiveMessage((msg: any) => {
+    const panel = createReactPanel(context.extensionUri, "frootai.protocolExplainer", "FAI Ecosystem", { panel: "protocolExplainer" });
+    panel.webview.onDidReceiveMessage((msg: WebviewMessage) => {
       switch (msg.command) {
         case "openUrl":
           if (msg.url) vscode.env.openExternal(vscode.Uri.parse(msg.url));
@@ -1340,7 +1356,7 @@ ${bodyHtml}
       const pick = uris.length === 1 ? uris[0] : await vscode.window.showQuickPick(
         uris.map(u => ({ label: vscode.workspace.asRelativePath(u), uri: u })),
         { placeHolder: "Select manifest to validate" }
-      ).then(p => p ? (p as any).uri : undefined);
+      ).then(p => p ? (p as { label: string; uri: vscode.Uri }).uri : undefined);
       if (pick) {
         const doc = await vscode.workspace.openTextDocument(pick);
         await vscode.window.showTextDocument(doc);
@@ -1360,7 +1376,8 @@ ${bodyHtml}
   });
 
   // ─── Context Menu: Open Play from fai-manifest.json ───
-  safeRegister("frootai.openPlayFromManifest", async (fileUri?: vscode.Uri) => {
+  safeRegister("frootai.openPlayFromManifest", async (...args: unknown[]) => {
+    const fileUri = args[0] as vscode.Uri | undefined;
     const uri = fileUri || vscode.window.activeTextEditor?.document.uri;
     if (!uri) return;
     try {
@@ -1374,7 +1391,8 @@ ${bodyHtml}
   });
 
   // ─── Context Menu: Peek Agent/Skill definition ───
-  safeRegister("frootai.peekFaiFile", async (fileUri?: vscode.Uri) => {
+  safeRegister("frootai.peekFaiFile", async (...args: unknown[]) => {
+    const fileUri = args[0] as vscode.Uri | undefined;
     const uri = fileUri || vscode.window.activeTextEditor?.document.uri;
     if (!uri) return;
     const doc = await vscode.workspace.openTextDocument(uri);
@@ -1482,12 +1500,12 @@ class FaiManifestCodeLensProvider implements vscode.CodeLensProvider {
 
 /** Shared message handler for panels that support navigation between views */
 function setupNavigationHandler(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
-  panel.webview.onDidReceiveMessage(async (msg: any) => {
+  panel.webview.onDidReceiveMessage(async (msg: WebviewMessage) => {
     switch (msg.command) {
       case "navigate":
         if (msg.panel === "playDetail" && msg.play) {
-          // Update the panel to show play detail
-          panel.title = `Play ${msg.play.id} — ${msg.play.name}`;
+          const navPlay = msg.play as { id: string; name: string };
+          panel.title = `Play ${navPlay.id} — ${navPlay.name}`;
           panel.webview.postMessage({ type: "update", data: { panel: "playDetail", play: msg.play } });
         } else if (msg.panel === "playBrowser") {
           panel.title = "Solution Plays";

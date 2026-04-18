@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-model-governance",
+      "description": "Deploy AI Model Governance — model registry with versioning, multi-stage approval workflows, A/B champion/challenger testing, model cards, lineage tracking, progressive rollout, drift monitoring.",
+      "functions": [
+        {
+          "name": "deploy-ai-model-governance",
+          "description": "Deploy AI Model Governance — model registry with versioning, multi-stage approval workflows, A/B champion/challenger testing, model cards, lineage tracking, progressive rollout, drift monitoring.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-model-governance",
+      "description": "Evaluate AI Model Governance quality — approval workflow efficiency, A/B test effectiveness, drift detection accuracy, model card completeness, rollback reliability.",
+      "functions": [
+        {
+          "name": "evaluate-ai-model-governance",
+          "description": "Evaluate AI Model Governance quality — approval workflow efficiency, A/B test effectiveness, drift detection accuracy, model card completeness, rollback reliability.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-model-governance",
+      "description": "Tune AI Model Governance — eval gate thresholds, A/B test duration and split, drift detection sensitivity, progressive rollout speed, approval workflow SLA.",
+      "functions": [
+        {
+          "name": "tune-ai-model-governance",
+          "description": "Tune AI Model Governance — eval gate thresholds, A/B test duration and split, drift detection sensitivity, progressive rollout speed, approval workflow SLA.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

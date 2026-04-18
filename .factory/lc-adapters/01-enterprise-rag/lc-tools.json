@@ -1,0 +1,98 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_enterprise_rag",
+      "description": "Deploy Enterprise RAG to Azure — provision AI Search + OpenAI + Storage with AVM Bicep, configure indexes, deploy application, run smoke tests. Use when: deploy, provision, infrastructure, Azure, Bicep, azd, CI/CD.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-enterprise-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_enterprise_rag",
+      "description": "Evaluate Enterprise RAG quality — measure groundedness, relevance, coherence, fluency, content safety. Run evaluation pipeline, analyze gaps, set quality gates. Use when: evaluate, quality, groundedness, relevance, metrics, test, audit.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-enterprise-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_enterprise_rag",
+      "description": "Tune Enterprise RAG for production — optimize chunking, search config, model routing, caching, temperature, token budget, evaluation thresholds. Use when: tune, optimize, performance, cost, latency, quality, config.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-enterprise-rag/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.570Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "71-smart-energy-grid-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\71-smart-energy-grid-ai\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-71-smart-energy-grid-ai",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_71",
+        "description": "FAI Skill: deploy-71",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-71/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_71",
+        "description": "FAI Skill: evaluate-71",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-71/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_71",
+        "description": "FAI Skill: tune-71",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-71/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "performance-efficiency",
+      "reliability",
+      "cost-optimization",
+      "operational-excellence",
+      "security"
+    ],
+    "scope": "71-smart-energy-grid-ai"
+  }
+}

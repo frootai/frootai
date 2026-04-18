@@ -1,0 +1,140 @@
+---
+title: "Play 86: Play 86 — Public Safety Analytics 🚨"
+description: "Build an ethical public safety analytics platform. Temporal pattern analysis (NOT geographic targeting) identifies demand peaks, resource optimization improves response times while ensuring demographi"
+icon: "🎯"
+order: 86
+editUrl: "solution-plays/86-public-safety-analytics/README.md"
+tags: ["solution-play", "play-86"]
+---
+# Play 86 — Public Safety Analytics 🚨
+
+> Ethical public safety AI — incident pattern analysis, resource allocation optimization, bias-mitigated analytics, community transparency dashboards.
+
+Build an ethical public safety analytics platform. Temporal pattern analysis (NOT geographic targeting) identifies demand peaks, resource optimization improves response times while ensuring demographic parity, bias audits catch enforcement-driven data skew, and public dashboards provide full methodology transparency.
+
+## Quick Start
+```bash
+cd solution-plays/86-public-safety-analytics
+az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
+code .
+# Use @builder to implement, @reviewer to audit, @tuner to optimize
+```
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Client Interface
+        UI[Command Dashboard<br/>Hotspot Maps · Resource Deploy · Incident Feed · Community Pulse]
+    end
+
+    subgraph Event Ingestion
+        EH[Azure Event Hubs<br/>911 Dispatch · CAD Feeds · Sensor Alerts · Social Signals]
+    end
+
+    subgraph Stream Processing
+        ASA[Azure Stream Analytics<br/>Event Correlation · Anomaly Detection · Geospatial Clustering]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Pattern Narratives · Resource Reasoning · Sentiment Summary · Briefings]
+    end
+
+    subgraph ML Models
+        AML[Azure Machine Learning<br/>Hotspot Forecast · Temporal Patterns · Demand Prediction · Risk Scoring]
+    end
+
+    subgraph Application
+        API[Container Apps<br/>Safety API · Resource Optimizer · Community Dashboard · Inter-Agency Hub]
+    end
+
+    subgraph Data Store
+        Cosmos[Cosmos DB<br/>Incidents · Patterns · Deployments · Sentiment · Hotspots · Officers]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>CJIS Secrets · CAD Creds · Agency Keys · Identity Encryption]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>System Uptime · Processing Latency · Model Accuracy · Alert Delivery]
+    end
+
+    EH -->|Raw Events| ASA
+    ASA -->|Correlated Events| API
+    API -->|Predict Patterns| AML
+    AML -->|Forecasts & Scores| API
+    API -->|Generate Analysis| OpenAI
+    OpenAI -->|Narratives & Briefings| API
+    API -->|Alerts & Insights| UI
+    API <-->|Read/Write| Cosmos
+    ASA -->|Archive Events| Cosmos
+    API -->|Auth| MI
+    MI -->|Secrets| KV
+    API -->|Traces| AppInsights
+
+    style UI fill:#06b6d4,color:#fff,stroke:#0891b2
+    style EH fill:#f97316,color:#fff,stroke:#ea580c
+    style ASA fill:#14b8a6,color:#fff,stroke:#0d9488
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style AML fill:#a855f7,color:#fff,stroke:#9333ea
+    style API fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#f97316,color:#fff,stroke:#ea580c
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
+## Pre-Tuned Defaults
+- Patterns: Temporal only (no geographic targeting) · source weighting (patrol 0.7×)
+- Resources: Priority 1 < 8 min · min 3 active units · max 2 min response parity
+- Privacy: Block-level addresses · k=5 anonymity · PII scrubbed narratives · 365-day retention
+- Prohibited: Predictive policing, individual targeting, facial recognition, social media monitoring
+
+## DevKit (AI-Assisted Development)
+| Primitive | What It Does |
+|-----------|-------------|
+| `agent.md` | Root orchestrator with builder→reviewer→tuner handoffs |
+| `copilot-instructions.md` | Safety domain (ethical analysis, bias mitigation, transparency requirements) |
+| 3 agents | Builder (gpt-4o), Reviewer (gpt-4o-mini), Tuner (gpt-4o-mini) |
+| 3 skills | Deploy (210+ lines), Evaluate (110+ lines), Tune (240+ lines) |
+| 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
+
+## Cost Estimate
+
+| Service | Dev/Test | Production | Enterprise |
+|---------|----------|------------|------------|
+| Azure OpenAI | $25 (PAYG) | $300 (PAYG) | $1,200 (PTU Reserved) |
+| Azure Machine Learning | $15 (Basic) | $250 (Standard) | $800 (Standard GPU) |
+| Azure Event Hubs | $12 (Basic) | $150 (Standard) | $600 (Premium) |
+| Cosmos DB | $3 (Serverless) | $120 (2000 RU/s) | $450 (8000 RU/s) |
+| Azure Stream Analytics | $80 (Standard) | $320 (Standard) | $800 (Standard) |
+| Container Apps | $10 (Consumption) | $180 (Dedicated) | $500 (Dedicated HA) |
+| Key Vault | $1 (Standard) | $15 (Premium HSM) | $30 (Premium HSM) |
+| Application Insights | $0 (Free) | $50 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$146/mo** | **$1,385/mo** | **$4,530/mo** |
+
+💰 [Full cost breakdown](cost.json)
+
+## vs. Play 84 (Citizen Services Chatbot)
+| Aspect | Play 84 | Play 86 |
+|--------|---------|---------|
+| Focus | Citizen Q&A + complaint routing | Safety pattern analysis + resource optimization |
+| Users | Citizens | Safety agency analysts + community oversight |
+| AI Role | Answer questions, route complaints | Pattern detection, resource allocation |
+| Bias Concern | Non-partisan language | Geographic targeting, enforcement bias |
+
+📖 [Full documentation](spec/README.md) · 🌐 [frootai.dev/solution-plays/86-public-safety-analytics](https://frootai.dev/solution-plays/86-public-safety-analytics) · 📦 [FAI Protocol](spec/fai-manifest.json)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `86-public-safety-analytics` |
+| Version | `1.0.0` |
+| Knowledge | T3-Production-Patterns, T2-Responsible-AI, O2-AI-Agents |
+| WAF Pillars | responsible-ai, security, reliability, performance-efficiency |

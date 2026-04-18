@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-pester-test-development",
+      "description": "Skill: deploy-pester-test-development",
+      "functions": [
+        {
+          "name": "deploy-pester-test-development",
+          "description": "Skill: deploy-pester-test-development",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-pester-test-development",
+      "description": "Skill: evaluate-pester-test-development",
+      "functions": [
+        {
+          "name": "evaluate-pester-test-development",
+          "description": "Skill: evaluate-pester-test-development",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-pester-test-development",
+      "description": "Skill: tune-pester-test-development",
+      "functions": [
+        {
+          "name": "tune-pester-test-development",
+          "description": "Skill: tune-pester-test-development",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_supply_chain_ai",
+      "description": "Deploy Supply Chain AI — demand forecasting (ML + LLM explanation), supplier risk scoring, inventory optimization, logistics routing, procurement anomaly detection, external signal integration.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-supply-chain-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_supply_chain_ai",
+      "description": "Evaluate Supply Chain AI quality — forecast MAPE/RMSE, supplier risk precision, inventory optimization savings, anomaly detection accuracy, external signal correlation.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-supply-chain-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_supply_chain_ai",
+      "description": "Tune Supply Chain AI — forecast model parameters, external signal weights, risk thresholds, safety stock levels, reorder triggers, reforecast frequency, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-supply-chain-ai/"
+      }
+    }
+  ]
+}

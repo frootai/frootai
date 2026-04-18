@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-sales-assistant",
+      "description": "Deploy AI Sales Assistant — CRM-grounded lead scoring, personalized email generation, call prep with talk tracks, competitive intelligence, deal stage coaching, CRM integration.",
+      "functions": [
+        {
+          "name": "deploy-ai-sales-assistant",
+          "description": "Deploy AI Sales Assistant — CRM-grounded lead scoring, personalized email generation, call prep with talk tracks, competitive intelligence, deal stage coaching, CRM integration.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-sales-assistant",
+      "description": "Evaluate AI Sales Assistant quality — lead-to-close correlation, email response rate, scoring accuracy, talk track relevance, competitive intel freshness.",
+      "functions": [
+        {
+          "name": "evaluate-ai-sales-assistant",
+          "description": "Evaluate AI Sales Assistant quality — lead-to-close correlation, email response rate, scoring accuracy, talk track relevance, competitive intel freshness.",
+          "parameters": [
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-sales-assistant",
+      "description": "Tune AI Sales Assistant — scoring weights, ICP definition, email temperature, talk track depth, competitive intel refresh, CRM sync, cost per lead.",
+      "functions": [
+        {
+          "name": "tune-ai-sales-assistant",
+          "description": "Tune AI Sales Assistant — scoring weights, ICP definition, email temperature, talk track depth, competitive intel refresh, CRM sync, cost per lead.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "functions": [
+    {
+      "name": "deploy-knowledge-graph-rag",
+      "description": "Deploy Knowledge Graph RAG — configure entity extraction, relationship mapping, Cosmos DB Gremlin graph, graph traversal retrieval, hybrid graph+vector search. Use when: deploy, provision graph RAG.",
+      "functions": [
+        {
+          "name": "deploy-knowledge-graph-rag",
+          "description": "Deploy Knowledge Graph RAG — configure entity extraction, relationship mapping, Cosmos DB Gremlin graph, graph traversal retrieval, hybrid graph+vector search. Use when: deploy, provision graph RAG.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-knowledge-graph-rag",
+      "description": "Evaluate Knowledge Graph RAG — measure entity extraction accuracy, relationship precision, graph traversal quality, hybrid retrieval effectiveness, multi-hop reasoning. Use when: evaluate, benchmark graph RAG.",
+      "functions": [
+        {
+          "name": "evaluate-knowledge-graph-rag",
+          "description": "Evaluate Knowledge Graph RAG — measure entity extraction accuracy, relationship precision, graph traversal quality, hybrid retrieval effectiveness, multi-hop reasoning. Use when: evaluate, benchmark graph RAG.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-knowledge-graph-rag",
+      "description": "Tune Knowledge Graph RAG — optimize graph traversal depth, entity resolution, hybrid graph+vector weights, extraction prompt, Gremlin query performance, cost. Use when: tune, optimize graph RAG.",
+      "functions": [
+        {
+          "name": "tune-knowledge-graph-rag",
+          "description": "Tune Knowledge Graph RAG — optimize graph traversal depth, entity resolution, hybrid graph+vector weights, extraction prompt, Gremlin query performance, cost. Use when: tune, optimize graph RAG.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

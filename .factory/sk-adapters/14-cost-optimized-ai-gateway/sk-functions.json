@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-cost-optimized-ai-gateway",
+      "description": "Deploy AI Gateway — configure APIM with semantic caching (Redis), token budgets per tenant, multi-region load balancing, model routing policies. Use when: deploy, provision, configure gateway.",
+      "functions": [
+        {
+          "name": "deploy-cost-optimized-ai-gateway",
+          "description": "Deploy AI Gateway — configure APIM with semantic caching (Redis), token budgets per tenant, multi-region load balancing, model routing policies. Use when: deploy, provision, configure gateway.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-cost-optimized-ai-gateway",
+      "description": "Evaluate AI Gateway — measure cache hit rate, cost savings vs direct, routing accuracy, budget enforcement, failover latency. Use when: evaluate, benchmark, FinOps review.",
+      "functions": [
+        {
+          "name": "evaluate-cost-optimized-ai-gateway",
+          "description": "Evaluate AI Gateway — measure cache hit rate, cost savings vs direct, routing accuracy, budget enforcement, failover latency. Use when: evaluate, benchmark, FinOps review.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-cost-optimized-ai-gateway",
+      "description": "Tune AI Gateway — optimize cache TTL and similarity threshold, PTU vs pay-as-you-go, routing weights, budget tiers, cost per 1K tokens. Use when: tune, optimize, FinOps.",
+      "functions": [
+        {
+          "name": "tune-cost-optimized-ai-gateway",
+          "description": "Tune AI Gateway — optimize cache TTL and similarity threshold, PTU vs pay-as-you-go, routing weights, budget tiers, cost per 1K tokens. Use when: tune, optimize, FinOps.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.577Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "75-exam-generation-engine",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\75-exam-generation-engine\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-75-exam-generation-engine",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_75",
+        "description": "FAI Skill: deploy-75",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-75/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_75",
+        "description": "FAI Skill: evaluate-75",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-75/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_75",
+        "description": "FAI Skill: tune-75",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-75/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "R1-Prompt-Engineering",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "performance-efficiency"
+    ],
+    "scope": "75-exam-generation-engine"
+  }
+}

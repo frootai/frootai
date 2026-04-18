@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_multi_modal_docproc",
+      "description": "Deploy Multi-Modal DocProc — configure GPT-4o vision + Document Intelligence OCR for images, charts, tables, stamps, handwriting. Use when: deploy, provision, configure vision pipeline.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-multi-modal-docproc/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_multi_modal_docproc",
+      "description": "Evaluate Multi-Modal DocProc — test vision extraction accuracy on charts/stamps/photos, OCR accuracy on text, cross-modal consistency, PII in images. Use when: evaluate, test quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-multi-modal-docproc/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_multi_modal_docproc",
+      "description": "Tune Multi-Modal DocProc — optimize vision vs OCR routing, image resolution, GPT-4o vision prompt engineering, batch throughput, cost per document. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-multi-modal-docproc/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.489Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "21-agentic-rag",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\21-agentic-rag\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-21-agentic-rag",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-agentic-rag",
+        "description": "Deploy Agentic RAG — configure autonomous retrieval agent with multi-source routing (AI Search, Bing, SQL, APIs), iterative search, self-evaluation, semantic caching. Use when: deploy, provision.",
+        "functions": [
+          {
+            "name": "deploy-agentic-rag",
+            "description": "Deploy Agentic RAG — configure autonomous retrieval agent with multi-source routing (AI Search, Bing, SQL, APIs), iterative search, self-evaluation, semantic caching. Use when: deploy, provision.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "User query or prompt",
+                "required": true
+              },
+              {
+                "name": "context",
+                "type": "string",
+                "description": "Conversation or task context",
+                "required": false
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-agentic-rag",
+        "description": "Evaluate Agentic RAG — measure retrieval quality, source selection accuracy, iteration efficiency, groundedness, citation accuracy, cost per query. Use when: evaluate, benchmark.",
+        "functions": [
+          {
+            "name": "evaluate-agentic-rag",
+            "description": "Evaluate Agentic RAG — measure retrieval quality, source selection accuracy, iteration efficiency, groundedness, citation accuracy, cost per query. Use when: evaluate, benchmark.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "User query or prompt",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-agentic-rag",
+        "description": "Tune Agentic RAG — optimize source routing weights, iteration thresholds, self-evaluation sensitivity, semantic cache, cost per query. Use when: tune, optimize retrieval.",
+        "functions": [
+          {
+            "name": "tune-agentic-rag",
+            "description": "Tune Agentic RAG — optimize source routing weights, iteration thresholds, self-evaluation sensitivity, semantic cache, cost per query. Use when: tune, optimize retrieval.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "User query or prompt",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 2,
+    "steps": [
+      {
+        "stepName": "Agentic-RAG-Orchestrator",
+        "agentRole": "orchestrator",
+        "description": "Agentic RAG orchestrator — autonomously decides when to retrieve, which sources to query, iterates on insufficient results, and synthesizes grounded answers with citations across multiple knowledge bases.",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "terminal",
+          "azure",
+          "frootai_mcp"
+        ],
+        "order": 0,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/agentic-rag.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "cost-optimization",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  },
+  "filters": [
+    {
+      "name": "guardrail-groundedness",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.95",
+      "threshold": 0.95,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-coherence",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.9",
+      "threshold": 0.9,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-relevance",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.9",
+      "threshold": 0.9,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-safety",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "block"
+      }
+    },
+    {
+      "name": "guardrail-costPerQuery",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.02",
+      "threshold": 0.02,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "python-waf",
+      "description": "Python coding standards aligned with Azure Well-Architected Framework pillars — secure credential handling, async patterns, structured error handling, cost-aware AI integration, and production-ready testing.",
+      "applyTo": "**/*.py, **/pyproject.toml, **/requirements.txt",
+      "template": "# Python — FAI Standards\r\n\r\nWhen writing or reviewing Python code in FAI projects, enforce these standards.\r\n\r\n## Security (WAF: Security Pillar)\r\n\r\n- NEVER hardcode secrets, API keys, connection strings, or tokens in Python files\r\n- Use `os.environ` or `azure.identity.DefaultAzureCredential` for all credentials\r\n- Use `python-dotenv` only in development — production uses Managed Identity or Key Vault\r\n- Validate all external input with Pydantic models or explicit type checks at system boundaries\r\n- Use `secrets` module for generating tokens, not `random`\r\n- Pin all dependency versions in `requirements.txt` or `pyproject.toml` — no floating versions\r\n- Run `pip audit` or `safety check` as part of CI\r\n\r\n## Reliability (WAF: Reliability Pillar)\r\n\r\n- Use `tenacity` for retry logic with exponential backoff on external API calls\r\n- Set explicit timeouts on ALL HTTP calls: `httpx.AsyncClient(timeout=30.0)`\r\n- Implement circuit breaker patterns for Azure OpenAI and AI Search calls\r\n- Use structured logging (`structlog` or `logging` with JSON formatter) — never bare `print()`\r\n- Handle specific exceptions, not bare `except:` — catch `httpx.TimeoutException`, `openai.RateLimitError`, etc.\r\n- Add health check endpoints for FastAPI/Flask services: `/health` returning `{\"status\": \"ok\"}`\r\n\r\n## Cost Optimization (WAF: Cost Pillar)\r\n\r\n- Use `max_tokens` parameter on all OpenAI API calls — never allow unbounded generation\r\n- Implement model routing: `gpt-4o-mini` for classification/simple tasks, `gpt-4o` for complex reasoning\r\n- Cache AI responses using TTL-based caching (`cachetools`, Redis, or Azure Cache)\r\n- Batch embedding calls: `openai.embeddings.create(input=[list_of_texts])` not one-by-one\r\n- Monitor token usage: log `usage.total_tokens` from every API response\r\n- Use `async` for I/O-bound operations — do not block on sequential API calls\r\n\r\n## Performance (WAF: Performance Pillar)\r\n\r\n- Use `async`/`await` for all I/O operations (HTTP, database, file)\r\n- Prefer `httpx.AsyncClient` over `requests` for async HTTP\r\n- Use connection pooling for database connections (`asyncpg`, `sqlalchemy` async)\r\n- Stream large LLM responses: `openai.chat.completions.create(stream=True)`\r\n- Use `asyncio.gather()` for concurrent independent operations\r\n- Profile before optimizing — use `cProfile` or `py-spy`, not intuition\r\n\r\n## Code Quality\r\n\r\n- Type hints on all function signatures — `def process(query: str, limit: int = 10) -> list[dict]:`\r\n- Use Pydantic `BaseModel` for data classes, not raw dicts\r\n- Follow PEP 8 naming: `snake_case` for variables/functions, `PascalCase` for classes\r\n- Maximum function length: 30 lines. Extract helper functions for readability\r\n- Docstrings on public functions (Google style): parameters, returns, raises\r\n- Use `pathlib.Path` instead of `os.path` for file operations\r\n\r\n## Testing\r\n\r\n- Use `pytest` as the test runner — not `unittest`\r\n- Minimum 80% code coverage for AI pipeline code\r\n- Mock external services in unit tests: `pytest-httpx` for HTTP, `unittest.mock` for SDK calls\r\n- Test edge cases: empty input, rate limit responses, timeout scenarios, malformed AI output\r\n- Use `pytest.mark.parametrize` for testing multiple input variations\r\n\r\n## Project Structure\r\n\r\n```\r\nproject/\r\n├── src/\r\n│   ├── __init__.py\r\n│   ├── main.py           # Entry point\r\n│   ├── config.py          # Settings via pydantic-settings\r\n│   ├── models/            # Pydantic models\r\n│   ├── services/          # Business logic\r\n│   └── utils/             # Shared utilities\r\n├── tests/\r\n│   ├── conftest.py        # Shared fixtures\r\n│   ├── test_services/\r\n│   └── test_utils/\r\n├── pyproject.toml         # Dependencies + tool config\r\n└── .env.example           # Template (never .env in git)\r\n```",
+      "templateFormat": "handlebars",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "../../instructions/python-waf.instructions.md"
+      }
+    }
+  ],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "O2-AI-Agents",
+      "O3-MCP-Tools-Functions",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "agentic-rag-multi-source"
+  }
+}

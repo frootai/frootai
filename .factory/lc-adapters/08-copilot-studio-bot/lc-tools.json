@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_copilot_studio_bot",
+      "description": "Deploy Copilot Studio Bot — configure topics, triggers, actions, knowledge sources, authentication, Microsoft Graph connectors. Use when: deploy, publish.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-copilot-studio-bot/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_copilot_studio_bot",
+      "description": "Evaluate Copilot Studio Bot — test intent recognition, resolution rate, CSAT, conversation turns, fallback rate, topic coverage. Use when: evaluate, test.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-copilot-studio-bot/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_copilot_studio_bot",
+      "description": "Tune Copilot Studio Bot — optimize topic triggers, knowledge source relevance, conversation flow, generative answers quality. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-copilot-studio-bot/"
+      }
+    }
+  ]
+}

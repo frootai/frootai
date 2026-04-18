@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_multi_agent_service",
+      "description": "Deploy Multi-Agent Service — configure supervisor pattern, agent topology, handoff protocol, shared context store, timeout policies. Use when: deploy, provision.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-multi-agent-service/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_multi_agent_service",
+      "description": "Evaluate Multi-Agent Service — test task completion rate, handoff efficiency, loop detection, conflict resolution, end-to-end latency. Use when: evaluate, test.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-multi-agent-service/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_multi_agent_service",
+      "description": "Tune Multi-Agent Service — optimize routing rules, per-agent model selection, timeout values, context passing, cost per task. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-multi-agent-service/"
+      }
+    }
+  ]
+}

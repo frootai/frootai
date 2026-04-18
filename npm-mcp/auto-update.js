@@ -18,6 +18,7 @@ import { readFileSync, writeFileSync, statSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import https from "https";
+import { urls } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,8 +26,7 @@ const __dirname = dirname(__filename);
 // ─── Configuration ─────────────────────────────────────────────────
 const KNOWLEDGE_PATH = join(__dirname, "knowledge.json");
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-const GITHUB_RAW_URL =
-  "https://raw.githubusercontent.com/frootai/frootai/main/npm-mcp/knowledge.json";
+const GITHUB_RAW_URL = urls.github.knowledgeJson;
 const FETCH_TIMEOUT_MS = 10000; // 10 second timeout
 
 /**

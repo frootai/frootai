@@ -1,0 +1,82 @@
+---
+title: "FAI Planning"
+description: "Protocol-level Planning"
+icon: "📋"
+order: 5
+editUrl: "engine/specialties/planning.js"
+category: "specialties"
+---
+# FAI Planning
+
+📋 S-5 — Protocol-level planning.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    strategy: {
+      type: 'string',
+      enum: ['react', 'plan-execute', 'tree-of-thought', 'supervisor-decompose', 'map-reduce', 'sequential'],
+      default: 'plan-execute',
+      description: 'Planning strategy for task decomposition.'
+    },
+    maxSteps: { type: 'integer', minimum: 1, maximum: 200, default: 20 },
+    parallelism: { type: 'integer', minimum: 1, maximum: 50, default: 3, description: 'Max concurrent sub-tasks.' },
+    loopPrevention: {
+      type: 'object',
+      properties: {
+        maxIterations: { type: 'integer', minimum: 1, default: 5 },
+        costCap: { type: 'number', minimum: 0, description: 'Abort if plan exceeds this cost (USD).' },
+        tokenCap: { type: 'integer', minimum: 0, description: 'Abort if total tokens exceed this.' },
+        duplicateDetection: { type: 'boolean', default: true }
+      },
+      additionalProperties: false
+    },
+    decomposition: {
+      type: 'object',
+      properties: {
+        model: { type: 'string', default: 'gpt-4o', description: 'Model for task decomposition.' },
+        validator: { type: 'string', default: 'gpt-4o-mini', description: 'Model for plan validation.' },
+        outputSchema: { type: 'object', description: 'JSON Schema for decomposed task output.' }
+      },
+      additionalProperties: false
+    },
+    fallback: {
+      type: 'object',
+      properties: {
+        strategy: { type: 'string', enum: ['abort', 'simplify', 'human-escalate'], default: 'abort' },
+        maxRetries: { type: 'integer', minimum: 0, default: 2 }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `planning` section to your `fai-manifest.json`:
+
+```json
+{
+  "planning": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.planning
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/planning.js)

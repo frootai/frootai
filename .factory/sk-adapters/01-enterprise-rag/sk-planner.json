@@ -1,0 +1,32 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 2,
+    "steps": [
+      {
+        "stepName": "agentmd",
+        "agentRole": "executor",
+        "description": "Optimize config values — chunking params, search weights, model routing, caching, evaluation thresholds",
+        "model": "gpt-4o",
+        "tools": [
+          "terminal",
+          "file",
+          "search"
+        ],
+        "order": 0,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "cost-optimization",
+            "operational-excellence",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  }
+}

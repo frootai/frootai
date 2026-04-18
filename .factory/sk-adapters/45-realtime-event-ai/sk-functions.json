@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-realtime-event-ai",
+      "description": "Deploy Real-Time Event AI pipeline — Event Hubs ingestion, batch AI enrichment, anomaly detection, pattern matching, checkpointing, dead letter queue, real-time alerting.",
+      "functions": [
+        {
+          "name": "deploy-realtime-event-ai",
+          "description": "Deploy Real-Time Event AI pipeline — Event Hubs ingestion, batch AI enrichment, anomaly detection, pattern matching, checkpointing, dead letter queue, real-time alerting.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-realtime-event-ai",
+      "description": "Evaluate Real-Time Event AI quality — throughput, enrichment accuracy, anomaly detection precision/recall, alert quality, checkpoint consistency, processing latency.",
+      "functions": [
+        {
+          "name": "evaluate-realtime-event-ai",
+          "description": "Evaluate Real-Time Event AI quality — throughput, enrichment accuracy, anomaly detection precision/recall, alert quality, checkpoint consistency, processing latency.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-realtime-event-ai",
+      "description": "Tune Real-Time Event AI — batch size, anomaly thresholds, LLM-to-rule ratio, consumer scaling, alert aggregation, checkpoint intervals, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-realtime-event-ai",
+          "description": "Tune Real-Time Event AI — batch size, anomaly thresholds, LLM-to-rule ratio, consumer scaling, alert aggregation, checkpoint intervals, cost optimization.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_healthcare_clinical_ai",
+      "description": "Deploy Healthcare Clinical AI — HIPAA-compliant clinical NLP, PHI de-identification with Presidio, ICD-10/CPT medical coding, drug interaction checking, FHIR integration, audit trail.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-healthcare-clinical-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_healthcare_clinical_ai",
+      "description": "Evaluate Healthcare Clinical AI quality — de-identification recall, clinical coding accuracy, drug interaction grounding, HIPAA audit completeness, clinical safety scoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-healthcare-clinical-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_healthcare_clinical_ai",
+      "description": "Tune Healthcare Clinical AI — de-identification entity config, clinical coding prompts, drug interaction grounding, audit retention, evidence sourcing, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-healthcare-clinical-ai/"
+      }
+    }
+  ]
+}

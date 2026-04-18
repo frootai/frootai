@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.636Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "84-citizen-services-chatbot",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\84-citizen-services-chatbot\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-84-citizen-services-chatbot",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-84",
+        "description": "Skill: deploy-84",
+        "functions": [
+          {
+            "name": "deploy-84",
+            "description": "Skill: deploy-84",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-84",
+        "description": "Skill: evaluate-84",
+        "functions": [
+          {
+            "name": "evaluate-84",
+            "description": "Skill: evaluate-84",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-84",
+        "description": "Skill: tune-84",
+        "functions": [
+          {
+            "name": "tune-84",
+            "description": "Skill: tune-84",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "O2-AI-Agents",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "performance-efficiency"
+    ],
+    "scope": "84-citizen-services-chatbot"
+  }
+}

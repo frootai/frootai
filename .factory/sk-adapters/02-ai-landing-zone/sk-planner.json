@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Landing-Zone-Builder",
+        "agentRole": "builder",
+        "description": "AI Landing Zone builder — implements Bicep infrastructure, configures networking, RBAC, private endpoints, monitoring",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Landing-Zone-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Landing Zone reviewer — audits security (private endpoints, NSG, RBAC), compliance, WAF alignment, Bicep best practices",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "cost-optimization"
+          ]
+        }
+      },
+      {
+        "stepName": "Landing-Zone-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Landing Zone tuner — optimizes SKU sizing, cost, quota, monitoring thresholds, network configuration",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

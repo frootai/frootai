@@ -1,0 +1,91 @@
+---
+title: "FAI Knowledge Graphs"
+description: "Protocol-level Knowledge Graphs"
+icon: "📊"
+order: 8
+editUrl: "engine/specialties/graphs.js"
+category: "specialties"
+---
+# FAI Knowledge Graphs
+
+📊 S-8 — Protocol-level knowledge graphs.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    backend: {
+      type: 'string',
+      enum: ['cosmos-gremlin', 'neo4j', 'neptune', 'tigergraph', 'in-memory'],
+      default: 'in-memory'
+    },
+    entityExtraction: {
+      type: 'object',
+      properties: {
+        model: { type: 'string', default: 'gpt-4o-mini' },
+        categories: {
+          type: 'array',
+          items: { type: 'string' },
+          default: ['person', 'organization', 'technology', 'concept', 'location', 'event']
+        },
+        minConfidence: { type: 'number', minimum: 0, maximum: 1, default: 0.7 },
+        deduplication: { type: 'boolean', default: true }
+      },
+      additionalProperties: false
+    },
+    traversal: {
+      type: 'object',
+      properties: {
+        maxHops: { type: 'integer', minimum: 1, maximum: 10, default: 3 },
+        strategy: { type: 'string', enum: ['breadth-first', 'depth-first', 'bidirectional', 'weighted'], default: 'breadth-first' },
+        maxResults: { type: 'integer', minimum: 1, default: 50 },
+        weightProperty: { type: 'string', default: 'confidence' }
+      },
+      additionalProperties: false
+    },
+    hybridSearch: {
+      type: 'object',
+      properties: {
+        vector: {
+          type: 'object',
+          properties: { weight: { type: 'number', minimum: 0, maximum: 1, default: 0.6 } }
+        },
+        graph: {
+          type: 'object',
+          properties: { weight: { type: 'number', minimum: 0, maximum: 1, default: 0.4 } }
+        },
+        reranking: { type: 'boolean', default: true }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `graphs` section to your `fai-manifest.json`:
+
+```json
+{
+  "graphs": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.graph
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/graphs.js)

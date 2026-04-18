@@ -1,0 +1,148 @@
+---
+title: "Play 19: Play 19 — Edge AI Phi-4 📱"
+description: "Run AI locally on edge devices — no cloud dependency for inference. Phi-4 is converted to ONNX, quantized to INT4/INT8 for memory-constrained devices, and served via ONNX Runtime. IoT Hub handles mode"
+icon: "🎯"
+order: 19
+editUrl: "solution-plays/19-edge-ai-phi4/README.md"
+tags: ["solution-play", "play-19"]
+---
+# Play 19 — Edge AI Phi-4 📱
+
+> On-device inference with Phi-4 SLM, ONNX Runtime quantization, and IoT Hub sync.
+
+Run AI locally on edge devices — no cloud dependency for inference. Phi-4 is converted to ONNX, quantized to INT4/INT8 for memory-constrained devices, and served via ONNX Runtime. IoT Hub handles model updates and telemetry sync. Hybrid routing sends simple queries to edge (free) and complex ones to cloud (quality).
+
+## Quick Start
+```bash
+cd solution-plays/19-edge-ai-phi4
+
+# Download and quantize Phi-4
+python scripts/download_model.py --model microsoft/phi-4
+python scripts/quantize.py --model models/phi4-onnx/ --output models/phi4-int4/ --bits 4
+
+code .  # Use @builder for ONNX/IoT, @reviewer for memory/privacy audit, @tuner for quantization
+```
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Edge Devices
+        Device1[Edge Device 1<br/>ONNX Runtime · Phi-4-mini]
+        Device2[Edge Device 2<br/>ONNX Runtime · Phi-4-mini]
+        Device3[Edge Device N<br/>ONNX Runtime · Phi-4-mini]
+    end
+
+    subgraph Cloud Gateway
+        IoTHub[Azure IoT Hub<br/>Device Management · Model Push]
+    end
+
+    subgraph Model Registry
+        ACR[Container Registry<br/>ONNX Model Containers]
+        Blob[Blob Storage<br/>Model Artifacts · Configs]
+    end
+
+    subgraph Cloud AI Fallback
+        OpenAI[Azure OpenAI<br/>GPT-4o · Complex Query Escalation]
+    end
+
+    subgraph ML Pipeline
+        CICD[GitHub Actions<br/>Quantize · Convert · Build · Deploy]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Inference Quality · Escalation Rate]
+        Monitor[Azure Monitor<br/>Fleet Health · Alerts]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>Device Certs · Model Signing Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    Device1 -->|Telemetry| IoTHub
+    Device2 -->|Telemetry| IoTHub
+    Device3 -->|Telemetry| IoTHub
+    Device1 -->|Low Confidence| OpenAI
+    IoTHub -->|Model Update| Device1
+    IoTHub -->|Model Update| Device2
+    IoTHub -->|Model Update| Device3
+    CICD -->|Build Container| ACR
+    CICD -->|Store Artifacts| Blob
+    ACR -->|Deploy via| IoTHub
+    IoTHub -->|Metrics| AppInsights
+    IoTHub -->|Health| Monitor
+    IoTHub -->|Auth| MI
+    MI -->|Secrets| KV
+
+    style Device1 fill:#10b981,color:#fff,stroke:#059669
+    style Device2 fill:#10b981,color:#fff,stroke:#059669
+    style Device3 fill:#10b981,color:#fff,stroke:#059669
+    style IoTHub fill:#3b82f6,color:#fff,stroke:#2563eb
+    style ACR fill:#f59e0b,color:#fff,stroke:#d97706
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style CICD fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+```
+
+> 📐 [Full architecture details](architecture.md)
+
+| Component | Purpose |
+|-----------|---------|
+| Phi-4 (ONNX) | Small language model for on-device inference |
+| ONNX Runtime | Cross-platform inference engine |
+| Azure IoT Hub | Model updates + telemetry sync to cloud |
+| Hybrid Router | Edge for simple queries, cloud fallback for complex |
+
+## Device Compatibility
+| Device | RAM | Recommended Quant | Inference Speed |
+|--------|-----|-------------------|----------------|
+| Raspberry Pi 5 | 8 GB | INT4 (AWQ) | ~5 tok/s |
+| NVIDIA Jetson | 4 GB | INT4 only | ~10 tok/s (GPU) |
+| Laptop (16GB) | 16 GB | INT8 or FP16 | ~20 tok/s |
+
+## Key Metrics
+- Inference: <2s on edge · Quality: ≥85% of cloud · Offline: 100% success · Memory: <80% device RAM
+
+## DevKit (Edge AI-Focused)
+| Primitive | What It Does |
+|-----------|-------------|
+| 3 agents | Builder (ONNX/quantization/IoT), Reviewer (memory/privacy/offline), Tuner (quant level/threads/sync) |
+| 3 skills | Deploy (115 lines), Evaluate (100 lines), Tune (112 lines) |
+| 4 prompts | `/deploy` (ONNX + device), `/test` (on-device inference), `/review` (memory/privacy), `/evaluate` (speed vs cloud) |
+
+**Note:** This is an edge/on-device AI play — no cloud inference costs during operation. TuneKit covers quantization selection, ONNX Runtime threads, prompt compression for small context windows, IoT Hub sync frequency, and hybrid routing (70% cost reduction from edge-first).
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|--------:|-----------:|-----------:|
+| Azure Container Registry | $5/mo | $20/mo | $50/mo |
+| Azure IoT Hub | $0/mo | $25/mo | $250/mo |
+| Azure OpenAI | $15/mo | $80/mo | $300/mo |
+| Blob Storage | $2/mo | $8/mo | $25/mo |
+| Azure Monitor | $0/mo | $20/mo | $60/mo |
+| Application Insights | $0/mo | $20/mo | $70/mo |
+| Key Vault | $1/mo | $3/mo | $10/mo |
+| Azure DevOps / GitHub Actions | $0/mo | $15/mo | $40/mo |
+| **Total** | **$23/mo** | **$191/mo** | **$805/mo** |
+
+> 💰 [Full cost breakdown](cost.json)
+
+📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/19-edge-ai-phi4](https://frootai.dev/solution-plays/19-edge-ai-phi4)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `19-edge-ai-phi4` |
+| Version | `1.0.0` |
+| Knowledge | F2-LLM-Selection, T1-Fine-Tuning-MLOps |
+| WAF Pillars | cost-optimization, performance-efficiency, security |
+| Groundedness | ≥ 85% |
+| Safety | 0 violations max |

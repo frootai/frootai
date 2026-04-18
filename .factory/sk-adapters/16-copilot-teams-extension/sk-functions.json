@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-copilot-teams-extension",
+      "description": "Deploy Copilot Teams Extension — configure Teams app manifest, Bot Service, SSO, Adaptive Cards, Microsoft Graph API, admin approval. Use when: deploy, publish, configure Teams app.",
+      "functions": [
+        {
+          "name": "deploy-copilot-teams-extension",
+          "description": "Deploy Copilot Teams Extension — configure Teams app manifest, Bot Service, SSO, Adaptive Cards, Microsoft Graph API, admin approval. Use when: deploy, publish, configure Teams app.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-copilot-teams-extension",
+      "description": "Evaluate Copilot Teams Extension — test SSO flow, Graph API permissions, Adaptive Card rendering, response quality, throttling resilience. Use when: evaluate, test, audit.",
+      "functions": [
+        {
+          "name": "evaluate-copilot-teams-extension",
+          "description": "Evaluate Copilot Teams Extension — test SSO flow, Graph API permissions, Adaptive Card rendering, response quality, throttling resilience. Use when: evaluate, test, audit.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-copilot-teams-extension",
+      "description": "Tune Copilot Teams Extension — optimize Adaptive Card layouts, Graph API batching, response caching, SSO token management, cost per interaction. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-copilot-teams-extension",
+          "description": "Tune Copilot Teams Extension — optimize Adaptive Card layouts, Graph API batching, response caching, SSO token management, cost per interaction. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

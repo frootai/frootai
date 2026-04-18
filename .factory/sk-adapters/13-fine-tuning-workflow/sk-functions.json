@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-fine-tuning-workflow",
+      "description": "Deploy Fine-Tuning pipeline — provision Azure ML workspace, prepare JSONL training data, configure LoRA, submit training job, deploy fine-tuned model. Use when: deploy, provision, train.",
+      "functions": [
+        {
+          "name": "deploy-fine-tuning-workflow",
+          "description": "Deploy Fine-Tuning pipeline — provision Azure ML workspace, prepare JSONL training data, configure LoRA, submit training job, deploy fine-tuned model. Use when: deploy, provision, train.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-fine-tuning-workflow",
+      "description": "Evaluate Fine-Tuning — compare fine-tuned vs base model on task-specific benchmarks, check overfitting, measure improvement on target metrics. Use when: evaluate, benchmark, compare.",
+      "functions": [
+        {
+          "name": "evaluate-fine-tuning-workflow",
+          "description": "Evaluate Fine-Tuning — compare fine-tuned vs base model on task-specific benchmarks, check overfitting, measure improvement on target metrics. Use when: evaluate, benchmark, compare.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-fine-tuning-workflow",
+      "description": "Tune Fine-Tuning — optimize LoRA rank, learning rate, epochs, batch size, data mix, compute selection, cost per training run. Use when: tune, optimize hyperparameters.",
+      "functions": [
+        {
+          "name": "tune-fine-tuning-workflow",
+          "description": "Tune Fine-Tuning — optimize LoRA rank, learning rate, epochs, batch size, data mix, compute selection, cost per training run. Use when: tune, optimize hyperparameters.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

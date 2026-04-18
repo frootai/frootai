@@ -1,0 +1,69 @@
+---
+title: "Migrate from LangChain"
+description: "Wrap your existing LangChain code with FAI primitives for quality gates and context wiring"
+icon: "🔄"
+order: 5
+tags: ["guide", "migrate-from-langchain"]
+category: "guides"
+---
+# Migrate from LangChain
+
+FrootAI doesn't replace LangChain — it wraps and enhances it. The FAI LangChain adapter translates your manifest into LCEL chain config.
+
+## What You Keep
+- ✅ All your LangChain chains, tools, and agents
+- ✅ LangSmith tracing
+- ✅ LCEL syntax
+
+## What You Gain
+- ✅ Protocol-level quality guardrails
+- ✅ Context wiring across agents
+- ✅ WAF alignment enforcement
+- ✅ Infrastructure as Code integration
+- ✅ Cross-framework portability
+
+## Step 1: Add FAI Manifest
+
+Create `spec/fai-manifest.json` in your project:
+
+```json
+{
+  "play": "custom-langchain-app",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture"],
+    "waf": ["security", "reliability"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "guardrails": { "groundedness": 0.90, "safety": 0 }
+  }
+}
+```
+
+## Step 2: Generate LangChain Adapter Config
+
+```bash
+npx frootai adapt --framework langchain
+```
+
+This generates:
+- `lc-config.json` — Chain configuration
+- `lc-tools.json` — StructuredTool definitions
+- `lc-graph.json` — LangGraph StateGraph nodes
+- `lc-callbacks.json` — Quality gate callbacks
+
+## Step 3: Wire Into Your App
+
+```python
+from langchain.callbacks import FrootAICallback
+from frootai import FAIEngine
+
+engine = FAIEngine()
+play = engine.load('spec/fai-manifest.json')
+
+# Add FAI quality gates to your chain
+chain = your_existing_chain.with_config(
+    callbacks=[FrootAICallback(play.guardrails)]
+)
+```

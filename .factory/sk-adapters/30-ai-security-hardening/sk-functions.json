@@ -1,0 +1,88 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-security-hardening",
+      "description": "Deploy AI Security Hardening — configure multi-layer defense against prompt injection, jailbreak, data exfiltration. OWASP LLM Top 10 coverage. Use when: deploy, configure AI security.",
+      "functions": [
+        {
+          "name": "deploy-ai-security-hardening",
+          "description": "Deploy AI Security Hardening — configure multi-layer defense against prompt injection, jailbreak, data exfiltration. OWASP LLM Top 10 coverage. Use when: deploy, configure AI security.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-security-hardening",
+      "description": "Evaluate AI Security — red-team OWASP LLM Top 10, measure injection block rate, false positive rate, data leakage prevention, jailbreak resilience. Use when: evaluate, pen-test AI security.",
+      "functions": [
+        {
+          "name": "evaluate-ai-security-hardening",
+          "description": "Evaluate AI Security — red-team OWASP LLM Top 10, measure injection block rate, false positive rate, data leakage prevention, jailbreak resilience. Use when: evaluate, pen-test AI security.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-security-hardening",
+      "description": "Tune AI Security — optimize detection sensitivity, reduce false positives, configure per-layer thresholds, attack pattern updates, security vs usability balance. Use when: tune, optimize security.",
+      "functions": [
+        {
+          "name": "tune-ai-security-hardening",
+          "description": "Tune AI Security — optimize detection sensitivity, reduce false positives, configure per-layer thresholds, attack pattern updates, security vs usability balance. Use when: tune, optimize security.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

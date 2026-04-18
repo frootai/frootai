@@ -1,0 +1,177 @@
+{
+  "mit": [
+    {
+      "folder": "agents/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "instructions/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "skills/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "hooks/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "plugins/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "workflows/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "cookbook/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "solution-plays/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "docs/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "schemas/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "engine/",
+      "fileCount": 21,
+      "license": "MIT"
+    },
+    {
+      "folder": "fai-protocol/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "community-plugins/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "workshops/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": "evaluation/",
+      "fileCount": 0,
+      "license": "MIT"
+    },
+    {
+      "folder": ".github/",
+      "fileCount": 0,
+      "license": "MIT"
+    }
+  ],
+  "proprietary": [
+    {
+      "folder": "vscode-extension/",
+      "fileCount": 99,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "npm-mcp/",
+      "fileCount": 77,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "npm-sdk/",
+      "fileCount": 6,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "python-mcp/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "python-sdk/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "cli/",
+      "fileCount": 1,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "sdk/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "mcp-server/",
+      "fileCount": 1,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "scripts/",
+      "fileCount": 132,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "functions/",
+      "fileCount": 2,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "config/",
+      "fileCount": 2,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "foundry-agent/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "infra-registry/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "bicep-registry/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "marketplace/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": "website-data/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": ".husky/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    },
+    {
+      "folder": ".vscode/",
+      "fileCount": 0,
+      "license": "Proprietary"
+    }
+  ],
+  "skipped": []
+}

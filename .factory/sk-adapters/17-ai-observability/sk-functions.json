@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-observability",
+      "description": "Deploy AI Observability — configure Application Insights, Log Analytics, KQL dashboards, distributed tracing, token/cost metrics, alert rules for AI workloads. Use when: deploy, configure monitoring.",
+      "functions": [
+        {
+          "name": "deploy-ai-observability",
+          "description": "Deploy AI Observability — configure Application Insights, Log Analytics, KQL dashboards, distributed tracing, token/cost metrics, alert rules for AI workloads. Use when: deploy, configure monitoring.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-observability",
+      "description": "Evaluate AI Observability — audit telemetry completeness, alert coverage, PII in logs, dashboard accuracy, data retention compliance. Use when: evaluate, audit monitoring.",
+      "functions": [
+        {
+          "name": "evaluate-ai-observability",
+          "description": "Evaluate AI Observability — audit telemetry completeness, alert coverage, PII in logs, dashboard accuracy, data retention compliance. Use when: evaluate, audit monitoring.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-observability",
+      "description": "Tune AI Observability — optimize sampling rates, alert thresholds, log retention tiers, KQL query performance, Log Analytics cost. Use when: tune, optimize monitoring cost.",
+      "functions": [
+        {
+          "name": "tune-ai-observability",
+          "description": "Tune AI Observability — optimize sampling rates, alert thresholds, log retention tiers, KQL query performance, Log Analytics cost. Use when: tune, optimize monitoring cost.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

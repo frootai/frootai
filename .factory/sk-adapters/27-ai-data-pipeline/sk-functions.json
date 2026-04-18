@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-data-pipeline",
+      "description": "Deploy AI Data Pipeline — configure ETL/ELT with LLM enrichment, batch processing, Data Factory orchestration, data quality checks, PII detection. Use when: deploy, provision data pipeline.",
+      "functions": [
+        {
+          "name": "deploy-ai-data-pipeline",
+          "description": "Deploy AI Data Pipeline — configure ETL/ELT with LLM enrichment, batch processing, Data Factory orchestration, data quality checks, PII detection. Use when: deploy, provision data pipeline.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-data-pipeline",
+      "description": "Evaluate AI Data Pipeline — measure enrichment accuracy, data quality score, throughput, error rate, PII detection coverage, pipeline reliability. Use when: evaluate, test pipeline quality.",
+      "functions": [
+        {
+          "name": "evaluate-ai-data-pipeline",
+          "description": "Evaluate AI Data Pipeline — measure enrichment accuracy, data quality score, throughput, error rate, PII detection coverage, pipeline reliability. Use when: evaluate, test pipeline quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-data-pipeline",
+      "description": "Tune AI Data Pipeline — optimize batch sizes, LLM enrichment cost, parallelism, partition strategy, scheduling, data quality thresholds. Use when: tune, optimize pipeline.",
+      "functions": [
+        {
+          "name": "tune-ai-data-pipeline",
+          "description": "Tune AI Data Pipeline — optimize batch sizes, LLM enrichment cost, parallelism, partition strategy, scheduling, data quality thresholds. Use when: tune, optimize pipeline.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

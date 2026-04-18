@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.647Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "91-customer-churn-predictor",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\91-customer-churn-predictor\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-91-customer-churn-predictor",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-91",
+        "description": "Skill: deploy-91",
+        "functions": [
+          {
+            "name": "deploy-91",
+            "description": "Skill: deploy-91",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-91",
+        "description": "Skill: evaluate-91",
+        "functions": [
+          {
+            "name": "evaluate-91",
+            "description": "Skill: evaluate-91",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-91",
+        "description": "Skill: tune-91",
+        "functions": [
+          {
+            "name": "tune-91",
+            "description": "Skill: tune-91",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O2-AI-Agents",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "cost-optimization",
+      "reliability",
+      "responsible-ai",
+      "performance-efficiency"
+    ],
+    "scope": "91-customer-churn-predictor"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Realtime-Event-AI-Builder",
+        "agentRole": "builder",
+        "description": "Realtime Event AI builder - implements event pipeline, anomaly detection, patterns",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Realtime-Event-AI-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Realtime Event AI reviewer - audits throughput, checkpointing, dedup, alerts",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Realtime-Event-AI-Tuner",
+        "agentRole": "tuner",
+        "description": "Realtime Event AI tuner - optimizes batch size, anomaly thresholds, LLM ratio",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

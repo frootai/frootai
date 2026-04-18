@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_autonomous_coding_agent",
+      "description": "Deploy Autonomous Coding Agent — issue-to-PR pipeline, codebase indexing, multi-file implementation, test generation, GitHub integration, CI self-healing.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-autonomous-coding-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_autonomous_coding_agent",
+      "description": "Evaluate Autonomous Coding Agent quality — issue resolution rate, code correctness, test coverage, PR acceptance rate, iteration count, cost per PR.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-autonomous-coding-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_autonomous_coding_agent",
+      "description": "Tune Autonomous Coding Agent — plan accuracy, iteration limits, test coverage requirements, auto-merge criteria, scope guards, cost per PR optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-autonomous-coding-agent/"
+      }
+    }
+  ]
+}

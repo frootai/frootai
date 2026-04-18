@@ -1,0 +1,65 @@
+---
+title: "FAI Primitives"
+description: "The 9 building blocks of AI applications"
+icon: "🧩"
+order: 2
+tags: ["primitives", "agents", "skills", "instructions"]
+category: "concepts"
+---
+# FAI Primitives
+
+FrootAI organizes AI capabilities into **9 primitive types** — reusable building blocks that can be composed into any AI application.
+
+## The 9 Primitive Types
+
+| Primitive | Extension | Purpose | Count |
+|-----------|-----------|---------|-------|
+| **Agents** | `.agent.md` | Specialized AI personas with tools and model preferences | 238 |
+| **Instructions** | `.instructions.md` | Context-specific behavioral rules (applied via glob patterns) | 176 |
+| **Skills** | `SKILL.md` | Reusable capabilities agents can invoke | 322 |
+| **Hooks** | `hooks.json` | Lifecycle event handlers (security, validation) | 10 |
+| **Workflows** | `.yml` | Multi-step automated processes | 12 |
+| **Plugins** | `plugin.json` | Distributable packages of primitives | 77 |
+| **Prompts** | `.prompt.md` | Reusable prompt templates | — |
+| **Guardrails** | In manifest | Quality thresholds (groundedness, safety, cost) | — |
+| **Tools** | Via MCP | External capabilities agents can call | 25+ |
+
+## How Primitives Connect
+
+Primitives are standalone files — each works independently. But when wired together via `fai-manifest.json`, they share context, enforce quality gates, and compose into complete solutions.
+
+```json
+{
+  "play": "01-enterprise-rag",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture"],
+    "waf": ["security", "reliability"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "skills": ["./.github/skills/rag-indexer/"],
+    "guardrails": { "groundedness": 0.95, "safety": 0 }
+  }
+}
+```
+
+## Well-Architected Framework Alignment
+
+Every primitive is tagged with WAF pillar alignment:
+
+| Pillar | Focus |
+|--------|-------|
+| **Security** | Managed Identity, Key Vault, RBAC, content safety |
+| **Reliability** | Retry, circuit breaker, health checks, degradation |
+| **Cost Optimization** | Model routing, token budgets, right-sizing |
+| **Operational Excellence** | CI/CD, observability, IaC |
+| **Performance Efficiency** | Caching, streaming, async |
+| **Responsible AI** | Content safety, groundedness, fairness |
+
+## Browse Primitives
+
+- [**Agents →**](/primitives/agents) — 238 specialized AI agents
+- [**Skills →**](/primitives/skills) — 322 reusable capabilities
+- [**Instructions →**](/primitives/instructions) — 176 behavioral rules
+- [**Plugins →**](/primitives/plugins) — 77 distributable packages

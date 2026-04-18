@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_realtime_event_ai",
+      "description": "Deploy Real-Time Event AI pipeline — Event Hubs ingestion, batch AI enrichment, anomaly detection, pattern matching, checkpointing, dead letter queue, real-time alerting.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-realtime-event-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_realtime_event_ai",
+      "description": "Evaluate Real-Time Event AI quality — throughput, enrichment accuracy, anomaly detection precision/recall, alert quality, checkpoint consistency, processing latency.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-realtime-event-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_realtime_event_ai",
+      "description": "Tune Real-Time Event AI — batch size, anomaly thresholds, LLM-to-rule ratio, consumer scaling, alert aggregation, checkpoint intervals, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-realtime-event-ai/"
+      }
+    }
+  ]
+}

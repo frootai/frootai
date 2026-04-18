@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Infra-Optimizer-Builder",
+        "agentRole": "builder",
+        "description": "Infra Optimizer builder - implements monitoring, right-sizing, auto-scaling",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Infra-Optimizer-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Infra Optimizer reviewer - audits recommendation safety, cost accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "cost-optimization"
+          ]
+        }
+      },
+      {
+        "stepName": "Infra-Optimizer-Tuner",
+        "agentRole": "tuner",
+        "description": "Infra Optimizer tuner - optimizes thresholds, alert sensitivity",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

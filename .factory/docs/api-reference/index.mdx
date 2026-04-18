@@ -1,0 +1,45 @@
+---
+title: "API Reference"
+description: "Complete API documentation for MCP, CLI, schemas, and SDK"
+icon: "📖"
+order: 7
+---
+# API Reference
+
+Complete reference documentation for all FrootAI interfaces.
+
+## MCP Tools (25+)
+
+The FrootAI MCP Server provides 25+ tools for AI architecture guidance, evaluation, and knowledge retrieval.
+
+```bash
+npx frootai-mcp@latest
+```
+
+[Browse MCP Tools →](/api-reference/mcp-tools)
+
+## CLI Commands
+
+```bash
+npx frootai@latest --help
+```
+
+[Browse CLI Commands →](/api-reference/cli)
+
+## JSON Schemas
+
+- [fai-manifest.json](/api-reference/schemas/fai-manifest) — The FAI Protocol manifest
+- [fai-context.json](/api-reference/schemas/fai-context) — Lightweight context reference
+- [plugin.json](/api-reference/schemas/plugin) — Plugin package manifest
+
+[Browse Schemas →](/api-reference/schemas)
+
+## Python SDK
+
+```python
+from frootai import FAIEngine
+engine = FAIEngine()
+play = engine.load('solution-plays/01-enterprise-rag/spec/fai-manifest.json')
+```
+
+[Python SDK Reference →](/api-reference/python-sdk)

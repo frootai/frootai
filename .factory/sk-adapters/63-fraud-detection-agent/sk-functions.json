@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-fraud-detection-agent",
+      "description": "Deploy Fraud Detection Agent — three-layer detection (rules <1ms, ML <50ms, graph analysis), explainable decisions (PSD2), fraud ring network analysis, velocity checks, analyst feedback loop.",
+      "functions": [
+        {
+          "name": "deploy-fraud-detection-agent",
+          "description": "Deploy Fraud Detection Agent — three-layer detection (rules <1ms, ML <50ms, graph analysis), explainable decisions (PSD2), fraud ring network analysis, velocity checks, analyst feedback loop.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-fraud-detection-agent",
+      "description": "Evaluate Fraud Detection Agent quality — precision/recall per layer, false positive rate, detection latency, graph coverage, explanation quality, feedback loop effectiveness.",
+      "functions": [
+        {
+          "name": "evaluate-fraud-detection-agent",
+          "description": "Evaluate Fraud Detection Agent quality — precision/recall per layer, false positive rate, detection latency, graph coverage, explanation quality, feedback loop effectiveness.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-fraud-detection-agent",
+      "description": "Tune Fraud Detection Agent — rule thresholds, ML model calibration, graph analysis depth, velocity windows, explanation format, feedback loop retrain schedule, cost.",
+      "functions": [
+        {
+          "name": "tune-fraud-detection-agent",
+          "description": "Tune Fraud Detection Agent — rule thresholds, ML model calibration, graph analysis depth, velocity windows, explanation format, feedback loop retrain schedule, cost.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

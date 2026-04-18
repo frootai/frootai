@@ -1,0 +1,188 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.429Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "23-browser-automation-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\23-browser-automation-agent\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-23-browser-automation-agent",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_browser_automation_agent",
+        "description": "Deploy Browser Automation Agent — configure Playwright, GPT-4o vision for page understanding, DOM state extraction, action execution, domain allowlists. Use when: deploy, provision browser agent.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/deploy-browser-automation-agent/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_browser_automation_agent",
+        "description": "Evaluate Browser Automation Agent — measure task completion rate, action success rate, step efficiency, selector resilience, error recovery. Use when: evaluate, test automation quality.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/evaluate-browser-automation-agent/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_browser_automation_agent",
+        "description": "Tune Browser Automation Agent — optimize screenshot frequency, wait strategies, selector methods, action planning prompts, step limits, cost per automation. Use when: tune, optimize browser agent.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Document content"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/tune-browser-automation-agent/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [
+      {
+        "id": "Browser_Automation_Agent",
+        "type": "agent",
+        "role": "agent",
+        "name": "Browser Automation Agent",
+        "description": "Browser automation agent — navigates websites, extracts data, fills forms, and executes multi-step web workflows using Playwright MCP and GPT-4o Vision. Operates with domain allowlists and human approval for transactions.",
+        "model": "gpt-4o",
+        "tools": [],
+        "order": 4,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/browser-agent.agent.md",
+          "waf": []
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "__start__",
+        "target": "Browser_Automation_Agent",
+        "condition": null
+      },
+      {
+        "source": "Browser_Automation_Agent",
+        "target": "__end__",
+        "condition": null
+      }
+    ],
+    "entryPoint": "Browser_Automation_Agent",
+    "finishPoint": "Browser_Automation_Agent"
+  },
+  "callbacks": [
+    {
+      "handler": "guardrail_groundedness",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "QAEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_coherence",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.9",
+      "threshold": 0.9,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_safety",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "CriteriaEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_costPerQuery",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.03",
+      "threshold": 0.03,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    }
+  ],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "O3-MCP-Tools-Functions",
+      "R1-Prompt-Engineering",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "browser-automation-web-tasks"
+  }
+}

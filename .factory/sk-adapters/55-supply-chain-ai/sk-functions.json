@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-supply-chain-ai",
+      "description": "Deploy Supply Chain AI — demand forecasting (ML + LLM explanation), supplier risk scoring, inventory optimization, logistics routing, procurement anomaly detection, external signal integration.",
+      "functions": [
+        {
+          "name": "deploy-supply-chain-ai",
+          "description": "Deploy Supply Chain AI — demand forecasting (ML + LLM explanation), supplier risk scoring, inventory optimization, logistics routing, procurement anomaly detection, external signal integration.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-supply-chain-ai",
+      "description": "Evaluate Supply Chain AI quality — forecast MAPE/RMSE, supplier risk precision, inventory optimization savings, anomaly detection accuracy, external signal correlation.",
+      "functions": [
+        {
+          "name": "evaluate-supply-chain-ai",
+          "description": "Evaluate Supply Chain AI quality — forecast MAPE/RMSE, supplier risk precision, inventory optimization savings, anomaly detection accuracy, external signal correlation.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-supply-chain-ai",
+      "description": "Tune Supply Chain AI — forecast model parameters, external signal weights, risk thresholds, safety stock levels, reorder triggers, reforecast frequency, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-supply-chain-ai",
+          "description": "Tune Supply Chain AI — forecast model parameters, external signal weights, risk thresholds, safety stock levels, reorder triggers, reforecast frequency, cost optimization.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

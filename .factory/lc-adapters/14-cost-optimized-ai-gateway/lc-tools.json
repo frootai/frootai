@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_cost_optimized_ai_gateway",
+      "description": "Deploy AI Gateway — configure APIM with semantic caching (Redis), token budgets per tenant, multi-region load balancing, model routing policies. Use when: deploy, provision, configure gateway.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-cost-optimized-ai-gateway/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_cost_optimized_ai_gateway",
+      "description": "Evaluate AI Gateway — measure cache hit rate, cost savings vs direct, routing accuracy, budget enforcement, failover latency. Use when: evaluate, benchmark, FinOps review.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-cost-optimized-ai-gateway/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_cost_optimized_ai_gateway",
+      "description": "Tune AI Gateway — optimize cache TTL and similarity threshold, PTU vs pay-as-you-go, routing weights, budget tiers, cost per 1K tokens. Use when: tune, optimize, FinOps.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-cost-optimized-ai-gateway/"
+      }
+    }
+  ]
+}

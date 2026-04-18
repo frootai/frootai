@@ -1,0 +1,23 @@
+# Core repo: factory pipeline on public repo update
+name: FAI Factory Pipeline
+on:
+  repository_dispatch:
+    types: [public-repo-updated]
+  workflow_dispatch:
+
+jobs:
+  factory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: frootai/frootai
+          path: ./public
+          token: ${{ secrets.PUBLIC_REPO_PAT }}
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: FROOTAI_PUBLIC_REPO=./public npm run factory:harvest
+      - run: FROOTAI_PUBLIC_REPO=./public npm run factory:catalog
+      - run: FROOTAI_PUBLIC_REPO=./public npm run factory:validate

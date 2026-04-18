@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.632Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "82-construction-safety-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\82-construction-safety-ai\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-82-construction-safety-ai",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-82",
+        "description": "Skill: deploy-82",
+        "functions": [
+          {
+            "name": "deploy-82",
+            "description": "Skill: deploy-82",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-82",
+        "description": "Skill: evaluate-82",
+        "functions": [
+          {
+            "name": "evaluate-82",
+            "description": "Skill: evaluate-82",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-82",
+        "description": "Skill: tune-82",
+        "functions": [
+          {
+            "name": "tune-82",
+            "description": "Skill: tune-82",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "T3-Production-Patterns",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "performance-efficiency"
+    ],
+    "scope": "82-construction-safety-ai"
+  }
+}

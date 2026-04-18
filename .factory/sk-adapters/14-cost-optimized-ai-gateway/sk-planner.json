@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Gateway-Builder",
+        "agentRole": "builder",
+        "description": "AI Gateway builder - implements routing, caching, budget tracking, rate limiting",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Gateway-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Gateway reviewer - audits routing accuracy, cache hits, security",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "cost-optimization",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Gateway-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Gateway tuner - optimizes routing thresholds, cache TTL, PTU sizing",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

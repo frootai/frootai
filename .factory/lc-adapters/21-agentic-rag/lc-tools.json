@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_agentic_rag",
+      "description": "Deploy Agentic RAG — configure autonomous retrieval agent with multi-source routing (AI Search, Bing, SQL, APIs), iterative search, self-evaluation, semantic caching. Use when: deploy, provision.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-agentic-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_agentic_rag",
+      "description": "Evaluate Agentic RAG — measure retrieval quality, source selection accuracy, iteration efficiency, groundedness, citation accuracy, cost per query. Use when: evaluate, benchmark.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-agentic-rag/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_agentic_rag",
+      "description": "Tune Agentic RAG — optimize source routing weights, iteration thresholds, self-evaluation sensitivity, semantic cache, cost per query. Use when: tune, optimize retrieval.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-agentic-rag/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_semantic_search_engine",
+      "description": "Deploy Semantic Search Engine — configure embedding pipeline, vector index, hybrid search, scoring profiles, query expansion, personalization API. Use when: deploy, provision search backend.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-semantic-search-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_semantic_search_engine",
+      "description": "Evaluate Semantic Search Engine — measure NDCG@10, MRR, zero-result rate, query latency, personalization lift, embedding quality. Use when: evaluate, benchmark search quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-semantic-search-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_semantic_search_engine",
+      "description": "Tune Semantic Search Engine — optimize scoring profiles, embedding model, query expansion strategy, personalization weights, index configuration, cost per query. Use when: tune, optimize search.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-semantic-search-engine/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.606Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "94-ai-podcast-generator",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\94-ai-podcast-generator\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-94-ai-podcast-generator",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_94",
+        "description": "FAI Skill: deploy-94",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-94/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_94",
+        "description": "FAI Skill: evaluate-94",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-94/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_94",
+        "description": "FAI Skill: tune-94",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-94/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "T3-Production-Patterns",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "performance-efficiency",
+      "cost-optimization",
+      "reliability"
+    ],
+    "scope": "94-ai-podcast-generator"
+  }
+}

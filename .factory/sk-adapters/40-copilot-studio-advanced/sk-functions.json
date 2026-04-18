@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-copilot-studio-advanced",
+      "description": "Deploy Copilot Studio Advanced — declarative agents, TypeSpec API plugins, Graph API data grounding, adaptive cards, SSO/OAuth2, Power Automate integration.",
+      "functions": [
+        {
+          "name": "deploy-copilot-studio-advanced",
+          "description": "Deploy Copilot Studio Advanced — declarative agents, TypeSpec API plugins, Graph API data grounding, adaptive cards, SSO/OAuth2, Power Automate integration.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-copilot-studio-advanced",
+      "description": "Evaluate Copilot Studio Advanced quality — plugin response accuracy, Graph grounding faithfulness, conversation coherence, adaptive card rendering, SSO reliability.",
+      "functions": [
+        {
+          "name": "evaluate-copilot-studio-advanced",
+          "description": "Evaluate Copilot Studio Advanced quality — plugin response accuracy, Graph grounding faithfulness, conversation coherence, adaptive card rendering, SSO reliability.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-copilot-studio-advanced",
+      "description": "Tune Copilot Studio Advanced configuration — plugin latency, conversation context, Graph query efficiency, adaptive card templates, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-copilot-studio-advanced",
+          "description": "Tune Copilot Studio Advanced configuration — plugin latency, conversation context, Graph query efficiency, adaptive card templates, cost optimization.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

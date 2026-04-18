@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.608Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "95-multimodal-search-v2",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\95-multimodal-search-v2\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-95-multimodal-search-v2",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_95",
+        "description": "FAI Skill: deploy-95",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-95/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_95",
+        "description": "FAI Skill: evaluate-95",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-95/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_95",
+        "description": "FAI Skill: tune-95",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-95/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG",
+      "F1-GenAI-Foundations",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "performance-efficiency",
+      "reliability",
+      "responsible-ai",
+      "cost-optimization"
+    ],
+    "scope": "95-multimodal-search-v2"
+  }
+}

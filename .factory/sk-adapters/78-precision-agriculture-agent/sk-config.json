@@ -1,0 +1,98 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.625Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "78-precision-agriculture-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\78-precision-agriculture-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-78-precision-agriculture-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-78",
+        "description": "Skill: deploy-78",
+        "functions": [
+          {
+            "name": "deploy-78",
+            "description": "Skill: deploy-78",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-78",
+        "description": "Skill: evaluate-78",
+        "functions": [
+          {
+            "name": "evaluate-78",
+            "description": "Skill: evaluate-78",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-78",
+        "description": "Skill: tune-78",
+        "functions": [
+          {
+            "name": "tune-78",
+            "description": "Skill: tune-78",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "O2-AI-Agents",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "78-precision-agriculture-agent"
+  }
+}

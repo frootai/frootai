@@ -1,0 +1,266 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-04-18T11:13:15.477Z",
+  "tree": [
+    {
+      "title": "Getting Started",
+      "path": "/getting-started",
+      "icon": "🚀"
+    },
+    {
+      "title": "Concepts",
+      "path": "/concepts",
+      "icon": "💡",
+      "children": [
+        {
+          "title": "FAI Protocol",
+          "path": "/concepts/fai-protocol"
+        },
+        {
+          "title": "FAI Primitives",
+          "path": "/concepts/primitives"
+        },
+        {
+          "title": "Well-Architected Framework",
+          "path": "/concepts/well-architected"
+        }
+      ]
+    },
+    {
+      "title": "Learning",
+      "path": "/learning",
+      "icon": "📚",
+      "children": [
+        {
+          "title": "F1: GenAI Foundations",
+          "path": "/learning/f1-genai-foundations",
+          "layer": "Foundations"
+        },
+        {
+          "title": "F2: LLM Landscape",
+          "path": "/learning/f2-llm-landscape",
+          "layer": "Foundations"
+        },
+        {
+          "title": "F3: AI Glossary A–Z",
+          "path": "/learning/f3-ai-glossary-a-z",
+          "layer": "Foundations"
+        },
+        {
+          "title": "F4: GitHub Agentic OS",
+          "path": "/learning/f4-github-agentic-os",
+          "layer": "Foundations"
+        },
+        {
+          "title": "R1: Prompt Engineering",
+          "path": "/learning/r1-prompt-engineering",
+          "layer": "Reasoning"
+        },
+        {
+          "title": "R2: RAG Architecture",
+          "path": "/learning/r2-rag-architecture",
+          "layer": "Reasoning"
+        },
+        {
+          "title": "R3: Deterministic AI",
+          "path": "/learning/r3-deterministic-ai",
+          "layer": "Reasoning"
+        },
+        {
+          "title": "O1: Semantic Kernel",
+          "path": "/learning/o1-semantic-kernel",
+          "layer": "Orchestration"
+        },
+        {
+          "title": "O2: AI Agents Deep Dive",
+          "path": "/learning/o2-ai-agents-deep-dive",
+          "layer": "Orchestration"
+        },
+        {
+          "title": "O3: MCP & Tools",
+          "path": "/learning/o3-mcp-tools",
+          "layer": "Orchestration"
+        },
+        {
+          "title": "O4: Azure AI Foundry",
+          "path": "/learning/o4-azure-ai-foundry",
+          "layer": "Operations"
+        },
+        {
+          "title": "O5: AI Infrastructure",
+          "path": "/learning/o5-ai-infrastructure",
+          "layer": "Operations"
+        },
+        {
+          "title": "O6: Copilot Ecosystem",
+          "path": "/learning/o6-copilot-ecosystem",
+          "layer": "Operations"
+        },
+        {
+          "title": "T1: Fine-Tuning & MLOps",
+          "path": "/learning/t1-fine-tuning-mlops",
+          "layer": "Transformation"
+        },
+        {
+          "title": "T2: Responsible AI",
+          "path": "/learning/t2-responsible-ai",
+          "layer": "Transformation"
+        },
+        {
+          "title": "T3: Production Patterns",
+          "path": "/learning/t3-production-patterns",
+          "layer": "Transformation"
+        }
+      ]
+    },
+    {
+      "title": "Guides",
+      "path": "/guides",
+      "icon": "🗺️",
+      "children": [
+        {
+          "title": "Deploy Your First Play",
+          "path": "/guides/deploy-first-play"
+        },
+        {
+          "title": "Create a Custom Agent",
+          "path": "/guides/create-agent"
+        },
+        {
+          "title": "Migrate from LangChain",
+          "path": "/guides/migrate-from-langchain"
+        },
+        {
+          "title": "Enterprise Deployment",
+          "path": "/guides/enterprise-deployment"
+        },
+        {
+          "title": "Troubleshooting",
+          "path": "/guides/troubleshooting"
+        }
+      ]
+    },
+    {
+      "title": "Solution Plays",
+      "path": "/solution-plays",
+      "icon": "🎯"
+    },
+    {
+      "title": "Primitives",
+      "path": "/primitives",
+      "icon": "🧩",
+      "children": [
+        {
+          "title": "Agents",
+          "path": "/primitives/agents"
+        },
+        {
+          "title": "Skills",
+          "path": "/primitives/skills"
+        },
+        {
+          "title": "Instructions",
+          "path": "/primitives/instructions"
+        },
+        {
+          "title": "Hooks",
+          "path": "/primitives/hooks"
+        },
+        {
+          "title": "Plugins",
+          "path": "/primitives/plugins"
+        },
+        {
+          "title": "Workflows",
+          "path": "/primitives/workflows"
+        }
+      ]
+    },
+    {
+      "title": "API Reference",
+      "path": "/api-reference",
+      "icon": "📖",
+      "children": [
+        {
+          "title": "MCP Tools",
+          "path": "/api-reference/mcp-tools"
+        },
+        {
+          "title": "CLI",
+          "path": "/api-reference/cli"
+        },
+        {
+          "title": "JSON Schemas",
+          "path": "/api-reference/schemas"
+        }
+      ]
+    },
+    {
+      "title": "Specialties",
+      "path": "/specialties",
+      "icon": "⚡",
+      "children": [
+        {
+          "title": "FAI Memory",
+          "path": "/specialties/memory",
+          "icon": "🧠"
+        },
+        {
+          "title": "FAI Context",
+          "path": "/specialties/context",
+          "icon": "🔗"
+        },
+        {
+          "title": "FAI Sessions",
+          "path": "/specialties/sessions",
+          "icon": "🔄"
+        },
+        {
+          "title": "FAI Reasoning",
+          "path": "/specialties/reasoning",
+          "icon": "🤔"
+        },
+        {
+          "title": "FAI Planning",
+          "path": "/specialties/planning",
+          "icon": "📋"
+        },
+        {
+          "title": "FAI Human-in-the-Loop",
+          "path": "/specialties/hitl",
+          "icon": "👤"
+        },
+        {
+          "title": "FAI Replay",
+          "path": "/specialties/replay",
+          "icon": "🔁"
+        },
+        {
+          "title": "FAI Knowledge Graphs",
+          "path": "/specialties/graphs",
+          "icon": "📊"
+        },
+        {
+          "title": "FAI Agentic Coding",
+          "path": "/specialties/coding",
+          "icon": "💻"
+        },
+        {
+          "title": "FAI Voice",
+          "path": "/specialties/voice",
+          "icon": "🎤"
+        },
+        {
+          "title": "FAI Trust",
+          "path": "/specialties/trust",
+          "icon": "🔐"
+        },
+        {
+          "title": "FAI Federation",
+          "path": "/specialties/federation",
+          "icon": "🌐"
+        }
+      ]
+    }
+  ]
+}

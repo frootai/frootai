@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.567Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "69-carbon-footprint-tracker",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\69-carbon-footprint-tracker\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-69-carbon-footprint-tracker",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_69",
+        "description": "FAI Skill: deploy-69",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-69/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_69",
+        "description": "FAI Skill: evaluate-69",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-69/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_69",
+        "description": "FAI Skill: tune-69",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-69/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "cost-optimization",
+      "operational-excellence",
+      "responsible-ai",
+      "reliability"
+    ],
+    "scope": "69-carbon-footprint-tracker"
+  }
+}

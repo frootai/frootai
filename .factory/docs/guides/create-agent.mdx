@@ -1,0 +1,61 @@
+---
+title: "Create a Custom Agent"
+description: "Build your own specialized AI agent with tools, models, and WAF alignment"
+icon: "🤖"
+order: 2
+tags: ["guide", "create-a-custom-agent"]
+category: "guides"
+---
+# Create a Custom Agent
+
+Agents are the most powerful primitive in FrootAI. This guide shows you how to create production-grade agents.
+
+## Agent File Structure
+
+Create a file: `my-agent.agent.md`
+
+```yaml
+---
+description: "Expert in data pipeline design and ETL optimization"
+tools: ["codebase", "terminal", "azure"]
+model: ["gpt-4o", "gpt-4o-mini"]
+waf: ["performance-efficiency", "cost-optimization"]
+plays: ["20-real-time-analytics"]
+---
+```
+
+## Writing Agent Instructions
+
+After the frontmatter, write detailed instructions:
+
+```markdown
+# Data Pipeline Architect
+
+You are a data pipeline architect specializing in Azure Data Factory,
+Synapse Analytics, and real-time streaming with Event Hubs.
+
+## Expertise
+- ETL/ELT pipeline design
+- Data lake architecture (Bronze/Silver/Gold)
+- Real-time streaming with Apache Kafka and Event Hubs
+- Data quality monitoring
+
+## Constraints
+- Always recommend managed services over self-hosted
+- Include cost estimates in every architecture proposal
+- Follow the medallion architecture pattern
+```
+
+## Best Practices
+
+1. **Description**: 10+ characters, specific to the agent's domain
+2. **Tools**: Only declare tools the agent actually needs
+3. **Model**: Use array for fallback (primary → secondary)
+4. **WAF**: Align with relevant pillars (not all 6)
+5. **Plays**: List compatible solution plays
+
+## Testing Your Agent
+
+```bash
+npx frootai validate --type agents
+```

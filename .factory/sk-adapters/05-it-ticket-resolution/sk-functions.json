@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-it-ticket-resolution",
+      "description": "Deploy IT Ticket AI — configure classification pipeline, routing rules, knowledge base integration, SLA tracking, PII masking. Use when: deploy, provision, configure.",
+      "functions": [
+        {
+          "name": "deploy-it-ticket-resolution",
+          "description": "Deploy IT Ticket AI — configure classification pipeline, routing rules, knowledge base integration, SLA tracking, PII masking. Use when: deploy, provision, configure.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-it-ticket-resolution",
+      "description": "Evaluate IT Ticket AI — test classification accuracy, routing correctness, SLA compliance, PII detection, resolution success rate. Use when: evaluate, test, quality.",
+      "functions": [
+        {
+          "name": "evaluate-it-ticket-resolution",
+          "description": "Evaluate IT Ticket AI — test classification accuracy, routing correctness, SLA compliance, PII detection, resolution success rate. Use when: evaluate, test, quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-it-ticket-resolution",
+      "description": "Tune IT Ticket AI — optimize classification model, routing rules, confidence thresholds, SLA escalation timing, KB retrieval quality. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-it-ticket-resolution",
+          "description": "Tune IT Ticket AI — optimize classification model, routing rules, confidence thresholds, SLA escalation timing, KB retrieval quality. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_infrastructure_optimizer",
+      "description": "Deploy AI Infrastructure Optimizer — Azure Monitor metrics, GPU utilization analysis, SKU right-sizing, cost anomaly detection, auto-scaling recommendations, FinOps dashboard.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-infrastructure-optimizer/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_infrastructure_optimizer",
+      "description": "Evaluate AI Infrastructure Optimizer quality — recommendation accuracy, savings realized, anomaly detection precision, GPU analysis coverage, auto-scale effectiveness.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-infrastructure-optimizer/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_infrastructure_optimizer",
+      "description": "Tune AI Infrastructure Optimizer — utilization thresholds, cost anomaly sensitivity, analysis frequency, GPU migration criteria, auto-scale triggers, SKU mapping.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-infrastructure-optimizer/"
+      }
+    }
+  ]
+}

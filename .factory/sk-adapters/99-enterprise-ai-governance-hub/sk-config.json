@@ -1,0 +1,99 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.659Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "99-enterprise-ai-governance-hub",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\99-enterprise-ai-governance-hub\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-99-enterprise-ai-governance-hub",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-99",
+        "description": "Skill: deploy-99",
+        "functions": [
+          {
+            "name": "deploy-99",
+            "description": "Skill: deploy-99",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-99",
+        "description": "Skill: evaluate-99",
+        "functions": [
+          {
+            "name": "evaluate-99",
+            "description": "Skill: evaluate-99",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-99",
+        "description": "Skill: tune-99",
+        "functions": [
+          {
+            "name": "tune-99",
+            "description": "Skill: tune-99",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "T2-Responsible-AI",
+      "O4-Azure-AI",
+      "O5-Infrastructure"
+    ],
+    "waf": [
+      "security",
+      "responsible-ai",
+      "operational-excellence",
+      "reliability",
+      "cost-optimization"
+    ],
+    "scope": "99-enterprise-ai-governance-hub"
+  }
+}

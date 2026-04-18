@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-predictive-maintenance-ai",
+      "description": "Deploy Predictive Maintenance AI — IoT sensor ingestion, multivariate feature engineering, RUL model, condition-based scheduling, root cause analysis, failure pattern recognition.",
+      "functions": [
+        {
+          "name": "deploy-predictive-maintenance-ai",
+          "description": "Deploy Predictive Maintenance AI — IoT sensor ingestion, multivariate feature engineering, RUL model, condition-based scheduling, root cause analysis, failure pattern recognition.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-predictive-maintenance-ai",
+      "description": "Evaluate Predictive Maintenance AI quality — RUL accuracy (MAE), false alarm rate, critical failure detection, downtime reduction, root cause quality.",
+      "functions": [
+        {
+          "name": "evaluate-predictive-maintenance-ai",
+          "description": "Evaluate Predictive Maintenance AI quality — RUL accuracy (MAE), false alarm rate, critical failure detection, downtime reduction, root cause quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-predictive-maintenance-ai",
+      "description": "Tune Predictive Maintenance AI — RUL thresholds, feature selection, sensor sampling, model retrain frequency, alert aggregation, cost of downtime vs maintenance.",
+      "functions": [
+        {
+          "name": "tune-predictive-maintenance-ai",
+          "description": "Tune Predictive Maintenance AI — RUL thresholds, feature selection, sensor sampling, model retrain frequency, alert aggregation, cost of downtime vs maintenance.",
+          "parameters": [
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

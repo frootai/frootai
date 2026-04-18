@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_synthetic_data_factory",
+      "description": "Deploy Synthetic Data Factory — LLM text generation, CTGAN tabular data, differential privacy, schema-driven pipelines, batch processing, statistical validation, PII-free output.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-synthetic-data-factory/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_synthetic_data_factory",
+      "description": "Evaluate Synthetic Data Factory quality — distribution fidelity (KS test), privacy (PII leakage, re-identification risk), data diversity, correlation preservation, downstream utility.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-synthetic-data-factory/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_synthetic_data_factory",
+      "description": "Tune Synthetic Data Factory — generation temperature, CTGAN epochs, batch size, PII markers, differential privacy budget, correlation preservation, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-synthetic-data-factory/"
+      }
+    }
+  ]
+}

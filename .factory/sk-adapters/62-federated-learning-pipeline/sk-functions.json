@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-federated-learning-pipeline",
+      "description": "Deploy Federated Learning Pipeline — FedAvg server, client local training, differential privacy, secure aggregation via Confidential Computing, convergence monitoring, non-IID handling.",
+      "functions": [
+        {
+          "name": "deploy-federated-learning-pipeline",
+          "description": "Deploy Federated Learning Pipeline — FedAvg server, client local training, differential privacy, secure aggregation via Confidential Computing, convergence monitoring, non-IID handling.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-federated-learning-pipeline",
+      "description": "Evaluate Federated Learning Pipeline quality — convergence speed, model accuracy, privacy budget consumption, client contribution fairness, communication efficiency.",
+      "functions": [
+        {
+          "name": "evaluate-federated-learning-pipeline",
+          "description": "Evaluate Federated Learning Pipeline quality — convergence speed, model accuracy, privacy budget consumption, client contribution fairness, communication efficiency.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-federated-learning-pipeline",
+      "description": "Tune Federated Learning Pipeline — DP epsilon/delta, client selection, aggregation strategy, convergence threshold, learning rate schedule, non-IID handling, cost.",
+      "functions": [
+        {
+          "name": "tune-federated-learning-pipeline",
+          "description": "Tune Federated Learning Pipeline — DP epsilon/delta, client selection, aggregation strategy, convergence threshold, learning rate schedule, non-IID handling, cost.",
+          "parameters": [
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_customer_support_v2",
+      "description": "Deploy AI Customer Support V2 — multi-channel (chat/email/voice), intent classification with slot filling, knowledge-grounded responses, sentiment-aware escalation, session memory, CSAT tracking.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-customer-support-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_customer_support_v2",
+      "description": "Evaluate AI Customer Support V2 quality — intent accuracy, resolution rate, CSAT score, escalation appropriateness, KB grounding, response quality across channels.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-customer-support-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_customer_support_v2",
+      "description": "Tune AI Customer Support V2 — intent thresholds, escalation rules, response tone, KB indexing, channel templates, CSAT optimization, cost per resolution.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-customer-support-v2/"
+      }
+    }
+  ]
+}

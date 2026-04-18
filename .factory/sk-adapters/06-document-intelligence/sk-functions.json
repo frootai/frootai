@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-document-intelligence",
+      "description": "Deploy Document Intelligence — configure Azure Document Intelligence, prebuilt/custom models, indexers, validation rules, PII masking. Use when: deploy, provision.",
+      "functions": [
+        {
+          "name": "deploy-document-intelligence",
+          "description": "Deploy Document Intelligence — configure Azure Document Intelligence, prebuilt/custom models, indexers, validation rules, PII masking. Use when: deploy, provision.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-document-intelligence",
+      "description": "Evaluate Document Intelligence — test field extraction accuracy, table recognition, confidence scores, processing time, human review rate. Use when: evaluate, test.",
+      "functions": [
+        {
+          "name": "evaluate-document-intelligence",
+          "description": "Evaluate Document Intelligence — test field extraction accuracy, table recognition, confidence scores, processing time, human review rate. Use when: evaluate, test.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-document-intelligence",
+      "description": "Tune Document Intelligence — optimize model selection, confidence thresholds, page range processing, batch throughput, cost per document. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-document-intelligence",
+          "description": "Tune Document Intelligence — optimize model selection, confidence thresholds, page range processing, batch throughput, cost per document. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

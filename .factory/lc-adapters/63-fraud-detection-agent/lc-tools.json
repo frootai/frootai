@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_fraud_detection_agent",
+      "description": "Deploy Fraud Detection Agent — three-layer detection (rules <1ms, ML <50ms, graph analysis), explainable decisions (PSD2), fraud ring network analysis, velocity checks, analyst feedback loop.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-fraud-detection-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_fraud_detection_agent",
+      "description": "Evaluate Fraud Detection Agent quality — precision/recall per layer, false positive rate, detection latency, graph coverage, explanation quality, feedback loop effectiveness.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-fraud-detection-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_fraud_detection_agent",
+      "description": "Tune Fraud Detection Agent — rule thresholds, ML model calibration, graph analysis depth, velocity windows, explanation format, feedback loop retrain schedule, cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-fraud-detection-agent/"
+      }
+    }
+  ]
+}

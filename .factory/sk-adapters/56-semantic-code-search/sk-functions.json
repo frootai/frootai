@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-semantic-code-search",
+      "description": "Deploy Semantic Code Search — AST-aware code parsing, function-level embedding, docstring/comment indexing, hybrid keyword+vector search, incremental re-indexing, access control.",
+      "functions": [
+        {
+          "name": "deploy-semantic-code-search",
+          "description": "Deploy Semantic Code Search — AST-aware code parsing, function-level embedding, docstring/comment indexing, hybrid keyword+vector search, incremental re-indexing, access control.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-semantic-code-search",
+      "description": "Evaluate Semantic Code Search quality — NDCG, recall, MRR, search latency, index freshness, access control, embedding model quality.",
+      "functions": [
+        {
+          "name": "evaluate-semantic-code-search",
+          "description": "Evaluate Semantic Code Search quality — NDCG, recall, MRR, search latency, index freshness, access control, embedding model quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-semantic-code-search",
+      "description": "Tune Semantic Code Search — embedding model selection, boost weights (docstring vs code vs comments), query rewriting, top-k, score threshold, indexing batch size, cost.",
+      "functions": [
+        {
+          "name": "tune-semantic-code-search",
+          "description": "Tune Semantic Code Search — embedding model selection, boost weights (docstring vs code vs comments), query rewriting, top-k, score threshold, indexing batch size, cost.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

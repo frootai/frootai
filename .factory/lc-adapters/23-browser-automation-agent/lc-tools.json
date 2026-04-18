@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_browser_automation_agent",
+      "description": "Deploy Browser Automation Agent — configure Playwright, GPT-4o vision for page understanding, DOM state extraction, action execution, domain allowlists. Use when: deploy, provision browser agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-browser-automation-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_browser_automation_agent",
+      "description": "Evaluate Browser Automation Agent — measure task completion rate, action success rate, step efficiency, selector resilience, error recovery. Use when: evaluate, test automation quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-browser-automation-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_browser_automation_agent",
+      "description": "Tune Browser Automation Agent — optimize screenshot frequency, wait strategies, selector methods, action planning prompts, step limits, cost per automation. Use when: tune, optimize browser agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-browser-automation-agent/"
+      }
+    }
+  ]
+}

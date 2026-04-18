@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-recruiter-agent",
+      "description": "Deploy AI Recruiter Agent — resume parsing with PII redaction, bias-aware candidate scoring, job description generation with bias check, explainable factors, fairness testing, EEOC compliance.",
+      "functions": [
+        {
+          "name": "deploy-ai-recruiter-agent",
+          "description": "Deploy AI Recruiter Agent — resume parsing with PII redaction, bias-aware candidate scoring, job description generation with bias check, explainable factors, fairness testing, EEOC compliance.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-recruiter-agent",
+      "description": "Evaluate AI Recruiter Agent quality — matching accuracy, fairness (disparate impact), PII redaction recall, score explainability, job description bias, EEOC compliance.",
+      "functions": [
+        {
+          "name": "evaluate-ai-recruiter-agent",
+          "description": "Evaluate AI Recruiter Agent quality — matching accuracy, fairness (disparate impact), PII redaction recall, score explainability, job description bias, EEOC compliance.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-recruiter-agent",
+      "description": "Tune AI Recruiter Agent — scoring weights, PII detection sensitivity, bias thresholds, matching criteria, JD language rules, cost per screening.",
+      "functions": [
+        {
+          "name": "tune-ai-recruiter-agent",
+          "description": "Tune AI Recruiter Agent — scoring weights, PII detection sensitivity, bias thresholds, matching criteria, JD language rules, cost per screening.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

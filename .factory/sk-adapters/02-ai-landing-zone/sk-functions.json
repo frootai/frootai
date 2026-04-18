@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-landing-zone",
+      "description": "Deploy AI Landing Zone to Azure — validate Bicep with AVM modules, deploy hub-spoke networking, configure private endpoints, set up RBAC, enable monitoring. Use when: deploy, provision, Bicep, infrastructure, landing zone, networking.",
+      "functions": [
+        {
+          "name": "deploy-landing-zone",
+          "description": "Deploy AI Landing Zone to Azure — validate Bicep with AVM modules, deploy hub-spoke networking, configure private endpoints, set up RBAC, enable monitoring. Use when: deploy, provision, Bicep, infrastructure, landing zone, networking.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-landing-zone",
+      "description": "Evaluate AI Landing Zone security and compliance — audit private endpoints, NSG rules, RBAC assignments, diagnostic settings, encryption, network isolation. Use when: evaluate, audit, security, compliance, review, assess.",
+      "functions": [
+        {
+          "name": "evaluate-landing-zone",
+          "description": "Evaluate AI Landing Zone security and compliance — audit private endpoints, NSG rules, RBAC assignments, diagnostic settings, encryption, network isolation. Use when: evaluate, audit, security, compliance, review, assess.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-landing-zone",
+      "description": "Tune AI Landing Zone for production — optimize SKU sizing, reduce cost, configure monitoring thresholds, right-size networking, manage GPU quota. Use when: tune, optimize, cost, SKU, quota, performance, budget.",
+      "functions": [
+        {
+          "name": "tune-landing-zone",
+          "description": "Tune AI Landing Zone for production — optimize SKU sizing, reduce cost, configure monitoring thresholds, right-size networking, manage GPU quota. Use when: tune, optimize, cost, SKU, quota, performance, budget.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

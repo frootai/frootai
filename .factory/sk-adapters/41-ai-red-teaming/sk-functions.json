@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-red-teaming",
+      "description": "Deploy AI Red Teaming framework — automated adversarial attack simulation, jailbreak detection, prompt injection testing, safety scorecards for EU AI Act and NIST AI RMF.",
+      "functions": [
+        {
+          "name": "deploy-ai-red-teaming",
+          "description": "Deploy AI Red Teaming framework — automated adversarial attack simulation, jailbreak detection, prompt injection testing, safety scorecards for EU AI Act and NIST AI RMF.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-red-teaming",
+      "description": "Evaluate AI Red Teaming quality — attack coverage, detection rate, false positive rate, severity accuracy, OWASP LLM Top 10 mapping, compliance scorecard.",
+      "functions": [
+        {
+          "name": "evaluate-ai-red-teaming",
+          "description": "Evaluate AI Red Teaming quality — attack coverage, detection rate, false positive rate, severity accuracy, OWASP LLM Top 10 mapping, compliance scorecard.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-red-teaming",
+      "description": "Tune AI Red Teaming configuration — attack diversity, severity thresholds, detection sensitivity, false positive calibration, regression suite management.",
+      "functions": [
+        {
+          "name": "tune-ai-red-teaming",
+          "description": "Tune AI Red Teaming configuration — attack diversity, severity thresholds, detection sensitivity, false positive calibration, regression suite management.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

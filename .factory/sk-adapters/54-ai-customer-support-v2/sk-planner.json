@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Customer-Support-V2-Builder",
+        "agentRole": "builder",
+        "description": "Customer Support V2 builder - implements multi-channel, intent classification, KB grounding",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Customer-Support-V2-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Customer Support V2 reviewer - audits response quality, escalation logic, CSAT",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Customer-Support-V2-Tuner",
+        "agentRole": "tuner",
+        "description": "Customer Support V2 tuner - optimizes intent accuracy, escalation rate, CSAT",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

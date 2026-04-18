@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_mcp_gateway",
+      "description": "Deploy MCP Gateway — build MCP server with tool definitions, resource handlers, transport (stdio/HTTP/SSE), input validation, sandboxing. Use when: deploy, build MCP server.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-mcp-gateway/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_mcp_gateway",
+      "description": "Evaluate MCP Gateway — test tool invocation accuracy, input validation, transport reliability, LLM tool selection quality, error handling. Use when: evaluate, test MCP server.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-mcp-gateway/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_mcp_gateway",
+      "description": "Tune MCP Gateway — optimize tool descriptions for LLM accuracy, response schemas, transport performance, caching, rate limits. Use when: tune, optimize MCP server.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-mcp-gateway/"
+      }
+    }
+  ]
+}

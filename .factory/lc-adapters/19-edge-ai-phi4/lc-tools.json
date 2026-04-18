@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_edge_ai_phi4",
+      "description": "Deploy Edge AI Phi-4 — convert Phi-4 to ONNX, quantize for edge devices, configure ONNX Runtime, set up IoT Hub cloud sync, build offline-capable inference. Use when: deploy, provision, configure edge AI.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-edge-ai-phi4/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_edge_ai_phi4",
+      "description": "Evaluate Edge AI Phi-4 — benchmark inference speed, memory footprint, quality vs cloud model, offline reliability, battery impact. Use when: evaluate, benchmark edge performance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-edge-ai-phi4/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_edge_ai_phi4",
+      "description": "Tune Edge AI Phi-4 — optimize quantization level, ONNX Runtime threads, prompt compression, cloud sync frequency, hybrid inference routing. Use when: tune, optimize edge performance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-edge-ai-phi4/"
+      }
+    }
+  ]
+}

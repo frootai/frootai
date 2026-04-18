@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.654Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "96-realtime-voice-agent-v2",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\96-realtime-voice-agent-v2\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-96-realtime-voice-agent-v2",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-96",
+        "description": "Skill: deploy-96",
+        "functions": [
+          {
+            "name": "deploy-96",
+            "description": "Skill: deploy-96",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-96",
+        "description": "Skill: evaluate-96",
+        "functions": [
+          {
+            "name": "evaluate-96",
+            "description": "Skill: evaluate-96",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-96",
+        "description": "Skill: tune-96",
+        "functions": [
+          {
+            "name": "tune-96",
+            "description": "Skill: tune-96",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "T3-Production-Patterns",
+      "O3-MCP-Tools"
+    ],
+    "waf": [
+      "performance-efficiency",
+      "reliability",
+      "responsible-ai",
+      "security"
+    ],
+    "scope": "96-realtime-voice-agent-v2"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-synthetic-data-factory",
+      "description": "Deploy Synthetic Data Factory — LLM text generation, CTGAN tabular data, differential privacy, schema-driven pipelines, batch processing, statistical validation, PII-free output.",
+      "functions": [
+        {
+          "name": "deploy-synthetic-data-factory",
+          "description": "Deploy Synthetic Data Factory — LLM text generation, CTGAN tabular data, differential privacy, schema-driven pipelines, batch processing, statistical validation, PII-free output.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-synthetic-data-factory",
+      "description": "Evaluate Synthetic Data Factory quality — distribution fidelity (KS test), privacy (PII leakage, re-identification risk), data diversity, correlation preservation, downstream utility.",
+      "functions": [
+        {
+          "name": "evaluate-synthetic-data-factory",
+          "description": "Evaluate Synthetic Data Factory quality — distribution fidelity (KS test), privacy (PII leakage, re-identification risk), data diversity, correlation preservation, downstream utility.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-synthetic-data-factory",
+      "description": "Tune Synthetic Data Factory — generation temperature, CTGAN epochs, batch size, PII markers, differential privacy budget, correlation preservation, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-synthetic-data-factory",
+          "description": "Tune Synthetic Data Factory — generation temperature, CTGAN epochs, batch size, PII markers, differential privacy budget, correlation preservation, cost optimization.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "functions": [
+    {
+      "name": "deploy-foundry-local-on-device",
+      "description": "Deploy Foundry Local On-Device AI — local model inference with Foundry Local SDK, hardware-aware model selection, hybrid cloud/local routing, offline caching.",
+      "functions": [
+        {
+          "name": "deploy-foundry-local-on-device",
+          "description": "Deploy Foundry Local On-Device AI — local model inference with Foundry Local SDK, hardware-aware model selection, hybrid cloud/local routing, offline caching.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-foundry-local-on-device",
+      "description": "Evaluate Foundry Local On-Device AI quality — local vs cloud response accuracy, latency comparison, cost savings, offline reliability, hardware utilization.",
+      "functions": [
+        {
+          "name": "evaluate-foundry-local-on-device",
+          "description": "Evaluate Foundry Local On-Device AI quality — local vs cloud response accuracy, latency comparison, cost savings, offline reliability, hardware utilization.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-foundry-local-on-device",
+      "description": "Tune Foundry Local On-Device AI — model selection per device class, complexity routing thresholds, quantization levels, prompt optimization for local models, cost savings maximization.",
+      "functions": [
+        {
+          "name": "tune-foundry-local-on-device",
+          "description": "Tune Foundry Local On-Device AI — model selection per device class, complexity routing thresholds, quantization levels, prompt optimization for local models, cost savings maximization.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

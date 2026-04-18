@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-conversation-memory-layer",
+      "description": "Deploy Conversation Memory Layer — configure tiered memory (short-term Redis, long-term Cosmos DB, episodic vector store), compression pipeline, PII-aware storage, recall API. Use when: deploy, provision memory.",
+      "functions": [
+        {
+          "name": "deploy-conversation-memory-layer",
+          "description": "Deploy Conversation Memory Layer — configure tiered memory (short-term Redis, long-term Cosmos DB, episodic vector store), compression pipeline, PII-aware storage, recall API. Use when: deploy, provision memory.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-conversation-memory-layer",
+      "description": "Evaluate Conversation Memory — measure recall accuracy, compression quality, PII scrubbing, memory relevance over time, storage efficiency. Use when: evaluate, test memory quality.",
+      "functions": [
+        {
+          "name": "evaluate-conversation-memory-layer",
+          "description": "Evaluate Conversation Memory — measure recall accuracy, compression quality, PII scrubbing, memory relevance over time, storage efficiency. Use when: evaluate, test memory quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-conversation-memory-layer",
+      "description": "Tune Conversation Memory — optimize compression ratio, recall thresholds, memory TTL per tier, embedding model for recall, storage cost per user. Use when: tune, optimize memory.",
+      "functions": [
+        {
+          "name": "tune-conversation-memory-layer",
+          "description": "Tune Conversation Memory — optimize compression ratio, recall thresholds, memory TTL per tier, embedding model for recall, storage cost per user. Use when: tune, optimize memory.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

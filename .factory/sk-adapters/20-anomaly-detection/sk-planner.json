@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Anomaly-Detection-Builder",
+        "agentRole": "builder",
+        "description": "Anomaly Detection builder - implements detection pipeline, alerting, root cause",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "operational-excellence",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Anomaly-Detection-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Anomaly Detection reviewer - audits sensitivity, false positives, alert routing",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Anomaly-Detection-Tuner",
+        "agentRole": "tuner",
+        "description": "Anomaly Detection tuner - optimizes sensitivity, reduces false positives",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-meeting-assistant",
+      "description": "Deploy AI Meeting Assistant — real-time transcription, speaker diarization, action item extraction, summary generation with Teams/Outlook integration on Azure.",
+      "functions": [
+        {
+          "name": "deploy-ai-meeting-assistant",
+          "description": "Deploy AI Meeting Assistant — real-time transcription, speaker diarization, action item extraction, summary generation with Teams/Outlook integration on Azure.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-meeting-assistant",
+      "description": "Evaluate AI Meeting Assistant quality — transcription accuracy, diarization DER, action item extraction precision, summary quality scoring.",
+      "functions": [
+        {
+          "name": "evaluate-ai-meeting-assistant",
+          "description": "Evaluate AI Meeting Assistant quality — transcription accuracy, diarization DER, action item extraction precision, summary quality scoring.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-meeting-assistant",
+      "description": "Tune AI Meeting Assistant configuration — diarization accuracy, summarization quality, action item extraction, cost optimization, Teams/Outlook integration.",
+      "functions": [
+        {
+          "name": "tune-ai-meeting-assistant",
+          "description": "Tune AI Meeting Assistant configuration — diarization accuracy, summarization quality, action item extraction, cost optimization, Teams/Outlook integration.",
+          "parameters": [
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

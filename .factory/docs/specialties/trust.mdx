@@ -1,0 +1,121 @@
+---
+title: "FAI Trust"
+description: "Protocol-level Trust"
+icon: "🔐"
+order: 11
+editUrl: "engine/specialties/trust.js"
+category: "specialties"
+---
+# FAI Trust
+
+🔐 S-11 — Protocol-level trust.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    identity: {
+      type: 'object',
+      properties: {
+        method: {
+          type: 'string',
+          enum: ['did:web', 'did:key', 'x509', 'api-key', 'mtls'],
+          default: 'did:web',
+          description: 'Identity method. did:web uses W3C Decentralized Identifiers.'
+        },
+        issuer: { type: 'string', description: 'Identity issuer domain (e.g., "frootai.dev").' },
+        subject: { type: 'string', description: 'Agent subject identifier.' },
+        publicKey: { type: 'string', description: 'Public key reference (e.g., "did:web:frootai.dev#key-1").' },
+        expiresAt: { type: 'string', format: 'date-time', description: 'Identity expiry timestamp.' }
+      },
+      additionalProperties: false
+    },
+    capabilities: {
+      type: 'object',
+      properties: {
+        declared: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Capabilities this agent declares (e.g., ["search", "generate", "deploy"]).'
+        },
+        attestedBy: {
+          type: 'string',
+          description: 'Entity that attested these capabilities (e.g., "fai-engine-v1").'
+        },
+        attestedAt: { type: 'string', format: 'date-time' },
+        revocable: { type: 'boolean', default: true },
+        scope: {
+          type: 'string',
+          enum: ['global', 'organization', 'play', 'session'],
+          default: 'play'
+        },
+        constraints: {
+          type: 'object',
+          properties: {
+            maxCostPerAction: { type: 'number', description: 'Max cost in USD per single action.' },
+            rateLimit: { type: 'integer', description: 'Max actions per minute.' },
+            allowedTargets: { type: 'array', items: { type: 'string' }, description: 'Resources this agent can access.' }
+          },
+          additionalProperties: false
+        }
+      },
+      additionalProperties: false
+    },
+    auditChain: {
+      type: 'object',
+      properties: {
+        format: {
+          type: 'string',
+          enum: ['merkle-tree', 'hash-chain', 'append-log', 'none'],
+          default: 'merkle-tree'
+        },
+        anchoring: {
+          type: 'string',
+          enum: ['none', 'blockchain-optional', 'azure-confidential-ledger'],
+          default: 'none'
+        },
+        retention: { type: 'string', pattern: '^[0-9]+(d|m|y)$', default: '365d' }
+      },
+      additionalProperties: false
+    },
+    verification: {
+      type: 'object',
+      properties: {
+        challengeResponse: { type: 'boolean', default: true, description: 'Require challenge-response before delegation.' },
+        mutualAttestation: { type: 'boolean', default: false, description: 'Both parties must attest each other.' },
+        continuousVerification: { type: 'boolean', default: false, description: 'Re-verify periodically during session.' },
+        verificationInterval: { type: 'string', pattern: '^[0-9]+(s|m|h)$', default: '5m' }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `trust` section to your `fai-manifest.json`:
+
+```json
+{
+  "trust": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.trust
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/trust.js)

@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_voice_ai_agent",
+      "description": "Deploy Voice AI Agent — configure dialog state machine, intent detection, multi-turn voice interaction loop, proactive actions, STT/TTS streaming. Use when: deploy, provision voice agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-voice-ai-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_voice_ai_agent",
+      "description": "Evaluate Voice AI Agent — measure intent accuracy, dialog completion rate, latency budget, voice quality (MOS), multi-turn context retention. Use when: evaluate, test voice agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-voice-ai-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_voice_ai_agent",
+      "description": "Tune Voice AI Agent — optimize dialog flow, voice prosody, intent thresholds, response speed, context window management, cost per conversation. Use when: tune, optimize voice agent.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-voice-ai-agent/"
+      }
+    }
+  ]
+}

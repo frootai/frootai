@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-knowledge-management",
+      "description": "Deploy AI Knowledge Management — auto-capture from conversations/docs/tickets, taxonomy generation, semantic dedup, knowledge graph, expertise finder, freshness scoring, access control.",
+      "functions": [
+        {
+          "name": "deploy-ai-knowledge-management",
+          "description": "Deploy AI Knowledge Management — auto-capture from conversations/docs/tickets, taxonomy generation, semantic dedup, knowledge graph, expertise finder, freshness scoring, access control.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-knowledge-management",
+      "description": "Evaluate AI Knowledge Management quality — capture rate, dedup accuracy, taxonomy coverage, expertise finder precision, freshness compliance, retrieval relevance.",
+      "functions": [
+        {
+          "name": "evaluate-ai-knowledge-management",
+          "description": "Evaluate AI Knowledge Management quality — capture rate, dedup accuracy, taxonomy coverage, expertise finder precision, freshness compliance, retrieval relevance.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-knowledge-management",
+      "description": "Tune AI Knowledge Management — capture sources, dedup threshold, taxonomy depth, freshness TTL, expertise weights, retrieval boost, cost per knowledge item.",
+      "functions": [
+        {
+          "name": "tune-ai-knowledge-management",
+          "description": "Tune AI Knowledge Management — capture sources, dedup threshold, taxonomy depth, freshness TTL, expertise weights, retrieval boost, cost per knowledge item.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+---
+title: "Play 35: Play 35 — AI Compliance Engine ⚖️"
+description: "Deploy an AI-powered compliance engine that automatically assesses your AI systems against regulatory frameworks. LLM-based analysis evaluates evidence, assigns risk scores, generates audit-ready repo"
+icon: "🎯"
+order: 35
+editUrl: "solution-plays/35-ai-compliance-engine/README.md"
+tags: ["solution-play", "play-35"]
+---
+# Play 35 — AI Compliance Engine ⚖️
+
+> Automated compliance checking against GDPR, HIPAA, EU AI Act, and SOC 2.
+
+Deploy an AI-powered compliance engine that automatically assesses your AI systems against regulatory frameworks. LLM-based analysis evaluates evidence, assigns risk scores, generates audit-ready reports, and tracks remediation. Covers all major frameworks with 200+ automated checks.
+
+## Quick Start
+```bash
+cd solution-plays/35-ai-compliance-engine
+az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
+code .  # Use @builder for checks/audit, @reviewer for coverage audit, @tuner for FP reduction
+```
+
+## Architecture
+| Service | Purpose |
+|---------|---------|
+| Azure OpenAI (gpt-4o) | Compliance analysis, evidence assessment, risk scoring |
+| Cosmos DB | Compliance evidence store, audit trail |
+| Azure Storage | Reports, evidence snapshots, archives |
+| Azure Functions | Scheduled compliance check execution |
+
+```mermaid
+graph TB
+    subgraph Compliance Team
+        User[Compliance Officer / Auditor]
+        Dashboard[Compliance Dashboard<br/>Findings · Posture Score · Audit Reports]
+    end
+
+    subgraph Scan Engine
+        Functions[Azure Functions<br/>Scan Orchestrator · Rule Evaluator · Report Generator]
+        EventGrid[Azure Event Grid<br/>Resource Change Events · Scan Triggers]
+    end
+
+    subgraph Azure Platform
+        Policy[Azure Policy<br/>Built-in + Custom Definitions · Assignment State]
+        ARG[Azure Resource Graph<br/>Resource Configuration Queries]
+    end
+
+    subgraph AI Engine
+        OpenAI[Azure OpenAI — GPT-4o<br/>Policy Interpretation · Gap Analysis · Remediation]
+        Mini[Azure OpenAI — GPT-4o-mini<br/>Finding Classification · Report Summarization]
+    end
+
+    subgraph Data Layer
+        CosmosDB[Cosmos DB<br/>Findings · Audit Trails · Rule Definitions · Remediation History]
+        Blob[Blob Storage — WORM<br/>Evidence Artifacts · Scan Reports · Policy Documents]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Signing Certs · Encryption Keys]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        LogAnalytics[Log Analytics<br/>Audit Logs · Scan Events · Access History]
+        AppInsights[Application Insights<br/>Scan Performance · Rule Latency]
+    end
+
+    User -->|Configure Rules / View| Dashboard
+    Dashboard -->|Query Findings| CosmosDB
+    EventGrid -->|Resource Changed| Functions
+    Functions -->|Scheduled Scans| ARG
+    Functions -->|Check Policy State| Policy
+    Functions -->|Analyze Compliance| OpenAI
+    Functions -->|Classify & Summarize| Mini
+    Functions -->|Store Findings| CosmosDB
+    Functions -->|Archive Evidence| Blob
+    Functions -->|Generate Report| Dashboard
+    MI -->|Secrets| KV
+    Functions -->|Audit Trail| LogAnalytics
+    Functions -->|Traces| AppInsights
+```
+
+📐 [Full architecture details](architecture.md)
+
+## Supported Frameworks
+| Framework | Checks | Focus |
+|-----------|--------|-------|
+| GDPR | 45 | Data subject rights, consent, breach notification |
+| HIPAA | 38 | PHI protection, access controls, encryption |
+| EU AI Act | 52 | Risk classification, transparency, testing |
+| SOC 2 | 64 | Security, availability, processing integrity |
+| ISO 27001 | 114 | ISMS, risk management, controls |
+
+## Key Metrics
+- Check accuracy: ≥90% · False negative: <5% · Framework coverage: 100% · Risk calibration: ±1 of expert
+
+## DevKit (Compliance-Focused)
+| Primitive | What It Does |
+|-----------|-------------|
+| 3 agents | Builder (checks/audit trail/risk scoring), Reviewer (coverage/evidence/gaps), Tuner (frequency/FP/weights) |
+| 3 skills | Deploy (100 lines), Evaluate (105 lines), Tune (105 lines) |
+| 4 prompts | `/deploy` (compliance engine), `/test` (check execution), `/review` (coverage audit), `/evaluate` (accuracy) |
+
+**Note:** This is a regulatory compliance play. TuneKit covers check frequency per risk level, false positive reduction, risk scoring weight calibration, evidence retention policies, and framework-specific tuning — not AI model parameters.
+
+## Cost
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $50 (PAYG) | $300 (PAYG) | $1,000 (PTU) |
+| Cosmos DB | $5 (Serverless) | $80 (1000 RU/s) | $400 (5000 RU/s) |
+| Azure Functions | $0 (Consumption) | $15 (Consumption) | $120 (Premium EP1) |
+| Event Grid | $0 (Free) | $5 (Standard) | $30 (Standard) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Blob Storage | $2 (Hot LRS) | $20 (Hot LRS+WORM) | $75 (Hot GRS+WORM) |
+| Log Analytics | $0 (Free) | $20 (Pay-per-GB) | $80 (Commitment) |
+| Application Insights | $0 (Free) | $20 (Pay-per-GB) | $80 (Pay-per-GB) |
+| **Total** | **$58/mo** | **$465/mo** | **$1,800/mo** |
+
+💰 [Full cost breakdown](cost.json)
+
+📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/35-ai-compliance-engine](https://frootai.dev/solution-plays/35-ai-compliance-engine)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `35-ai-compliance-engine` |
+| Version | `1.0.0` |
+| Knowledge | T2-Responsible-AI, T3-Production-Patterns, R3-Deterministic-AI |
+| WAF Pillars | security, reliability, responsible-ai, operational-excellence |
+| Groundedness | ≥ 85% |
+| Safety | 0 violations max |

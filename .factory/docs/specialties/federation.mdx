@@ -1,0 +1,150 @@
+---
+title: "FAI Federation"
+description: "Protocol-level Federation"
+icon: "🌐"
+order: 12
+editUrl: "engine/specialties/federation.js"
+category: "specialties"
+---
+# FAI Federation
+
+🌐 S-12 — Protocol-level federation.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    discovery: {
+      type: 'object',
+      properties: {
+        protocol: {
+          type: 'string',
+          enum: ['a2a', 'well-known', 'dns-sd', 'manual'],
+          default: 'a2a',
+          description: 'Agent discovery protocol. "a2a" uses Google Agent-to-Agent standard.'
+        },
+        agentCard: {
+          type: 'string',
+          default: '/.well-known/agent.json',
+          description: 'Path to the agent card (A2A standard).'
+        },
+        registryUrl: {
+          type: 'string',
+          description: 'Central registry URL for federated agent discovery.'
+        },
+        refreshInterval: {
+          type: 'string',
+          pattern: '^[0-9]+(s|m|h)$',
+          default: '1h',
+          description: 'How often to refresh the agent registry.'
+        }
+      },
+      additionalProperties: false
+    },
+    trust: {
+      type: 'object',
+      properties: {
+        method: {
+          type: 'string',
+          enum: ['mutual-tls', 'oauth2', 'api-key', 'did-verification', 'none'],
+          default: 'mutual-tls'
+        },
+        allowList: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Allowed partner domains (e.g., ["partner-org.dev", "acme.com"]).'
+        },
+        denyList: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Explicitly denied domains.'
+        },
+        requireAttestation: {
+          type: 'boolean',
+          default: true,
+          description: 'Require FAI Trust attestation before accepting delegation.'
+        }
+      },
+      additionalProperties: false
+    },
+    dataSharing: {
+      type: 'object',
+      properties: {
+        policy: {
+          type: 'string',
+          enum: ['none', 'aggregated-only', 'anonymized', 'full-with-consent'],
+          default: 'aggregated-only',
+          description: 'Data sharing policy across federation boundaries.'
+        },
+        pii: {
+          type: 'string',
+          enum: ['never-cross-boundary', 'encrypted-only', 'with-consent'],
+          default: 'never-cross-boundary'
+        },
+        maxPayloadSize: {
+          type: 'integer',
+          default: 1048576,
+          description: 'Max request/response payload in bytes (1MB default).'
+        },
+        auditRequired: {
+          type: 'boolean',
+          default: true,
+          description: 'All cross-boundary data exchanges must be audited.'
+        }
+      },
+      additionalProperties: false
+    },
+    routing: {
+      type: 'object',
+      properties: {
+        strategy: {
+          type: 'string',
+          enum: ['direct', 'gateway', 'mesh', 'hierarchical'],
+          default: 'gateway',
+          description: 'How agents communicate across organizations.'
+        },
+        timeout: { type: 'string', pattern: '^[0-9]+(s|m)$', default: '30s' },
+        retries: { type: 'integer', minimum: 0, default: 2 },
+        circuitBreaker: {
+          type: 'object',
+          properties: {
+            enabled: { type: 'boolean', default: true },
+            failureThreshold: { type: 'integer', default: 5 },
+            resetTimeout: { type: 'string', pattern: '^[0-9]+(s|m)$', default: '60s' }
+          },
+          additionalProperties: false
+        }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `federation` section to your `fai-manifest.json`:
+
+```json
+{
+  "federation": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.federation
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/federation.js)

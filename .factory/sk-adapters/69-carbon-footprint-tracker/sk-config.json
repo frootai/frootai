@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.611Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "69-carbon-footprint-tracker",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\69-carbon-footprint-tracker\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-69-carbon-footprint-tracker",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-69",
+        "description": "Skill: deploy-69",
+        "functions": [
+          {
+            "name": "deploy-69",
+            "description": "Skill: deploy-69",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-69",
+        "description": "Skill: evaluate-69",
+        "functions": [
+          {
+            "name": "evaluate-69",
+            "description": "Skill: evaluate-69",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-69",
+        "description": "Skill: tune-69",
+        "functions": [
+          {
+            "name": "tune-69",
+            "description": "Skill: tune-69",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "cost-optimization",
+      "operational-excellence",
+      "responsible-ai",
+      "reliability"
+    ],
+    "scope": "69-carbon-footprint-tracker"
+  }
+}

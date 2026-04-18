@@ -1,0 +1,65 @@
+---
+title: "Troubleshooting"
+description: "Common issues and solutions for FrootAI development"
+icon: "🔧"
+order: 10
+tags: ["guide", "troubleshooting"]
+category: "guides"
+---
+# Troubleshooting
+
+Solutions to common issues when working with FrootAI.
+
+## MCP Server Issues
+
+### "Connection refused" when starting MCP server
+```bash
+# Check if port is in use
+netstat -ano | findstr :3000
+
+# Try a different port
+FAI_PORT=3001 npx frootai-mcp@latest
+```
+
+### MCP tools returning stale data
+The MCP server caches knowledge.json in memory. Restart to refresh:
+```bash
+# Kill existing server
+# Restart
+npx frootai-mcp@latest
+```
+
+## Validation Errors
+
+### "Missing fai-manifest.json"
+Ensure your play has `spec/fai-manifest.json`:
+```bash
+npx frootai validate --verbose
+```
+
+### "Agent description too short"
+Agent frontmatter must have `description` with 10+ characters:
+```yaml
+---
+description: "Expert in RAG pipeline design and optimization"  # ✅ Good
+---
+```
+
+## Infrastructure Deployment
+
+### Bicep deployment fails with "QuotaExceeded"
+Check your Azure OpenAI quota:
+```bash
+az cognitiveservices usage list --location eastus2
+```
+
+### Terraform state lock
+```bash
+terraform force-unlock <lock-id>
+```
+
+## Getting Help
+
+- [GitHub Issues](https://github.com/frootai/frootai/issues)
+- [Community](https://frootai.dev/community)
+- Ask Agent FAI: `npx frootai-mcp@latest` → use `search_knowledge` tool

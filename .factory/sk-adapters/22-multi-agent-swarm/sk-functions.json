@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-multi-agent-swarm",
+      "description": "Deploy Multi-Agent Swarm — configure decentralized agent topology, bidding protocol, consensus voting, parallel execution, conflict resolution, swarm state store. Use when: deploy, provision swarm.",
+      "functions": [
+        {
+          "name": "deploy-multi-agent-swarm",
+          "description": "Deploy Multi-Agent Swarm — configure decentralized agent topology, bidding protocol, consensus voting, parallel execution, conflict resolution, swarm state store. Use when: deploy, provision swarm.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-multi-agent-swarm",
+      "description": "Evaluate Multi-Agent Swarm — measure consensus quality, bidding efficiency, vote agreement rate, parallel speedup, cost per swarm task. Use when: evaluate, benchmark swarm.",
+      "functions": [
+        {
+          "name": "evaluate-multi-agent-swarm",
+          "description": "Evaluate Multi-Agent Swarm — measure consensus quality, bidding efficiency, vote agreement rate, parallel speedup, cost per swarm task. Use when: evaluate, benchmark swarm.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-multi-agent-swarm",
+      "description": "Tune Multi-Agent Swarm — optimize swarm size, bidding strategy, voting thresholds, agent model selection, parallel execution limits, cost per task. Use when: tune, optimize swarm.",
+      "functions": [
+        {
+          "name": "tune-multi-agent-swarm",
+          "description": "Tune Multi-Agent Swarm — optimize swarm size, bidding strategy, voting thresholds, agent model selection, parallel execution limits, cost per task. Use when: tune, optimize swarm.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

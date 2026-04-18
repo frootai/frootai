@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Observability-Builder",
+        "agentRole": "builder",
+        "description": "AI Observability builder - implements tracing, metrics, dashboards, alerts",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "operational-excellence",
+            "reliability",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Observability-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Observability reviewer - audits data collection, PII, alert coverage",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "operational-excellence",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Observability-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Observability tuner - optimizes sampling, thresholds, storage cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.587Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "81-property-valuation-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\81-property-valuation-ai\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-81-property-valuation-ai",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_81",
+        "description": "FAI Skill: deploy-81",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-81/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_81",
+        "description": "FAI Skill: evaluate-81",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-81/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_81",
+        "description": "FAI Skill: tune-81",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-81/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T3-Production-Patterns",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "reliability",
+      "responsible-ai",
+      "security",
+      "cost-optimization"
+    ],
+    "scope": "81-property-valuation-ai"
+  }
+}

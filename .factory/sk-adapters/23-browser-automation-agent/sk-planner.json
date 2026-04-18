@@ -1,0 +1,21 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 2,
+    "steps": [
+      {
+        "stepName": "Browser-Automation-Agent",
+        "agentRole": "executor",
+        "description": "Browser automation agent — navigates websites, extracts data, fills forms, and executes multi-step web workflows using Playwright MCP and GPT-4o Vision. Operates with domain allowlists and human approval for transactions.",
+        "model": "gpt-4o",
+        "tools": [],
+        "order": 0,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/browser-agent.agent.md",
+          "waf": []
+        }
+      }
+    ]
+  }
+}

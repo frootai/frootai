@@ -1,0 +1,318 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.365Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "06-document-intelligence",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\06-document-intelligence\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-06-document-intelligence",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_document_intelligence",
+        "description": "Deploy Document Intelligence — configure Azure Document Intelligence, prebuilt/custom models, indexers, validation rules, PII masking. Use when: deploy, provision.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Document content"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/deploy-document-intelligence/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_document_intelligence",
+        "description": "Evaluate Document Intelligence — test field extraction accuracy, table recognition, confidence scores, processing time, human review rate. Use when: evaluate, test.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Document content"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/evaluate-document-intelligence/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_document_intelligence",
+        "description": "Tune Document Intelligence — optimize model selection, confidence thresholds, page range processing, batch throughput, cost per document. Use when: tune, optimize.",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Document content"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "./.github/skills/tune-document-intelligence/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [
+      {
+        "id": "Document_Intelligence_Builder",
+        "type": "agent",
+        "role": "builder",
+        "name": "Document Intelligence Builder",
+        "description": "Document Intelligence builder - implements OCR extraction, form processing, validation",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "id": "Document_Intelligence_Reviewer",
+        "type": "agent",
+        "role": "reviewer",
+        "name": "Document Intelligence Reviewer",
+        "description": "Document Intelligence reviewer - audits extraction accuracy, PII handling",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "id": "Document_Intelligence_Tuner",
+        "type": "agent",
+        "role": "tuner",
+        "name": "Document Intelligence Tuner",
+        "description": "Document Intelligence tuner - optimizes model selection, throughput, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "__start__",
+        "target": "Document_Intelligence_Builder",
+        "condition": null
+      },
+      {
+        "source": "Document_Intelligence_Builder",
+        "target": "Document_Intelligence_Reviewer",
+        "condition": null
+      },
+      {
+        "source": "Document_Intelligence_Reviewer",
+        "target": "Document_Intelligence_Tuner",
+        "condition": null
+      },
+      {
+        "source": "Document_Intelligence_Tuner",
+        "target": "__end__",
+        "condition": null
+      }
+    ],
+    "entryPoint": "Document_Intelligence_Builder",
+    "finishPoint": "Document_Intelligence_Tuner"
+  },
+  "callbacks": [
+    {
+      "handler": "guardrail_groundedness",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "QAEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_coherence",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_relevance",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_safety",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "CriteriaEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_costPerQuery",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.05",
+      "threshold": 0.05,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "class": "ChatPromptTemplate",
+      "name": "azure_coding",
+      "description": "Azure coding patterns and best practices for Document Intelligence",
+      "template": "# Azure Coding Patterns — Document Intelligence\n\n## Authentication — Managed Identity First\nAlways use `DefaultAzureCredential` for Azure service authentication:\n\n```python\nfrom azure.identity import DefaultAzureCredential\nfrom azure.ai.openai import AzureOpenAI\n\ncredential = DefaultAzureCredential()\nclient = AzureOpenAI(\n    azure_endpoint=os.environ[\"AZURE_OPENAI_ENDPOINT\"],\n    azure_ad_token_provider=get_bearer_token_provider(credential, \"https://cognitiveservices.azure.com/.default\"),\n    api_version=\"2024-12-01-preview\"\n)\n```\n\n**Never do this:**\n```python\n# ❌ WRONG: API key in code\nclient = AzureOpenAI(api_key=\"sk-abc123...\")\n# ❌ WRONG: API key from env without Managed Identity\nclient = AzureOpenAI(api_key=os.environ[\"OPENAI_API_KEY\"])\n```\n\n## Azure SDK Error Handling\nWrap all Azure SDK calls with retry and proper error handling:\n\n```python\nfrom azure.core.exceptions import HttpResponseError, ServiceRequestError\nfrom tenacity import retry, stop_after_attempt, wait_exponential\n\n@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=30))\nasync def call_azure_openai(prompt: str) -> str:\n    try:\n        response = await client.chat.completions.create(\n            model=config[\"model\"],\n            messages=[{\"role\": \"user\", \"content\": prompt}],\n            temperature=config[\"temperature\"],\n            max_tokens=config[\"max_tokens\"]\n        )\n        return response.choices[0].message.content\n    except HttpResponseError as e:\n        if e.status_code == 429:\n            logger.warning(f\"Rate limited, retrying... (retry-after: {e.headers.get('Retry-After', 'unknown')})\")\n            raise  # Let tenacity handle retry\n        elif e.status_code == 404:\n            logger.error(f\"Model deployment not found: {config['model']}\")\n            raise ValueError(f\"Model {config['model']} not deployed\")\n        else:\n            logger.error(f\"Azure OpenAI error: {e.status_code} - {e.message}\")\n            raise\n    except ServiceRequestError as e:\n        logger.error(f\"Network error calling Azure OpenAI: {e}\")\n        raise\n```\n\n## Key Vault Integration\nStore and retrieve secrets using Azure Key Vault:\n\n```python\nfrom azure.keyvault.secrets import SecretClient\n\ncredential = DefaultAzureCredential()\nsecret_client = SecretClient(vault_url=os.environ[\"AZURE_KEY_VAULT_URL\"], credential=credential)\n\n# Retrieve secrets at startup, cache in memory\nconnection_string = secret_client.get_secret(\"database-connection-string\").value\n```\n\n## Application Insights Logging\nUse structured logging with correlation IDs:\n\n```python\nfrom azure.monitor.opentelemetry import configure_azure_monitor\nfrom opentelemetry import trace\n\nconfigure_azure_monitor(connection_string=os.environ[\"APPLICATIONINSIGHTS_CONNECTION_STRING\"])\ntracer = trace.get_tracer(__name__)\n\n@tracer.start_as_current_span(\"process_request\")\nasync def process_request(request_id: str, data: dict):\n    span = trace.get_current_span()\n    span.set_attribute(\"request.id\", request_id)\n    span.set_attribute(\"play.id\", \"06-document-intelligence\")\n    # ... processing logic\n    span.set_attribute(\"tokens.used\", token_count)\n    span.set_attribute(\"model.name\", config[\"model\"])\n```\n\n## Bicep Best Practices\n\n### Module Pattern\n```bicep\n// Use modules for reusable resource groups\nmodule openai 'modules/openai.bicep' = {\n  name: 'openai-deployment'\n  params: {\n    location: location\n    name: '${prefix}-openai'\n    sku: environment == 'prod' ? 'S0' : 'S0'\n    deployments: [\n      { name: 'gpt-4o', model: { name: 'gpt-4o', version: '2024-11-20' }, sku: { name: 'GlobalStandard', capacity: 30 } }\n      { name: 'text-embedding-3-large', model: { name: 'text-embedding-3-large', version: '1' }, sku: { name: 'Standard', capacity: 120 } }\n    ]\n  }\n}\n```\n\n### Conditional Resources\n```bicep\n// Deploy monitoring only in production\nresource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = if (environment == 'prod') {\n  name: '${prefix}-logs'\n  location: location\n ",
+      "input_variables": [
+        "e",
+        "prefix",
+        "project",
+        "environment",
+        "env"
+      ],
+      "template_format": "f-string",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "./.github/instructions/azure-coding.instructions.md",
+        "applyTo": "**/*.{py,ts,js,bicep,json}"
+      }
+    },
+    {
+      "class": "ChatPromptTemplate",
+      "name": "document_intelligence_patterns",
+      "description": "Domain-specific coding patterns for Document Intelligence (Play 06)",
+      "template": "# Document Intelligence — Domain Patterns & Best Practices\n\n## Architecture Pattern\nThis play implements a Document Intelligence architecture with these core components:\n\n### Request Flow\n1. Client sends request to API endpoint\n2. Input validation and sanitization\n3. Authentication check (Managed Identity / Bearer token)\n4. Core processing pipeline:\n   a. Pre-processing: data extraction, normalization, enrichment\n   b. AI processing: model inference, embedding, search, generation\n   c. Post-processing: output validation, formatting, safety check\n5. Response with structured output and metadata\n6. Async logging: metrics, traces, audit events\n\n### Component Responsibilities\n| Component | Responsibility | Key Patterns |\n|-----------|---------------|-------------|\n| API Gateway | Routing, rate limiting, auth | APIM policies, JWT validation |\n| Application | Business logic, orchestration | Async/await, dependency injection |\n| AI Services | Model inference, embeddings | Retry with backoff, circuit breaker |\n| Data Store | Persistence, caching | Connection pooling, read replicas |\n| Monitoring | Observability, alerting | Structured logs, custom metrics |\n\n## Domain-Specific Patterns\n\n### Data Processing Pipeline\n```python\nfrom dataclasses import dataclass\nfrom typing import List, Optional\nimport asyncio\n\n@dataclass\nclass ProcessingResult:\n    \"\"\"Result from the processing pipeline.\"\"\"\n    data: dict\n    metadata: dict\n    quality_score: float\n    processing_time_ms: float\n\nclass ProcessingPipeline:\n    \"\"\"Multi-stage processing pipeline for Document Intelligence.\"\"\"\n    \n    def __init__(self, config: dict):\n        self.config = config\n        self.stages = []\n    \n    def add_stage(self, stage_fn, name: str):\n        self.stages.append({\"fn\": stage_fn, \"name\": name})\n    \n    async def execute(self, input_data: dict) -> ProcessingResult:\n        import time\n        start = time.monotonic()\n        current = input_data\n        metadata = {\"stages\": []}\n        \n        for stage in self.stages:\n            stage_start = time.monotonic()\n            try:\n                current = await stage[\"fn\"](current)\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"success\",\n                    \"duration_ms\": round((time.monotonic() - stage_start) * 1000, 2)\n                })\n            except Exception as e:\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"error\",\n                    \"error\": str(e)\n                })\n                raise\n        \n        return ProcessingResult(\n            data=current,\n            metadata=metadata,\n            quality_score=current.get(\"quality_score\", 0.0),\n            processing_time_ms=round((time.monotonic() - start) * 1000, 2)\n        )\n```\n\n### Configuration Management\n```python\nimport json\nfrom pathlib import Path\nfrom functools import lru_cache\n\n@lru_cache(maxsize=1)\ndef load_play_config() -> dict:\n    \"\"\"Load all config files for this play.\"\"\"\n    config_dir = Path(__file__).parent.parent / \"config\"\n    configs = {}\n    for config_file in config_dir.glob(\"*.json\"):\n        with open(config_file) as f:\n            configs[config_file.stem] = json.load(f)\n    return configs\n\ndef get_model_config() -> dict:\n    \"\"\"Get OpenAI model configuration.\"\"\"\n    config = load_play_config()\n    return config.get(\"openai\", {\"model\": \"gpt-4o\", \"temperature\": 0.1, \"max_tokens\": 4096})\n\ndef get_guardrails() -> dict:\n    \"\"\"Get content safety and guardrail thresholds.\"\"\"\n    config = load_play_config()\n    return config.get(\"guardrails\", {\"content_safety_threshold\": 4, \"groundedness_min\": 0.8})\n```\n\n### Health Check Pattern\n```python\nfrom fastapi import FastAPI, Response\nfrom datetime import datetime\n\napp = FastAPI()\n\n@app.get(\"/health\")\nasync def health_check():\n    checks = {}\n    overall = True\n    \n    # Check Azure OpenAI\n    try:\n        await openai_client.models.list()\n",
+      "input_variables": [
+        "input"
+      ],
+      "template_format": "f-string",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "./.github/instructions/document-intelligence-patterns.instructions.md",
+        "applyTo": "**/*.{py,ts,js}"
+      }
+    },
+    {
+      "class": "ChatPromptTemplate",
+      "name": "security",
+      "description": "Security patterns and OWASP LLM Top 10 mitigations for Document Intelligence",
+      "template": "# Security Patterns — Document Intelligence\n\n## OWASP LLM Top 10 Mitigations\n\n### LLM01: Prompt Injection Defense\n- **System prompt isolation:** Never include user input in the system message\n- **Input sanitization:** Strip control characters, limit length to 4096 tokens\n- **Output validation:** Check LLM responses match expected schema before returning\n- **Delimiter strategy:** Use XML-style delimiters to separate user content from instructions\n\n```python\ndef sanitize_user_input(text: str, max_length: int = 4096) -> str:\n    # Remove control characters\n    import re\n    text = re.sub(r'[\\x00-\\x1f\\x7f-\\x9f]', '', text)\n    # Limit length\n    if len(text) > max_length:\n        text = text[:max_length]\n    # Strip potential injection markers\n    text = text.replace(\"SYSTEM:\", \"\").replace(\"ASSISTANT:\", \"\")\n    return text.strip()\n```\n\n### LLM02: Insecure Output Handling\n- Validate all LLM outputs against JSON schema before returning to users\n- HTML-encode any LLM output displayed in web UI\n- Never execute code generated by LLM without sandbox\n- Log all outputs for audit trail\n\n### LLM03: Training Data Poisoning\n- Use only curated, verified knowledge sources for RAG\n- Implement source attribution for every generated response\n- Monitor groundedness scores — alert if below threshold\n\n### LLM04: Model Denial of Service\n- Set `max_tokens` ceiling on all API calls\n- Implement rate limiting per user/session (e.g., 60 requests/minute)\n- Queue long-running requests with timeout (max 60 seconds)\n- Use circuit breaker pattern for Azure OpenAI calls\n\n### LLM05: Supply Chain Vulnerabilities\n- Pin all Azure SDK versions to exact (no ^ or ~)\n- Run `pip audit` / `npm audit` in CI pipeline\n- Use Microsoft-managed base images for containers\n- Verify package checksums on install\n\n### LLM06: Sensitive Information Disclosure\n- Use Azure Content Safety API for PII detection in inputs and outputs\n- Never log full prompts or responses in production (log metadata only)\n- Implement data masking for known PII patterns (email, phone, SSN)\n- Enable Azure Purview for data classification\n\n```python\nfrom azure.ai.contentsafety import ContentSafetyClient\n\nasync def check_pii(text: str) -> dict:\n    client = ContentSafetyClient(endpoint, credential)\n    result = await client.analyze_text({\"text\": text, \"categories\": [\"PersonallyIdentifiableInformation\"]})\n    return {\"has_pii\": any(c.severity > 0 for c in result.categories_analysis), \"details\": result}\n```\n\n### LLM07: Insecure Plugin Design\n- Validate all MCP tool inputs against JSON schema\n- Implement least-privilege for tool permissions\n- Log all tool invocations with parameters and results\n- Rate-limit tool calls per session\n\n### LLM08: Excessive Agency\n- Define explicit tool allowlists in `config/agents.json`\n- Require human approval for destructive actions (delete, update, deploy)\n- Implement guardrails.json preToolUse hooks for policy enforcement\n- Log all agent decisions and tool selections\n\n### LLM09: Overreliance\n- Always include source citations in generated responses\n- Display confidence scores when available\n- Add disclaimers for generated content in user-facing outputs\n- Implement human-in-the-loop for high-stakes decisions\n\n### LLM10: Model Theft\n- Use Azure Private Endpoints for all AI services\n- Never expose model endpoints publicly\n- Implement API key rotation (90-day cycle minimum)\n- Use Managed Identity — eliminate need for keys entirely\n\n## Azure Security Baseline\n\n### Network Security\n- Deploy all AI services behind Private Endpoints\n- Use Network Security Groups (NSGs) to restrict traffic\n- Enable DDoS Protection Standard on public-facing resources\n- Configure Web Application Firewall (WAF) on API Gateway\n\n### Identity & Access\n- Use Managed Identity for all service-to-service auth\n- Implement RBAC with least-privilege role assignments\n- Enable Conditional Access policies for admin operations\n- Use Azure AD for user authentication (OIDC/OAuth2)\n\n### Data Protection\n- Enable encryption at res",
+      "input_variables": [
+        "input"
+      ],
+      "template_format": "f-string",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "./.github/instructions/security.instructions.md",
+        "applyTo": "**/*.{py,ts,js,bicep,json}"
+      }
+    }
+  ],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "responsible-ai"
+    ],
+    "scope": "document-intelligence-solution"
+  }
+}

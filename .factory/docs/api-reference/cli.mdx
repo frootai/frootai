@@ -1,0 +1,55 @@
+---
+title: "CLI Reference"
+description: "Command-line interface for FAI"
+icon: "⌨️"
+order: 2
+tags: ["cli", "commands"]
+category: "api-reference"
+---
+# CLI Reference
+
+The FrootAI CLI provides command-line access to the FAI ecosystem.
+
+## Installation
+
+```bash
+npm install -g frootai
+# or
+npx frootai@latest
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `fai init <play>` | Scaffold a new solution play |
+| `fai validate` | Validate all primitives in current directory |
+| `fai catalog` | Generate fai-catalog.json from source |
+| `fai diff` | Show changes since last catalog |
+| `fai harvest` | Scan and count all primitives |
+| `fai unify` | Run primitive unification checks |
+| `fai adapt` | Generate framework adapters (SK, LangChain) |
+| `fai search <query>` | Search primitives and knowledge |
+| `fai stats` | Show repository statistics |
+| `fai doctor` | Health check for FAI installation |
+
+## Examples
+
+### Scaffold a new RAG solution
+```bash
+fai init 01-enterprise-rag
+cd 01-enterprise-rag
+fai validate
+```
+
+### Run quality validation
+```bash
+fai validate --fix      # Auto-fix common issues
+fai validate --json     # JSON output for CI
+```
+
+### Search the knowledge base
+```bash
+fai search "how to reduce hallucination"
+fai search "RAG chunking strategies"
+```

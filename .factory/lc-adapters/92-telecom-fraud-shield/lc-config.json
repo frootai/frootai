@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.603Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "92-telecom-fraud-shield",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\92-telecom-fraud-shield\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-92-telecom-fraud-shield",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_92",
+        "description": "FAI Skill: deploy-92",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-92/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_92",
+        "description": "FAI Skill: evaluate-92",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-92/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_92",
+        "description": "FAI Skill: tune-92",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-92/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "R3-Deterministic-AI",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "92-telecom-fraud-shield"
+  }
+}

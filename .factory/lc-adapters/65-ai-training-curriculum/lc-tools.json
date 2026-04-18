@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_training_curriculum",
+      "description": "Deploy AI Training Curriculum — adaptive learning paths, skill gap analysis, dependency-ordered modules, content generation per learning style, interactive assessments, progress tracking.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-training-curriculum/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_training_curriculum",
+      "description": "Evaluate AI Training Curriculum quality — path completion rate, assessment validity, skill gain measurement, content quality, learner satisfaction.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-training-curriculum/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_training_curriculum",
+      "description": "Tune AI Training Curriculum — role-skill matrix, dependency graph, assessment difficulty, content sources, learning style mapping, completion optimization, cost per learner.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-training-curriculum/"
+      }
+    }
+  ]
+}

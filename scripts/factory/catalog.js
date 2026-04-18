@@ -45,7 +45,10 @@ function catalog() {
 
   const harvest = JSON.parse(fs.readFileSync(harvestPath, "utf8"));
 
-  // Build stats
+  // Stats are computed first because they feed into the catalog header
+  // and are used by the website's counts/badges. Simple length counts
+  // plus a totalPrimitives rollup (excludes plays and modules — those
+  // are structural, not standalone primitives).
   const stats = {
     agents: harvest.agents.length,
     skills: harvest.skills.length,
@@ -62,7 +65,11 @@ function catalog() {
       harvest.workflows.length + harvest.cookbook.length,
   };
 
-  // Build cross-reference map: which standalone primitives are used by which plays
+  // Cross-reference map: resolves which standalone primitives (from agents/,
+  // skills/, etc.) are referenced by which solution plays via fai-manifest.json.
+  // Paths starting with "../../" indicate a reference from a play's manifest
+  // back to a standalone primitive in the repo root. This powers the "Used by"
+  // badges on the website and validates that referenced primitives actually exist.
   const crossRefs = {};
   for (const play of harvest.plays) {
     if (!play.hasManifest) continue;
@@ -98,6 +105,10 @@ function catalog() {
     { agents: 0, skills: 0, instructions: 0, hooks: 0 }
   );
 
+  // Catalog assembly order: metadata (version, commit, timestamp) → stats →
+  // embedded stats → cross-refs → raw primitive arrays. This order ensures
+  // consumers can read the header to decide if the catalog is fresh before
+  // parsing the larger primitive arrays.
   const catalog = {
     version: readVersion(),
     generated: new Date().toISOString(),

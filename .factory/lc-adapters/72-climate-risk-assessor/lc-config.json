@@ -1,0 +1,108 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.572Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "72-climate-risk-assessor",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\72-climate-risk-assessor\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-72-climate-risk-assessor",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_72",
+        "description": "FAI Skill: deploy-72",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-72/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_72",
+        "description": "FAI Skill: evaluate-72",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-72/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_72",
+        "description": "FAI Skill: tune-72",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-72/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "cost-optimization"
+    ],
+    "scope": "72-climate-risk-assessor"
+  }
+}

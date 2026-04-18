@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.619Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "74-ai-tutoring-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\74-ai-tutoring-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-74-ai-tutoring-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-74",
+        "description": "Skill: deploy-74",
+        "functions": [
+          {
+            "name": "deploy-74",
+            "description": "Skill: deploy-74",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-74",
+        "description": "Skill: evaluate-74",
+        "functions": [
+          {
+            "name": "evaluate-74",
+            "description": "Skill: evaluate-74",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-74",
+        "description": "Skill: tune-74",
+        "functions": [
+          {
+            "name": "tune-74",
+            "description": "Skill: tune-74",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "O2-AI-Agents",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency"
+    ],
+    "scope": "74-ai-tutoring-agent"
+  }
+}

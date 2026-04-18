@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_computer_use_agent",
+      "description": "Deploy Computer Use Agent — vision-based desktop/web automation with screenshot→reason→act loop, sandbox VM isolation, accessibility API integration, and action replay.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-computer-use-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_computer_use_agent",
+      "description": "Evaluate Computer Use Agent quality — task completion rate, action accuracy, step efficiency, loop detection, safety compliance, vision token cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-computer-use-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_computer_use_agent",
+      "description": "Tune Computer Use Agent configuration — screenshot resolution, vision detail level, action timing, loop detection, coordinate calibration, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-computer-use-agent/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_data_pipeline",
+      "description": "Deploy AI Data Pipeline — configure ETL/ELT with LLM enrichment, batch processing, Data Factory orchestration, data quality checks, PII detection. Use when: deploy, provision data pipeline.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-data-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_data_pipeline",
+      "description": "Evaluate AI Data Pipeline — measure enrichment accuracy, data quality score, throughput, error rate, PII detection coverage, pipeline reliability. Use when: evaluate, test pipeline quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-data-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_data_pipeline",
+      "description": "Tune AI Data Pipeline — optimize batch sizes, LLM enrichment cost, parallelism, partition strategy, scheduling, data quality thresholds. Use when: tune, optimize pipeline.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-data-pipeline/"
+      }
+    }
+  ]
+}

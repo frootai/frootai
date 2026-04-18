@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-translation-engine",
+      "description": "Deploy AI Translation Engine — Azure Translator for bulk NMT, LLM post-editing for nuanced content, custom glossary enforcement, HTML/markdown preservation, batch processing, quality scoring.",
+      "functions": [
+        {
+          "name": "deploy-ai-translation-engine",
+          "description": "Deploy AI Translation Engine — Azure Translator for bulk NMT, LLM post-editing for nuanced content, custom glossary enforcement, HTML/markdown preservation, batch processing, quality scoring.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-translation-engine",
+      "description": "Evaluate AI Translation Engine quality — BLEU/COMET scores, glossary compliance, LLM refinement impact, locale correctness, markup preservation, throughput.",
+      "functions": [
+        {
+          "name": "evaluate-ai-translation-engine",
+          "description": "Evaluate AI Translation Engine quality — BLEU/COMET scores, glossary compliance, LLM refinement impact, locale correctness, markup preservation, throughput.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-translation-engine",
+      "description": "Tune AI Translation Engine — LLM refinement ratio, quality thresholds, glossary coverage, content type routing, batch config, cost per 1K words.",
+      "functions": [
+        {
+          "name": "tune-ai-translation-engine",
+          "description": "Tune AI Translation Engine — LLM refinement ratio, quality thresholds, glossary coverage, content type routing, batch config, cost per 1K words.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

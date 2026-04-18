@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Synthetic-Data-Builder",
+        "agentRole": "builder",
+        "description": "Synthetic Data builder - implements generation pipelines, statistical models, validation",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "security",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Synthetic-Data-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Synthetic Data reviewer - audits privacy guarantees, distribution fidelity, PII leakage",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Synthetic-Data-Tuner",
+        "agentRole": "tuner",
+        "description": "Synthetic Data tuner - optimizes diversity, statistical accuracy, generation cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  }
+}

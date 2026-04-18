@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.628Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "80-biodiversity-monitor",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\80-biodiversity-monitor\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-80-biodiversity-monitor",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-80",
+        "description": "Skill: deploy-80",
+        "functions": [
+          {
+            "name": "deploy-80",
+            "description": "Skill: deploy-80",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-80",
+        "description": "Skill: evaluate-80",
+        "functions": [
+          {
+            "name": "evaluate-80",
+            "description": "Skill: evaluate-80",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-80",
+        "description": "Skill: tune-80",
+        "functions": [
+          {
+            "name": "tune-80",
+            "description": "Skill: tune-80",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "O2-AI-Agents",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency"
+    ],
+    "scope": "80-biodiversity-monitor"
+  }
+}

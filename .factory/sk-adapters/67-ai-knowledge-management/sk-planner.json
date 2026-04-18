@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Knowledge-Mgmt-Builder",
+        "agentRole": "builder",
+        "description": "Knowledge Mgmt builder - implements capture pipeline, taxonomy, expertise finder",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "operational-excellence",
+            "reliability",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Knowledge-Mgmt-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Knowledge Mgmt reviewer - audits knowledge quality, access control, freshness",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Knowledge-Mgmt-Tuner",
+        "agentRole": "tuner",
+        "description": "Knowledge Mgmt tuner - optimizes capture rate, dedup accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

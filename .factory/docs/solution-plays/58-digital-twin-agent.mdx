@@ -1,0 +1,153 @@
+---
+title: "Play 58: Play 58 — Digital Twin Agent"
+description: "AI-powered digital twin — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion via Event Grid, natural language→DTDL query translation, predictive maintenance (Remaining Useful Life), twin g"
+icon: "🎯"
+order: 58
+editUrl: "solution-plays/58-digital-twin-agent/README.md"
+tags: ["solution-play", "play-58"]
+---
+# Play 58 — Digital Twin Agent
+
+AI-powered digital twin — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion via Event Grid, natural language→DTDL query translation, predictive maintenance (Remaining Useful Life), twin graph relationship traversal, event-driven state synchronization, and telemetry archival in Azure Data Explorer.
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Physical World
+        Sensors[IoT Sensors<br/>Temperature · Vibration · Pressure · Flow · Energy]
+        Actuators[Actuators<br/>Valves · Motors · HVAC · Switches · Dampers]
+        Edge[Edge Devices<br/>Gateway · Protocol Translation · Local Processing]
+    end
+
+    subgraph IoT Connectivity
+        IoTHub[Azure IoT Hub<br/>Device Management · Telemetry Routing · C2D Commands]
+    end
+
+    subgraph Twin Platform
+        ADT[Azure Digital Twins<br/>DTDL Models · Twin Graph · Relationships · Live State]
+        EventGrid[Event Grid<br/>Twin Events · Device Events · Simulation Events]
+    end
+
+    subgraph Event Processing
+        Functions[Azure Functions<br/>Telemetry Transform · Graph Handlers · Anomaly Detection]
+    end
+
+    subgraph AI Intelligence
+        AOAI[Azure OpenAI<br/>Simulation Narration · Root-Cause Analysis · NL Queries]
+        Simulation[Simulation Engine<br/>What-If Scenarios · Cascading Effects · Prediction]
+    end
+
+    subgraph Analytics
+        ADX[Azure Data Explorer<br/>Time-Series Store · KQL Analytics · Trend Analysis]
+    end
+
+    subgraph Visualization
+        Dashboard[Operations Dashboard<br/>3D Twin View · Live Metrics · Alerts · Simulation Results]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>IoT Certs · API Keys · Connection Strings]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Sync Latency · Simulation Time · Device Health]
+    end
+
+    Sensors -->|Telemetry| Edge
+    Edge -->|Messages| IoTHub
+    IoTHub -->|Telemetry| Functions
+    Functions -->|Property Updates| ADT
+    ADT -->|Change Events| EventGrid
+    EventGrid -->|Handlers| Functions
+    Functions -->|Anomalies| AOAI
+    ADT -->|Twin State| Simulation
+    Simulation -->|Results| AOAI
+    AOAI -->|Narration| Dashboard
+    IoTHub -->|Raw Data| ADX
+    ADT -->|History| ADX
+    ADX -->|Trends| AOAI
+    AOAI -->|Commands| IoTHub
+    IoTHub -->|C2D| Actuators
+    ADT -->|Live State| Dashboard
+    MI -->|Secrets| KV
+    Functions -->|Traces| AppInsights
+
+    style Sensors fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Actuators fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Edge fill:#3b82f6,color:#fff,stroke:#2563eb
+    style IoTHub fill:#f59e0b,color:#fff,stroke:#d97706
+    style ADT fill:#10b981,color:#fff,stroke:#059669
+    style EventGrid fill:#f59e0b,color:#fff,stroke:#d97706
+    style Functions fill:#10b981,color:#fff,stroke:#059669
+    style AOAI fill:#10b981,color:#fff,stroke:#059669
+    style Simulation fill:#10b981,color:#fff,stroke:#059669
+    style ADX fill:#f59e0b,color:#fff,stroke:#d97706
+    style Dashboard fill:#3b82f6,color:#fff,stroke:#2563eb
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+> Full architecture details: [`architecture.md`](./architecture.md)
+
+## How It Differs from Related Plays
+
+| Aspect | Play 19 (Edge AI) | **Play 58 (Digital Twin)** | Play 34 (Edge Deployment) |
+|--------|-------------------|--------------------------|--------------------------|
+| Model | ONNX on device | **DTDL twin graph in cloud** | ONNX on IoT device |
+| Scope | Single device inference | **Entire facility (building/factory)** | Device fleet |
+| Query | N/A | **NL→DTDL ("overheating machines?")** | N/A |
+| Prediction | Edge inference | **Cloud RUL prediction + LLM explanation** | Edge inference |
+| Relationships | N/A | **Graph: locatedIn, feeds, controls** | N/A |
+| Telemetry | On-device processing | **Streamed to cloud, archived in ADX** | Cloud sync |
+
+## Key Metrics
+
+| Metric | Target | Description |
+|--------|--------|-------------|
+| NL Query Accuracy | > 85% | Correct DTDL generated from natural language |
+| RUL MAE | < 5 days | Maintenance prediction error margin |
+| Critical Detection | > 90% | Failing machines flagged within 7 days |
+| Sync Latency | < 5s | IoT message→twin property update |
+| Telemetry Coverage | > 95% | Sensors actively reporting |
+
+## Cost Estimate
+
+| Service | Dev | Prod | Enterprise |
+|---------|-----|------|------------|
+| Azure OpenAI | $60 | $500 | $2,000 |
+| Azure IoT Hub | $0 | $100 | $500 |
+| Azure Digital Twins | $15 | $150 | $600 |
+| Azure Functions | $0 | $30 | $250 |
+| Azure Event Grid | $1 | $10 | $50 |
+| Azure Data Explorer | $25 | $200 | $800 |
+| Key Vault | $1 | $5 | $15 |
+| Application Insights | $0 | $35 | $100 |
+| **Total** | **$102** | **$1,030** | **$4,315** |
+
+> Detailed breakdown with SKUs and optimization tips: [`cost.json`](./cost.json) · [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
+
+## WAF Alignment
+
+| Pillar | Implementation |
+|--------|---------------|
+| **Reliability** | Event-driven IoT→Twin sync, telemetry archival, twin lifecycle |
+| **Security** | IoT device authentication, managed identity, Key Vault |
+| **Cost Optimization** | ADX Dev tier, gpt-4o-mini for explanations, compressed telemetry |
+| **Operational Excellence** | Twin graph visualization, threshold alerting, prediction dashboards |
+| **Performance Efficiency** | Event-driven (not polling), ADX hot cache for recent queries |
+| **Responsible AI** | Explainable RUL predictions, human review for maintenance decisions |
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `58-digital-twin-agent` |
+| Version | `1.0.0` |
+| Knowledge | T3-Production-Patterns, O2-Agent-Coding, F1-GenAI-Foundations |
+| WAF Pillars | reliability, performance-efficiency, cost-optimization, operational-excellence |
+| Groundedness | ≥ 85% |
+| Safety | 0 violations max |

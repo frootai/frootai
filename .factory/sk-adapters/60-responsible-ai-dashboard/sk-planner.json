@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "RAI-Dashboard-Builder",
+        "agentRole": "builder",
+        "description": "RAI Dashboard builder - implements dashboard, metrics collection, incident tracking",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "responsible-ai",
+            "operational-excellence",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "RAI-Dashboard-Reviewer",
+        "agentRole": "reviewer",
+        "description": "RAI Dashboard reviewer - audits fairness methodology, compliance evidence",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "RAI-Dashboard-Tuner",
+        "agentRole": "tuner",
+        "description": "RAI Dashboard tuner - optimizes monitoring cadence, alert thresholds",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "responsible-ai"
+          ]
+        }
+      }
+    ]
+  }
+}

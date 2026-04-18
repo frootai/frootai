@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-training-curriculum",
+      "description": "Deploy AI Training Curriculum — adaptive learning paths, skill gap analysis, dependency-ordered modules, content generation per learning style, interactive assessments, progress tracking.",
+      "functions": [
+        {
+          "name": "deploy-ai-training-curriculum",
+          "description": "Deploy AI Training Curriculum — adaptive learning paths, skill gap analysis, dependency-ordered modules, content generation per learning style, interactive assessments, progress tracking.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-training-curriculum",
+      "description": "Evaluate AI Training Curriculum quality — path completion rate, assessment validity, skill gain measurement, content quality, learner satisfaction.",
+      "functions": [
+        {
+          "name": "evaluate-ai-training-curriculum",
+          "description": "Evaluate AI Training Curriculum quality — path completion rate, assessment validity, skill gain measurement, content quality, learner satisfaction.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-training-curriculum",
+      "description": "Tune AI Training Curriculum — role-skill matrix, dependency graph, assessment difficulty, content sources, learning style mapping, completion optimization, cost per learner.",
+      "functions": [
+        {
+          "name": "tune-ai-training-curriculum",
+          "description": "Tune AI Training Curriculum — role-skill matrix, dependency graph, assessment difficulty, content sources, learning style mapping, completion optimization, cost per learner.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_powered_testing",
+      "description": "Deploy AI-Powered Testing — configure LLM test generation from source AST, mutation testing framework, test prioritization, CI/CD integration for automated test suites. Use when: deploy, set up test automation.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-powered-testing/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_powered_testing",
+      "description": "Evaluate AI-Powered Testing — measure generated test quality, coverage improvement, mutation score, false positive rate, flaky test rate. Use when: evaluate, audit test quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-powered-testing/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_powered_testing",
+      "description": "Tune AI-Powered Testing — optimize generation prompts, test prioritization, mutation testing config, flaky test handling, model routing per language. Use when: tune, optimize test generation.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-powered-testing/"
+      }
+    }
+  ]
+}

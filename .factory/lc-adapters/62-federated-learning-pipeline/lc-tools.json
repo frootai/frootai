@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_federated_learning_pipeline",
+      "description": "Deploy Federated Learning Pipeline — FedAvg server, client local training, differential privacy, secure aggregation via Confidential Computing, convergence monitoring, non-IID handling.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-federated-learning-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_federated_learning_pipeline",
+      "description": "Evaluate Federated Learning Pipeline quality — convergence speed, model accuracy, privacy budget consumption, client contribution fairness, communication efficiency.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-federated-learning-pipeline/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_federated_learning_pipeline",
+      "description": "Tune Federated Learning Pipeline — DP epsilon/delta, client selection, aggregation strategy, convergence threshold, learning rate schedule, non-IID handling, cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-federated-learning-pipeline/"
+      }
+    }
+  ]
+}

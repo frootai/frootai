@@ -1,0 +1,88 @@
+{
+  "functions": [
+    {
+      "name": "deploy-digital-twin-agent",
+      "description": "Deploy Digital Twin Agent — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion, NL→DTDL query translation, predictive maintenance (RUL), twin graph relationships, event-driven updates.",
+      "functions": [
+        {
+          "name": "deploy-digital-twin-agent",
+          "description": "Deploy Digital Twin Agent — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion, NL→DTDL query translation, predictive maintenance (RUL), twin graph relationships, event-driven updates.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-digital-twin-agent",
+      "description": "Evaluate Digital Twin Agent quality — NL query accuracy, predictive maintenance RUL precision, twin sync latency, telemetry coverage, graph traversal correctness.",
+      "functions": [
+        {
+          "name": "evaluate-digital-twin-agent",
+          "description": "Evaluate Digital Twin Agent quality — NL query accuracy, predictive maintenance RUL precision, twin sync latency, telemetry coverage, graph traversal correctness.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-digital-twin-agent",
+      "description": "Tune Digital Twin Agent — NL query schema injection, RUL model features, sensor refresh rate, telemetry retention, twin lifecycle, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-digital-twin-agent",
+          "description": "Tune Digital Twin Agent — NL query schema injection, RUL model features, sensor refresh rate, telemetry retention, twin lifecycle, cost optimization.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

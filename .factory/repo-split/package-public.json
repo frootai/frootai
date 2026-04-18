@@ -1,0 +1,28 @@
+{
+  "name": "frootai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FrootAI™ — The open-source AI primitive unification platform. FAI Protocol, 830+ primitives, 100 solution plays.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frootai/frootai"
+  },
+  "homepage": "https://frootai.dev",
+  "scripts": {
+    "validate": "node scripts/validate-primitives.js",
+    "validate:verbose": "node scripts/validate-primitives.js --verbose",
+    "test:engine": "node engine/test.js",
+    "lint:md": "markdownlint docs/ --config .markdownlint.json"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "mcp",
+    "fai-protocol",
+    "primitives",
+    "rag",
+    "azure",
+    "openai"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.450Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "101-pester-test-development",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\101-pester-test-development\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-101-pester-test-development",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-pester-test-development",
+        "description": "Skill: deploy-pester-test-development",
+        "functions": [
+          {
+            "name": "deploy-pester-test-development",
+            "description": "Skill: deploy-pester-test-development",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-pester-test-development",
+        "description": "Skill: evaluate-pester-test-development",
+        "functions": [
+          {
+            "name": "evaluate-pester-test-development",
+            "description": "Skill: evaluate-pester-test-development",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-pester-test-development",
+        "description": "Skill: tune-pester-test-development",
+        "functions": [
+          {
+            "name": "tune-pester-test-development",
+            "description": "Skill: tune-pester-test-development",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O3-MCP-Tools"
+    ],
+    "waf": [
+      "reliability",
+      "operational-excellence",
+      "security"
+    ],
+    "scope": "101-pester-test-development"
+  }
+}

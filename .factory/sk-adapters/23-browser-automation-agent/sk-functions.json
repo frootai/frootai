@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-browser-automation-agent",
+      "description": "Deploy Browser Automation Agent — configure Playwright, GPT-4o vision for page understanding, DOM state extraction, action execution, domain allowlists. Use when: deploy, provision browser agent.",
+      "functions": [
+        {
+          "name": "deploy-browser-automation-agent",
+          "description": "Deploy Browser Automation Agent — configure Playwright, GPT-4o vision for page understanding, DOM state extraction, action execution, domain allowlists. Use when: deploy, provision browser agent.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-browser-automation-agent",
+      "description": "Evaluate Browser Automation Agent — measure task completion rate, action success rate, step efficiency, selector resilience, error recovery. Use when: evaluate, test automation quality.",
+      "functions": [
+        {
+          "name": "evaluate-browser-automation-agent",
+          "description": "Evaluate Browser Automation Agent — measure task completion rate, action success rate, step efficiency, selector resilience, error recovery. Use when: evaluate, test automation quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-browser-automation-agent",
+      "description": "Tune Browser Automation Agent — optimize screenshot frequency, wait strategies, selector methods, action planning prompts, step limits, cost per automation. Use when: tune, optimize browser agent.",
+      "functions": [
+        {
+          "name": "tune-browser-automation-agent",
+          "description": "Tune Browser Automation Agent — optimize screenshot frequency, wait strategies, selector methods, action planning prompts, step limits, cost per automation. Use when: tune, optimize browser agent.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

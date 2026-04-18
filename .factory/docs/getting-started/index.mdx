@@ -1,0 +1,84 @@
+---
+title: "Getting Started"
+description: "Set up FrootAI in under 5 minutes"
+icon: "🚀"
+order: 1
+tags: ["quickstart", "installation", "setup"]
+---
+# Getting Started
+
+Get up and running with FrootAI in under 5 minutes.
+
+## Prerequisites
+
+- **Node.js** 18+ (for MCP server and CLI)
+- **Python** 3.10+ (for Python SDK, optional)
+- **VS Code** (recommended IDE)
+- **Azure subscription** (for cloud-deployed plays, optional)
+
+## Installation
+
+### Option 1: MCP Server (Recommended)
+
+```bash
+# Works with any MCP-compatible AI assistant
+npx frootai-mcp@latest
+```
+
+### Option 2: VS Code Extension
+
+1. Open VS Code
+2. Go to Extensions (Ctrl+Shift+X)
+3. Search "FrootAI"
+4. Click Install
+
+### Option 3: CLI
+
+```bash
+npm install -g frootai
+fai --help
+```
+
+### Option 4: Python SDK
+
+```bash
+pip install frootai
+```
+
+## Your First Play
+
+Every FrootAI solution is called a **Play** — a self-contained, deployable AI architecture.
+
+```bash
+# Scaffold Play 01: Enterprise RAG
+fai init 01-enterprise-rag
+
+# Explore the structure
+cd 01-enterprise-rag
+tree .github/
+```
+
+**What you get:**
+
+```
+01-enterprise-rag/
+├── agent.md                    # Root orchestrator agent
+├── .github/
+│   ├── copilot-instructions.md # Knowledge context (<150 lines)
+│   ├── agents/                 # Builder, Reviewer, Tuner agents
+│   ├── instructions/           # Domain-specific instructions
+│   ├── skills/                 # Reusable skill definitions
+│   ├── hooks/                  # Security guardrails
+│   └── workflows/              # CI/CD automation
+├── config/                     # Tunable AI parameters
+├── infra/                      # Azure Bicep / Terraform
+├── evaluation/                 # Quality evaluation pipeline
+└── spec/
+    └── fai-manifest.json       # FAI Protocol manifest (the glue)
+```
+
+## Next Steps
+
+- [**Understand the Concepts →**](/concepts) — What makes FAI unique
+- [**Browse Solution Plays →**](/solution-plays) — 100 production architectures
+- [**Read the Learning Hub →**](/learning) — 18 deep-dive modules

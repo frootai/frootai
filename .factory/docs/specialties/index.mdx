@@ -1,0 +1,40 @@
+---
+title: "FAI Specialties"
+description: "12 protocol-level advanced capabilities"
+icon: "⚡"
+order: 8
+---
+# FAI Specialties
+
+12 advanced capabilities declared at the protocol level — things no competitor offers as a standard.
+
+## The 12 Specialties
+
+| # | Specialty | Priority | What It Does |
+|---|-----------|----------|-------------|
+| S-1 | 🧠 [FAI Memory](/specialties/memory) | P1 | Protocol-level memory |
+| S-2 | 🔗 [FAI Context](/specialties/context) | P0 | Protocol-level context |
+| S-3 | 🔄 [FAI Sessions](/specialties/sessions) | P1 | Protocol-level sessions |
+| S-4 | 🤔 [FAI Reasoning](/specialties/reasoning) | P0 | Protocol-level reasoning |
+| S-5 | 📋 [FAI Planning](/specialties/planning) | P2 | Protocol-level planning |
+| S-6 | 👤 [FAI Human-in-the-Loop](/specialties/hitl) | P1 | Protocol-level human-in-the-loop |
+| S-7 | 🔁 [FAI Replay](/specialties/replay) | P2 | Protocol-level replay |
+| S-8 | 📊 [FAI Knowledge Graphs](/specialties/graphs) | P2 | Protocol-level knowledge graphs |
+| S-9 | 💻 [FAI Agentic Coding](/specialties/coding) | P3 | Protocol-level agentic coding |
+| S-10 | 🎤 [FAI Voice](/specialties/voice) | P3 | Protocol-level voice |
+| S-11 | 🔐 [FAI Trust](/specialties/trust) | P1 | Protocol-level trust |
+| S-12 | 🌐 [FAI Federation](/specialties/federation) | P0 | Protocol-level federation |
+
+## How Specialties Work
+
+Specialties extend `fai-manifest.json` with new top-level sections. Each is optional — only configure what you need.
+
+```json
+{
+  "play": "01-enterprise-rag",
+  "version": "2.0.0",
+  "reasoning": { "strategy": "deterministic", "temperature": 0 },
+  "memory": { "tiers": { "working": { "ttl": "15m" } } },
+  "humanInTheLoop": { "gates": [{ "stage": "pre-deploy" }] }
+}
+```

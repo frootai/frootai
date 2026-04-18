@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_semantic_code_search",
+      "description": "Deploy Semantic Code Search — AST-aware code parsing, function-level embedding, docstring/comment indexing, hybrid keyword+vector search, incremental re-indexing, access control.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-semantic-code-search/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_semantic_code_search",
+      "description": "Evaluate Semantic Code Search quality — NDCG, recall, MRR, search latency, index freshness, access control, embedding model quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-semantic-code-search/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_semantic_code_search",
+      "description": "Tune Semantic Code Search — embedding model selection, boost weights (docstring vs code vs comments), query rewriting, top-k, score threshold, indexing batch size, cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-semantic-code-search/"
+      }
+    }
+  ]
+}

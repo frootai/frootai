@@ -1,0 +1,66 @@
+---
+title: "MCP Tools"
+description: "25+ tools for AI architecture guidance"
+icon: "🔌"
+order: 1
+tags: ["mcp", "tools", "api"]
+category: "api-reference"
+---
+# MCP Tools Reference
+
+The FrootAI MCP Server exposes 25+ tools for AI architecture guidance, knowledge retrieval, and evaluation.
+
+## Installation
+
+```bash
+npx frootai-mcp@latest
+```
+
+## Tool Categories
+
+### 🧠 Knowledge & Search
+| Tool | Description |
+|------|-------------|
+| `search_knowledge` | Search across all 18 FROOT modules for a topic |
+| `get_module` | Get full content of a specific module (F1, R2, etc.) |
+| `lookup_term` | Look up an AI/ML term in the glossary (200+ terms) |
+
+### 🎯 Solution Plays
+| Tool | Description |
+|------|-------------|
+| `list_community_plays` | List all 100 solution plays with status |
+| `get_play_detail` | Get detailed architecture for a specific play |
+| `semantic_search_plays` | Natural language search across plays |
+| `compare_plays` | Side-by-side comparison of 2-3 plays |
+
+### 🏗️ Architecture
+| Tool | Description |
+|------|-------------|
+| `get_architecture_pattern` | Get guidance for specific scenarios (RAG, agent hosting, etc.) |
+| `generate_architecture_diagram` | Generate Mermaid.js diagrams for any play |
+| `compare_models` | Side-by-side AI model comparison |
+
+### 💰 Cost & Evaluation
+| Tool | Description |
+|------|-------------|
+| `estimate_cost` | Calculate monthly Azure costs for any play |
+| `get_azure_pricing` | Azure AI pricing scenarios |
+| `run_evaluation` | Check AI quality scores against thresholds |
+| `validate_config` | Validate TuneKit configuration files |
+
+### 🤖 Agent Operations
+| Tool | Description |
+|------|-------------|
+| `agent_build` | Builder agent — implementation guidance |
+| `agent_review` | Reviewer agent — security & quality review |
+| `agent_tune` | Tuner agent — production readiness validation |
+
+### 📦 Ecosystem
+| Tool | Description |
+|------|-------------|
+| `list_modules` | List all FROOT framework modules |
+| `list_primitives` | Browse primitives by type |
+| `get_model_catalog` | Azure OpenAI model catalog |
+| `get_froot_overview` | Complete FROOT framework overview |
+| `fetch_azure_docs` | Fetch latest Azure documentation |
+| `fetch_external_mcp` | Search for external MCP servers |

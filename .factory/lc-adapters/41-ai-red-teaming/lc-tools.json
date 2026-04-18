@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_red_teaming",
+      "description": "Deploy AI Red Teaming framework — automated adversarial attack simulation, jailbreak detection, prompt injection testing, safety scorecards for EU AI Act and NIST AI RMF.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-red-teaming/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_red_teaming",
+      "description": "Evaluate AI Red Teaming quality — attack coverage, detection rate, false positive rate, severity accuracy, OWASP LLM Top 10 mapping, compliance scorecard.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-red-teaming/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_red_teaming",
+      "description": "Tune AI Red Teaming configuration — attack diversity, severity thresholds, detection sensitivity, false positive calibration, regression suite management.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-red-teaming/"
+      }
+    }
+  ]
+}

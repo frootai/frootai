@@ -1,0 +1,31 @@
+# Public repo: validate primitives on every push
+name: FAI Validate
+on:
+  push:
+    branches: [main]
+    paths: ['agents/**', 'skills/**', 'instructions/**', 'hooks/**', 'solution-plays/**', 'schemas/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node engine/test.js
+      - run: node scripts/validate-primitives.js
+      
+  # Trigger core repo rebuild on main push
+  trigger-core:
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CORE_REPO_PAT }}
+          repository: frootai/frootai-core
+          event-type: public-repo-updated
+          client-payload: '{"ref": "${{ github.sha }}"}'

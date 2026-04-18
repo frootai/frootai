@@ -1,0 +1,117 @@
+---
+title: "FAI Sessions"
+description: "Protocol-level Sessions"
+icon: "🔄"
+order: 3
+editUrl: "engine/specialties/sessions.js"
+category: "specialties"
+---
+# FAI Sessions
+
+🔄 S-3 — Protocol-level sessions.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    persistence: {
+      type: 'string',
+      enum: ['in-memory', 'cosmos-db', 'redis', 'sqlite', 'postgresql', 'file-system'],
+      default: 'in-memory',
+      description: 'Session state backend.'
+    },
+    scope: {
+      type: 'string',
+      enum: ['single-agent', 'multi-agent', 'multi-play'],
+      default: 'multi-agent',
+      description: 'Session visibility scope.'
+    },
+    checkpointing: {
+      type: 'object',
+      properties: {
+        enabled: { type: 'boolean', default: true },
+        interval: {
+          type: 'string',
+          enum: ['per-turn', 'per-agent', 'timed', 'manual'],
+          default: 'per-turn',
+          description: 'When to create checkpoints.'
+        },
+        timedIntervalMs: { type: 'integer', minimum: 1000, default: 30000 },
+        maxSnapshots: { type: 'integer', minimum: 1, default: 50 },
+        compressionEnabled: { type: 'boolean', default: false }
+      },
+      additionalProperties: false
+    },
+    recovery: {
+      type: 'object',
+      properties: {
+        strategy: {
+          type: 'string',
+          enum: ['last-checkpoint', 'best-checkpoint', 'replay-from-start', 'none'],
+          default: 'last-checkpoint'
+        },
+        timeout: { type: 'string', pattern: '^[0-9]+(s|m|h)$', default: '30m' },
+        maxRetries: { type: 'integer', minimum: 0, default: 3 }
+      },
+      additionalProperties: false
+    },
+    handoff: {
+      type: 'object',
+      properties: {
+        contextTransfer: {
+          type: 'string',
+          enum: ['full', 'summary', 'selective', 'none'],
+          default: 'full',
+          description: 'How much context to transfer between agents.'
+        },
+        stateFormat: {
+          type: 'string',
+          enum: ['json', 'protobuf', 'msgpack'],
+          default: 'json'
+        },
+        preserveHistory: { type: 'boolean', default: true },
+        maxTransferTokens: { type: 'integer', minimum: 100, default: 8000 }
+      },
+      additionalProperties: false
+    },
+    lifecycle: {
+      type: 'object',
+      properties: {
+        maxTurns: { type: 'integer', minimum: 1, default: 100 },
+        maxDuration: { type: 'string', pattern: '^[0-9]+(s|m|h)$', default: '4h' },
+        idleTimeout: { type: 'string', pattern: '^[0-9]+(s|m|h)$', default: '30m' },
+        onExpiry: { type: 'string', enum: ['archive', 'delete', 'summarize-and-archive'], default: 'archive' }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `sessions` section to your `fai-manifest.json`:
+
+```json
+{
+  "sessions": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.sessions
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/sessions.js)

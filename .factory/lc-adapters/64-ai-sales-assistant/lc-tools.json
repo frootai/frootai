@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_sales_assistant",
+      "description": "Deploy AI Sales Assistant — CRM-grounded lead scoring, personalized email generation, call prep with talk tracks, competitive intelligence, deal stage coaching, CRM integration.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-sales-assistant/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_sales_assistant",
+      "description": "Evaluate AI Sales Assistant quality — lead-to-close correlation, email response rate, scoring accuracy, talk track relevance, competitive intel freshness.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-sales-assistant/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_sales_assistant",
+      "description": "Tune AI Sales Assistant — scoring weights, ICP definition, email temperature, talk track depth, competitive intel refresh, CRM sync, cost per lead.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-sales-assistant/"
+      }
+    }
+  ]
+}

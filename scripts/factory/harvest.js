@@ -16,6 +16,14 @@ const { parseFrontmatter, parseJson, countLines } = require("./utils/frontmatter
 const REPO_ROOT = process.env.FROOTAI_PUBLIC_REPO || path.resolve(__dirname, "../..");
 
 // ─── Scanners ──────────────────────────────────────────────────────────────
+// Each scanner follows the same pattern: list directory → filter by convention
+// (file extension or presence of a known file like SKILL.md, hooks.json) →
+// parse YAML frontmatter from each file → return normalized metadata objects.
+//
+// Frontmatter parsing strategy: We use a lightweight YAML parser (utils/frontmatter.js)
+// that extracts the --- delimited block at the top of .md files. This avoids pulling
+// in a full YAML library and handles the subset we need (strings, arrays, numbers).
+// JSON files (hooks.json, plugin.json) are parsed with native JSON.parse.
 
 /**
  * Scan all .agent.md files in a directory.
@@ -185,6 +193,13 @@ function scanMarkdownFiles(dir, extension = ".md") {
 
 /**
  * Scan solution plays — read directory structure + fai-manifest.json.
+ *
+ * This is the most complex scanner because plays have a deep structure:
+ * agent.md (root), .github/ (DevKit), config/ (TuneKit), spec/ (SpecKit),
+ * infra/ (Bicep). We introspect each subdirectory to count embedded
+ * primitives and extract TuneKit parameters, giving the catalog a full
+ * picture of each play's composition without requiring the engine.
+ *
  * @param {string} dir
  * @returns {Array<object>}
  */
@@ -329,6 +344,13 @@ function countMcpTools(file) {
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────
+// Full scan (default): harvests every primitive type sequentially.
+// The order doesn't affect correctness — each scanner is independent —
+// but agents are scanned first because they're the most likely to have
+// issues (frontmatter mistakes) and we want fast feedback.
+// Incremental mode (--incremental flag) is declared in the CLI header
+// but not yet implemented; when added, it will use file mtime to skip
+// unchanged files and merge into the previous harvest.json.
 
 function harvest() {
   console.log("🏭 FAI Factory — Harvester");

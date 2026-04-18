@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-call-center-voice-ai",
+      "description": "Deploy Voice AI — configure Azure Communication Services, Speech Service (STT+TTS), OpenAI, Content Safety. Set up WebSocket streaming, SSML templates, call recording. Use when: deploy, provision, configure.",
+      "functions": [
+        {
+          "name": "deploy-call-center-voice-ai",
+          "description": "Deploy Voice AI — configure Azure Communication Services, Speech Service (STT+TTS), OpenAI, Content Safety. Set up WebSocket streaming, SSML templates, call recording. Use when: deploy, provision, configure.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-call-center-voice-ai",
+      "description": "Evaluate Voice AI — test intent recognition accuracy, response latency (STT+LLM+TTS < 2s), call resolution rate, CSAT scores, barge-in handling. Use when: evaluate, test, quality, metrics.",
+      "functions": [
+        {
+          "name": "evaluate-call-center-voice-ai",
+          "description": "Evaluate Voice AI — test intent recognition accuracy, response latency (STT+LLM+TTS < 2s), call resolution rate, CSAT scores, barge-in handling. Use when: evaluate, test, quality, metrics.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-call-center-voice-ai",
+      "description": "Tune Voice AI — optimize STT recognition, TTS voice/prosody, LLM response speed, model routing, intent classification thresholds. Use when: tune, optimize, latency, cost.",
+      "functions": [
+        {
+          "name": "tune-call-center-voice-ai",
+          "description": "Tune Voice AI — optimize STT recognition, TTS voice/prosody, LLM response speed, model routing, intent classification thresholds. Use when: tune, optimize, latency, cost.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

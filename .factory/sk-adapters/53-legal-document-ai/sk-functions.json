@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-legal-document-ai",
+      "description": "Deploy Legal Document AI — contract review pipeline, clause extraction with Document Intelligence, risk scoring against industry benchmarks, redlining, UPL-safe disclaimers, privilege markers.",
+      "functions": [
+        {
+          "name": "deploy-legal-document-ai",
+          "description": "Deploy Legal Document AI — contract review pipeline, clause extraction with Document Intelligence, risk scoring against industry benchmarks, redlining, UPL-safe disclaimers, privilege markers.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-legal-document-ai",
+      "description": "Evaluate Legal Document AI quality — clause extraction accuracy, risk score calibration, redline quality, UPL compliance, privilege marker presence, jurisdiction handling.",
+      "functions": [
+        {
+          "name": "evaluate-legal-document-ai",
+          "description": "Evaluate Legal Document AI quality — clause extraction accuracy, risk score calibration, redline quality, UPL compliance, privilege marker presence, jurisdiction handling.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-legal-document-ai",
+      "description": "Tune Legal Document AI — clause library coverage, risk benchmarks per contract type, redline tone, UPL guardrails, jurisdiction rules, cost per contract review.",
+      "functions": [
+        {
+          "name": "tune-legal-document-ai",
+          "description": "Tune Legal Document AI — clause library coverage, risk benchmarks per contract type, redline tone, UPL guardrails, jurisdiction rules, cost per contract review.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

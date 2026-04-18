@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Red-Team-Builder",
+        "agentRole": "builder",
+        "description": "AI Red Team builder - implements attack framework, custom generators, reporting",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Red-Team-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Red Team reviewer - audits attack coverage, severity classifications",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Red-Team-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Red Team tuner - optimizes attack detection, false positives, severity",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "security"
+          ]
+        }
+      }
+    ]
+  }
+}

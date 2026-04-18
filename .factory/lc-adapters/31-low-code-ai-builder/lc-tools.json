@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_low_code_ai_builder",
+      "description": "Deploy Low-Code AI Builder — configure visual pipeline designer, template library, connector framework, one-click deployment to Azure. Use when: deploy, provision builder platform.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-low-code-ai-builder/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_low_code_ai_builder",
+      "description": "Evaluate Low-Code AI Builder — test pipeline execution accuracy, template quality, deployment success rate, user experience, connector reliability. Use when: evaluate, test builder platform.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-low-code-ai-builder/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_low_code_ai_builder",
+      "description": "Tune Low-Code AI Builder — optimize pipeline execution speed, model selection per step type, template quality, deployment configuration, cost per pipeline run. Use when: tune, optimize builder.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-low-code-ai-builder/"
+      }
+    }
+  ]
+}

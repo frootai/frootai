@@ -1,0 +1,7 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  }
+}

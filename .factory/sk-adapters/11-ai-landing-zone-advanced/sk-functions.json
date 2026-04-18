@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-landing-zone-advanced",
+      "description": "Deploy Advanced Landing Zone — multi-region Bicep with management groups, Azure Firewall, NAT Gateway, DNS zones, Azure Policy, Defender for Cloud. Use when: deploy, provision, configure enterprise infrastructure.",
+      "functions": [
+        {
+          "name": "deploy-ai-landing-zone-advanced",
+          "description": "Deploy Advanced Landing Zone — multi-region Bicep with management groups, Azure Firewall, NAT Gateway, DNS zones, Azure Policy, Defender for Cloud. Use when: deploy, provision, configure enterprise infrastructure.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-landing-zone-advanced",
+      "description": "Evaluate Advanced Landing Zone — audit Azure Policy compliance, Defender score, network segmentation, RBAC least-privilege, CIS/NIST benchmarks. Use when: evaluate, audit, compliance check.",
+      "functions": [
+        {
+          "name": "evaluate-ai-landing-zone-advanced",
+          "description": "Evaluate Advanced Landing Zone — audit Azure Policy compliance, Defender score, network segmentation, RBAC least-privilege, CIS/NIST benchmarks. Use when: evaluate, audit, compliance check.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-landing-zone-advanced",
+      "description": "Tune Advanced Landing Zone — optimize SKU right-sizing, region selection, policy effects (Audit vs Deny), reserved instances, Firewall rules, cost governance. Use when: tune, optimize, cost review.",
+      "functions": [
+        {
+          "name": "tune-ai-landing-zone-advanced",
+          "description": "Tune Advanced Landing Zone — optimize SKU right-sizing, region selection, policy effects (Audit vs Deny), reserved instances, Firewall rules, cost governance. Use when: tune, optimize, cost review.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

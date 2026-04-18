@@ -1,0 +1,61 @@
+---
+title: "Well-Architected Framework"
+description: "How FrootAI enforces enterprise-grade quality"
+icon: "🏛️"
+order: 3
+tags: ["waf", "security", "reliability", "cost"]
+category: "concepts"
+---
+# Well-Architected Framework
+
+FrootAI enforces the Azure Well-Architected Framework across all primitives and solution plays. Every agent, instruction, skill, and hook is aligned to one or more of the 6 WAF pillars.
+
+## The 6 Pillars
+
+### 🔒 Security
+- Never hardcode secrets — use Managed Identity and Key Vault
+- Private endpoints for all PaaS services in production
+- Content safety filters on all AI endpoints
+- Rate-limit AI API calls per user/tenant
+
+### 🔄 Reliability
+- Retry with exponential backoff on all external calls
+- Circuit breaker for downstream dependencies
+- Health checks on every service endpoint
+- Graceful degradation when AI services are unavailable
+
+### 💰 Cost Optimization
+- Model routing: GPT-4o-mini for simple tasks, GPT-4o for complex
+- Token budgets per request
+- Response caching for repeated queries
+- Auto-scaling with appropriate bounds
+
+### ⚙️ Operational Excellence
+- All deployments through CI/CD — no manual changes
+- Structured logging with correlation IDs
+- Infrastructure as Code (Bicep/Terraform)
+- Automated content sync across distribution channels
+
+### ⚡ Performance Efficiency
+- Streaming responses for AI chat interfaces
+- Semantic caching (similarity > 0.95)
+- Async/parallel for independent operations
+- CDN for static assets
+
+### 🛡️ Responsible AI
+- ALL user-facing AI responses through Content Safety
+- RAG responses MUST cite sources
+- AI-generated content labeled transparently
+- Human-in-the-loop for critical decisions
+
+## How WAF is Enforced
+
+1. **Manifest**: `context.waf` declares which pillars apply
+2. **Instructions**: `.instructions.md` files enforce pillar-specific rules
+3. **Hooks**: Security hooks validate compliance at runtime
+4. **Evaluation**: Guardrails check quality after every response
+
+## Learn More
+
+- [Security Instructions](/learning/waf-security)
+- [Solution Plays](/solution-plays) — every play lists its WAF alignment

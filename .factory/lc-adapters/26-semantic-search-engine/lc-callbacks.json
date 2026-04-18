@@ -1,0 +1,64 @@
+{
+  "callbacks": [
+    {
+      "handler": "guardrail_safety",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "CriteriaEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_costPerQuery",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.05",
+      "threshold": 0.05,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_relevance",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    },
+    {
+      "handler": "guardrail_groundedness",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "QAEvalChain"
+      }
+    },
+    {
+      "handler": "guardrail_coherence",
+      "event": "on_llm_end",
+      "faiEvent": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "evaluator": "StringEvaluator"
+      }
+    }
+  ]
+}

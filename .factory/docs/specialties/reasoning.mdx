@@ -1,0 +1,118 @@
+---
+title: "FAI Reasoning"
+description: "Protocol-level Reasoning"
+icon: "🤔"
+order: 4
+editUrl: "engine/specialties/reasoning.js"
+category: "specialties"
+---
+# FAI Reasoning
+
+🤔 S-4 — Protocol-level reasoning.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    strategy: {
+      type: 'string',
+      enum: ['creative', 'deterministic', 'chain-of-thought', 'tree-of-thought', 'react', 'reflection'],
+      default: 'deterministic',
+      description: 'Reasoning strategy. Each maps to specific model parameters and prompt patterns.'
+    },
+    temperature: {
+      type: 'number',
+      minimum: 0,
+      maximum: 2,
+      description: 'LLM temperature. Automatically set by strategy if not specified.'
+    },
+    seed: {
+      type: 'integer',
+      description: 'Deterministic seed for reproducible outputs. Only used with deterministic strategy.'
+    },
+    topP: {
+      type: 'number',
+      minimum: 0,
+      maximum: 1,
+      description: 'Nucleus sampling parameter. Set to 1.0 for deterministic.'
+    },
+    outputFormat: {
+      type: 'string',
+      enum: ['text', 'structured-json', 'json-schema', 'markdown', 'code'],
+      default: 'text',
+      description: 'Expected output format. structured-json enables JSON mode.'
+    },
+    jsonSchema: {
+      type: 'object',
+      description: 'JSON Schema for structured output validation (when outputFormat is json-schema).'
+    },
+    confidenceThreshold: {
+      type: 'number',
+      minimum: 0,
+      maximum: 1,
+      default: 0.7,
+      description: 'Abstain from answering if confidence falls below this threshold.'
+    },
+    abstentionPolicy: {
+      type: 'string',
+      enum: ['decline', 'escalate', 'fallback', 'retry'],
+      default: 'decline',
+      description: 'What to do when confidence is below threshold.'
+    },
+    maxReasoningSteps: {
+      type: 'integer',
+      minimum: 1,
+      maximum: 100,
+      default: 10,
+      description: 'Maximum reasoning steps before forcing a conclusion.'
+    },
+    auditTrail: {
+      type: 'boolean',
+      default: true,
+      description: 'Log every reasoning step for debugging and replay.'
+    },
+    antiPatterns: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['sycophancy', 'hallucination', 'repetition', 'contradiction', 'verbosity', 'refusal-to-answer']
+      },
+      default: ['sycophancy', 'hallucination'],
+      description: 'Anti-patterns to detect and flag in reasoning output.'
+    },
+    thinkingBudget: {
+      type: 'integer',
+      minimum: 0,
+      description: 'Max thinking/reasoning tokens (for models that support extended thinking).'
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `reasoning` section to your `fai-manifest.json`:
+
+```json
+{
+  "reasoning": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.reasoning
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/reasoning.js)

@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_prompt_management",
+      "description": "Deploy Prompt Management — set up prompt registry (Cosmos DB), versioned templates, A/B testing framework, injection defense layer, prompt analytics. Use when: deploy, provision, configure prompt platform.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-prompt-management/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_prompt_management",
+      "description": "Evaluate Prompt Management — audit prompt quality scores, injection resilience, version hygiene, A/B test significance, template compliance. Use when: evaluate, audit prompt quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-prompt-management/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_prompt_management",
+      "description": "Tune Prompt Management — optimize token usage, A/B test configuration, few-shot example selection, template compression, prompt caching. Use when: tune, optimize prompts.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-prompt-management/"
+      }
+    }
+  ]
+}

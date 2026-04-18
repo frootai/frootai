@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Healthcare-AI-Builder",
+        "agentRole": "builder",
+        "description": "Healthcare AI builder - implements clinical NLP, de-identification, decision support",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Healthcare-AI-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Healthcare AI reviewer - audits HIPAA compliance, PHI handling, clinical accuracy",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Healthcare-AI-Tuner",
+        "agentRole": "tuner",
+        "description": "Healthcare AI tuner - optimizes de-identification, response quality, latency",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "security"
+          ]
+        }
+      }
+    ]
+  }
+}

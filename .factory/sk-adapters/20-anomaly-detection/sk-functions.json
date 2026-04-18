@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-anomaly-detection",
+      "description": "Deploy Anomaly Detection — configure time-series detection pipeline, Azure Monitor Anomaly Detector, alerting rules, LLM root cause analysis, dashboards. Use when: deploy, provision, configure detection.",
+      "functions": [
+        {
+          "name": "deploy-anomaly-detection",
+          "description": "Deploy Anomaly Detection — configure time-series detection pipeline, Azure Monitor Anomaly Detector, alerting rules, LLM root cause analysis, dashboards. Use when: deploy, provision, configure detection.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-anomaly-detection",
+      "description": "Evaluate Anomaly Detection — measure precision, recall, F1 on labeled anomalies, false positive rate, detection latency, root cause accuracy. Use when: evaluate, benchmark detection.",
+      "functions": [
+        {
+          "name": "evaluate-anomaly-detection",
+          "description": "Evaluate Anomaly Detection — measure precision, recall, F1 on labeled anomalies, false positive rate, detection latency, root cause accuracy. Use when: evaluate, benchmark detection.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-anomaly-detection",
+      "description": "Tune Anomaly Detection — optimize detection thresholds (σ levels), time windows, suppression rules, seasonal baselines, alert routing, false positive reduction. Use when: tune, optimize detection.",
+      "functions": [
+        {
+          "name": "tune-anomaly-detection",
+          "description": "Tune Anomaly Detection — optimize detection thresholds (σ levels), time windows, suppression rules, seasonal baselines, alert routing, false positive reduction. Use when: tune, optimize detection.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

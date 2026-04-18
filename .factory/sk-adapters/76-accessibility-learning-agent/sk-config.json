@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.622Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "76-accessibility-learning-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\76-accessibility-learning-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-76-accessibility-learning-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-76",
+        "description": "Skill: deploy-76",
+        "functions": [
+          {
+            "name": "deploy-76",
+            "description": "Skill: deploy-76",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-76",
+        "description": "Skill: evaluate-76",
+        "functions": [
+          {
+            "name": "evaluate-76",
+            "description": "Skill: evaluate-76",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-76",
+        "description": "Skill: tune-76",
+        "functions": [
+          {
+            "name": "tune-76",
+            "description": "Skill: tune-76",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "O2-AI-Agents",
+      "T2-Responsible-AI"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "performance-efficiency",
+      "security"
+    ],
+    "scope": "76-accessibility-learning-agent"
+  }
+}

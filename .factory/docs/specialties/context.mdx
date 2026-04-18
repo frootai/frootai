@@ -1,0 +1,160 @@
+---
+title: "FAI Context"
+description: "Protocol-level Context"
+icon: "🔗"
+order: 2
+editUrl: "engine/specialties/context.js"
+category: "specialties"
+---
+# FAI Context
+
+🔗 S-2 — Protocol-level context.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    compression: {
+      type: 'object',
+      properties: {
+        strategy: {
+          type: 'string',
+          enum: ['none', 'summarize', 'extract-entities', 'truncate-oldest', 'sliding-window'],
+          default: 'none',
+          description: 'Context compression strategy applied before LLM calls.'
+        },
+        ratio: {
+          type: 'string',
+          pattern: '^[0-9]+:[0-9]+$',
+          default: '1:1',
+          description: 'Target compression ratio (e.g., "20:1" = 4000 → 200 tokens).'
+        },
+        model: {
+          type: 'string',
+          default: 'gpt-4o-mini',
+          description: 'Model used for summarize/extract compression. Use cheap model.'
+        },
+        preserveEntities: {
+          type: 'boolean',
+          default: true,
+          description: 'Keep named entities intact during compression.'
+        }
+      },
+      additionalProperties: false
+    },
+    caching: {
+      type: 'object',
+      properties: {
+        enabled: { type: 'boolean', default: false },
+        ttl: {
+          type: 'string',
+          pattern: '^[0-9]+(s|m|h|d)$',
+          default: '5m',
+          description: 'Cache time-to-live (e.g., "5m", "1h", "365d").'
+        },
+        scope: {
+          type: 'string',
+          enum: ['exact', 'semantic', 'prefix'],
+          default: 'exact',
+          description: 'Cache matching strategy. "semantic" uses embedding similarity.'
+        },
+        similarity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+          default: 0.95,
+          description: 'Minimum similarity for cache hit (semantic scope only).'
+        },
+        maxEntries: {
+          type: 'integer',
+          minimum: 1,
+          default: 1000,
+          description: 'Maximum cache entries before LRU eviction.'
+        }
+      },
+      additionalProperties: false
+    },
+    inheritance: {
+      type: 'object',
+      properties: {
+        from: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Parent play IDs to inherit context from.'
+        },
+        override: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Context keys to override from parent (e.g., "waf.cost-optimization").'
+        },
+        merge: {
+          type: 'string',
+          enum: ['shallow', 'deep', 'replace'],
+          default: 'deep',
+          description: 'How to merge inherited context with local context.'
+        }
+      },
+      additionalProperties: false
+    },
+    tokenBudget: {
+      type: 'object',
+      properties: {
+        maxPerAgent: {
+          type: 'integer',
+          minimum: 100,
+          default: 8000,
+          description: 'Max context tokens per agent per turn.'
+        },
+        maxPerTurn: {
+          type: 'integer',
+          minimum: 100,
+          default: 32000,
+          description: 'Max total context tokens per conversation turn.'
+        },
+        reserveForOutput: {
+          type: 'integer',
+          minimum: 100,
+          default: 4000,
+          description: 'Tokens reserved for model output (deducted from budget).'
+        },
+        warningThreshold: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+          default: 0.8,
+          description: 'Emit warning when budget usage exceeds this ratio.'
+        }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `context` section to your `fai-manifest.json`:
+
+```json
+{
+  "context": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.context
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/context.js)

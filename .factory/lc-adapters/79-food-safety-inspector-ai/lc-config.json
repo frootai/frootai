@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.583Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "79-food-safety-inspector-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\79-food-safety-inspector-ai\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-79-food-safety-inspector-ai",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_79",
+        "description": "FAI Skill: deploy-79",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-79/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_79",
+        "description": "FAI Skill: evaluate-79",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-79/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_79",
+        "description": "FAI Skill: tune-79",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-79/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "responsible-ai",
+      "operational-excellence"
+    ],
+    "scope": "79-food-safety-inspector-ai"
+  }
+}

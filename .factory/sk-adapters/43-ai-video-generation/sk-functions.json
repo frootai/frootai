@@ -1,0 +1,82 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-video-generation",
+      "description": "Deploy AI Video Generation pipeline — text-to-video, image-to-video, batch queue processing, async generation with polling, content safety, C2PA watermarking.",
+      "functions": [
+        {
+          "name": "deploy-ai-video-generation",
+          "description": "Deploy AI Video Generation pipeline — text-to-video, image-to-video, batch queue processing, async generation with polling, content safety, C2PA watermarking.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-video-generation",
+      "description": "Evaluate AI Video Generation quality — visual fidelity, prompt adherence, temporal coherence, content safety compliance, generation latency, cost per video.",
+      "functions": [
+        {
+          "name": "evaluate-ai-video-generation",
+          "description": "Evaluate AI Video Generation quality — visual fidelity, prompt adherence, temporal coherence, content safety compliance, generation latency, cost per video.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-video-generation",
+      "description": "Tune AI Video Generation configuration — resolution presets, quality/cost trade-offs, batch queue throughput, prompt enhancement, content safety thresholds, preview workflow.",
+      "functions": [
+        {
+          "name": "tune-ai-video-generation",
+          "description": "Tune AI Video Generation configuration — resolution presets, quality/cost trade-offs, batch queue throughput, prompt enhancement, content safety thresholds, preview workflow.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

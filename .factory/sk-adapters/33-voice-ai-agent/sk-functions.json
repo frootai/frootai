@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-voice-ai-agent",
+      "description": "Deploy Voice AI Agent — configure dialog state machine, intent detection, multi-turn voice interaction loop, proactive actions, STT/TTS streaming. Use when: deploy, provision voice agent.",
+      "functions": [
+        {
+          "name": "deploy-voice-ai-agent",
+          "description": "Deploy Voice AI Agent — configure dialog state machine, intent detection, multi-turn voice interaction loop, proactive actions, STT/TTS streaming. Use when: deploy, provision voice agent.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-voice-ai-agent",
+      "description": "Evaluate Voice AI Agent — measure intent accuracy, dialog completion rate, latency budget, voice quality (MOS), multi-turn context retention. Use when: evaluate, test voice agent.",
+      "functions": [
+        {
+          "name": "evaluate-voice-ai-agent",
+          "description": "Evaluate Voice AI Agent — measure intent accuracy, dialog completion rate, latency budget, voice quality (MOS), multi-turn context retention. Use when: evaluate, test voice agent.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-voice-ai-agent",
+      "description": "Tune Voice AI Agent — optimize dialog flow, voice prosody, intent thresholds, response speed, context window management, cost per conversation. Use when: tune, optimize voice agent.",
+      "functions": [
+        {
+          "name": "tune-voice-ai-agent",
+          "description": "Tune Voice AI Agent — optimize dialog flow, voice prosody, intent thresholds, response speed, context window management, cost per conversation. Use when: tune, optimize voice agent.",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

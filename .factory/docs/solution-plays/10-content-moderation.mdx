@@ -1,0 +1,122 @@
+---
+title: "Play 10: Play 10 — Content Moderation 🛡️"
+description: "Every AI response passes through Azure Content Safety for severity scoring across hate, violence, self-harm, and sexual categories. Custom blocklists catch domain-specific terms. Dual moderation on bo"
+icon: "🎯"
+order: 10
+editUrl: "solution-plays/10-content-moderation/README.md"
+tags: ["solution-play", "play-10"]
+---
+# Play 10 — Content Moderation 🛡️
+
+> Filter harmful content with Azure Content Safety, custom blocklists, and severity scoring.
+
+Every AI response passes through Azure Content Safety for severity scoring across hate, violence, self-harm, and sexual categories. Custom blocklists catch domain-specific terms. Dual moderation on both input and output.
+
+## Quick Start
+```bash
+cd solution-plays/10-content-moderation
+az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
+code .  # Use @builder for pipeline, @reviewer for threshold audit, @tuner for false positives
+```
+
+## Key Metrics
+- True positive rate: ≥95% · False positive rate: <5% · Moderation latency: <200ms
+
+## DevKit
+| Primitive | What It Does |
+|-----------|-------------|
+| 3 agents | Builder (pipeline/blocklists), Reviewer (threshold/compliance audit), Tuner (FP reduction/cost) |
+| 3 skills | Deploy (121 lines), Evaluate (101 lines), Tune (120 lines) |
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Client Layer
+        App[Client Application<br/>Web · Mobile · API]
+    end
+
+    subgraph API Gateway
+        APIM[API Management<br/>Rate limiting + auth]
+    end
+
+    subgraph Processing
+        FUNC[Azure Functions<br/>Moderation pipeline]
+        SB[Service Bus<br/>Async queue]
+    end
+
+    subgraph AI Services
+        CS[Content Safety<br/>Multi-category scoring]
+        BL[Custom Blocklists<br/>Domain-specific terms]
+    end
+
+    subgraph Data Layer
+        COSMOS[Cosmos DB<br/>Audit trail]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API keys]
+        MI[Managed Identity<br/>Auth]
+    end
+
+    subgraph Monitoring
+        AI_INS[Application Insights<br/>Moderation metrics]
+        LOG[Log Analytics<br/>Audit logs]
+    end
+
+    App -->|submit content| APIM
+    APIM -->|route| FUNC
+    FUNC -->|queue| SB
+    SB -->|process| FUNC
+    FUNC -->|analyze| CS
+    CS -->|severity scores| FUNC
+    FUNC -->|check| BL
+    FUNC -->|store decision| COSMOS
+    MI -->|auth| KV
+    FUNC -->|telemetry| AI_INS
+    FUNC -->|audit| LOG
+
+    style App fill:#3b82f6,color:#fff
+    style APIM fill:#3b82f6,color:#fff
+    style FUNC fill:#3b82f6,color:#fff
+    style SB fill:#3b82f6,color:#fff
+    style CS fill:#10b981,color:#fff
+    style BL fill:#10b981,color:#fff
+    style COSMOS fill:#f59e0b,color:#fff
+    style KV fill:#7c3aed,color:#fff
+    style MI fill:#7c3aed,color:#fff
+    style AI_INS fill:#0ea5e9,color:#fff
+    style LOG fill:#0ea5e9,color:#fff
+```
+
+> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|---------|-----------|------------|
+| Content Safety | $0 (Free) | $75 (Standard) | $300 (Standard) |
+| API Management | $5 (Consumption) | $150 (Standard) | $700 (Premium) |
+| Azure Functions | $0 (Consumption) | $20 (Consumption) | $100 (Premium EP1) |
+| Cosmos DB | $3 (Serverless) | $45 (Provisioned) | $200 (Provisioned) |
+| Service Bus | $5 (Basic) | $20 (Standard) | $80 (Premium) |
+| Key Vault | $1 (Standard) | $3 (Standard) | $10 (Premium HSM) |
+| Application Insights | $0 (Free) | $20 (Pay-per-GB) | $80 (Pay-per-GB) |
+| Log Analytics | $0 (Free) | $15 (Pay-per-GB) | $50 (Commitment) |
+| **Total** | **$14/mo** | **$348/mo** | **$1,520/mo** |
+
+> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
+
+📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/10-content-moderation](https://frootai.dev/solution-plays/10-content-moderation)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `10-content-moderation` |
+| Version | `1.0.0` |
+| Knowledge | T2-Responsible-AI, F1-GenAI-Foundations |
+| WAF Pillars | security, responsible-ai, reliability |
+| Groundedness | ≥ 85% |
+| Safety | 0 violations max |

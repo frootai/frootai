@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_digital_twin_agent",
+      "description": "Deploy Digital Twin Agent — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion, NL→DTDL query translation, predictive maintenance (RUL), twin graph relationships, event-driven updates.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-digital-twin-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_digital_twin_agent",
+      "description": "Evaluate Digital Twin Agent quality — NL query accuracy, predictive maintenance RUL precision, twin sync latency, telemetry coverage, graph traversal correctness.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-digital-twin-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_digital_twin_agent",
+      "description": "Tune Digital Twin Agent — NL query schema injection, RUL model features, sensor refresh rate, telemetry retention, twin lifecycle, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-digital-twin-agent/"
+      }
+    }
+  ]
+}

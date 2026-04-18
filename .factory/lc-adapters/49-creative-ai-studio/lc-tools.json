@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_creative_ai_studio",
+      "description": "Deploy Creative AI Studio — multi-modal content generation, brand voice templates, cross-platform adaptation, content calendar automation, image generation, A/B variation testing.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-creative-ai-studio/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_creative_ai_studio",
+      "description": "Evaluate Creative AI Studio quality — brand voice fidelity, content originality, variation diversity, platform adaptation quality, image safety, A/B performance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-creative-ai-studio/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_creative_ai_studio",
+      "description": "Tune Creative AI Studio — creative temperature, brand voice rules, variation count, platform templates, A/B test config, image style presets, cost optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-creative-ai-studio/"
+      }
+    }
+  ]
+}

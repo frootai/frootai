@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-creative-ai-studio",
+      "description": "Deploy Creative AI Studio — multi-modal content generation, brand voice templates, cross-platform adaptation, content calendar automation, image generation, A/B variation testing.",
+      "functions": [
+        {
+          "name": "deploy-creative-ai-studio",
+          "description": "Deploy Creative AI Studio — multi-modal content generation, brand voice templates, cross-platform adaptation, content calendar automation, image generation, A/B variation testing.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-creative-ai-studio",
+      "description": "Evaluate Creative AI Studio quality — brand voice fidelity, content originality, variation diversity, platform adaptation quality, image safety, A/B performance.",
+      "functions": [
+        {
+          "name": "evaluate-creative-ai-studio",
+          "description": "Evaluate Creative AI Studio quality — brand voice fidelity, content originality, variation diversity, platform adaptation quality, image safety, A/B performance.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-creative-ai-studio",
+      "description": "Tune Creative AI Studio — creative temperature, brand voice rules, variation count, platform templates, A/B test config, image style presets, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-creative-ai-studio",
+          "description": "Tune Creative AI Studio — creative temperature, brand voice rules, variation count, platform templates, A/B test config, image style presets, cost optimization.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

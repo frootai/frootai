@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_multi_agent_swarm",
+      "description": "Deploy Multi-Agent Swarm — configure decentralized agent topology, bidding protocol, consensus voting, parallel execution, conflict resolution, swarm state store. Use when: deploy, provision swarm.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-multi-agent-swarm/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_multi_agent_swarm",
+      "description": "Evaluate Multi-Agent Swarm — measure consensus quality, bidding efficiency, vote agreement rate, parallel speedup, cost per swarm task. Use when: evaluate, benchmark swarm.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-multi-agent-swarm/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_multi_agent_swarm",
+      "description": "Tune Multi-Agent Swarm — optimize swarm size, bidding strategy, voting thresholds, agent model selection, parallel execution limits, cost per task. Use when: tune, optimize swarm.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-multi-agent-swarm/"
+      }
+    }
+  ]
+}

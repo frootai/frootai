@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-compliance-engine",
+      "description": "Deploy AI Compliance Engine — configure regulatory check framework (GDPR, HIPAA, EU AI Act, SOC 2), automated audit trail, risk scoring, evidence collection. Use when: deploy, configure compliance.",
+      "functions": [
+        {
+          "name": "deploy-ai-compliance-engine",
+          "description": "Deploy AI Compliance Engine — configure regulatory check framework (GDPR, HIPAA, EU AI Act, SOC 2), automated audit trail, risk scoring, evidence collection. Use when: deploy, configure compliance.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-compliance-engine",
+      "description": "Evaluate AI Compliance Engine — measure check accuracy, evidence quality, framework coverage, risk scoring calibration, false positive/negative rate. Use when: evaluate, audit compliance.",
+      "functions": [
+        {
+          "name": "evaluate-ai-compliance-engine",
+          "description": "Evaluate AI Compliance Engine — measure check accuracy, evidence quality, framework coverage, risk scoring calibration, false positive/negative rate. Use when: evaluate, audit compliance.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-compliance-engine",
+      "description": "Tune AI Compliance Engine — optimize check frequency, reduce false positives, calibrate risk scoring, configure evidence retention, framework-specific tuning. Use when: tune, optimize compliance.",
+      "functions": [
+        {
+          "name": "tune-ai-compliance-engine",
+          "description": "Tune AI Compliance Engine — optimize check frequency, reduce false positives, calibrate risk scoring, configure evidence retention, framework-specific tuning. Use when: tune, optimize compliance.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

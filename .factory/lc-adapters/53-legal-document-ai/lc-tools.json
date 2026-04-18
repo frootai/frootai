@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_legal_document_ai",
+      "description": "Deploy Legal Document AI — contract review pipeline, clause extraction with Document Intelligence, risk scoring against industry benchmarks, redlining, UPL-safe disclaimers, privilege markers.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-legal-document-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_legal_document_ai",
+      "description": "Evaluate Legal Document AI quality — clause extraction accuracy, risk score calibration, redline quality, UPL compliance, privilege marker presence, jurisdiction handling.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-legal-document-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_legal_document_ai",
+      "description": "Tune Legal Document AI — clause library coverage, risk benchmarks per contract type, redline tone, UPL guardrails, jurisdiction rules, cost per contract review.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-legal-document-ai/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.616Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "72-climate-risk-assessor",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\72-climate-risk-assessor\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-72-climate-risk-assessor",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-72",
+        "description": "Skill: deploy-72",
+        "functions": [
+          {
+            "name": "deploy-72",
+            "description": "Skill: deploy-72",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-72",
+        "description": "Skill: evaluate-72",
+        "functions": [
+          {
+            "name": "evaluate-72",
+            "description": "Skill: evaluate-72",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-72",
+        "description": "Skill: tune-72",
+        "functions": [
+          {
+            "name": "tune-72",
+            "description": "Skill: tune-72",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "cost-optimization"
+    ],
+    "scope": "72-climate-risk-assessor"
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "steps": [
+    {
+      "step": 1,
+      "action": "Create frootai/frootai-core private repo on GitHub",
+      "risk": "none",
+      "reversible": true,
+      "commands": [
+        "gh repo create frootai/frootai-core --private --description \"FrootAI Distribution Intelligence\""
+      ]
+    },
+    {
+      "step": 2,
+      "action": "Move 18 distribution folders to frootai-core",
+      "risk": "medium",
+      "reversible": true,
+      "folders": [
+        ".husky/",
+        ".vscode/",
+        "bicep-registry/",
+        "cli/",
+        "config/",
+        "foundry-agent/",
+        "functions/",
+        "infra-registry/",
+        "marketplace/",
+        "mcp-server/",
+        "npm-mcp/",
+        "npm-sdk/",
+        "python-mcp/",
+        "python-sdk/",
+        "scripts/",
+        "sdk/",
+        "vscode-extension/",
+        "website-data/"
+      ],
+      "commands": [
+        "# Move .husky/ to frootai-core",
+        "# Move .vscode/ to frootai-core",
+        "# Move bicep-registry/ to frootai-core",
+        "# Move cli/ to frootai-core",
+        "# Move config/ to frootai-core",
+        "# Move foundry-agent/ to frootai-core",
+        "# Move functions/ to frootai-core",
+        "# Move infra-registry/ to frootai-core",
+        "# Move marketplace/ to frootai-core",
+        "# Move mcp-server/ to frootai-core",
+        "# Move npm-mcp/ to frootai-core",
+        "# Move npm-sdk/ to frootai-core",
+        "# Move python-mcp/ to frootai-core",
+        "# Move python-sdk/ to frootai-core",
+        "# Move scripts/ to frootai-core",
+        "# Move sdk/ to frootai-core",
+        "# Move vscode-extension/ to frootai-core",
+        "# Move website-data/ to frootai-core"
+      ],
+      "warnings": [
+        "All CI/CD paths will change",
+        "package.json scripts reference moved folders",
+        "Import paths in moved code may reference public repo files"
+      ]
+    },
+    {
+      "step": 3,
+      "action": "Update .gitignore in public repo (remove moved folder entries)",
+      "risk": "low",
+      "reversible": true
+    },
+    {
+      "step": 4,
+      "action": "Set up workspace symlinks or git submodule",
+      "risk": "low",
+      "reversible": true,
+      "options": [
+        "Symlink (recommended for local dev)",
+        "Git submodule (recommended for CI)"
+      ]
+    },
+    {
+      "step": 5,
+      "action": "Update CI/CD workflows for cross-repo operation",
+      "risk": "medium",
+      "reversible": true,
+      "warnings": [
+        "GitHub Actions in public repo only validate primitives",
+        "All publishing workflows move to frootai-core",
+        "repository_dispatch needed for cross-repo triggers"
+      ]
+    },
+    {
+      "step": 6,
+      "action": "Update public repo README (remove distribution details)",
+      "risk": "low",
+      "reversible": true
+    },
+    {
+      "step": 7,
+      "action": "Verify: npm run factory works from frootai-core using public repo data",
+      "risk": "medium",
+      "reversible": true,
+      "verifications": [
+        "factory:harvest scans public repo primitives",
+        "factory:catalog generates from public data",
+        "factory:validate passes all checks",
+        "All adapters produce correct output"
+      ]
+    },
+    {
+      "step": 8,
+      "action": "Verify: all publishing workflows still work",
+      "risk": "high",
+      "reversible": false,
+      "verifications": [
+        "npm publish frootai-mcp succeeds",
+        "npm publish frootai succeeds",
+        "pip publish frootai-mcp succeeds",
+        "vsce publish succeeds",
+        "docker push succeeds"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "level": "medium",
+      "description": "1 cross-references found between public and private code",
+      "details": [
+        {
+          "file": "npm-mcp\\index.js",
+          "references": "engine/",
+          "type": "import"
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "public": {
+      "items": 24,
+      "files": 3028,
+      "sizeKB": 16756
+    },
+    "private": {
+      "items": 24,
+      "files": 31883,
+      "sizeKB": 331290
+    },
+    "unclassified": 0
+  },
+  "privateFolders": [
+    ".husky/",
+    ".vscode/",
+    "bicep-registry/",
+    "cli/",
+    "config/",
+    "foundry-agent/",
+    "functions/",
+    "infra-registry/",
+    "marketplace/",
+    "mcp-server/",
+    "npm-mcp/",
+    "npm-sdk/",
+    "python-mcp/",
+    "python-sdk/",
+    "scripts/",
+    "sdk/",
+    "vscode-extension/",
+    "website-data/"
+  ]
+}

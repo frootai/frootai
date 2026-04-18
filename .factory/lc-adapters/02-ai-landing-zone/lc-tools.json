@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_landing_zone",
+      "description": "Deploy AI Landing Zone to Azure — validate Bicep with AVM modules, deploy hub-spoke networking, configure private endpoints, set up RBAC, enable monitoring. Use when: deploy, provision, Bicep, infrastructure, landing zone, networking.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-landing-zone/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_landing_zone",
+      "description": "Evaluate AI Landing Zone security and compliance — audit private endpoints, NSG rules, RBAC assignments, diagnostic settings, encryption, network isolation. Use when: evaluate, audit, security, compliance, review, assess.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-landing-zone/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_landing_zone",
+      "description": "Tune AI Landing Zone for production — optimize SKU sizing, reduce cost, configure monitoring thresholds, right-size networking, manage GPU quota. Use when: tune, optimize, cost, SKU, quota, performance, budget.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-landing-zone/"
+      }
+    }
+  ]
+}

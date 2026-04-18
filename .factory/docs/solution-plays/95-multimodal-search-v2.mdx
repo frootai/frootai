@@ -1,0 +1,150 @@
+---
+title: "Play 95: Play 95 — Multimodal Search V2 🔎"
+description: "Build a unified multimodal search engine. Per-modality encoders (text-embedding-3-large, CLIP, Whisper) create embeddings across 4 content types, cross-modal retrieval enables searching images with te"
+icon: "🎯"
+order: 95
+editUrl: "solution-plays/95-multimodal-search-v2/README.md"
+tags: ["solution-play", "play-95"]
+---
+# Play 95 — Multimodal Search V2 🔎
+
+> Unified multimodal search — text+image+audio+video indexing, cross-modal retrieval, late fusion ranking, personalized results.
+
+Build a unified multimodal search engine. Per-modality encoders (text-embedding-3-large, CLIP, Whisper) create embeddings across 4 content types, cross-modal retrieval enables searching images with text queries (and vice versa), late fusion with reciprocal rank fusion merges and re-ranks results, and user preference models personalize result ordering.
+
+## Quick Start
+```bash
+cd solution-plays/95-multimodal-search-v2
+az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
+code .
+# Use @builder to implement, @reviewer to audit, @tuner to optimize
+```
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Content Sources
+        Text[Text Content<br/>Documents · Articles · Wikis · PDFs]
+        Images[Image Content<br/>Photos · Diagrams · Charts · Screenshots]
+        Code[Code Content<br/>Repositories · Snippets · Notebooks · APIs]
+        Audio[Audio Content<br/>Meetings · Podcasts · Lectures · Calls]
+    end
+
+    subgraph Indexing Pipeline
+        Vision[Azure AI Vision<br/>Embeddings · Object Detection · OCR · Captioning · VQA]
+        Speech[Azure AI Speech<br/>Transcription · Diarization · Timestamps · Language ID]
+        ACA[Container Apps<br/>Query Engine · Indexing Workers · Embedding Gen · Result Fusion]
+    end
+
+    subgraph Unified Index
+        Search[Azure AI Search<br/>Hybrid Vector + Keyword · Cross-Modal Rank · Semantic Rerank · Facets]
+    end
+
+    subgraph Reasoning Layer
+        OpenAI[Azure OpenAI — GPT-4o<br/>Query Understanding · Cross-Modal Synthesis · Expansion · Refinement]
+    end
+
+    subgraph Storage
+        Blob[Blob Storage<br/>Source Files · Embeddings · Thumbnails · Transcripts · Queue Artifacts]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>AI Creds · Search Keys · Storage Keys · Source Tokens]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    subgraph Monitoring
+        AppInsights[Application Insights<br/>Query Latency · Relevance (MRR/NDCG) · Embedding Throughput · Cache Hits]
+    end
+
+    Text --> ACA
+    Images --> Vision
+    Code --> ACA
+    Audio --> Speech
+    Vision -->|Image Embeddings + Metadata| ACA
+    Speech -->|Transcripts + Timestamps| ACA
+    ACA -->|Index Documents| Search
+    ACA -->|Cross-Modal Reasoning| OpenAI
+    OpenAI -->|Enhanced Results| ACA
+    Search -->|Search Results| ACA
+    ACA <-->|Content Store| Blob
+    ACA -->|Auth| MI
+    MI -->|Secrets| KV
+    ACA -->|Traces| AppInsights
+
+    style Text fill:#6366f1,color:#fff,stroke:#4f46e5
+    style Images fill:#ec4899,color:#fff,stroke:#db2777
+    style Code fill:#14b8a6,color:#fff,stroke:#0d9488
+    style Audio fill:#f43f5e,color:#fff,stroke:#e11d48
+    style Vision fill:#a855f7,color:#fff,stroke:#9333ea
+    style Speech fill:#f97316,color:#fff,stroke:#ea580c
+    style ACA fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Search fill:#10b981,color:#fff,stroke:#059669
+    style OpenAI fill:#22c55e,color:#fff,stroke:#16a34a
+    style Blob fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#ef4444,color:#fff,stroke:#dc2626
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+```
+
+📐 [Full architecture details](architecture.md)
+
+| Service | Purpose |
+|---------|---------|
+| Azure OpenAI | Text embedding + CLIP visual encoding |
+| Azure AI Search (Standard) | 4 vector indices (text, image, audio, video) |
+| Azure Speech (Whisper) | Audio → transcript for embedding |
+| Azure AI Vision | Video key frame extraction |
+| Azure Storage + CDN | Media files + delivery |
+| Cosmos DB (Serverless) | User preferences, search analytics |
+
+## Pre-Tuned Defaults
+- Encoding: text-embedding-3-large (1536d) · CLIP ViT-L/14 (768d) · Whisper-large-v3
+- Fusion: Reciprocal rank · text 40% / image 30% / audio 20% / video 10% · multi-modal bonus
+- Cross-modal: CLIP shared space for text↔image · transcript embedding for text→audio/video
+- Video: 1 fps key frames · scene detection · dual embedding (visual + transcript)
+
+## DevKit (AI-Assisted Development)
+| Primitive | What It Does |
+|-----------|-------------|
+| `agent.md` | Root orchestrator with builder→reviewer→tuner handoffs |
+| `copilot-instructions.md` | Multimodal domain (cross-modal, late fusion, video processing) |
+| 3 agents | Builder (gpt-4o), Reviewer (gpt-4o-mini), Tuner (gpt-4o-mini) |
+| 3 skills | Deploy (225+ lines), Evaluate (110+ lines), Tune (225+ lines) |
+| 4 prompts | `/deploy`, `/test`, `/review`, `/evaluate` with agent routing |
+
+## Cost Estimate
+| Service | Dev/mo | Prod/mo | Enterprise/mo |
+|---------|--------|---------|---------------|
+| Azure AI Search | $75 (Basic) | $500 (Standard S2) | $2,000 (Standard S3) |
+| Azure AI Vision | $5 (Free tier) | $200 (Standard S1) | $600 (Standard S1) |
+| Azure AI Speech | $5 (Free tier) | $150 (Standard) | $500 (Standard + Custom) |
+| Azure OpenAI | $25 (PAYG) | $350 (PAYG) | $1,200 (PTU Reserved) |
+| Container Apps | $10 (Consumption) | $200 (Dedicated) | $600 (Dedicated HA) |
+| Blob Storage | $5 (Hot LRS) | $80 (Hot LRS) | $250 (Hot GRS) |
+| Key Vault | $1 (Standard) | $5 (Standard) | $15 (Premium HSM) |
+| Application Insights | $0 (Free) | $45 (Pay-per-GB) | $150 (Pay-per-GB) |
+| **Total** | **$126** | **$1,530** | **$5,315** |
+
+💰 [Full cost breakdown](cost.json)
+
+## vs. Play 88 (Visual Product Search)
+| Aspect | Play 88 | Play 95 |
+|--------|---------|---------|
+| Focus | Product image matching (retail) | Universal content search (all types) |
+| Modalities | Image + text (2) | Text + image + audio + video (4) |
+| Cross-Modal | Image↔text only | All combinations (text→any, image→video) |
+| Fusion | Reranking weights | Late fusion with reciprocal rank |
+
+📖 [Full documentation](spec/README.md) · 🌐 [frootai.dev/solution-plays/95-multimodal-search-v2](https://frootai.dev/solution-plays/95-multimodal-search-v2) · 📦 [FAI Protocol](spec/fai-manifest.json)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `95-multimodal-search-v2` |
+| Version | `1.0.0` |
+| Knowledge | R2-RAG, F1-GenAI-Foundations, T3-Production-Patterns |
+| WAF Pillars | performance-efficiency, reliability, responsible-ai, cost-optimization |

@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_it_ticket_resolution",
+      "description": "Deploy IT Ticket AI — configure classification pipeline, routing rules, knowledge base integration, SLA tracking, PII masking. Use when: deploy, provision, configure.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-it-ticket-resolution/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_it_ticket_resolution",
+      "description": "Evaluate IT Ticket AI — test classification accuracy, routing correctness, SLA compliance, PII detection, resolution success rate. Use when: evaluate, test, quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-it-ticket-resolution/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_it_ticket_resolution",
+      "description": "Tune IT Ticket AI — optimize classification model, routing rules, confidence thresholds, SLA escalation timing, KB retrieval quality. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-it-ticket-resolution/"
+      }
+    }
+  ]
+}

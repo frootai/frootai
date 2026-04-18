@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-content-moderation-v2",
+      "description": "Deploy Content Moderation V2 — multi-modal safety (text+image+video), custom category training, severity-based routing, human review queues, appeal workflows, streaming moderation.",
+      "functions": [
+        {
+          "name": "deploy-content-moderation-v2",
+          "description": "Deploy Content Moderation V2 — multi-modal safety (text+image+video), custom category training, severity-based routing, human review queues, appeal workflows, streaming moderation.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-content-moderation-v2",
+      "description": "Evaluate Content Moderation V2 quality — precision/recall per category, false positive rate, latency per modality, human review efficiency, appeal fairness.",
+      "functions": [
+        {
+          "name": "evaluate-content-moderation-v2",
+          "description": "Evaluate Content Moderation V2 quality — precision/recall per category, false positive rate, latency per modality, human review efficiency, appeal fairness.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-content-moderation-v2",
+      "description": "Tune Content Moderation V2 — per-category severity thresholds, custom blocklists, review queue routing, appeal workflow, video sampling rate, latency optimization.",
+      "functions": [
+        {
+          "name": "tune-content-moderation-v2",
+          "description": "Tune Content Moderation V2 — per-category severity thresholds, custom blocklists, review queue routing, appeal workflow, video sampling rate, latency optimization.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

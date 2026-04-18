@@ -1,0 +1,21 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 2,
+    "steps": [
+      {
+        "stepName": "Swarm-Supervisor",
+        "agentRole": "reviewer",
+        "description": "Multi-agent swarm supervisor — routes tasks to specialist agents (researcher, analyst, coder, reviewer), manages handoffs, enforces turn limits, and synthesizes multi-perspective results.",
+        "model": "gpt-4o",
+        "tools": [],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/swarm-supervisor.agent.md",
+          "waf": []
+        }
+      }
+    ]
+  }
+}

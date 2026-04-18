@@ -1,0 +1,52 @@
+{
+  "filters": [
+    {
+      "name": "guardrail-groundedness",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-coherence",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.9",
+      "threshold": 0.9,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-safety",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "block"
+      }
+    },
+    {
+      "name": "guardrail-costPerQuery",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.03",
+      "threshold": 0.03,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    }
+  ]
+}

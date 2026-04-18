@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_fine_tuning_workflow",
+      "description": "Deploy Fine-Tuning pipeline — provision Azure ML workspace, prepare JSONL training data, configure LoRA, submit training job, deploy fine-tuned model. Use when: deploy, provision, train.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-fine-tuning-workflow/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_fine_tuning_workflow",
+      "description": "Evaluate Fine-Tuning — compare fine-tuned vs base model on task-specific benchmarks, check overfitting, measure improvement on target metrics. Use when: evaluate, benchmark, compare.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-fine-tuning-workflow/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_fine_tuning_workflow",
+      "description": "Tune Fine-Tuning — optimize LoRA rank, learning rate, epochs, batch size, data mix, compute selection, cost per training run. Use when: tune, optimize hyperparameters.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-fine-tuning-workflow/"
+      }
+    }
+  ]
+}

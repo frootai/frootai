@@ -41,7 +41,7 @@ import { join, dirname, basename, resolve } from "path";
 import { fileURLToPath } from "url";
 
 import { getLatestKnowledge } from "./auto-update.js";
-import { ENDPOINTS } from "./endpoints.js";
+import { ENDPOINTS, urls } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -78,8 +78,16 @@ try {
 }
 
 // ─── Production Middleware (Phase 3) ──────────────────────────────
+// Architecture: Middleware is implemented as composable classes (LRUCache,
+// RateLimiter, sanitizer) instantiated at startup and applied inside each
+// tool handler — not as Express-style wrapping functions. This keeps the
+// MCP SDK's tool registration clean while still enforcing caching, rate
+// limiting, and input sanitization on every external-facing tool call.
 
-/** LRU Cache with TTL — avoids re-computing on repeated calls */
+/** LRU Cache with TTL — avoids re-computing on repeated calls.
+ *  Uses Map iteration order (insertion-order) as the eviction signal:
+ *  on every get-hit, the entry is deleted and re-inserted at the end,
+ *  so the first key in the Map is always the least-recently-used. */
 class LRUCache {
   constructor(maxSize = 100, defaultTTLMs = 300_000) {
     this.cache = new Map();
@@ -112,7 +120,12 @@ class LRUCache {
   }
 }
 
-/** Token bucket rate limiter — protects external APIs */
+/** Token bucket rate limiter — protects external APIs (GitHub, MS Learn, MCP Registry).
+ *  Algorithm: Each key (API endpoint) gets a bucket that starts full (maxTokens).
+ *  On each request, one token is consumed. Tokens refill continuously at refillPerSec.
+ *  This allows short bursts (up to maxTokens) while enforcing a steady-state rate,
+ *  which is gentler on APIs than a fixed-window counter. Per-key buckets prevent
+ *  one noisy tool from starving others. */
 class RateLimiter {
   constructor(maxTokens = 10, refillPerSec = 1) {
     this.buckets = new Map();
@@ -124,6 +137,7 @@ class RateLimiter {
     const now = Date.now();
     let bucket = this.buckets.get(key);
     if (!bucket) { bucket = { tokens: this.maxTokens, lastRefill: now }; this.buckets.set(key, bucket); }
+    // Refill tokens proportional to elapsed time since last check
     const elapsed = (now - bucket.lastRefill) / 1000;
     bucket.tokens = Math.min(this.maxTokens, bucket.tokens + elapsed * this.refillPerSec);
     bucket.lastRefill = now;
@@ -273,7 +287,15 @@ const FROOT_MAP = {
 };
 
 /**
- * Load modules — uses auto-update (fetches from GitHub if stale), falls back to bundled/local
+ * Load modules — uses auto-update (fetches from GitHub if stale), falls back to bundled/local.
+ *
+ * Loading strategy (eager, with lazy refresh):
+ *   1. Try auto-update first — if knowledge.json is >7 days old, fetch from GitHub.
+ *      This keeps npx users current without requiring a package upgrade.
+ *   2. If the fetch fails (offline, rate-limited), fall back to the bundled/local copy.
+ *   3. Once loaded, modules are cached in _cachedModules (singleton) for the process lifetime.
+ *   This is "eager at startup, lazy on refresh" — the server blocks on first load but
+ *   never re-reads from disk or network during a session.
  */
 async function loadModulesWithAutoUpdate() {
   try {
@@ -294,6 +316,11 @@ async function loadModulesWithAutoUpdate() {
 /**
  * Load modules — tries bundled JSON first (for npx), falls back to local files (for repo).
  * Results are cached in-memory to avoid re-reading 18+ markdown files on every call.
+ *
+ * Two distribution modes require different loading paths:
+ *   Mode 1 (npx): knowledge.json is pre-built and shipped in the npm package — fast, single file.
+ *   Mode 2 (repo): reads raw .md files from docs/ — used during development.
+ * The consumer (tool handlers) never knows which mode loaded the data.
  */
 let _cachedModules = null;
 
@@ -421,13 +448,24 @@ try {
 }
 
 // ─── BM25 Search Algorithm ────────────────────────────────────────
-// BM25 (Best Matching 25) is a probabilistic ranking function.
-// Parameters:
-//   k1 (1.2-2.0): Term saturation. Higher = longer docs get more credit.
-//   b  (0.75):    Length normalization. 0 = no normalization, 1 = full.
-// Score = Σ IDF(t) × (tf × (k1+1)) / (tf + k1 × (1 - b + b × dl/avgdl))
-// where IDF = inverse document frequency, tf = term frequency in doc,
-// dl = doc length, avgdl = average doc length across corpus.
+// BM25 (Best Matching 25) is a probabilistic ranking function used in
+// information retrieval. It extends TF-IDF by adding document length
+// normalization, which prevents long documents from dominating results.
+//
+// Key parameters (pre-computed in search-index.json by build-search-index.js):
+//   k1 (1.2):  Controls term frequency saturation — higher values let
+//              repeated terms contribute more; 1.2 is the classic default.
+//   b  (0.75): Controls document length normalization — 0 ignores length,
+//              1 fully penalizes long docs. 0.75 balances precision/recall.
+//
+// Per-term scoring formula:
+//   Score(t) = IDF(t) × (tf × (k1+1)) / (tf + k1 × (1 - b + b × dl/avgdl))
+//   where: IDF = log((N - df + 0.5) / (df + 0.5)), precomputed per term
+//          tf  = term frequency in this document
+//          dl  = document length (tokens), avgdl = corpus average
+//
+// The IDF values and per-doc term frequencies are precomputed at build time
+// into search-index.json (~200KB), so runtime scoring is just arithmetic.
 // STOP_WORDS filter removes ~100 common English words to reduce noise.
 
 /**
@@ -443,6 +481,7 @@ function bm25Score(queryTokens, doc) {
   for (const term of queryTokens) {
     if (!idf[term] || !doc.tf[term]) continue;
     const tf = doc.tf[term];
+    // BM25 per-term score: IDF-weighted, length-normalized term frequency
     const tfScore = (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (docLen / avgDocLen)));
     score += idf[term] * tfScore;
   }
@@ -1336,12 +1375,12 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 
       if (plays.length > 0) {
         const formatted = plays.map((p, i) =>
-          `${i + 1}. **${p}**\n   🔗 https://github.com/frootai/frootai/tree/main/solution-plays/${p}`
+          `${i + 1}. **${p}**\n   🔗 ${urls.github.playTree(p)}`
         ).join("\n");
         return {
           content: [{
             type: "text",
-            text: `## FrootAI Solution Plays\n*Live from GitHub*\n\n${formatted}\n\n---\n**Each play ships with:** .github Agentic OS (19 files) + DevKit + TuneKit\n🌐 https://frootai.dev/solution-plays`,
+            text: `## FrootAI Solution Plays\n*Live from GitHub*\n\n${formatted}\n\n---\n**Each play ships with:** .github Agentic OS (19 files) + DevKit + TuneKit\n🌐 ${urls.website.plays}`,
           }],
         };
       }
@@ -1361,7 +1400,7 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
       return {
         content: [{
           type: "text",
-          text: `## FrootAI Solution Plays\n*Offline — showing bundled list*\n\n${formatted}\n\n---\n**101 plays** · Each with .github Agentic OS + DevKit + TuneKit\n🌐 https://frootai.dev/solution-plays`,
+          text: `## FrootAI Solution Plays\n*Offline — showing bundled list*\n\n${formatted}\n\n---\n**101 plays** · Each with .github Agentic OS + DevKit + TuneKit\n🌐 ${urls.website.plays}`,
         }],
       };
     }
@@ -2092,7 +2131,7 @@ ${est.breakdown}
       const engine = BM25_INDEX ? "BM25" : "Jaccard";
       const _ms = trackTool("semantic_search_plays", _start);
       mcpLog(server, "debug", "semantic_search_plays", { duration: `${_ms}ms` });
-      return { content: [{ type: "text", text: `## 🔍 Smart Play Search (${engine})\n**Query**: "${query}"\n\n${results}\n\n---\n> 💡 Use the [Configurator](https://frootai.dev/configurator) for guided selection.` }] };
+      return { content: [{ type: "text", text: `## 🔍 Smart Play Search (${engine})\n**Query**: "${query}"\n\n${results}\n\n---\n> 💡 Use the [Configurator](${urls.website.configurator}) for guided selection.` }] };
     }
   );
 
@@ -2443,7 +2482,7 @@ ${est.breakdown}
       const listing = items.map((it, i) => `${i + 1}. **${it.name}** — ${it.description}`).join("\n");
       const _ms = trackTool("list_primitives", _start);
       mcpLog(server, "debug", "list_primitives", { duration: `${_ms}ms` });
-      return { content: [{ type: "text", text: `## ${type.charAt(0).toUpperCase() + type.slice(1)} Catalog (${Math.min(limit, total)} of ${total})\n\n${listing}\n\n---\n📊 **Total ${type}**: ${total} | 🌐 [Browse all on frootai.dev](https://frootai.dev/primitives/${type})` }] };
+      return { content: [{ type: "text", text: `## ${type.charAt(0).toUpperCase() + type.slice(1)} Catalog (${Math.min(limit, total)} of ${total})\n\n${listing}\n\n---\n📊 **Total ${type}**: ${total} | 🌐 [Browse all on frootai.dev](${urls.website.primitives(type)})` }] };
     }
   );
 
@@ -2558,7 +2597,7 @@ ${est.breakdown}
       output += `- \`evaluation/\` — eval.py, test-set.jsonl\n`;
       output += `- \`infra/\` — main.bicep, parameters.json\n\n`;
 
-      output += `🔗 [View on website](https://frootai.dev/solution-plays/${playFolder}) | [User Guide](https://frootai.dev/user-guide?play=${playId})`;
+      output += `🔗 [View on website](${urls.website.playDetail(playFolder)}) | [User Guide](${urls.website.userGuide(playId)})`;
 
       const _ms = trackTool("get_play_detail", _start);
       mcpLog(server, "debug", "get_play_detail", { duration: `${_ms}ms` });

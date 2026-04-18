@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.638Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "85-policy-impact-analyzer",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\85-policy-impact-analyzer\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-85-policy-impact-analyzer",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-85",
+        "description": "Skill: deploy-85",
+        "functions": [
+          {
+            "name": "deploy-85",
+            "description": "Skill: deploy-85",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-85",
+        "description": "Skill: evaluate-85",
+        "functions": [
+          {
+            "name": "evaluate-85",
+            "description": "Skill: evaluate-85",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-85",
+        "description": "Skill: tune-85",
+        "functions": [
+          {
+            "name": "tune-85",
+            "description": "Skill: tune-85",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "responsible-ai",
+      "reliability",
+      "security",
+      "operational-excellence"
+    ],
+    "scope": "85-policy-impact-analyzer"
+  }
+}

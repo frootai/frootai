@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.630Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "81-property-valuation-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\81-property-valuation-ai\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-81-property-valuation-ai",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-81",
+        "description": "Skill: deploy-81",
+        "functions": [
+          {
+            "name": "deploy-81",
+            "description": "Skill: deploy-81",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-81",
+        "description": "Skill: evaluate-81",
+        "functions": [
+          {
+            "name": "evaluate-81",
+            "description": "Skill: evaluate-81",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-81",
+        "description": "Skill: tune-81",
+        "functions": [
+          {
+            "name": "tune-81",
+            "description": "Skill: tune-81",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T3-Production-Patterns",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "reliability",
+      "responsible-ai",
+      "security",
+      "cost-optimization"
+    ],
+    "scope": "81-property-valuation-ai"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_model_governance",
+      "description": "Deploy AI Model Governance — model registry with versioning, multi-stage approval workflows, A/B champion/challenger testing, model cards, lineage tracking, progressive rollout, drift monitoring.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-model-governance/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_model_governance",
+      "description": "Evaluate AI Model Governance quality — approval workflow efficiency, A/B test effectiveness, drift detection accuracy, model card completeness, rollback reliability.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-model-governance/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_model_governance",
+      "description": "Tune AI Model Governance — eval gate thresholds, A/B test duration and split, drift detection sensitivity, progressive rollout speed, approval workflow SLA.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-model-governance/"
+      }
+    }
+  ]
+}

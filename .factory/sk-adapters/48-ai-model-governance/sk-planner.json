@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Model-Governance-Builder",
+        "agentRole": "builder",
+        "description": "Model Governance builder - implements registry, approval workflow, A/B, model cards",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "operational-excellence",
+            "responsible-ai"
+          ]
+        }
+      },
+      {
+        "stepName": "Model-Governance-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Model Governance reviewer - audits model cards, bias testing, compliance, lineage",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Model-Governance-Tuner",
+        "agentRole": "tuner",
+        "description": "Model Governance tuner - optimizes A/B duration, drift detection, rollout speed",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

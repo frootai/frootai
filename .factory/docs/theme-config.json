@@ -1,0 +1,33 @@
+{
+  "colors": {
+    "primary": "#10b981",
+    "primaryDark": "#059669",
+    "accent": "#d4a853",
+    "background": "#0a0a0a",
+    "surface": "#111111",
+    "text": "#e5e5e5",
+    "muted": "#737373"
+  },
+  "fonts": {
+    "heading": "Inter, system-ui, sans-serif",
+    "body": "Inter, system-ui, sans-serif",
+    "code": "JetBrains Mono, Fira Code, monospace"
+  },
+  "logo": {
+    "text": "FrootAI",
+    "tagline": "AI Primitive Unification",
+    "brandHtml": "<span class=\"text-white\">Froot</span><span class=\"text-emerald-400\">AI</span>"
+  },
+  "codeTheme": "one-dark-pro",
+  "defaultTheme": "dark",
+  "features": {
+    "search": true,
+    "toc": true,
+    "editOnGithub": true,
+    "feedback": true,
+    "copyCode": true,
+    "breadcrumbs": true,
+    "prevNext": true,
+    "darkMode": true
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.648Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "92-telecom-fraud-shield",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\92-telecom-fraud-shield\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-92-telecom-fraud-shield",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-92",
+        "description": "Skill: deploy-92",
+        "functions": [
+          {
+            "name": "deploy-92",
+            "description": "Skill: deploy-92",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-92",
+        "description": "Skill: evaluate-92",
+        "functions": [
+          {
+            "name": "evaluate-92",
+            "description": "Skill: evaluate-92",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-92",
+        "description": "Skill: tune-92",
+        "functions": [
+          {
+            "name": "tune-92",
+            "description": "Skill: tune-92",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "R3-Deterministic-AI",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "92-telecom-fraud-shield"
+  }
+}

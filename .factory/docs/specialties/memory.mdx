@@ -1,0 +1,125 @@
+---
+title: "FAI Memory"
+description: "Protocol-level Memory"
+icon: "🧠"
+order: 1
+editUrl: "engine/specialties/memory.js"
+category: "specialties"
+---
+# FAI Memory
+
+🧠 S-1 — Protocol-level memory.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    tiers: {
+      type: 'object',
+      properties: {
+        working: {
+          type: 'object',
+          properties: {
+            backend: { type: 'string', enum: ['redis', 'in-memory', 'sqlite'], default: 'in-memory' },
+            ttl: { type: 'string', pattern: '^[0-9]+(s|m|h|d)$', default: '15m' },
+            maxTokens: { type: 'integer', minimum: 100, default: 4000 }
+          },
+          additionalProperties: false,
+          description: 'Short-term working memory — current conversation context.'
+        },
+        episodic: {
+          type: 'object',
+          properties: {
+            backend: { type: 'string', enum: ['vector-store', 'ai-search', 'pinecone', 'qdrant', 'chromadb'], default: 'vector-store' },
+            ttl: { type: 'string', pattern: '^[0-9]+(s|m|h|d)$', default: '365d' },
+            compression: { type: 'string', pattern: '^[0-9]+→[0-9]+$', description: 'Token compression (e.g., "4000→200").' },
+            similarityThreshold: { type: 'number', minimum: 0, maximum: 1, default: 0.75 }
+          },
+          additionalProperties: false,
+          description: 'Long-term episodic memory — past interactions stored as embeddings.'
+        },
+        semantic: {
+          type: 'object',
+          properties: {
+            backend: { type: 'string', enum: ['cosmos-db', 'postgresql', 'sqlite', 'mongodb'], default: 'cosmos-db' },
+            ttl: { type: 'string', pattern: '^[0-9]+(s|m|h|d)$', default: '90d' },
+            pii: { type: 'string', enum: ['redact', 'encrypt', 'mask', 'exclude'], default: 'redact' },
+            indexFields: { type: 'array', items: { type: 'string' }, description: 'Fields to index for fast retrieval.' }
+          },
+          additionalProperties: false,
+          description: 'Structured semantic memory — facts, preferences, learned knowledge.'
+        }
+      },
+      additionalProperties: false
+    },
+    federation: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          enum: ['agent', 'play', 'organization', 'global'],
+          default: 'play',
+          description: 'Visibility scope of memory. "play" = all agents in same play can read.'
+        },
+        shareWith: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Agent IDs that can read this agent\'s memory (e.g., ["reviewer", "tuner"]).'
+        },
+        writePolicy: {
+          type: 'string',
+          enum: ['owner-only', 'shared', 'append-only'],
+          default: 'owner-only',
+          description: 'Who can write to this memory pool.'
+        },
+        conflictResolution: {
+          type: 'string',
+          enum: ['last-write-wins', 'merge', 'version'],
+          default: 'last-write-wins',
+          description: 'How to resolve conflicts when multiple agents write to shared memory.'
+        }
+      },
+      additionalProperties: false
+    },
+    compliance: {
+      type: 'object',
+      properties: {
+        gdpr: { type: 'boolean', default: false, description: 'Enable GDPR-compliant memory handling.' },
+        rightToDeletion: { type: 'string', enum: ['automated', 'manual', 'request-queue'], default: 'automated' },
+        retention: { type: 'string', pattern: '^[0-9]+(s|m|h|d)$', default: '90d' },
+        auditLog: { type: 'boolean', default: true },
+        dataResidency: { type: 'string', description: 'Azure region for memory storage (e.g., "westeurope").' }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `memory` section to your `fai-manifest.json`:
+
+```json
+{
+  "memory": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.memory
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/memory.js)

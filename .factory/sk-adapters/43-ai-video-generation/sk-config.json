@@ -1,0 +1,253 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.547Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "43-ai-video-generation",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\43-ai-video-generation\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-43-ai-video-generation",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-ai-video-generation",
+        "description": "Deploy AI Video Generation pipeline — text-to-video, image-to-video, batch queue processing, async generation with polling, content safety, C2PA watermarking.",
+        "functions": [
+          {
+            "name": "deploy-ai-video-generation",
+            "description": "Deploy AI Video Generation pipeline — text-to-video, image-to-video, batch queue processing, async generation with polling, content safety, C2PA watermarking.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "User query or prompt",
+                "required": true
+              },
+              {
+                "name": "content",
+                "type": "string",
+                "description": "Document or content to process",
+                "required": false
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-ai-video-generation",
+        "description": "Evaluate AI Video Generation quality — visual fidelity, prompt adherence, temporal coherence, content safety compliance, generation latency, cost per video.",
+        "functions": [
+          {
+            "name": "evaluate-ai-video-generation",
+            "description": "Evaluate AI Video Generation quality — visual fidelity, prompt adherence, temporal coherence, content safety compliance, generation latency, cost per video.",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "User query or prompt",
+                "required": true
+              },
+              {
+                "name": "content",
+                "type": "string",
+                "description": "Document or content to process",
+                "required": false
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-ai-video-generation",
+        "description": "Tune AI Video Generation configuration — resolution presets, quality/cost trade-offs, batch queue throughput, prompt enhancement, content safety thresholds, preview workflow.",
+        "functions": [
+          {
+            "name": "tune-ai-video-generation",
+            "description": "Tune AI Video Generation configuration — resolution presets, quality/cost trade-offs, batch queue throughput, prompt enhancement, content safety thresholds, preview workflow.",
+            "parameters": [
+              {
+                "name": "content",
+                "type": "string",
+                "description": "Document or content to process",
+                "required": false
+              },
+              {
+                "name": "temperature",
+                "type": "number",
+                "description": "Sampling temperature (0-1)",
+                "required": false
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Video-Generation-Builder",
+        "agentRole": "builder",
+        "description": "Video Generation builder - implements generation pipeline, batch processing, safety",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "cost-optimization"
+          ]
+        }
+      },
+      {
+        "stepName": "Video-Generation-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Video Generation reviewer - audits content safety, copyright, watermarking",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Video-Generation-Tuner",
+        "agentRole": "tuner",
+        "description": "Video Generation tuner - optimizes quality/cost, resolution, queue throughput",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "operational-excellence"
+          ]
+        }
+      }
+    ]
+  },
+  "filters": [
+    {
+      "name": "guardrail-groundedness",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate groundedness ≥ 0.85",
+      "threshold": 0.85,
+      "metric": "groundedness",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-coherence",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate coherence ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "coherence",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-relevance",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate relevance ≥ 0.8",
+      "threshold": 0.8,
+      "metric": "relevance",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    },
+    {
+      "name": "guardrail-safety",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate safety ≥ 0",
+      "threshold": 0,
+      "metric": "safety",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "block"
+      }
+    },
+    {
+      "name": "guardrail-costPerQuery",
+      "filterType": "FunctionInvocationFilter",
+      "event": "PostToolUse",
+      "description": "Evaluate costPerQuery ≥ 0.05",
+      "threshold": 0.05,
+      "metric": "costPerQuery",
+      "metadata": {
+        "source": "fai-guardrail",
+        "action": "warn"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "ai-video-generation-patterns",
+      "description": "Domain-specific coding patterns for Ai Video Generation (Play 43)",
+      "applyTo": "**/*.{py,ts,js}",
+      "template": "# Ai Video Generation — Domain Patterns & Best Practices\n\n## Architecture Pattern\nThis play implements a Ai Video Generation architecture with these core components:\n\n### Request Flow\n1. Client sends request to API endpoint\n2. Input validation and sanitization\n3. Authentication check (Managed Identity / Bearer token)\n4. Core processing pipeline:\n   a. Pre-processing: data extraction, normalization, enrichment\n   b. AI processing: model inference, embedding, search, generation\n   c. Post-processing: output validation, formatting, safety check\n5. Response with structured output and metadata\n6. Async logging: metrics, traces, audit events\n\n### Component Responsibilities\n| Component | Responsibility | Key Patterns |\n|-----------|---------------|-------------|\n| API Gateway | Routing, rate limiting, auth | APIM policies, JWT validation |\n| Application | Business logic, orchestration | Async/await, dependency injection |\n| AI Services | Model inference, embeddings | Retry with backoff, circuit breaker |\n| Data Store | Persistence, caching | Connection pooling, read replicas |\n| Monitoring | Observability, alerting | Structured logs, custom metrics |\n\n## Domain-Specific Patterns\n\n### Data Processing Pipeline\n```python\nfrom dataclasses import dataclass\nfrom typing import List, Optional\nimport asyncio\n\n@dataclass\nclass ProcessingResult:\n    \"\"\"Result from the processing pipeline.\"\"\"\n    data: dict\n    metadata: dict\n    quality_score: float\n    processing_time_ms: float\n\nclass ProcessingPipeline:\n    \"\"\"Multi-stage processing pipeline for Ai Video Generation.\"\"\"\n    \n    def __init__(self, config: dict):\n        self.config = config\n        self.stages = []\n    \n    def add_stage(self, stage_fn, name: str):\n        self.stages.append({\"fn\": stage_fn, \"name\": name})\n    \n    async def execute(self, input_data: dict) -> ProcessingResult:\n        import time\n        start = time.monotonic()\n        current = input_data\n        metadata = {\"stages\": []}\n        \n        for stage in self.stages:\n            stage_start = time.monotonic()\n            try:\n                current = await stage[\"fn\"](current)\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"success\",\n                    \"duration_ms\": round((time.monotonic() - stage_start) * 1000, 2)\n                })\n            except Exception as e:\n                metadata[\"stages\"].append({\n                    \"name\": stage[\"name\"],\n                    \"status\": \"error\",\n                    \"error\": str(e)\n                })\n                raise\n        \n        return ProcessingResult(\n            data=current,\n            metadata=metadata,\n            quality_score=current.get(\"quality_score\", 0.0),\n            processing_time_ms=round((time.monotonic() - start) * 1000, 2)\n        )\n```\n\n### Configuration Management\n```python\nimport json\nfrom pathlib import Path\nfrom functools import lru_cache\n\n@lru_cache(maxsize=1)\ndef load_play_config() -> dict:\n    \"\"\"Load all config files for this play.\"\"\"\n    config_dir = Path(__file__).parent.parent / \"config\"\n    configs = {}\n    for config_file in config_dir.glob(\"*.json\"):\n        with open(config_file) as f:\n            configs[config_file.stem] = json.load(f)\n    return configs\n\ndef get_model_config() -> dict:\n    \"\"\"Get OpenAI model configuration.\"\"\"\n    config = load_play_config()\n    return config.get(\"openai\", {\"model\": \"gpt-4o\", \"temperature\": 0.1, \"max_tokens\": 4096})\n\ndef get_guardrails() -> dict:\n    \"\"\"Get content safety and guardrail thresholds.\"\"\"\n    config = load_play_config()\n    return config.get(\"guardrails\", {\"content_safety_threshold\": 4, \"groundedness_min\": 0.8})\n```\n\n### Health Check Pattern\n```python\nfrom fastapi import FastAPI, Response\nfrom datetime import datetime\n\napp = FastAPI()\n\n@app.get(\"/health\")\nasync def health_check():\n    checks = {}\n    overall = True\n    \n    # Check Azure OpenAI\n    try:\n        await openai_client.models.list()\n      ",
+      "templateFormat": "handlebars",
+      "metadata": {
+        "source": "fai-instruction",
+        "originalPath": "./.github/instructions/ai-video-generation-patterns.instructions.md"
+      }
+    }
+  ],
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "F2-LLM-Selection",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns",
+      "R1-Prompt-Patterns"
+    ],
+    "waf": [
+      "cost-optimization",
+      "responsible-ai",
+      "performance-efficiency",
+      "reliability"
+    ],
+    "scope": "ai-video-generation-solution"
+  }
+}

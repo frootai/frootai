@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-semantic-search-engine",
+      "description": "Deploy Semantic Search Engine — configure embedding pipeline, vector index, hybrid search, scoring profiles, query expansion, personalization API. Use when: deploy, provision search backend.",
+      "functions": [
+        {
+          "name": "deploy-semantic-search-engine",
+          "description": "Deploy Semantic Search Engine — configure embedding pipeline, vector index, hybrid search, scoring profiles, query expansion, personalization API. Use when: deploy, provision search backend.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-semantic-search-engine",
+      "description": "Evaluate Semantic Search Engine — measure NDCG@10, MRR, zero-result rate, query latency, personalization lift, embedding quality. Use when: evaluate, benchmark search quality.",
+      "functions": [
+        {
+          "name": "evaluate-semantic-search-engine",
+          "description": "Evaluate Semantic Search Engine — measure NDCG@10, MRR, zero-result rate, query latency, personalization lift, embedding quality. Use when: evaluate, benchmark search quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-semantic-search-engine",
+      "description": "Tune Semantic Search Engine — optimize scoring profiles, embedding model, query expansion strategy, personalization weights, index configuration, cost per query. Use when: tune, optimize search.",
+      "functions": [
+        {
+          "name": "tune-semantic-search-engine",
+          "description": "Tune Semantic Search Engine — optimize scoring profiles, embedding model, query expansion strategy, personalization weights, index configuration, cost per query. Use when: tune, optimize search.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

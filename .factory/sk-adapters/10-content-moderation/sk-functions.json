@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-content-moderation",
+      "description": "Deploy Content Moderation — configure Azure Content Safety, custom blocklists, severity thresholds, input+output pipeline, image moderation. Use when: deploy.",
+      "functions": [
+        {
+          "name": "deploy-content-moderation",
+          "description": "Deploy Content Moderation — configure Azure Content Safety, custom blocklists, severity thresholds, input+output pipeline, image moderation. Use when: deploy.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-content-moderation",
+      "description": "Evaluate Content Moderation — test true positive rate, false positive rate, moderation latency, custom category detection, human review volume. Use when: evaluate.",
+      "functions": [
+        {
+          "name": "evaluate-content-moderation",
+          "description": "Evaluate Content Moderation — test true positive rate, false positive rate, moderation latency, custom category detection, human review volume. Use when: evaluate.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-content-moderation",
+      "description": "Tune Content Moderation — optimize severity thresholds per category, reduce false positives, custom blocklist management, latency optimization. Use when: tune.",
+      "functions": [
+        {
+          "name": "tune-content-moderation",
+          "description": "Tune Content Moderation — optimize severity thresholds per category, reduce false positives, custom blocklist management, latency optimization. Use when: tune.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

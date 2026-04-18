@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-responsible-ai-dashboard",
+      "description": "Deploy Responsible AI Dashboard — centralized fairness monitoring, content safety incident tracking, model card registry, compliance evidence hub, executive scorecards, multi-system aggregation.",
+      "functions": [
+        {
+          "name": "deploy-responsible-ai-dashboard",
+          "description": "Deploy Responsible AI Dashboard — centralized fairness monitoring, content safety incident tracking, model card registry, compliance evidence hub, executive scorecards, multi-system aggregation.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-responsible-ai-dashboard",
+      "description": "Evaluate Responsible AI Dashboard quality — fairness metric coverage, incident tracking completeness, compliance evidence gaps, executive summary quality, alert reliability.",
+      "functions": [
+        {
+          "name": "evaluate-responsible-ai-dashboard",
+          "description": "Evaluate Responsible AI Dashboard quality — fairness metric coverage, incident tracking completeness, compliance evidence gaps, executive summary quality, alert reliability.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-responsible-ai-dashboard",
+      "description": "Tune Responsible AI Dashboard — monitoring cadence, fairness thresholds, alert rules, compliance frameworks, executive summary style, incident severity classification.",
+      "functions": [
+        {
+          "name": "tune-responsible-ai-dashboard",
+          "description": "Tune Responsible AI Dashboard — monitoring cadence, fairness thresholds, alert rules, compliance frameworks, executive summary style, incident severity classification.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

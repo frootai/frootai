@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Supply-Chain-AI-Builder",
+        "agentRole": "builder",
+        "description": "Supply Chain AI builder - implements forecasting, risk scoring, optimization",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "cost-optimization"
+          ]
+        }
+      },
+      {
+        "stepName": "Supply-Chain-AI-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Supply Chain AI reviewer - audits forecast accuracy, risk model, data quality",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "reliability",
+            "responsible-ai",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "Supply-Chain-AI-Tuner",
+        "agentRole": "tuner",
+        "description": "Supply Chain AI tuner - optimizes model parameters, feature selection, frequency",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

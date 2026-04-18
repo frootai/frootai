@@ -1,0 +1,82 @@
+{
+  "functions": [
+    {
+      "name": "deploy-multimodal-agent",
+      "description": "Deploy Multimodal Agent — configure unified text+image+audio pipeline, GPT-4o vision, modality routing, cross-modal synthesis, content safety per modality. Use when: deploy, provision multimodal.",
+      "functions": [
+        {
+          "name": "deploy-multimodal-agent",
+          "description": "Deploy Multimodal Agent — configure unified text+image+audio pipeline, GPT-4o vision, modality routing, cross-modal synthesis, content safety per modality. Use when: deploy, provision multimodal.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-multimodal-agent",
+      "description": "Evaluate Multimodal Agent — measure per-modality accuracy, cross-modal quality, content safety coverage, processing latency, modality routing. Use when: evaluate, test multimodal quality.",
+      "functions": [
+        {
+          "name": "evaluate-multimodal-agent",
+          "description": "Evaluate Multimodal Agent — measure per-modality accuracy, cross-modal quality, content safety coverage, processing latency, modality routing. Use when: evaluate, test multimodal quality.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-multimodal-agent",
+      "description": "Tune Multimodal Agent — optimize image detail level, parallel modality processing, cross-modal prompts, content safety thresholds, cost per request. Use when: tune, optimize multimodal.",
+      "functions": [
+        {
+          "name": "tune-multimodal-agent",
+          "description": "Tune Multimodal Agent — optimize image detail level, parallel modality processing, cross-modal prompts, content safety thresholds, cost per request. Use when: tune, optimize multimodal.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

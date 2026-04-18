@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.627Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "79-food-safety-inspector-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\79-food-safety-inspector-ai\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-79-food-safety-inspector-ai",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-79",
+        "description": "Skill: deploy-79",
+        "functions": [
+          {
+            "name": "deploy-79",
+            "description": "Skill: deploy-79",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-79",
+        "description": "Skill: evaluate-79",
+        "functions": [
+          {
+            "name": "evaluate-79",
+            "description": "Skill: evaluate-79",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-79",
+        "description": "Skill: tune-79",
+        "functions": [
+          {
+            "name": "tune-79",
+            "description": "Skill: tune-79",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "R2-RAG-Architecture",
+      "T2-Responsible-AI",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "responsible-ai",
+      "operational-excellence"
+    ],
+    "scope": "79-food-safety-inspector-ai"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_powered_devops",
+      "description": "Deploy AI-Powered DevOps — configure AI incident pipeline, deployment risk scoring, auto-remediation runbooks, alert correlation, change impact analysis. Use when: deploy, provision AIOps.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-powered-devops/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_powered_devops",
+      "description": "Evaluate AI-Powered DevOps — measure incident response accuracy, risk score calibration, auto-remediation safety, alert correlation quality, MTTR reduction. Use when: evaluate, test AIOps.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-powered-devops/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_powered_devops",
+      "description": "Tune AI-Powered DevOps — optimize alert correlation windows, risk scoring weights, remediation confidence, incident prompt quality, cost. Use when: tune, optimize AIOps.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-powered-devops/"
+      }
+    }
+  ]
+}

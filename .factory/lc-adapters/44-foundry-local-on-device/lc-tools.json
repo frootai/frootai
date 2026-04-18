@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_foundry_local_on_device",
+      "description": "Deploy Foundry Local On-Device AI — local model inference with Foundry Local SDK, hardware-aware model selection, hybrid cloud/local routing, offline caching.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-foundry-local-on-device/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_foundry_local_on_device",
+      "description": "Evaluate Foundry Local On-Device AI quality — local vs cloud response accuracy, latency comparison, cost savings, offline reliability, hardware utilization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-foundry-local-on-device/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_foundry_local_on_device",
+      "description": "Tune Foundry Local On-Device AI — model selection per device class, complexity routing thresholds, quantization levels, prompt optimization for local models, cost savings maximization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-foundry-local-on-device/"
+      }
+    }
+  ]
+}

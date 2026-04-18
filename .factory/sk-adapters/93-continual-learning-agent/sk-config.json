@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.650Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "93-continual-learning-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\93-continual-learning-agent\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-93-continual-learning-agent",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-93",
+        "description": "Skill: deploy-93",
+        "functions": [
+          {
+            "name": "deploy-93",
+            "description": "Skill: deploy-93",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-93",
+        "description": "Skill: evaluate-93",
+        "functions": [
+          {
+            "name": "evaluate-93",
+            "description": "Skill: evaluate-93",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-93",
+        "description": "Skill: tune-93",
+        "functions": [
+          {
+            "name": "tune-93",
+            "description": "Skill: tune-93",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "O2-AI-Agents",
+      "T3-Production-Patterns",
+      "R2-RAG"
+    ],
+    "waf": [
+      "reliability",
+      "responsible-ai",
+      "performance-efficiency",
+      "cost-optimization"
+    ],
+    "scope": "93-continual-learning-agent"
+  }
+}

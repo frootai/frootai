@@ -1,0 +1,100 @@
+{
+  "functions": [
+    {
+      "name": "deploy-prompt-management",
+      "description": "Deploy Prompt Management — set up prompt registry (Cosmos DB), versioned templates, A/B testing framework, injection defense layer, prompt analytics. Use when: deploy, provision, configure prompt platform.",
+      "functions": [
+        {
+          "name": "deploy-prompt-management",
+          "description": "Deploy Prompt Management — set up prompt registry (Cosmos DB), versioned templates, A/B testing framework, injection defense layer, prompt analytics. Use when: deploy, provision, configure prompt platform.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-prompt-management",
+      "description": "Evaluate Prompt Management — audit prompt quality scores, injection resilience, version hygiene, A/B test significance, template compliance. Use when: evaluate, audit prompt quality.",
+      "functions": [
+        {
+          "name": "evaluate-prompt-management",
+          "description": "Evaluate Prompt Management — audit prompt quality scores, injection resilience, version hygiene, A/B test significance, template compliance. Use when: evaluate, audit prompt quality.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-prompt-management",
+      "description": "Tune Prompt Management — optimize token usage, A/B test configuration, few-shot example selection, template compression, prompt caching. Use when: tune, optimize prompts.",
+      "functions": [
+        {
+          "name": "tune-prompt-management",
+          "description": "Tune Prompt Management — optimize token usage, A/B test configuration, few-shot example selection, template compression, prompt caching. Use when: tune, optimize prompts.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_conversation_memory_layer",
+      "description": "Deploy Conversation Memory Layer — configure tiered memory (short-term Redis, long-term Cosmos DB, episodic vector store), compression pipeline, PII-aware storage, recall API. Use when: deploy, provision memory.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of results"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-conversation-memory-layer/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_conversation_memory_layer",
+      "description": "Evaluate Conversation Memory — measure recall accuracy, compression quality, PII scrubbing, memory relevance over time, storage efficiency. Use when: evaluate, test memory quality.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-conversation-memory-layer/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_conversation_memory_layer",
+      "description": "Tune Conversation Memory — optimize compression ratio, recall thresholds, memory TTL per tier, embedding model for recall, storage cost per user. Use when: tune, optimize memory.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-conversation-memory-layer/"
+      }
+    }
+  ]
+}

@@ -24,12 +24,20 @@ import { createEvaluator } from './evaluator.js';
 import { runHooksForEvent } from './hook-runner.js';
 import { createRequire } from 'module';
 
-// Moonshot uses CommonJS — bridge via createRequire
+// ESM/CJS bridge: The engine is ESM but moonshot/ is a CommonJS module
+// (third-party code that uses require/module.exports). Node's ESM loader
+// cannot `import` CJS directly in all cases, so we use createRequire to
+// get a CJS-compatible require() function scoped to this file's URL.
 const _require = createRequire(import.meta.url);
 const moonshot = _require('./moonshot/index.js');
 
 /**
  * Initialize the FAI Engine with a manifest file.
+ *
+ * 6-step pipeline — each step feeds into the next, building up the engine
+ * instance incrementally. Failures are collected (not thrown) so the caller
+ * always gets a result object with partial data and a full error list.
+ *
  * @param {string} manifestPath - Path to fai-manifest.json
  * @returns {object} Engine instance with all components loaded
  */
@@ -37,7 +45,7 @@ function initEngine(manifestPath) {
   const startTime = Date.now();
   const allErrors = [];
 
-  // Step 1: Load and validate manifest
+  // Step 1: Load and validate manifest — parse JSON, check required fields
   const { manifest, playDir, errors: loadErrors } = loadManifest(manifestPath);
   allErrors.push(...loadErrors);
 
@@ -49,25 +57,31 @@ function initEngine(manifestPath) {
     };
   }
 
-  // Step 2: Resolve file paths
+  // Step 2: Resolve file paths — turn relative refs (../../agents/foo.agent.md)
+  // into absolute paths and verify each file exists on disk
   const { resolved, missing } = resolvePaths(manifest, playDir);
   if (missing.length > 0) {
     allErrors.push(...missing.map(m => `Missing: ${m}`));
   }
 
-  // Step 3: Build shared context
+  // Step 3: Build shared context — load FROOT knowledge modules + WAF pillars
+  // referenced by the manifest into a unified context object for the play
   const context = buildContext(manifest.context);
   allErrors.push(...context.errors);
 
-  // Step 4: Wire primitives
+  // Step 4: Wire primitives — connect resolved files to the context so agents,
+  // skills, and instructions can reference shared knowledge and each other
   const wiring = wirePrimitives(resolved, context);
   allErrors.push(...wiring.errors);
 
-  // Step 5: Create evaluator
+  // Step 5: Create evaluator — build a quality gate checker from the manifest's
+  // guardrails thresholds (groundedness, coherence, relevance, safety, cost)
   const guardrails = manifest.primitives?.guardrails || {};
   const evaluator = createEvaluator(guardrails);
 
   // Step 6: Initialize moonshot contracts (v2.0 — optional, backwards-compatible)
+  // Moonshot adds advanced capabilities (memory, observability, cost tracking, etc.)
+  // Only activated when the manifest declares at least one moonshot contract key.
   let moonshotSuite = null;
   const moonshotContracts = ['memory','observability','cost','identity','compliance','providers','modalities','prompts','evaluation','privacy'];
   const hasAnyContract = moonshotContracts.some(k => manifest[k]);

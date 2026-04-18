@@ -1,0 +1,93 @@
+---
+title: "FAI Agentic Coding"
+description: "Protocol-level Agentic Coding"
+icon: "💻"
+order: 9
+editUrl: "engine/specialties/coding.js"
+category: "specialties"
+---
+# FAI Agentic Coding
+
+💻 S-9 — Protocol-level agentic coding.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    source: {
+      type: 'string',
+      enum: ['github-issues', 'jira', 'azure-devops', 'linear', 'manual'],
+      default: 'github-issues'
+    },
+    pipeline: {
+      type: 'array',
+      items: { type: 'string', enum: ['plan', 'code', 'test', 'review', 'lint', 'security-scan', 'deploy'] },
+      default: ['plan', 'code', 'test', 'review']
+    },
+    selfHealing: {
+      type: 'object',
+      properties: {
+        enabled: { type: 'boolean', default: true },
+        maxRetries: { type: 'integer', minimum: 0, default: 3 },
+        strategies: {
+          type: 'array',
+          items: { type: 'string', enum: ['fix-lint', 'fix-tests', 'simplify-approach', 'ask-human'] },
+          default: ['fix-lint', 'fix-tests']
+        }
+      },
+      additionalProperties: false
+    },
+    scopeGuards: {
+      type: 'object',
+      properties: {
+        maxFiles: { type: 'integer', minimum: 1, default: 10 },
+        maxLinesChanged: { type: 'integer', minimum: 1, default: 500 },
+        allowedPaths: { type: 'array', items: { type: 'string' }, description: 'Glob patterns of allowed file paths.' },
+        blockedPaths: { type: 'array', items: { type: 'string' }, default: ['**/*.env', '**/secrets/**'] }
+      },
+      additionalProperties: false
+    },
+    approval: {
+      type: 'string',
+      enum: ['human-required', 'auto-merge-if-green', 'auto-merge-minor'],
+      default: 'human-required'
+    },
+    costPerPR: {
+      type: 'object',
+      properties: {
+        max: { type: 'number', minimum: 0, default: 1.00, description: 'Max cost per PR in USD.' },
+        alertThreshold: { type: 'number', minimum: 0, default: 0.50 }
+      },
+      additionalProperties: false
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `coding` section to your `fai-manifest.json`:
+
+```json
+{
+  "coding": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.coding
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/coding.js)

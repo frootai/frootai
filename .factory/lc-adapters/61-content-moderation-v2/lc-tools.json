@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_content_moderation_v2",
+      "description": "Deploy Content Moderation V2 — multi-modal safety (text+image+video), custom category training, severity-based routing, human review queues, appeal workflows, streaming moderation.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-content-moderation-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_content_moderation_v2",
+      "description": "Evaluate Content Moderation V2 quality — precision/recall per category, false positive rate, latency per modality, human review efficiency, appeal fairness.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-content-moderation-v2/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_content_moderation_v2",
+      "description": "Tune Content Moderation V2 — per-category severity thresholds, custom blocklists, review queue routing, appeal workflow, video sampling rate, latency optimization.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-content-moderation-v2/"
+      }
+    }
+  ]
+}

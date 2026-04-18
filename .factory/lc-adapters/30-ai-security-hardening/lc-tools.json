@@ -1,0 +1,90 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_security_hardening",
+      "description": "Deploy AI Security Hardening — configure multi-layer defense against prompt injection, jailbreak, data exfiltration. OWASP LLM Top 10 coverage. Use when: deploy, configure AI security.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-security-hardening/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_security_hardening",
+      "description": "Evaluate AI Security — red-team OWASP LLM Top 10, measure injection block rate, false positive rate, data leakage prevention, jailbreak resilience. Use when: evaluate, pen-test AI security.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-security-hardening/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_security_hardening",
+      "description": "Tune AI Security — optimize detection sensitivity, reduce false positives, configure per-layer thresholds, attack pattern updates, security vs usability balance. Use when: tune, optimize security.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-security-hardening/"
+      }
+    }
+  ]
+}

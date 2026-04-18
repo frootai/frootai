@@ -1,0 +1,107 @@
+{
+  "$schema": "https://frootai.dev/schemas/lc-adapter.schema.json",
+  "generated": "2026-04-18T10:33:33.569Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "70-esg-compliance-agent",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\70-esg-compliance-agent\\spec\\fai-manifest.json"
+  },
+  "chain": {
+    "type": "RunnableSequence",
+    "name": "fai-70-esg-compliance-agent",
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "class": "StructuredTool",
+        "name": "deploy_70",
+        "description": "FAI Skill: deploy-70",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "deploy-70/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "evaluate_70",
+        "description": "FAI Skill: evaluate-70",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "evaluate-70/"
+        }
+      },
+      {
+        "class": "StructuredTool",
+        "name": "tune_70",
+        "description": "FAI Skill: tune-70",
+        "args_schema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "Input for the tool"
+            }
+          },
+          "required": [
+            "input"
+          ]
+        },
+        "return_direct": false,
+        "metadata": {
+          "source": "fai-skill",
+          "originalPath": "tune-70/"
+        }
+      }
+    ]
+  },
+  "graph": {
+    "type": "StateGraph",
+    "graphType": "langgraph",
+    "nodes": [],
+    "edges": [],
+    "entryPoint": null,
+    "finishPoint": null
+  },
+  "callbacks": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T2-Responsible-AI",
+      "T3-Production-Patterns",
+      "R2-RAG-Architecture"
+    ],
+    "waf": [
+      "responsible-ai",
+      "security",
+      "operational-excellence",
+      "reliability"
+    ],
+    "scope": "70-esg-compliance-agent"
+  }
+}

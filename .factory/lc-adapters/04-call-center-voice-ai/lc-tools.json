@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_call_center_voice_ai",
+      "description": "Deploy Voice AI — configure Azure Communication Services, Speech Service (STT+TTS), OpenAI, Content Safety. Set up WebSocket streaming, SSML templates, call recording. Use when: deploy, provision, configure.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-call-center-voice-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_call_center_voice_ai",
+      "description": "Evaluate Voice AI — test intent recognition accuracy, response latency (STT+LLM+TTS < 2s), call resolution rate, CSAT scores, barge-in handling. Use when: evaluate, test, quality, metrics.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-call-center-voice-ai/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_call_center_voice_ai",
+      "description": "Tune Voice AI — optimize STT recognition, TTS voice/prosody, LLM response speed, model routing, intent classification thresholds. Use when: tune, optimize, latency, cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-call-center-voice-ai/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_recruiter_agent",
+      "description": "Deploy AI Recruiter Agent — resume parsing with PII redaction, bias-aware candidate scoring, job description generation with bias check, explainable factors, fairness testing, EEOC compliance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Sampling temperature"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-recruiter-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_recruiter_agent",
+      "description": "Evaluate AI Recruiter Agent quality — matching accuracy, fairness (disparate impact), PII redaction recall, score explainability, job description bias, EEOC compliance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-recruiter-agent/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_recruiter_agent",
+      "description": "Tune AI Recruiter Agent — scoring weights, PII detection sensitivity, bias thresholds, matching criteria, JD language rules, cost per screening.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-recruiter-agent/"
+      }
+    }
+  ]
+}

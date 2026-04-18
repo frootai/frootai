@@ -1,0 +1,99 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.615Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "71-smart-energy-grid-ai",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\71-smart-energy-grid-ai\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-71-smart-energy-grid-ai",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-71",
+        "description": "Skill: deploy-71",
+        "functions": [
+          {
+            "name": "deploy-71",
+            "description": "Skill: deploy-71",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-71",
+        "description": "Skill: evaluate-71",
+        "functions": [
+          {
+            "name": "evaluate-71",
+            "description": "Skill: evaluate-71",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-71",
+        "description": "Skill: tune-71",
+        "functions": [
+          {
+            "name": "tune-71",
+            "description": "Skill: tune-71",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations",
+      "O2-AI-Agents"
+    ],
+    "waf": [
+      "performance-efficiency",
+      "reliability",
+      "cost-optimization",
+      "operational-excellence",
+      "security"
+    ],
+    "scope": "71-smart-energy-grid-ai"
+  }
+}

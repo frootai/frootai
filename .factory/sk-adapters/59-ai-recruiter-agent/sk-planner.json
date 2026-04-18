@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "AI-Recruiter-Builder",
+        "agentRole": "builder",
+        "description": "AI Recruiter builder - implements resume parsing, scoring, job description gen",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Recruiter-Reviewer",
+        "agentRole": "reviewer",
+        "description": "AI Recruiter reviewer - audits bias testing, PII redaction, explainability",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "responsible-ai",
+            "security",
+            "operational-excellence"
+          ]
+        }
+      },
+      {
+        "stepName": "AI-Recruiter-Tuner",
+        "agentRole": "tuner",
+        "description": "AI Recruiter tuner - optimizes matching accuracy, bias reduction",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "responsible-ai",
+            "cost-optimization",
+            "performance-efficiency"
+          ]
+        }
+      }
+    ]
+  }
+}

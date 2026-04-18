@@ -1,0 +1,30 @@
+# FrootAI Public Repository — CODEOWNERS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything
+* @frootai/core-team
+
+# FAI Protocol (critical — requires 2 reviewers)
+/schemas/                    @frootai/protocol-team @frootai/core-team
+/fai-protocol/               @frootai/protocol-team @frootai/core-team
+/engine/                     @frootai/protocol-team @frootai/core-team
+
+# Primitives (community-contributed — 1 reviewer sufficient)
+/agents/                     @frootai/primitive-reviewers
+/instructions/               @frootai/primitive-reviewers
+/skills/                     @frootai/primitive-reviewers
+/hooks/                      @frootai/primitive-reviewers
+/plugins/                    @frootai/primitive-reviewers
+/workflows/                  @frootai/primitive-reviewers
+/cookbook/                    @frootai/primitive-reviewers
+/community-plugins/          @frootai/primitive-reviewers
+
+# Solution Plays (requires architecture review)
+/solution-plays/             @frootai/architecture-team
+
+# Documentation
+/docs/                       @frootai/docs-team
+/workshops/                  @frootai/docs-team
+
+# GitHub configuration
+/.github/                    @frootai/core-team

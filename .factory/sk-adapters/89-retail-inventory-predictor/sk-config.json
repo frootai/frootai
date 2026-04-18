@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/sk-adapter.schema.json",
+  "generated": "2026-04-18T10:33:27.644Z",
+  "source": {
+    "protocol": "FAI Protocol v0.1",
+    "play": "89-retail-inventory-predictor",
+    "version": "1.0.0",
+    "manifestPath": "solution-plays\\89-retail-inventory-predictor\\spec\\fai-manifest.json"
+  },
+  "kernel": {
+    "serviceId": "fai-89-retail-inventory-predictor",
+    "modelId": "gpt-4o",
+    "plugins": [
+      {
+        "name": "deploy-89",
+        "description": "Skill: deploy-89",
+        "functions": [
+          {
+            "name": "deploy-89",
+            "description": "Skill: deploy-89",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "evaluate-89",
+        "description": "Skill: evaluate-89",
+        "functions": [
+          {
+            "name": "evaluate-89",
+            "description": "Skill: evaluate-89",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      },
+      {
+        "name": "tune-89",
+        "description": "Skill: tune-89",
+        "functions": [
+          {
+            "name": "tune-89",
+            "description": "Skill: tune-89",
+            "parameters": [
+              {
+                "name": "input",
+                "type": "string",
+                "description": "Input for the skill",
+                "required": true
+              }
+            ],
+            "returnType": "string",
+            "isPrompt": false
+          }
+        ]
+      }
+    ]
+  },
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 0,
+    "steps": []
+  },
+  "filters": [],
+  "prompts": [],
+  "context": {
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure",
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "cost-optimization",
+      "reliability",
+      "operational-excellence",
+      "performance-efficiency"
+    ],
+    "scope": "89-retail-inventory-predictor"
+  }
+}

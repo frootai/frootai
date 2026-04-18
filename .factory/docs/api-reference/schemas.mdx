@@ -1,0 +1,658 @@
+---
+title: "JSON Schemas"
+description: "FAI Protocol validation schemas"
+icon: "📋"
+order: 3
+tags: ["schema", "validation", "json"]
+category: "api-reference"
+---
+# JSON Schemas
+
+FAI Protocol schemas that validate manifest files, context references, and plugin packages.
+
+## FrootAI Agent Schema
+
+Validates YAML frontmatter for .agent.md files — the AI persona definition format for FrootAI standalone and play-wired agents.
+
+**Schema ID**: `https://frootai.dev/schemas/agent.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/agent.schema.json",
+  "title": "FrootAI Agent Schema",
+  "description": "Validates YAML frontmatter for .agent.md files — the AI persona definition format for FrootAI standalone and play-wired agents.",
+  "type": "object",
+  "required": ["description"],
+  "properties": {
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "Purpose statement for this agent (1-2 sentences). Must clearly state the agent's expertise and role."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable display name for the agent."
+    },
+    "model": {
+      "type": "string",
+      "description": "Preferred LLM model identifier (e.g., GPT-4.1, GPT-4o, claude-sonnet-4). Optional — defaults to provider default.",
+      "examples": ["GPT-4.1", "GPT-4o", "GPT-4o-mini"]
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "description": "List of tool identifiers this agent can invoke. Tools may include MCP servers, VS Code commands, or built-in capabilities."
+    },
+    "waf": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+      },
+      "uniqueItems": true,
+      "description": "WAF pillars this agent enforces or aligns with. Unique to FrootAI — no competitor has architecture-aligned agents."
+    },
+    "plays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{2}(-[a-z0-9-]+)?$"
+      },
+      "description": "Solution play IDs this agent is designed for (e.g., '01', '01-enterprise-rag'). When used inside a play, the agent auto-wires with shared context."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+
+## FAI Context Schema
+
+Lightweight context reference for standalone LEGO blocks. Makes an individual agent, skill, or instruction aware of the broader FAI ecosystem — which knowledge it assumes, which WAF pillars it respects, which plays it's compatible with, and what quality gates it should pass. This is the standalone-to-wired bridge.
+
+**Schema ID**: `https://frootai.dev/schemas/fai-context.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/fai-context.schema.json",
+  "title": "FAI Context Schema",
+  "description": "Lightweight context reference for standalone LEGO blocks. Makes an individual agent, skill, or instruction aware of the broader FAI ecosystem — which knowledge it assumes, which WAF pillars it respects, which plays it's compatible with, and what quality gates it should pass. This is the standalone-to-wired bridge.",
+  "type": "object",
+  "properties": {
+    "assumes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "FROOT knowledge module IDs this primitive assumes are available (e.g., 'R2-RAG-Architecture', 'T3-Production-Patterns'). When used standalone, these are informational. When used inside a play, the FAI Engine resolves them."
+    },
+    "waf": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+      },
+      "uniqueItems": true,
+      "description": "WAF pillars this primitive respects or enforces."
+    },
+    "compatiblePlays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{2}(-[a-z0-9-]+)?$"
+      },
+      "description": "Solution play IDs this primitive is tested and verified to work with. The FAI Engine uses this for auto-wiring."
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "groundedness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Expected groundedness threshold when this primitive runs."
+        },
+        "coherence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Expected coherence threshold."
+        },
+        "relevance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Expected relevance threshold."
+        },
+        "costPerQuery": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Expected cost per invocation in USD."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Quality expectations when this primitive runs. Used by the FAI Engine to set evaluation thresholds."
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Other primitives this one depends on (e.g., a skill that requires a specific agent or hook). Expressed as relative paths."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+
+## FAI Manifest Schema
+
+The FAI Protocol glue file — a single JSON that wires all primitives together for a solution play. Describes context, primitive connections, quality gates, infrastructure, and toolkit. This is what makes FrootAI unique: no competitor has a context-wiring protocol.
+
+**Schema ID**: `https://frootai.dev/schemas/fai-manifest.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "title": "FAI Manifest Schema",
+  "description": "The FAI Protocol glue file — a single JSON that wires all primitives together for a solution play. Describes context, primitive connections, quality gates, infrastructure, and toolkit. This is what makes FrootAI unique: no competitor has a context-wiring protocol.",
+  "type": "object",
+  "required": ["play", "version", "context", "primitives"],
+  "properties": {
+    "play": {
+      "type": "string",
+      "pattern": "^[0-9]{2}-[a-z0-9-]+$",
+      "description": "Solution play identifier (e.g., '01-enterprise-rag', '14-cost-optimized-ai-gateway')."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.]+)?$",
+      "description": "Semantic version of this manifest."
+    },
+    "context": {
+      "type": "object",
+      "required": ["knowledge", "waf"],
+      "properties": {
+        "knowledge": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "FROOT knowledge module IDs this play depends on (e.g., 'R2-RAG-Architecture', 'O3-MCP-Tools'). The FAI Engine resolves these to actual knowledge content."
+        },
+        "waf": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "WAF pillars enforced for this play. All primitives must respect these guardrails."
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Scenario scope identifier (e.g., 'enterprise-rag-qa', 'multi-agent-orchestration'). Used for context isolation."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Shared knowledge context — which FROOT modules, WAF pillars, and scenario scope apply to all primitives."
+    },
+    "primitives": {
+      "type": "object",
+      "properties": {
+        "agents": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Paths to agent .md files (relative to play root)."
+        },
+        "instructions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Paths to instruction .md files."
+        },
+        "skills": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Paths to skill folders."
+        },
+        "hooks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Paths to hook folders."
+        },
+        "workflows": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Paths to agentic workflow .md files."
+        },
+        "guardrails": {
+          "type": "object",
+          "properties": {
+            "groundedness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Minimum groundedness score (0-1). Recommended: 0.95 for enterprise."
+            },
+            "coherence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Minimum coherence score. Recommended: 0.90."
+            },
+            "relevance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Minimum relevance score. Recommended: 0.85."
+            },
+            "safety": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 0,
+              "description": "Maximum allowed safety violations. Must be 0 for production."
+            },
+            "costPerQuery": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Maximum cost per query in USD (e.g., 0.01). Enforced by WAF Cost pillar."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Quality gates the FAI Engine evaluates after every agent response. Failures trigger retry or escalation."
+        }
+      },
+      "additionalProperties": false,
+      "description": "All primitives wired into this play — agents, instructions, skills, hooks, workflows, and quality guardrails."
+    },
+    "infrastructure": {
+      "type": "object",
+      "properties": {
+        "bicep": {
+          "type": "string",
+          "description": "Azure Bicep template path (e.g., './infra/main.bicep')."
+        },
+        "parameters": {
+          "type": "string",
+          "description": "Parameter file path (e.g., './infra/parameters.json')."
+        },
+        "terraform": {
+          "type": "string",
+          "description": "Terraform configuration path (e.g., './infra/main.tf')."
+        },
+        "pulumi": {
+          "type": "string",
+          "description": "Pulumi program path (e.g., './infra/index.ts')."
+        },
+        "docker": {
+          "type": "string",
+          "description": "Docker Compose path (e.g., './docker-compose.yml')."
+        },
+        "kubernetes": {
+          "type": "string",
+          "description": "Path to Kubernetes manifests folder (e.g., './k8s/')."
+        },
+        "helm": {
+          "type": "string",
+          "description": "Helm chart path (e.g., './charts/')."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Infrastructure as Code declarations — supports multiple cloud providers and container orchestrators."
+    },
+    "toolkit": {
+      "type": "object",
+      "properties": {
+        "devkit": {
+          "type": "string",
+          "description": "Path to DevKit folder (agents, instructions, prompts, skills, hooks)."
+        },
+        "tunekit": {
+          "type": "string",
+          "description": "Path to TuneKit folder (config, evaluation, guardrails)."
+        },
+        "speckit": {
+          "type": "string",
+          "description": "Path to SpecKit folder (architecture, waf-alignment, this manifest)."
+        }
+      },
+      "additionalProperties": false,
+      "description": "FAI Toolkit paths — the three kits that equip every play."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+
+## FrootAI Hook Schema
+
+Validates hooks.json — security automation triggered at session lifecycle events (secrets scanning, tool guarding, governance audit).
+
+**Schema ID**: `https://frootai.dev/schemas/hook.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/hook.schema.json",
+  "title": "FrootAI Hook Schema",
+  "description": "Validates hooks.json — security automation triggered at session lifecycle events (secrets scanning, tool guarding, governance audit).",
+  "type": "object",
+  "required": ["version", "hooks"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version. Currently always 1."
+    },
+    "hooks": {
+      "type": "object",
+      "properties": {
+        "sessionStart": {
+          "$ref": "#/definitions/hookArray"
+        },
+        "sessionEnd": {
+          "$ref": "#/definitions/hookArray"
+        },
+        "userPromptSubmitted": {
+          "$ref": "#/definitions/hookArray"
+        },
+        "preToolUse": {
+          "$ref": "#/definitions/hookArray"
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Map of event names to hook command arrays. At least one event must be configured."
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "hookCommand": {
+      "type": "object",
+      "required": ["type", "bash"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "command",
+          "description": "Hook type. Currently only 'command' (bash script execution) is supported."
+        },
+        "bash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to the bash script to execute, relative to the hook folder."
+        },
+        "cwd": {
+          "type": "string",
+          "default": ".",
+          "description": "Working directory for script execution. Defaults to hook folder."
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Environment variables passed to the script. Use for MODE (warn/block), GUARD_MODE, AUDIT_LEVEL, etc."
+        },
+        "timeoutSec": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120,
+          "default": 30,
+          "description": "Maximum execution time in seconds. Script is killed if exceeded."
+        }
+      },
+      "additionalProperties": false
+    },
+    "hookArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/hookCommand"
+      },
+      "minItems": 1,
+      "description": "One or more commands to run for this event."
+    }
+  }
+}
+
+```
+
+---
+
+## FrootAI Instruction Schema
+
+Validates YAML frontmatter for .instructions.md files — coding standards and rules that auto-apply via glob patterns.
+
+**Schema ID**: `https://frootai.dev/schemas/instruction.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/instruction.schema.json",
+  "title": "FrootAI Instruction Schema",
+  "description": "Validates YAML frontmatter for .instructions.md files — coding standards and rules that auto-apply via glob patterns.",
+  "type": "object",
+  "required": ["description", "applyTo"],
+  "properties": {
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "What this instruction enforces — the coding standard, framework convention, or cross-cutting concern."
+    },
+    "applyTo": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Glob pattern(s) for files this instruction applies to. Examples: '**/*.py' for Python, '**/*.bicep' for Bicep, '*' for all files. Comma-separated for multiple patterns.",
+      "examples": [
+        "**/*.py",
+        "**/*.ts, **/*.tsx",
+        "**/*.bicep, **/*.bicepparam",
+        "*"
+      ]
+    },
+    "waf": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+      },
+      "uniqueItems": true,
+      "description": "WAF pillars this instruction enforces. FrootAI's unique advantage: every coding standard is architecture-aligned."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+
+## FrootAI Plugin Schema
+
+Validates plugin.json — themed bundles of agents, skills, instructions, and hooks that ship as installable packages.
+
+**Schema ID**: `https://frootai.dev/schemas/plugin.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/plugin.schema.json",
+  "title": "FrootAI Plugin Schema",
+  "description": "Validates plugin.json — themed bundles of agents, skills, instructions, and hooks that ship as installable packages.",
+  "type": "object",
+  "required": ["name", "description", "version", "author", "license"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "minLength": 3,
+      "maxLength": 64,
+      "description": "Kebab-case plugin identifier. Must match the plugin folder name."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "What this plugin provides — displayed in marketplace and discovery."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.]+)?$",
+      "description": "Semantic version (e.g., 1.0.0, 2.1.0-beta.1)."
+    },
+    "author": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Author or organization name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email (optional)."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Author website (optional)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier (e.g., MIT, Apache-2.0).",
+      "examples": ["MIT", "Apache-2.0"]
+    },
+    "repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "GitHub repository URL."
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Plugin homepage or documentation URL."
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$",
+        "maxLength": 32
+      },
+      "maxItems": 20,
+      "uniqueItems": true,
+      "description": "Discovery tags for marketplace search. 5-15 recommended."
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Paths to bundled agent folders or files (relative to plugin root)."
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Paths to bundled skill folders (relative to plugin root)."
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Paths to bundled instruction files (relative to plugin root)."
+    },
+    "hooks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Paths to bundled hook folders (relative to plugin root)."
+    },
+    "plays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{2}(-[a-z0-9-]+)?$"
+      },
+      "description": "Solution play IDs this plugin is designed for. FAI Layer auto-wires all bundled primitives when used inside a play."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+
+## FrootAI Skill Schema
+
+Validates YAML frontmatter for SKILL.md files — self-contained capabilities bundled as folders.
+
+**Schema ID**: `https://frootai.dev/schemas/skill.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/skill.schema.json",
+  "title": "FrootAI Skill Schema",
+  "description": "Validates YAML frontmatter for SKILL.md files — self-contained capabilities bundled as folders.",
+  "type": "object",
+  "required": ["name", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "minLength": 3,
+      "maxLength": 64,
+      "description": "Kebab-case identifier that MUST match the parent folder name. Example: 'frootai-play-initializer' must live in skills/frootai-play-initializer/."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 1024,
+      "description": "Single-line description of what this skill does. Displayed in marketplace and discovery UI."
+    }
+  },
+  "additionalProperties": false
+}
+
+```
+
+---
+

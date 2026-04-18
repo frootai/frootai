@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_search_portal",
+      "description": "Deploy AI Search Portal — configure index schema, hybrid search, semantic ranking, facets, autocomplete, scoring profiles, indexers. Use when: deploy, provision.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-search-portal/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_search_portal",
+      "description": "Evaluate AI Search Portal — test search relevance (NDCG@10), query latency, zero-result rate, click-through rate, autocomplete acceptance. Use when: evaluate.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-search-portal/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_search_portal",
+      "description": "Tune AI Search Portal — optimize scoring profiles, boost functions, indexer schedule, caching strategy, embedding model selection. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-search-portal/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Multimodal-Agent-Builder",
+        "agentRole": "builder",
+        "description": "Multimodal Agent builder - implements multimodal pipeline, vision, cross-modal synthesis",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "reliability",
+            "performance-efficiency",
+            "security"
+          ]
+        }
+      },
+      {
+        "stepName": "Multimodal-Agent-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Multimodal Agent reviewer - audits content safety, modality handling, image sizing",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "responsible-ai",
+            "reliability"
+          ]
+        }
+      },
+      {
+        "stepName": "Multimodal-Agent-Tuner",
+        "agentRole": "tuner",
+        "description": "Multimodal Agent tuner - optimizes image detail, parallel processing, cost",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}

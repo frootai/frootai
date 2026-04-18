@@ -1,0 +1,121 @@
+---
+title: "FAI Human-in-the-Loop"
+description: "Protocol-level Human-in-the-Loop"
+icon: "👤"
+order: 6
+editUrl: "engine/specialties/hitl.js"
+category: "specialties"
+---
+# FAI Human-in-the-Loop
+
+👤 S-6 — Protocol-level human-in-the-loop.
+
+
+## Schema Contract
+
+```json
+{
+  type: 'object',
+  properties: {
+    gates: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['stage'],
+        properties: {
+          stage: {
+            type: 'string',
+            description: 'Pipeline stage where this gate applies (e.g., "pre-deploy", "post-generation", "pre-execution").'
+          },
+          condition: {
+            type: 'string',
+            description: 'JavaScript-like condition expression (e.g., "confidence < 0.8", "cost > 1.00", "safety > 0").'
+          },
+          approvers: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Approver roles or team names (e.g., ["security-team", "content-review"]).'
+          },
+          minApprovals: {
+            type: 'integer',
+            minimum: 1,
+            default: 1,
+            description: 'Minimum approvals required to pass the gate.'
+          },
+          timeout: {
+            type: 'string',
+            pattern: '^[0-9]+(s|m|h|d)$',
+            default: '24h',
+            description: 'Maximum wait time before escalation/rejection.'
+          },
+          escalation: {
+            type: 'string',
+            enum: ['auto-reject', 'auto-approve', 'escalate-up', 'notify-and-wait'],
+            default: 'auto-reject',
+            description: 'Action when timeout expires without sufficient approvals.'
+          },
+          priority: {
+            type: 'string',
+            enum: ['low', 'medium', 'high', 'critical'],
+            default: 'medium',
+            description: 'Approval request priority — affects notification urgency.'
+          },
+          bypassCondition: {
+            type: 'string',
+            description: 'Condition under which the gate is automatically bypassed (e.g., "environment == dev").'
+          }
+        },
+        additionalProperties: false
+      },
+      description: 'Ordered list of approval gates in the pipeline.'
+    },
+    auditTrail: {
+      type: 'string',
+      enum: ['immutable', 'appendable', 'none'],
+      default: 'immutable',
+      description: 'Audit trail persistence mode.'
+    },
+    notificationChannels: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['email', 'teams', 'slack', 'webhook', 'github-issue'] },
+          target: { type: 'string', description: 'Channel-specific target (email address, webhook URL, etc.).' }
+        }
+      },
+      description: 'Where to send approval request notifications.'
+    },
+    defaultTimeout: {
+      type: 'string',
+      pattern: '^[0-9]+(s|m|h|d)$',
+      default: '24h'
+    }
+  },
+  additionalProperties: false
+}
+```
+
+## Usage in Manifest
+
+Add the `hitl` section to your `fai-manifest.json`:
+
+```json
+{
+  "hitl": {
+    // See schema above for available options
+  }
+}
+```
+
+## Engine API
+
+```javascript
+import { createSpecialties } from './engine/specialties/index.js';
+const specs = createSpecialties(manifest);
+// Access via: specs.hitl
+```
+
+## Source
+
+[View source on GitHub](https://github.com/frootai/frootai/blob/main/engine/specialties/hitl.js)

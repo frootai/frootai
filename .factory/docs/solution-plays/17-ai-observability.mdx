@@ -1,0 +1,146 @@
+---
+title: "Play 17: Play 17 — AI Observability 📊"
+description: "Instrument your AI pipeline with Application Insights, track token usage and cost per tenant with custom metrics, build KQL dashboards for real-time visibility, and configure alerts for latency spikes"
+icon: "🎯"
+order: 17
+editUrl: "solution-plays/17-ai-observability/README.md"
+tags: ["solution-play", "play-17"]
+---
+# Play 17 — AI Observability 📊
+
+> End-to-end monitoring for AI workloads — tracing, metrics, dashboards, and intelligent alerts.
+
+Instrument your AI pipeline with Application Insights, track token usage and cost per tenant with custom metrics, build KQL dashboards for real-time visibility, and configure alerts for latency spikes, quality drops, and budget overruns.
+
+## Quick Start
+```bash
+cd solution-plays/17-ai-observability
+az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
+code .  # Use @builder for instrumentation, @reviewer for telemetry audit, @tuner for cost
+```
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph AI Workloads
+        App1[AI App 1<br/>RAG Pipeline]
+        App2[AI App 2<br/>Agent Service]
+        App3[AI App 3<br/>Chat Interface]
+    end
+
+    subgraph Telemetry Collection
+        AppInsights[Application Insights<br/>Distributed Tracing · Custom Metrics]
+        LogAnalytics[Log Analytics Workspace<br/>KQL Queries · Cross-service Correlation]
+        Monitor[Azure Monitor<br/>Alert Rules · Action Groups]
+    end
+
+    subgraph Visualization
+        Grafana[Managed Grafana<br/>Real-time Dashboards · AI KPIs]
+    end
+
+    subgraph AI Backend
+        OpenAI[Azure OpenAI<br/>GPT-4o · Token Usage Source]
+    end
+
+    subgraph Processing
+        Functions[Azure Functions<br/>Alert Enrichment · Routing]
+    end
+
+    subgraph Persistence
+        Cosmos[Cosmos DB<br/>Trace Archive · Eval History]
+    end
+
+    subgraph Security
+        KV[Key Vault<br/>API Keys · Connection Strings]
+        MI[Managed Identity<br/>Zero-secret Auth]
+    end
+
+    App1 -->|OpenTelemetry| AppInsights
+    App2 -->|OpenTelemetry| AppInsights
+    App3 -->|OpenTelemetry| AppInsights
+    App1 -->|Structured Logs| LogAnalytics
+    App2 -->|Structured Logs| LogAnalytics
+    App3 -->|Structured Logs| LogAnalytics
+    AppInsights -->|Metrics Feed| Monitor
+    LogAnalytics -->|Log Alerts| Monitor
+    Monitor -->|Trigger| Functions
+    Functions -->|Enrich + Route| Cosmos
+    AppInsights -->|Data Source| Grafana
+    LogAnalytics -->|Data Source| Grafana
+    App1 -->|API Calls| OpenAI
+    App2 -->|API Calls| OpenAI
+    OpenAI -->|Usage Metrics| AppInsights
+    Functions -->|Auth| MI
+    MI -->|Secrets| KV
+
+    style App1 fill:#3b82f6,color:#fff,stroke:#2563eb
+    style App2 fill:#3b82f6,color:#fff,stroke:#2563eb
+    style App3 fill:#3b82f6,color:#fff,stroke:#2563eb
+    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style LogAnalytics fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Monitor fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style Grafana fill:#f59e0b,color:#fff,stroke:#d97706
+    style OpenAI fill:#10b981,color:#fff,stroke:#059669
+    style Functions fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Cosmos fill:#f59e0b,color:#fff,stroke:#d97706
+    style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style MI fill:#7c3aed,color:#fff,stroke:#6d28d9
+```
+
+> 📐 [Full architecture details](architecture.md)
+
+| Service | Purpose |
+|---------|---------|
+| Application Insights | Telemetry collection, distributed tracing |
+| Log Analytics Workspace | KQL querying, data retention |
+| Azure Monitor | Alert rules, action groups |
+| Azure Dashboard | Shared workbooks with live metrics |
+
+## AI-Specific Metrics Tracked
+| Metric | Type | What It Shows |
+|--------|------|-------------|
+| `ai.tokens.cost` | Counter | Dollar cost per request |
+| `ai.latency.ttft` | Histogram | Time to first token |
+| `ai.quality.groundedness` | Gauge | RAG quality score |
+| `ai.safety.blocked` | Counter | Content safety blocks |
+| `ai.cache.hit` | Counter | Semantic cache effectiveness |
+
+## DevKit (Observability-Focused)
+| Primitive | What It Does |
+|-----------|-------------|
+| 3 agents | Builder (instrumentation/dashboards/alerts), Reviewer (telemetry audit/PII/coverage), Tuner (sampling/retention/cost) |
+| 3 skills | Deploy (128 lines), Evaluate (110 lines), Tune (120 lines) |
+| 4 prompts | `/deploy` (App Insights + dashboards), `/test` (tracing), `/review` (PII/retention), `/evaluate` (alert coverage) |
+
+**Note:** This is an operational observability play. TuneKit covers sampling rates, alert thresholds, log retention tiers, KQL optimization, and Log Analytics cost — not AI model parameters.
+
+## Cost Estimate
+
+| Service | Dev/PoC | Production | Enterprise |
+|---------|--------:|-----------:|-----------:|
+| Application Insights | $0/mo | $50/mo | $200/mo |
+| Log Analytics Workspace | $0/mo | $75/mo | $200/mo |
+| Azure Monitor | $0/mo | $30/mo | $80/mo |
+| Azure Managed Grafana | $0/mo | $15/mo | $30/mo |
+| Azure OpenAI | $30/mo | $200/mo | $800/mo |
+| Cosmos DB | $3/mo | $50/mo | $180/mo |
+| Key Vault | $1/mo | $3/mo | $10/mo |
+| Azure Functions | $0/mo | $10/mo | $75/mo |
+| **Total** | **$34/mo** | **$433/mo** | **$1,575/mo** |
+
+> 💰 [Full cost breakdown](cost.json)
+
+📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/17-ai-observability](https://frootai.dev/solution-plays/17-ai-observability)
+
+
+## FAI Manifest
+
+| Field | Value |
+|-------|-------|
+| Play | `17-ai-observability` |
+| Version | `1.0.0` |
+| Knowledge | T3-Production-Patterns, O5-GPU-Infra |
+| WAF Pillars | operational-excellence, reliability, cost-optimization |
+| Groundedness | ≥ 85% |
+| Safety | 0 violations max |

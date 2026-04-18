@@ -1,0 +1,76 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-search-portal",
+      "description": "Deploy AI Search Portal — configure index schema, hybrid search, semantic ranking, facets, autocomplete, scoring profiles, indexers. Use when: deploy, provision.",
+      "functions": [
+        {
+          "name": "deploy-ai-search-portal",
+          "description": "Deploy AI Search Portal — configure index schema, hybrid search, semantic ranking, facets, autocomplete, scoring profiles, indexers. Use when: deploy, provision.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-search-portal",
+      "description": "Evaluate AI Search Portal — test search relevance (NDCG@10), query latency, zero-result rate, click-through rate, autocomplete acceptance. Use when: evaluate.",
+      "functions": [
+        {
+          "name": "evaluate-ai-search-portal",
+          "description": "Evaluate AI Search Portal — test search relevance (NDCG@10), query latency, zero-result rate, click-through rate, autocomplete acceptance. Use when: evaluate.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-search-portal",
+      "description": "Tune AI Search Portal — optimize scoring profiles, boost functions, indexer schedule, caching strategy, embedding model selection. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-ai-search-portal",
+          "description": "Tune AI Search Portal — optimize scoring profiles, boost functions, indexer schedule, caching strategy, embedding model selection. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

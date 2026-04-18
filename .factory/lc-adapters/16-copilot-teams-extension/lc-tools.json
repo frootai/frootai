@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_copilot_teams_extension",
+      "description": "Deploy Copilot Teams Extension — configure Teams app manifest, Bot Service, SSO, Adaptive Cards, Microsoft Graph API, admin approval. Use when: deploy, publish, configure Teams app.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-copilot-teams-extension/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_copilot_teams_extension",
+      "description": "Evaluate Copilot Teams Extension — test SSO flow, Graph API permissions, Adaptive Card rendering, response quality, throttling resilience. Use when: evaluate, test, audit.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-copilot-teams-extension/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_copilot_teams_extension",
+      "description": "Tune Copilot Teams Extension — optimize Adaptive Card layouts, Graph API batching, response caching, SSO token management, cost per interaction. Use when: tune, optimize.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-copilot-teams-extension/"
+      }
+    }
+  ]
+}

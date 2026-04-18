@@ -1,0 +1,968 @@
+[
+  {
+    "title": "CLI Reference",
+    "description": "The FrootAI CLI provides command-line access to the FAI ecosystem.",
+    "route": "/api-reference/cli",
+    "section": "api-reference",
+    "words": 206
+  },
+  {
+    "title": "API Reference",
+    "description": "Complete reference documentation for all FrootAI interfaces.",
+    "route": "/api-reference",
+    "section": "api-reference",
+    "words": 112
+  },
+  {
+    "title": "MCP Tools Reference",
+    "description": "The FrootAI MCP Server exposes 25+ tools for AI architecture guidance, knowledge retrieval, and evaluation.",
+    "route": "/api-reference/mcp-tools",
+    "section": "api-reference",
+    "words": 339
+  },
+  {
+    "title": "JSON Schemas",
+    "description": "FAI Protocol schemas that validate manifest files, context references, and plugin packages.",
+    "route": "/api-reference/schemas",
+    "section": "api-reference",
+    "words": 2145
+  },
+  {
+    "title": "FAI Protocol — v0.1 Specification",
+    "description": "The FAI Protocol defines a JSON-based manifest format (`fai-manifest.json`) for declaring how AI primitives — agents, instructions, skills, hooks, workflows, plugins, tools, prompts, and guardrails — ",
+    "route": "/concepts/fai-protocol",
+    "section": "concepts",
+    "words": 3509
+  },
+  {
+    "title": "FAI Primitives",
+    "description": "FrootAI organizes AI capabilities into **9 primitive types** — reusable building blocks that can be composed into any AI application.",
+    "route": "/concepts/primitives",
+    "section": "concepts",
+    "words": 346
+  },
+  {
+    "title": "Well-Architected Framework",
+    "description": "FrootAI enforces the Azure Well-Architected Framework across all primitives and solution plays. Every agent, instruction, skill, and hook is aligned to one or more of the 6 WAF pillars.",
+    "route": "/concepts/well-architected",
+    "section": "concepts",
+    "words": 296
+  },
+  {
+    "title": "Getting Started",
+    "description": "Get up and running with FrootAI in under 5 minutes.",
+    "route": "/getting-started",
+    "section": "getting-started",
+    "words": 277
+  },
+  {
+    "title": "FrootAI Documentation",
+    "description": "Welcome to the FrootAI documentation — your guide to the open-source AI primitive unification platform.",
+    "route": "/",
+    "section": "root",
+    "words": 226
+  },
+  {
+    "title": "Module 1: GenAI Foundations — How LLMs Actually Work",
+    "description": "'",
+    "route": "/learning/f1-genai-foundations",
+    "section": "learning",
+    "words": 8434
+  },
+  {
+    "title": "Module 2: The LLM Landscape — Models, Families & Selection Guide",
+    "description": "'",
+    "route": "/learning/f2-llm-landscape",
+    "section": "learning",
+    "words": 7236
+  },
+  {
+    "title": "F3: The AI Glossary A–Z",
+    "description": "'",
+    "route": "/learning/f3-ai-glossary-a-z",
+    "section": "learning",
+    "words": 4564
+  },
+  {
+    "title": "F4: The .github Agentic OS — GitHub Copilot's 7 Primitives",
+    "description": "'",
+    "route": "/learning/f4-github-agentic-os",
+    "section": "learning",
+    "words": 2157
+  },
+  {
+    "title": "Learning Hub",
+    "description": "Master AI engineering through 18 comprehensive modules organized in the FROOT framework.",
+    "route": "/learning",
+    "section": "learning",
+    "words": 170
+  },
+  {
+    "title": "Module 7: Semantic Kernel & AI Orchestration Frameworks",
+    "description": "'",
+    "route": "/learning/o1-semantic-kernel",
+    "section": "learning",
+    "words": 7372
+  },
+  {
+    "title": "Module 6: AI Agents Deep Dive — From Concept to Production",
+    "description": "'",
+    "route": "/learning/o2-ai-agents-deep-dive",
+    "section": "learning",
+    "words": 8571
+  },
+  {
+    "title": "O3: MCP, Tools & Function Calling",
+    "description": "'",
+    "route": "/learning/o3-mcp-tools",
+    "section": "learning",
+    "words": 3513
+  },
+  {
+    "title": "Module 3: Azure AI Foundry — Microsoft's AI Platform Deep Dive",
+    "description": "'",
+    "route": "/learning/o4-azure-ai-foundry",
+    "section": "learning",
+    "words": 6825
+  },
+  {
+    "title": "Module 9: AI Infrastructure for Architects — GPU, Scaling & Production",
+    "description": "'",
+    "route": "/learning/o5-ai-infrastructure",
+    "section": "learning",
+    "words": 7691
+  },
+  {
+    "title": "Module 4: The Microsoft Copilot Ecosystem — Complete Guide",
+    "description": "'",
+    "route": "/learning/o6-copilot-ecosystem",
+    "section": "learning",
+    "words": 5470
+  },
+  {
+    "title": "Module 8: Prompt Engineering Mastery — The Art of Talking to AI",
+    "description": "'",
+    "route": "/learning/r1-prompt-engineering",
+    "section": "learning",
+    "words": 4590
+  },
+  {
+    "title": "Module 5: RAG Architecture — Retrieval-Augmented Generation Deep Dive",
+    "description": "'",
+    "route": "/learning/r2-rag-architecture",
+    "section": "learning",
+    "words": 9388
+  },
+  {
+    "title": "R3: Making AI Deterministic & Reliable",
+    "description": "'",
+    "route": "/learning/r3-deterministic-ai",
+    "section": "learning",
+    "words": 2978
+  },
+  {
+    "title": "T1: Fine-Tuning & Model Customization",
+    "description": "'",
+    "route": "/learning/t1-fine-tuning-mlops",
+    "section": "learning",
+    "words": 2607
+  },
+  {
+    "title": "Module 10: Responsible AI & Safety — Building Trust in AI Systems",
+    "description": "'",
+    "route": "/learning/t2-responsible-ai",
+    "section": "learning",
+    "words": 6739
+  },
+  {
+    "title": "T3: Production Architecture Patterns",
+    "description": "'",
+    "route": "/learning/t3-production-patterns",
+    "section": "learning",
+    "words": 2428
+  },
+  {
+    "title": "Agents",
+    "description": "238 agents available in the FrootAI ecosystem.",
+    "route": "/primitives/agents",
+    "section": "primitives",
+    "words": 521
+  },
+  {
+    "title": "Hooks",
+    "description": "10 hooks available in the FrootAI ecosystem.",
+    "route": "/primitives/hooks",
+    "section": "primitives",
+    "words": 59
+  },
+  {
+    "title": "Primitives Catalog",
+    "description": "Browse all 830+ FAI primitives — the building blocks of AI applications.",
+    "route": "/primitives",
+    "section": "primitives",
+    "words": 88
+  },
+  {
+    "title": "Instructions",
+    "description": "176 instructions available in the FrootAI ecosystem.",
+    "route": "/primitives/instructions",
+    "section": "primitives",
+    "words": 391
+  },
+  {
+    "title": "Plugins",
+    "description": "8 plugins available in the FrootAI ecosystem.",
+    "route": "/primitives/plugins",
+    "section": "primitives",
+    "words": 55
+  },
+  {
+    "title": "Skills",
+    "description": "333 skills available in the FrootAI ecosystem.",
+    "route": "/primitives/skills",
+    "section": "primitives",
+    "words": 705
+  },
+  {
+    "title": "Workflows",
+    "description": "13 workflows available in the FrootAI ecosystem.",
+    "route": "/primitives/workflows",
+    "section": "primitives",
+    "words": 65
+  },
+  {
+    "title": "Play 01 — Enterprise RAG Q&A 🔍",
+    "description": "Build a production-grade Retrieval-Augmented Generation system. AI Search indexes your documents, GPT-4o generates grounded answers with citations, and Container Apps hosts the API.",
+    "route": "/solution-plays/01-enterprise-rag",
+    "section": "solution-plays",
+    "words": 728
+  },
+  {
+    "title": "Play 02 — AI Landing Zone ⛰️",
+    "description": "Deploy the foundational infrastructure every AI workload needs. VNet with private endpoints keeps traffic off the public internet, Managed Identity eliminates secrets, RBAC locks down access, and Key ",
+    "route": "/solution-plays/02-ai-landing-zone",
+    "section": "solution-plays",
+    "words": 562
+  },
+  {
+    "title": "Play 03 — Deterministic Agent 🎯",
+    "description": "When you need AI that gives the same answer every time. Temperature=0, seed pinning, structured JSON output, confidence scoring, anti-sycophancy prompts, and a multi-layer guardrail pipeline.",
+    "route": "/solution-plays/03-deterministic-agent",
+    "section": "solution-plays",
+    "words": 528
+  },
+  {
+    "title": "Play 04 — Call Center Voice AI 📞",
+    "description": "Build a phone-answering AI agent. Azure Communication Services handles the call, Speech Service converts audio to text, GPT-4o processes intent and generates a response, then TTS speaks it back — all ",
+    "route": "/solution-plays/04-call-center-voice-ai",
+    "section": "solution-plays",
+    "words": 581
+  },
+  {
+    "title": "Play 05 — IT Ticket Resolution 🎫",
+    "description": "Incoming tickets hit classification via GPT-4o-mini, the agent routes to the right team or auto-resolves known issues from knowledge base. ServiceNow integration syncs state bidirectionally.",
+    "route": "/solution-plays/05-it-ticket-resolution",
+    "section": "solution-plays",
+    "words": 496
+  },
+  {
+    "title": "Play 06 — Document Intelligence 📄",
+    "description": "Feed PDFs, invoices, receipts, and forms into Azure Document Intelligence for OCR, then GPT-4o extracts structured fields into typed JSON. Handles multi-page documents, handwriting, tables, and stamps",
+    "route": "/solution-plays/06-document-intelligence",
+    "section": "solution-plays",
+    "words": 525
+  },
+  {
+    "title": "Play 07 — Multi-Agent Service 🤖",
+    "description": "A supervisor agent receives requests, classifies intent, and delegates to specialist agents. Each agent has its own model config, tools, and memory. Loop prevention and max-iteration guards keep costs",
+    "route": "/solution-plays/07-multi-agent-service",
+    "section": "solution-plays",
+    "words": 529
+  },
+  {
+    "title": "Play 08 — Copilot Studio Bot 💬",
+    "description": "Build an enterprise chatbot without writing code. Copilot Studio provides the canvas, SharePoint and Dataverse supply the knowledge, AI Search grounds the answers. Deploys to Teams, web, and mobile.",
+    "route": "/solution-plays/08-copilot-studio-bot",
+    "section": "solution-plays",
+    "words": 478
+  },
+  {
+    "title": "Play 09 — AI Search Portal 🔎",
+    "description": "A search experience combining keyword matching with semantic understanding. AI Search handles retrieval with custom scoring profiles, GPT-4o synthesizes results into readable summaries with citations.",
+    "route": "/solution-plays/09-ai-search-portal",
+    "section": "solution-plays",
+    "words": 516
+  },
+  {
+    "title": "Play 10 — Content Moderation 🛡️",
+    "description": "Every AI response passes through Azure Content Safety for severity scoring across hate, violence, self-harm, and sexual categories. Custom blocklists catch domain-specific terms. Dual moderation on bo",
+    "route": "/solution-plays/10-content-moderation",
+    "section": "solution-plays",
+    "words": 525
+  },
+  {
+    "title": "Play 100 — FAI Meta-Agent 🎯",
+    "description": "Build the FAI Meta-Agent — FrootAI's master orchestrator. Semantic search over all 101 plays matches user intent to the best solution, cross-play intelligence suggests complementary plays (e.g., RAG +",
+    "route": "/solution-plays/100-fai-meta-agent",
+    "section": "solution-plays",
+    "words": 776
+  },
+  {
+    "title": "Play 101 — Pester Test Development 🧪",
+    "description": "Build production-grade Pester test suites from PowerShell code. AST analysis identifies testable functions, the builder generates Describe/Context/It blocks with proper mocking, the reviewer validates",
+    "route": "/solution-plays/101-pester-test-development",
+    "section": "solution-plays",
+    "words": 617
+  },
+  {
+    "title": "Play 11 — AI Landing Zone Advanced 🏔️",
+    "description": "The enterprise-grade version of Play 02. Multi-region VNets with Azure Firewall, NAT Gateway, private DNS zones, management group hierarchy, Azure Policy enforcement, and Defender for Cloud. Designed ",
+    "route": "/solution-plays/11-ai-landing-zone-advanced",
+    "section": "solution-plays",
+    "words": 666
+  },
+  {
+    "title": "Play 12 — Model Serving AKS ⚙️",
+    "description": "Host your own models on Kubernetes. AKS with NVIDIA GPU node pools runs vLLM for high-throughput inference. Auto-scaling based on GPU utilization, health checks, and rolling deployments. Supports quan",
+    "route": "/solution-plays/12-model-serving-aks",
+    "section": "solution-plays",
+    "words": 717
+  },
+  {
+    "title": "Play 13 — Fine-Tuning Workflow 🔬",
+    "description": "Curate training data, configure LoRA parameters, train on Azure ML or Azure OpenAI, evaluate with automated metrics, then deploy the fine-tuned model. MLflow tracks experiments. Handles data validatio",
+    "route": "/solution-plays/13-fine-tuning-workflow",
+    "section": "solution-plays",
+    "words": 664
+  },
+  {
+    "title": "Play 14 — Cost-Optimized AI Gateway 🚪",
+    "description": "Route AI requests through APIM with semantic caching (Redis stores embeddings of recent queries — similar questions get cached responses). Token budgets per tenant prevent runaway costs. Multi-region ",
+    "route": "/solution-plays/14-cost-optimized-ai-gateway",
+    "section": "solution-plays",
+    "words": 680
+  },
+  {
+    "title": "Play 15 — Multi-Modal DocProc 🖼️",
+    "description": "GPT-4o's vision capability processes documents containing images, charts, tables, and text together. Document Intelligence handles OCR, then GPT-4o interprets visual elements like graphs, stamps, and ",
+    "route": "/solution-plays/15-multi-modal-docproc",
+    "section": "solution-plays",
+    "words": 666
+  },
+  {
+    "title": "Play 16 — Copilot Teams Extension 👥",
+    "description": "Deploy a Teams-native AI assistant. Message extensions appear in the compose box, Adaptive Cards display rich responses, Microsoft Graph provides organizational data, and SSO means zero login prompts.",
+    "route": "/solution-plays/16-copilot-teams-extension",
+    "section": "solution-plays",
+    "words": 641
+  },
+  {
+    "title": "Play 17 — AI Observability 📊",
+    "description": "Instrument your AI pipeline with Application Insights, track token usage and cost per tenant with custom metrics, build KQL dashboards for real-time visibility, and configure alerts for latency spikes",
+    "route": "/solution-plays/17-ai-observability",
+    "section": "solution-plays",
+    "words": 679
+  },
+  {
+    "title": "Play 18 — Prompt Management 📝",
+    "description": "Manage prompts as first-class assets. Cosmos DB stores versioned templates, A/B testing compares variants with statistical significance, injection defense layers protect against prompt attacks, and an",
+    "route": "/solution-plays/18-prompt-management",
+    "section": "solution-plays",
+    "words": 626
+  },
+  {
+    "title": "Play 19 — Edge AI Phi-4 📱",
+    "description": "Run AI locally on edge devices — no cloud dependency for inference. Phi-4 is converted to ONNX, quantized to INT4/INT8 for memory-constrained devices, and served via ONNX Runtime. IoT Hub handles mode",
+    "route": "/solution-plays/19-edge-ai-phi4",
+    "section": "solution-plays",
+    "words": 744
+  },
+  {
+    "title": "Play 20 — Anomaly Detection 🚨",
+    "description": "Detect anomalies in time-series metrics using statistical methods and Azure Anomaly Detector, then use GPT-4o to automatically analyze root causes and suggest remediation. Intelligent alerting with su",
+    "route": "/solution-plays/20-anomaly-detection",
+    "section": "solution-plays",
+    "words": 677
+  },
+  {
+    "title": "Play 21 — Agentic RAG 🧠",
+    "description": "Unlike standard RAG (Play 01) with a fixed pipeline, Agentic RAG gives the AI agent full control over retrieval. It decides IF search is needed, WHICH sources to query (AI Search, Bing, SQL, APIs), IT",
+    "route": "/solution-plays/21-agentic-rag",
+    "section": "solution-plays",
+    "words": 709
+  },
+  {
+    "title": "Play 22 — Multi-Agent Swarm 🐝",
+    "description": "Unlike Play 07 (supervisor pattern), the swarm has no single coordinator. Agents bid for tasks competitively, execute in parallel, and vote on the best result through consensus. Self-healing: when an ",
+    "route": "/solution-plays/22-multi-agent-swarm",
+    "section": "solution-plays",
+    "words": 717
+  },
+  {
+    "title": "Play 23 — Browser Automation Agent 🌐",
+    "description": "An autonomous browser agent that takes screenshots, uses GPT-4o vision to understand page state, decides what to click/type/navigate, and executes actions via Playwright. Handles login flows, form fil",
+    "route": "/solution-plays/23-browser-automation-agent",
+    "section": "solution-plays",
+    "words": 686
+  },
+  {
+    "title": "Play 24 — AI Code Review Pipeline 🔍",
+    "description": "AI reviews every pull request automatically. Static analysis catches syntax and style, GPT-4o reviews for security vulnerabilities and logic errors, OWASP scanning catches dependency issues. Actionabl",
+    "route": "/solution-plays/24-ai-code-review-pipeline",
+    "section": "solution-plays",
+    "words": 438
+  },
+  {
+    "title": "24-ai-code-review",
+    "description": "Solution play documentation.",
+    "route": "/solution-plays/24-ai-code-review",
+    "section": "solution-plays",
+    "words": 24
+  },
+  {
+    "title": "Play 25 — Conversation Memory Layer 🧠💾",
+    "description": "Give your AI agent persistent memory across conversations. Redis handles short-term session state, Cosmos DB stores compressed long-term summaries, and a vector store enables episodic recall of key fa",
+    "route": "/solution-plays/25-conversation-memory-layer",
+    "section": "solution-plays",
+    "words": 425
+  },
+  {
+    "title": "25-conversation-memory",
+    "description": "Solution play documentation.",
+    "route": "/solution-plays/25-conversation-memory",
+    "section": "solution-plays",
+    "words": 24
+  },
+  {
+    "title": "Play 26 — Semantic Search Engine 🔎",
+    "description": "A semantic search engine consumed as an API by other services. Embedding pipeline indexes documents into vector + keyword fields, hybrid search combines BM25 + vector + semantic reranking, query expan",
+    "route": "/solution-plays/26-semantic-search-engine",
+    "section": "solution-plays",
+    "words": 714
+  },
+  {
+    "title": "Play 27 — AI Data Pipeline 📊",
+    "description": "Ingest raw data, clean and validate, then enrich with GPT-4o-mini for classification, entity extraction, and summarization. Data Factory orchestrates the pipeline, data flows through lake zones (raw →",
+    "route": "/solution-plays/27-ai-data-pipeline",
+    "section": "solution-plays",
+    "words": 689
+  },
+  {
+    "title": "Play 28 — Knowledge Graph RAG 🕸️",
+    "description": "Instead of vector similarity (Play 01) or agent-controlled search (Play 21), Knowledge Graph RAG builds a graph of entities and relationships, then traverses the graph to find context for multi-hop re",
+    "route": "/solution-plays/28-knowledge-graph-rag",
+    "section": "solution-plays",
+    "words": 748
+  },
+  {
+    "title": "Play 29 — MCP Gateway 🔌",
+    "description": "Create an MCP server that wraps your existing APIs, databases, and services as tools that any AI agent can invoke. Define tool schemas with input validation, expose resources for context, and deploy v",
+    "route": "/solution-plays/29-mcp-gateway",
+    "section": "solution-plays",
+    "words": 725
+  },
+  {
+    "title": "Play 30 — AI Security Hardening 🔒",
+    "description": "Wrap any AI application with 8 security layers covering the full OWASP LLM Top 10. Input sanitization, prompt injection classifiers, content safety, PII masking, output validation, data exfiltration p",
+    "route": "/solution-plays/30-ai-security-hardening",
+    "section": "solution-plays",
+    "words": 813
+  },
+  {
+    "title": "Play 31 — Low-Code AI Builder 🧩",
+    "description": "Build AI pipelines without writing code. Drag nodes onto a canvas, connect them, configure properties, and deploy with one click. Pre-built templates for document classification, sentiment analysis, F",
+    "route": "/solution-plays/31-low-code-ai-builder",
+    "section": "solution-plays",
+    "words": 722
+  },
+  {
+    "title": "Play 32 — AI-Powered Testing 🧪",
+    "description": "LLM reads your source code, parses the AST, and generates comprehensive test suites — unit tests, edge cases, error handling, boundary conditions. Mutation testing validates test strength. CI integrat",
+    "route": "/solution-plays/32-ai-powered-testing",
+    "section": "solution-plays",
+    "words": 743
+  },
+  {
+    "title": "Play 33 — Voice AI Agent 🎙️",
+    "description": "An AI voice agent that goes beyond Play 04's inbound call handling. Dialog state machine manages multi-turn conversations, intent detection with entity extraction enables complex requests, and proacti",
+    "route": "/solution-plays/33-voice-ai-agent",
+    "section": "solution-plays",
+    "words": 715
+  },
+  {
+    "title": "Play 34 — Edge AI Deployment 🚀📦",
+    "description": "Deploy any AI model as a container to hundreds of edge devices. IoT Hub manages the fleet, staged rollouts (canary → 25% → 50% → 100%) prevent bad deployments, layered deployments separate base runtim",
+    "route": "/solution-plays/34-edge-ai-deployment",
+    "section": "solution-plays",
+    "words": 784
+  },
+  {
+    "title": "Play 35 — AI Compliance Engine ⚖️",
+    "description": "Deploy an AI-powered compliance engine that automatically assesses your AI systems against regulatory frameworks. LLM-based analysis evaluates evidence, assigns risk scores, generates audit-ready repo",
+    "route": "/solution-plays/35-ai-compliance-engine",
+    "section": "solution-plays",
+    "words": 744
+  },
+  {
+    "title": "Play 36 — Multimodal Agent 🎨🎤📝",
+    "description": "A general-purpose multimodal AI agent that handles any combination of text, images, and audio input. GPT-4o vision analyzes images, Azure Speech transcribes audio, and the agent synthesizes informatio",
+    "route": "/solution-plays/36-multimodal-agent",
+    "section": "solution-plays",
+    "words": 682
+  },
+  {
+    "title": "Play 37 — AI-Powered DevOps 🔧🤖",
+    "description": "AI enhances your DevOps operations: deployment risk scoring prevents bad deploys, alert correlation reduces noise by 90%, LLM root cause analysis finds issues in minutes not hours, and auto-remediatio",
+    "route": "/solution-plays/37-ai-powered-devops",
+    "section": "solution-plays",
+    "words": 769
+  },
+  {
+    "title": "Play 38 — Document Understanding V2 📑🔍",
+    "description": "Beyond Play 06's basic OCR: auto-classify documents by type, extract fields while preserving layout structure (sections, tables, columns), compare document versions to find changes, and route through ",
+    "route": "/solution-plays/38-document-understanding-v2",
+    "section": "solution-plays",
+    "words": 712
+  },
+  {
+    "title": "Play 39 — AI Meeting Assistant",
+    "description": "Real-time meeting transcription, speaker diarization, action item extraction, summary generation, and follow-up scheduling integrated with Microsoft Teams/Outlook.",
+    "route": "/solution-plays/39-ai-meeting-assistant",
+    "section": "solution-plays",
+    "words": 1025
+  },
+  {
+    "title": "Play 40 — Copilot Studio Advanced",
+    "description": "Production-grade Microsoft Copilot Studio solution with declarative agents, TypeSpec API plugins, Graph API data grounding, SSO/OAuth2, adaptive card responses, Power Automate integration, and enterpr",
+    "route": "/solution-plays/40-copilot-studio-advanced",
+    "section": "solution-plays",
+    "words": 1088
+  },
+  {
+    "title": "Play 41 — AI Red Teaming",
+    "description": "Automated adversarial testing of AI systems — systematic jailbreak probing, prompt injection simulation, data exfiltration detection, encoding bypass testing, multi-turn escalation attacks, and compli",
+    "route": "/solution-plays/41-ai-red-teaming",
+    "section": "solution-plays",
+    "words": 1071
+  },
+  {
+    "title": "Play 42 — Computer Use Agent",
+    "description": "Vision-based desktop and web automation — AI agent that controls applications via screenshots and mouse/keyboard actions, replacing brittle RPA with intelligent screen understanding. Runs in a sandbox",
+    "route": "/solution-plays/42-computer-use-agent",
+    "section": "solution-plays",
+    "words": 1130
+  },
+  {
+    "title": "Play 43 — AI Video Generation",
+    "description": "AI-powered video generation and editing — text-to-video, image-to-video, async batch processing with priority queues, C2PA watermarking, prompt and frame content safety, and cost-controlled preview-fi",
+    "route": "/solution-plays/43-ai-video-generation",
+    "section": "solution-plays",
+    "words": 1093
+  },
+  {
+    "title": "Play 44 — Foundry Local On-Device",
+    "description": "On-device AI inference with Azure AI Foundry Local SDK — hardware-aware model selection, hybrid cloud/local routing, offline caching, complexity-based query classification, and cost optimization throu",
+    "route": "/solution-plays/44-foundry-local-on-device",
+    "section": "solution-plays",
+    "words": 1085
+  },
+  {
+    "title": "45-real-time-event-ai",
+    "description": "Solution play documentation.",
+    "route": "/solution-plays/45-real-time-event-ai",
+    "section": "solution-plays",
+    "words": 24
+  },
+  {
+    "title": "Play 45 — Real-Time Event AI",
+    "description": "Real-time event-driven AI processing — streaming ingestion via Event Hubs, rule-based + LLM batch enrichment, adaptive anomaly detection with rolling Z-score, pattern matching, deduplication, checkpoi",
+    "route": "/solution-plays/45-realtime-event-ai",
+    "section": "solution-plays",
+    "words": 1104
+  },
+  {
+    "title": "Play 46 — Healthcare Clinical AI",
+    "description": "HIPAA-compliant clinical AI — PHI de-identification with Presidio, ICD-10/CPT medical coding, drug interaction checking grounded in FDA data, patient risk scoring via FHIR, clinical NLP decision suppo",
+    "route": "/solution-plays/46-healthcare-clinical-ai",
+    "section": "solution-plays",
+    "words": 1145
+  },
+  {
+    "title": "Play 47 — Synthetic Data Factory",
+    "description": "Privacy-safe synthetic data generation factory — LLM-based text generation, CTGAN statistical tabular data, differential privacy, schema-driven pipelines, distribution fidelity validation, PII marker ",
+    "route": "/solution-plays/47-synthetic-data-factory",
+    "section": "solution-plays",
+    "words": 1067
+  },
+  {
+    "title": "Play 48 — AI Model Governance",
+    "description": "AI model governance platform — centralized model registry with semantic versioning, multi-stage approval workflows (eval gate → bias testing → model card → human sign-off), A/B champion/challenger tes",
+    "route": "/solution-plays/48-ai-model-governance",
+    "section": "solution-plays",
+    "words": 1122
+  },
+  {
+    "title": "Play 49 — Creative AI Studio",
+    "description": "Multi-modal creative content generation platform — brand voice-consistent text, DALL-E image generation, cross-platform adaptation (LinkedIn/Twitter/Instagram/Blog/Email), content calendar automation,",
+    "route": "/solution-plays/49-creative-ai-studio",
+    "section": "solution-plays",
+    "words": 1100
+  },
+  {
+    "title": "Play 50 — Financial Risk Intelligence",
+    "description": "AI-powered financial risk platform — explainable credit risk scoring (ECOA/GDPR-compliant), three-tier real-time fraud detection (rules→ML→LLM), market sentiment analysis, regulatory reporting (Basel ",
+    "route": "/solution-plays/50-financial-risk-intelligence",
+    "section": "solution-plays",
+    "words": 1170
+  },
+  {
+    "title": "Play 51 — Autonomous Coding Agent",
+    "description": "Autonomous issue-to-PR pipeline — analyzes GitHub issues, indexes codebase, creates implementation plans, generates multi-file code changes, auto-generates tests, self-heals failing CI, and creates PR",
+    "route": "/solution-plays/51-autonomous-coding-agent",
+    "section": "solution-plays",
+    "words": 1127
+  },
+  {
+    "title": "Play 52 — AI API Gateway V2",
+    "description": "Intelligent AI API gateway — multi-provider routing (Azure OpenAI, Anthropic, Google) with priority-based failover, semantic caching via Redis (embedding similarity), circuit breakers, complexity-base",
+    "route": "/solution-plays/52-ai-api-gateway-v2",
+    "section": "solution-plays",
+    "words": 1026
+  },
+  {
+    "title": "Play 53 — Legal Document AI",
+    "description": "AI-powered legal document analysis — contract review, clause extraction with layout-aware parsing, risk scoring against industry benchmarks, redlining suggestions, version comparison, jurisdiction-awa",
+    "route": "/solution-plays/53-legal-document-ai",
+    "section": "solution-plays",
+    "words": 1012
+  },
+  {
+    "title": "Play 54 — AI Customer Support V2",
+    "description": "Advanced AI customer support — multi-channel (chat, email, voice), intent classification with slot filling, knowledge-grounded responses via AI Search, sentiment-aware escalation with priority routing",
+    "route": "/solution-plays/54-ai-customer-support-v2",
+    "section": "solution-plays",
+    "words": 903
+  },
+  {
+    "title": "Play 55 — Supply Chain AI",
+    "description": "AI-powered supply chain intelligence — demand forecasting (Prophet ML + LLM anomaly explanation), supplier risk scoring (multi-factor weighted), inventory optimization (safety stock + EOQ), logistics ",
+    "route": "/solution-plays/55-supply-chain-ai",
+    "section": "solution-plays",
+    "words": 839
+  },
+  {
+    "title": "Play 56 — Semantic Code Search",
+    "description": "Vector-based code search engine — AST-aware function parsing (tree-sitter), multi-field embedding (signature + docstring + body), hybrid keyword+vector search with boost weights, semantic reranking, i",
+    "route": "/solution-plays/56-semantic-code-search",
+    "section": "solution-plays",
+    "words": 747
+  },
+  {
+    "title": "Play 57 — AI Translation Engine",
+    "description": "Enterprise translation engine — two-layer architecture: Azure Translator for bulk NMT (130+ languages, custom glossary enforcement) + GPT-4o LLM post-editing for nuanced content (marketing, legal, med",
+    "route": "/solution-plays/57-ai-translation-engine",
+    "section": "solution-plays",
+    "words": 765
+  },
+  {
+    "title": "Play 58 — Digital Twin Agent",
+    "description": "AI-powered digital twin — Azure Digital Twins with DTDL models, IoT Hub sensor ingestion via Event Grid, natural language→DTDL query translation, predictive maintenance (Remaining Useful Life), twin g",
+    "route": "/solution-plays/58-digital-twin-agent",
+    "section": "solution-plays",
+    "words": 806
+  },
+  {
+    "title": "Play 59 — AI Recruiter Agent",
+    "description": "Bias-aware AI recruitment — resume parsing with PII redaction (name, photos, graduation years), candidate scoring on skills+experience only (never demographics), explainable factors, job description g",
+    "route": "/solution-plays/59-ai-recruiter-agent",
+    "section": "solution-plays",
+    "words": 799
+  },
+  {
+    "title": "Play 60 — Responsible AI Dashboard",
+    "description": "Organization-wide responsible AI monitoring — centralized fairness scorecards (demographic parity, equalized odds, disparate impact, intersectional analysis), content safety incident tracking with sev",
+    "route": "/solution-plays/60-responsible-ai-dashboard",
+    "section": "solution-plays",
+    "words": 811
+  },
+  {
+    "title": "Play 61 — Content Moderation V2",
+    "description": "Advanced multi-modal content moderation — Azure Content Safety for text+image+video, custom category blocklists, per-category severity thresholds, severity-based routing (auto-block/human-review/flag)",
+    "route": "/solution-plays/61-content-moderation-v2",
+    "section": "solution-plays",
+    "words": 807
+  },
+  {
+    "title": "Play 62 — Federated Learning Pipeline",
+    "description": "Privacy-preserving distributed training — FedAvg server orchestration, client local training (data never leaves), differential privacy via Opacus, optional secure aggregation in Azure Confidential Com",
+    "route": "/solution-plays/62-federated-learning-pipeline",
+    "section": "solution-plays",
+    "words": 834
+  },
+  {
+    "title": "Play 63 — Fraud Detection Agent",
+    "description": "Real-time fraud detection — three-layer architecture: rule engine (<1ms, velocity+geo+amount), ML model (<50ms, statistical patterns+SHAP explainability), graph network analysis (fraud rings, mule acc",
+    "route": "/solution-plays/63-fraud-detection-agent",
+    "section": "solution-plays",
+    "words": 804
+  },
+  {
+    "title": "Play 64 — AI Sales Assistant",
+    "description": "AI-powered sales enablement — CRM-grounded lead scoring (ICP match + engagement signals), personalized email generation, call prep with talk tracks, competitive intelligence from win/loss data, deal s",
+    "route": "/solution-plays/64-ai-sales-assistant",
+    "section": "solution-plays",
+    "words": 801
+  },
+  {
+    "title": "Play 65 — AI Training Curriculum",
+    "description": "Adaptive AI-powered learning platform — skill gap analysis against role-skill matrices, dependency-ordered learning paths (topological sort), content matched to learning style (visual/reading/hands-on",
+    "route": "/solution-plays/65-ai-training-curriculum",
+    "section": "solution-plays",
+    "words": 765
+  },
+  {
+    "title": "Play 66 — AI Infrastructure Optimizer",
+    "description": "FinOps for AI workloads — Azure Monitor metrics collection, GPU utilization analysis, SKU right-sizing engine with p95-based recommendations, cost anomaly detection with severity classification, auto-",
+    "route": "/solution-plays/66-ai-infrastructure-optimizer",
+    "section": "solution-plays",
+    "words": 762
+  },
+  {
+    "title": "Play 67 — AI Knowledge Management",
+    "description": "Organizational knowledge platform — auto-capture from Teams/SharePoint/ServiceNow/Jira/meetings, LLM extraction with taxonomy classification, semantic deduplication (0.95 threshold), knowledge graph i",
+    "route": "/solution-plays/67-ai-knowledge-management",
+    "section": "solution-plays",
+    "words": 784
+  },
+  {
+    "title": "Play 68 — Predictive Maintenance AI",
+    "description": "Industrial predictive maintenance — IoT sensor telemetry (vibration, temperature, pressure, current), multivariate feature engineering, Gradient Boosting RUL prediction, condition-based scheduling (ur",
+    "route": "/solution-plays/68-predictive-maintenance-ai",
+    "section": "solution-plays",
+    "words": 789
+  },
+  {
+    "title": "Play 69 — Carbon Footprint Tracker",
+    "description": "AI-powered carbon tracking — Scope 1 (direct fuel), Scope 2 (location + market-based electricity), Scope 3 (AI-classified spend-based estimation), emission factor database (GHG Protocol 2024), multi-f",
+    "route": "/solution-plays/69-carbon-footprint-tracker",
+    "section": "solution-plays",
+    "words": 772
+  },
+  {
+    "title": "Play 70 — ESG Compliance Agent 🌱",
+    "description": "Build an ESG compliance agent. Score companies across GRI, SASB, CSRD, and TCFD frameworks, match evidence to requirements using AI Search + LLM evaluation, detect greenwashing with 5 indicator types,",
+    "route": "/solution-plays/70-esg-compliance-agent",
+    "section": "solution-plays",
+    "words": 681
+  },
+  {
+    "title": "Play 71 — Smart Energy Grid AI ⚡",
+    "description": "Build a smart energy grid management system. Time-series models forecast load (Prophet + LightGBM ensemble), IoT Hub ingests sensor data, and LLMs explain anomalies for grid operators.",
+    "route": "/solution-plays/71-smart-energy-grid-ai",
+    "section": "solution-plays",
+    "words": 799
+  },
+  {
+    "title": "Play 72 — Climate Risk Assessor 🌍",
+    "description": "Assess climate risks for companies at asset-level granularity. Physical risks (floods, heat, sea level, wildfire, storms) scored by location, transition risks (carbon pricing, stranded assets, market ",
+    "route": "/solution-plays/72-climate-risk-assessor",
+    "section": "solution-plays",
+    "words": 706
+  },
+  {
+    "title": "Play 73 — Waste Recycling Optimizer ♻️",
+    "description": "Build an intelligent waste management system. ONNX vision models classify materials (9 categories), contamination detection prevents batch rejection, OR-Tools optimizes collection routes, and IoT sens",
+    "route": "/solution-plays/73-waste-recycling-optimizer",
+    "section": "solution-plays",
+    "words": 700
+  },
+  {
+    "title": "Play 74 — AI Tutoring Agent 🎓",
+    "description": "Build an intelligent tutoring agent that never gives direct answers. Uses Socratic questioning with 4-step hint progression, tracks student mastery via Bayesian Knowledge Tracing, detects and remediat",
+    "route": "/solution-plays/74-ai-tutoring-agent",
+    "section": "solution-plays",
+    "words": 681
+  },
+  {
+    "title": "Play 75 — Exam Generation Engine 📝",
+    "description": "Build an intelligent exam generation system. Extract content from learning materials (PDF/DOCX), generate questions across Bloom's taxonomy levels, create plausible distractors grounded in common misc",
+    "route": "/solution-plays/75-exam-generation-engine",
+    "section": "solution-plays",
+    "words": 701
+  },
+  {
+    "title": "Play 76 — Accessibility Learning Agent ♿",
+    "description": "Build an intelligent accessibility auditor. Combines axe-core automated checks with AI-enhanced analysis (cognitive load, reading order, plain language), generates context-aware alt text via GPT-4o Vi",
+    "route": "/solution-plays/76-accessibility-learning-agent",
+    "section": "solution-plays",
+    "words": 713
+  },
+  {
+    "title": "Play 77 — Research Paper AI 📚",
+    "description": "Build an intelligent research assistant. Search across Semantic Scholar, arXiv, PubMed, and Crossref simultaneously, extract structured data (objective, methodology, findings, limitations), synthesize",
+    "route": "/solution-plays/77-research-paper-ai",
+    "section": "solution-plays",
+    "words": 677
+  },
+  {
+    "title": "Play 78 — Precision Agriculture Agent 🌾",
+    "description": "Build a precision agriculture system. Sentinel-2 multispectral imagery calculates NDVI/NDWI/EVI vegetation indices, Custom Vision classifies stress causes (drought, pest, disease, nutrient), IoT soil ",
+    "route": "/solution-plays/78-precision-agriculture-agent",
+    "section": "solution-plays",
+    "words": 728
+  },
+  {
+    "title": "Play 79 — Food Safety Inspector AI 🍴",
+    "description": "Build an intelligent food safety inspection system. IoT sensors monitor Critical Control Points (temperature, humidity), AI detects violation patterns across inspections, full supply chain traceabilit",
+    "route": "/solution-plays/79-food-safety-inspector-ai",
+    "section": "solution-plays",
+    "words": 692
+  },
+  {
+    "title": "Play 80 — Biodiversity Monitor 🦎",
+    "description": "Build an intelligent biodiversity monitoring system. Camera traps auto-classify species via Custom Vision, bioacoustic recorders identify birds/amphibians/bats by call, occupancy models estimate popul",
+    "route": "/solution-plays/80-biodiversity-monitor",
+    "section": "solution-plays",
+    "words": 694
+  },
+  {
+    "title": "Play 81 — Property Valuation AI 🏠",
+    "description": "Build an automated valuation model (AVM). AI Search finds geospatially-filtered comparable sales, paired-sales-derived adjustment factors normalize for differences (sqft, condition, features), gradien",
+    "route": "/solution-plays/81-property-valuation-ai",
+    "section": "solution-plays",
+    "words": 706
+  },
+  {
+    "title": "Play 82 — Construction Safety AI 🏗️",
+    "description": "Build an intelligent construction safety system. YOLOv8 detects PPE compliance at 2 FPS on IoT Edge devices, geo-fenced hazard zones trigger intrusion alerts, gradient boosting predicts incident risk ",
+    "route": "/solution-plays/82-construction-safety-ai",
+    "section": "solution-plays",
+    "words": 768
+  },
+  {
+    "title": "Play 83 — Building Energy Optimizer 🏢",
+    "description": "Build an intelligent building energy optimizer. Occupancy prediction fuses badge-in, WiFi, CO2, and calendar data to drive zone-based HVAC setpoints, pre-conditioning anticipates arrivals, fault detec",
+    "route": "/solution-plays/83-building-energy-optimizer",
+    "section": "solution-plays",
+    "words": 754
+  },
+  {
+    "title": "Play 84 — Citizen Services Chatbot 🏛️",
+    "description": "Build a government citizen services chatbot. Temperature-zero responses ensure factual accuracy, Azure Translator provides 10+ language support, WCAG 2.2 AA accessibility is built-in, complaint routin",
+    "route": "/solution-plays/84-citizen-services-chatbot",
+    "section": "solution-plays",
+    "words": 752
+  },
+  {
+    "title": "Play 85 — Policy Impact Analyzer 📊",
+    "description": "Build an evidence-based policy impact analyzer. Extract provisions from regulatory documents, score impacts per stakeholder group with uncertainty ranges, analyze public comments with campaign detecti",
+    "route": "/solution-plays/85-policy-impact-analyzer",
+    "section": "solution-plays",
+    "words": 748
+  },
+  {
+    "title": "Play 86 — Public Safety Analytics 🚨",
+    "description": "Build an ethical public safety analytics platform. Temporal pattern analysis (NOT geographic targeting) identifies demand peaks, resource optimization improves response times while ensuring demographi",
+    "route": "/solution-plays/86-public-safety-analytics",
+    "section": "solution-plays",
+    "words": 755
+  },
+  {
+    "title": "Play 87 — Dynamic Pricing Engine 💰",
+    "description": "Build a dynamic pricing engine. ML elasticity models predict demand sensitivity, scipy optimization finds revenue-maximizing prices within fairness constraints (margin floor, change caps, no demograph",
+    "route": "/solution-plays/87-dynamic-pricing-engine",
+    "section": "solution-plays",
+    "words": 762
+  },
+  {
+    "title": "Play 88 — Visual Product Search 🔍",
+    "description": "Build a visual product search engine. CLIP/Florence encodes product catalog into vector embeddings, AI Search provides sub-200ms vector similarity search, multi-modal fusion combines image + text quer",
+    "route": "/solution-plays/88-visual-product-search",
+    "section": "solution-plays",
+    "words": 763
+  },
+  {
+    "title": "Play 89 — Retail Inventory Predictor 📦",
+    "description": "Build a retail inventory prediction system. LightGBM forecasts demand per SKU × store with promotion/weather/event features, dynamic safety stock adapts to demand variability, Croston handles slow mov",
+    "route": "/solution-plays/89-retail-inventory-predictor",
+    "section": "solution-plays",
+    "words": 758
+  },
+  {
+    "title": "Play 90 — Network Optimization Agent 📡",
+    "description": "Build a telecom network optimization agent. LSTM forecasts traffic per link 4 hours ahead, NetworkX-based routing balances utilization while maintaining redundancy, predictive maintenance catches equi",
+    "route": "/solution-plays/90-network-optimization-agent",
+    "section": "solution-plays",
+    "words": 766
+  },
+  {
+    "title": "Play 91 — Customer Churn Predictor 📉",
+    "description": "Build a customer churn prediction system. LightGBM scores risk from 4 signal categories (usage, engagement, billing, support), SHAP explains top 3 churn drivers per customer, segment-specific retentio",
+    "route": "/solution-plays/91-customer-churn-predictor",
+    "section": "solution-plays",
+    "words": 765
+  },
+  {
+    "title": "Play 92 — Telecom Fraud Shield 🛡️",
+    "description": "Build a telecom fraud detection system. Stream Analytics processes millions of CDRs/sec with velocity rules, multi-pattern engines detect SIM swap (5 indicators), IRSF (premium number ranges), and Wan",
+    "route": "/solution-plays/92-telecom-fraud-shield",
+    "section": "solution-plays",
+    "words": 844
+  },
+  {
+    "title": "Play 93 — Continual Learning Agent 🧠",
+    "description": "Build a continual learning agent that improves across sessions. Three memory types (episodic experiences, semantic patterns, procedural skills) persist between conversations, reflection loops analyze ",
+    "route": "/solution-plays/93-continual-learning-agent",
+    "section": "solution-plays",
+    "words": 776
+  },
+  {
+    "title": "Play 94 — AI Podcast Generator 🎙️",
+    "description": "Build an AI podcast generator. GPT-4o writes conversational scripts in 4 formats (interview, monologue, debate, panel), Azure Neural TTS synthesizes multiple distinct voices with SSML prosody control,",
+    "route": "/solution-plays/94-ai-podcast-generator",
+    "section": "solution-plays",
+    "words": 807
+  },
+  {
+    "title": "Play 95 — Multimodal Search V2 🔎",
+    "description": "Build a unified multimodal search engine. Per-modality encoders (text-embedding-3-large, CLIP, Whisper) create embeddings across 4 content types, cross-modal retrieval enables searching images with te",
+    "route": "/solution-plays/95-multimodal-search-v2",
+    "section": "solution-plays",
+    "words": 864
+  },
+  {
+    "title": "Play 96 — Realtime Voice Agent V2 📞",
+    "description": "Build a real-time voice agent with sub-500ms time-to-first-byte. GPT-4o Realtime API streams responses token-by-token, Azure Speech provides streaming STT/TTS with SSML, barge-in detection lets users ",
+    "route": "/solution-plays/96-realtime-voice-agent-v2",
+    "section": "solution-plays",
+    "words": 825
+  },
+  {
+    "title": "Play 97 — AI Data Marketplace 📊",
+    "description": "Build an AI data marketplace. 5-dimension quality scoring (completeness, consistency, accuracy, timeliness, uniqueness) grades every dataset, PII scanning + k-anonymity + differential privacy enable p",
+    "route": "/solution-plays/97-ai-data-marketplace",
+    "section": "solution-plays",
+    "words": 820
+  },
+  {
+    "title": "Play 98 — Agent Evaluation Platform 🏆",
+    "description": "Build an agent evaluation platform. Score agents across 7 dimensions (task completion, accuracy, tool use, safety, latency, cost, conversation quality), calibrate LLM-as-judge against human annotation",
+    "route": "/solution-plays/98-agent-evaluation-platform",
+    "section": "solution-plays",
+    "words": 784
+  },
+  {
+    "title": "Play 99 — Enterprise AI Governance Hub 🏛️",
+    "description": "Build an enterprise AI governance hub. Centralized registry tracks every AI system with risk level, owner, and compliance status. EU AI Act 4-tier risk classification (unacceptable→high→limited→minima",
+    "route": "/solution-plays/99-enterprise-ai-governance-hub",
+    "section": "solution-plays",
+    "words": 811
+  },
+  {
+    "title": "Solution Plays",
+    "description": "100 production-ready AI architectures — each a self-contained, deployable solution with agents, infrastructure, evaluation, and quality guardrails.",
+    "route": "/solution-plays",
+    "section": "solution-plays",
+    "words": 177
+  }
+]

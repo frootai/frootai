@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_model_serving_aks",
+      "description": "Deploy Model Serving on AKS — provision GPU node pools, deploy vLLM/TGI containers, configure HPA, health probes, ACR, and ingress. Use when: deploy, provision, configure GPU cluster.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-model-serving-aks/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_model_serving_aks",
+      "description": "Evaluate Model Serving AKS — benchmark inference throughput (tokens/sec), latency (TTFT, TPS), GPU utilization, pod health, scaling behavior. Use when: evaluate, benchmark, load test.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-model-serving-aks/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_model_serving_aks",
+      "description": "Tune Model Serving AKS — optimize GPU utilization, quantization level, batch size, spot node pools, auto-scaling rules, cost per inference. Use when: tune, optimize, reduce cost.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-model-serving-aks/"
+      }
+    }
+  ]
+}

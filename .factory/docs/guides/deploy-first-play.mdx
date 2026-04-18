@@ -1,0 +1,75 @@
+---
+title: "Deploy Your First Play"
+description: "End-to-end tutorial: scaffold → configure → deploy → evaluate"
+icon: "🚀"
+order: 1
+tags: ["guide", "deploy-your-first-play"]
+category: "guides"
+---
+# Deploy Your First Play
+
+This guide walks you through deploying Play 01 (Enterprise RAG) from scratch.
+
+## Prerequisites
+
+- Azure subscription with Contributor access
+- Azure CLI installed (`az login`)
+- Node.js 18+
+
+## Step 1: Scaffold the Play
+
+```bash
+npx frootai@latest init 01-enterprise-rag
+cd 01-enterprise-rag
+```
+
+## Step 2: Configure Parameters
+
+Edit `config/openai.json`:
+```json
+{
+  "model": "gpt-4o",
+  "temperature": 0.3,
+  "max_tokens": 4000,
+  "top_p": 0.9
+}
+```
+
+## Step 3: Deploy Infrastructure
+
+```bash
+# Using Azure Bicep
+az deployment group create \
+  --resource-group rg-frootai \
+  --template-file infra/main.bicep \
+  --parameters infra/parameters.json
+
+# Or using Terraform
+cd infra/terraform
+terraform init && terraform apply
+```
+
+## Step 4: Run Evaluation
+
+```bash
+# Validate the play
+npx frootai validate
+
+# Run quality evaluation
+node engine/index.js spec/fai-manifest.json --eval
+```
+
+## Step 5: Verify Quality Gates
+
+Check that all guardrails pass:
+- ✅ Groundedness ≥ 95%
+- ✅ Coherence ≥ 90%
+- ✅ Relevance ≥ 85%
+- ✅ Safety = 0 violations
+- ✅ Cost ≤ $0.01/query
+
+## Next Steps
+
+- [Create a Custom Agent →](/guides/create-agent)
+- [Build a Plugin →](/guides/build-plugin)
+- [Enterprise Deployment →](/guides/enterprise-deployment)

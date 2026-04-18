@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-powered-devops",
+      "description": "Deploy AI-Powered DevOps — configure AI incident pipeline, deployment risk scoring, auto-remediation runbooks, alert correlation, change impact analysis. Use when: deploy, provision AIOps.",
+      "functions": [
+        {
+          "name": "deploy-ai-powered-devops",
+          "description": "Deploy AI-Powered DevOps — configure AI incident pipeline, deployment risk scoring, auto-remediation runbooks, alert correlation, change impact analysis. Use when: deploy, provision AIOps.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-powered-devops",
+      "description": "Evaluate AI-Powered DevOps — measure incident response accuracy, risk score calibration, auto-remediation safety, alert correlation quality, MTTR reduction. Use when: evaluate, test AIOps.",
+      "functions": [
+        {
+          "name": "evaluate-ai-powered-devops",
+          "description": "Evaluate AI-Powered DevOps — measure incident response accuracy, risk score calibration, auto-remediation safety, alert correlation quality, MTTR reduction. Use when: evaluate, test AIOps.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-powered-devops",
+      "description": "Tune AI-Powered DevOps — optimize alert correlation windows, risk scoring weights, remediation confidence, incident prompt quality, cost. Use when: tune, optimize AIOps.",
+      "functions": [
+        {
+          "name": "tune-ai-powered-devops",
+          "description": "Tune AI-Powered DevOps — optimize alert correlation windows, risk scoring weights, remediation confidence, incident prompt quality, cost. Use when: tune, optimize AIOps.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

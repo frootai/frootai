@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_anomaly_detection",
+      "description": "Deploy Anomaly Detection — configure time-series detection pipeline, Azure Monitor Anomaly Detector, alerting rules, LLM root cause analysis, dashboards. Use when: deploy, provision, configure detection.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-anomaly-detection/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_anomaly_detection",
+      "description": "Evaluate Anomaly Detection — measure precision, recall, F1 on labeled anomalies, false positive rate, detection latency, root cause accuracy. Use when: evaluate, benchmark detection.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-anomaly-detection/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_anomaly_detection",
+      "description": "Tune Anomaly Detection — optimize detection thresholds (σ levels), time windows, suppression rules, seasonal baselines, alert routing, false positive reduction. Use when: tune, optimize detection.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-anomaly-detection/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "functions": [
+    {
+      "name": "deploy-multi-modal-docproc",
+      "description": "Deploy Multi-Modal DocProc — configure GPT-4o vision + Document Intelligence OCR for images, charts, tables, stamps, handwriting. Use when: deploy, provision, configure vision pipeline.",
+      "functions": [
+        {
+          "name": "deploy-multi-modal-docproc",
+          "description": "Deploy Multi-Modal DocProc — configure GPT-4o vision + Document Intelligence OCR for images, charts, tables, stamps, handwriting. Use when: deploy, provision, configure vision pipeline.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-multi-modal-docproc",
+      "description": "Evaluate Multi-Modal DocProc — test vision extraction accuracy on charts/stamps/photos, OCR accuracy on text, cross-modal consistency, PII in images. Use when: evaluate, test quality.",
+      "functions": [
+        {
+          "name": "evaluate-multi-modal-docproc",
+          "description": "Evaluate Multi-Modal DocProc — test vision extraction accuracy on charts/stamps/photos, OCR accuracy on text, cross-modal consistency, PII in images. Use when: evaluate, test quality.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-multi-modal-docproc",
+      "description": "Tune Multi-Modal DocProc — optimize vision vs OCR routing, image resolution, GPT-4o vision prompt engineering, batch throughput, cost per document. Use when: tune, optimize.",
+      "functions": [
+        {
+          "name": "tune-multi-modal-docproc",
+          "description": "Tune Multi-Modal DocProc — optimize vision vs OCR routing, image resolution, GPT-4o vision prompt engineering, batch throughput, cost per document. Use when: tune, optimize.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-96",
+      "description": "Skill: deploy-96",
+      "functions": [
+        {
+          "name": "deploy-96",
+          "description": "Skill: deploy-96",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-96",
+      "description": "Skill: evaluate-96",
+      "functions": [
+        {
+          "name": "evaluate-96",
+          "description": "Skill: evaluate-96",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-96",
+      "description": "Skill: tune-96",
+      "functions": [
+        {
+          "name": "tune-96",
+          "description": "Skill: tune-96",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

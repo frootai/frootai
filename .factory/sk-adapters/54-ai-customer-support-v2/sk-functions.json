@@ -1,0 +1,82 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-customer-support-v2",
+      "description": "Deploy AI Customer Support V2 — multi-channel (chat/email/voice), intent classification with slot filling, knowledge-grounded responses, sentiment-aware escalation, session memory, CSAT tracking.",
+      "functions": [
+        {
+          "name": "deploy-ai-customer-support-v2",
+          "description": "Deploy AI Customer Support V2 — multi-channel (chat/email/voice), intent classification with slot filling, knowledge-grounded responses, sentiment-aware escalation, session memory, CSAT tracking.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-customer-support-v2",
+      "description": "Evaluate AI Customer Support V2 quality — intent accuracy, resolution rate, CSAT score, escalation appropriateness, KB grounding, response quality across channels.",
+      "functions": [
+        {
+          "name": "evaluate-ai-customer-support-v2",
+          "description": "Evaluate AI Customer Support V2 quality — intent accuracy, resolution rate, CSAT score, escalation appropriateness, KB grounding, response quality across channels.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "description": "Conversation or task context",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-customer-support-v2",
+      "description": "Tune AI Customer Support V2 — intent thresholds, escalation rules, response tone, KB indexing, channel templates, CSAT optimization, cost per resolution.",
+      "functions": [
+        {
+          "name": "tune-ai-customer-support-v2",
+          "description": "Tune AI Customer Support V2 — intent thresholds, escalation rules, response tone, KB indexing, channel templates, CSAT optimization, cost per resolution.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "description": "Sampling temperature (0-1)",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

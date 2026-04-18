@@ -1,0 +1,74 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_compliance_engine",
+      "description": "Deploy AI Compliance Engine — configure regulatory check framework (GDPR, HIPAA, EU AI Act, SOC 2), automated audit trail, risk scoring, evidence collection. Use when: deploy, configure compliance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-compliance-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_compliance_engine",
+      "description": "Evaluate AI Compliance Engine — measure check accuracy, evidence quality, framework coverage, risk scoring calibration, false positive/negative rate. Use when: evaluate, audit compliance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-compliance-engine/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_compliance_engine",
+      "description": "Tune AI Compliance Engine — optimize check frequency, reduce false positives, calibrate risk scoring, configure evidence retention, framework-specific tuning. Use when: tune, optimize compliance.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Conversation context"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-compliance-engine/"
+      }
+    }
+  ]
+}

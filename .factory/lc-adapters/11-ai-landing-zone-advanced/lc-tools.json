@@ -1,0 +1,78 @@
+{
+  "tools": [
+    {
+      "class": "StructuredTool",
+      "name": "deploy_ai_landing_zone_advanced",
+      "description": "Deploy Advanced Landing Zone — multi-region Bicep with management groups, Azure Firewall, NAT Gateway, DNS zones, Azure Policy, Defender for Cloud. Use when: deploy, provision, configure enterprise infrastructure.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          },
+          "input": {
+            "type": "string",
+            "description": "Input for the tool"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/deploy-ai-landing-zone-advanced/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "evaluate_ai_landing_zone_advanced",
+      "description": "Evaluate Advanced Landing Zone — audit Azure Policy compliance, Defender score, network segmentation, RBAC least-privilege, CIS/NIST benchmarks. Use when: evaluate, audit, compliance check.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/evaluate-ai-landing-zone-advanced/"
+      }
+    },
+    {
+      "class": "StructuredTool",
+      "name": "tune_ai_landing_zone_advanced",
+      "description": "Tune Advanced Landing Zone — optimize SKU right-sizing, region selection, policy effects (Audit vs Deny), reserved instances, Firewall rules, cost governance. Use when: tune, optimize, cost review.",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "User query or prompt"
+          },
+          "content": {
+            "type": "string",
+            "description": "Document content"
+          }
+        },
+        "required": [
+          "input"
+        ]
+      },
+      "return_direct": false,
+      "metadata": {
+        "source": "fai-skill",
+        "originalPath": "./.github/skills/tune-ai-landing-zone-advanced/"
+      }
+    }
+  ]
+}

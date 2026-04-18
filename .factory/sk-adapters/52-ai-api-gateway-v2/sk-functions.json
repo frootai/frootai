@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-ai-api-gateway-v2",
+      "description": "Deploy AI API Gateway V2 — multi-provider routing (OpenAI/Anthropic/Google), semantic caching with Redis, circuit breakers, token metering, per-consumer rate limiting, APIM policies.",
+      "functions": [
+        {
+          "name": "deploy-ai-api-gateway-v2",
+          "description": "Deploy AI API Gateway V2 — multi-provider routing (OpenAI/Anthropic/Google), semantic caching with Redis, circuit breakers, token metering, per-consumer rate limiting, APIM policies.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-ai-api-gateway-v2",
+      "description": "Evaluate AI API Gateway V2 — cache hit rate, failover reliability, cost savings, latency distribution, rate limiting accuracy, provider health.",
+      "functions": [
+        {
+          "name": "evaluate-ai-api-gateway-v2",
+          "description": "Evaluate AI API Gateway V2 — cache hit rate, failover reliability, cost savings, latency distribution, rate limiting accuracy, provider health.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "User query or prompt",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-ai-api-gateway-v2",
+      "description": "Tune AI API Gateway V2 — provider routing priority, semantic cache TTL, circuit breaker thresholds, complexity routing rules, rate limit quotas, cost optimization.",
+      "functions": [
+        {
+          "name": "tune-ai-api-gateway-v2",
+          "description": "Tune AI API Gateway V2 — provider routing priority, semantic cache TTL, circuit breaker thresholds, complexity routing rules, rate limit quotas, cost optimization.",
+          "parameters": [
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "description": "Maximum tokens for response",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

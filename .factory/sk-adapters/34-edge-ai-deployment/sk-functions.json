@@ -1,0 +1,64 @@
+{
+  "functions": [
+    {
+      "name": "deploy-edge-ai-deployment",
+      "description": "Deploy Edge AI — package models into containers, configure IoT Edge modules, set up fleet deployment with canary rollouts, layered deployments, offline-capable. Use when: deploy, provision edge fleet.",
+      "functions": [
+        {
+          "name": "deploy-edge-ai-deployment",
+          "description": "Deploy Edge AI — package models into containers, configure IoT Edge modules, set up fleet deployment with canary rollouts, layered deployments, offline-capable. Use when: deploy, provision edge fleet.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "evaluate-edge-ai-deployment",
+      "description": "Evaluate Edge AI Deployment — measure fleet deployment success, device compatibility, rollout health, offline resilience, rollback capability. Use when: evaluate, test fleet deployment.",
+      "functions": [
+        {
+          "name": "evaluate-edge-ai-deployment",
+          "description": "Evaluate Edge AI Deployment — measure fleet deployment success, device compatibility, rollout health, offline resilience, rollback capability. Use when: evaluate, test fleet deployment.",
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "description": "Document or content to process",
+              "required": false
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    },
+    {
+      "name": "tune-edge-ai-deployment",
+      "description": "Tune Edge AI Deployment — optimize container image size, rollout speed, update frequency, fleet segmentation, monitoring granularity, deployment cost. Use when: tune, optimize fleet ops.",
+      "functions": [
+        {
+          "name": "tune-edge-ai-deployment",
+          "description": "Tune Edge AI Deployment — optimize container image size, rollout speed, update frequency, fleet segmentation, monitoring granularity, deployment cost. Use when: tune, optimize fleet ops.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "string",
+              "description": "Input for the skill",
+              "required": true
+            }
+          ],
+          "returnType": "string",
+          "isPrompt": false
+        }
+      ]
+    }
+  ]
+}

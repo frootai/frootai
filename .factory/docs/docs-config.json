@@ -1,0 +1,117 @@
+{
+  "title": "FrootAI Documentation",
+  "description": "The open-source AI primitive unification platform — documentation, guides, and API reference.",
+  "url": "https://docs.frootai.dev",
+  "repo": "https://github.com/frootai/frootai",
+  "editBaseUrl": "https://github.com/frootai/frootai/edit/main/",
+  "version": "1.0.0",
+  "ogImage": "https://frootai.dev/og-image.png",
+  "themeColor": "#10b981",
+  "navigation": {
+    "primary": [
+      {
+        "title": "Getting Started",
+        "path": "/getting-started",
+        "icon": "🚀"
+      },
+      {
+        "title": "Concepts",
+        "path": "/concepts",
+        "icon": "💡"
+      },
+      {
+        "title": "Learning",
+        "path": "/learning",
+        "icon": "📚"
+      },
+      {
+        "title": "Guides",
+        "path": "/guides",
+        "icon": "🗺️"
+      },
+      {
+        "title": "Solution Plays",
+        "path": "/solution-plays",
+        "icon": "🎯"
+      },
+      {
+        "title": "Primitives",
+        "path": "/primitives",
+        "icon": "🧩"
+      },
+      {
+        "title": "API Reference",
+        "path": "/api-reference",
+        "icon": "📖"
+      },
+      {
+        "title": "Specialties",
+        "path": "/specialties",
+        "icon": "⚡"
+      },
+      {
+        "title": "Changelog",
+        "path": "/changelog",
+        "icon": "📝"
+      }
+    ],
+    "secondary": [
+      {
+        "title": "GitHub",
+        "url": "https://github.com/frootai/frootai",
+        "external": true
+      },
+      {
+        "title": "Community",
+        "url": "https://frootai.dev/community",
+        "external": true
+      },
+      {
+        "title": "frootai.dev",
+        "url": "https://frootai.dev",
+        "external": true
+      }
+    ]
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Product",
+        "links": [
+          "Getting Started",
+          "Solution Plays",
+          "Primitives",
+          "FAI Protocol"
+        ]
+      },
+      {
+        "title": "Developers",
+        "links": [
+          "API Reference",
+          "CLI",
+          "MCP Server",
+          "Python SDK"
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          "Learning Hub",
+          "Guides",
+          "Changelog",
+          "Roadmap"
+        ]
+      },
+      {
+        "title": "Community",
+        "links": [
+          "GitHub",
+          "Contributing",
+          "Code of Conduct",
+          "Discord"
+        ]
+      }
+    ],
+    "copyright": "© 2025-2026 FrootAI. MIT License."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "planner": {
+    "type": "StepwisePlanner",
+    "maxIterations": 6,
+    "steps": [
+      {
+        "stepName": "Edge-AI-Phi-4-Builder",
+        "agentRole": "builder",
+        "description": "Edge AI Phi-4 builder - sets up ONNX Runtime, quantization, IoT Hub sync",
+        "model": "gpt-4o",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal",
+          "agent"
+        ],
+        "order": 1,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/builder.agent.md",
+          "waf": [
+            "performance-efficiency",
+            "reliability",
+            "security"
+          ]
+        }
+      },
+      {
+        "stepName": "Edge-AI-Phi-4-Reviewer",
+        "agentRole": "reviewer",
+        "description": "Edge AI Phi-4 reviewer - audits model size, memory, offline capability",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase"
+        ],
+        "order": 2,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/reviewer.agent.md",
+          "waf": [
+            "security",
+            "reliability",
+            "performance-efficiency"
+          ]
+        }
+      },
+      {
+        "stepName": "Edge-AI-Phi-4-Tuner",
+        "agentRole": "tuner",
+        "description": "Edge AI Phi-4 tuner - optimizes quantization, inference speed, prompts",
+        "model": "gpt-4o-mini",
+        "tools": [
+          "codebase",
+          "editFiles",
+          "terminal"
+        ],
+        "order": 3,
+        "metadata": {
+          "source": "fai-agent",
+          "originalPath": "./.github/agents/tuner.agent.md",
+          "waf": [
+            "cost-optimization",
+            "performance-efficiency",
+            "reliability"
+          ]
+        }
+      }
+    ]
+  }
+}
