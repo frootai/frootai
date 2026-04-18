@@ -26,7 +26,12 @@
     "release:pymcp": "node scripts/release-channel.js pymcp patch",
     "release:all": "node scripts/release-channel.js all patch",
     "release:all:minor": "node scripts/release-channel.js all minor",
-    "prepare": "husky"
+    "prepare": "husky",
+    "factory": "node scripts/factory/index.js",
+    "factory:harvest": "node scripts/factory/harvest.js",
+    "factory:catalog": "node scripts/factory/catalog.js",
+    "factory:diff": "node scripts/factory/diff.js",
+    "factory:status": "node scripts/factory/index.js --status"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

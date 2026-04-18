@@ -24,3 +24,9 @@ __pycache__/
 
 npm-sdk/node_modules/
 vscode-extension/esbuild.config.d.mts
+
+# FAI Factory — temp files (catalog is committed)
+.factory/harvest.json
+.factory/fai-catalog.prev.json
+.factory/changes.json
+.factory/logs/
