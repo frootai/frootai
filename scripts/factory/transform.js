@@ -20,6 +20,7 @@ const adapters = {
   "python-mcp": require("./adapters/python-mcp"),
   "npm-sdk": require("./adapters/npm-sdk"),
   "python-sdk": require("./adapters/python-sdk"),
+  "website": require("./adapters/website"),
 };
 
 function transform(specificChannel) {

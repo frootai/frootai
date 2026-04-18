@@ -33,6 +33,7 @@
     "factory:diff": "node scripts/factory/diff.js",
     "factory:transform": "node scripts/factory/transform.js",
     "factory:validate": "node scripts/factory/validate.js",
+    "factory:website": "node scripts/factory/transform.js --channel website",
     "factory:status": "node scripts/factory/index.js --status"
   },
   "devDependencies": {
