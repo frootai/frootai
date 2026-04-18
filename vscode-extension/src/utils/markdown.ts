@@ -113,3 +113,63 @@ export function markdownToHtml(markdown: string, title?: string): string {
 </body>
 </html>`;
 }
+
+// ─── Lightweight Markdown Parsing Utilities ────────────────────────
+// For consistent parsing across the extension. Replaces scattered regex
+// patterns and can be adopted incrementally by legacy.js callers.
+
+/** Parse markdown into sections by heading level */
+export function parseSections(md: string, level: number = 2): Array<{ title: string; content: string }> {
+  const prefix = "#".repeat(level) + " ";
+  const nextLevel = "#".repeat(level + 1);
+  const sections: Array<{ title: string; content: string }> = [];
+  const lines = md.split("\n");
+  let currentTitle = "";
+  let currentContent: string[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith(prefix) && !line.startsWith(nextLevel)) {
+      if (currentTitle) {
+        sections.push({ title: currentTitle, content: currentContent.join("\n").trim() });
+      }
+      currentTitle = line.slice(prefix.length).trim();
+      currentContent = [];
+    } else if (currentTitle) {
+      currentContent.push(line);
+    }
+  }
+  if (currentTitle) {
+    sections.push({ title: currentTitle, content: currentContent.join("\n").trim() });
+  }
+  return sections;
+}
+
+/** Extract all headings at a given level */
+export function extractHeadings(md: string, level: number = 2): string[] {
+  const prefix = "#".repeat(level) + " ";
+  const nextLevel = "#".repeat(level + 1);
+  return md
+    .split("\n")
+    .filter(line => line.startsWith(prefix) && !line.startsWith(nextLevel))
+    .map(line => line.slice(prefix.length).trim());
+}
+
+/** Strip markdown formatting to plain text */
+export function stripMarkdown(md: string): string {
+  return md
+    .replace(/```[\s\S]*?```/g, "")           // code blocks
+    .replace(/`[^`]+`/g, "")                   // inline code
+    .replace(/\*\*([^*]+)\*\*/g, "$1")         // bold
+    .replace(/\*([^*]+)\*/g, "$1")             // italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")   // links
+    .replace(/^#{1,6}\s+/gm, "")               // headings
+    .replace(/^[>-]\s+/gm, "")                 // blockquotes and list markers
+    .trim();
+}
+
+/** Truncate text to maxLen chars, respecting word boundaries */
+export function truncate(text: string, maxLen: number = 300): string {
+  if (text.length <= maxLen) return text;
+  const cut = text.lastIndexOf(" ", maxLen);
+  return text.substring(0, cut > 0 ? cut : maxLen) + "…";
+}

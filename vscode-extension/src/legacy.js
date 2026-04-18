@@ -1,3 +1,4 @@
+// @ts-check
 ﻿const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
@@ -12,7 +13,9 @@ const https = require("https");
 
 // ─── Bundled Knowledge Engine ──────────────────────────────────────
 
+/** @type {any} */
 let KNOWLEDGE = null;
+/** @type {Record<string, {term: string, definition: string}>} */
 let GLOSSARY = {};
 
 function loadBundledKnowledge() {
@@ -295,6 +298,7 @@ const MCP_TOOLS = [
 
 // ─── Webview Panel: Render Modules as Rich HTML ────────────────────
 
+/** @param {import('vscode').ExtensionContext} context @param {string} moduleId @param {string} title @param {string} content */
 function createModuleWebview(context, moduleId, title, content) {
   const panel = vscode.window.createWebviewPanel(
     "frootai.module",
@@ -309,10 +313,12 @@ function createModuleWebview(context, moduleId, title, content) {
   return panel;
 }
 
+/** @param {string} markdown @param {string} title */
 function markdownToHtml(markdown, title) {
   // Extract mermaid blocks before processing
+  /** @type {string[]} */
   const mermaidBlocks = [];
-  let processed = markdown.replace(/`{2,3}\s*mermaid\s*\n([\s\S]*?)`{2,3}/g, (match, code) => {
+  let processed = markdown.replace(/`{2,3}\s*mermaid\s*\n([\s\S]*?)`{2,3}/g, (/** @type {string} */ match, /** @type {string} */ code) => {
     mermaidBlocks.push(code.trim());
     return `%%MERMAID_${mermaidBlocks.length - 1}%%`;
   });
@@ -342,9 +348,9 @@ function markdownToHtml(markdown, title) {
     .replace(/^- (.+)$/gm, '<li>$1</li>')
     .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
     // Tables (basic)
-    .replace(/^\|(.+)\|$/gm, (match) => {
+    .replace(/^\|(.+)\|$/gm, (/** @type {string} */ match) => {
       if (match.match(/^\|[\s-:|]+\|$/)) return ''; // skip separator row
-      const cells = match.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`);
+      const cells = match.split('|').filter((/** @type {string} */ c) => c.trim()).map((/** @type {string} */ c) => `<td>${c.trim()}</td>`);
       return `<tr>${cells.join('')}</tr>`;
     })
     // Paragraphs (wrap remaining lines)
@@ -418,15 +424,18 @@ function markdownToHtml(markdown, title) {
 
 // ─── GitHub Download Helper with Cache ─────────────────────────────
 
+/** @type {string | null} */
 let _cacheDir = null; // Set in activate() from context.globalStorageUri
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
+/** @param {string} repoPath */
 function getCachePath(repoPath) {
   if (!_cacheDir) return null;
   // Flatten path separators for filesystem safety
   return path.join(_cacheDir, "downloads", repoPath.replace(/\//g, "__"));
 }
 
+/** @param {string} repoPath */
 function readFromCache(repoPath) {
   const cachePath = getCachePath(repoPath);
   if (!cachePath) return null;
@@ -442,6 +451,7 @@ function readFromCache(repoPath) {
   return null;
 }
 
+/** @param {string} repoPath @param {string} content */
 function writeToCache(repoPath, content) {
   const cachePath = getCachePath(repoPath);
   if (!cachePath) return;
@@ -452,6 +462,7 @@ function writeToCache(repoPath, content) {
   } catch { /* cache write failure is non-critical */ }
 }
 
+/** @param {string} repoPath */
 function downloadFromGitHub(repoPath) {
   // Check cache first
   const cached = readFromCache(repoPath);
@@ -473,7 +484,9 @@ function downloadFromGitHub(repoPath) {
 // ─── Tree Data Providers ───────────────────────────────────────────
 
 class SolutionPlayProvider {
+  /** @param {import('vscode').ExtensionContext} context */
   constructor(context) {
+    /** @type {import('vscode').EventEmitter<any>} */
     this._onDidChange = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._onDidChange.event;
     this._filter = "";
@@ -482,25 +495,30 @@ class SolutionPlayProvider {
     this._recentIds = context?.workspaceState?.get("frootai.recentPlays") || [];
   }
 
+  /** @param {string} playId */
   trackRecent(playId) {
     if (!this._context) return;
-    this._recentIds = [playId, ...this._recentIds.filter(id => id !== playId)].slice(0, 5);
+    this._recentIds = [playId, ...this._recentIds.filter((/** @type {string} */ id) => id !== playId)].slice(0, 5);
     this._context.workspaceState.update("frootai.recentPlays", this._recentIds);
-    this._onDidChange.fire();
+    this._onDidChange.fire(undefined);
   }
 
-  setFilter(filter) { this._filter = filter.toLowerCase(); this._onDidChange.fire(); }
-  setViewMode(mode) { this._viewMode = mode; this._onDidChange.fire(); }
-  refresh() { this._onDidChange.fire(); }
+  /** @param {string} filter */
+  setFilter(filter) { this._filter = filter.toLowerCase(); this._onDidChange.fire(undefined); }
+  /** @param {string} mode */
+  setViewMode(mode) { this._viewMode = mode; this._onDidChange.fire(undefined); }
+  refresh() { this._onDidChange.fire(undefined); }
 
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
 
+  /** @param {any} [element] */
   getChildren(element) {
     const layerNames = { F: "Foundations", R: "Reasoning", O: "Orchestration", T: "Transformation" };
 
     // Children of a category group or recently used
     if (element?._plays) {
-      return element._plays.map(p => this._buildPlayItem(p, layerNames));
+      return element._plays.map((/** @type {any} */ p) => this._buildPlayItem(p, layerNames));
     }
 
     // Non-root element — nothing else to expand
@@ -513,13 +531,14 @@ class SolutionPlayProvider {
     // "Recently Used" group
     if (this._recentIds.length > 0) {
       const recentPlays = this._recentIds
-        .map(id => SOLUTION_PLAYS.find(p => p.id === id))
+        .map((/** @type {string} */ id) => SOLUTION_PLAYS.find(p => p.id === id))
         .filter(Boolean);
       if (recentPlays.length > 0) {
         const recentGroup = new vscode.TreeItem("⏱️ Recently Used", vscode.TreeItemCollapsibleState.Expanded);
         recentGroup.description = `${recentPlays.length} plays`;
         recentGroup.iconPath = new vscode.ThemeIcon("history", new vscode.ThemeColor("charts.orange"));
         recentGroup.contextValue = "recentPlays";
+        // @ts-ignore — custom property for tree data grouping
         recentGroup._plays = recentPlays;
         items.push(recentGroup);
       }
@@ -546,6 +565,7 @@ class SolutionPlayProvider {
     });
   }
 
+  /** @param {any} p @param {Record<string, string>} layerNames */
   _buildPlayItem(p, layerNames) {
     const item = new vscode.TreeItem(`${p.id} ${p.name}`, vscode.TreeItemCollapsibleState.None);
 
@@ -559,12 +579,13 @@ class SolutionPlayProvider {
       Foundation: "charts.blue", Low: "charts.green", Medium: "charts.yellow",
       High: "charts.orange", "Very High": "charts.red",
     };
+    // @ts-ignore — dynamic key access on cxColors is valid here
     const themeColor = cxColors[p.cx] ? new vscode.ThemeColor(cxColors[p.cx]) : undefined;
     item.iconPath = new vscode.ThemeIcon(p.codicon || statusIcon, themeColor);
 
     // Rich tooltip with WAF pillars, Azure services, category
     const statusEmoji = p.status === "Ready" ? "✅ Ready" : "⬜ Skeleton";
-    const wafPillars = p.waf && p.waf.length > 0 ? p.waf.map((w) => `\`${w}\``).join("  ") : "";
+    const wafPillars = p.waf && p.waf.length > 0 ? p.waf.map((/** @type {string} */ w) => `\`${w}\``).join("  ") : "";
     const azServices = p.azure && p.azure.length > 0 ? p.azure.slice(0, 5).join(", ") : (p.infra || "N/A");
     const catLine = p.category ? `**Category:** ${p.category}  \n` : "";
     item.tooltip = new vscode.MarkdownString(
@@ -595,7 +616,9 @@ const LAYER_DESCRIPTIONS = {
 };
 
 class FrootModuleProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     if (!element) {
       return FROOT_MODULES.map((layer) => {
@@ -603,6 +626,7 @@ class FrootModuleProvider {
         item.contextValue = "layer";
         item.description = `${layer.modules.length} modules`;
         item.tooltip = new vscode.MarkdownString(
+          // @ts-ignore — dynamic key access on LAYER_DESCRIPTIONS
           `**${layer.layer}**\n\n${LAYER_DESCRIPTIONS[layer.layer] || ""}\n\n---\n\n` +
           `**Modules:** ${layer.modules.length}  \n` +
           layer.modules.map(m => `- \`${m.id}\` ${m.name}`).join("\n")
@@ -632,6 +656,7 @@ class FrootModuleProvider {
   }
 }
 
+/** @param {string} hexColor */
 function getLayerThemeColor(hexColor) {
   // Map our hex colors to VS Code theme color IDs
   const map = {
@@ -641,9 +666,11 @@ function getLayerThemeColor(hexColor) {
     "#6366f1": "charts.purple",   // Operations
     "#7c3aed": "charts.purple",   // Transformation
   };
+  // @ts-ignore — dynamic key access on map is valid here
   return map[hexColor] || "foreground";
 }
 
+/** @param {string} moduleId */
 function getModuleDescription(moduleId) {
   const descriptions = {
     "F1": "Core GenAI concepts & terminology",
@@ -663,34 +690,41 @@ function getModuleDescription(moduleId) {
     "T2": "Safety, content filtering, red teaming",
     "T3": "Caching, load balancing, cost optimization",
   };
+  // @ts-ignore — dynamic key access on descriptions is valid here
   return descriptions[moduleId] || "";
 }
 
 // ─── Primitives Catalog Provider ──────────────────────────────────
 
 class PrimitivesCatalogProvider {
+  /** @param {import('vscode').ExtensionContext} context */
   constructor(context) {
+    /** @type {import('vscode').EventEmitter<any>} */
     this._onDidChange = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._onDidChange.event;
     this._context = context;
     this._recentIds = context?.globalState?.get("frootai.recentPrimitives") || [];
   }
 
+  /** @param {string} type @param {string} id @param {string} [label] */
   trackRecent(type, id, label) {
     if (!this._context) return;
     const entry = { type, id, label };
-    this._recentIds = [entry, ...this._recentIds.filter(e => !(e.type === type && e.id === id))].slice(0, 8);
+    this._recentIds = [entry, ...this._recentIds.filter((/** @type {any} */ e) => !(e.type === type && e.id === id))].slice(0, 8);
     this._context.globalState.update("frootai.recentPrimitives", this._recentIds);
-    this._onDidChange.fire();
+    this._onDidChange.fire(undefined);
   }
 
-  refresh() { this._onDidChange.fire(); }
+  refresh() { this._onDidChange.fire(undefined); }
 
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     // Expand recently used group
     if (element?._recentPrimitives) {
-      return element._recentPrimitives.map(entry => {
+      return element._recentPrimitives.map((/** @type {any} */ entry) => {
+        /** @type {Record<string, string>} */
         const typeIcons = { agents: "person", instructions: "book", skills: "tools", hooks: "zap", plugins: "extensions" };
         const item = new vscode.TreeItem(entry.label || entry.id, vscode.TreeItemCollapsibleState.None);
         item.description = entry.type;
@@ -715,6 +749,7 @@ class PrimitivesCatalogProvider {
       recentGroup.description = `${this._recentIds.length} primitives`;
       recentGroup.iconPath = new vscode.ThemeIcon("history", new vscode.ThemeColor("charts.orange"));
       recentGroup.contextValue = "recentPrimitives";
+      // @ts-ignore — custom property for tree data grouping
       recentGroup._recentPrimitives = this._recentIds;
       items.push(recentGroup);
     }
@@ -726,7 +761,9 @@ class PrimitivesCatalogProvider {
 // ─── FAI Learning Hub Provider ────────────────────────────────
 
 class FaiProtocolProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     if (element) return [];
 
@@ -760,7 +797,9 @@ class FaiProtocolProvider {
 }
 
 class McpToolProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     if (element) return [];
 
@@ -787,6 +826,7 @@ class McpToolProvider {
 }
 
 class GlossaryProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
   getChildren() {
     const terms = Object.entries(GLOSSARY).slice(0, 50).map(([key, val]) => {
@@ -811,7 +851,9 @@ class GlossaryProvider {
 
 // ─── FAI Dev Hub Provider ──────────────────────────────────────────
 class DevHubProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     if (element) return [];
 
@@ -837,7 +879,9 @@ class DevHubProvider {
 
 // ─── FAI Community Provider ──────────────────────────────────────────
 class CommunityProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
+  /** @param {any} [element] */
   getChildren(element) {
     if (element) return [];
 
@@ -858,6 +902,7 @@ class CommunityProvider {
 
 // ─── Welcome Tree Provider ──────────────────────────────────────────
 class WelcomeTreeProvider {
+  /** @param {import('vscode').TreeItem} element */
   getTreeItem(element) { return element; }
   getChildren() {
     const hi = new vscode.TreeItem("Welcome — Get Started", vscode.TreeItemCollapsibleState.None);
@@ -888,9 +933,12 @@ class WelcomeTreeProvider {
 
 // ─── Activate ──────────────────────────────────────────────────────
 
+/** @param {import('vscode').ExtensionContext} context */
 function activate(context) {
   // Guard against double activation
+  // @ts-ignore — _done is a dynamic property on the function
   if (activate._done) return;
+  // @ts-ignore — _done is a dynamic property on the function
   activate._done = true;
 
   console.log("FrootAI v6.1 activated");
@@ -1311,7 +1359,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       ];
 
       // Skill directories (each has SKILL.md)
-      const addSkillDirs = (baseDir, playPath) => {
+      const addSkillDirs = (/** @type {string} */ baseDir, /** @type {string} */ playPath) => {
         const skillsDir = path.join(playPath, ".github", "skills");
         if (fs.existsSync(skillsDir)) {
           for (const d of fs.readdirSync(skillsDir)) {
@@ -1324,7 +1372,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       };
 
       // Hooks directory (all .json files)
-      const addHookFiles = (playPath) => {
+      const addHookFiles = (/** @type {string} */ playPath) => {
         const hooksDir = path.join(playPath, ".github", "hooks");
         if (fs.existsSync(hooksDir)) {
           for (const f of fs.readdirSync(hooksDir)) {
@@ -1336,7 +1384,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       };
 
       // Workflows directory (CI/CD templates — .yml, .yaml, .yml.template)
-      const addWorkflowFiles = (playPath) => {
+      const addWorkflowFiles = (/** @type {string} */ playPath) => {
         const workflowsDir = path.join(playPath, ".github", "workflows");
         if (fs.existsSync(workflowsDir)) {
           for (const f of fs.readdirSync(workflowsDir)) {
@@ -1836,7 +1884,9 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.viewToolDocs", async (tool) => {
       if (!tool) return;
+      /** @type {Record<string, string>} */
       const typeLabel = { static: "Static", live: "Live", chain: "Agent Chain", ecosystem: "Ecosystem", compute: "Compute" };
+      /** @type {Record<string, string>} */
       const typeColor = { static: "#10b981", live: "#06b6d4", chain: "#f59e0b", ecosystem: "#8b5cf6", compute: "#ec4899" };
       const color = typeColor[tool.type] || "#10b981";
       const panel = vscode.window.createWebviewPanel("frootai.mcpDocs", tool.name, vscode.ViewColumn.One, {});
@@ -1939,10 +1989,12 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
         20: ["Azure OpenAI (GPT-4o)", "Azure Functions (Consumption)", "Cosmos DB (Serverless)", "Application Insights"],
       };
 
+      // @ts-ignore — dynamic key access on PLAY_SERVICES is valid here
       const services = PLAY_SERVICES[playNum] || PLAY_SERVICES[1];
       let total = 0;
       const lines = [];
       for (const svc of services) {
+        // @ts-ignore — dynamic key access on SVC_PRICING is valid here
         const price = SVC_PRICING[svc]?.[scale] || 0;
         total += price;
         lines.push(`| ${svc} | $${price}/mo |`);
@@ -1997,13 +2049,14 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       try {
         config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
       } catch (e) {
-        vscode.window.showErrorMessage(`Failed to parse ${fileName}: ${e.message}`);
+        const err = /** @type {Error} */ (e);
+        vscode.window.showErrorMessage(`Failed to parse ${fileName}: ${err.message}`);
         return;
       }
 
       // Run validations
       const findings = [];
-      const addFinding = (severity, message) => findings.push({ severity, message });
+      const addFinding = (/** @type {string} */ severity, /** @type {string} */ message) => findings.push({ severity, message });
 
       if (fileName.includes("openai")) {
         // OpenAI config validation
@@ -2205,6 +2258,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       const thresholds = config.thresholds || {};
 
       // Try to run eval.py if it exists
+      /** @type {any} */
       let evalResults = null;
       let evalStatus = "awaiting";
       let evalOutput = "";
@@ -2220,17 +2274,15 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
               const relTestSet = path.relative(wsRoot, testSet);
               const pythonCmd = process.platform === "win32" ? "python" : "python3";
               try {
-                evalOutput = execSync(`${pythonCmd} "${relEvalPy}" --test-set "${relTestSet}"`, {
-                  cwd: wsRoot,
-                  encoding: "utf-8",
-                  timeout: 30000,
-                  shell: true,
-                });
+                /** @type {any} */
+                const execOpts = { cwd: wsRoot, encoding: "utf-8", timeout: 30000, shell: true };
+                evalOutput = execSync(`${pythonCmd} "${relEvalPy}" --test-set "${relTestSet}"`, execOpts);
               } catch (execErr) {
+                const ex = /** @type {any} */ (execErr);
                 // eval.py exits with code 1 when tests fail — that's normal, capture its output
-                if (execErr.stdout) evalOutput = execErr.stdout;
-                else if (execErr.stderr) evalOutput = execErr.stderr;
-                else evalOutput = execErr.message;
+                if (ex.stdout) evalOutput = ex.stdout;
+                else if (ex.stderr) evalOutput = ex.stderr;
+                else evalOutput = ex.message;
               }
               evalStatus = "completed";
 
@@ -2252,7 +2304,8 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
               const passMatch = evalOutput.match(/(\d+)\s*\/\s*(\d+)\s*(?:passed|PASS)/i);
               if (passMatch) evalResults._summary = `${passMatch[1]}/${passMatch[2]} passed`;
             } catch (err) {
-              evalOutput = err.message || "Evaluation script failed";
+              const e = /** @type {Error} */ (err);
+              evalOutput = e.message || "Evaluation script failed";
               evalStatus = "error";
             }
           }
@@ -2264,7 +2317,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
       // Build dashboard
       const panel = vscode.window.createWebviewPanel("frootai.evaluation", "Evaluation Dashboard", vscode.ViewColumn.One, { enableScripts: true });
 
-      const metricsHtml = metrics.map(m => {
+      const metricsHtml = metrics.map((/** @type {string} */ m) => {
         const threshold = thresholds[m] || 4.0;
         const actual = evalResults && evalResults[m] !== undefined ? evalResults[m] : null;
         const color = actual !== null
@@ -2324,6 +2377,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
     const httpUrl = config.get("mcpHttpUrl", "https://mcp.frootai.dev/mcp");
 
     if (autoRegister) {
+      /** @type {import('vscode').EventEmitter<any>} */
       const changeEmitter = new vscode.EventEmitter();
 
       const provider = {
@@ -2331,9 +2385,9 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
 
         provideMcpServerDefinitions: async () => {
           const cfg = vscode.workspace.getConfiguration("frootai");
-          const t = cfg.get("mcpTransport", "stdio");
-          const url = cfg.get("mcpHttpUrl", "https://mcp.frootai.dev/mcp");
-          const localPath = cfg.get("mcpServerPath", "");
+          const t = /** @type {string} */ (cfg.get("mcpTransport", "stdio"));
+          const url = /** @type {string} */ (cfg.get("mcpHttpUrl", "https://mcp.frootai.dev/mcp"));
+          const localPath = /** @type {string} */ (cfg.get("mcpServerPath", ""));
 
           if (t === "http") {
             return [
@@ -2353,7 +2407,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
           return [serverDef];
         },
 
-        resolveMcpServerDefinition: async (def) => {
+        resolveMcpServerDefinition: async (/** @type {any} */ def) => {
           // Passthrough — no additional resolution (no auth required for FrootAI)
           return def;
         },
@@ -2369,7 +2423,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
           if (e.affectsConfiguration("frootai.mcpTransport") ||
             e.affectsConfiguration("frootai.mcpServerPath") ||
             e.affectsConfiguration("frootai.mcpHttpUrl")) {
-            changeEmitter.fire();
+            changeEmitter.fire(undefined);
           }
         })
       );

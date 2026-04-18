@@ -180,12 +180,34 @@ const CACHE_TTL_SEARCH = parseInt(process.env.FAI_CACHE_TTL_SEARCH || "300000");
 const CACHE_TTL_AZURE_DOCS = parseInt(process.env.FAI_CACHE_TTL_AZURE_DOCS || "3600000"); // 1 hour default
 const CACHE_TTL_GITHUB = parseInt(process.env.FAI_CACHE_TTL_GITHUB || "300000");         // 5 min default
 
+// ─── Cache Strategy ───────────────────────────────────────────────
+// Three-tier caching: LRU (recent), TTL (expiry), semantic dedup.
+// - Knowledge modules: cached on first load, rarely change (build-time data)
+// - Search results: LRU(50, 5min) — queries repeat within sessions
+// - Azure docs: LRU(30, 1hr) — external API, changes infrequently
+// - GitHub plays: LRU(5, 5min) — API calls for live play listing
+// Cache warming: knowledge.json parsed once at startup into moduleCache.
+// TTLs configurable via FAI_CACHE_TTL_SEARCH, FAI_CACHE_TTL_AZURE_DOCS env vars.
+
 const searchCache = new LRUCache(50, CACHE_TTL_SEARCH);
 const azureDocsCache = new LRUCache(30, CACHE_TTL_AZURE_DOCS);
 const mcpRegistryCache = new LRUCache(20, CACHE_TTL_AZURE_DOCS);
 const githubPlaysCache = new LRUCache(5, CACHE_TTL_GITHUB);
 
 const liveLimiter = new RateLimiter(10, 1);  // 10 req burst, 1/sec refill
+
+
+// ─── Performance Metrics ──────────────────────────────────────────
+const toolMetrics = new Map();
+function trackTool(name, startTime) {
+  const duration = Date.now() - startTime;
+  const entry = toolMetrics.get(name) || { calls: 0, totalMs: 0, maxMs: 0 };
+  entry.calls++;
+  entry.totalMs += duration;
+  entry.maxMs = Math.max(entry.maxMs, duration);
+  toolMetrics.set(name, entry);
+  return duration;
+}
 
 // ─── Knowledge Base Loader ─────────────────────────────────────────
 // Two modes:
@@ -398,6 +420,16 @@ try {
   mcpLog(null, "error", "search", { message: "Failed to load search index", error: e.message });
 }
 
+// ─── BM25 Search Algorithm ────────────────────────────────────────
+// BM25 (Best Matching 25) is a probabilistic ranking function.
+// Parameters:
+//   k1 (1.2-2.0): Term saturation. Higher = longer docs get more credit.
+//   b  (0.75):    Length normalization. 0 = no normalization, 1 = full.
+// Score = Σ IDF(t) × (tf × (k1+1)) / (tf + k1 × (1 - b + b × dl/avgdl))
+// where IDF = inverse document frequency, tf = term frequency in doc,
+// dl = doc length, avgdl = average doc length across corpus.
+// STOP_WORDS filter removes ~100 common English words to reduce noise.
+
 /**
  * Score a single document against a query using BM25.
  * Returns 0..∞ (unnormalized). Higher = more relevant.
@@ -416,6 +448,11 @@ function bm25Score(queryTokens, doc) {
   }
   return score;
 }
+
+// Common English stop words filtered from search queries.
+// Source: Standard IR stop word list + common function words.
+// These are excluded from BM25 scoring to improve search precision.
+// Words shorter than 3 characters are also filtered by tokenizeQuery().
 
 /** Tokenize a query string for BM25 (matches build-search-index.js tokenizer) */
 const STOP_WORDS_BM25 = new Set(["a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by", "from", "up", "out", "as", "is", "was", "are", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "could", "should", "may", "might", "shall", "can", "need", "that", "this", "these", "those", "it", "its", "not", "also", "but", "if", "then", "when", "where", "who", "which", "how", "what", "all", "both", "each", "few", "more", "most", "other", "some", "such", "than", "too", "very", "just", "about", "above", "after", "before", "between", "into", "through", "during", "including", "until", "against", "among", "throughout", "within", "without", "over", "under", "again", "so", "yet", "only", "even", "back", "still"]);
@@ -456,6 +493,14 @@ function createConfiguredServer() {
 
   // ── Tool: list_modules ─────────────────────────────────────────────
 
+  /**
+   * @tool list_modules
+   * @description List all FrootAI knowledge modules organized by the 5 FROOT layers
+   * @param {Object} params - Input parameters
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
+
   server.tool(
     "list_modules",
     "List all FrootAI modules organized by FROOT layer (Foundations, Reasoning, Orchestration, Operations, Transformation). Use this to explore the knowledge base structure.",
@@ -480,6 +525,16 @@ function createConfiguredServer() {
 
   // ── Tool: get_module ───────────────────────────────────────────────
 
+  /**
+   * @tool get_module
+   * @description Retrieve full content of a FrootAI module by ID, optionally filtered to a section
+   * @param {Object} params - Input parameters
+   * @param {string} params.module_id - Module ID (e.g., F1, R2, T3)
+   * @param {string} params.[section] - Optional section title to retrieve
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
+
   server.tool(
     "get_module",
     "Get the full content of a FrootAI module by its ID (F1, F2, F3, R1, R2, R3, O1, O2, O3, O4, O5, O6, T1, T2, T3). Returns the complete module with all sections.",
@@ -496,6 +551,7 @@ function createConfiguredServer() {
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ module_id, section }) => {
+      const _start = Date.now();
       const id = module_id.toUpperCase();
       const mod = modules[id];
 
@@ -539,6 +595,8 @@ function createConfiguredServer() {
         ? mod.content.substring(0, 15000) + "\n\n... [truncated — use section parameter to get specific parts]"
         : mod.content;
 
+      const _ms = trackTool("get_module", _start);
+      mcpLog(server, "debug", "get_module", { duration: `${_ms}ms` });
       return {
         content: [{ type: "text", text: content }],
       };
@@ -546,6 +604,15 @@ function createConfiguredServer() {
   );
 
   // ── Tool: lookup_term ──────────────────────────────────────────────
+
+  /**
+   * @tool lookup_term
+   * @description Look up an AI/ML term in the FrootAI Glossary with fuzzy matching
+   * @param {Object} params - Input parameters
+   * @param {string} params.term - The AI/ML term to look up
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
 
   server.tool(
     "lookup_term",
@@ -603,6 +670,16 @@ function createConfiguredServer() {
 
   // ── Tool: search_knowledge ─────────────────────────────────────────
 
+  /**
+   * @tool search_knowledge
+   * @description Search across all FrootAI modules using BM25 ranking with keyword fallback
+   * @param {Object} params - Input parameters
+   * @param {string} params.query - Natural language search query
+   * @param {number} params.[max_results=5] - Maximum number of matching sections
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
+
   server.tool(
     "search_knowledge",
     "Search across all 17 FrootAI modules for a topic. Returns relevant sections matching the query. Use for questions like 'how to reduce hallucination', 'GPU sizing for AI', 'when to use Semantic Kernel vs Agent Framework'.",
@@ -616,6 +693,7 @@ function createConfiguredServer() {
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ query, max_results = 5 }) => {
+      const _start = Date.now();
       // Check cache first
       const cacheKey = `search:${query}:${max_results}`;
       const cached = searchCache.get(cacheKey);
@@ -702,6 +780,8 @@ function createConfiguredServer() {
       const topResults = scored.slice(0, max_results);
 
       if (topResults.length === 0) {
+        const _ms = trackTool("search_knowledge", _start);
+        mcpLog(server, "debug", "search_knowledge", { duration: `${_ms}ms` });
         return {
           content: [
             {
@@ -735,6 +815,15 @@ function createConfiguredServer() {
   );
 
   // ── Tool: get_architecture_pattern ─────────────────────────────────
+
+  /**
+   * @tool get_architecture_pattern
+   * @description Get actionable AI architecture guidance for common scenarios
+   * @param {Object} params - Input parameters
+   * @param {string} params.scenario - Architecture scenario enum (rag_pipeline, agent_hosting, etc.)
+   * @returns {Object} MCP response with content array
+   * @category Architecture
+   */
 
   server.tool(
     "get_architecture_pattern",
@@ -947,6 +1036,14 @@ Fine-tuning teaches HOW to respond, not WHAT to know.
 
   // ── Tool: get_froot_overview ───────────────────────────────────────
 
+  /**
+   * @tool get_froot_overview
+   * @description Get a complete overview of the FROOT framework, all 5 layers and ecosystem stats
+   * @param {Object} params - Input parameters
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
+
   server.tool(
     "get_froot_overview",
     "Get a complete overview of the FROOT framework — all 5 layers, 16 modules, what each layer covers, and how they connect. Use when asked 'what is FrootAI' or 'show me the framework'.",
@@ -1052,6 +1149,15 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 
   // ── Tool: fetch_azure_docs ─────────────────────────────────────────
 
+  /**
+   * @tool fetch_azure_docs
+   * @description Fetch latest Azure documentation via Microsoft Learn REST API with offline fallback
+   * @param {Object} params - Input parameters
+   * @param {string} params.service - Azure service name or topic to search
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
+
   server.tool(
     "fetch_azure_docs",
     "Fetch latest Azure documentation for a specific service or topic. Uses Microsoft Learn REST API. Returns curated summary. Falls back to static knowledge if offline.",
@@ -1114,6 +1220,15 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
   );
 
   // ── Tool: fetch_external_mcp ───────────────────────────────────────
+
+  /**
+   * @tool fetch_external_mcp
+   * @description Search for external MCP servers from public registries with curated fallback
+   * @param {Object} params - Input parameters
+   * @param {string} params.query - What kind of MCP server to find
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "fetch_external_mcp",
@@ -1186,6 +1301,15 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 
   // ── Tool: list_community_plays ─────────────────────────────────────
 
+  /**
+   * @tool list_community_plays
+   * @description List FrootAI solution plays from GitHub with optional keyword filtering
+   * @param {Object} params - Input parameters
+   * @param {string} params.[filter] - Keyword filter for play names
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
+
   server.tool(
     "list_community_plays",
     "List FrootAI solution plays from the GitHub repository. Shows all 101 plays with status. Falls back to static list if offline.",
@@ -1244,6 +1368,15 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
   );
 
   // ── Tool: get_github_agentic_os ────────────────────────────────────
+
+  /**
+   * @tool get_github_agentic_os
+   * @description Get reference guide for GitHub Copilot's .github agentic OS primitives
+   * @param {Object} params - Input parameters
+   * @param {string} params.[primitive='overview'] - Which primitive to explain
+   * @returns {Object} MCP response with content array
+   * @category Knowledge
+   */
 
   server.tool(
     "get_github_agentic_os",
@@ -1379,6 +1512,15 @@ Two modes: self-hosted (your repo) or marketplace (public).`,
   // AGENT TOOLS — Auto-chain: Build → Review → Tune (in-chat flow)
   // ════════════════════════════════════════════════════════════════════
 
+  /**
+   * @tool agent_build
+   * @description Builder agent that provides architecture guidance and building rules for a task
+   * @param {Object} params - Input parameters
+   * @param {string} params.task - What the user wants to build
+   * @returns {Object} MCP response with content array
+   * @category Agents
+   */
+
   server.tool(
     "agent_build",
     "BUILDER AGENT — Use when the user wants to BUILD or CREATE something. Returns building guidelines based on FrootAI best practices, then suggests review. Triggers the Build → Review → Tune chain.",
@@ -1431,6 +1573,15 @@ Say: *"Review this code"* or *"Check my implementation for issues"*`,
     }
   );
 
+  /**
+   * @tool agent_review
+   * @description Reviewer agent that provides security, quality, and Azure best practices checklist
+   * @param {Object} params - Input parameters
+   * @param {string} params.[context] - What was built or what to review
+   * @returns {Object} MCP response with content array
+   * @category Agents
+   */
+
   server.tool(
     "agent_review",
     "REVIEWER AGENT — Use when the user wants to REVIEW or CHECK code. Provides a security + quality review checklist, then suggests tuning. Part of the Build → Review → Tune chain.",
@@ -1476,6 +1627,15 @@ Say: *"Validate my config for production"* or *"Is my TuneKit ready?"*`,
       };
     }
   );
+
+  /**
+   * @tool agent_tune
+   * @description Tuner agent that validates TuneKit configuration for production readiness
+   * @param {Object} params - Input parameters
+   * @param {string} params.[context] - What solution or config to validate
+   * @returns {Object} MCP response with content array
+   * @category Agents
+   */
 
   server.tool(
     "agent_tune",
@@ -1530,6 +1690,15 @@ If any checks fail:
 
   // ── C4: AI Ecosystem Live Tools (v3) ─────────────────────────────
 
+  /**
+   * @tool get_model_catalog
+   * @description List Azure OpenAI models with capabilities, pricing, context windows, and use cases
+   * @param {Object} params - Input parameters
+   * @param {string} params.[category='all'] - Filter by model category (gpt, embedding, image, speech)
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
+
   server.tool(
     "get_model_catalog",
     "AI MODEL CATALOG — Lists available Azure OpenAI models with capabilities, pricing tiers, context windows, and recommended use cases. Helps pick the right model for the job.",
@@ -1575,6 +1744,16 @@ ${table}
       };
     }
   );
+
+  /**
+   * @tool get_azure_pricing
+   * @description Estimate monthly Azure costs for AI solution architectures by scenario and scale
+   * @param {Object} params - Input parameters
+   * @param {string} params.scenario - Solution type (rag, agent, batch, realtime, custom)
+   * @param {string} params.[scale='production'] - Scale tier
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "get_azure_pricing",
@@ -1641,6 +1820,16 @@ ${est.breakdown}
       };
     }
   );
+
+  /**
+   * @tool compare_models
+   * @description Side-by-side AI model comparison with recommendations based on priority
+   * @param {Object} params - Input parameters
+   * @param {string} params.useCase - What you're building
+   * @param {string} params.[priority='quality'] - Optimization priority
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "compare_models",
@@ -1848,6 +2037,16 @@ ${est.breakdown}
     return hits / qt.length;
   }
 
+  /**
+   * @tool semantic_search_plays
+   * @description Search solution plays by natural language using BM25 ranking with confidence scores
+   * @param {Object} params - Input parameters
+   * @param {string} params.query - Natural language description of what to build
+   * @param {number} params.[top_k=3] - Number of results (max 5)
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
+
   server.tool(
     "semantic_search_plays",
     "SMART PLAY SEARCH — Describe what you want to build in natural language, get top matching solution plays ranked by relevance with confidence scores. Powered by BM25 ranking over 101 indexed plays.",
@@ -1857,6 +2056,7 @@ ${est.breakdown}
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ query, top_k = 3 }) => {
+      const _start = Date.now();
       const k = Math.min(Math.max(top_k, 1), 5);
       mcpLog(server, 'debug', 'plays', { event: 'search', query, k, engine: BM25_INDEX ? 'bm25' : 'jaccard' });
 
@@ -1890,11 +2090,23 @@ ${est.breakdown}
       }).join("\n\n");
 
       const engine = BM25_INDEX ? "BM25" : "Jaccard";
+      const _ms = trackTool("semantic_search_plays", _start);
+      mcpLog(server, "debug", "semantic_search_plays", { duration: `${_ms}ms` });
       return { content: [{ type: "text", text: `## 🔍 Smart Play Search (${engine})\n**Query**: "${query}"\n\n${results}\n\n---\n> 💡 Use the [Configurator](https://frootai.dev/configurator) for guided selection.` }] };
     }
   );
 
   // ── Tool: estimate_cost ────────────────────────────────────────────
+
+  /**
+   * @tool estimate_cost
+   * @description Calculate itemized monthly Azure costs for a specific solution play
+   * @param {Object} params - Input parameters
+   * @param {string} params.play - Play number (01-100)
+   * @param {string} params.[scale='dev'] - Scale tier (dev or prod)
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "estimate_cost",
@@ -1922,6 +2134,17 @@ ${est.breakdown}
   );
 
   // ── Tool: validate_config ──────────────────────────────────────────
+
+  /**
+   * @tool validate_config
+   * @description Validate TuneKit config files against best practices and play-specific rules
+   * @param {Object} params - Input parameters
+   * @param {string} params.config_type - Config file type
+   * @param {string} params.config_content - JSON content of the config file
+   * @param {string} params.[play] - Play number for play-specific rules
+   * @returns {Object} MCP response with content array
+   * @category Evaluation
+   */
 
   server.tool(
     "validate_config",
@@ -1972,6 +2195,15 @@ ${est.breakdown}
 
   // ── Tool: compare_plays ────────────────────────────────────────────
 
+  /**
+   * @tool compare_plays
+   * @description Side-by-side comparison of 2-3 solution plays with cost, complexity, and services
+   * @param {Object} params - Input parameters
+   * @param {string} params.plays - Comma-separated play numbers
+   * @returns {Object} MCP response with content array
+   * @category Architecture
+   */
+
   server.tool(
     "compare_plays",
     "PLAY COMPARISON — Side-by-side comparison of 2-3 solution plays showing services, cost, complexity, team size, deployment time, and pros/cons.",
@@ -2019,6 +2251,15 @@ ${est.breakdown}
     "20": "graph LR\\n  Sensors -->|Events| EH[Event Hub]\\n  EH -->|Stream| SA[Stream Analytics]\\n  SA -->|Anomaly| OAI[OpenAI]\\n  SA -->|Store| DB[(Cosmos DB)]\\n  OAI -->|Alert| Alert[Notification]\\n  style SA fill:#06b6d422,stroke:#06b6d4\\n  style EH fill:#f59e0b22,stroke:#f59e0b",
   };
 
+  /**
+   * @tool generate_architecture_diagram
+   * @description Generate a Mermaid.js architecture diagram for a solution play
+   * @param {Object} params - Input parameters
+   * @param {string} params.play - Play number (01-20)
+   * @returns {Object} MCP response with content array
+   * @category Architecture
+   */
+
   server.tool(
     "generate_architecture_diagram",
     "ARCHITECTURE DIAGRAM — Generate a Mermaid.js architecture diagram for any solution play. Paste the output into any Mermaid renderer to visualize.",
@@ -2048,6 +2289,17 @@ ${est.breakdown}
   // Phase 8C — run_evaluation (local threshold-based evaluation)
   // ═══════════════════════════════════════════════════════════════════
 
+  /**
+   * @tool run_evaluation
+   * @description Check AI quality scores against configurable thresholds with pass/fail per metric
+   * @param {Object} params - Input parameters
+   * @param {Object} params.scores - Metric scores
+   * @param {Object} params.[thresholds] - Custom thresholds
+   * @param {string} params.[play] - Solution play number for context
+   * @returns {Object} MCP response with content array
+   * @category Evaluation
+   */
+
   server.tool(
     "run_evaluation",
     "RUN EVALUATION — Check AI quality scores against thresholds. Input actual scores from your evaluation run, get pass/fail per metric. Supports: groundedness, relevance, coherence, fluency, safety.",
@@ -2058,6 +2310,7 @@ ${est.breakdown}
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ scores, thresholds, play }) => {
+      const _start = Date.now();
       const defaultThresholds = { groundedness: 4.0, relevance: 4.0, coherence: 4.0, fluency: 4.0, safety: 4.0 };
       const t = { ...defaultThresholds, ...thresholds };
       const results = [];
@@ -2090,6 +2343,8 @@ ${est.breakdown}
         }
       }
 
+      const _ms = trackTool("run_evaluation", _start);
+      mcpLog(server, "debug", "run_evaluation", { duration: `${_ms}ms` });
       return { content: [{ type: "text", text: `## 📊 Evaluation Results${playCtx}\n\n| Metric | Score | Threshold | Result |\n|--------|-------|-----------|--------|\n${results.join("\n")}\n\n${verdict}${recommendations.length > 0 ? "\n\n### 💡 Recommendations\n" + recommendations.join("\n") : ""}` }] };
     }
   );
@@ -2097,6 +2352,16 @@ ${est.breakdown}
   // ═══════════════════════════════════════════════════════════════════
   // Phase 8C — embedding_playground (lite — no Azure OpenAI required)
   // ═══════════════════════════════════════════════════════════════════
+
+  /**
+   * @tool embedding_playground
+   * @description Compare two texts for semantic similarity using Jaccard-based keyword overlap
+   * @param {Object} params - Input parameters
+   * @param {string} params.text1 - First text to compare
+   * @param {string} params.text2 - Second text to compare
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "embedding_playground",
@@ -2123,6 +2388,16 @@ ${est.breakdown}
 
   // ── T24: List Primitives ──────────────────────────────────────────
 
+  /**
+   * @tool list_primitives
+   * @description Browse FrootAI primitives by type with descriptions from the file system
+   * @param {Object} params - Input parameters
+   * @param {string} params.type - Primitive type (agents, instructions, skills, etc.)
+   * @param {number} params.[limit=20] - Max results to return
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
+
   server.tool(
     "list_primitives",
     "PRIMITIVES CATALOG — Browse all 830+ FrootAI primitives by type: agents (238), instructions (176), skills (322), hooks (10), plugins (77), workflows (13), cookbook (17). Returns name, description, WAF alignment, and compatible plays for each primitive.",
@@ -2132,6 +2407,7 @@ ${est.breakdown}
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ type, limit }) => {
+      const _start = Date.now();
       const fs = await import("fs");
       const path = await import("path");
       const counts = { agents: 238, instructions: 176, skills: 322, hooks: 10, plugins: 77, workflows: 13, cookbook: 17 };
@@ -2165,11 +2441,22 @@ ${est.breakdown}
       }
       const total = counts[type] || items.length;
       const listing = items.map((it, i) => `${i + 1}. **${it.name}** — ${it.description}`).join("\n");
+      const _ms = trackTool("list_primitives", _start);
+      mcpLog(server, "debug", "list_primitives", { duration: `${_ms}ms` });
       return { content: [{ type: "text", text: `## ${type.charAt(0).toUpperCase() + type.slice(1)} Catalog (${Math.min(limit, total)} of ${total})\n\n${listing}\n\n---\n📊 **Total ${type}**: ${total} | 🌐 [Browse all on frootai.dev](https://frootai.dev/primitives/${type})` }] };
     }
   );
 
   // ── T25: Get Play Detail ──────────────────────────────────────────
+
+  /**
+   * @tool get_play_detail
+   * @description Get detailed architecture, config, manifest, and file structure for a solution play
+   * @param {Object} params - Input parameters
+   * @param {string} params.play_number - Play number (01-100) or partial name
+   * @returns {Object} MCP response with content array
+   * @category Ecosystem
+   */
 
   server.tool(
     "get_play_detail",
@@ -2179,6 +2466,7 @@ ${est.breakdown}
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ play_number }) => {
+      const _start = Date.now();
       const fs = await import("fs");
       const path = await import("path");
       // Try repo root (../solution-plays relative to npm-mcp/) then cwd
@@ -2272,6 +2560,8 @@ ${est.breakdown}
 
       output += `🔗 [View on website](https://frootai.dev/solution-plays/${playFolder}) | [User Guide](https://frootai.dev/user-guide?play=${playId})`;
 
+      const _ms = trackTool("get_play_detail", _start);
+      mcpLog(server, "debug", "get_play_detail", { duration: `${_ms}ms` });
       return { content: [{ type: "text", text: output }] };
     }
   );
@@ -2463,6 +2753,16 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
 
     // ── Tool: wire_play ────────────────────────────────────────────────
 
+    /**
+     * @tool wire_play
+     * @description Wire a solution play using the FAI Protocol, resolve context and wire all primitives
+     * @param {Object} params - Input parameters
+     * @param {string} params.[playId] - Play ID
+     * @param {string} params.[manifestPath] - Direct path to fai-manifest.json
+     * @returns {Object} MCP response with content array
+     * @category Engine
+     */
+
     server.tool(
       "wire_play",
       "FAI ENGINE — Wire a solution play using the FAI Protocol. Reads fai-manifest.json, resolves FROOT knowledge context, wires all primitives (agents, instructions, skills, hooks) with shared context, and checks quality gates. This is the FAI Layer in action — no other MCP server can do this.",
@@ -2472,6 +2772,7 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
       },
       { annotations: { readOnlyHint: true, openWorldHint: false } },
       async ({ playId, manifestPath }) => {
+        const _start = Date.now();
         if (!playId && !manifestPath) {
           return { content: [{ type: "text", text: "❌ Provide either playId or manifestPath." }], isError: true };
         }
@@ -2525,11 +2826,22 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
         }
 
         report.push(``, `---`, `*FAI Protocol — the binding glue for AI primitives*`);
+        const _ms = trackTool("wire_play", _start);
+        mcpLog(server, "debug", "wire_play", { duration: `${_ms}ms` });
         return { content: [{ type: "text", text: report.join('\n') }] };
       }
     );
 
     // ── Tool: validate_manifest ────────────────────────────────────────
+
+    /**
+     * @tool validate_manifest
+     * @description Validate a fai-manifest.json against the FAI Protocol specification
+     * @param {Object} params - Input parameters
+     * @param {string} params.playId - Play ID to validate
+     * @returns {Object} MCP response with content array
+     * @category Engine
+     */
 
     server.tool(
       "validate_manifest",
@@ -2539,6 +2851,7 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
       },
       { annotations: { readOnlyHint: true, openWorldHint: false } },
       async ({ playId }) => {
+        const _start = Date.now();
         const mfPath = faiEngine.findManifest(playId);
         if (!mfPath) {
           return { content: [{ type: "text", text: `❌ Play "${playId}" not found in solution-plays/.` }], isError: true };
@@ -2569,6 +2882,8 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
           ? '✅ **VALID** — Manifest passes all FAI Protocol checks.'
           : `⚠️ **${allErrors.length} ISSUE(S)** — Review before deploying.`;
 
+        const _ms = trackTool("validate_manifest", _start);
+        mcpLog(server, "debug", "validate_manifest", { duration: `${_ms}ms` });
         return {
           content: [{
             type: "text",
@@ -2579,6 +2894,16 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
     );
 
     // ── Tool: evaluate_quality ─────────────────────────────────────────
+
+    /**
+     * @tool evaluate_quality
+     * @description Evaluate AI output quality against guardrail thresholds from FAI manifest
+     * @param {Object} params - Input parameters
+     * @param {Object} params.scores - Metric scores
+     * @param {string} params.[playId] - Play ID for play-specific thresholds
+     * @returns {Object} MCP response with content array
+     * @category Engine
+     */
 
     server.tool(
       "evaluate_quality",
@@ -2608,6 +2933,15 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
     );
 
     // ── Tool: inspect_wiring ───────────────────────────────────────────
+
+    /**
+     * @tool inspect_wiring
+     * @description Inspect how primitives are wired inside a solution play with full X-ray view
+     * @param {Object} params - Input parameters
+     * @param {string} params.playId - Play ID to inspect
+     * @returns {Object} MCP response with content array
+     * @category Engine
+     */
 
     server.tool(
       "inspect_wiring",
@@ -2720,6 +3054,21 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
 
     // ── Tool: scaffold_play ──────────────────────────────────────────
 
+    /**
+     * @tool scaffold_play
+     * @description Generate a complete solution play with DevKit, TuneKit, SpecKit, and infrastructure
+     * @param {Object} params - Input parameters
+     * @param {string} params.name - Play name in plain English
+     * @param {string} params.[description] - What this play does
+     * @param {string} params.[model='gpt-4o'] - AI model
+     * @param {string[]} params.[wafPillars] - WAF pillar alignment
+     * @param {number} params.[temperature=0.1] - Model temperature
+     * @param {boolean} params.[generateInfra=true] - Generate Bicep infrastructure
+     * @param {boolean} params.[dryRun=false] - Preview without creating
+     * @returns {Object} MCP response with content array
+     * @category Scaffold
+     */
+
     server.tool(
       "scaffold_play",
       "FAI SCAFFOLD — Generate a complete solution play with DevKit (.github/ Agentic OS), TuneKit (config/ + evaluation/), SpecKit (spec/ + fai-manifest.json), and infrastructure (infra/). Everything auto-wires through the FAI Protocol.",
@@ -2734,6 +3083,7 @@ Present an itemized monthly cost table with: compute, AI services, storage, netw
       },
       { annotations: { destructiveHint: true, idempotentHint: false } },
       async ({ name, description, model, wafPillars, temperature, generateInfra, dryRun }, { signal, _meta } = {}) => {
+        const _start = Date.now();
         // Extract progressToken from MCP call metadata (if client sent one)
         const progressToken = _meta?.progressToken ?? null;
 
@@ -3074,6 +3424,8 @@ param projectName string = '${slug}'
             : `⚠️ Wired with ${result.errors.length} issue(s): ${result.errors.slice(0, 3).join("; ")}`;
         } catch { wiringStatus = "⚠️ Could not verify (engine error)"; }
 
+        const _ms = trackTool("scaffold_play", _start);
+        mcpLog(server, "debug", "scaffold_play", { duration: `${_ms}ms` });
         return {
           content: [{
             type: "text",
@@ -3084,6 +3436,21 @@ param projectName string = '${slug}'
     );
 
     // ── Tool: create_primitive ───────────────────────────────────────
+
+    /**
+     * @tool create_primitive
+     * @description Create a single FAI primitive (agent, instruction, or skill) with proper frontmatter
+     * @param {Object} params - Input parameters
+     * @param {string} params.type - Primitive type (agent, instruction, skill)
+     * @param {string} params.name - Name in kebab-case
+     * @param {string} params.description - What this primitive does
+     * @param {string[]} params.[waf] - WAF pillar alignment
+     * @param {string[]} params.[plays] - Compatible play IDs
+     * @param {string} params.[targetDir] - Target directory
+     * @param {boolean} params.[dryRun=false] - Preview without creating
+     * @returns {Object} MCP response with content array
+     * @category Scaffold
+     */
 
     server.tool(
       "create_primitive",
@@ -3190,6 +3557,18 @@ ${description}
 
     // ── Tool: smart_scaffold ─────────────────────────────────────────
 
+    /**
+     * @tool smart_scaffold
+     * @description Find best-matching solution play template using BM25 search, then optionally scaffold
+     * @param {Object} params - Input parameters
+     * @param {string} params.description - What you want to build
+     * @param {number} params.[topK=3] - Number of template matches
+     * @param {boolean} params.[scaffoldFromTop=false] - Auto-scaffold from top match
+     * @param {string} params.[playName] - Name for the new play
+     * @returns {Object} MCP response with content array
+     * @category Scaffold
+     */
+
     server.tool(
       "smart_scaffold",
       "FAI SMART SCAFFOLD — Describe what you want to build in natural language, and get the best-matching solution play as a template. Then optionally scaffold a new play based on that template.",
@@ -3294,6 +3673,17 @@ ${description}
 
   // ── Tool: marketplace_search ────────────────────────────────────
 
+  /**
+   * @tool marketplace_search
+   * @description Search the FAI plugin marketplace by use case, technology, or keyword
+   * @param {Object} params - Input parameters
+   * @param {string} params.query - Search query
+   * @param {number} params.[limit=5] - Max results
+   * @param {string} params.[playId] - Filter to plugins compatible with a play
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "marketplace_search",
     "FAI MARKETPLACE — Search 77+ plugins by use case, technology, or keyword. Describe what you need in natural language, get ranked plugin recommendations with install commands.",
@@ -3304,6 +3694,7 @@ ${description}
     },
     { annotations: { readOnlyHint: true, idempotentHint: true } },
     async ({ query, limit, playId }) => {
+      const _start = Date.now();
       const marketplace = loadMarketplace();
       const queryLower = query.toLowerCase();
       const queryWords = queryLower.split(/\s+/).filter(w => w.length >= 3);
@@ -3336,6 +3727,8 @@ ${description}
         return `### ${i + 1}. ${plugin.name} (${items} items, ${(score * 3).toFixed(0)}% match)\n${plugin.description?.substring(0, 200)}\n- **Plays**: ${plays}\n- **Keywords**: ${(plugin.keywords || []).slice(0, 8).join(", ")}\n- **Install**: \`install_plugin name="${plugin.name}"\``;
       }).join("\n\n---\n\n");
 
+      const _ms = trackTool("marketplace_search", _start);
+      mcpLog(server, "debug", "marketplace_search", { duration: `${_ms}ms` });
       return {
         content: [{
           type: "text",
@@ -3346,6 +3739,16 @@ ${description}
   );
 
   // ── Tool: marketplace_browse ────────────────────────────────────
+
+  /**
+   * @tool marketplace_browse
+   * @description Browse the FAI plugin marketplace with pagination and category filters
+   * @param {Object} params - Input parameters
+   * @param {string} params.[category='all'] - Category filter
+   * @param {number} params.[page=1] - Page number (20 per page)
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "marketplace_browse",
@@ -3394,6 +3797,17 @@ ${description}
   );
 
   // ── Tool: install_plugin ────────────────────────────────────────
+
+  /**
+   * @tool install_plugin
+   * @description Install a FrootAI plugin into the current project's .github/ structure
+   * @param {Object} params - Input parameters
+   * @param {string} params.name - Plugin name to install
+   * @param {string} params.[targetDir] - Target project directory
+   * @param {boolean} params.[dryRun=false] - Preview without installing
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "install_plugin",
@@ -3464,6 +3878,16 @@ ${description}
 
   // ── Tool: uninstall_plugin ──────────────────────────────────────
 
+  /**
+   * @tool uninstall_plugin
+   * @description Remove a plugin's primitives from the current project's .github/ structure
+   * @param {Object} params - Input parameters
+   * @param {string} params.name - Plugin name to uninstall
+   * @param {string} params.[targetDir] - Target project directory
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "uninstall_plugin",
     "FAI UNINSTALL — Remove a plugin's primitives from the current project (.github/ structure).",
@@ -3501,6 +3925,15 @@ ${description}
   );
 
   // ── Tool: list_installed ────────────────────────────────────────
+
+  /**
+   * @tool list_installed
+   * @description List plugins currently installed by scanning .github/ against the marketplace
+   * @param {Object} params - Input parameters
+   * @param {string} params.[targetDir] - Target project directory
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "list_installed",
@@ -3572,6 +4005,16 @@ ${description}
 
   // ── Tool: check_compatibility ───────────────────────────────────
 
+  /**
+   * @tool check_compatibility
+   * @description Check if a plugin is compatible with a solution play before installing
+   * @param {Object} params - Input parameters
+   * @param {string} params.pluginName - Plugin to check
+   * @param {string} params.playId - Play to check against
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "check_compatibility",
     "FAI COMPATIBILITY — Check if a plugin is compatible with a solution play before installing. Validates play alignment and potential naming conflicts.",
@@ -3639,6 +4082,15 @@ ${description}
   );
 
   // ── Tool: validate_plugin ───────────────────────────────────────
+
+  /**
+   * @tool validate_plugin
+   * @description Validate a plugin's plugin.json against the FAI Plugin Schema
+   * @param {Object} params - Input parameters
+   * @param {string} params.pluginName - Plugin name to validate
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "validate_plugin",
@@ -3721,6 +4173,17 @@ ${description}
 
   // ── Tool: compose_plugins (T54) ─────────────────────────────────
 
+  /**
+   * @tool compose_plugins
+   * @description Install multiple plugins simultaneously with cross-plugin conflict detection
+   * @param {Object} params - Input parameters
+   * @param {string[]} params.plugins - Plugin names to install together
+   * @param {string} params.[targetDir] - Target directory
+   * @param {boolean} params.[dryRun=false] - Preview without installing
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "compose_plugins",
     "FAI COMPOSE — Install multiple plugins simultaneously with cross-plugin conflict detection. Checks for naming collisions between plugins, resolves install order, and reports combined results.",
@@ -3799,6 +4262,16 @@ ${description}
   );
 
   // ── Tool: publish_plugin (T56) ──────────────────────────────────
+
+  /**
+   * @tool publish_plugin
+   * @description Validate a plugin and generate its marketplace.json entry
+   * @param {Object} params - Input parameters
+   * @param {string} params.pluginName - Plugin name to publish
+   * @param {boolean} params.[dryRun=true] - Preview before committing
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "publish_plugin",
@@ -3885,6 +4358,15 @@ ${description}
 
   // ── Tool: check_plugin_updates (T57) ────────────────────────────
 
+  /**
+   * @tool check_plugin_updates
+   * @description Check installed plugins against the marketplace for available version updates
+   * @param {Object} params - Input parameters
+   * @param {string} params.[targetDir] - Target project directory
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "check_plugin_updates",
     "FAI UPDATES — Check installed plugins against the marketplace for available version updates.",
@@ -3952,6 +4434,15 @@ ${description}
 
   // ── Tool: resolve_dependencies (T58) ────────────────────────────
 
+  /**
+   * @tool resolve_dependencies
+   * @description Resolve plugin dependency chains and determine correct install order
+   * @param {Object} params - Input parameters
+   * @param {string} params.pluginName - Plugin to resolve dependencies for
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
+
   server.tool(
     "resolve_dependencies",
     "FAI DEPENDENCIES — Resolve plugin dependency chains. Shows what other plugins a plugin requires and the install order.",
@@ -3997,6 +4488,14 @@ ${description}
   );
 
   // ── Tool: list_external_plugins (T60) ───────────────────────────
+
+  /**
+   * @tool list_external_plugins
+   * @description Browse external plugin sources from community and third-party repositories
+   * @param {Object} params - Input parameters
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "list_external_plugins",
@@ -4045,6 +4544,14 @@ ${description}
   );
 
   // ── Tool: marketplace_stats (T61) ───────────────────────────────
+
+  /**
+   * @tool marketplace_stats
+   * @description Get marketplace analytics with total plugins, items by type, top plugins, play coverage
+   * @param {Object} params - Input parameters
+   * @returns {Object} MCP response with content array
+   * @category Marketplace
+   */
 
   server.tool(
     "marketplace_stats",

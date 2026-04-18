@@ -8,6 +8,8 @@ import * as fs from "fs";
 import { searchAll } from "./commands/search";
 import { createReactPanel } from "./webviews/reactHost";
 import { SOLUTION_PLAYS } from "./data/plays";
+import { loadBM25Index, searchPlays as bm25SearchPlays } from "./utils/bm25";
+import type { BM25Index } from "./utils/bm25";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const legacy = require("./legacy.js");
@@ -819,6 +821,9 @@ ${bodyHtml}
     let knowledge: KnowledgeData = {};
     try { knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf-8")); } catch {}
 
+    // Load BM25 search index for @fai chat participant (more accurate than keyword matching)
+    const bm25Index: BM25Index | null = loadBM25Index(path.join(context.extensionPath, "search-index.json"));
+
     const participant = vscode.chat.createChatParticipant("frootai.fai", async (request, chatContext, stream, token) => {
       const query = request.prompt.toLowerCase();
       const stopWords = new Set(["how", "to", "the", "a", "an", "is", "in", "on", "for", "of", "and", "or", "my", "can", "do", "i", "we", "it", "with", "what", "which", "should", "use", "about", "this", "that", "from", "have", "need", "want", "please", "me", "be", "get", "let", "make", "just", "some"]);
@@ -852,17 +857,30 @@ ${bodyHtml}
         scoredModules = cached.scoredModules;
         glossaryMatches = cached.glossaryMatches;
       } else {
-        // ── Search plays with rich fields (whole-word matching) ──
-        scoredPlays = SOLUTION_PLAYS.map(p => {
-          const fields = [
-            p.id, p.name, p.desc || "", p.infra || "", p.cat || "",
-            p.tagline || "", p.pattern || "",
-          ].join(" ");
-          const matchCount = queryWords.filter(w => wordMatch(fields, w)).length;
-          return { play: p, score: matchCount, ratio: matchCount / queryWords.length };
-        }).filter(s => s.score > 0 && s.ratio >= 0.4)
-          .sort((a, b) => b.ratio - a.ratio || b.score - a.score)
-          .slice(0, 5);
+        // ── Search plays: BM25 first (probabilistic ranking), keyword fallback ──
+        if (bm25Index && bm25Index.docs.length > 0) {
+          const bm25Results = bm25SearchPlays(request.prompt, bm25Index, 5);
+          scoredPlays = bm25Results
+            .map(r => {
+              const doc = bm25Index.docs[r.docIndex];
+              const playId = doc.meta?.playId || doc.meta?.id;
+              const play = SOLUTION_PLAYS.find(p => p.id === playId);
+              return play ? { play, score: r.score, ratio: r.normalizedScore } : null;
+            })
+            .filter((s): s is NonNullable<typeof s> => s !== null);
+        } else {
+          // Fallback: naive whole-word keyword matching
+          scoredPlays = SOLUTION_PLAYS.map(p => {
+            const fields = [
+              p.id, p.name, p.desc || "", p.infra || "", p.cat || "",
+              p.tagline || "", p.pattern || "",
+            ].join(" ");
+            const matchCount = queryWords.filter(w => wordMatch(fields, w)).length;
+            return { play: p, score: matchCount, ratio: matchCount / queryWords.length };
+          }).filter(s => s.score > 0 && s.ratio >= 0.4)
+            .sort((a, b) => b.ratio - a.ratio || b.score - a.score)
+            .slice(0, 5);
+        }
 
         // ── Search knowledge modules (whole-word, deeper content) ──
         scoredModules = [];
