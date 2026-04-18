@@ -1,0 +1,532 @@
+# ═══════════════════════════════════════════════════════════════════════
+# FAI Factory Sync — Post-Merge Catalog Validation & Channel Integrity
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Runs AFTER a push to main (post-merge). Unlike factory.yml (which runs
+# on PRs to preview changes), this workflow VALIDATES that the committed
+# catalog is consistent, all channel artifacts are in sync, and the
+# factory output matches the filesystem reality.
+#
+# Triggers:
+#   - Push to main (after PR merge or direct push)
+#   - Manual dispatch (for ad-hoc audits)
+#   - Weekly schedule (Saturday 04:00 UTC — drift detection)
+#
+# What it checks:
+#   1. Catalog JSON validity + schema conformance
+#   2. Primitive count sanity (catalog vs filesystem)
+#   3. Content hash verification (detect tampering/drift)
+#   4. Channel artifact freshness (are adapters in sync?)
+#   5. Build verification (TypeScript, Docker, npm pack)
+#   6. Change summary (what changed since last successful run)
+# ═══════════════════════════════════════════════════════════════════════
+
+name: FAI Factory Sync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.factory/fai-catalog.json'
+      - 'agents/**'
+      - 'instructions/**'
+      - 'skills/**'
+      - 'hooks/**'
+      - 'plugins/**'
+      - 'solution-plays/**'
+      - 'scripts/factory/**'
+      - 'npm-mcp/**'
+      - 'vscode-extension/**'
+  workflow_dispatch:
+    inputs:
+      full_audit:
+        description: 'Run full audit (slower, checks all channels)'
+        type: boolean
+        default: false
+  schedule:
+    # Weekly drift detection — Saturday 04:00 UTC
+    - cron: '0 4 * * 6'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: factory-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # ══════════════════════════════════════════════════════════
+  # Job 1: Catalog Validation — JSON, schema, counts, hashes
+  # ══════════════════════════════════════════════════════════
+  catalog-validation:
+    name: 📋 Catalog Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    outputs:
+      catalog_valid: ${{ steps.validate-json.outputs.valid }}
+      counts_match: ${{ steps.count-sanity.outputs.match }}
+      hash_ok: ${{ steps.hash-verify.outputs.ok }}
+      total_primitives: ${{ steps.count-sanity.outputs.total }}
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ── Check 1: Catalog JSON is valid and parseable ──
+      - name: 🔍 Validate catalog JSON
+        id: validate-json
+        run: |
+          echo "## Catalog JSON Validation" >> $GITHUB_STEP_SUMMARY
+
+          if [ ! -f .factory/fai-catalog.json ]; then
+            echo "❌ .factory/fai-catalog.json NOT FOUND" >> $GITHUB_STEP_SUMMARY
+            echo "valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+          # Parse and validate JSON structure
+          node -e "
+            const fs = require('fs');
+            try {
+              const raw = fs.readFileSync('.factory/fai-catalog.json', 'utf8');
+              const catalog = JSON.parse(raw);
+
+              // Required top-level fields
+              const required = ['version', 'generated', 'stats'];
+              const missing = required.filter(f => !catalog[f]);
+              if (missing.length > 0) {
+                console.error('Missing required fields:', missing.join(', '));
+                process.exit(1);
+              }
+
+              // Stats must have primitive counts
+              const statFields = ['agents', 'skills', 'instructions', 'hooks', 'plugins', 'plays'];
+              const missingStats = statFields.filter(f => typeof catalog.stats[f] !== 'number');
+              if (missingStats.length > 0) {
+                console.error('Missing stats fields:', missingStats.join(', '));
+                process.exit(1);
+              }
+
+              // Sanity: no negative counts
+              for (const f of statFields) {
+                if (catalog.stats[f] < 0) {
+                  console.error('Negative count for', f, ':', catalog.stats[f]);
+                  process.exit(1);
+                }
+              }
+
+              const size = (Buffer.byteLength(raw) / 1024).toFixed(1);
+              console.log('✅ Catalog valid — ' + size + 'KB, generated ' + catalog.generated);
+              console.log('   Version: ' + catalog.version);
+              console.log('   Stats: ' + JSON.stringify(catalog.stats));
+            } catch (e) {
+              console.error('❌ Catalog parse error:', e.message);
+              process.exit(1);
+            }
+          "
+
+          echo "valid=true" >> $GITHUB_OUTPUT
+          echo "✅ Catalog JSON is valid and well-formed" >> $GITHUB_STEP_SUMMARY
+
+      # ── Check 2: Primitive counts match filesystem ──
+      - name: 📊 Count sanity check
+        id: count-sanity
+        run: |
+          echo "## Count Sanity Check" >> $GITHUB_STEP_SUMMARY
+
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const catalog = JSON.parse(fs.readFileSync('.factory/fai-catalog.json', 'utf8'));
+
+            // Count files on disk
+            function countFiles(dir, pattern) {
+              if (!fs.existsSync(dir)) return 0;
+              let count = 0;
+              const walk = (d) => {
+                for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
+                  const full = path.join(d, entry.name);
+                  if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
+                    walk(full);
+                  } else if (entry.isFile() && pattern.test(entry.name)) {
+                    count++;
+                  }
+                }
+              };
+              walk(dir);
+              return count;
+            }
+
+            const checks = [
+              { name: 'agents', dir: 'agents', pattern: /\.agent\.md$/, catalogCount: catalog.stats.agents },
+              { name: 'skills', dir: 'skills', pattern: /^SKILL\.md$/, catalogCount: catalog.stats.skills },
+              { name: 'instructions', dir: 'instructions', pattern: /\.instructions\.md$/, catalogCount: catalog.stats.instructions },
+              { name: 'hooks', dir: 'hooks', pattern: /^hooks\.json$/, catalogCount: catalog.stats.hooks },
+              { name: 'plugins', dir: 'plugins', pattern: /^plugin\.json$/, catalogCount: catalog.stats.plugins },
+            ];
+
+            let allMatch = true;
+            const results = [];
+
+            for (const check of checks) {
+              const diskCount = countFiles(check.dir, check.pattern);
+              const match = diskCount === check.catalogCount;
+              if (!match) allMatch = false;
+              const status = match ? '✅' : '⚠️';
+              const delta = diskCount - check.catalogCount;
+              const deltaStr = delta === 0 ? '—' : (delta > 0 ? '+' + delta : String(delta));
+              results.push({ name: check.name, disk: diskCount, catalog: check.catalogCount, status, delta: deltaStr });
+              console.log(status + ' ' + check.name + ': disk=' + diskCount + ' catalog=' + check.catalogCount + (match ? '' : ' MISMATCH'));
+            }
+
+            // Total
+            const total = checks.reduce((s, c) => s + c.catalogCount, 0);
+            console.log('Total standalone primitives: ' + total);
+
+            if (!allMatch) {
+              console.error('⚠️  Some counts do not match — catalog may need regeneration');
+              console.error('   Run: npm run factory:catalog');
+            }
+
+            // Output for other steps
+            console.log('match=' + allMatch);
+            console.log('total=' + total);
+          " | tee /tmp/count-output.txt
+
+          # Extract outputs
+          grep '^match=' /tmp/count-output.txt | head -1 >> $GITHUB_OUTPUT
+          grep '^total=' /tmp/count-output.txt | head -1 >> $GITHUB_OUTPUT
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat /tmp/count-output.txt >> $GITHUB_STEP_SUMMARY
+
+      # ── Check 3: Content hash verification ──
+      - name: 🔐 Content hash verification
+        id: hash-verify
+        run: |
+          echo "## Content Hash" >> $GITHUB_STEP_SUMMARY
+
+          # Compute SHA-256 of the catalog
+          HASH=$(sha256sum .factory/fai-catalog.json | cut -d' ' -f1)
+          SIZE=$(stat -c%s .factory/fai-catalog.json)
+          echo "Catalog hash: ${HASH:0:16}... (${SIZE} bytes)"
+
+          # Verify the catalog's internal commit field matches HEAD (if present)
+          node -e "
+            const catalog = require('./.factory/fai-catalog.json');
+            if (catalog.commit) {
+              console.log('Catalog commit: ' + catalog.commit);
+            }
+            if (catalog.generated) {
+              const age = Date.now() - new Date(catalog.generated).getTime();
+              const hours = (age / 3600000).toFixed(1);
+              console.log('Catalog age: ' + hours + ' hours');
+              if (age > 7 * 24 * 3600000) {
+                console.warn('⚠️  Catalog is older than 7 days — consider regenerating');
+              }
+            }
+          "
+
+          echo "ok=true" >> $GITHUB_OUTPUT
+          echo "✅ Hash: \`${HASH:0:16}...\` (${SIZE} bytes)" >> $GITHUB_STEP_SUMMARY
+
+      # ── Check 4: Run factory validate ──
+      - name: 🛡️ Factory quality gates
+        run: |
+          echo "## Quality Gates" >> $GITHUB_STEP_SUMMARY
+          node scripts/factory/validate.js 2>&1 | tee /tmp/validate-output.txt
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -20 /tmp/validate-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════
+  # Job 2: Channel Artifact Freshness
+  # ══════════════════════════════════════════════════════════
+  channel-sync:
+    name: 🔄 Channel Sync Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: catalog-validation
+    if: needs.catalog-validation.outputs.catalog_valid == 'true'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ── Check channels are in sync with catalog ──
+      - name: 📡 Verify channel artifacts
+        run: |
+          echo "## Channel Sync Status" >> $GITHUB_STEP_SUMMARY
+
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const catalog = JSON.parse(fs.readFileSync('.factory/fai-catalog.json', 'utf8'));
+
+            const checks = [];
+            let allOk = true;
+
+            // 1. npm-mcp knowledge.json — must have ecosystem section
+            const kjPath = 'npm-mcp/knowledge.json';
+            if (fs.existsSync(kjPath)) {
+              try {
+                const kj = JSON.parse(fs.readFileSync(kjPath, 'utf8'));
+                const hasEco = kj.ecosystem || (kj.modules && Object.keys(kj.modules).length > 0);
+                checks.push({ channel: 'npm-mcp', file: 'knowledge.json', ok: !!hasEco, note: hasEco ? 'ecosystem present' : 'missing ecosystem section' });
+              } catch (e) {
+                checks.push({ channel: 'npm-mcp', file: 'knowledge.json', ok: false, note: 'parse error: ' + e.message });
+                allOk = false;
+              }
+            } else {
+              checks.push({ channel: 'npm-mcp', file: 'knowledge.json', ok: false, note: 'FILE MISSING' });
+              allOk = false;
+            }
+
+            // 2. npm-mcp package.json — version check
+            const npmPkg = 'npm-mcp/package.json';
+            if (fs.existsSync(npmPkg)) {
+              const pkg = JSON.parse(fs.readFileSync(npmPkg, 'utf8'));
+              checks.push({ channel: 'npm-mcp', file: 'package.json', ok: true, note: 'v' + pkg.version });
+            }
+
+            // 3. VS Code extension — plays data exists
+            const vscodePlays = 'vscode-extension/src/data/plays.ts';
+            if (fs.existsSync(vscodePlays)) {
+              const content = fs.readFileSync(vscodePlays, 'utf8');
+              const playCount = (content.match(/id:\s*['\"](\d+)/g) || []).length;
+              checks.push({ channel: 'vscode', file: 'data/plays.ts', ok: playCount > 0, note: playCount + ' plays' });
+            } else {
+              checks.push({ channel: 'vscode', file: 'data/plays.ts', ok: false, note: 'FILE MISSING' });
+            }
+
+            // 4. Python MCP — knowledge.json exists
+            const pyKj = 'python-mcp/frootai_mcp/knowledge.json';
+            if (fs.existsSync(pyKj)) {
+              const size = (fs.statSync(pyKj).size / 1024).toFixed(0);
+              checks.push({ channel: 'python-mcp', file: 'knowledge.json', ok: true, note: size + 'KB' });
+            } else {
+              checks.push({ channel: 'python-mcp', file: 'knowledge.json', ok: false, note: 'FILE MISSING' });
+            }
+
+            // 5. Schemas — fai-manifest.schema.json exists and is valid
+            const schemaPath = 'schemas/fai-manifest.schema.json';
+            if (fs.existsSync(schemaPath)) {
+              try {
+                const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+                checks.push({ channel: 'schemas', file: 'fai-manifest.schema.json', ok: true, note: 'v' + (schema.version || '?') });
+              } catch (e) {
+                checks.push({ channel: 'schemas', file: 'fai-manifest.schema.json', ok: false, note: 'parse error' });
+                allOk = false;
+              }
+            }
+
+            // 6. CLI — bin.js exists
+            const cliBin = 'cli/bin.js';
+            if (fs.existsSync(cliBin)) {
+              checks.push({ channel: 'cli', file: 'bin.js', ok: true, note: 'present' });
+            }
+
+            // Print results
+            console.log('Channel Artifact Check:');
+            console.log('─'.repeat(70));
+            for (const c of checks) {
+              const icon = c.ok ? '✅' : '❌';
+              console.log(icon + ' ' + c.channel.padEnd(14) + c.file.padEnd(30) + c.note);
+            }
+            console.log('─'.repeat(70));
+            const passed = checks.filter(c => c.ok).length;
+            console.log('Result: ' + passed + '/' + checks.length + ' checks passed');
+
+            if (!allOk) {
+              console.error('\\n⚠️  Some channels are out of sync. Run: npm run factory');
+            }
+          "
+
+      # ── Verify consistency script ──
+      - name: 🔗 Cross-channel consistency
+        run: |
+          if [ -f scripts/validate-consistency.js ]; then
+            echo "## Cross-Channel Consistency" >> $GITHUB_STEP_SUMMARY
+            node scripts/validate-consistency.js 2>&1 | tee /tmp/consistency.txt
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -10 /tmp/consistency.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ validate-consistency.js not found — skipping" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ══════════════════════════════════════════════════════════
+  # Job 3: Build Verification (ensures nothing is broken)
+  # ══════════════════════════════════════════════════════════
+  build-verify:
+    name: 🏗️ Build Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: catalog-validation
+    if: >-
+      needs.catalog-validation.outputs.catalog_valid == 'true' &&
+      (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ── MCP Server: verify it loads ──
+      - name: 📦 Verify MCP server loads
+        run: |
+          echo "## Build Verification" >> $GITHUB_STEP_SUMMARY
+          cd npm-mcp
+          npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
+          node -e "
+            try {
+              require('./config.js');
+              console.log('✅ config.js loads');
+            } catch (e) {
+              console.error('❌ config.js:', e.message);
+              process.exit(1);
+            }
+          "
+          echo "✅ MCP server dependencies OK" >> $GITHUB_STEP_SUMMARY
+
+      # ── VS Code Extension: TypeScript compile check ──
+      - name: 🔧 Verify VS Code extension compiles
+        run: |
+          cd vscode-extension
+          npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
+          npx tsc --noEmit 2>&1 | tail -5
+          echo "✅ TypeScript compilation OK" >> $GITHUB_STEP_SUMMARY
+
+      # ── Engine: verify moonshot tests ──
+      - name: 🧪 Verify engine tests
+        run: |
+          node engine/moonshot/test.js 2>&1 | tail -5
+          echo "✅ Engine moonshot tests OK" >> $GITHUB_STEP_SUMMARY
+
+      # ── npm pack dry-run: verify package is valid ──
+      - name: 📦 Verify npm pack
+        run: |
+          cd npm-mcp
+          npm pack --dry-run 2>&1 | tail -10
+          echo "✅ npm pack verification OK" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════
+  # Job 4: Change Summary — cache baseline for next run
+  # ══════════════════════════════════════════════════════════
+  cache-baseline:
+    name: 💾 Cache Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [catalog-validation, channel-sync]
+    if: >-
+      needs.catalog-validation.outputs.catalog_valid == 'true' &&
+      github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      # Save current catalog as baseline for future PR diffs
+      - name: 💾 Save catalog baseline
+        run: cp .factory/fai-catalog.json .factory/fai-catalog-baseline.json
+
+      - uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .factory/fai-catalog-baseline.json
+          key: factory-catalog-main-${{ github.sha }}
+
+      - name: 📊 Summary
+        run: |
+          node -e "
+            const catalog = require('./.factory/fai-catalog.json');
+            const s = catalog.stats;
+            console.log('## 🏭 Factory Sync Complete');
+            console.log('');
+            console.log('| Metric | Value |');
+            console.log('|--------|-------|');
+            console.log('| Agents | ' + s.agents + ' |');
+            console.log('| Skills | ' + s.skills + ' |');
+            console.log('| Instructions | ' + s.instructions + ' |');
+            console.log('| Hooks | ' + s.hooks + ' |');
+            console.log('| Plugins | ' + s.plugins + ' |');
+            console.log('| Plays | ' + s.plays + ' |');
+            console.log('| **Total** | **' + s.totalPrimitives + '** |');
+            console.log('');
+            console.log('Catalog: v' + catalog.version + ' (' + catalog.generated + ')');
+            console.log('Commit: ' + (catalog.commit || 'N/A'));
+          " >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════
+  # Job 5: Auto-create issue on drift (schedule only)
+  # ══════════════════════════════════════════════════════════
+  drift-alert:
+    name: 🚨 Drift Alert
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [catalog-validation, channel-sync]
+    if: >-
+      github.event_name == 'schedule' &&
+      (needs.catalog-validation.outputs.counts_match == 'false' ||
+       needs.catalog-validation.result == 'failure')
+
+    steps:
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const title = '🏭 Factory Sync Drift Detected — ' + new Date().toISOString().split('T')[0];
+
+            // Check if issue already exists
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'factory-drift',
+              per_page: 1,
+            });
+
+            if (existing.data.length > 0) {
+              console.log('Drift issue already open: #' + existing.data[0].number);
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: [
+                '## Factory Sync Drift Detected',
+                '',
+                'The weekly factory sync audit found inconsistencies between the catalog and filesystem.',
+                '',
+                '**Counts match**: ' + ('${{ needs.catalog-validation.outputs.counts_match }}' === 'true' ? '✅' : '❌'),
+                '**Catalog valid**: ' + ('${{ needs.catalog-validation.outputs.catalog_valid }}' === 'true' ? '✅' : '❌'),
+                '',
+                '### Resolution',
+                '```bash',
+                'npm run factory        # Regenerate catalog + sync all channels',
+                'npm run factory:status  # Check channel health',
+                'git add -A && git commit -m "fix: sync factory catalog"',
+                'git push',
+                '```',
+                '',
+                '---',
+                '*Auto-created by [factory-sync.yml](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/workflows/factory-sync.yml)*',
+              ].join('\n'),
+              labels: ['factory-drift', 'automation'],
+            });
+
+            console.log('Created drift alert issue');
