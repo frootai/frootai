@@ -60,30 +60,34 @@ section('📦 VERSION CONSISTENCY');
 
 const mcpPkg = readJSON('npm-mcp/package.json');
 const extPkg = readJSON('vscode-extension/package.json');
-const mcpVersion = mcpPkg?.version || 'MISSING';
-const extVersion = extPkg?.version || 'MISSING';
-console.log(`  MCP Server version: ${mcpVersion}`);
-console.log(`  VS Code Extension version: ${extVersion}`);
+const mcpVersion = mcpPkg?.version || null;
+const extVersion = extPkg?.version || null;
+
+if (!mcpPkg) console.log('  ⏭️  npm-mcp/ not in this repo (moved to frootai-core) — skipping MCP version checks');
+if (!extPkg) console.log('  ⏭️  vscode-extension/ not in this repo (moved to frootai-core) — skipping extension version checks');
+
+if (mcpVersion) console.log(`  MCP Server version: ${mcpVersion}`);
+if (extVersion) console.log(`  VS Code Extension version: ${extVersion}`);
 
 // Check chatbot references MCP version
 const chatbot = read('functions/server.js');
-if (chatbot) {
+if (chatbot && mcpVersion) {
   if (!chatbot.includes(`@${mcpVersion}`)) {
     check('Chatbot → MCP version', 'missing', `@${mcpVersion}`, 'functions/server.js');
   } else {
     console.log(`  ✅ Chatbot references MCP @${mcpVersion}`);
   }
 
-  if (!chatbot.includes(`v${extVersion}`)) {
+  if (extVersion && !chatbot.includes(`v${extVersion}`)) {
     check('Chatbot → Extension version', 'missing', `v${extVersion}`, 'functions/server.js');
-  } else {
+  } else if (extVersion) {
     console.log(`  ✅ Chatbot references extension v${extVersion}`);
   }
 }
 
 // Check README references
 const readme = read('README.md');
-if (readme) {
+if (readme && mcpVersion) {
   const readmeVersionMatch = readme.match(/frootai-mcp@(\d+\.\d+\.\d+)/);
   if (readmeVersionMatch) {
     check('README → MCP version', readmeVersionMatch[1], mcpVersion, 'README.md');
@@ -100,30 +104,32 @@ let actualToolCount = 0;
 if (mcpIndex) {
   const toolMatches = mcpIndex.match(/server\.tool\(/g);
   actualToolCount = toolMatches ? toolMatches.length : 0;
+  console.log(`  Source of truth (index.js): ${actualToolCount} tools`);
+} else {
+  console.log('  ⏭️  npm-mcp/index.js not found — skipping tool count checks');
 }
-console.log(`  Source of truth (index.js): ${actualToolCount} tools`);
 
 // npm description
-if (mcpPkg?.description) {
+if (mcpPkg?.description && mcpIndex) {
   const m = mcpPkg.description.match(/(\d+)\s*tools/);
   if (m) check('npm description tool count', m[1], String(actualToolCount), 'npm-mcp/package.json');
 }
 
 // Extension description
-if (extPkg?.description) {
+if (extPkg?.description && mcpIndex) {
   const m = extPkg.description.match(/(\d+)\s*MCP tools/);
   if (m) check('Extension description tool count', m[1], String(actualToolCount), 'vscode-extension/package.json');
 }
 
 // Extension sidebar
-if (extPkg?.contributes) {
+if (extPkg?.contributes && mcpIndex) {
   const views = JSON.stringify(extPkg.contributes);
   const m = views.match(/MCP Tools \((\d+)\)/);
   if (m) check('Extension sidebar tool count', m[1], String(actualToolCount), 'vscode-extension/package.json');
 }
 
 // README references
-if (readme) {
+if (readme && mcpIndex) {
   const readmeToolRefs = readme.match(/(\d+) tools/g) || [];
   const readmeToolCounts = readmeToolRefs.map(r => parseInt(r));
   const wrongCounts = readmeToolCounts.filter(c => c !== actualToolCount && c > 10);
@@ -140,9 +146,13 @@ if (readme) {
 section('⌨️  COMMAND COUNT CONSISTENCY');
 
 const actualCmdCount = extPkg?.contributes?.commands?.length || 0;
-console.log(`  Source of truth (extension commands): ${actualCmdCount}`);
+if (extPkg) {
+  console.log(`  Source of truth (extension commands): ${actualCmdCount}`);
+} else {
+  console.log('  ⏭️  vscode-extension/ not found — skipping command count checks');
+}
 
-if (readme) {
+if (readme && extPkg) {
   const cmdMatch = readme.match(/(\d+)\s*commands/);
   if (cmdMatch) {
     check('README command count', cmdMatch[1], String(actualCmdCount), 'README.md');
@@ -166,6 +176,8 @@ console.log(`  Source of truth (solution-plays/): ${actualPlayCount} plays`);
 if (mcpPkg?.description) {
   const m = mcpPkg.description.match(/(\d+)\s*solution plays/);
   if (m) check('npm description play count', m[1], String(actualPlayCount), 'npm-mcp/package.json');
+} else if (!mcpPkg) {
+  console.log('  ⏭️  npm-mcp/ not found — skipping npm description play count check');
 }
 
 if (readme) {
@@ -188,10 +200,12 @@ let actualModuleCount = 0;
 const knowledge = readJSON('npm-mcp/knowledge.json');
 if (knowledge?.modules) {
   actualModuleCount = Object.keys(knowledge.modules).length;
+  console.log(`  Source of truth (knowledge.json): ${actualModuleCount} modules`);
+} else {
+  console.log('  ⏭️  npm-mcp/knowledge.json not found — skipping module count checks');
 }
-console.log(`  Source of truth (knowledge.json): ${actualModuleCount} modules`);
 
-if (mcpPkg?.description) {
+if (mcpPkg?.description && knowledge) {
   const m = mcpPkg.description.match(/(\d+)\s*modules/);
   if (m && actualModuleCount > 0) check('npm description module count', m[1], String(actualModuleCount), 'npm-mcp/package.json');
 }
@@ -217,11 +231,11 @@ for (const [name, url] of Object.entries(expectedURLs)) {
   }
 }
 
-if (mcpPkg?.homepage !== 'https://frootai.dev') {
+if (mcpPkg && mcpPkg?.homepage !== 'https://frootai.dev') {
   check('npm homepage', mcpPkg?.homepage || 'missing', 'https://frootai.dev', 'npm-mcp/package.json');
 }
 
-if (mcpPkg?.repository?.url !== 'https://github.com/frootai/frootai') {
+if (mcpPkg && mcpPkg?.repository?.url !== 'https://github.com/frootai/frootai') {
   check('npm repository', mcpPkg?.repository?.url || 'missing', 'https://github.com/frootai/frootai', 'npm-mcp/package.json');
 }
 
@@ -339,9 +353,9 @@ section('📊 CROSS-CHANNEL VERSION MATRIX');
 
 console.log('  Channel                  | Version');
 console.log('  ─────────────────────────┼──────────');
-console.log(`  ${'npm (MCP Server)'.padEnd(25)} | ${mcpVersion}`);
-console.log(`  ${'VS Code Extension'.padEnd(25)} | ${extVersion}`);
-console.log(`  ${'Docker'.padEnd(25)} | ${mcpVersion} (follows npm)`);
+console.log(`  ${'npm (MCP Server)'.padEnd(25)} | ${mcpVersion || 'N/A (in frootai-core)'}`);
+console.log(`  ${'VS Code Extension'.padEnd(25)} | ${extVersion || 'N/A (in frootai-core)'}`);
+console.log(`  ${'Docker'.padEnd(25)} | ${mcpVersion ? mcpVersion + ' (follows npm)' : 'N/A'}`);
 console.log(`  ${'Website'.padEnd(25)} | auto-deploy on push`);
 console.log(`  ${'Chatbot API'.padEnd(25)} | auto-deploy on push`);
 

@@ -58,6 +58,8 @@ function updateFile(rel, replacer, label) {
 }
 
 // ─── Gather sources of truth ───
+// NOTE: npm-mcp/ and vscode-extension/ have moved to frootai-core (private repo).
+// When these folders are absent, we skip syncing counts to avoid zeroing out values.
 console.log('🔍 Reading sources of truth...\n');
 
 const mcpPkg = readJSON('npm-mcp/package.json');
@@ -80,11 +82,17 @@ const playCount = existsSync(playsDir)
       .filter(d => d.isDirectory() && /^\d+/.test(d.name)).length
   : 0;
 
-console.log(`  MCP version:     ${mcpVersion}`);
-console.log(`  Extension version: ${extVersion}`);
-console.log(`  Tools:           ${toolCount}`);
-console.log(`  Commands:        ${cmdCount}`);
-console.log(`  Modules:         ${moduleCount}`);
+// Detect which sources of truth are available
+const hasMcpSource = mcpPkg !== null;
+const hasExtSource = extPkg !== null;
+const hasMcpIndex = mcpIndex.length > 0;
+const hasKnowledge = knowledge !== null;
+
+console.log(`  MCP version:     ${hasMcpSource ? mcpVersion : 'SKIPPED (npm-mcp/ not in this repo)'}`);
+console.log(`  Extension version: ${hasExtSource ? extVersion : 'SKIPPED (vscode-extension/ not in this repo)'}`);
+console.log(`  Tools:           ${hasMcpIndex ? toolCount : 'SKIPPED'}`);
+console.log(`  Commands:        ${hasExtSource ? cmdCount : 'SKIPPED'}`);
+console.log(`  Modules:         ${hasKnowledge ? moduleCount : 'SKIPPED'}`);
 console.log(`  Solution plays:  ${playCount}`);
 console.log('');
 
@@ -92,32 +100,34 @@ console.log('');
 console.log('📝 Syncing README.md...');
 
 updateFile('README.md', (content) => {
-  // Update frootai-mcp@X.Y.Z references
-  content = content.replace(/frootai-mcp@\d+\.\d+\.\d+/g, `frootai-mcp@${mcpVersion}`);
+  // Only sync counts when the source of truth is available — avoid zeroing out values
+  if (hasMcpSource) {
+    content = content.replace(/frootai-mcp@\d+\.\d+\.\d+/g, `frootai-mcp@${mcpVersion}`);
+  }
 
-  // Update "N tools" references (only where N > 10 to avoid false matches)
-  content = content.replace(/\b(\d+) tools\b/g, (match, n) => {
-    return parseInt(n) > 10 ? `${toolCount} tools` : match;
-  });
+  if (hasMcpIndex) {
+    content = content.replace(/\b(\d+) tools\b/g, (match, n) => {
+      return parseInt(n) > 10 ? `${toolCount} tools` : match;
+    });
+    content = content.replace(/\b\d+ MCP tools\b/g, `${toolCount} MCP tools`);
+  }
 
-  // Update "N MCP tools" references
-  content = content.replace(/\b\d+ MCP tools\b/g, `${toolCount} MCP tools`);
+  if (hasKnowledge) {
+    content = content.replace(/\b\d+ knowledge modules\b/g, `${moduleCount} knowledge modules`);
+    content = content.replace(/all \d+ modules/g, `all ${moduleCount} modules`);
+  }
 
-  // Update "N knowledge modules" references
-  content = content.replace(/\b\d+ knowledge modules\b/g, `${moduleCount} knowledge modules`);
+  // Only sync the summary line if all three sources are available
+  if (hasKnowledge && hasMcpIndex) {
+    content = content.replace(/(\d+) modules · (\d+) MCP tools · (\d+) solution plays/g,
+      `${moduleCount} modules · ${toolCount} MCP tools · ${playCount} solution plays`);
+  }
 
-  // Update "all N modules" references
-  content = content.replace(/all \d+ modules/g, `all ${moduleCount} modules`);
-
-  // Update "N modules" in the summary line (e.g., "18 modules · 22 MCP tools · 20 solution plays")
-  content = content.replace(/(\d+) modules · (\d+) MCP tools · (\d+) solution plays/g,
-    `${moduleCount} modules · ${toolCount} MCP tools · ${playCount} solution plays`);
-
-  // Update "N solution plays" references
   content = content.replace(/\b\d+ solution plays\b/g, `${playCount} solution plays`);
 
-  // Update "N commands" references
-  content = content.replace(/\b\d+ commands\b/g, `${cmdCount} commands`);
+  if (hasExtSource) {
+    content = content.replace(/\b\d+ commands\b/g, `${cmdCount} commands`);
+  }
 
   return content;
 }, 'Version + counts');
@@ -125,7 +135,7 @@ updateFile('README.md', (content) => {
 // ─── 2. Sync MCP package.json description ───
 console.log('\n📦 Syncing npm-mcp/package.json description...');
 
-if (mcpPkg) {
+if (mcpPkg && hasMcpIndex) {
   let desc = mcpPkg.description;
   const origDesc = desc;
   desc = desc.replace(/\b\d+ tools/g, `${toolCount} tools`);
@@ -144,7 +154,7 @@ if (mcpPkg) {
 // ─── 3. Sync Extension package.json description ───
 console.log('\n🔌 Syncing vscode-extension/package.json description...');
 
-if (extPkg) {
+if (extPkg && hasMcpIndex) {
   let desc = extPkg.description;
   const origDesc = desc;
   desc = desc.replace(/\b\d+ MCP tools/g, `${toolCount} MCP tools`);

@@ -20,9 +20,10 @@ const oldNames = [
 const root = path.resolve(__dirname, '..');
 
 // Directories to search (exclude skills/, node_modules/, .git/, .internal/)
+// Folders removed from public repo (moved to frootai-core):
+// npm-mcp, vscode-extension, python-sdk, config
 const searchDirs = [
     'plugins', 'hooks', 'cookbook', 'website-data', 'docs',
-    'npm-mcp', 'vscode-extension/src', 'python-sdk', 'config',
     'solution-plays', 'scripts', 'workshops'
 ];
 

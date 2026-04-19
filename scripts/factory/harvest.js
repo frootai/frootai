@@ -521,8 +521,13 @@ function harvest(incremental = false) {
   const modules = scanModules("docs");
   console.log(`  ✅ Modules:      ${modules.length}`);
 
-  const mcpTools = countMcpTools("npm-mcp/index.js");
-  console.log(`  ✅ MCP Tools:    ${mcpTools}`);
+  const mcpToolsFile = "npm-mcp/index.js";
+  const mcpTools = countMcpTools(mcpToolsFile);
+  if (!fs.existsSync(path.join(REPO_ROOT, mcpToolsFile))) {
+    console.log(`  ⏭️  MCP Tools:    skipped (npm-mcp/ moved to frootai-core)`);
+  } else {
+    console.log(`  ✅ MCP Tools:    ${mcpTools}`);
+  }
 
   const elapsed = Date.now() - t0;
   console.log(`\n  Harvested in ${elapsed}ms`);

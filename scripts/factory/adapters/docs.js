@@ -38,6 +38,7 @@ const DOCS_SRC = path.join(ROOT, 'docs');
 const PLAYS_DIR = path.join(ROOT, 'solution-plays');
 const SCHEMAS_DIR = path.join(ROOT, 'schemas');
 const PROTOCOL_DIR = path.join(ROOT, 'fai-protocol');
+// cli/ has moved to frootai-core — CLI_DIR kept for reference only
 const CLI_DIR = path.join(ROOT, 'cli');
 const OUTPUT = path.join(ROOT, '.factory', 'docs');
 

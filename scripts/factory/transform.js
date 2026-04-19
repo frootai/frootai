@@ -13,15 +13,22 @@ const path = require("path");
 
 const REPO_ROOT = process.env.FROOTAI_PUBLIC_REPO || path.resolve(__dirname, "../..");
 
-// Import all adapters
-const adapters = {
-  "npm-mcp": require("./adapters/npm-mcp"),
-  "vscode": require("./adapters/vscode"),
-  "python-mcp": require("./adapters/python-mcp"),
-  "npm-sdk": require("./adapters/npm-sdk"),
-  "python-sdk": require("./adapters/python-sdk"),
-  "website": require("./adapters/website"),
-};
+// Import all adapters — some channels have moved to frootai-core (private repo).
+// Use tryRequire to gracefully skip adapters whose target folders are absent.
+function tryRequire(id) {
+  try { return require(id); } catch { return null; }
+}
+
+const adapters = Object.fromEntries(
+  Object.entries({
+    "npm-mcp": tryRequire("./adapters/npm-mcp"),
+    "vscode": tryRequire("./adapters/vscode"),
+    "python-mcp": tryRequire("./adapters/python-mcp"),
+    "npm-sdk": tryRequire("./adapters/npm-sdk"),
+    "python-sdk": tryRequire("./adapters/python-sdk"),
+    "website": tryRequire("./adapters/website"),
+  }).filter(([, mod]) => mod !== null)
+);
 
 function transform(specificChannel) {
   console.log("🔄 FAI Factory — Transform");
