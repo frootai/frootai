@@ -5,7 +5,7 @@
 <h1 align="center">FrootAI</h1>
 <p align="center"><strong>From the Roots to the Fruits. It's simply Frootful.</strong></p>
 <p align="center"><em>An open ecosystem where Infra, Platform, and App teams build AI — Frootfully.</em></p>
-<p align="center"><em>An open glue for the GenAI ecosystem, enabling deterministic and reliable AI solutions.</em></p>
+<p align="center"><em>The open glue for the GenAI ecosystem — 45 MCP tools · 104 solution plays · 860+ AI primitives via the FAI Protocol.</em></p>
 
 <p align="center">
   <a href="https://frootai.dev"><img src="https://img.shields.io/badge/frootai.dev-10b981?style=flat-square&logo=cloudflare&logoColor=white" alt="Website"></a>

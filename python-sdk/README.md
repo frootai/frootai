@@ -88,7 +88,7 @@ frootai wire 01                  # Generate fai-manifest.json
 frootai validate manifest.json   # Validate FAI manifest
 frootai evaluate groundedness=4.5 relevance=3.8  # Run quality check
 frootai waf security             # WAF pillar guidance
-frootai primitives               # Browse 830+ primitives
+frootai primitives               # Browse 860+ primitives
 frootai learning-path rag        # Curated learning path
 ```
 

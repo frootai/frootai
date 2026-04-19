@@ -1,7 +1,7 @@
 """FrootAI Client — Main entry point for the SDK.
 
 Offline-first: queries bundled knowledge base (16 modules, 5 FROOT layers).
-101 solution plays, 830+ FAI primitives (238 agents, 176 instructions, 322 skills, 10 hooks),
+101 solution plays, 860+ FAI primitives (238 agents, 176 instructions, 322 skills, 10 hooks),
 77 plugins, 16 cookbook recipes, 12 workflows, 45 MCP tools.
 No network required for search, modules, glossary, or cost estimation.
 """
@@ -50,7 +50,7 @@ _PLAY_COSTS = {
 class FrootAI:
     """FrootAI SDK client — offline-first access to AI architecture knowledge.
 
-    101 solution plays, 830+ FAI primitives, 77 plugins, 45 MCP tools.
+    101 solution plays, 860+ FAI primitives, 77 plugins, 45 MCP tools.
 
     Usage:
         client = FrootAI()
@@ -256,7 +256,7 @@ class FrootAI:
         }
 
     def primitives_catalog(self) -> dict:
-        """Get the FAI primitives catalog — all 830+ LEGO blocks."""
+        """Get the FAI primitives catalog — all 860+ LEGO blocks."""
         return {
             "total": 831,
             "categories": {

@@ -25,7 +25,7 @@ tags:
   - solution-plays
   - primitives
   - fai-protocol
-short_description: "Explore 45 MCP tools, 104 solution plays, and 862+ AI primitives interactively"
+short_description: "Explore 45 MCP tools, 104 solution plays, and 860+ AI primitives interactively"
 ---
 ```
 
@@ -87,7 +87,7 @@ Azure cost estimation for any solution play at dev or production scale.
 - Comparison between dev and prod estimates
 
 ### Tab 5: Primitive Browser
-Explore the full catalog of 862+ AI primitives.
+Explore the full catalog of 860+ AI primitives.
 
 **Inputs:**
 - Primitive type selector (agents, instructions, skills, hooks, plugins, workflows, cookbook)
@@ -187,7 +187,7 @@ def compare_models(use_case: str, priority: str) -> str:
 
 with gr.Blocks(title="FrootAI MCP Playground", theme=gr.themes.Soft()) as demo:
     gr.Markdown("# 🧩 FrootAI MCP Playground")
-    gr.Markdown("Explore 45 MCP tools, 104 solution plays, and 862+ AI primitives")
+    gr.Markdown("Explore 45 MCP tools, 104 solution plays, and 860+ AI primitives")
 
     with gr.Tab("Knowledge Search"):
         query = gr.Textbox(label="Search Query", placeholder="e.g., reduce hallucination in RAG")

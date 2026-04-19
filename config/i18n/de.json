@@ -7,7 +7,7 @@
   "common": {
     "brand": "FrootAI",
     "tagline": "Von den Wurzeln zu den Früchten",
-    "description": "Das Open-Source FAI-Protokoll für die Vereinheitlichung von KI-Primitiven — 100 Lösungen, 830+ Primitive, 25 MCP-Tools",
+    "description": "Das Open-Source FAI-Protokoll für die Vereinheitlichung von KI-Primitiven — 100 Lösungen, 860+ Primitive, 25 MCP-Tools",
     "cta_get_started": "Loslegen",
     "cta_install": "Installieren",
     "nav_home": "Startseite",
@@ -26,6 +26,6 @@
   },
   "chatbot": {
     "title": "Frage Agent FAI",
-    "greeting": "Hallo! Ich bin Agent FAI. Ich kenne alle 100 Lösungen und 830+ Primitive. Wie kann ich helfen?"
+    "greeting": "Hallo! Ich bin Agent FAI. Ich kenne alle 100 Lösungen und 860+ Primitive. Wie kann ich helfen?"
   }
 }

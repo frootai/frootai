@@ -680,7 +680,7 @@ function generatePublicPackageJson() {
     name: 'frootai',
     version: '1.0.0',
     private: true,
-    description: 'FrootAI™ — The open-source AI primitive unification platform. FAI Protocol, 830+ primitives, 100 solution plays.',
+    description: 'FrootAI™ — The open-source AI primitive unification platform. FAI Protocol, 860+ primitives, 100 solution plays.',
     license: 'MIT',
     repository: { type: 'git', url: 'https://github.com/frootai/frootai' },
     homepage: 'https://frootai.dev',

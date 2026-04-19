@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: frootai
 Version: 5.1.0
-Summary: FrootAI SDK — 101 solution plays, 830+ primitives, 45 MCP tools. Offline access to knowledge modules, BM25 search, FAI Protocol wiring, scaffold, evaluation, A/B testing, and CLI.
+Summary: FrootAI SDK — 101 solution plays, 860+ primitives, 45 MCP tools. Offline access to knowledge modules, BM25 search, FAI Protocol wiring, scaffold, evaluation, A/B testing, and CLI.
 Author-email: Pavleen Bali <pavleenbali@frootai.dev>
 License: MIT
 Project-URL: Homepage, https://frootai.dev
@@ -110,7 +110,7 @@ frootai wire 01                  # Generate fai-manifest.json
 frootai validate manifest.json   # Validate FAI manifest
 frootai evaluate groundedness=4.5 relevance=3.8  # Run quality check
 frootai waf security             # WAF pillar guidance
-frootai primitives               # Browse 830+ primitives
+frootai primitives               # Browse 860+ primitives
 frootai learning-path rag        # Curated learning path
 ```
 

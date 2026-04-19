@@ -1133,7 +1133,7 @@ AI Landing Zones · GPU Compute · Networking · Security · Identity
 
 ## FAI Ecosystem — By The Numbers
 - **101 Solution Plays** — Pre-tuned Azure AI blueprints (DevKit + TuneKit + SpecKit)
-- **830+ FAI Primitives** — 238 agents, 176 instructions, 322 skills, 10 hooks
+- **860+ FAI Primitives** — 238 agents, 176 instructions, 322 skills, 10 hooks
 - **77 Plugins** — Composable packages (1,008 bundled items) via \`npx frootai install\`
 - **45 MCP Tools** — 6 static + 4 live + 3 chain + 10 ecosystem + 6 engine + 3 scaffold + 13 marketplace
 - **16 Cookbook Recipes** — Step-by-step guides from init to production
@@ -2439,7 +2439,7 @@ ${est.breakdown}
 
   server.tool(
     "list_primitives",
-    "PRIMITIVES CATALOG — Browse all 830+ FrootAI primitives by type: agents (238), instructions (176), skills (322), hooks (10), plugins (77), workflows (13), cookbook (17). Returns name, description, WAF alignment, and compatible plays for each primitive.",
+    "PRIMITIVES CATALOG — Browse all 860+ FrootAI primitives by type: agents (238), instructions (176), skills (322), hooks (10), plugins (77), workflows (13), cookbook (17). Returns name, description, WAF alignment, and compatible plays for each primitive.",
     {
       type: z.enum(["agents", "instructions", "skills", "hooks", "plugins", "workflows", "cookbook"]).describe("Primitive type to list"),
       limit: z.number().optional().default(20).describe("Max results to return (default 20)"),
@@ -2628,7 +2628,7 @@ The open glue that binds infrastructure, platform, and application.
 🏗️ O — Operations: Azure AI Platform, Infrastructure, Copilot
 🍎 T — Transformation: Fine-Tuning, Responsible AI, Production Patterns
 
-18 modules | 200+ AI terms | 45 tools | 100 solution plays | FAI Engine
+16 modules | 200+ AI terms | 45 tools | 104 solution plays | FAI Engine
 Engine: ${faiEngine?.available ? 'connected' : 'not available (npm mode)'}
 https://frootai.dev`,
       }],

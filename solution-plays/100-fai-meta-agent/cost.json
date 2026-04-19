@@ -97,7 +97,7 @@
     {
       "name": "Azure AI Search",
       "category": "AI Services",
-      "purpose": "Play knowledge retrieval — semantic search across 100 play architectures, 830+ primitives, 17 knowledge modules, and 200+ glossary terms; hybrid search (keyword + vector) for precise play matching against user requirements; faceted filtering by complexity, services, industry, WAF pillars; powers the meta-agent's contextual understanding of the entire FAI ecosystem",
+      "purpose": "Play knowledge retrieval — semantic search across 100 play architectures, 860+ primitives, 17 knowledge modules, and 200+ glossary terms; hybrid search (keyword + vector) for precise play matching against user requirements; faceted filtering by complexity, services, industry, WAF pillars; powers the meta-agent's contextual understanding of the entire FAI ecosystem",
       "tiers": {
         "dev": {
           "sku": "Free",

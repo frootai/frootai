@@ -28,7 +28,7 @@ const MCP_TOOLS: McpTool[] = [
   { name: "agent_tune", description: "Tuner agent — production readiness", category: "Agents", readOnly: false },
   { name: "run_evaluation", description: "Check AI quality scores", category: "Evaluation", readOnly: false },
   { name: "validate_config", description: "Validate TuneKit config files", category: "Evaluation", readOnly: true },
-  { name: "list_primitives", description: "Browse 830+ FrootAI primitives", category: "Primitives", readOnly: true },
+  { name: "list_primitives", description: "Browse 860+ FrootAI primitives", category: "Primitives", readOnly: true },
   { name: "embedding_playground", description: "Compare texts for similarity", category: "Tools", readOnly: true },
   { name: "fetch_azure_docs", description: "Fetch latest Azure documentation", category: "Docs", readOnly: true },
   { name: "fetch_external_mcp", description: "Search external MCP servers", category: "Tools", readOnly: true },

@@ -2,9 +2,9 @@ FROM node:22-alpine AS base
 
 # ── Metadata ──────────────────────────────────────────────
 LABEL org.opencontainers.image.source="https://github.com/frootai/frootai"
-LABEL org.opencontainers.image.description="FrootAI FAI Engine MCP Server — 38 tools, 100 plays, 830+ primitives, stdio + HTTP"
+LABEL org.opencontainers.image.description="FrootAI FAI Engine MCP Server — 25 tools, 100 plays, 800+ primitives, stdio + HTTP"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.version="5.0.1"
+LABEL org.opencontainers.image.version="1.0.0"
 LABEL org.opencontainers.image.vendor="FrootAI"
 LABEL org.opencontainers.image.title="frootai-mcp"
 LABEL org.opencontainers.image.url="https://frootai.dev/mcp-tooling"
@@ -50,7 +50,7 @@ USER frootai
 
 # ── Environment ───────────────────────────────────────────
 ENV NODE_ENV=production
-ENV FROOTAI_VERSION=5.0.1
+ENV FROOTAI_VERSION=1.0.0
 
 # ── Health check (HTTP mode) ─────────────────────────────
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

@@ -28,7 +28,7 @@ The open glue that binds infrastructure, platform, and application.
 🏗️ O — Operations: Azure AI Platform, Infrastructure, Copilot
 🍎 T — Transformation: Fine-Tuning, Responsible AI, Production Patterns
 
-18 modules | 200+ AI terms | 45 tools | 100 solution plays | 830+ primitives | FAI Engine
+18 modules | 200+ AI terms | 45 tools | 100 solution plays | 860+ primitives | FAI Engine
 https://frootai.dev`,
     },
     {

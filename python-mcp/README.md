@@ -120,7 +120,7 @@ print(result)
 | **Prompts** | 6 | Guided workflows for architecture, review, scaffold |
 | **Search** | BM25 | 358 docs × 8,627 terms, Robertson IDF |
 | **Plays** | 100 | Solution architectures from starter to enterprise |
-| **Primitives** | 830+ | Agents, instructions, skills, hooks, plugins |
+| **Primitives** | 860+ | Agents, instructions, skills, hooks, plugins |
 
 ### MCP Tools (45)
 
@@ -165,7 +165,7 @@ print(result)
 - `evaluate_quality` — run quality evaluation (groundedness, relevance, etc.)
 
 **Marketplace (4)** — primitive discovery
-- `list_marketplace` — browse 830+ primitives by type
+- `list_marketplace` — browse 860+ primitives by type
 - `get_primitive_detail` — get detail for a specific primitive
 - `search_marketplace` — keyword search across all primitives
 - `embedding_playground` — text similarity comparison (educational)

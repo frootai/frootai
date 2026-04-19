@@ -138,7 +138,7 @@ export default function Sidebar() {
       {/* Primitives Tab */}
       {tab === "primitives" && (
         <div className="tab-content">
-          <div className="section-header">830+ FAI Primitives</div>
+          <div className="section-header">860+ FAI Primitives</div>
           <div className="primitives-grid">
             {PRIMITIVES.map(p => (
               <div key={p.type} className="primitive-card" onClick={() => cmd("frootai.browsePrimitives")}>

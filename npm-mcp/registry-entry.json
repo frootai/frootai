@@ -3,7 +3,7 @@
   "name": "frootai-mcp",
   "displayName": "FrootAI — FAI Engine Runtime Interface",
   "version": "5.0.1",
-  "description": "45 tools, 18 modules, 100 solution plays, 830+ primitives. The open glue for the GenAI ecosystem — FAI Engine, Build→Review→Tune, scaffolding, marketplace.",
+  "description": "45 tools, 18 modules, 100 solution plays, 860+ primitives. The open glue for the GenAI ecosystem — FAI Engine, Build→Review→Tune, scaffolding, marketplace.",
   "longDescription": "FrootAI MCP Server is the FAI Engine's network interface. It wires AI primitives (agents, skills, instructions, hooks) into solution plays using the FAI Protocol. 45 tools across 7 categories: Knowledge, Live, Agent Chain, Ecosystem, Engine, Scaffold, and Marketplace. Includes Streamable HTTP transport, OTel telemetry, resource templates, 4 MCP prompts, and A2A agent card.",
   "author": {
     "name": "FrootAI Contributors",

@@ -1,7 +1,7 @@
 """FrootAI MCP Server — Python Implementation.
 
 AI architecture knowledge engine powered by FastMCP.
-45 tools, 4 resources, 6 prompts, BM25 search, 100 solution plays, 830+ primitives.
+45 tools, 4 resources, 6 prompts, BM25 search, 100 solution plays, 860+ primitives.
 
 Usage:
     pip install frootai-mcp

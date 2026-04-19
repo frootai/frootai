@@ -215,7 +215,7 @@ LangChain Hub artifacts are versioned in sync with FrootAI releases:
 
 | FrootAI Version | Hub Version | Changes |
 |----------------|-------------|---------|
-| 5.2.0 | 5.2.0 | 45 tools, 104 plays, 862+ primitives |
+| 5.2.0 | 5.2.0 | 45 tools, 104 plays, 860+ primitives |
 
 Artifacts are auto-published via the FrootAI CI/CD pipeline (`npm run release` triggers Hub push).
 

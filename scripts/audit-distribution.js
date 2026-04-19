@@ -35,7 +35,7 @@ const stalePatterns = [
 ];
 
 const currentPatterns = [
-    [/\b830\+/g, "830+", false],
+    [/\b830\+/g, "860+", false],
     [/\b25 tools\b/g, "25 tools", false],
     [/\b25 MCP\b/g, "25 MCP", false],
     [/\b238 agents?\b/g, "238 agents", false],

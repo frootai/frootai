@@ -2010,7 +2010,7 @@
   {
     "id": "fai-play-lifecycle",
     "name": "FAI Play Lifecycle",
-    "description": "FAI play lifecycle manager — handles play initialization (scaffold file structure), Bicep deployment, evaluation quality gates, and config tuning for any of the 101 solution plays.",
+    "description": "FAI play lifecycle manager — handles play initialization (scaffold file structure), Bicep deployment, evaluation quality gates, and config tuning for any of the 100 solution plays.",
     "waf": [
       "operational-excellence",
       "reliability",

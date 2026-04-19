@@ -2,7 +2,7 @@
 
 > **FrootAI™ CLI & SDK** — AI Primitive Unification Ecosystem
 
-The official CLI & SDK for [FrootAI](https://frootai.dev) — 100 solution plays, 830+ AI primitives, and the FAI Protocol.
+The official CLI & SDK for [FrootAI](https://frootai.dev) — 100 solution plays, 860+ AI primitives, and the FAI Protocol.
 
 ## Installation
 
@@ -23,7 +23,7 @@ frootai info 01                           # Play details, cost estimate, archite
 frootai list                              # Browse all 100 solution plays
 frootai search "RAG architecture"         # BM25 ranked knowledge search
 frootai cost 01 --scale prod              # Detailed cost breakdown
-frootai primitives                        # Browse 830+ AI primitives catalog
+frootai primitives                        # Browse 860+ AI primitives catalog
 
 # Build
 frootai init                              # Interactive project scaffolding

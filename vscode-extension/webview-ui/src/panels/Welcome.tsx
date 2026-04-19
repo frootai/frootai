@@ -39,7 +39,7 @@ export default function Welcome() {
           The open glue for GenAI ecosystem · The tooling layer for AI primitives
         </p>
         <p style={{ fontSize: 13, marginTop: 10, color: "#c4c4d4", lineHeight: 1.5 }}>
-          45 MCP tools · 101 solution plays · 830+ primitives · FAI Protocol
+          45 MCP tools · 101 solution plays · 860+ primitives · FAI Protocol
         </p>
         <p style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>v{VERSION}</p>
       </div>

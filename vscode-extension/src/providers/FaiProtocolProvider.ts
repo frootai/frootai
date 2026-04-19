@@ -111,7 +111,7 @@ const LAYERS: ProtocolLayer[] = [
     children: [
       {
         label: "Harvester",
-        desc: "Scans 862+ primitives across 9 directories in ~250ms",
+        desc: "Scans 860+ primitives across 9 directories in ~250ms",
         icon: "search",
       },
       {

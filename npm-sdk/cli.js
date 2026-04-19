@@ -9,7 +9,7 @@
  *   deploy              Deploy infra/main.bicep to Azure (guided wizard)
  *   info <play>         Show play details, cost, and architecture
  *   list [keyword]      List available plugins
- *   primitives [type]   Browse 830+ FAI primitives catalog
+ *   primitives [type]   Browse 860+ FAI primitives catalog
  *   protocol            View FAI Protocol overview
  *   search <query>      Search FrootAI knowledge base
  *   cost <play>         Estimate costs for a solution play
@@ -1791,7 +1791,7 @@ function cmdHelp() {
 }
 
 // ═══════════════════════════════════════════════════
-// PRIMITIVES — Browse the 830+ LEGO blocks catalog
+// PRIMITIVES — Browse the 860+ LEGO blocks catalog
 // ═══════════════════════════════════════════════════
 function cmdPrimitivesCatalog(filter) {
   banner();

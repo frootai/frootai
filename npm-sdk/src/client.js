@@ -2,7 +2,7 @@
  * FrootAI Client — Main SDK entry point
  *
  * Offline-first: queries bundled knowledge base (16 modules, 5 FROOT layers).
- * 100 solution plays, 830+ FAI primitives, 77 plugins, 45 MCP tools.
+ * 100 solution plays, 860+ FAI primitives, 77 plugins, 45 MCP tools.
  *
  * Usage:
  *   import { FrootAI } from 'frootai';

@@ -1,8 +1,8 @@
 {
   "$schema": "https://cdn.jsdelivr.net/npm/@anthropic-ai/mcp-server-schema@latest/dist/schema.json",
   "name": "frootai",
-  "version": "5.0.1",
-  "description": "FrootAI MCP Server — The open glue for the GenAI ecosystem. 45 tools, 18 modules, 100 solution plays, 830+ primitives.",
+  "version": "5.2.0",
+  "description": "FrootAI MCP Server — The open glue for the GenAI ecosystem. 45 tools, 16 modules, 104 solution plays, 860+ primitives.",
   "publisher": {
     "name": "FrootAI Contributors",
     "url": "https://frootai.dev"

@@ -6,7 +6,7 @@
 <p align="center"><sub>MCP Server (npm)</sub></p>
 <p align="center"><strong>From the Roots to the Fruits. It's simply Frootful.</strong></p>
 <p align="center"><em>An open ecosystem where Infra, Platform, and App teams build AI — Frootfully.</em></p>
-<p align="center"><em>An open glue for the GenAI ecosystem, enabling deterministic and reliable AI solutions.</em></p>
+<p align="center"><em>The open glue for the GenAI ecosystem — 45 MCP tools · 104 solution plays · 860+ AI primitives via the FAI Protocol.</em></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=flat-square&logo=npm" alt="npm"></a>
@@ -165,7 +165,7 @@ pip install frootai-mcp                      # Python
 - `inspect_wiring`  audit a play's wiring — primitives, context, health score
 - `validate_manifest`  validate `fai-manifest.json` schema + completeness
 - `get_play_detail`  full play spec — services, config, WAF alignment, evaluation
-- `list_primitives`  browse 830+ primitives by type (agents, skills, hooks…)
+- `list_primitives`  browse 860+ primitives by type (agents, skills, hooks…)
 - `evaluate_quality`  run quality evaluation with configurable pass/fail thresholds
 
 **Scaffold & Create** — generate production-ready plays and primitives
@@ -525,7 +525,7 @@ Chat with Agent FAI  grounded in FrootAI knowledge: [frootai.dev/chatbot](https:
 - **FROOT Knowledge Modules** — 16 modules across Foundations, Reasoning, Orchestration, Operations, Transformation
 - **AI Glossary** — 200+ AI/ML term definitions
 - **100 Solution Plays** — pre-tuned deployable solutions with .github Agentic OS
-- **830+ Primitives** — agents, instructions, skills, hooks, plugins, workflows
+- **860+ Primitives** — agents, instructions, skills, hooks, plugins, workflows
 - **FAI Engine** — FAI Protocol runtime: wire, inspect, validate, evaluate
 - **FAI Marketplace** — 77+ plugins searchable and installable via MCP
 - **Architecture Decision Guides** — RAG, agents, hosting, model selection, cost optimization, determinism

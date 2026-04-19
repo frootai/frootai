@@ -7,7 +7,7 @@ const https = require("https");
 // ════════════════════════════════════════════════════════════════════
 // FrootAI VS Code Extension v1.0 — Standalone Engine
 // From the Roots to the Fruits. The Open Glue for GenAI.
-// 45 MCP tools · 18 modules · 200+ terms · 100 solution plays
+// 25 MCP tools · 18 modules · 200+ terms · 100 solution plays
 // Works from ANY workspace — no clone needed.
 // ════════════════════════════════════════════════════════════════════
 
@@ -222,7 +222,7 @@ const MCP_TOOLS = [
   },
   {
     name: "get_froot_overview", desc: "Complete FROOT summary", type: "static",
-    docs: "Returns the complete FrootAI platform overview: mission, 6 layers, 101 solution plays list, DevKit/TuneKit model, and getting started guide.\n\n**Input:** none\n**Output:** Platform overview markdown"
+    docs: "Returns the complete FrootAI platform overview: mission, 6 layers, 100 solution plays list, DevKit/TuneKit model, and getting started guide.\n\n**Input:** none\n**Output:** Platform overview markdown"
   },
   {
     name: "fetch_azure_docs", desc: "⛅ Live — Search Azure docs", type: "live",
@@ -234,7 +234,7 @@ const MCP_TOOLS = [
   },
   {
     name: "list_community_plays", desc: "⛅ Live — List plays from GitHub", type: "live",
-    docs: "Fetches the list of solution plays from the FrootAI GitHub repository. Returns play names, statuses, and file counts. Useful for discovering what's available.\n\n**Input:** none\n**Output:** Array of 101 solution plays with metadata"
+    docs: "Fetches the list of solution plays from the FrootAI GitHub repository. Returns play names, statuses, and file counts. Useful for discovering what's available.\n\n**Input:** none\n**Output:** Array of 100 solution plays with metadata"
   },
   {
     name: "get_github_agentic_os", desc: "⛅ Live — .github OS guide", type: "live",
@@ -268,7 +268,7 @@ const MCP_TOOLS = [
   // ── Compute Tools (6) ──
   {
     name: "semantic_search_plays", desc: "🧮 Compute — Semantic search across 20 plays", type: "compute",
-    docs: "Performs keyword + semantic search across all 101 solution plays. Matches against play names, descriptions, services used, and architecture patterns. Returns ranked results with relevance scores.\n\n**Input:** `query` (string) — what to search for\n**Output:** Ranked matches with play ID, name, relevance, and excerpts\n**Example:** `semantic_search_plays({query: 'voice AI'})` → Play 04 (Call Center Voice AI) ranked first"
+    docs: "Performs keyword + semantic search across all 100 solution plays. Matches against play names, descriptions, services used, and architecture patterns. Returns ranked results with relevance scores.\n\n**Input:** `query` (string) — what to search for\n**Output:** Ranked matches with play ID, name, relevance, and excerpts\n**Example:** `semantic_search_plays({query: 'voice AI'})` → Play 04 (Call Center Voice AI) ranked first"
   },
   {
     name: "estimate_cost", desc: "🧮 Compute — Estimate monthly Azure cost", type: "compute",
@@ -837,7 +837,7 @@ class DevHubProvider {
       { label: "Admin Guide", desc: "Install, configure, maintain", icon: "wrench", color: "charts.yellow", url: "https://frootai.dev/docs/admin-guide" },
       { label: "User Guide", desc: "End-to-end usage walkthrough", icon: "book", color: "charts.green", url: "https://frootai.dev/docs/user-guide-complete" },
       { label: "Contribution Guide", desc: "Add primitives, plugins, plays", icon: "git-pull-request", color: "charts.blue", url: "https://frootai.dev/contribute" },
-      { label: "API Reference", desc: "45 MCP tools, 16 commands", icon: "radio-tower", color: "charts.purple", url: "https://frootai.dev/docs/api-reference" },
+      { label: "API Reference", desc: "25 MCP tools, 16 commands", icon: "radio-tower", color: "charts.purple", url: "https://frootai.dev/docs/api-reference" },
       { label: "Changelog", desc: "Version history & releases", icon: "list-ordered", color: "charts.purple", url: "https://frootai.dev/dev-hub-changelog" },
       { label: "Architecture", desc: "System design & data flow", icon: "circuit-board", color: "charts.orange", url: "https://frootai.dev/docs/architecture-overview" },
       { label: "GitHub Repository", desc: "Source code — star ⭐ us!", icon: "github", color: "charts.green", url: "https://github.com/frootai/frootai" },
@@ -1221,7 +1221,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
         <pre>npx frootai scaffold 01 my-rag-project</pre></div>
 
         <div class="step"><h3>Step 6: FAI Primitives Catalog</h3>
-        <p>Browse and install 830+ reusable AI building blocks — agents, instructions, skills, hooks, and plugins. Each primitive is a standalone LEGO block that auto-wires when placed inside a solution play via the FAI Protocol.</p></div>
+        <p>Browse and install 860+ reusable AI building blocks — agents, instructions, skills, hooks, and plugins. Each primitive is a standalone LEGO block that auto-wires when placed inside a solution play via the FAI Protocol.</p></div>
 
         <h2>📋 Sidebar Overview</h2>
         <table>
@@ -1230,7 +1230,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
           <tr><td>📦 FAI Solution Plays</td><td>Solution Configurator, Browse 101 plays, Scaffold projects</td></tr>
           <tr><td>🧩 FAI Primitives Catalog</td><td>Browse & install agents, instructions, skills, hooks, plugins</td></tr>
           <tr><td>⚙️ FAI Protocol & Layer</td><td>FAI Protocol, Engine, Factory, Marketplace architecture</td></tr>
-          <tr><td>🔧 FAI MCP Tools</td><td>45 MCP tools — knowledge, live, chain, ecosystem, engine</td></tr>
+          <tr><td>🔧 FAI MCP Tools</td><td>25 MCP tools — knowledge, live, chain, ecosystem, engine</td></tr>
         </table>
 
         <h2>🧩 Primitives at a Glance</h2>
@@ -2408,7 +2408,7 @@ docker run -i ghcr.io/frootai/frootai-mcp  # Docker</pre>
 
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBar.text = "$(tree-view-icon) FrootAI";
-  statusBar.tooltip = `FrootAI — AI Architecture Knowledge Engine\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 45 MCP tools` : "Knowledge loading..."}`;
+  statusBar.tooltip = `FrootAI — AI Architecture Knowledge Engine\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 25 MCP tools` : "Knowledge loading..."}`;
   statusBar.command = "frootai.browseSolutionPlays";
   statusBar.show();
   context.subscriptions.push(statusBar);

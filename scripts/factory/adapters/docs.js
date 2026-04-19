@@ -16,7 +16,7 @@
  *   ├── learning/                 ← 18 FROOT modules (F1-T3)
  *   ├── guides/                   ← How-to guides (tutorials, migration, enterprise)
  *   ├── solution-plays/           ← 100 play reference pages
- *   ├── primitives/               ← 830+ primitive catalog pages
+ *   ├── primitives/               ← 860+ primitive catalog pages
  *   ├── api-reference/            ← MCP tools, CLI, schemas, Python SDK
  *   ├── specialties/              ← 12 FAI Specialties documentation
  *   ├── changelog/                ← Unified changelog
@@ -895,7 +895,7 @@ function generatePrimitiveCatalogs() {
 
   const primIndex = addFrontmatter(`# Primitives Catalog
 
-Browse all 830+ FAI primitives — the building blocks of AI applications.
+Browse all 860+ FAI primitives — the building blocks of AI applications.
 
 ## Categories
 
@@ -908,7 +908,7 @@ Browse all 830+ FAI primitives — the building blocks of AI applications.
 | [**Hooks**](/primitives/hooks) | 10 | Lifecycle handlers |
 | [**Workflows**](/primitives/workflows) | 12 | Multi-step processes |
 `,
-    { title: 'Primitives', description: '830+ reusable AI building blocks', icon: '🧩', order: 6 }
+    { title: 'Primitives', description: '860+ reusable AI building blocks', icon: '🧩', order: 6 }
   );
   writeDoc(path.join(primDir, 'index.mdx'), primIndex);
   recordPage('primitives', 'index.mdx', wordCount(primIndex), primIndex.length);

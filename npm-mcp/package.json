@@ -1,7 +1,7 @@
 {
   "name": "frootai-mcp",
   "version": "5.2.0",
-  "description": "FrootAI™ MCP Server — The open glue for the GenAI ecosystem. 45 MCP tools, 104 solution plays, 862+ primitives. HTTP/stdio transport, Node.js 18+. For CLI commands use the `frootai` package.",
+  "description": "FrootAI™ MCP Server — The open glue for the GenAI ecosystem. 45 MCP tools, 104 solution plays, 860+ primitives. HTTP/stdio transport, Node.js 18+. For CLI commands use the `frootai` package.",
   "main": "index.js",
   "types": "dist/server.d.ts",
   "exports": {

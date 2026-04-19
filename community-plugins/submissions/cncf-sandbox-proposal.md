@@ -87,7 +87,7 @@ The FAI Protocol fills the composition gap — declaring which primitives a syst
 | GitHub stars | Growing (public since 2025) |
 | npm weekly downloads (frootai-mcp) | Active |
 | Solution plays | 100 production-ready architectures |
-| Primitives cataloged | 830+ (agents, instructions, skills, hooks, plugins) |
+| Primitives cataloged | 860+ (agents, instructions, skills, hooks, plugins) |
 | Distribution channels | 6 (npm, PyPI, VS Code, Docker, GitHub Actions, CLI) |
 | Framework adapters | 2 (Semantic Kernel, LangChain) |
 | Infrastructure support | 3 (Bicep, Terraform, Pulumi schema) |

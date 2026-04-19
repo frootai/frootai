@@ -1,6 +1,6 @@
 # FrootAI MCP Server
 
-> The open glue for the GenAI ecosystem. 45 MCP tools, 18 knowledge modules, 100 solution plays, 830+ AI primitives.
+> The open glue for the GenAI ecosystem. 45 MCP tools, 18 knowledge modules, 100 solution plays, 860+ AI primitives.
 
 ## Install
 

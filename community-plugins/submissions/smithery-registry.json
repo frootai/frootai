@@ -2,7 +2,7 @@
   "$schema": "https://smithery.ai/schemas/registry-entry.json",
   "name": "frootai-mcp",
   "displayName": "FrootAI MCP Server",
-  "description": "The open glue for the GenAI ecosystem — 45 MCP tools spanning architecture guidance, solution plays, primitive management, model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires 862+ primitives (238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins) across 104 solution plays via the FAI Protocol.",
+  "description": "The open glue for the GenAI ecosystem — 45 MCP tools spanning architecture guidance, solution plays, primitive management, model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires 860+ primitives (238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins) across 104 solution plays via the FAI Protocol.",
   "version": "5.2.0",
   "author": {
     "name": "FrootAI",
@@ -61,7 +61,7 @@
     { "name": "get_architecture_pattern", "description": "Architecture guidance for 7 scenarios" },
     { "name": "get_froot_overview", "description": "Complete FROOT framework overview (5 layers, 24 modules)" },
     { "name": "list_modules", "description": "All 24 modules organized by FROOT layer" },
-    { "name": "list_primitives", "description": "Browse 862+ primitives by type with WAF alignment" },
+    { "name": "list_primitives", "description": "Browse 860+ primitives by type with WAF alignment" },
     { "name": "embedding_playground", "description": "Semantic similarity comparison tool" },
     { "name": "generate_architecture_diagram", "description": "Mermaid.js diagram for any play" },
     { "name": "fetch_azure_docs", "description": "Latest Azure documentation retrieval" },

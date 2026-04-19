@@ -119,7 +119,7 @@ COST_DATA = {
 # ─── Server Instance ───
 mcp = FastMCP(
     "frootai",
-    instructions="FrootAI — AI architecture knowledge engine. 45 tools across 8 categories: Knowledge (6), Plays (5), Agent Chain (3), Azure/Live (4), Ecosystem (5), FAI Engine (5), Marketplace (4), Scaffold (5). Plus extra tools (8), 4 resources, and 6 prompts. 100 solution plays, 830+ primitives, BM25 search, FAI Protocol.",
+    instructions="FrootAI — AI architecture knowledge engine. 45 tools across 8 categories: Knowledge (6), Plays (5), Agent Chain (3), Azure/Live (4), Ecosystem (5), FAI Engine (5), Marketplace (4), Scaffold (5). Plus extra tools (8), 4 resources, and 6 prompts. 100 solution plays, 860+ primitives, BM25 search, FAI Protocol.",
 )
 
 # ─── Data Loading ───
@@ -306,7 +306,7 @@ async def get_froot_overview() -> str:
         "version": "5.1.0",
         "tagline": "From the Roots to the Fruits. It's simply Frootful.",
         "framework": "FROOT = Foundations · Reasoning · Orchestration · Operations · Transformation",
-        "stats": {"tools": 45, "modules": len(modules), "plays": 100, "terms": len(_build_glossary()), "primitives": "830+"},
+        "stats": {"tools": 45, "modules": len(modules), "plays": 100, "terms": len(_build_glossary()), "primitives": "860+"},
         "channels": ["npm", "pip", "VS Code", "Docker", "CLI"],
         "website": "https://frootai.dev",
     }, indent=2)
@@ -1083,7 +1083,7 @@ async def get_version_info() -> str:
             "prompts": 6,
             "search": "BM25 (Robertson IDF, k1=1.5, b=0.75)",
             "plays": 100,
-            "primitives": "830+",
+            "primitives": "860+",
             "modules": len(_get_modules()),
         },
         "channels": ["pip install frootai-mcp", "npx frootai-mcp", "Docker", "VS Code Extension"],
@@ -1135,7 +1135,7 @@ async def overview_resource() -> str:
         "version": "5.1.0",
         "tagline": "From the Roots to the Fruits. It's simply Frootful.",
         "framework": "FROOT = Foundations · Reasoning · Orchestration · Operations · Transformation",
-        "stats": {"tools": 45, "modules": len(_get_modules()), "plays": 100, "primitives": "830+"},
+        "stats": {"tools": 45, "modules": len(_get_modules()), "plays": 100, "primitives": "860+"},
         "website": "https://frootai.dev",
     })
 

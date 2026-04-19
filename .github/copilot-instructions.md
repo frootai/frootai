@@ -34,7 +34,7 @@ The implementation plan `.internal/improvisation/implementation-plan.md` has **2
 - All primitive display names use "FAI" prefix (not "FrootAI")
 - VS Code install uses `vscode://github.copilot-chat/createAgent` protocol
 - **Content Scaling Sprint:** Skills ✅ (159 avg), Hooks ✅ (449 avg), Plugins ✅ (124 avg), Workflows ✅ (306 avg), Cookbook ✅ (344 avg). Agents 10/238 done, Instructions 10/176 done
-- **Distribution:** VS Code v2.0.0, MCP v3.5.0, Python SDK v4.0.0, Python MCP v3.5.0, Docker v3.5.0 — all synced with 100 plays + 830+ primitives + FAI Protocol
+- **Distribution:** VS Code v2.0.0, MCP v3.5.0, Python SDK v4.0.0, Python MCP v3.5.0, Docker v3.5.0 — all synced with 100 plays + 860+ primitives + FAI Protocol
 
 ## Agent Workflow
 When implementing features, follow the builder → reviewer → tuner chain:

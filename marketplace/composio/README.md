@@ -69,7 +69,7 @@ FrootAI MCP tools map to Composio actions with the following structure:
 
 | Composio Action | MCP Tool | Input Schema | Output |
 |----------------|----------|--------------|--------|
-| `FROOTAI_LIST_PRIMITIVES` | `list_primitives` | `{ type: enum, limit?: number }` | Browse 862+ primitives by type |
+| `FROOTAI_LIST_PRIMITIVES` | `list_primitives` | `{ type: enum, limit?: number }` | Browse 860+ primitives by type |
 | `FROOTAI_SEARCH_AGENTS` | `search_agents` | `{ query: string }` | Search 238 agents |
 | `FROOTAI_GET_PRIMITIVE_DETAIL` | `get_primitive_detail` | `{ name: string, type: string }` | Deep-dive into any primitive |
 | `FROOTAI_GET_SKILL_DETAIL` | `get_skill_detail` | `{ name: string }` | Full skill content with examples |
@@ -125,7 +125,7 @@ toolset.register_local_tool(
     name="frootai",
     command="npx frootai-mcp@5.2.0",
     transport="stdio",
-    description="AI architecture guidance, 104 solution plays, 862+ primitives"
+    description="AI architecture guidance, 104 solution plays, 860+ primitives"
 )
 ```
 
@@ -203,7 +203,7 @@ assistant = client.beta.assistants.create(
 {
   "name": "frootai",
   "displayName": "FrootAI",
-  "description": "AI architecture guidance with 45 tools, 104 solution plays, and 862+ primitives via the FAI Protocol",
+  "description": "AI architecture guidance with 45 tools, 104 solution plays, and 860+ primitives via the FAI Protocol",
   "version": "5.2.0",
   "logo": "https://frootai.dev/logo.png",
   "categories": ["developer-tools", "ai-architecture"],

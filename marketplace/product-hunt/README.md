@@ -17,7 +17,7 @@ The open glue that wires AI primitives into systems
 ## Short Description (260 chars)
 
 ```
-FrootAI is the missing binding layer for AI development. While MCP handles tool calling and A2A handles delegation, FrootAI handles wiring — 862+ primitives across 104 solution plays via the FAI Protocol. 45 MCP tools. Bicep + Terraform IaC. Open source.
+FrootAI is the missing binding layer for AI development. While MCP handles tool calling and A2A handles delegation, FrootAI handles wiring — 860+ primitives across 104 solution plays via the FAI Protocol. 45 MCP tools. Bicep + Terraform IaC. Open source.
 ```
 
 ## Detailed Description
@@ -36,7 +36,7 @@ FrootAI introduces the **FAI Protocol** — a declarative standard (`fai-manifes
 
 📦 **104 Solution Plays** — Production-ready AI architectures covering Enterprise RAG, Multi-Agent Systems, Voice AI, Document Intelligence, Agentic RAG, Edge AI, Browser Agents, AI Landing Zones, and 96 more. Each play ships with agents, IaC (Bicep + Terraform), evaluation pipelines, and quality guardrails.
 
-🧩 **862+ Reusable Primitives** — 238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins, 12 workflows, and 16 cookbook recipes. All cataloged with Well-Architected Framework alignment across 6 pillars.
+🧩 **860+ Reusable Primitives** — 238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins, 12 workflows, and 16 cookbook recipes. All cataloged with Well-Architected Framework alignment across 6 pillars.
 
 🔌 **FAI Protocol v2.0** — 10 moonshot contract types (Context, Guardrail, Routing, Handoff, Evaluation, Cost, Security, Observability, Deployment, Lifecycle) for declarative agent orchestration across platforms.
 
@@ -65,7 +65,7 @@ npx frootai-mcp@5.2.0
 
 1. **🔧 45 MCP Tools** — Architecture guidance, cost estimation, model comparison, evaluation, and primitive orchestration via any MCP client
 2. **📦 104 Solution Plays** — Production-ready AI architectures with agents, IaC, eval pipelines, and guardrails for every scenario
-3. **🧩 862+ AI Primitives** — Agents, skills, instructions, hooks, plugins, workflows, and cookbook recipes — all WAF-aligned and cross-framework
+3. **🧩 860+ AI Primitives** — Agents, skills, instructions, hooks, plugins, workflows, and cookbook recipes — all WAF-aligned and cross-framework
 4. **🔌 FAI Protocol** — The Dockerfile for AI systems — declarative context-wiring with 10 moonshot contract types
 5. **🌐 6 Distribution Channels** — npm, PyPI, VS Code, Docker, GitHub Actions, CLI — use FrootAI wherever you build
 
@@ -77,7 +77,7 @@ npx frootai-mcp@5.2.0
 >
 > **The problem we solve:** Building production AI systems requires assembling agents, skills, and tools from different frameworks. There's no standard for wiring these primitives together. MCP handles tool calling. A2A handles delegation. AG-UI handles rendering. But nothing handles the *wiring* — how primitives share context, enforce quality gates, and deploy as a system.
 >
-> **What we built:** The FAI Protocol — a declarative standard (`fai-manifest.json`) that context-wires AI primitives into deployable architectures. One manifest file declares your agents, skills, guardrails, IaC, and evaluation pipelines. We ship 862+ reusable primitives across 104 production-ready solution plays.
+> **What we built:** The FAI Protocol — a declarative standard (`fai-manifest.json`) that context-wires AI primitives into deployable architectures. One manifest file declares your agents, skills, guardrails, IaC, and evaluation pipelines. We ship 860+ reusable primitives across 104 production-ready solution plays.
 >
 > **What makes us different:**
 > - Primitives work standalone but auto-wire when used inside solution plays

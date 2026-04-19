@@ -8,7 +8,7 @@ Add this entry under the appropriate section (Frameworks / Platforms / Open Sour
 
 > Open-source AI primitive unification platform — the missing glue layer for AI agent ecosystems. Context-wires agents, instructions, skills, hooks, and plugins into deployable AI systems via the FAI Protocol.
 
-- **862+ Primitives**: 238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins, 12 workflows, 16 cookbook recipes
+- **860+ Primitives**: 238 agents, 176 instructions, 333 skills, 10 hooks, 77 plugins, 12 workflows, 16 cookbook recipes
 - **104 Solution Plays**: Production-ready architectures (Enterprise RAG, Agentic RAG, Multi-Agent, Voice AI, Document Intelligence, Edge AI, Browser Agents, and 97 more)
 - **FAI Protocol v2.0**: Declarative standard for wiring AI primitives with 10 moonshot contract types — the Dockerfile equivalent for AI systems
 - **Framework Adapters**: Semantic Kernel, LangChain native adapters for cross-framework portability
@@ -23,7 +23,7 @@ Add this entry under the appropriate section (Frameworks / Platforms / Open Sour
 
 ## PR Template
 
-**Title**: Add FrootAI — AI primitive unification platform (862+ primitives, 104 plays, 45 MCP tools)
+**Title**: Add FrootAI — AI primitive unification platform (860+ primitives, 104 plays, 45 MCP tools)
 
 **Body**:
 
@@ -32,7 +32,7 @@ This PR adds [FrootAI](https://frootai.dev) — an open-source platform for unif
 **Key differentiators:**
 - **FAI Protocol v2.0** (`fai-manifest.json`) — declarative context-wiring standard with 10 moonshot contract types. While MCP handles tool calling and A2A handles delegation, FAI handles how primitives share context, enforce quality gates, and wire into deployable systems.
 - **104 solution plays** — each is a self-contained, deployable AI architecture with agents, infrastructure (Bicep + Terraform), evaluation pipelines, and quality guardrails.
-- **862+ reusable primitives** cataloged with WAF (Well-Architected Framework) alignment across 6 pillars.
+- **860+ reusable primitives** cataloged with WAF (Well-Architected Framework) alignment across 6 pillars.
 - **45 MCP tools** (v5.2.0) — architecture guidance, play discovery, model comparison, cost estimation, evaluation, and primitive management via stdio and Streamable HTTP transports.
 - **Cross-framework**: native adapters for Semantic Kernel and LangChain.
 - **6 distribution channels**: npm, PyPI, VS Code Marketplace, Docker, GitHub Actions, CLI.

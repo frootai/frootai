@@ -3,7 +3,7 @@
   "name": "FrootAI",
   "displayName": "FrootAI — AI Primitive Unification Platform",
   "publisher": "pavleenbali",
-  "description": "The open glue for the GenAI ecosystem — context-wires 862+ AI primitives across 104 solution plays via the FAI Protocol. 45 MCP tools for architecture guidance, model comparison, cost estimation, evaluation, and primitive orchestration. Includes Bicep + Terraform IaC, Semantic Kernel and LangChain adapters, and 6 distribution channels.",
+  "description": "The open glue for the GenAI ecosystem — context-wires 860+ AI primitives across 104 solution plays via the FAI Protocol. 45 MCP tools for architecture guidance, model comparison, cost estimation, evaluation, and primitive orchestration. Includes Bicep + Terraform IaC, Semantic Kernel and LangChain adapters, and 6 distribution channels.",
   "categories": [
     "AI + Machine Learning",
     "Developer Tools",

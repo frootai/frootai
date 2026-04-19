@@ -31,7 +31,7 @@ const DEFAULT_TOOLS: McpTool[] = [
   { name: "evaluate_quality", description: "Run quality evaluation (5 metrics)", category: "Evaluation", readOnly: true },
   { name: "scaffold_play", description: "Scaffold project with DevKit structure", category: "Tools", readOnly: false },
   { name: "smart_scaffold", description: "AI-powered play recommendation + scaffold", category: "Tools", readOnly: false },
-  { name: "list_marketplace", description: "Browse 830+ FAI primitives by type", category: "Primitives", readOnly: true },
+  { name: "list_marketplace", description: "Browse 860+ FAI primitives by type", category: "Primitives", readOnly: true },
   { name: "search_marketplace", description: "Search across all primitives", category: "Primitives", readOnly: true },
   { name: "get_waf_guidance", description: "WAF pillar guidance (6 pillars)", category: "Architecture", readOnly: true },
   { name: "get_learning_path", description: "Curated learning paths by topic", category: "Docs", readOnly: true },

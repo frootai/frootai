@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <strong>101 Solution Plays</strong> · <strong>830+ Primitives</strong> · <strong>25 MCP Tools</strong> · <strong>16 Knowledge Modules</strong> · <strong>200+ Glossary Terms</strong>
+  <strong>100 solution plays</strong> · <strong>800+ primitives</strong> · <strong>25 MCP tools</strong> · <strong>16 Knowledge Modules</strong> · <strong>200+ Glossary Terms</strong>
 </p>
 
 ---
@@ -30,7 +30,7 @@ The extension adds a **FrootAI** icon to your activity bar with **7 sidebar sect
 |---------|-------------|
 | **Hi FAI** | Welcome hub, Agent FAI chat, Setup Guide, Global Search (`Ctrl+Shift+F9`) |
 | **FAI Solution Plays** | Configurator wizard, browse 101 plays, scaffold projects, recently used |
-| **FAI Primitives Catalog** | 238 agents · 176 instructions · 322 skills · 10 hooks · 77 plugins |
+| **FAI Primitives Catalog** | 200 agents · 150 instructions · 300 skills · 10 hooks · 70 plugins |
 | **FAI Learning Hub** | FAI Ecosystem explorer, 16 FROOT modules, AI Glossary, Learning Center, Quizzes |
 | **FAI Packages** | MCP server setup, npm/PyPI/Docker distribution, CLI tools |
 | **FAI Dev Hub** | Admin guide, user guide, API reference, changelog, architecture docs |
@@ -68,7 +68,7 @@ The **Solution Configurator** walks you through 5 questions to recommend the bes
   <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/solutionplay_FAI.png" width="680" alt="Solution Play browser">
 </p>
 
-**Browse All Plays** gives you a searchable, filterable catalog of all 101 solution plays. Click any play for a rich detail panel with WAF checklist, Azure services grid, tuning parameters, and cost breakdown.
+**Browse All Plays** gives you a searchable, filterable catalog of all 100 solution plays. Click any play for a rich detail panel with WAF checklist, Azure services grid, tuning parameters, and cost breakdown.
 
 Each play ships as a **4-kit structure**:
 
@@ -91,7 +91,7 @@ solution-play/
   <img src="https://raw.githubusercontent.com/frootai/frootai/main/vscode-extension/media/catalog_FAI.png" width="680" alt="Primitives Catalog">
 </p>
 
-Browse **830+ reusable AI primitives** across 5 tabs with search, WAF pillar filters, and domain filters:
+Browse **860+ reusable AI primitives** across 5 tabs with search, WAF pillar filters, and domain filters:
 
 | Primitive | Count | What They Do |
 |-----------|:-----:|-------------|
@@ -138,7 +138,7 @@ Set up the FAI ecosystem in your preferred format:
 | **VS Code** | This extension | `code --install-extension frootai.frootai-vscode` |
 | **Website** | frootai.dev | [frootai.dev](https://frootai.dev) |
 
-All channels ship the same 101 plays, 830+ primitives, and 25 MCP tools.
+All channels ship the same 101 plays, 800+ primitives, and 25 MCP tools.
 
 ---
 
@@ -193,7 +193,7 @@ That's it — you're ready to build AI solutions with FrootAI.
 | `FrootAI: Agent FAI` | Streaming AI chat — ask anything about FrootAI |
 | `FrootAI: Plugin Marketplace` | Browse 77 FAI plugins with search and filters |
 | `FrootAI: FAI Ecosystem` | Interactive 6-tab ecosystem explorer |
-| `FrootAI: Open Primitives Catalog` | 830+ primitives across 5 tabs with filters |
+| `FrootAI: Open Primitives Catalog` | 800+ primitives across 5 tabs with filters |
 | `FrootAI: Open Evaluation` | 3-mode dashboard: guide, demo, real workspace data |
 | `FrootAI: Open Scaffold Wizard` | 4-step wizard to bootstrap a play |
 | `FrootAI: Initialize DevKit` | .github Agentic OS files |

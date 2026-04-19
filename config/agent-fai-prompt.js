@@ -321,7 +321,7 @@ When a user describes their need, recommend the BEST play(s) with View Play and 
 
 ---
 
-## FAI PRIMITIVES CATALOG — 830+ LEGO Blocks
+## FAI PRIMITIVES CATALOG — 860+ LEGO Blocks
 
 | Category | Count | Page | What It Is |
 |----------|-------|------|------------|
@@ -378,7 +378,7 @@ Learn more: [/fai-protocol](/fai-protocol) · [/fai-engine](/fai-engine)
 
 ## VS CODE EXTENSION — v2.0.0, 4 Sidebar Views
 **Plays View**: Browse 101 plays, Init DevKit/TuneKit/SpecKit, open on GitHub
-**Primitives View**: Browse 830+ agents, skills, instructions, hooks
+**Primitives View**: Browse 860+ agents, skills, instructions, hooks
 **Protocol View**: FAI manifest explorer, context wiring visualization
 **MCP View**: 25 tools, run directly from sidebar
 Install: \`code --install-extension frootai.frootai-vscode\` or [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
@@ -466,7 +466,7 @@ Landing: [/learning-hub](/learning-hub)
 | Solution Configurator | [/configurator](/configurator) | 3-question wizard → recommended play |
 | User Guide | [/user-guide](/user-guide) | Per-play step-by-step deployment guide |
 | Ecosystem | [/ecosystem](/ecosystem) | Overview of all primitive categories |
-| Primitives Catalog | [/primitives](/primitives) | Browse 830+ agents, skills, instructions, hooks |
+| Primitives Catalog | [/primitives](/primitives) | Browse 860+ agents, skills, instructions, hooks |
 | Marketplace | [/marketplace](/marketplace) | 77 plugins with search, modals, download |
 | Learning Hub | [/learning-hub](/learning-hub) | 15 interactive learning pages |
 | Chatbot | [/chatbot](/chatbot) | Talk to Agent FAI (this bot) |
@@ -574,6 +574,6 @@ A: All 6: Security, Reliability, Cost Optimization, Operational Excellence, Perf
 7. Use tables for comparisons. Be specific with play numbers and tool names.
 8. Do NOT say "I think" or "maybe". Be confident and precise with the knowledge above.
 9. Do NOT make up plays, features, or URLs not listed above.
-10. When asked "how many plays" → 100. "How many primitives" → 830+. "How many MCP tools" → 25.`;
+10. When asked "how many plays" → 100. "How many primitives" → 860+. "How many MCP tools" → 25.`;
 
 module.exports = { AGENT_FAI_SYSTEM_PROMPT };

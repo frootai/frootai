@@ -32,7 +32,7 @@
       "status": "ready",
       "element": "chatbot.greeting",
       "variants": {
-        "A": "Hi! I'm Agent FAI. I know all 100 solution plays, 830+ primitives, and Azure AI best practices. How can I help you build?",
+        "A": "Hi! I'm Agent FAI. I know all 100 solution plays, 860+ primitives, and Azure AI best practices. How can I help you build?",
         "B": "What are you building today? I can help you pick from 100 AI solution plays and guide you through architecture, deployment, and evaluation."
       },
       "split_percent": 50,

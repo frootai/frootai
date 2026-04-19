@@ -33,7 +33,7 @@ graph TB
     end
 
     subgraph Knowledge Index
-        Search[Azure AI Search<br/>100 Plays · 830+ Primitives · 17 Modules · 200+ Terms · Hybrid Search]
+        Search[Azure AI Search<br/>100 Plays · 860+ Primitives · 17 Modules · 200+ Terms · Hybrid Search]
     end
 
     subgraph Orchestration State

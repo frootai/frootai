@@ -2,7 +2,7 @@
   "$schema": "https://mcp.run/schemas/entry.json",
   "name": "frootai-mcp",
   "displayName": "FrootAI — AI Primitive Unification MCP Server",
-  "description": "The open glue for the GenAI ecosystem. 45 tools for architecture guidance, 104 solution plays, 862+ primitives (238 agents, 176 instructions, 333 skills, 77 plugins), model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires primitives into deployable systems with Bicep + Terraform IaC.",
+  "description": "The open glue for the GenAI ecosystem. 45 tools for architecture guidance, 104 solution plays, 860+ primitives (238 agents, 176 instructions, 333 skills, 77 plugins), model comparison, cost estimation, AI evaluation, and FAI Protocol orchestration. Context-wires primitives into deployable systems with Bicep + Terraform IaC.",
   "version": "5.2.0",
   "protocol": "mcp",
   "protocolVersion": "2025-03-26",

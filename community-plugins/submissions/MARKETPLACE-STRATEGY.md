@@ -125,7 +125,7 @@ These are **instant wins** — submission templates already exist in `community-
 3. Check "Publish this Action to the GitHub Marketplace"
 4. Fill in:
    - **Action name**: `FrootAI — AI Primitive Validation`
-   - **Description**: `Validate FAI Protocol manifests, primitives, and quality gates in CI/CD. 830+ primitives, 100 solution plays.`
+   - **Description**: `Validate FAI Protocol manifests, primitives, and quality gates in CI/CD. 860+ primitives, 100 solution plays.`
    - **Primary category**: `Code quality`
    - **Secondary category**: `Utilities`
    - **Icon**: `package` (or `zap`)
@@ -170,7 +170,7 @@ These are **instant wins** — submission templates already exist in `community-
 2. Add FrootAI entry in the appropriate section (alphabetical order)
 3. Use the content from our PR templates
 4. Open a PR with a clear title:
-   - awesome-mcp: `Add FrootAI MCP Server — 25 tools, 100 plays, 830+ primitives`
+   - awesome-mcp: `Add FrootAI MCP Server — 25 tools, 100 plays, 860+ primitives`
    - awesome-ai-agents: `Add FrootAI — AI primitive unification platform`
 5. Follow the list's contribution guidelines exactly
 6. Be patient — maintainers review weekly
@@ -201,13 +201,13 @@ These are **instant wins** — submission templates already exist in `community-
 #### Pre-Launch Checklist (Prepare Before Launch Day)
 - [ ] **Product Hunt account** created and verified
 - [ ] **Hunter**: Find a well-known hunter to submit (50%+ upvote boost)
-- [ ] **Tagline** (60 chars max): `The open glue for AI — 830+ primitives, 100 solution plays`
+- [ ] **Tagline** (60 chars max): `The open glue for AI — 860+ primitives, 100 solution plays`
 - [ ] **Description** (260 chars): `FrootAI is the missing binding layer for AI. The FAI Protocol context-wires agents, skills, and plugins into deployable systems. Like Dockerfile for AI apps. 25 MCP tools, cross-framework (SK + LangChain).`
 - [ ] **Gallery images** (5-6 images, 1270x760px):
   1. Hero: FAI Protocol diagram showing the glue concept
   2. Solution Plays browser (100 plays)
   3. MCP tools in action (VS Code/Claude)
-  4. Primitive catalog (830+ items)
+  4. Primitive catalog (860+ items)
   5. Architecture diagram generation
   6. Before/after: without FAI vs with FAI
 - [ ] **First Comment** prepared (maker's story — why you built this)
@@ -411,14 +411,14 @@ All located in `community-plugins/submissions/`:
 ## Key Messaging (Use Across All Listings)
 
 ### One-Liner (60 chars)
-> The open glue for AI — 830+ primitives, 100 solution plays
+> The open glue for AI — 860+ primitives, 100 solution plays
 
 ### Elevator Pitch (100 words)
-> FrootAI is the open-source AI primitive unification platform. While MCP handles tool calling and A2A handles agent delegation, FrootAI handles **wiring** — declaring how agents, skills, instructions, and plugins connect via the FAI Protocol. Think of `fai-manifest.json` as the Dockerfile for AI applications. With 100 production-ready solution plays, 830+ reusable primitives, and adapters for Semantic Kernel and LangChain, FrootAI gives you enterprise-grade AI architectures that are evaluated, governed, and deployable from day one.
+> FrootAI is the open-source AI primitive unification platform. While MCP handles tool calling and A2A handles agent delegation, FrootAI handles **wiring** — declaring how agents, skills, instructions, and plugins connect via the FAI Protocol. Think of `fai-manifest.json` as the Dockerfile for AI applications. With 100 production-ready solution plays, 860+ reusable primitives, and adapters for Semantic Kernel and LangChain, FrootAI gives you enterprise-grade AI architectures that are evaluated, governed, and deployable from day one.
 
 ### Key Differentiators (For All Listings)
 1. **FAI Protocol** — The only declarative standard for AI primitive composition
-2. **830+ Primitives** — Largest open catalog of AI building blocks
+2. **860+ Primitives** — Largest open catalog of AI building blocks
 3. **100 Solution Plays** — Production-ready architectures with infrastructure
 4. **Cross-Framework** — Works with Semantic Kernel, LangChain, AutoGen, CrewAI
 5. **Quality Gates** — Built-in evaluation (groundedness, safety, cost) at the protocol level

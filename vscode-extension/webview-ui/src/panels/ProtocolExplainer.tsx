@@ -319,7 +319,7 @@ function PackagesTab() {
   return (
     <div>
       <p style={{ fontSize: 13, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
-        <strong>FAI Packages</strong> deliver FrootAI through 6 distribution channels — install via your preferred platform and get the full ecosystem of 830+ primitives and 100 solution plays.
+        <strong>FAI Packages</strong> deliver FrootAI through 6 distribution channels — install via your preferred platform and get the full ecosystem of 860+ primitives and 100 solution plays.
       </p>
 
       <Section icon={Package} title="Distribution Channels" color="#0ea5e9">

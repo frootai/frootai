@@ -197,7 +197,7 @@
   },
   {
     "title": "Primitives Catalog",
-    "description": "Browse all 830+ FAI primitives — the building blocks of AI applications.",
+    "description": "Browse all 860+ FAI primitives — the building blocks of AI applications.",
     "route": "/primitives",
     "section": "primitives",
     "words": 88

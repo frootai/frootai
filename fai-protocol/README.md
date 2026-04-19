@@ -15,7 +15,7 @@ The FAI Protocol defines a JSON-based manifest format (`fai-manifest.json`) for 
 | Authors | FrootAI Contributors |
 | License | MIT |
 | Reference Implementation | [FAI Engine](../engine/) |
-| Validated Against | 100+ solution plays, 830+ primitives |
+| Validated Against | 100+ solution plays, 860+ primitives |
 
 This specification is at **v0.1 (Draft)**. It is implemented by the FAI Engine reference implementation and validated across 100 solution plays comprising 238 agents, 176 instructions, 322 skills, and 77 plugins.
 

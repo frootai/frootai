@@ -72,7 +72,7 @@ Internal modules:
 | `inspect_wiring` | `playId: string` | Audit a play's wiring — primitives, context, health score |
 | `validate_manifest` | `playId: string` | Validate fai-manifest.json schema + completeness |
 | `get_play_detail` | `play_number: string` | Full play spec — services, config, WAF alignment |
-| `list_primitives` | `type: string, limit?: number` | Browse 830+ primitives by type |
+| `list_primitives` | `type: string, limit?: number` | Browse 860+ primitives by type |
 | `evaluate_quality` | `scores: object, thresholds?: object, play?: string` | Run quality evaluation with pass/fail thresholds |
 
 ### Category 6: Scaffold (3 tools)
