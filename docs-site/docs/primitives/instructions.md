@@ -148,6 +148,6 @@ This checks that every instruction has:
 
 ## See Also
 
-- [Create an Instruction Guide](/docs/guides/create-instruction) — step-by-step tutorial
-- [Well-Architected Framework](/docs/concepts/well-architected) — the 6 pillars
-- [Primitives Overview](/docs/concepts/primitives) — all 6 primitive types
+- [Create an Instruction Guide](/guides/create-instruction) — step-by-step tutorial
+- [Well-Architected Framework](/concepts/well-architected) — the 6 pillars
+- [Primitives Overview](/concepts/primitives) — all 6 primitive types

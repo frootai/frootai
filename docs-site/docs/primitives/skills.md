@@ -168,6 +168,6 @@ Checks that every skill has:
 
 ## See Also
 
-- [Create a Skill Guide](/docs/guides/create-skill) — step-by-step tutorial
-- [Plugins](/docs/primitives/plugins) — bundle skills into distributable packages
-- [Primitives Overview](/docs/concepts/primitives) — all 6 primitive types
+- [Create a Skill Guide](/guides/create-skill) — step-by-step tutorial
+- [Plugins](/primitives/plugins) — bundle skills into distributable packages
+- [Primitives Overview](/concepts/primitives) — all 6 primitive types

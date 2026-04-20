@@ -142,6 +142,6 @@ Current version: **v4.0.0**, synced with 100 plays and all primitives.
 
 ## See Also
 
-- [npm SDK](/docs/distribution/npm-sdk) — Node.js equivalent
-- [MCP Server](/docs/distribution/mcp-server) — MCP protocol access
-- [CLI](/docs/distribution/cli) — command-line interface
+- [npm SDK](/distribution/npm-sdk) — Node.js equivalent
+- [MCP Server](/distribution/mcp-server) — MCP protocol access
+- [CLI](/distribution/cli) — command-line interface

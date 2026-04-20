@@ -166,5 +166,5 @@ CMD ["uv", "run", "server.py", "--transport", "streamable-http", "--port", "8080
 
 ## See Also
 
-- [MCP Server Distribution](/docs/distribution/mcp-server) — FrootAI's MCP server
-- [Error Handling](/docs/guides/error-handling) — error patterns
+- [MCP Server Distribution](/distribution/mcp-server) — FrootAI's MCP server
+- [Error Handling](/guides/error-handling) — error patterns

@@ -128,5 +128,5 @@ echo '{"toolName":"test","toolInput":"hello"}' | bash hooks/${HOOK_NAME}/check.s
 
 ## See Also
 
-- [Hooks Reference](/docs/primitives/hooks) — full hook specification
-- [Error Handling](/docs/guides/error-handling) — error patterns for hooks
+- [Hooks Reference](/primitives/hooks) — full hook specification
+- [Error Handling](/guides/error-handling) — error patterns for hooks

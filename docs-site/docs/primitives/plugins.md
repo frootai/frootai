@@ -151,6 +151,6 @@ Common errors:
 
 ## See Also
 
-- [Package a Plugin Guide](/docs/guides/package-plugin) — step-by-step tutorial
-- [Skills](/docs/primitives/skills) — skills bundled in plugins
-- [Hooks](/docs/primitives/hooks) — hooks bundled in plugins
+- [Package a Plugin Guide](/guides/package-plugin) — step-by-step tutorial
+- [Skills](/primitives/skills) — skills bundled in plugins
+- [Hooks](/primitives/hooks) — hooks bundled in plugins

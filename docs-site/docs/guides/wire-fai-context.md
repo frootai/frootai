@@ -143,6 +143,6 @@ node engine/index.js solution-plays/01-enterprise-rag/fai-manifest.json --status
 
 ## See Also
 
-- [FAI Protocol](/docs/concepts/fai-protocol) — full protocol specification
-- [Primitives Overview](/docs/concepts/primitives) — all 6 primitive types
-- [Create an Agent](/docs/guides/create-agent) — agents with context
+- [FAI Protocol](/concepts/fai-protocol) — full protocol specification
+- [Primitives Overview](/concepts/primitives) — all 6 primitive types
+- [Create an Agent](/guides/create-agent) — agents with context

@@ -99,6 +99,6 @@ Current version: **v2.0.0**, synced with 100 plays and all primitives.
 
 ## See Also
 
-- [Configure VS Code](/docs/guides/configure-vscode) — full VS Code setup guide
-- [MCP Server](/docs/distribution/mcp-server) — MCP server configuration
-- [Quick Start](/docs/getting-started/quick-start) — get started with FrootAI
+- [Configure VS Code](/guides/configure-vscode) — full VS Code setup guide
+- [MCP Server](/distribution/mcp-server) — MCP server configuration
+- [Quick Start](/getting-started/quick-start) — get started with FrootAI

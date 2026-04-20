@@ -158,5 +158,5 @@ npm run validate:primitives
 
 ## See Also
 
-- [Skills Reference](/docs/primitives/skills) — full skill specification
-- [Package a Plugin](/docs/guides/package-plugin) — bundle skills into plugins
+- [Skills Reference](/primitives/skills) — full skill specification
+- [Package a Plugin](/guides/package-plugin) — bundle skills into plugins

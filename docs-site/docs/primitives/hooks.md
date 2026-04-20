@@ -165,6 +165,6 @@ Or in a plugin's `plugin.json`:
 
 ## See Also
 
-- [Create a Hook Guide](/docs/guides/create-hook) — step-by-step tutorial
-- [Plugins](/docs/primitives/plugins) — bundle hooks into distributable packages
-- [Security WAF](/docs/concepts/well-architected) — security pillar guidelines
+- [Create a Hook Guide](/guides/create-hook) — step-by-step tutorial
+- [Plugins](/primitives/plugins) — bundle hooks into distributable packages
+- [Security WAF](/concepts/well-architected) — security pillar guidelines

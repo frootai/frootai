@@ -141,6 +141,6 @@ node -e "
 
 ## See Also
 
-- [Plugins Reference](/docs/primitives/plugins) — full plugin specification
-- [Create a Skill](/docs/guides/create-skill) — skills for plugins
-- [Create an Agent](/docs/guides/create-agent) — agents for plugins
+- [Plugins Reference](/primitives/plugins) — full plugin specification
+- [Create a Skill](/guides/create-skill) — skills for plugins
+- [Create an Agent](/guides/create-agent) — agents for plugins

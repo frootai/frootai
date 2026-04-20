@@ -150,7 +150,7 @@ The assistant calls `estimate_cost` with `play: "01"` and `scale: "prod"`.
 
 ## Docker Deployment
 
-For containerized environments, see the [Docker distribution](/docs/distribution/docker).
+For containerized environments, see the [Docker distribution](/distribution/docker).
 
 ## Version
 
@@ -163,6 +163,6 @@ npx frootai-mcp@latest --version
 
 ## See Also
 
-- [Build an MCP Server](/docs/guides/build-mcp-server) — create your own MCP server
-- [Configure VS Code](/docs/guides/configure-vscode) — full VS Code setup
-- [Docker](/docs/distribution/docker) — containerized MCP server
+- [Build an MCP Server](/guides/build-mcp-server) — create your own MCP server
+- [Configure VS Code](/guides/configure-vscode) — full VS Code setup
+- [Docker](/distribution/docker) — containerized MCP server

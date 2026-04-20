@@ -164,6 +164,6 @@ Current version synced with main FrootAI release.
 
 ## See Also
 
-- [Quick Start](/docs/getting-started/quick-start) — getting started guide
-- [MCP Server](/docs/distribution/mcp-server) — MCP protocol access
-- [npm SDK](/docs/distribution/npm-sdk) — programmatic Node.js access
+- [Quick Start](/getting-started/quick-start) — getting started guide
+- [MCP Server](/distribution/mcp-server) — MCP protocol access
+- [npm SDK](/distribution/npm-sdk) — programmatic Node.js access

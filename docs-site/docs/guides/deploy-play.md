@@ -131,6 +131,6 @@ az deployment group create --resource-group "$RG" \
 
 ## See Also
 
-- [Evaluate a Play](/docs/guides/evaluate-play) — quality gate evaluation
-- [Workflows](/docs/primitives/workflows) — CI/CD automation
-- [Cost Optimization WAF](/docs/concepts/well-architected) — cost pillar
+- [Evaluate a Play](/guides/evaluate-play) — quality gate evaluation
+- [Workflows](/primitives/workflows) — CI/CD automation
+- [Cost Optimization WAF](/concepts/well-architected) — cost pillar

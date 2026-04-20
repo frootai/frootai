@@ -119,6 +119,6 @@ Current version: **v4.0.0**, synced with 100 plays and all primitives.
 
 ## See Also
 
-- [Python SDK](/docs/distribution/python-sdk) — Python equivalent
-- [MCP Server](/docs/distribution/mcp-server) — MCP protocol access
-- [CLI](/docs/distribution/cli) — command-line interface
+- [Python SDK](/distribution/python-sdk) — Python equivalent
+- [MCP Server](/distribution/mcp-server) — MCP protocol access
+- [CLI](/distribution/cli) — command-line interface

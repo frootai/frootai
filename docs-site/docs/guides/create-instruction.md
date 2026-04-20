@@ -141,5 +141,5 @@ waf: ["security", "reliability"]
 
 ## See Also
 
-- [Instructions Reference](/docs/primitives/instructions) — full specification
-- [Well-Architected Framework](/docs/concepts/well-architected) — WAF pillars
+- [Instructions Reference](/primitives/instructions) — full specification
+- [Well-Architected Framework](/concepts/well-architected) — WAF pillars

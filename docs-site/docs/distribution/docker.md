@@ -126,6 +126,6 @@ Tags available:
 
 ## See Also
 
-- [MCP Server](/docs/distribution/mcp-server) — npx-based installation
-- [Build an MCP Server](/docs/guides/build-mcp-server) — create your own
-- [Configure VS Code](/docs/guides/configure-vscode) — editor setup
+- [MCP Server](/distribution/mcp-server) — npx-based installation
+- [Build an MCP Server](/guides/build-mcp-server) — create your own
+- [Configure VS Code](/guides/configure-vscode) — editor setup

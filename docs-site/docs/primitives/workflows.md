@@ -189,6 +189,6 @@ jobs:
 
 ## See Also
 
-- [Evaluate a Play Guide](/docs/guides/evaluate-play) — evaluation pipeline setup
-- [Deploy a Play Guide](/docs/guides/deploy-play) — deployment workflow
-- [FAI Protocol](/docs/concepts/fai-protocol) — how workflows wire into plays
+- [Evaluate a Play Guide](/guides/evaluate-play) — evaluation pipeline setup
+- [Deploy a Play Guide](/guides/deploy-play) — deployment workflow
+- [FAI Protocol](/concepts/fai-protocol) — how workflows wire into plays

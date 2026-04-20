@@ -149,6 +149,6 @@ This checks that every agent has:
 
 ## See Also
 
-- [Create an Agent Guide](/docs/guides/create-agent) — step-by-step tutorial
-- [FAI Protocol](/docs/concepts/fai-protocol) — how agents wire into plays
-- [Primitives Overview](/docs/concepts/primitives) — all 6 primitive types
+- [Create an Agent Guide](/guides/create-agent) — step-by-step tutorial
+- [FAI Protocol](/concepts/fai-protocol) — how agents wire into plays
+- [Primitives Overview](/concepts/primitives) — all 6 primitive types

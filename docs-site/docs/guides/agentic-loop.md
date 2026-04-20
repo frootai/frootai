@@ -165,5 +165,5 @@ function runEvaluation(playId) {
 
 ## See Also
 
-- [Evaluate a Play](/docs/guides/evaluate-play) — evaluation as backpressure
-- [Agents Reference](/docs/primitives/agents) — multi-agent routing
+- [Evaluate a Play](/guides/evaluate-play) — evaluation as backpressure
+- [Agents Reference](/primitives/agents) — multi-agent routing

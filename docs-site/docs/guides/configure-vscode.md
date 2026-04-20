@@ -173,5 +173,5 @@ After setup, VS Code automatically recognizes:
 
 ## See Also
 
-- [MCP Server](/docs/distribution/mcp-server) — FrootAI MCP server
-- [Installation](/docs/getting-started/installation) — full setup guide
+- [MCP Server](/distribution/mcp-server) — FrootAI MCP server
+- [Installation](/getting-started/installation) — full setup guide

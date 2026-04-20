@@ -154,5 +154,5 @@ Summary: 0 errors, 0 warnings
 
 ## See Also
 
-- [Agents Reference](/docs/primitives/agents) — full agent specification
-- [Wire FAI Context](/docs/guides/wire-fai-context) — connect agents to plays
+- [Agents Reference](/primitives/agents) — full agent specification
+- [Wire FAI Context](/guides/wire-fai-context) — connect agents to plays

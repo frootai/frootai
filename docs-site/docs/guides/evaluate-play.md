@@ -114,6 +114,6 @@ jobs:
 
 ## See Also
 
-- [Deploy a Play](/docs/guides/deploy-play) — deployment workflow
-- [Workflows](/docs/primitives/workflows) — CI/CD automation
-- [FAI Protocol](/docs/concepts/fai-protocol) — guardrails configuration
+- [Deploy a Play](/guides/deploy-play) — deployment workflow
+- [Workflows](/primitives/workflows) — CI/CD automation
+- [FAI Protocol](/concepts/fai-protocol) — guardrails configuration

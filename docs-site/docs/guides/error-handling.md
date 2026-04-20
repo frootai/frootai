@@ -166,5 +166,5 @@ const result = await withTimeout(callOpenAI(client, messages), 30000, 'Azure Ope
 
 ## See Also
 
-- [Build an MCP Server](/docs/guides/build-mcp-server) — MCP error patterns
-- [Reliability WAF](/docs/concepts/well-architected) — reliability pillar
+- [Build an MCP Server](/guides/build-mcp-server) — MCP error patterns
+- [Reliability WAF](/concepts/well-architected) — reliability pillar
