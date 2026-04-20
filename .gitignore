@@ -34,3 +34,7 @@ vscode-extension/esbuild.config.d.mts
 .factory/lc-adapters/
 .factory/sk-adapters/
 .factory/repo-split/
+
+docs-site/node_modules/
+docs-site/build/
+docs-site/.docusaurus/

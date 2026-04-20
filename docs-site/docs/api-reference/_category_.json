@@ -1,0 +1,10 @@
+{
+  "label": "API Reference",
+  "position": 8,
+  "collapsible": true,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Complete reference for MCP tools, CLI commands, JSON schemas, and the FAI Protocol specification."
+  }
+}

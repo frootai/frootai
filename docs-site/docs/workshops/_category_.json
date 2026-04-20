@@ -1,0 +1,10 @@
+{
+  "label": "Workshops",
+  "position": 7,
+  "collapsible": true,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Hands-on workshops for building RAG pipelines, AI landing zones, and multi-agent systems with FrootAI."
+  }
+}
