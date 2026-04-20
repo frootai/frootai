@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <rect width="1200" height="630" fill="#0f172a"/>
-  <text x="600" y="280" font-family="Arial" font-size="72" font-weight="bold" fill="#10b981" text-anchor="middle">FrootAI Docs</text>
-  <text x="600" y="360" font-family="Arial" font-size="28" fill="#94a3b8" text-anchor="middle">The uniFAIng glue for the GenAI ecosystem</text>
-</svg>

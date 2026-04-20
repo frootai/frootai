@@ -1,8 +1,0 @@
-{
-  "label": "Concepts",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "description": "Core concepts behind FrootAI — the FAI Protocol, primitives, solution plays, and the Well-Architected Framework."
-  }
-}
