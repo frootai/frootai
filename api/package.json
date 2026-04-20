@@ -1,0 +1,14 @@
+{
+  "name": "frootai-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FrootAI Public REST API — Cloudflare Worker",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "echo 'Cloudflare Workers handle build automatically'"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

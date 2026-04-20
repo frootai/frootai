@@ -1,0 +1,9 @@
+name = "frootai-api"
+main = "src/index.js"
+compatibility_date = "2026-04-20"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Custom domain: api.frootai.dev
+# Configure in Cloudflare dashboard after first deploy
