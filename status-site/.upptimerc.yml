@@ -1,0 +1,70 @@
+# FrootAI Status Page Configuration
+# https://upptime.js.org/docs/configuration
+
+owner: frootai
+repo: status
+
+sites:
+  - name: FrootAI Website
+    url: https://frootai.dev
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
+  - name: FrootAI Docs
+    url: https://docs.frootai.dev
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
+  - name: FrootAI API
+    url: https://api.frootai.dev/health
+    expectedStatusCodes:
+      - 200
+
+  - name: npm — frootai-mcp
+    url: https://registry.npmjs.org/frootai-mcp
+    expectedStatusCodes:
+      - 200
+
+  - name: npm — frootai
+    url: https://registry.npmjs.org/frootai
+    expectedStatusCodes:
+      - 200
+
+  - name: PyPI — frootai
+    url: https://pypi.org/pypi/frootai/json
+    expectedStatusCodes:
+      - 200
+
+  - name: PyPI — frootai-mcp
+    url: https://pypi.org/pypi/frootai-mcp/json
+    expectedStatusCodes:
+      - 200
+
+  - name: GitHub Repository
+    url: https://github.com/frootai/frootai
+    expectedStatusCodes:
+      - 200
+
+status-website:
+  cname: status.frootai.dev
+  name: FrootAI Status
+  theme: dark
+  logoUrl: https://frootai.dev/favicon.ico
+  introTitle: "FrootAI System Status"
+  introMessage: "Real-time monitoring of the FrootAI ecosystem. [Learn more →](https://frootai.dev)"
+
+i18n:
+  activeIncidents: Active Incidents
+  pastIncidents: Past Incidents
+  allSystemsOperational: All Systems Operational
+  incidentReport: Incident Report
+
+workflowSchedule:
+  graphs: "0 0 * * *"
+  responseTime: "0 23 * * *"
+  staticSite: "0 1 * * *"
+  summary: "0 0 * * *"
+  updateTemplate: "0 0 * * *"
+  updates: "*/5 * * * *"
