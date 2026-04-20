@@ -38,3 +38,7 @@ vscode-extension/esbuild.config.d.mts
 docs-site/node_modules/
 docs-site/build/
 docs-site/.docusaurus/
+
+app-site/node_modules/
+app-site/.next/
+app-site/out/
