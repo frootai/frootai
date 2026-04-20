@@ -269,11 +269,11 @@ frootai/frootai
 ├── schemas/              7 JSON schemas validating all primitive types
 ├── engine/               FAI Engine v0.1 (7 modules — manifest reader → evaluator)
 ├── solution-plays/       100 deployable plays with DevKit+TuneKit+SpecKit+Bicep
-├── npm-mcp/              MCP Server — 0 tools + knowledge.json
-├── npm-sdk/              npm SDK & CLI — FrootAI class, 0 commands, 7 modules
+├── npm-mcp/              MCP Server — 45 tools + knowledge.json
+├── npm-sdk/              npm SDK & CLI — FrootAI class, 8 commands, 7 modules
 ├── python-sdk/           Python SDK — offline, zero deps, 7 modules
 ├── python-mcp/           Python MCP Server
-├── vscode-extension/     VS Code extension (0 commands)
+├── vscode-extension/     VS Code extension (4 commands, play browser)
 ├── functions/            REST API + Agent FAI chatbot
 ├── docs/                 FROOT knowledge modules (18 modules, 664 KB)
 ├── config/               Configurator data + spec templates
@@ -298,15 +298,17 @@ frootai/frootai
 | Resource | Link |
 |---|---|
 | **Website** | [frootai.dev](https://frootai.dev) |
-| **Docs** | [Knowledge Modules](https://frootai.dev/docs) |
+| **Documentation** | [docs.frootai.dev](https://docs.frootai.dev) |
+| **Platform App** | [app.frootai.dev](https://app.frootai.dev) |
+| **REST API** | [api.frootai.dev](https://api.frootai.dev) |
+| **Status** | [status.frootai.dev](https://status.frootai.dev) |
 | **Solution Plays** | [Browse All Plays](https://frootai.dev/solution-plays) |
 | **Agent FAI** | [Chatbot](https://frootai.dev/chatbot) |
 | **Configurator** | [Play Recommendation Wizard](https://frootai.dev/configurator) |
 | **Packages** | [Distribution Channels](https://frootai.dev/packages) |
 | **Setup Guide** | [Installation Guide](https://frootai.dev/setup-guide) |
-| **Learning Hub** | [Workshops & Certs](https://frootai.dev/learning-hub) |
+| **Learning Hub** | [Interactive Learning](https://frootai.dev/learning-hub) |
 | **CLI** | [CLI Reference](https://frootai.dev/cli) |
-| **REST API** | [API Docs](https://frootai.dev/api-docs) |
 | **Contact** | [info@frootai.dev](mailto:info@frootai.dev) |
 
 ---
@@ -321,9 +323,11 @@ Open source under MIT. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 <p align="center">
   <a href="https://frootai.dev">Website</a> · 
-  <a href="https://frootai.dev/chatbot">Agent FAI</a> · 
-  <a href="https://frootai.dev/docs">Docs</a> · 
-  <a href="https://frootai.dev/solution-plays">Solution Plays</a>
+  <a href="https://docs.frootai.dev">Docs</a> · 
+  <a href="https://app.frootai.dev">App</a> · 
+  <a href="https://api.frootai.dev">API</a> · 
+  <a href="https://frootai.dev/solution-plays">Solution Plays</a> · 
+  <a href="https://frootai.dev/chatbot">Agent FAI</a>
 </p>
 <p align="center"><em>It's simply Frootful.</em></p>
 <p align="center">© 2026 FrootAI — MIT License</p>
