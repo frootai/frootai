@@ -1,0 +1,68 @@
+name: "CodeQL"
+
+# Static Application Security Testing (SAST) on every PR + nightly main.
+# Languages: JavaScript/TypeScript + Python + GitHub Actions YAML.
+# Query pack: security-extended (broader than default; tolerable FP rate at our scale).
+#
+# Tracker: P0.3.019
+# PRD: ../../frootai-blueprint/prds/PRD-003-supply-chain-security.md
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Nightly at 02:00 UTC — catches CVE-publication catch-up
+    - cron: '0 2 * * *'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+          - language: actions
+            build-mode: none
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-extended,security-and-quality
+          # Path filters: skip vendor / generated / fixture content
+          config: |
+            paths-ignore:
+              - 'node_modules/**'
+              - '**/dist/**'
+              - '**/build/**'
+              - '**/coverage/**'
+              - '**/.next/**'
+              - '**/out/**'
+              - '**/__pycache__/**'
+              - '**/*.min.js'
+              - '**/marketplace.json'
+              - 'fai-protocol/examples/**'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+          upload: true

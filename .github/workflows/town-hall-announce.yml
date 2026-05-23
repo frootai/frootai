@@ -1,0 +1,120 @@
+name: Town Hall Announce
+
+# Posts Town Hall reminders to Discord #announcements at 14 days and 24 hours
+# before each Quarterly Community Town Hall. Runs daily at 09:00 UTC.
+# Ideology: PRD-008 §6 Flow C — announced 14 days before.
+# PB-CM principle 5 — founder shows up; the bot makes sure the community knows.
+# Tracker: P1.6.011
+
+on:
+  schedule:
+    # Daily at 09:00 UTC — checks if a Town Hall is 14 days or 1 day away.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      force_date:
+        description: 'Force announce for a specific Town Hall date (YYYY-MM-DD) for testing'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    name: Town Hall reminders
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and announce upcoming Town Halls
+        uses: actions/github-script@v7
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ANNOUNCEMENTS_WEBHOOK }}
+        with:
+          script: |
+            const webhook = process.env.DISCORD_WEBHOOK;
+            if (!webhook) {
+              core.warning('DISCORD_ANNOUNCEMENTS_WEBHOOK secret not set — skipping Town Hall announce.');
+              return;
+            }
+
+            // Town Hall schedule — end of each quarter, 17:00 CEST (15:00 UTC)
+            const TOWN_HALL_SCHEDULE = [
+              {
+                date: '2026-08-28',
+                quarter: 'Q3 2026',
+                title: 'Phase 1 in Review',
+              },
+            ];
+
+            const now = new Date();
+            const forceDate = '${{ inputs.force_date }}';
+
+            for (const th of TOWN_HALL_SCHEDULE) {
+              const thDate = new Date(th.date + 'T15:00:00Z');
+              const diffMs = thDate.getTime() - now.getTime();
+              const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+              const shouldAnnounce14d = diffDays === 14;
+              const shouldAnnounce1d = diffDays === 1;
+              const forced = forceDate === th.date;
+
+              if (!shouldAnnounce14d && !shouldAnnounce1d && !forced) continue;
+
+              const isReminder = shouldAnnounce1d;
+              const friendlyDate = new Date(th.date + 'T12:00:00Z')
+                .toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+              const agenda = [
+                '1️⃣ Roadmap update — what shipped, what\'s next (20 min)',
+                '2️⃣ Honest retro — what went well & what didn\'t (15 min)',
+                '3️⃣ Champions highlights — each Champion shares 1 thing (15 min)',
+                '4️⃣ Open Q&A — your questions, live (30 min)',
+                '5️⃣ Social close (10 min)',
+              ].join('\n');
+
+              const embed = {
+                title: isReminder
+                  ? `🏛️ Town Hall ${th.quarter} — Tomorrow!`
+                  : `🏛️ Town Hall ${th.quarter} — Save the Date`,
+                description: [
+                  `**${friendlyDate}** · 17:00 CEST (15:00 UTC) · 90 min`,
+                  '',
+                  `> **${th.title}**`,
+                  '',
+                  '**Agenda:**',
+                  agenda,
+                  '',
+                  isReminder
+                    ? '⏰ **Tomorrow on Discord stage.** Bring your questions!'
+                    : '📅 Mark your calendar — 14 days to go.',
+                  '',
+                  '📅 [Add to calendar](https://frootai.dev/town-hall.ics) · 🌐 [Events page](https://frootai.dev/events)',
+                  '',
+                  'Recording goes to YouTube within 24h. Written summary on the blog within 7 days.',
+                ].join('\n'),
+                color: isReminder ? 0xf59e0b : 0xa855f7, // amber for reminder, purple for 14-day
+                timestamp: new Date().toISOString(),
+                footer: {
+                  text: `FrootAI Quarterly Town Hall · ${th.quarter}`,
+                },
+              };
+
+              const body = JSON.stringify({
+                username: 'FrootAI Events',
+                avatar_url: 'https://frootai.dev/logo.png',
+                embeds: [embed],
+              });
+
+              const resp = await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body,
+              });
+
+              if (!resp.ok) {
+                core.setFailed(`Discord webhook failed for ${th.date}: ${resp.status} ${resp.statusText}`);
+              } else {
+                const label = isReminder ? '24h reminder' : '14-day notice';
+                core.info(`🏛️ Town Hall ${label} posted for ${th.date}: ${th.title}`);
+              }
+            }

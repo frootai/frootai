@@ -1,0 +1,99 @@
+name: Validate Marketplace Schema
+
+# Validates marketplace.json against schemas/marketplace.schema.json (frozen at v1.1).
+# Ideology: TR-PR (product: quality gates — schema validation every PR).
+# Tracker: P0.2.005.
+#
+# Why a separate workflow?
+# - validate-primitives.yml does general primitive-level checks
+# - This one is laser-focused on the marketplace registry contract
+# - Keeps signal high: when this fails, the registry contract was broken
+
+on:
+  pull_request:
+    paths:
+      - 'marketplace.json'
+      - 'schemas/marketplace.schema.json'
+      - '.github/workflows/validate-marketplace-schema.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'marketplace.json'
+      - 'schemas/marketplace.schema.json'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: Schema conformance
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ajv-cli (JSON Schema validator)
+        run: npm install -g ajv-cli@5 ajv-formats@3
+
+      - name: Validate marketplace.json against schema
+        id: validate
+        run: |
+          set -euo pipefail
+          echo "::group::Schema validation"
+          ajv validate \
+            --strict=false \
+            --all-errors \
+            -c ajv-formats \
+            -s schemas/marketplace.schema.json \
+            -d marketplace.json
+          echo "::endgroup::"
+        continue-on-error: false
+
+      - name: Smoke check schema parses as JSON Schema Draft-07
+        run: |
+          set -euo pipefail
+          node -e "
+            const schema = require('./schemas/marketplace.schema.json');
+            const Ajv = require('/usr/local/lib/node_modules/ajv').default;
+            const addFormats = require('/usr/local/lib/node_modules/ajv-formats').default;
+            const ajv = new Ajv({ strict: false, allErrors: true });
+            addFormats(ajv);
+            const valid = ajv.validateSchema(schema);
+            if (!valid) {
+              console.error('Marketplace schema itself is invalid:', ajv.errors);
+              process.exit(1);
+            }
+            console.log('marketplace.schema.json is a valid JSON Schema (Draft-07).');
+          "
+
+      - name: Comment on PR if validation failed
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '## ❌ marketplace.json failed schema validation',
+                '',
+                'The registry contract (`schemas/marketplace.schema.json` v1.1) is not satisfied.',
+                '',
+                'Common fixes:',
+                '- Run `npm run generate:marketplace` locally and commit the result — never hand-edit `marketplace.json`.',
+                '- Check that every plugin entry has `name`, `description`, `version`, `author`, `license`, `source`.',
+                '- Verify `name` is kebab-case (lowercase, 3–64 chars, starts with a letter).',
+                '- Verify `source` starts with `./`.',
+                '- Verify play IDs match `NN-kebab-case` (e.g. `01-enterprise-rag`).',
+                '',
+                'See the full job log above for line-by-line errors.'
+              ].join('\n')
+            });

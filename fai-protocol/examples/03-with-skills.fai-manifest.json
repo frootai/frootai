@@ -1,0 +1,16 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-skills",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["O3-MCP-Tools", "R2-RAG-Architecture"],
+    "waf": ["reliability", "performance-efficiency"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "skills": [
+      "./skills/rag-indexer",
+      "./skills/rag-evaluator"
+    ]
+  }
+}

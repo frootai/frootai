@@ -1,0 +1,114 @@
+name: PR Review Reminder
+
+# Alerts the founder if any open PR sits >18h without a review.
+# Ideology: PRD-008 §7 risk row 5 mitigation — "PR sits unreviewed".
+# PB-CM: 24h SLA on first-time PRs; this fires at 18h to give 6h buffer.
+
+on:
+  schedule:
+    # Runs every 6 hours — catches PRs before the 24h SLA breach.
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Manual trigger for testing
+
+permissions:
+  pull-requests: read
+  issues: read
+
+jobs:
+  check-stale-prs:
+    name: Flag unreviewed PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find PRs awaiting first review >18h
+        uses: actions/github-script@v7
+        env:
+          DISCORD_FOUNDER_WEBHOOK: ${{ secrets.DISCORD_FOUNDER_ALERT_WEBHOOK }}
+        with:
+          script: |
+            const STALE_HOURS = 18;
+            const now = Date.now();
+            const cutoff = now - (STALE_HOURS * 60 * 60 * 1000);
+
+            // Fetch all open PRs
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',
+              direction: 'asc',
+              per_page: 100,
+            });
+
+            const stale = [];
+
+            for (const pr of prs) {
+              // Skip drafts — they're not ready for review
+              if (pr.draft) continue;
+
+              const createdAt = new Date(pr.created_at).getTime();
+              if (createdAt > cutoff) continue; // Not old enough
+
+              // Check if PR has any reviews
+              const { data: reviews } = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+              });
+
+              if (reviews.length === 0) {
+                const hoursOpen = Math.round((now - createdAt) / (1000 * 60 * 60));
+                const isFirstTimer = pr.labels.some(l => l.name === 'first-time-contributor');
+                stale.push({
+                  number: pr.number,
+                  title: pr.title,
+                  author: pr.user.login,
+                  url: pr.html_url,
+                  hoursOpen,
+                  isFirstTimer,
+                });
+              }
+            }
+
+            if (stale.length === 0) {
+              core.info('✅ No stale PRs — all reviewed within 18h.');
+              return;
+            }
+
+            // Build alert message
+            const lines = stale.map(pr => {
+              const flag = pr.isFirstTimer ? ' 🌱 FIRST-TIMER' : '';
+              return `• [#${pr.number}](${pr.url}) — **${pr.title}** by @${pr.author} (${pr.hoursOpen}h)${flag}`;
+            });
+
+            const summary = [
+              `## ⏰ ${stale.length} PR(s) awaiting review >18h`,
+              '',
+              ...lines,
+              '',
+              `24h SLA breaches in: ${stale.map(p => `#${p.number} (${24 - p.hoursOpen}h left)`).filter(x => !x.includes('-')).join(', ') || 'some already breached'}`,
+            ].join('\n');
+
+            core.warning(summary);
+
+            // Post to Discord founder alert channel if webhook is set
+            const webhook = process.env.DISCORD_FOUNDER_WEBHOOK;
+            if (webhook) {
+              const body = JSON.stringify({
+                username: 'FrootAI SLA Bot',
+                content: `⏰ **${stale.length} PR(s) awaiting review >18h** in **${context.repo.repo}**\n\n${lines.join('\n')}\n\n🔗 [View open PRs](https://github.com/${context.repo.owner}/${context.repo.repo}/pulls)`,
+              });
+
+              const resp = await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body,
+              });
+
+              if (!resp.ok) {
+                core.warning(`Discord alert webhook failed: ${resp.status}`);
+              } else {
+                core.info('📨 Founder alert posted to Discord.');
+              }
+            } else {
+              core.warning('DISCORD_FOUNDER_ALERT_WEBHOOK not set — alert logged to Actions only.');
+            }

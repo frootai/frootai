@@ -1,0 +1,84 @@
+# Dependabot configuration — frootai/frootai (public)
+# Tracker: P0.3.017
+# PRD: ../prds/PRD-003-supply-chain-security.md
+#
+# Security updates: enabled by default for all GitHub repos with Dependabot ON.
+# Version updates: weekly Mondays 08:00 UTC, grouped to reduce PR noise.
+
+version: 2
+
+updates:
+  # ── npm (root: scripts + dev tooling) ────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "frootai/core"
+    labels:
+      - "dependencies"
+      - "ecosystem/npm"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      npm-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # ── npm (engine) ──────────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/engine"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "frootai/core"
+    labels:
+      - "dependencies"
+      - "ecosystem/npm"
+      - "area/engine"
+    commit-message:
+      prefix: "deps(engine)"
+    groups:
+      engine-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+
+  # ── GitHub Actions ────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "frootai/core"
+    labels:
+      - "dependencies"
+      - "ecosystem/github-actions"
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"

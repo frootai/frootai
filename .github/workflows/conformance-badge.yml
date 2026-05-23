@@ -1,0 +1,63 @@
+name: FAI Conformance Badge
+
+# Regenerates conformance/badge.svg + conformance/badge-endpoint.json
+# whenever the spec, examples, or conformance suite change.
+# Auto-commits the result back to main using [skip ci] to avoid recursion.
+#
+# Tracker: P1.2.009 — "FAI Protocol Conformance" badge (SVG, CI-auto-updated)
+# Spec: github.com/frootai/frootai/blob/main/fai-protocol/README.md#9-conformance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "fai-protocol/**"
+      - "schemas/**"
+      - "conformance/**"
+      - ".github/workflows/conformance-badge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write  # required for the auto-commit step
+
+concurrency:
+  group: conformance-badge
+  cancel-in-progress: false
+
+jobs:
+  regenerate-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for auto-commit)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Use a PAT or default GITHUB_TOKEN; default works because permissions: contents: write above
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify L0 conformance suite passes
+        # If this fails, the badge generator will still run and emit a red badge.
+        # We do NOT gate the workflow on this — a failing suite produces a failing badge.
+        run: npm run test:conformance
+        continue-on-error: true
+
+      - name: Regenerate badge artefacts
+        run: node conformance/generate-badge.js
+        continue-on-error: true  # allow red-badge commits
+
+      - name: Commit + push if changed
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet conformance/badge.svg conformance/badge-endpoint.json; then
+            echo "No badge changes — skipping commit."
+            exit 0
+          fi
+          git add conformance/badge.svg conformance/badge-endpoint.json
+          git commit -m "chore(conformance): regenerate L0 badge [skip ci]"
+          git push

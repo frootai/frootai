@@ -1,0 +1,100 @@
+name: "FrootAI Eval Action"
+description: "Run FrootAI eval datasets against your manifest in CI. Fails on threshold breach."
+author: "FrootAI <hello@frootai.dev>"
+
+branding:
+  icon: "check-circle"
+  color: "green"
+
+inputs:
+  dataset:
+    description: "Play slug — loads the matching eval dataset (e.g. '01-enterprise-rag')."
+    required: true
+  manifest:
+    description: "Path to the fai-manifest.json file."
+    required: true
+    default: "./fai-manifest.json"
+  mode:
+    description: "'oss' (local engine, no token) or 'cloud' (FrootAI Cloud Engine)."
+    required: false
+    default: "oss"
+  node-version:
+    description: "Node.js version to use."
+    required: false
+    default: "22"
+  thresholds:
+    description: "JSON string of metric thresholds (e.g. '{\"groundedness\": 0.85, \"safety\": 1.0}')."
+    required: false
+    default: "{}"
+
+outputs:
+  results:
+    description: "JSON file path with eval results."
+    value: ${{ steps.eval.outputs.results }}
+  passed:
+    description: "'true' if all thresholds passed, 'false' otherwise."
+    value: ${{ steps.eval.outputs.passed }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install FrootAI CLI
+      shell: bash
+      run: npm install -g frootai@latest
+
+    - name: Download eval dataset
+      shell: bash
+      run: |
+        echo "📥 Downloading dataset: ${{ inputs.dataset }}"
+        frootai eval download-dataset --slug ${{ inputs.dataset }} --output eval-dataset.jsonl
+
+    - name: Run eval
+      id: eval
+      shell: bash
+      env:
+        FROOTAI_EVAL_TOKEN: ${{ env.FROOTAI_EVAL_TOKEN }}
+      run: |
+        echo "🧪 Running eval: ${{ inputs.dataset }} against ${{ inputs.manifest }}"
+
+        EVAL_ARGS="--dataset eval-dataset.jsonl --manifest ${{ inputs.manifest }} --output eval-results.json"
+
+        if [ "${{ inputs.mode }}" = "cloud" ] && [ -n "$FROOTAI_EVAL_TOKEN" ]; then
+          EVAL_ARGS="$EVAL_ARGS --mode cloud --token $FROOTAI_EVAL_TOKEN"
+        else
+          EVAL_ARGS="$EVAL_ARGS --mode oss"
+        fi
+
+        if [ '${{ inputs.thresholds }}' != '{}' ]; then
+          EVAL_ARGS="$EVAL_ARGS --thresholds '${{ inputs.thresholds }}'"
+        fi
+
+        frootai eval run $EVAL_ARGS
+
+        # Parse results
+        PASSED=$(cat eval-results.json | node -e "const r=require('fs').readFileSync('/dev/stdin','utf8');const j=JSON.parse(r);console.log(j.allPassed?'true':'false')")
+        echo "results=eval-results.json" >> $GITHUB_OUTPUT
+        echo "passed=$PASSED" >> $GITHUB_OUTPUT
+
+        if [ "$PASSED" = "false" ]; then
+          echo "❌ Eval thresholds breached — see eval-results.json for details."
+          exit 1
+        else
+          echo "✅ All eval thresholds passed."
+        fi
+
+    - name: First-run beacon
+      if: always()
+      shell: bash
+      run: |
+        # Anonymous telemetry: repo hash + dataset + result + version
+        REPO_HASH=$(echo "${{ github.repository }}" | sha256sum | cut -c1-12)
+        PASSED="${{ steps.eval.outputs.passed }}"
+        curl -s -X POST https://t.frootai.dev/eval-action/first-run \
+          -H "Content-Type: application/json" \
+          -d "{\"repo_hash\":\"$REPO_HASH\",\"dataset_slug\":\"${{ inputs.dataset }}\",\"result\":\"$PASSED\",\"eval_action_version\":\"v1\"}" \
+          --max-time 5 || true

@@ -182,9 +182,15 @@ Requirements: `version: 1`, valid events, bash script exists.
 
 ---
 
+## Becoming a Champion
+
+Consistent contributors are hand-picked for the **[FrootAI Champions Program](./CHAMPIONS.md)** — a recognised cohort of community members who embody our culture of kindness, quality, and craft. Champions get monthly calls with the founder, early access to new features, co-authorship opportunities, and more. Read the full charter: **[CHAMPIONS.md](./CHAMPIONS.md)**.
+
+---
+
 ## Code of Conduct
 
-- Be respectful and constructive
+- Be respectful and constructive — see our full **[Code of Conduct](./CODE_OF_CONDUCT.md)**.
 - Focus on the infra/platform audience
 - Quality over quantity — one deeply customized play beats ten skeletons
 - MIT License — all contributions are MIT-licensed

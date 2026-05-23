@@ -1,0 +1,17 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-scope",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture", "O4-Azure-AI-Services"],
+    "waf": ["security", "responsible-ai"],
+    "scope": "healthcare-clinical-qa"
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "guardrails": {
+      "groundedness": 0.98,
+      "safety": 0
+    }
+  }
+}

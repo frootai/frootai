@@ -1,0 +1,24 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-catalog-paths",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture", "O3-MCP-Tools"],
+    "waf": ["security", "reliability"]
+  },
+  "primitives": {
+    "agents": [
+      "./agent.md",
+      "./.github/agents/builder.agent.md",
+      "../../agents/fai-rag-architect.agent.md"
+    ],
+    "instructions": [
+      "./.github/copilot-instructions.md",
+      "../../instructions/python-waf.instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/rag-indexer",
+      "../../skills/fai-play-initializer"
+    ]
+  }
+}

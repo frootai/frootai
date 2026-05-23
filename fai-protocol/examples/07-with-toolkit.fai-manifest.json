@@ -1,0 +1,17 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-toolkit",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["F4-Agentic-OS", "T3-Production-Patterns"],
+    "waf": ["operational-excellence"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"]
+  },
+  "toolkit": {
+    "devkit": "./.github",
+    "tunekit": "./config",
+    "speckit": "./spec"
+  }
+}

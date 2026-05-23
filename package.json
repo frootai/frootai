@@ -18,6 +18,7 @@
     "validate:fix": "node scripts/validate-consistency.js --fix",
     "build": "npm run validate:primitives && npm run generate:marketplace && npm run generate:website-data && npm run update:readme",
     "test:engine": "node engine/test.js",
+    "test:conformance": "node conformance/index.js",
     "release": "node scripts/release-channel.js",
     "release:dry": "node scripts/release-channel.js --dry-run",
     "release:mcp": "node scripts/release-channel.js mcp",

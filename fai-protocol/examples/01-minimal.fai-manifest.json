@@ -1,0 +1,12 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-minimal",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["F1-GenAI-Foundations"],
+    "waf": ["responsible-ai"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"]
+  }
+}

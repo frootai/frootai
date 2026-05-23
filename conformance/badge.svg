@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="20" role="img" aria-label="FAI L0: passing 10/10">
+  <title>FAI L0: passing 10/10</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
+    <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
+    <stop offset="1" stop-color="#000" stop-opacity=".5"/>
+  </linearGradient>
+  <clipPath id="r"><rect width="150" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="52" height="20" fill="#555"/>
+    <rect x="52" width="98" height="20" fill="#4c1"/>
+    <rect width="150" height="20" fill="url(#s)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="110" text-rendering="geometricPrecision">
+    <text transform="scale(.1)" x="260" y="150" fill="#010101" fill-opacity=".3">FAI L0</text>
+    <text transform="scale(.1)" x="260" y="140">FAI L0</text>
+    <text transform="scale(.1)" x="1010" y="150" fill="#010101" fill-opacity=".3">passing 10/10</text>
+    <text transform="scale(.1)" x="1010" y="140">passing 10/10</text>
+  </g>
+</svg>

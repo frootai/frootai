@@ -1,0 +1,16 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-instructions",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["F1-GenAI-Foundations", "R1-Prompts"],
+    "waf": ["responsible-ai", "security"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "instructions": [
+      "./instructions/python-coding.instructions.md",
+      "./instructions/bicep-style.instructions.md"
+    ]
+  }
+}
