@@ -1,0 +1,23 @@
+{
+  "id": "azure-samples__graphrag-accelerator",
+  "overrides": {
+    "tagline": "One-click deploy of Microsoft GraphRAG as an Azure Container App with API + UI for knowledge-graph-augmented retrieval",
+    "categories": ["rag", "search", "data"],
+    "froot_layer": "R",
+    "cost_band": "$400-1800/mo",
+    "trust_badges": [
+      "microsoft_official",
+      "azd_template"
+    ],
+    "tags": [
+      "graphrag",
+      "knowledge-graph",
+      "container-apps",
+      "archived"
+    ]
+  },
+  "reason": "Auto-classifier picked the generic 'rag' category and missed that this is the specific GraphRAG variant (knowledge-graph augmented). 'data' added because the pipeline ingests + indexes documents into a graph store before retrieval. Added 'archived' to tags so the website can surface a maintenance-status badge — the upstream repo was archived 2025-08 in favour of microsoft/graphrag direct usage; the accelerator pattern remains a valuable reference.",
+  "submitted_by": "github:pavle",
+  "reviewed_by": "@frootai/core",
+  "submitted_at": "2026-05-25T12:00:00Z"
+}

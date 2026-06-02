@@ -1,0 +1,717 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+  "title": "FAI Accelerator Manifest",
+  "description": "The cross-cloud Solution Accelerator manifest used by the FAI Orchard. Carries identity, descriptive, classification, maturity, licensing, cost, deployment, eval, FAI-compatibility, pollination, and provenance metadata for one accelerator (harvested, cultivated, or first-party). Schema is CC0-1.0; adopt freely. See https://github.com/Pavleen-Singh/frootai/tree/main/orchard for the registry, validators, and contribution flow. See planning/fai-orchard-masterplan.md §S and §G for the conceptual model; planning/fai-orchard-manifest-schema.md for the full spec.",
+  "$comment": "License: CC0-1.0 (Creative Commons Zero v1.0 Universal — public domain dedication). https://creativecommons.org/publicdomain/zero/1.0/legalcode. SPDX-License-Identifier: CC0-1.0. Authored by FrootAI 2026-05-24 as part of Phase [A0.2] of the FAI Orchard master plan. Forward-compat: origin + composed_from fields baked in at v1.0.0 to support FAI Greenhouse (Phase [A11]) without a future major version bump.",
+
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "slug",
+    "variety",
+    "owner",
+    "repo_url",
+    "tagline",
+    "categories",
+    "tech",
+    "ripeness",
+    "season",
+    "last_commit",
+    "license",
+    "fai_compatible",
+    "origin",
+    "provenance"
+  ],
+
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URL of the schema this document validates against. Conventionally https://frootai.dev/schemas/fai-accelerator.v1.json."
+    },
+
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Strict semver of this schema (MAJOR.MINOR.PATCH). v1.0.0 is the initial release."
+    },
+
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*__[a-z0-9][a-z0-9._-]*$",
+      "minLength": 5,
+      "maxLength": 256,
+      "description": "Canonical identifier: <owner>__<repo>, lowercase, double-underscore separator. Example: azure-samples__azure-search-openai-demo."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable display name. Often the repo name with spaces and proper case."
+    },
+
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "URL-safe slug used in /orchard/<variety>/<slug>. Derived from repo name."
+    },
+
+    "variety": {
+      "type": "string",
+      "enum": ["azure", "gcp", "aws", "oss", "hybrid"],
+      "description": "Cloud variety. hybrid = spans multiple clouds."
+    },
+
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "GitHub org or user. Case preserved from GitHub (e.g., Azure-Samples)."
+    },
+
+    "owner_type": {
+      "type": "string",
+      "enum": ["first_party", "community", "partner", "frootai"],
+      "description": "Owner classification. first_party = cloud vendor org (Azure-Samples, GoogleCloudPlatform, aws-samples). community = independent OSS. partner = vendor partner. frootai = FrootAI itself."
+    },
+
+    "repo_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://github\\.com/[^/]+/[^/]+$",
+      "description": "Canonical GitHub URL. No trailing slash. No .git suffix."
+    },
+
+    "default_branch": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Default branch name (typically main or master)."
+    },
+
+    "homepage": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Optional separate website URL declared by the repo."
+    },
+
+    "tagline": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140,
+      "description": "One-line elevator pitch. ≤140 chars. Shown in grid cards."
+    },
+
+    "description": {
+      "type": "string",
+      "maxLength": 5000,
+      "description": "1-3 paragraphs. May be a README excerpt or LLM-polished summary."
+    },
+
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "rag",
+          "agent",
+          "multi-agent",
+          "voice",
+          "vision",
+          "chat",
+          "doc",
+          "code",
+          "infra",
+          "mcp",
+          "security",
+          "search",
+          "data",
+          "eval",
+          "edge",
+          "industry-healthcare",
+          "industry-finance",
+          "industry-retail",
+          "industry-public-sector"
+        ]
+      },
+      "description": "Controlled vocabulary, 1:1 mapping with Solution Play categories. See planning/fai-orchard-manifest-schema.md §3."
+    },
+
+    "tech": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "description": "Free-form tech stack tags. Examples: 'Azure OpenAI', 'Bicep', 'LangChain'."
+    },
+
+    "languages": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "description": "Top GitHub languages by bytes (from GitHub API /repos/{owner}/{repo}/languages)."
+    },
+
+    "tags": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "description": "Free-form lowercase tags. Used for search, not for filtering UI."
+    },
+
+    "froot_layer": {
+      "type": "string",
+      "enum": ["F", "R", "O1", "O2", "T"],
+      "description": "FROOT layer classification: F=Foundations, R=Reasoning, O1=Orchestration, O2=Operations, T=Transformation. See planning/fai-orchard-manifest-schema.md §4."
+    },
+
+    "froot_layer_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "LLM classifier confidence 0-1."
+    },
+
+    "froot_layer_reason": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Short justification from the classifier prompt."
+    },
+
+    "ripeness": {
+      "type": "string",
+      "enum": ["Seedling", "Sapling", "Bearing", "Mature"],
+      "description": "Maturity tier. Computed deterministically by enrich.js — never LLM-judged. See §5."
+    },
+
+    "ripeness_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stars": { "type": "integer", "minimum": 0 },
+        "forks": { "type": "integer", "minimum": 0 },
+        "contributors": { "type": "integer", "minimum": 0 },
+        "open_issues": { "type": "integer", "minimum": 0 },
+        "closed_issues_30d": { "type": "integer", "minimum": 0 },
+        "commit_velocity_30d": { "type": "integer", "minimum": 0 },
+        "has_releases": { "type": "boolean" },
+        "latest_release": { "type": ["string", "null"], "maxLength": 100 }
+      },
+      "description": "Raw signals used to compute ripeness. Recorded for auditability."
+    },
+
+    "season": {
+      "type": "string",
+      "enum": ["Spring", "Summer", "Autumn", "Winter"],
+      "description": "Recency tier. Computed deterministically. See §5b."
+    },
+
+    "season_reason": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Short justification (which signal moved it into this season)."
+    },
+
+    "first_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC. When this fruit was first harvested by the Orchard."
+    },
+
+    "last_commit": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC. Date of most recent commit on default_branch."
+    },
+
+    "last_release": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 UTC. Date of most recent GitHub release, or null if none."
+    },
+
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "SPDX license identifier (MIT, Apache-2.0, BSD-3-Clause, CC0-1.0, etc.) OR the literal string 'Unknown'."
+    },
+
+    "license_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "URL to the LICENSE file in the repo."
+    },
+
+    "trust_badges": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "microsoft_official",
+          "google_official",
+          "aws_official",
+          "azd_template",
+          "frootai_compatible_full",
+          "frootai_compatible_partial",
+          "frootai_pollinated",
+          "eval_proven",
+          "safety_layer",
+          "production_ready"
+        ]
+      },
+      "description": "Controlled vocab of trust badges. See §6."
+    },
+
+    "code_of_conduct": {
+      "type": "boolean",
+      "description": "True if CODE_OF_CONDUCT.md exists at repo root."
+    },
+
+    "security_md": {
+      "type": "boolean",
+      "description": "True if SECURITY.md exists at repo root."
+    },
+
+    "cost_band": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "Human-readable cost band shown in the UI. Example: '$200-800/mo'."
+    },
+
+    "cost_estimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "method", "estimated_at"],
+      "properties": {
+        "currency": {
+          "type": "string",
+          "enum": ["USD", "EUR", "GBP"],
+          "description": "ISO 4217 currency code."
+        },
+        "monthly_dev_low": { "type": "number", "minimum": 0 },
+        "monthly_dev_high": { "type": "number", "minimum": 0 },
+        "monthly_prod_low": { "type": "number", "minimum": 0 },
+        "monthly_prod_high": { "type": "number", "minimum": 0 },
+        "drivers": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "type": "string", "maxLength": 100 }
+        },
+        "method": {
+          "type": "string",
+          "enum": ["llm_estimate_v1", "manual_override", "upstream_declared"]
+        },
+        "estimated_at": { "type": "string", "format": "date-time" }
+      },
+      "description": "Structured cost estimate. low <= high enforced via allOf below."
+    },
+
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "azd_template": {
+          "type": "boolean",
+          "description": "True if azure.yaml exists at repo root (Azure Developer CLI template)."
+        },
+        "iac": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["bicep", "arm", "terraform", "cdk", "pulumi", "helm", "cloudformation"]
+          }
+        },
+        "containers": { "type": "boolean" },
+        "serverless": { "type": "boolean" },
+        "one_click_url": { "type": ["string", "null"], "format": "uri" },
+        "estimated_deploy_minutes": { "type": ["integer", "null"], "minimum": 0 },
+        "requires_quota": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "type": "string", "maxLength": 100 }
+        }
+      }
+    },
+
+    "eval_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "has_eval_folder": { "type": "boolean" },
+        "has_tests": { "type": "boolean" },
+        "has_safety_layer": { "type": "boolean" },
+        "has_observability": { "type": "boolean" },
+        "has_load_tests": { "type": "boolean" },
+        "fai_eval_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "fai_eval_run_id": { "type": ["string", "null"], "maxLength": 100 }
+      }
+    },
+
+    "fai_compatible": {
+      "type": "string",
+      "enum": ["none", "partial", "full"],
+      "description": "How well this accelerator already speaks FAI primitives."
+    },
+
+    "fai_compatibility_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "has_fai_manifest": { "type": "boolean" },
+        "has_dot_github_agentic_os": { "type": "boolean" },
+        "primitives_present": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["agents", "skills", "prompts", "instructions", "hooks", "workflows", "evals"]
+          }
+        },
+        "missing_primitives": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["agents", "skills", "prompts", "instructions", "hooks", "workflows", "evals"]
+          }
+        },
+        "upgrade_path": { "type": ["string", "null"], "maxLength": 1000 }
+      }
+    },
+
+    "pollinates": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["play_id", "relation", "confidence", "source"],
+        "properties": {
+          "play_id": {
+            "type": "string",
+            "pattern": "^[0-9]{2}$",
+            "description": "Two-digit zero-padded Solution Play ID (01-99)."
+          },
+          "play_slug": {
+            "type": "string",
+            "pattern": "^[0-9]{2}-[a-z0-9-]+$",
+            "description": "Play slug: <id>-<kebab-name>."
+          },
+          "relation": {
+            "type": "string",
+            "enum": ["baseline", "extends_to", "alternative", "uses_pattern", "provides_infra"]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "reason": { "type": "string", "maxLength": 500 },
+          "source": {
+            "type": "string",
+            "enum": ["auto", "manual", "community_pr"]
+          }
+        }
+      },
+      "description": "Cross-links from this Accelerator to FrootAI Solution Plays. Many-to-many."
+    },
+
+    "origin": {
+      "type": "string",
+      "enum": ["harvested", "cultivated", "first_party"],
+      "description": "How this accelerator entered the Orchard. harvested = crawled from external GitHub (Phase A1+A2). cultivated = composed by FrootAI's Builder agent from verified modules (Phase A11). first_party = hand-authored by FrootAI (rare; legacy 101 Plays' infra). See planning/fai-orchard-masterplan.md §G."
+    },
+
+    "composed_from": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "module_path",
+          "version",
+          "upstream_url",
+          "integrity_sha256",
+          "registry",
+          "role"
+        ],
+        "properties": {
+          "module_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Canonical module path. Example: avm/ptn/ai-ml/ai-foundry OR Azure/openai/azurerm."
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?$",
+            "description": "Strict semver. No 'latest', no '^', no '~'."
+          },
+          "upstream_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Direct URL to the pinned module source."
+          },
+          "integrity_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "Lowercase 64-hex sha256 of the module bytes at pin time."
+          },
+          "registry": {
+            "type": "string",
+            "enum": [
+              "avm-bicep",
+              "terraform-azure",
+              "terraform-aws",
+              "terraform-gcp",
+              "terraform-oss"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": ["pattern", "resource", "utility"]
+          }
+        }
+      },
+      "description": "Provenance chain for cultivated accelerators. REQUIRED when origin == 'cultivated'. See planning/fai-orchard-manifest-schema.md §13.2."
+    },
+
+    "composition_method": {
+      "type": "string",
+      "pattern": "^frootai-greenhouse/v[0-9]+\\.[0-9]+$",
+      "description": "Identifier of the cultivation method. Example: frootai-greenhouse/v1.0."
+    },
+
+    "composed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC. When the Builder agent composed this accelerator."
+    },
+
+    "composed_by_agent": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "Identifier of the Builder agent version. Example: builder-v3.2."
+    },
+
+    "gold_iac": {
+      "type": "boolean",
+      "description": "True if the IaC was hand-authored instead of composed from verified modules. Doctrine line 9 says this MUST be false for cultivated accelerators unless gold_iac_reason is supplied (escape valve tracked in CI)."
+    },
+
+    "gold_iac_reason": {
+      "type": ["string", "null"],
+      "maxLength": 1000,
+      "description": "REQUIRED when gold_iac is true. Free-form justification for the doctrine exception."
+    },
+
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harvested_at", "harvested_by", "source"],
+      "properties": {
+        "harvested_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC. When the pipeline harvested or composed this fruit."
+        },
+        "harvested_by": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Pipeline version. Example: fai-orchard-harvester/v1.0."
+        },
+        "source": {
+          "type": "string",
+          "enum": ["github-api", "frootai-greenhouse", "manual-seed"],
+          "description": "Where this fruit came from."
+        },
+        "first_party": {
+          "type": "boolean",
+          "description": "True if this repo is owned by FrootAI."
+        },
+        "enriched_by": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["step", "model", "at"],
+            "properties": {
+              "step": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Pipeline step name. Examples: froot_layer_classification, cost_estimation, tagline_polish, pollination_suggest."
+              },
+              "model": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Model identifier. Example: gpt-4o-mini-2024-07-18."
+              },
+              "at": { "type": "string", "format": "date-time" }
+            }
+          },
+          "description": "Stamp per LLM-touched field. Doctrine line 3: NO SILENT ENRICHMENT."
+        },
+        "overrides_applied": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Path to override file merged in. Example: overrides/azure-samples__azure-search-openai-demo.json."
+          }
+        }
+      },
+      "description": "Required on every fruit. The complete audit trail."
+    },
+
+    "search_keywords": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "description": "Lowercase keywords for full-text search. Auto-derived from tagline + categories + tech."
+    },
+
+    "readme_excerpt": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "First ~500 chars of the README for full-text search."
+    },
+
+    "semantic_embedding_id": {
+      "type": ["string", "null"],
+      "maxLength": 100,
+      "description": "Pointer into the semantic-search vector store. Populated by Phase A3 search indexer."
+    }
+  },
+
+  "allOf": [
+    {
+      "$comment": "Validator rule §13.3.1: origin=cultivated implies composed_from required and non-empty.",
+      "if": {
+        "properties": { "origin": { "const": "cultivated" } },
+        "required": ["origin"]
+      },
+      "then": {
+        "required": [
+          "composed_from",
+          "composition_method",
+          "composed_at",
+          "composed_by_agent",
+          "gold_iac"
+        ]
+      }
+    },
+    {
+      "$comment": "Validator rule §13.3.2: gold_iac=true requires gold_iac_reason (doctrine line 9 escape valve).",
+      "if": {
+        "properties": { "gold_iac": { "const": true } },
+        "required": ["gold_iac"]
+      },
+      "then": {
+        "required": ["gold_iac_reason"],
+        "properties": {
+          "gold_iac_reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    {
+      "$comment": "Validator rule §7.12: monthly_dev_low <= monthly_dev_high.",
+      "if": {
+        "properties": {
+          "cost_estimate": {
+            "type": "object",
+            "required": ["monthly_dev_low", "monthly_dev_high"]
+          }
+        },
+        "required": ["cost_estimate"]
+      },
+      "then": {
+        "properties": {
+          "cost_estimate": {
+            "properties": {
+              "monthly_dev_low": { "type": "number" },
+              "monthly_dev_high": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Cultivated fruits MUST use source=frootai-greenhouse in provenance.",
+      "if": {
+        "properties": { "origin": { "const": "cultivated" } },
+        "required": ["origin"]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "source": { "const": "frootai-greenhouse" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Harvested fruits MUST use source=github-api in provenance.",
+      "if": {
+        "properties": { "origin": { "const": "harvested" } },
+        "required": ["origin"]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "source": { "const": "github-api" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "microsoft-foundry__foundry-samples",
+  "overrides": {
+    "tagline": "Curated collection of runnable Azure AI Foundry samples covering agents, evaluation, RAG, and model deployment",
+    "categories": ["agent", "rag", "eval", "chat"],
+    "froot_layer": "F",
+    "trust_badges": [
+      "microsoft_official",
+      "azd_template"
+    ],
+    "tags": [
+      "sample-collection",
+      "azure-ai-foundry",
+      "multi-sample",
+      "learning-resource"
+    ]
+  },
+  "reason": "Auto-pipeline classified this as a single application but the repo is a docs-embedded sample collection spanning agents, eval, RAG, and model-deployment scenarios. Multi-category classification + sample-collection tag are needed so the website can render it correctly (collection-style card, not single-fruit card). Froot layer 'F' (Foundations) because the samples teach the underlying Azure AI Foundry primitives rather than implementing a higher-layer reasoning or orchestration pattern.",
+  "submitted_by": "github:pavle",
+  "reviewed_by": "@frootai/core",
+  "submitted_at": "2026-05-25T12:00:00Z"
+}

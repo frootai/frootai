@@ -1,0 +1,267 @@
+{
+  "$schema": "https://frootai.dev/schemas/orchard-discovery-queries.v1.json",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-05-25T00:00:00Z",
+  "generated_by": "manual",
+  "comment": "Phase [A0.26] initial 28-query set: 7 queries per Variety (azure, gcp, aws, oss). Tuned against live GitHub Search results on 2026-05-24. Targets ~640 unique Y1 Accelerators after dedupe against seed-list.json + ripeness filtering in normalize.js. Each query is independently disable-able. Add a query by appending to this array; the crawler picks it up next nightly cron.",
+
+  "queries": [
+
+    {
+      "id": "azure-samples-azd-templates",
+      "variety": "azure",
+      "query": "org:Azure-Samples topic:azd-templates",
+      "min_stars": 50,
+      "max_results": 100,
+      "reason": "Microsoft-canonical azd-template samples. Anchors the catalog; ~60 hits on 2026-05-24.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "azure-samples-ai",
+      "variety": "azure",
+      "query": "org:Azure-Samples topic:ai-azd-templates",
+      "min_stars": 30,
+      "max_results": 100,
+      "reason": "Subset of azd-templates with explicit AI focus; catches RAG, agents, voice, doc-intel.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "azure-org-azd",
+      "variety": "azure",
+      "query": "org:Azure topic:azd-templates",
+      "min_stars": 50,
+      "max_results": 50,
+      "reason": "Enterprise patterns (landing zones, reliable-web-app, GPT-RAG) from the Azure org itself.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "microsoft-azure-openai",
+      "variety": "azure",
+      "query": "org:microsoft topic:azure-openai",
+      "min_stars": 100,
+      "max_results": 50,
+      "reason": "Broader microsoft org Azure-OpenAI samples beyond Azure-Samples; e.g. content-processing-accelerator.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "microsoft-semantic-kernel",
+      "variety": "azure",
+      "query": "org:microsoft topic:semantic-kernel",
+      "min_stars": 100,
+      "max_results": 50,
+      "reason": "Semantic Kernel ecosystem samples; agent + plugin patterns.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "msusazure-accelerators",
+      "variety": "azure",
+      "query": "org:MSUSAzureAccelerators",
+      "min_stars": 5,
+      "max_results": 30,
+      "reason": "Industry-vertical accelerators (call-center, insurance, supply-chain). Low star bar — long-tail strategic value.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "microsoft-foundry-org",
+      "variety": "azure",
+      "query": "org:microsoft-foundry",
+      "min_stars": 10,
+      "max_results": 30,
+      "reason": "Newest Microsoft Foundry samples (MCP, hosted agents, Foundry Local). Live source of truth for Foundry features.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+
+    {
+      "id": "gcp-generative-ai",
+      "variety": "gcp",
+      "query": "org:GoogleCloudPlatform topic:generative-ai",
+      "min_stars": 100,
+      "max_results": 100,
+      "reason": "Google-canonical generative AI notebooks + samples. The anchor for GCP variety.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "gcp-vertex-ai",
+      "variety": "gcp",
+      "query": "org:GoogleCloudPlatform topic:vertex-ai",
+      "min_stars": 50,
+      "max_results": 100,
+      "reason": "Vertex AI platform samples — orchestration, training, deployment patterns.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "google-gemini-org",
+      "variety": "gcp",
+      "query": "org:google-gemini",
+      "min_stars": 20,
+      "max_results": 30,
+      "reason": "Gemini API reference samples + cookbooks from the Gemini org.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "gcp-rag",
+      "variety": "gcp",
+      "query": "org:GoogleCloudPlatform topic:rag",
+      "min_stars": 30,
+      "max_results": 50,
+      "reason": "GCP RAG patterns; cross-cloud equivalents to Azure RAG samples for the 'no hidden competitors' doctrine.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "gcp-llm-topic",
+      "variety": "gcp",
+      "query": "org:GoogleCloudPlatform topic:llm",
+      "min_stars": 50,
+      "max_results": 50,
+      "reason": "Broader LLM samples beyond generative-ai topic; some serverless + Cloud Run patterns are tagged llm only.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "google-deepmind-ai",
+      "variety": "gcp",
+      "query": "org:google-deepmind topic:ai",
+      "min_stars": 200,
+      "max_results": 30,
+      "reason": "DeepMind research-grade samples; high quality, lower volume. Strategic for 'foundation model' fruits.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "gcp-ai-agent-topic",
+      "variety": "gcp",
+      "query": "topic:google-cloud topic:ai-agent",
+      "min_stars": 100,
+      "max_results": 50,
+      "reason": "Cross-org topic search for agentic patterns on GCP — picks up partner + community accelerators.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+
+    {
+      "id": "aws-samples-bedrock",
+      "variety": "aws",
+      "query": "org:aws-samples topic:bedrock",
+      "min_stars": 50,
+      "max_results": 100,
+      "reason": "AWS-canonical Bedrock samples — Claude, Llama, Titan models with RAG + agents.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "aws-samples-generative-ai",
+      "variety": "aws",
+      "query": "org:aws-samples topic:generative-ai",
+      "min_stars": 100,
+      "max_results": 100,
+      "reason": "Broader generative-AI samples from aws-samples; ~80+ hits.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "awslabs-ai",
+      "variety": "aws",
+      "query": "org:awslabs topic:ai",
+      "min_stars": 100,
+      "max_results": 50,
+      "reason": "AWS Labs (research-grade) AI samples. Often more advanced than aws-samples.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "aws-samples-sagemaker",
+      "variety": "aws",
+      "query": "org:aws-samples topic:sagemaker",
+      "min_stars": 200,
+      "max_results": 50,
+      "reason": "SageMaker training + deployment samples. High bar — only 200+ stars to filter out tutorials.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "awslabs-llm",
+      "variety": "aws",
+      "query": "org:awslabs topic:llm",
+      "min_stars": 50,
+      "max_results": 50,
+      "reason": "LLM-specific samples from AWS Labs; e.g. AGI ingestion patterns.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "aws-samples-rag",
+      "variety": "aws",
+      "query": "org:aws-samples topic:rag",
+      "min_stars": 50,
+      "max_results": 50,
+      "reason": "RAG-specific patterns; cross-cloud equivalents for the 'no hidden competitors' doctrine.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "aws-ai-agent-topic",
+      "variety": "aws",
+      "query": "topic:aws topic:ai-agent",
+      "min_stars": 100,
+      "max_results": 50,
+      "reason": "Cross-org topic search for agentic patterns on AWS — picks up partner + community accelerators.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+
+    {
+      "id": "oss-langchain-topic",
+      "variety": "oss",
+      "query": "topic:langchain",
+      "min_stars": 1000,
+      "max_results": 100,
+      "reason": "LangChain ecosystem — 1000+ stars filters to substantial integrations + templates.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-llamaindex-topic",
+      "variety": "oss",
+      "query": "topic:llamaindex",
+      "min_stars": 500,
+      "max_results": 100,
+      "reason": "LlamaIndex packs + integrations. Indexing-focused complement to LangChain.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-semantic-kernel-topic",
+      "variety": "oss",
+      "query": "topic:semantic-kernel",
+      "min_stars": 500,
+      "max_results": 50,
+      "reason": "Semantic Kernel community samples beyond Microsoft org.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-mcp-server-topic",
+      "variety": "oss",
+      "query": "topic:mcp-server",
+      "min_stars": 100,
+      "max_results": 100,
+      "reason": "Model Context Protocol servers — Anthropic/Cursor/Claude ecosystem; rapidly growing.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-langchain-ai-org",
+      "variety": "oss",
+      "query": "org:langchain-ai",
+      "min_stars": 200,
+      "max_results": 50,
+      "reason": "Canonical LangChain org repos. Filters down to maintained core + templates.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-run-llama-org",
+      "variety": "oss",
+      "query": "org:run-llama",
+      "min_stars": 200,
+      "max_results": 50,
+      "reason": "LlamaIndex canonical org (rebranded). Captures the core lib + create-llama scaffolder.",
+      "added_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "id": "oss-anthropic-cookbook",
+      "variety": "oss",
+      "query": "org:anthropics",
+      "min_stars": 500,
+      "max_results": 30,
+      "reason": "Anthropic-official cookbook + courses + tools. Reference for Claude-first patterns.",
+      "added_at": "2026-05-25T00:00:00Z"
+    }
+
+  ]
+}

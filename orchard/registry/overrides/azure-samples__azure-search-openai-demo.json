@@ -1,0 +1,24 @@
+{
+  "id": "azure-samples__azure-search-openai-demo",
+  "overrides": {
+    "tagline": "Production-grade RAG on Azure AI Search with hybrid + vector retrieval and built-in eval harness",
+    "categories": ["rag", "search", "chat"],
+    "froot_layer": "R",
+    "cost_band": "$150-600/mo",
+    "cost_estimate": {
+      "monthly_prod_low": 150,
+      "monthly_prod_high": 600,
+      "method": "manual_override"
+    },
+    "trust_badges": [
+      "microsoft_official",
+      "azd_template",
+      "production_ready",
+      "eval_proven"
+    ]
+  },
+  "reason": "Verified deployment costs from three customer engagements 2025-Q4 through 2026-Q1: actual production spend ranges $150-600/mo (auto-estimate was 30% high). The 'eval_proven' badge is justified by the in-repo `evals/` harness shipping with golden answers and azd `azd up` reproducibility.",
+  "submitted_by": "github:pavle",
+  "reviewed_by": "@frootai/core",
+  "submitted_at": "2026-05-25T12:00:00Z"
+}
