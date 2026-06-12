@@ -13,10 +13,13 @@
 | Add an Accelerator the Orchard doesn't know about yet | 🌱 **Seed** | [`registry/seed-list.json`](./registry/seed-list.json) | ~24h (next nightly cron) |
 | Fix a wrong field on an Accelerator already in the catalog | 🍂 **Override** | [`registry/overrides/<owner>__<repo>.json`](./registry/overrides/) | ~24h (next nightly cron) |
 | Link an Accelerator to a Solution Play | 🔗 **Pollinate** | [`registry/pollinations.json`](./registry/pollinations.json) | ~24h (next nightly cron) |
+| **Submit a Community Play PR (author a new community-curated play)** | 🌿 **Community Play PR** | [`community-plays/<slug>/`](./community-plays/CONTRIBUTING.md) | Reviewed weekly; merged to community catalog |
 | Suggest a schema change (new field, new enum value, ...) | 📐 **Schema PR** | [`schema/fai-accelerator.schema.json`](./schema/fai-accelerator.schema.json) | Reviewed weekly; bumps schema version |
 | Improve the docs / a validator / this CONTRIBUTING | 📝 **Regular PR** | The file in question | Reviewed on merge |
 
 Every path is **a single PR**. No issues required first. CODEOWNER review is enough.
+
+> **Community plays** have their own validation pipeline + dedicated reviewer rotation \u2014 see [`community-plays/CONTRIBUTING.md`](./community-plays/CONTRIBUTING.md) for the full submission template, quality bar, and spam-guard rules.
 
 ---
 
