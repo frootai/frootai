@@ -23,6 +23,8 @@ after the next major ships. After that, please upgrade.
 
 **Please do NOT report security issues in public GitHub Issues, Discussions, Pull Requests, or Discord.**
 
+> **Looking for DMCA takedowns, license violations, or harassment / TOS reports?** Those route to a separate Trust + Safety channel — see [`TRUST_AND_SAFETY.md`](./TRUST_AND_SAFETY.md) ([H11.26]). This document covers software vulnerability reports only.
+
 Use one of these private channels:
 
 ### Preferred — GitHub Private Vulnerability Reporting
@@ -98,11 +100,17 @@ If you operate FrootAI in production:
 
 ## Cryptographic Signatures
 
-All published packages are:
-- npm: signed with npm provenance (Sigstore)
-- VS Code: signed by Microsoft Marketplace
-- PyPI: hash-pinned in `pyproject.toml`
-- GitHub Releases: signed via GPG (key fingerprint published on `frootai.dev/security`)
+**Canonical trust home**: [`frootai.dev/security`](https://frootai.dev/security) lists every signing mechanism, the exact location of each signing key/secret, and the verify command for each artifact surface.
+
+Summary:
+- **npm packages** (`frootai-mcp`, `frootai-cli`, `frootai-sdk`) — npm provenance (Sigstore via GitHub Actions OIDC; no long-lived key). Verify: `npm audit signatures frootai-mcp`.
+- **PyPI packages** (`frootai-mcp`, `frootai-sdk`) — PyPI Trusted Publishing with PEP 740 attestations (no `PYPI_TOKEN` secret; OIDC trusted-publishing).
+- **VS Code extension** (`frootai-vscode`) — signed by Microsoft Marketplace at install; publish auth via `secrets.VSCE_PAT`.
+- **Linux .deb / .rpm** — GPG signature. Private key in GitHub Actions secrets `GPG_PRIVATE_KEY_B64` + `GPG_KEY_PASSPHRASE`. Public key + fingerprint published at [frootai.dev/security](https://frootai.dev/security).
+- **Orchard play ZIP bundles** (planned [H7.14]) — sigstore-cosign keyless OIDC + sha256 sidecar.
+- **Orchard manifest.json** (planned [H7.15]) — embedded sha256 + cosign signature reference.
+
+Policy: **keyless first**. Every new publishing surface MUST attempt keyless OIDC (Sigstore / Fulcio + Rekor) before introducing a long-lived private key.
 
 ## Hall of Fame
 
