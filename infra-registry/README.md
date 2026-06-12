@@ -2,6 +2,18 @@
 
 > Reusable Azure infrastructure modules for AI workloads. Built on [Azure Verified Modules (AVM)](https://azure.github.io/Azure-Verified-Modules/).
 
+## Status & Scope (Phase 3 OT-11 — May 3, 2026)
+
+> **This folder is documentation-only.** It explains the AVM-first philosophy that all FrootAI solution plays follow. **No Bicep modules live here.** The actual per-play `infra/` Bicep modules live in the **sister repo** at [`c:\CodeSpace\frootai\solution-plays\<NN-name>\infra\`](https://github.com/frootai/frootai/tree/main/solution-plays).
+
+| Concern | Where it lives |
+|---------|----------------|
+| Per-play infra modules (`main.bicep`, AVM references) | Sister repo `solution-plays/NN-name/infra/` |
+| AVM module catalog (the table below) | This README — narrative explainer only |
+| Distribution / release of AVM module wrappers | None — we use AVM directly via `br/public:avm/...` |
+
+**OT-11 verdict:** **Keep as-is.** This folder is not duplicate code with sister `infra/`; it is the strategic narrative for why we use AVM modules instead of authoring our own. It belongs in `frootai-core` (distribution monorepo) because the Solution Accelerator philosophy applies to every channel that ships infra (CLI deploy templates, Function-app templates, etc.), not just the per-play deployments in sister.
+
 ## Philosophy
 
 FrootAI infrastructure follows the **Solution Accelerator** approach:
