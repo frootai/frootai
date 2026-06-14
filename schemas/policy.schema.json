@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/policy.schema.json",
+  "title": "FrootAI Policy Overlay (V7)",
+  "description": "Company-owned policy.yaml/policy.json schema for the V7 Policy Overlay Engine. The 13 overlay domains (regions, models, skus, naming, tags, network, rbac, identity, iac, encryption, observability, cost, custom_checks) compose across resolver -> composer -> emitter pipelines. Every overlay is OPTIONAL — an absent domain contributes no overlay for that slice; an empty array means 'no constraint' (NOT 'reject everything'). NEVER FAKE A SIGNAL §0.5 #4: the schema only describes shape; semantic enforcement lives in the V7.4-V7.18 overlay functions and surfaces typed PolicyError on conflict.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec_version"],
+  "properties": {
+    "$schema":  { "type": "string" },
+    "spec_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Policy spec version. Bump only when this schema changes shape (the V7.30 close pins v1; v2 is a breaking-change event)."
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form company/org identifier surfaced in PolicyDiff + telemetry."
+    },
+    "regions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 2 },
+      "uniqueItems": true,
+      "description": "Allowed Azure region names (e.g. ['eastus', 'westeurope']). Resolver candidates that don't support every listed region are filtered out (V7.6). Empty array = no region constraint."
+    },
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Model allowlist/denylist for Cognitive Services / OpenAI deployments (V7.7).",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Whitelisted model ids (e.g. ['gpt-4o', 'gpt-4o-mini']). Empty array = no constraint."
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Blacklisted model ids. Overrides allow on conflict."
+        }
+      }
+    },
+    "skus": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "SKU allowlist/denylist applied across every emitted resource (V7.8).",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "naming": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Naming convention overlay (V7.9). Rewrites canonical resource names to satisfy company-pinned prefix/suffix/separator/max_length.",
+      "properties": {
+        "prefix":     { "type": "string", "minLength": 1, "maxLength": 20 },
+        "suffix":     { "type": "string", "minLength": 1, "maxLength": 20 },
+        "separator":  { "type": "string", "enum": ["-", "_", ""] },
+        "max_length": { "type": "integer", "minimum": 3, "maximum": 90 }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Tag overlay (V7.10): inject required tag keys + validate values against regex patterns.",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Tag keys that MUST be present on every taggable resource."
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Regex pattern the tag value must match."
+          },
+          "description": "Map of tag-key -> regex pattern for value validation."
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Network overlay (V7.11). posture=private triggers PE module + DNS-zone wiring injection.",
+      "properties": {
+        "posture": {
+          "type": "string",
+          "enum": ["public", "hybrid", "private"]
+        },
+        "vnet_required":             { "type": "boolean" },
+        "private_endpoint_required": { "type": "boolean" },
+        "dns_zone_overrides": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 },
+          "description": "Resource-type -> DNS zone name override map (e.g. 'Microsoft.Storage/storageAccounts' -> 'privatelink.blob.core.windows.net')."
+        }
+      }
+    },
+    "rbac": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "RBAC overlay (V7.12). managed_identity_required=true enforces composer MI wiring + rejects service-principal alternatives.",
+      "properties": {
+        "managed_identity_required": { "type": "boolean" },
+        "role_assignment_policy": {
+          "type": "string",
+          "enum": ["strict", "permissive", "any"],
+          "description": "strict=only built-in roles; permissive=custom roles allowed if scoped; any=no constraint."
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Identity overlay (V7.13). Filters Entra ID provider config + enforces guest-account policy.",
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["entra-id", "google", "github", "okta", "azuread-b2c"]
+          },
+          "uniqueItems": true
+        },
+        "guest_account_policy": {
+          "type": "string",
+          "enum": ["allowed", "blocked", "review-required"]
+        }
+      }
+    },
+    "iac": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "IaC format overlay (V7.14). Dispatches V5 Bicep emitter / V6 Terraform emitter / both; toggles modular emit (V5.21 + V6 parallel).",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["bicep", "terraform", "both"]
+        },
+        "modular_emit": {
+          "type": "boolean",
+          "description": "When true, emit per-category split files (V5.21 + V6 parallel)."
+        },
+        "gold_allowed": {
+          "type": "boolean",
+          "description": "When false, only AVM-verified modules are emitted; community modules rejected at resolver."
+        }
+      }
+    },
+    "encryption": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Encryption overlay (V7.15). cmk_required=true injects customer-managed-key references on every supported resource.",
+      "properties": {
+        "cmk_required":       { "type": "boolean" },
+        "key_vault_required": { "type": "boolean" }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Observability overlay (V7.16). Enforces Log Analytics + App Insights wiring when *_required=true.",
+      "properties": {
+        "log_analytics_required": { "type": "boolean" },
+        "app_insights_required":  { "type": "boolean" }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cost overlay (V7.17). band_target rejects SKUs above the band; tier_default injects default tier when caller omits.",
+      "properties": {
+        "band_target": {
+          "type": "string",
+          "enum": ["micro", "small", "medium", "large", "xl"]
+        },
+        "tier_default": {
+          "type": "string",
+          "enum": ["free", "basic", "standard", "premium", "enterprise"]
+        }
+      }
+    },
+    "custom_checks": {
+      "type": "array",
+      "description": "User-defined checks evaluated against the composed AST (V7.18). Each carries a CUSTOM-<bucket>-NNN id mirroring the V1.22 sealed-namespace convention.",
+      "items": { "$ref": "#/$defs/CustomCheck" }
+    }
+  },
+  "$defs": {
+    "CustomCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "severity", "title", "expression"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CUSTOM-[A-Z0-9]+-[0-9]{3}$",
+          "description": "CUSTOM-<bucket>-NNN. Same shape as V1.22 sealed-namespace; never collides with WAF-*/CAF-*."
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"]
+        },
+        "title":       { "type": "string", "minLength": 8, "maxLength": 200 },
+        "description": { "type": "string", "minLength": 16, "maxLength": 800 },
+        "expression": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Match expression evaluated against the composed AST. V7.18 owns the evaluator + the expression DSL."
+        }
+      }
+    }
+  }
+}

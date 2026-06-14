@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/policy-overlay.v1.json",
+  "title": "FAI Policy Overlay Schema v1",
+  "description": "Company-owned policy that filters every emit from Stage S6 (compose-infra) + every customize entry-point. Declares allow-listed regions, models, SKUs, naming/tags rules, network posture, RBAC posture, identity providers, IaC format, encryption defaults, observability defaults, and cost guardrails. Loaded as YAML at runtime but specified here in JSON Schema 2020-12 (Ajv-compatible). Reproduce-bit: same RepoFacts + same overlay sha256 → same composed infra.",
+  "$comment": "License: CC0-1.0. Authored 2026-06-04 as part of Phase [H0.4] of the Repo→Solution-Play Converter masterplan. Companion to fai-manifest-v2.json provenance.policy_overlay (which points at the file applied at compose time) and to the future [V7.1] policy.schema.json (the V-engine consumer). Sections covered: regions, models, skus, naming, tags, network, rbac, identity, iac, encryption, observability, cost, custom_checks. v1.0.0 ships with FROZEN ENUMS — extending the enum requires a MAJOR bump and the [H0.27] schema-drift CI gate. Every section is OPTIONAL at the top level (an empty overlay {} validates) so customers can adopt incrementally; the only required top-level key is schema_version.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version"],
+
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URL of the schema this document validates against."
+    },
+
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Strict semver of THIS schema. v1.0.0 is the initial release. Bump the MAJOR when an existing enum value is removed or a previously-optional field becomes required."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Friendly identifier for the overlay (e.g. 'eu-finserv-baseline'). Surfaces in the [V7.19] PolicyDiff renderer."
+    },
+
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Human-readable summary of what this overlay enforces."
+    },
+
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 50,
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "description": "Cloud-agnostic region key. Azure: 'westeurope'; AWS: 'eu-west-1'; GCP: 'europe-west1'. The composer normalises across clouds."
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Allow-listed regions. Resolver candidates restricted to modules supporting these regions ([V7.6])."
+    },
+
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Model allow/deny lists. When intent emits Cognitive Services / OpenAI / Bedrock, the composer forces deployments to allow[] ([V7.7]).",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "uniqueItems": true,
+          "description": "Provider-qualified model literals (e.g. 'azure-openai/gpt-4o-2024-08-06', 'openai/gpt-4o-mini', 'bedrock/anthropic.claude-3-5-sonnet')."
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "uniqueItems": true,
+          "description": "Explicit deny-list. Takes precedence over allow[] when both match a literal."
+        }
+      }
+    },
+
+    "skus": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "SKU allow/deny per resource family. Composer filters SKU params ([V7.8]).",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "uniqueItems": true
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "naming": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Resource-name overlay. Composer rewrites naming convention per these constraints ([V7.9]).",
+      "properties": {
+        "prefix":     { "type": "string", "minLength": 0, "maxLength": 20, "pattern": "^[a-z0-9-]*$" },
+        "suffix":     { "type": "string", "minLength": 0, "maxLength": 20, "pattern": "^[a-z0-9-]*$" },
+        "separator":  { "type": "string", "enum": ["-", "_", ""] },
+        "max_length": { "type": "integer", "minimum": 1, "maximum": 256 }
+      }
+    },
+
+    "tags": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Required tags + value patterns. Composer injects required[] on every resource + validates value patterns ([V7.10]).",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$" },
+          "uniqueItems": true,
+          "description": "Tag keys that MUST be present on every taggable resource."
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Regex (ECMAScript flavour) that the tag value MUST match. Example: '^(dev|staging|prod)$'."
+          },
+          "description": "Per-tag value-validation regex map. Keys must overlap with `required[]` or with tags freely set in IaC."
+        }
+      }
+    },
+
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Network posture overlay ([V7.11]).",
+      "properties": {
+        "posture": {
+          "type": "string",
+          "enum": ["public", "hybrid", "private"],
+          "description": "public = open to internet; hybrid = mixed (some endpoints public, some private); private = no public endpoints, all traffic via private links."
+        },
+        "vnet_required":              { "type": "boolean", "description": "Force every supported resource to be VNet-injected." },
+        "private_endpoint_required":  { "type": "boolean", "description": "Force private endpoints on every PaaS service that supports them." },
+        "dns_zone_overrides": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "description": "Map of <service-key> → <fqdn-template> for private DNS zone overrides (e.g. 'storage' → 'privatelink.blob.core.windows.net')."
+        }
+      }
+    },
+
+    "rbac": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "RBAC posture overlay ([V7.12]).",
+      "properties": {
+        "managed_identity_required": {
+          "type": "boolean",
+          "description": "If true, composer rejects service-principal credentials in favor of system/user-assigned managed identities."
+        },
+        "role_assignment_policy": {
+          "type": "string",
+          "enum": ["least-privilege", "built-in-only", "custom-allowed"],
+          "description": "least-privilege = require minimum-scope built-in roles; built-in-only = no custom roles; custom-allowed = customer-defined roles permitted."
+        }
+      }
+    },
+
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Identity-provider overlay ([V7.13]).",
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["entra-id", "azure-ad-b2c", "okta", "auth0", "cognito", "workforce-identity-federation", "github", "google", "microsoft-account"] },
+          "uniqueItems": true,
+          "description": "Allow-listed identity providers."
+        },
+        "guest_account_policy": {
+          "type": "string",
+          "enum": ["allowed", "review-required", "blocked"],
+          "description": "Entra ID guest-account policy."
+        }
+      }
+    },
+
+    "iac": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "IaC format overlay ([V7.14]).",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["bicep", "terraform", "both"],
+          "description": "Which emitter(s) the composer runs."
+        },
+        "modular_emit": {
+          "type": "boolean",
+          "description": "If true, composer emits one module per resource group; if false, single-file emit."
+        },
+        "gold_allowed": {
+          "type": "boolean",
+          "description": "If true, customer-curated 'gold' modules (outside AVM catalog) may be composed; if false, only AVM + AVM-promoted modules permitted."
+        }
+      }
+    },
+
+    "encryption": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Encryption defaults overlay ([V7.15]).",
+      "properties": {
+        "cmk_required":         { "type": "boolean", "description": "Force customer-managed-key encryption on every supported resource." },
+        "key_vault_required":   { "type": "boolean", "description": "Force a Key Vault module in every composed template (target for CMK)." },
+        "tls_min_version": {
+          "type": "string",
+          "enum": ["1.2", "1.3"],
+          "description": "Minimum TLS version on every supported endpoint."
+        }
+      }
+    },
+
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Observability wiring overlay ([V7.16]).",
+      "properties": {
+        "log_analytics_required":  { "type": "boolean", "description": "Force a Log Analytics workspace + diagnostic settings on every supported resource." },
+        "app_insights_required":   { "type": "boolean", "description": "Force an Application Insights resource for every compute/app resource." },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 730,
+          "description": "Log Analytics retention. Azure max is 730 days for standard SKU."
+        }
+      }
+    },
+
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cost guardrails overlay ([V7.17]).",
+      "properties": {
+        "band_target": {
+          "type": "string",
+          "enum": ["<€100/mo", "€100–500/mo", "€500–2k/mo", "€2k–10k/mo", ">€10k/mo"],
+          "description": "Target monthly cost band. Composer rejects SKUs that push the aggregate above this band. Enum values are stable across `repo-facts.cost_band`."
+        },
+        "tier_default": {
+          "type": "string",
+          "enum": ["basic", "standard", "premium", "enterprise"],
+          "description": "Default SKU tier per resource family when the resolver has multiple candidates."
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["EUR", "USD", "GBP"],
+          "description": "Currency for cost-band evaluation. Defaults to EUR if absent."
+        }
+      }
+    },
+
+    "custom_checks": {
+      "type": "array",
+      "description": "Customer-defined post-compose checks ([V7.18]). Each check is a named rule the policy engine runs against the composed AST.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "severity"],
+        "properties": {
+          "id":          { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "^[a-z][a-z0-9_-]*$" },
+          "description": { "type": "string", "maxLength": 500 },
+          "kind": {
+            "type": "string",
+            "enum": ["resource-required", "resource-forbidden", "property-equals", "property-pattern", "property-min", "property-max", "tag-required", "module-version-pin"],
+            "description": "Built-in check kind. Custom-arbitrary code execution is OUT OF SCOPE for v1; v2 may add 'custom-script' kind via a sandboxed runtime."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["error", "warning", "info"],
+            "description": "error = blocks the compose; warning = surfaces in PolicyDiff but allows compose; info = reported only in --verbose."
+          },
+          "target": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Resource type or module name the check applies to (e.g. 'Microsoft.Storage/storageAccounts')." },
+          "property": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Dotted path into the resource (e.g. 'properties.minimumTlsVersion')." },
+          "value": { "description": "Expected value for property-equals / property-pattern (regex) / property-min / property-max kinds." }
+        }
+      }
+    }
+  }
+}

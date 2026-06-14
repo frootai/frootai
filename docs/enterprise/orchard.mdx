@@ -1,0 +1,803 @@
+---
+title: "FAI Orchard — Enterprise Guide"
+description: "Enterprise-tier deployment guide for the FrootAI Orchard: SSO (SAML / OIDC) login, per-tenant quota overrides, audit log batch export, multi-region data residency, and cross-region read controls."
+icon: "🏢"
+order: 50
+tags: ["enterprise", "sso", "saml", "oidc", "audit-export", "multi-region", "quota-override", "admin", "compliance", "data-residency"]
+---
+
+# FAI Orchard — Enterprise Guide
+
+The **enterprise tier** unlocks SSO (SAML 2.0 / OIDC), per-tenant quota overrides, audit log batch export to S3 / Azure Blob, and multi-region data residency (`us-east`, `eu-west`, `ap-south`). This page is the **complete admin reference** — from initial provisioning through every day-2 operator runbook.
+
+- **For procurement / security reviewers** — start at [SSO setup](#sso-setup-saml--oidc), [Audit log export](#audit-log-export), and [Compliance + data residency](#compliance--data-residency).
+- **For platform admins** — start at [Onboarding an enterprise org](#onboarding-an-enterprise-org), then [Per-tenant quota overrides](#per-tenant-quota-overrides) and the [Runbook reference](#runbook-reference).
+- **For developers integrating SDK / MCP** — start at [Enterprise whoami surface](#enterprise-whoami-surface) and [Multi-region tenancy](#multi-region-tenancy).
+
+> All enterprise features are gated by the `enterprise` tier. Self-serve checkout tops out at the `business` tier; enterprise plans are sales-assisted (`sales@frootai.dev`).
+
+---
+
+## At a glance
+
+| Capability | Tier required | Entitlement | Admin runbook |
+|---|---|---|---|
+| SSO sign-in (SAML 2.0 + OIDC) | `enterprise` | `sso-saml` | `admin-sso-test.js` (A9) |
+| Per-tenant quota overrides | `enterprise` | (admin scope `admin:entitlements`) | `admin-quota-override.js` |
+| Audit log batch export (S3 / Azure Blob) | `enterprise` | `audit-export` | `audit-export.js` |
+| Multi-region tenancy (`home_region`) | `enterprise` | (built-in) | `setOrgHomeRegion` API |
+| Cross-region read | `enterprise` | `cross-region:read` | (entitlement grant) |
+| Operator telemetry dashboard | `business`+ | `telemetry-dash` | `mcp-telemetry-dashboard.js` |
+
+**Tier rank** (cumulative): `free` < `pro` < `team` < `business` < `enterprise`. Each tier inherits everything below it. Enterprise base entitlements: `["sso-saml", "audit-export", "cross-region:read"]` (cumulative adds `upgrade-to-play`, `bushel-sync`, `telemetry-dash`).
+
+---
+
+## Onboarding an enterprise org
+
+The standard onboarding flow runs through `sales@frootai.dev`. Once your org record is provisioned, you receive:
+
+1. An **org_id** (e.g. `acme`) — used in every admin runbook flag (`--key acme`).
+2. An **admin token** with `admin:entitlements` + `admin:invalidate-cache` scopes — store in `FROOTAI_ADMIN_TOKEN` env var (NEVER in argv, NEVER in version control).
+3. Your **chosen home region** — one of `us-east`, `eu-west`, `ap-south`. See [Multi-region tenancy](#multi-region-tenancy).
+4. An **SSO IdP integration kickoff** — typically Azure AD or Okta; see [SSO setup](#sso-setup-saml--oidc).
+
+### Day-1 checklist
+
+- [ ] Receive `org_id` + admin token from FrootAI ops.
+- [ ] Store admin token securely: `export FROOTAI_ADMIN_TOKEN="<token>"` (Linux/macOS) or your secret manager.
+- [ ] Confirm home region via `frootai whoami --json | jq .home_region`.
+- [ ] Run a smoke admin op in dry-run mode:
+
+```bash
+node scripts/orchard/admin-quota-override.js \
+  --scope org --key acme \
+  --tool orchard.search --rpm 600 --rph 6000 --rpd 50000 \
+  --reason "enterprise onboarding" --dry-run --json
+```
+
+- [ ] Configure SSO — see next section.
+
+---
+
+## SSO setup (SAML / OIDC)
+
+FrootAI supports two SSO protocols for enterprise login:
+
+### SAML 2.0
+
+The SAML integration uses the `buildSamlClaimMapper` module in `token-service.js`. The default attribute map targets Azure AD + Okta defaults:
+
+| Canonical claim | Default SAML attribute URI |
+|---|---|
+| `subject` | `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier` |
+| `email` | `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress` |
+| `tier` | `https://schemas.frootai.dev/saml/claims/tier` |
+| `org_id` | `https://schemas.frootai.dev/saml/claims/org_id` |
+| `entitlements` | `https://schemas.frootai.dev/saml/claims/entitlements` |
+
+Custom attribute maps are supported via the `attributeMap` option:
+
+```js
+const mapper = buildSamlClaimMapper({
+  attributeMap: {
+    subject: "custom:nameid",
+    org_id: "custom:organization",
+  },
+  defaultTier: "enterprise", // if your IdP doesn't assert a tier
+});
+const claims = mapper(samlAssertion);
+// → { subject, email, tier, org_id, entitlements, sso_provider: "saml" }
+```
+
+Supported attribute formats:
+- `urn:oasis:names:tc:SAML:2.0:attrname-format:basic`
+- `urn:oasis:names:tc:SAML:2.0:attrname-format:uri`
+- `urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified`
+
+Multi-value attributes (e.g. entitlements as an array) are supported; the mapper takes the first element for scalar fields and preserves the full array for `entitlements`.
+
+### OIDC (OpenID Connect)
+
+The OIDC integration uses `buildOidcClaimMapper`. The default claim map targets Azure AD / Okta / Auth0 conventions:
+
+| Canonical claim | Default OIDC id_token claim |
+|---|---|
+| `subject` | `sub` |
+| `email` | `email` |
+| `tier` | `https://frootai.dev/tier` |
+| `org_id` | `https://frootai.dev/org_id` |
+| `entitlements` | `https://frootai.dev/entitlements` |
+
+```js
+const mapper = buildOidcClaimMapper({
+  claimsMap: { subject: "preferred_username" },
+  defaultTier: "enterprise",
+});
+const claims = mapper(idTokenClaims);
+// → { subject, email, tier, org_id, entitlements, sso_provider: "oidc" }
+```
+
+### Security doctrine
+
+- **NEVER trust the IdP for `tier` or `entitlements` without server-side re-resolution** — the claim mapper merely surfaces what the IdP asserted; the entitlements-store resolver applies policy server-side.
+- `tier` defaults to `"free"` when the IdP doesn't assert one — defense-in-depth: never silently grant a paid tier from an unverified claim.
+- Claims are canonicalized via `normalizeSsoClaims(raw)` which validates `subject` (required), clamps unknown `tier` to `"free"`, rejects unknown `sso_provider`, and returns a frozen object.
+- The `sso_provider` field (`"saml"` or `"oidc"`) is attached to every session so audit logs and `whoami()` can distinguish SSO-initiated sessions from password/token-based ones.
+
+### MFA enforcement
+
+Enterprise orgs can require multi-factor authentication (MFA) for all Orchard access. When enabled, the auth gate rejects tokens whose SAML assertion or OIDC id_token doesn't carry an accepted Authentication Context Class Reference (ACR) value.
+
+#### Supported SAML AuthnContextClassRef values
+
+The `SAML_MFA_AUTHNCONTEXT_VALUES` frozen array in `token-service.js` accepts:
+
+| AuthnContextClassRef | Provider support |
+|---|---|
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport` | Azure AD, Okta, Auth0 |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:MobileTwoFactorContract` | Azure AD |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken` | RSA SecurID, Okta |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:X509` | Smart card / PIV |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:Smartcard` | Smart card |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:SmartcardPKI` | Smart card + PKI |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:TLSClient` | Mutual TLS |
+| `urn:oasis:names:tc:SAML:2.0:ac:classes:Kerberos` | Active Directory |
+| `http://schemas.microsoft.com/claims/multipleauthn` | Azure AD conditional access |
+| `urn:federation:authentication:windows` | Windows integrated auth |
+
+#### Supported OIDC ACR claim values
+
+The `OIDC_MFA_ACR_VALUES` frozen array in `token-service.js` accepts:
+
+| ACR value | Standard |
+|---|---|
+| `urn:mace:incommon:iap:silver` | InCommon Federation |
+| `urn:mace:incommon:iap:bronze` | InCommon Federation |
+| `http://schemas.openid.net/pape/policies/2007/06/multi-factor` | OpenID PAPE |
+| `http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical` | OpenID PAPE |
+| `urn:nist:authentication:aal:2` | NIST SP 800-63B AAL2 |
+| `urn:nist:authentication:aal:3` | NIST SP 800-63B AAL3 |
+| `http://schemas.microsoft.com/claims/multipleauthn` | Azure AD |
+| `possessionorinherence` | Azure AD conditional access |
+| `urn:okta:loa:2fa:any` | Okta |
+| `urn:okta:loa:2fa:any:ifpossible` | Okta |
+| `urn:webauthn:mfa` | FIDO2 / WebAuthn |
+
+When the OIDC id_token has no `acr` claim but the `amr` array includes `"mfa"`, the check also passes (common with Azure AD + Okta).
+
+#### Configuring MFA policy via admin CLI
+
+```bash
+# Require MFA for all org members (accept any canonical ACR value)
+node scripts/orchard/admin-mfa-policy.js \
+  --org-id acme \
+  --required true \
+  --reason "CISO requested MFA enforcement"
+
+# Require MFA with a restricted ACR subset (FIDO2 + smart card only)
+node scripts/orchard/admin-mfa-policy.js \
+  --org-id acme \
+  --required true \
+  --allowed-acr "urn:oasis:names:tc:SAML:2.0:ac:classes:X509,urn:nist:authentication:aal:3" \
+  --reason "Phishing-resistant MFA only per security policy"
+
+# Disable MFA requirement
+node scripts/orchard/admin-mfa-policy.js \
+  --org-id acme \
+  --required false \
+  --reason "MFA enforcement removed per customer request"
+```
+
+The policy is stored under `mfa-policy:<org_id>` in the entitlements store and defaults to `{ required: false, allowed_acr: null }` when not set. The `resolve()` method attaches `mfa_policy` to enterprise-tier responses.
+
+#### MFA failure error code
+
+When MFA is required but the assertion/claim doesn't carry an accepted ACR value, the MCP protocol returns error code `-32006` (`MFA_REQUIRED`) with `data.required_acr_values` listing the accepted values:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32006,
+    "message": "MFA required for org-acme",
+    "data": {
+      "tool": "orchard.search",
+      "required_acr_values": [
+        "urn:nist:authentication:aal:2",
+        "urn:nist:authentication:aal:3"
+      ]
+    }
+  }
+}
+```
+
+#### Troubleshooting MFA
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| MCP client shows `-32006 MFA_REQUIRED` | IdP assertion/claim missing an accepted ACR value | Configure the IdP to emit a supported AuthnContextClassRef (SAML) or `acr` claim (OIDC); see tables above |
+| MFA enforcement works for SAML users but not OIDC | OIDC id_token has no `acr` claim and `amr` array doesn't include `"mfa"` | Configure the OIDC provider to include `acr` claim with a NIST AAL value, OR ensure `amr` includes `"mfa"` |
+| `admin-mfa-policy.js` returns exit 1 | Missing `--required true\|false` or `--reason` flag, or `--org-id` doesn't match the slug regex | Check the CLI `--help` output; `--required` must be the literal string `true` or `false` |
+| MFA policy set but `resolve()` doesn't attach `mfa_policy` | Org is not on the enterprise tier, or `org_id` is missing from the token claims | Verify the org's tier is `enterprise` via `admin-provision-org.js`; ensure SSO claim mapper populates `org_id` |
+
+---
+
+## Per-tenant quota overrides
+
+Enterprise orgs can set per-tool quota overrides that exceed or restrict the tier defaults. Overrides are stored in the entitlements-store and take precedence over `MCP_TIER_QUOTAS` tier defaults.
+
+### Quota structure
+
+Each override maps tool names to request windows:
+
+```json
+{
+  "tools": {
+    "orchard.search": {
+      "requests_per_minute": 600,
+      "requests_per_hour": 6000,
+      "requests_per_day": 50000
+    }
+  },
+  "reason": "design-partner pilot bump",
+  "added_at": "2026-05-26T00:00:00.000Z",
+  "added_by": "admin@acme"
+}
+```
+
+### Setting overrides via the admin runbook
+
+```bash
+node scripts/orchard/admin-quota-override.js \
+  --scope org \
+  --key acme \
+  --tool orchard.search --rpm 600 --rph 6000 --rpd 50000 \
+  --tool orchard.find_play --rpm 120 --rph 1200 --rpd 10000 \
+  --reason "enterprise design-partner pilot" \
+  --token-env FROOTAI_ADMIN_TOKEN
+```
+
+Flags:
+- `--scope user|org` — scope of the override.
+- `--key <id>` — subject (user scope) or org_id (org scope).
+- `--tool <name>` — one of `orchard.search`, `orchard.show`, `orchard.install_command`, `orchard.find_play`, `orchard.list_pollinations`.
+- `--rpm`, `--rph`, `--rpd` — requests per minute / hour / day.
+- `--reason` — audit log reason (required; recorded in `quota_change` event).
+- `--token-env` — env var holding the admin token (default `FROOTAI_ADMIN_TOKEN`). The token is read from the **environment**, never from argv (security: no shell-history leakage).
+- `--dry-run` — print the canonical request body without making the network call.
+- `--json` — structured JSON output for automation.
+
+### Precedence
+
+1. **Org-scoped override** (if present for the tool) wins.
+2. **User-scoped override** (if present) is the fallback.
+3. **Tier default** from `MCP_TIER_QUOTAS` is the final fallback.
+
+When a tool's effective quota has `requests_per_minute = 0`, the rate-limiter returns an immediate deny (`quota_denied: true`, `retry_after_seconds: 3600`). This is how the free tier blocks `orchard.find_play` — it has `rpm = 0` in the tier table.
+
+### Audit trail
+
+Every `setQuotaOverride` call emits a fire-and-forget `quota_change` audit event with `actor`, `before` (previous override or null), `after` (new override), and `context: { scope, key, reason }`. These events are exported by the [Audit log export](#audit-log-export) pipeline.
+
+---
+
+## Audit log export
+
+Enterprise orgs can export audit logs as daily JSONL batches to S3, Azure Blob, or local filesystem. Exports are gated by the `audit-export` entitlement.
+
+### Running the exporter
+
+```bash
+# S3 — requires AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY in env
+node scripts/orchard/audit-export.js \
+  --audit-dir /var/frootai/audit \
+  --date 2026-05-25 \
+  --backend s3 \
+  --s3-bucket frootai-audit-acme \
+  --region us-east \
+  --tenant acme \
+  --json
+
+# Azure Blob — requires AZURE_STORAGE_CONNECTION_STRING in env
+node scripts/orchard/audit-export.js \
+  --audit-dir /var/frootai/audit \
+  --date 2026-05-25 \
+  --backend azure_blob \
+  --azure-container audit-exports \
+  --region eu-west
+
+# Local filesystem (dev / test)
+node scripts/orchard/audit-export.js \
+  --audit-dir /var/frootai/audit \
+  --date 2026-05-25 \
+  --backend local_fs \
+  --out-root ./tmp/audit-export
+```
+
+### Object key convention
+
+Exported batches follow a Hive-style partitioned key:
+
+```
+audit-export/region=<region>/tenant=<org_id>/<date>/audit-<date>.jsonl
+audit-export/region=<region>/tenant=<org_id>/<date>/audit-<date>.manifest.json
+```
+
+### Manifest shape
+
+Each batch ships with a `.manifest.json` that describes its contents:
+
+```json
+{
+  "manifest_version": 1,
+  "date": "2026-05-25",
+  "region": "us-east",
+  "tenant": "acme",
+  "record_count": 1234,
+  "bytes": 567890,
+  "sha256": "a1b2c3...",
+  "exported_at": "2026-05-26T00:15:00.000Z"
+}
+```
+
+Downstream consumers verify integrity by comparing `sha256` against the batch body.
+
+### Retention
+
+- **Raw segments**: 90 days (matching A5.17 `RETENTION_DAYS_RAW`). Exports outside this window are rejected with `out_of_retention_window`.
+- **Aggregate summaries**: 730 days. Use the aggregate endpoint for historical queries.
+- **Batch size caps**: `MAX_EXPORT_BYTES = 128 MiB`, `MAX_EXPORT_RECORDS = 500,000`. Larger batches auto-split into `-part-NN` files.
+
+### Filtering
+
+- `--tenant <org_id>` — filter by `subject` or `org_id` on each entry. Entries with neither are excluded from per-tenant exports but included in global admin exports.
+- `--kinds <k1,k2>` — whitelist by audit kind (e.g. `quota_change,admin_action`). The full kind enum: `http_request`, `token_issued`, `token_refreshed`, `token_revoked`, `entitlement_grant`, `entitlement_deny`, `stripe_event`, `rate_limiter_fault`, `admin_action`, `validation_failed`, `internal_error`, `quota_change`.
+
+---
+
+## Multi-region tenancy
+
+Every enterprise org has a `home_region` pinned at provisioning time. The three supported regions are:
+
+| Region | Location | Default? |
+|---|---|---|
+| `us-east` | US East (Virginia) | **Yes** (default for new orgs) |
+| `eu-west` | EU West (Ireland) | No |
+| `ap-south` | Asia Pacific South (Mumbai) | No |
+
+### How region routing works
+
+- All **writes** (telemetry events, audit entries, bushel syncs) land in the org's `home_region` segment store. Cross-region writes are **always denied** — there is no opt-in for this.
+- **Reads** against the home region are always allowed.
+- **Cross-region reads** (reading a different region's segment store) require the `cross-region:read` entitlement — which is included in the enterprise tier by default.
+- Users without the entitlement who attempt a cross-region read receive a `cross_region_denied` error.
+
+### The `selectRegionForRequest` decision tree
+
+The `selectRegionForRequest` pure function in `entitlements-store.js` evaluates every region-scoped request:
+
+```
+requested_region unset OR === home_region
+  → allowed: true, region: home_region
+
+requested_region !== home_region AND is_write
+  → allowed: false, reason: "cross_region_write_denied"
+
+requested_region !== home_region AND has cross-region:read
+  → allowed: true, region: requested_region
+
+requested_region !== home_region AND NO cross-region:read
+  → allowed: false, reason: "cross_region_denied"
+```
+
+### Setting the home region
+
+Home region is set at org provisioning time via the entitlements store:
+
+```js
+await store.setOrgHomeRegion("acme", "eu-west", {
+  set_by: "admin@frootai.dev",
+  auditEmit: auditLog.append,
+});
+```
+
+This emits an `admin_action` audit event with `action: "set_home_region"`, `before` (previous record or null), and `after` (new record).
+
+To query the current home region:
+
+```js
+const region = await store.getOrgHomeRegion("acme");
+// → "eu-west" (or "us-east" if no record exists)
+```
+
+---
+
+## Enterprise whoami surface
+
+The `whoami()` response across CLI, SDK, and MCP surfaces three enterprise-specific fields when the caller is on the enterprise tier:
+
+| Field | Type | Description |
+|---|---|---|
+| `sso_provider` | `"saml"` \| `"oidc"` \| `null` | SSO protocol used for this session (null for password/token login) |
+| `home_region` | `"us-east"` \| `"eu-west"` \| `"ap-south"` \| `null` | Org's data residency region (null for personal accounts) |
+| `org_id` | `string` \| `null` | Org identifier (null for personal accounts) |
+
+### CLI
+
+```bash
+frootai whoami
+```
+
+Output includes:
+
+```
+  Subject     u-1
+  Email       alice@acme.com
+  Tier        enterprise
+  Org         acme
+  SSO         SAML
+  Home region eu-west
+  Entitlements sso-saml, audit-export, cross-region:read, ...
+```
+
+`frootai whoami --json` returns the full structured response including `sso_provider`, `home_region`, and `org_id` fields.
+
+### npm SDK (`@frootai/orchard`)
+
+```js
+const client = createClient();
+const me = await client.whoami();
+console.log(me.tier);         // "enterprise"
+console.log(me.sso_provider); // "saml"
+console.log(me.home_region);  // "eu-west"
+console.log(me.org_id);       // "acme"
+```
+
+### Python SDK (`frootai-orchard`)
+
+```python
+client = create_client()
+me = client.whoami()
+print(me["tier"])         # "enterprise"
+print(me["sso_provider"]) # "oidc"
+print(me["home_region"])  # "ap-south"
+print(me["org_id"])       # "acme"
+```
+
+### MCP (via auth gate probe)
+
+The MCP auth gate calls `sdkClient.whoami()` internally. When `checkQuota` is injected (A8.15), the gate probes `whoami()` even for free tools to pull the `quotas[toolName]` block. Enterprise fields are available in the `quotas` envelope returned by the entitlements resolver.
+
+### Field validation
+
+- `home_region` is validated against `HOME_REGIONS = ["us-east", "eu-west", "ap-south"]` at every layer (backend, CLI, SDK, VSCode). Invalid values are clamped to `null`.
+- `sso_provider` is validated against `SSO_PROVIDERS = ["saml", "oidc"]`. Unknown providers are rejected by `normalizeSsoClaims`.
+- Personal accounts (no `org_id`) always have `home_region: null` and `sso_provider: null`.
+
+---
+
+## Compliance + data residency
+
+### Data residency guarantees
+
+- **Writes are home-region-only.** Telemetry events, audit log entries, and bushel sync data are written exclusively to the org's `home_region` segment store.
+- **Cross-region reads are entitlement-gated.** Only enterprise-tier orgs with `cross-region:read` can query another region's store.
+- **Exports honor the region filter.** The `--region` flag on `audit-export.js` scopes the export to a single region's segments.
+
+### Audit log integrity
+
+- Every exported batch includes a `sha256` hash in the manifest for tamper detection.
+- The `audit_kind` enum is strictly validated — unknown kinds are rejected at write time, ensuring the log contains only recognized event types.
+- Audit entries are append-only JSONL segments with 16 MiB rotation. Segments are never modified after write.
+
+### Token security
+
+- Admin tokens are read from environment variables (`FROOTAI_ADMIN_TOKEN`), **never from argv** (prevents leakage via shell history / `ps` / process listing).
+- SSO claim mappers **never trust IdP-asserted tier or entitlements** without server-side re-resolution.
+- Access tokens use HMAC-SHA256 with 256-bit minimum signing keys and 60-second clock skew tolerance.
+- Refresh tokens are single-use with automatic revocation chain on replay.
+
+---
+
+## Rate limiting
+
+Enterprise orgs benefit from the highest quota ceilings in `MCP_TIER_QUOTAS`. The per-tool defaults for the enterprise tier are:
+
+| Tool | RPM | RPH | RPD |
+|---|---|---|---|
+| `orchard.search` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` |
+| `orchard.show` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` |
+| `orchard.install_command` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` |
+| `orchard.find_play` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` |
+| `orchard.list_pollinations` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` | `MAX_SAFE_INTEGER` |
+
+In practice, enterprise tier is **unmetered**. Per-tenant overrides (via `admin-quota-override.js`) can tighten these if needed — for example, to enforce a design-partner pilot budget.
+
+The rate-limiter uses a token-bucket algorithm with `profileFromQuota(quota)` deriving `capacity = rpm` and `refill_per_sec = rpm / 60`. When `rpm = 0`, the limiter returns an immediate deny with `quota_denied: true`.
+
+The MCP protocol envelope surfaces rate-limit denials as JSON-RPC error code `-32005` (`RATE_LIMITED`) with `data.retry_after_ms` so clients can implement backoff.
+
+---
+
+## MCP capabilities
+
+Enterprise orgs get the full MCP capability surface:
+
+| Capability | Advertised in `initialize` | Methods |
+|---|---|---|
+| `tools` | `{ listChanged: false }` | `tools/list`, `tools/call` |
+| `resources` | `{ listChanged: false, subscribe: <bool> }` | `resources/list`, `resources/read`, `resources/subscribe`, `resources/unsubscribe` |
+| `prompts` | `{ listChanged: false }` | `prompts/list`, `prompts/get` |
+
+The `resources.subscribe` field is `true` only when a `sendNotification` callback is injected into `createServer`. When subscribed, the server emits `notifications/resources/updated` when a fruit's metadata changes (e.g. after an ETag invalidation via A5.27).
+
+### Prompt templates
+
+6 canned prompt templates are available via `prompts/list` + `prompts/get`:
+
+1. **`setup_rag_starter`** — "Set up a RAG starter on `<variety>`"
+2. **`find_alternative`** — "Find a `<variety>` alternative to `<fruit_id>`"
+3. **`explain_play_recipe`** — "Explain Play recipe `<play_id>`"
+4. **`compare_accelerators`** — "Compare `<fruit_a>` and `<fruit_b>`"
+5. **`recommend_for_use_case`** — "Recommend an accelerator for `<use_case>`"
+6. **`bootstrap_with_play`** — "Bootstrap `<fruit_id>` with Play `<play_id>`"
+
+Each template validates its arguments (variety against `["azure", "gcp", "aws", "oss", "hybrid"]`, play_id against `/^[0-9]{2}$/`, fruit_id against `/^[a-z0-9][a-z0-9._\-/:]{0,255}$/i`).
+
+---
+
+## Runbook reference
+
+All operator runbooks live under `frootai-core/scripts/orchard/`. They share common conventions:
+
+- **Admin token from env** — `--token-env FROOTAI_ADMIN_TOKEN` (default). Never from argv.
+- **`--dry-run`** — print the canonical request body / plan without side effects.
+- **`--json`** — structured JSON output for pipeline consumption.
+- **`--help`** — print usage; exit 0.
+- **Exit codes** — `0` success, `1` bad args / validation, `2` server / IO failure.
+
+### admin-quota-override.js
+
+Set per-tenant MCP quota overrides. See [Per-tenant quota overrides](#per-tenant-quota-overrides) for details.
+
+```bash
+node scripts/orchard/admin-quota-override.js --help
+```
+
+### audit-export.js
+
+Export daily JSONL audit batches. See [Audit log export](#audit-log-export) for details.
+
+```bash
+node scripts/orchard/audit-export.js --help
+```
+
+### mcp-telemetry-dashboard.js
+
+Operator dashboard for MCP tool invocation telemetry. Requires `telemetry-dash` entitlement (business+ tier).
+
+```bash
+node scripts/orchard/mcp-telemetry-dashboard.js \
+  --dir /var/frootai/telemetry \
+  --region us-east \
+  --top-n 20 --json
+```
+
+Answers: "Which client uses us most?", per-tool success rates, error code distribution, and per-day event counts.
+
+### invalidate-recipe-cache.js
+
+Invalidate the CDN recipe cache for a Play. Requires `admin:invalidate-cache` scope.
+
+```bash
+node scripts/orchard/invalidate-recipe-cache.js \
+  --id 01 --id 22 --token-env FROOTAI_ADMIN_TOKEN
+```
+
+---
+
+## Worked examples
+
+### Example 1 — Onboard a new enterprise org and set a quota override
+
+```bash
+# 1. Confirm org is provisioned
+frootai whoami --json | jq '{tier, org_id, home_region, sso_provider}'
+
+# 2. Set a pilot quota for orchard.find_play (normally blocked on free tier)
+node scripts/orchard/admin-quota-override.js \
+  --scope org --key acme \
+  --tool orchard.find_play --rpm 60 --rph 600 --rpd 5000 \
+  --reason "enterprise pilot 2026-Q2" \
+  --dry-run --json
+
+# 3. Apply it (remove --dry-run)
+node scripts/orchard/admin-quota-override.js \
+  --scope org --key acme \
+  --tool orchard.find_play --rpm 60 --rph 600 --rpd 5000 \
+  --reason "enterprise pilot 2026-Q2"
+```
+
+### Example 2 — Export yesterday's audit logs for an EU org to Azure Blob
+
+```bash
+node scripts/orchard/audit-export.js \
+  --audit-dir /var/frootai/audit \
+  --date 2026-05-25 \
+  --backend azure_blob \
+  --azure-container audit-exports-eu \
+  --region eu-west \
+  --tenant acme \
+  --json
+```
+
+### Example 3 — Check cross-region read access
+
+```js
+const { selectRegionForRequest } = require("entitlements-store");
+
+// Enterprise user in us-east reading eu-west data
+const decision = selectRegionForRequest({
+  home_region: "us-east",
+  requested_region: "eu-west",
+  entitlements: ["cross-region:read"],
+  is_write: false,
+});
+console.log(decision);
+// → { allowed: true, region: "eu-west" }
+```
+
+### Example 4 — Configure SAML SSO with a custom attribute map (Okta)
+
+```js
+const { buildSamlClaimMapper, normalizeSsoClaims } = require("token-service");
+
+const mapper = buildSamlClaimMapper({
+  attributeMap: {
+    subject: "urn:oid:0.9.2342.19200300.100.1.1",  // uid
+    email: "urn:oid:0.9.2342.19200300.100.1.3",     // mail
+    org_id: "urn:oid:2.5.4.10",                      // o (organization)
+  },
+  defaultTier: "enterprise",
+});
+
+const raw = mapper(oktaSamlAssertion);
+const claims = normalizeSsoClaims(raw);
+```
+
+### Example 5 — Use the MCP compliance probe to verify all 3 capabilities
+
+```js
+const { runMcpComplianceProbe } = require("mcp-compliance-probe");
+const PROTOCOL = require("@frootai/mcp-orchard/protocol");
+
+const server = PROTOCOL.createServer({ sdkClient: myClient });
+const report = await runMcpComplianceProbe({ server });
+
+console.log(`${report.passed}/${report.total} checks passed`);
+console.log("Drifts:", report.drifts);
+// Expected: 12/12 checks passed, Drifts: []
+```
+
+---
+
+## Environment variables
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `FROOTAI_ADMIN_TOKEN` | Admin token for operator runbooks | (none — required for admin ops) |
+| `FROOTAI_TOKEN` | User access token (overrides `~/.frootai/.token`) | (none) |
+| `AWS_ACCESS_KEY_ID` | S3 audit export credentials | (none) |
+| `AWS_SECRET_ACCESS_KEY` | S3 audit export credentials | (none) |
+| `AWS_REGION` | S3 region override | `us-east-1` |
+| `AZURE_STORAGE_CONNECTION_STRING` | Azure Blob audit export | (none) |
+| `DO_NOT_TRACK` | Disable all telemetry when `1` | (unset) |
+| `FROOTAI_CDN_PLAYS_URL` | CDN base for Play recipe bundles | `https://cdn.frootai.dev/plays` |
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `admin-quota-override.js` exits 1 with "env var FROOTAI_ADMIN_TOKEN is empty or unset" | Admin token not in environment | `export FROOTAI_ADMIN_TOKEN=<your-admin-token>` |
+| `whoami` shows `Org: (personal)` | Claims don't include `org_id` | Verify SSO IdP attribute mapping includes `org_id` claim |
+| `whoami` shows `Home region: (n/a)` | Org home_region not set or personal account | Admin runs `setOrgHomeRegion(orgId, region)` |
+| `cross_region_denied` error on tool call | Caller lacks `cross-region:read` entitlement | Grant via admin or verify enterprise tier |
+| `cross_region_write_denied` | Write attempted against non-home region | Writes always route to home region — this is by design |
+| `out_of_retention_window` on audit export | Export date older than 90-day raw retention | Use aggregate export path for historical data |
+| `quota_denied: true` on `orchard.find_play` | Free tier has `rpm=0` for find_play | Upgrade to Pro+ or set per-tenant override |
+| SSO login shows `tier: free` | IdP doesn't assert `tier` claim | Configure the tier attribute in your IdP or set `defaultTier: "enterprise"` in the mapper |
+| `RATE_LIMITED` (-32005) in MCP JSON-RPC | Per-tool quota exceeded | Wait `retry_after_ms` then retry; or request a quota override |
+
+---
+
+## Operations (v0.9.0-ops)
+
+Phase A9 added 6 operator-facing capabilities for production-grade self-hosted deployments. All features are opt-in and backward-compatible — existing single-instance deployments keep working with zero config changes.
+
+### Multi-instance rate limiting (Redis backend)
+
+The default in-memory rate limiter scopes per process; for multi-instance deployments behind a load balancer, switch to the Redis-backed token bucket:
+
+```bash
+# Operator boot env
+FROOTAI_RATE_LIMITER_BACKEND=redis
+# + supply opts.redisClient when wiring buildSelectedRateLimiter
+```
+
+Selector helpers exported from `entitlements/rate-limiter`:
+
+- `selectRateLimiterBackend(env)` → `"memory"` | `"redis"` (validates against `RATE_LIMITER_BACKENDS`)
+- `buildRedisRateLimiterDatastore({redisClient})` — adapter for any redis-shaped client (`ioredis`, `redis@4`, `@upstash/redis`, or a custom RESP-2 stub). JSON-encodes on write + decodes on read; returns `null` on missing or malformed values.
+- `buildSelectedRateLimiter({backend?, env?, datastore?, redisClient?, onFault?, now?, profiles?})` — single entry point that routes to the right backend.
+
+The underlying limiter logic is unchanged — both backends share identical refill math and quota enforcement. **No npm dependency added** so air-gapped customers can pick their preferred Redis client at integration time.
+
+### Audit log segment compaction
+
+Long-lived audit stores accumulate thousands of small JSONL segments. The compactor merges small segments per (region, date) into a single rolled-up `audit-compact-<YYYYMMDD>.jsonl` file:
+
+```bash
+node frootai-core/scripts/orchard/audit-segment-compact.js \
+  --dir /var/lib/frootai/audit \
+  --region all \
+  --min-bytes-per-segment 1048576 \
+  --dry-run --json
+```
+
+Compaction is **atomic** (tmp + rename + unlink-originals-only-after-rename); a crash mid-compaction leaves the originals intact plus a `.tmp` file that the next run cleans up.
+
+### Graceful HTTP shutdown
+
+The Streamable HTTP transport now tracks in-flight requests and exposes `closeGraceful({drainMs})`. During drain:
+
+- New POSTs to `/mcp` return **`503 Service Unavailable` + `Retry-After: 5`** so clients back off briefly.
+- `GET /health` continues to respond with new `draining: true` + `in_flight: <n>` fields so orchestrators (Kubernetes / Nomad) can confirm liveness without blocking the rolling deploy.
+- Existing in-flight tool calls run to completion (no truncation).
+
+Default drain window is **15 s**. Operators receive `{drained, in_flight_remaining, waited_ms}` so they can alert when a deploy ran out of drain time (typically suggests a stuck handler or insufficient budget).
+
+### Telemetry pipeline alerting
+
+`telemetry-alert.js` watches the rolling error rate over a configurable window (default **15 min**, **5% threshold**, **min sample 25**). When the rate crosses the threshold, it posts a Slack-shaped payload (`{text, blocks}` — works with both classic webhook URLs and Block Kit) summarizing the top failing tool + top error code.
+
+```bash
+FROOTAI_TELEMETRY_ALERT_WEBHOOK=https://hooks.slack.com/services/... \
+  node frootai-core/scripts/orchard/telemetry-alert.js \
+    --dir /var/lib/frootai/telemetry --region us-east --json
+```
+
+Webhook URL is **read from env, never from argv** (same defense-in-depth pattern as the admin runbooks). The `postSlack` helper is fetch-injectable for testing and **never throws** on network failure.
+
+### Package size + tree-shake audit
+
+`mcp-package-size-audit.js` validates the npm + Python packages on every release:
+
+- Total bytes under budget (default **128 KiB** each — bumped from A8.18's 96 KiB to accommodate the cumulative A8 + A9 surface).
+- Zero third-party runtime deps (peer dep `@frootai/orchard` / `frootai-orchard` only).
+- Every `require()` resolves to stdlib / sibling / declared peer (comment-aware regex; ignores JSDoc examples).
+
+Respects the npm `files` allowlist + a Python build-artifact skiplist (`__pycache__`, `*.egg-info`, `*.pyc`) so the audit reflects what actually ships in the tarball/wheel.
+
+### Regression performance budget
+
+`perf-budget.js` is the operator-driven CLI for asserting the full `orchard:test` chain stays within wall-clock budget (default **120 s total**, **30 s per suite**). It runs each suite individually via `spawnSync`, reports the top-10 slowest suites in the banner, and exits non-zero when over budget.
+
+Intentionally **NOT wired into `orchard:test`** itself — that would cause recursion. Run via `npm run orchard:perf-budget` from `frootai-core/`.
+
+> **For self-hosted deployments**, see also the [Self-host guide](/docs/enterprise/self-host) for Docker image setup, per-region pinning, and cosign verification.
+
+---
+
+## See also
+
+- [MCP Server Reference](/docs/mcp/orchard) — full tool reference, wire protocol, auth gate
+- [MCP Client Install Guide](/docs/mcp/install-clients) — Cursor, Claude Desktop, ChatGPT MCP, Continue, Cline setup
+- [MCP Marketplace Listings](/docs/mcp/listings) — Smithery + Glama verified publisher badges
+- [TypeScript SDK Reference](/docs/sdk/orchard-typescript) — `@frootai/orchard` npm SDK
+- [Python SDK Reference](/docs/sdk/orchard-python) — `frootai-orchard` PyPI SDK
+- [CLI Reference](/docs/cli/orchard) — `frootai orchard` CLI subcommands
+- [MCP Spec 2025-03-26](https://spec.modelcontextprotocol.io/specification/2025-03-26/) — upstream wire protocol specification

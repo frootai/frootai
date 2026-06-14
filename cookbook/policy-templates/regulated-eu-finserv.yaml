@@ -1,0 +1,114 @@
+# regulated-eu-finserv.yaml — Regulated EU financial services (DORA / PSD2 / GDPR)
+#
+# Profile: Tier-1 EU bank or fintech under DORA + PSD2 + GDPR. Private-only
+# network posture, mandatory CMK, mandatory managed identity, strict RBAC,
+# guests blocked, prod region restricted to EU sovereign cloud, every SKU
+# pinned to predictable cost-bands so capital-allocation desks can model spend.
+# Bicep-only emit (Terraform requires separate auditor sign-off at the bank).
+---
+spec_version: 1
+company: "EuroBank N.V. (regulated finserv)"
+
+regions:
+  - westeurope
+  - northeurope
+
+models:
+  allow:
+    - gpt-4o
+    - text-embedding-3-large
+  deny:
+    - gpt-3.5-turbo
+    - gpt-4
+    - claude-3-haiku
+    - text-davinci-003
+
+skus:
+  allow:
+    - Standard_D4s_v3
+    - Standard_D8s_v3
+    - Standard_D16s_v3
+    - Standard_E8s_v3
+    - Standard_E16s_v3
+  deny:
+    - Standard_B1s
+    - Standard_B2s
+    - Standard_A1_v2
+
+naming:
+  prefix: eb
+  suffix: prd
+  separator: "-"
+  max_length: 24
+
+tags:
+  required:
+    - env
+    - bu
+    - costcenter
+    - dataclassification
+    - regulatoryscope
+    - owner
+    - dora_critical
+  values:
+    env: "^(prod|dr)$"
+    dataclassification: "^(internal|confidential|restricted)$"
+    regulatoryscope: "^(DORA|PSD2|GDPR|MiFID-II|EBA)$"
+    dora_critical: "^(yes|no)$"
+
+network:
+  posture: private
+  vnet_required: true
+  private_endpoint_required: true
+  dns_zone_overrides:
+    "Microsoft.Storage/storageAccounts": "privatelink.blob.core.windows.net"
+    "Microsoft.KeyVault/vaults": "privatelink.vaultcore.azure.net"
+    "Microsoft.Sql/servers": "privatelink.database.windows.net"
+    "Microsoft.DocumentDB/databaseAccounts": "privatelink.documents.azure.com"
+    "Microsoft.CognitiveServices/accounts": "privatelink.openai.azure.com"
+    "Microsoft.Cache/Redis": "privatelink.redis.cache.windows.net"
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: blocked
+
+iac:
+  format: bicep
+  modular_emit: true
+  gold_allowed: false
+
+encryption:
+  cmk_required: true
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: large
+  tier_default: premium
+
+custom_checks:
+  - id: CUSTOM-EUROBANK-001
+    severity: critical
+    title: All Storage accounts must use RA-GRS for cross-region durability
+    description: |
+      DORA requires resilient infrastructure across two availability zones AND
+      one cross-region replica. Every Microsoft.Storage/storageAccounts MUST
+      set sku.name to Standard_RAGRS or Standard_RAGZRS — the LRS / GRS / ZRS
+      variants do not satisfy the DR test.
+    expression: "resource.type=='Microsoft.Storage/storageAccounts' and sku.name in ['Standard_RAGRS','Standard_RAGZRS']"
+  - id: CUSTOM-EUROBANK-002
+    severity: high
+    title: Cognitive Services accounts must disable public network access
+    description: |
+      OpenAI / Cognitive Services deployments handling PII MUST set
+      publicNetworkAccess=Disabled. Public endpoints on these services have
+      historically been a top-3 EBA finding in pen-tests.
+    expression: "resource.type=='Microsoft.CognitiveServices/accounts' and properties.publicNetworkAccess=='Disabled'"

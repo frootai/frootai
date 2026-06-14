@@ -46,6 +46,15 @@
 # ── Solution Plays ──
 /solution-plays/                    @frootai/core @frootai/community
 
+# ── FAI Orchard (Cross-cloud Solution Accelerator catalog) ──
+# Phase [A0.12] of the orchard master plan. Path precedence: most-specific wins.
+# See orchard/CONTRIBUTING.md §5 for review SLAs and dispute resolution.
+/orchard/                           @frootai/core @frootai/community
+/orchard/schema/                    @frootai/core @frootai/protocol
+/orchard/validators/                @frootai/core @frootai/distribution
+/orchard/registry/                  @frootai/core @frootai/community
+/orchard/registry/overrides/        @frootai/core @frootai/community
+
 # ── Documentation ──
 /docs/                              @frootai/core
 /README.md                          @frootai/core

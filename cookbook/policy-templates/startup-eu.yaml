@@ -1,0 +1,76 @@
+# startup-eu.yaml — Early-stage EU startup (Berlin / Paris / Stockholm)
+#
+# Profile: 5-50 engineers, single Azure subscription, EU-only data residency,
+# cost-conscious but not penny-pinching, identity via Entra ID, every team
+# member is full-time staff (no guests). Modular Bicep emit so the platform
+# team can review per-stack diffs.
+#
+# Use as the canonical "starter" policy; bump regions / encryption / network
+# posture as the company scales into V7.4 mid-market template.
+---
+spec_version: 1
+company: "Acme GmbH (EU startup)"
+
+regions:
+  - westeurope
+  - northeurope
+
+models:
+  allow:
+    - gpt-4o-mini
+    - gpt-4o
+    - text-embedding-3-small
+
+skus:
+  allow:
+    - Standard_B2s
+    - Standard_B4ms
+    - Standard_D2s_v3
+    - Standard_D4s_v3
+  deny:
+    - Standard_M128ms
+    - Standard_M208s_v2
+
+naming:
+  prefix: acme
+  separator: "-"
+  max_length: 24
+
+tags:
+  required:
+    - env
+    - owner
+    - costcenter
+  values:
+    env: "^(prod|staging|dev)$"
+
+network:
+  posture: hybrid
+  vnet_required: true
+  private_endpoint_required: false
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: permissive
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: blocked
+
+iac:
+  format: bicep
+  modular_emit: true
+  gold_allowed: true
+
+encryption:
+  cmk_required: false
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: small
+  tier_default: standard

@@ -1,0 +1,283 @@
+---
+title: "Install FrootAI Orchard MCP in your AI client"
+description: "Copy-pasteable install snippets for Cursor, Claude Desktop, ChatGPT MCP, Continue, Cline, and any raw MCP CLI client"
+icon: "🔌"
+order: 42
+tags: ["mcp", "orchard", "cursor", "claude", "chatgpt", "continue", "cline", "install"]
+---
+
+# Install FrootAI Orchard MCP
+
+This guide shows how to wire the FrootAI Orchard MCP server into the 6 most common MCP clients. Pick the runtime that fits your machine (`npx` for Node, `uvx` for Python — both are byte-equal):
+
+| Runtime | Command |
+|---|---|
+| npm | `npx -y @frootai/mcp-orchard@latest` |
+| Python | `uvx frootai-mcp-orchard[sdk]@latest` |
+
+All snippets below use the **npm runtime**. Replace the `command` + `args` block with the Python form (see [Python alternative](#python-alternative) at the bottom) if you prefer.
+
+## Auth — `frootai login` once, works everywhere
+
+Before configuring any client, sign in once so the MCP server can call paid tools (`orchard.find_play`):
+
+```bash
+npm install -g frootai
+frootai login
+```
+
+This writes a token to `~/.frootai/.token` (mode 0o600). The MCP server reads it automatically — you do NOT pass tokens through client configs. Free tools (`orchard.search`, `orchard.show`, `orchard.install_command`, `orchard.list_pollinations`) work without sign-in.
+
+---
+
+## Cursor
+
+Cursor reads MCP server configs from `~/.cursor/mcp.json`. Add the `frootai-orchard` entry:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/mcp-orchard@latest"]
+    }
+  }
+}
+```
+
+Restart Cursor. The MCP server appears in **Settings → Features → MCP Servers** with a green dot when healthy. You can now ask Cursor things like *"find me an Azure RAG accelerator with eval coverage"* and it will call `orchard.search` automatically.
+
+---
+
+## Claude Desktop
+
+Claude Desktop reads `claude_desktop_config.json`:
+
+| OS | Path |
+|---|---|
+| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/mcp-orchard@latest"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop. The server appears under the **hammer icon** in the chat input.
+
+---
+
+## ChatGPT MCP
+
+ChatGPT supports MCP servers via **Settings → Beta features → MCP servers → Add server**. Paste:
+
+| Field | Value |
+|---|---|
+| Name | `FrootAI Orchard` |
+| Command | `npx` |
+| Args (one per line) | `-y`<br>`@frootai/mcp-orchard@latest` |
+| Env vars | *(leave blank — server reads `~/.frootai/.token`)* |
+
+Click **Add**. ChatGPT spawns the server and registers the 5 tools.
+
+---
+
+## Continue (VS Code / JetBrains)
+
+Continue reads `~/.continue/config.json`:
+
+```json
+{
+  "experimental": {
+    "modelContextProtocolServers": [
+      {
+        "transport": {
+          "type": "stdio",
+          "command": "npx",
+          "args": ["-y", "@frootai/mcp-orchard@latest"]
+        }
+      }
+    ]
+  }
+}
+```
+
+Reload Continue (`Continue: Reload Window` from the command palette). The tools appear in the slash-command menu prefixed with `@orchard`.
+
+---
+
+## Cline
+
+Cline (VS Code extension) reads MCP config from its own settings panel:
+
+1. Open **VS Code → Settings → Extensions → Cline**
+2. Scroll to **MCP Servers** and click **Add Server**
+3. Fill in:
+
+| Field | Value |
+|---|---|
+| Server name | `frootai-orchard` |
+| Command | `npx -y @frootai/mcp-orchard@latest` |
+| Transport | `stdio` |
+
+Save. Cline restarts and the 5 tools appear in the tool picker.
+
+---
+
+## VS Code (embedded MCP server)
+
+If you have the **FrootAI Orchard VS Code extension** installed, an embedded MCP server boots in-process — no separate terminal or `npx` required. The extension uses a built-in SDK shim (A8.7) that routes through the same `@frootai/mcp-orchard` protocol dispatcher, so tool outputs are **byte-equal** with the standalone npm + Python servers.
+
+### Enabling the embedded server
+
+1. Open **Settings** → search `frootai.orchard.mcpServer`.
+2. Set `frootai.orchard.mcpServer.autoStart` to `true` (or run the command palette → *FrootAI Orchard: Start MCP Server*).
+3. Optionally pin a port: `frootai.orchard.mcpServer.port` (default `0` = OS picks a free ephemeral port).
+
+The server writes a discovery file at `~/.frootai/vscode-mcp-endpoint.json` (mode `0600`) so other extensions / MCP agents can discover the local endpoint:
+
+```json
+{
+  "schema_version": 1,
+  "url": "http://127.0.0.1:<port>/mcp",
+  "transport": "streamable_http",
+  "tools": ["orchard.search", "orchard.show", "orchard.install_command", "orchard.find_play", "orchard.list_pollinations"]
+}
+```
+
+### Auth
+
+The embedded server reads the same `~/.frootai/.token` file the CLI writes. Run `frootai login` in any VS Code terminal to authenticate — the embedded server picks up the token on the next tool call (60-second cache TTL).
+
+### 3-runtime conformance
+
+The embedded server is byte-equal with the standalone npm and Python servers. This is verified by the 3-runtime cross-MCP conformance suite (A9.1) which runs the same contract manifest against all three runtimes and asserts deep equality on every tool-call response.
+
+---
+
+## Any other MCP client (raw stdio)
+
+Any client speaking MCP spec **2025-03-26** over stdio can use our server. Spawn:
+
+```bash
+npx -y @frootai/mcp-orchard@latest
+```
+
+The process reads JSON-RPC 2.0 messages from stdin (line-delimited, one JSON per line) and writes responses to stdout. Stderr is reserved for diagnostics.
+
+For Streamable HTTP partners (self-hosted):
+
+```bash
+mcp-orchard --http --port 8080
+# POST JSON-RPC to http://localhost:8080/mcp
+# GET http://localhost:8080/health for the health check
+```
+
+---
+
+## Python alternative
+
+Anywhere you see the npm runtime config, swap in the Python runtime:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "uvx",
+      "args": ["frootai-mcp-orchard[sdk]@latest"]
+    }
+  }
+}
+```
+
+(Requires [`uv`](https://docs.astral.sh/uv/) installed — the recommended Python launcher for MCP servers.) The two runtimes produce **byte-equal** results for the same tool call — pick whichever fits your machine.
+
+---
+
+## Verifying the install
+
+After your client restarts, you should be able to ask it:
+
+> *"Search the FrootAI Orchard for Azure RAG accelerators with eval coverage"*
+
+The agent calls `orchard.search` with `query="rag"` and `where="variety:azure AND trust_badge:eval_proven"` and renders a Markdown table inline. If you see a "tool not found" error, the MCP server failed to start — check the client's MCP log for the stderr output.
+
+---
+
+## Self-host (on-prem)
+
+Enterprise customers can run the MCP server inside their own VPC / on-prem datacenter using the published Docker image. The container exposes the same `/mcp` Streamable HTTP endpoint as `mcp-orchard --http` plus a `/health` endpoint suitable for orchestrators (Kubernetes / Nomad / ECS):
+
+```bash
+docker pull ghcr.io/frootai/mcp-orchard:1.0.0
+
+docker run --rm -p 3000:3000 \
+  --read-only --tmpfs /tmp \
+  --cap-drop=ALL --security-opt no-new-privileges \
+  ghcr.io/frootai/mcp-orchard:1.0.0
+```
+
+For per-region pinning, IAM / secrets wiring, cosign verification, and graceful-shutdown semantics, see the [Self-host guide](../enterprise/self-host).
+
+---
+
+## Walkthrough videos (A10.18)
+
+> **Status: production-recording in progress.** The agent ships the canonical recording manifest + scene outlines + URL slots; the founder records each walkthrough + commits the binary asset + flips the `status` in the manifest. Until each row's `status` flips to `recorded`, the link points at this section as a placeholder.
+
+Each walkthrough is **≤ 90 seconds** and recorded against the **same 5-tool surface + same synthetic demo account** as the in-package GIF demos (see [`npm-mcp/orchard/demo/recordings-manifest.json`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/recordings-manifest.json)).
+
+| Client | Walkthrough | Status | Mirror GIF (≤ 30 s) |
+|---|---|---|---|
+| Cursor | _(video URL pending — see scene outline below)_ | `pending` | [`demo/cursor.gif`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/cursor.gif) |
+| Cline | _(video URL pending — see scene outline below)_ | `pending` | [`demo/cline.gif`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/cline.gif) |
+| Claude Desktop | _(video URL pending)_ | `pending` | [`demo/claude-desktop.gif`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/claude-desktop.gif) |
+| Continue | _(video URL pending)_ | `pending` | [`demo/continue.gif`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/continue.gif) |
+| VS Code (embedded MCP) | _(video URL pending)_ | `pending` | [`demo/vscode.gif`](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/vscode.gif) |
+
+### Cursor walkthrough — scene outline
+
+| Time | Scene |
+|---|---|
+| 0:00–0:10 | Open Cursor → `Settings → MCP` → paste the `@frootai/mcp-orchard` JSON snippet → restart. |
+| 0:10–0:25 | Switch to Composer → ask: *"Find Azure RAG accelerators with eval coverage"*. |
+| 0:25–0:50 | Agent fires `orchard.search` → renders Markdown table inline. |
+| 0:50–1:15 | Click the top result → ask: *"show me the install command"* → agent fires `orchard.install_command`. |
+| 1:15–1:30 | Pan to the discovered Play recipe (paid tool denial banner appears for free tier → "Sign in for Pro" CTA). |
+
+### Cline walkthrough — scene outline
+
+| Time | Scene |
+|---|---|
+| 0:00–0:10 | Open Cline side panel → MCP server list shows `frootai-orchard` connected. |
+| 0:10–0:25 | Ask: *"Recommend a multi-tenant RAG starter for a SaaS team"*. |
+| 0:25–0:55 | `orchard.find_play` runs — auth gate denies (free tier) → upgrade hint with `frootai login` instructions. |
+| 0:55–1:20 | After `frootai login` + Pro upgrade, re-run → matched Play surfaces with Markdown recipe. |
+| 1:20–1:30 | One pollination clicked → `orchard.list_pollinations` shows cross-Variety equivalents. |
+
+### Recording rules
+
+- Each walkthrough records against the **same synthetic demo account** referenced in the recordings manifest. Real customer or partner tokens NEVER appear in any frame.
+- The browser bookmarks bar + the OS notification tray are blurred or hidden.
+- Captions are open captions (burned-in), generated from the agent's spoken script for accessibility.
+- Source files (Final Cut / DaVinci / OBS projects) live in `frootai-core/marketplace/walkthroughs-source/` (gitignored) so the agent never ships PII-bearing project files.
+- Once recorded, each video is uploaded to YouTube + Loom (mirror) and the canonical YouTube URL is committed back into this table.
+
+### Validating the walkthroughs in CI
+
+`scripts/orchard/validate-recordings.js` (A10.16) covers the GIF mirrors. A future v1.x sub-phase will ship a YouTube-URL validator (`scripts/orchard/validate-walkthroughs.js`) that checks each row's URL returns HTTP 200 + the video is unlisted-or-public + duration ≤ 90 s.
+
+## See also
+
+- [`/docs/mcp/orchard`](./orchard) — full tool reference + JSON-RPC examples
+- [`/docs/mcp/listings`](./listings) — Smithery + Glama listings + verified-publisher badges
+- [`/docs/cli/orchard`](../cli/orchard) — the equivalent terminal commands
+- [`/docs/enterprise/self-host`](../enterprise/self-host) — Docker image + multi-region pinning + on-prem deployment
+- [Recordings manifest](https://github.com/frootai/frootai-core/blob/main/frootai-core/npm-mcp/orchard/demo/recordings-manifest.json) — single source of truth for GIF + walkthrough recording state
+

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/harvest-seed-list.v1.json",
+  "title": "FAI Harvest Seed List",
+  "description": "Curated bootstrap input for the FAI Harvest pipeline (repo → Solution Play converter). Each entry is one Microsoft-anchor accelerator the cron sweep will pull through stages S1→S7 (clone → repo-facts → fact-check → manifest-v2 → policy-overlay → cost-track → publish). Distinct from `orchard-seed-list.schema.json` (Orchard A-phase fruit-catalog crawler input) — same source repos may appear in both files for different downstream consumers. Authored at Phase [H0.26]. License: CC0-1.0.",
+  "$comment": "License: CC0-1.0 (Creative Commons Zero v1.0 Universal — public domain dedication). SPDX-License-Identifier: CC0-1.0. Authored by FrootAI 2026-06-04 as part of Phase [H0.26] of the Harvest-to-Solution-Play masterplan. Forward-pinned consumers: [H0.18] pytest fixtures, [H0.27] schema-drift CI, [H0.28] seed-coverage CI.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "count", "items"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional pointer back to this schema (CDN URL). Tooling MAY use this to fetch + validate."
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver of THIS schema document. Bumped on breaking changes to the items[] shape. Consumers MUST match major."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC. Timestamp when the seed list was last hand-edited or pipeline-regenerated."
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5000,
+      "description": "Number of entries in items[]. MUST equal items.length — enforced by the smoke test, not by JSON Schema (which has no cross-field arithmetic in 2020-12)."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5000,
+      "uniqueItems": false,
+      "description": "Seed entries. Order may drive cron-sweep order in priority='high' tiers; otherwise non-significant.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["full_name", "priority", "reason"],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$",
+            "minLength": 3,
+            "maxLength": 256,
+            "description": "GitHub <owner>/<repo>. Case preserved exactly as it appears on GitHub. Example: Azure-Samples/azure-search-openai-demo. Same regex as orchard-seed-list.schema.json `full_name`."
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["high", "normal", "low"],
+            "description": "Sweep-order tier. `high` = front of cron queue (≥1k stars or strategic anchor); `normal` = bulk (100–999 stars); `low` = long-tail (<100 stars, industry-vertical accelerators). Drives [H0.20] cost-tracker budget allocation."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "One-line technical justification for inclusion. ≤200 chars recommended. Used as audit context when reviewers triage seed PRs and as the `harvested_from.notes` seed in [H0.3] manifest-v2 provenance."
+          },
+          "expected_primary_cloud": {
+            "type": "string",
+            "enum": ["azure", "aws", "gcp", "multi", "agnostic", "none"],
+            "description": "Optional pre-classification hint matching repo-facts.schema.json `primary_cloud`. Drives [H0.25] lenient-mode classifier confidence floor. Omit if uncertain — classifier will infer."
+          },
+          "expected_domain": {
+            "type": "string",
+            "enum": [
+              "rag", "agent", "chatbot", "voice", "vision", "multimodal",
+              "fine-tune", "evaluation", "cookbook", "infra",
+              "data-pipeline", "search", "vector-db", "embeddings", "other"
+            ],
+            "description": "Optional pre-classification hint matching repo-facts.schema.json `domain` enum (15-member). Drives [H0.25] lenient-mode confidence floor. Omit if uncertain."
+          },
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Optional ISO 8601 UTC. When this seed was first added to the list. Pre-existing entries may omit; the harvest pipeline does not depend on it."
+          },
+          "added_by": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional. GitHub username of the seed PR author OR pipeline identifier. Examples: 'github:pavle', 'fai-harvest-seed-curator/v1.0'."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Optional free-form notes. Use for: known caveats (archived/deprecated repos), licensing flags, expected play_slug hints, reviewer comments. NOT used at runtime — pure metadata."
+          }
+        }
+      }
+    }
+  }
+}

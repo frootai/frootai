@@ -1,0 +1,209 @@
+---
+title: "FAI Orchard — On-Prem & Self-Host Guide"
+description: "Run the FrootAI Orchard MCP server on your own infrastructure: Docker image, Streamable HTTP transport, Bring-Your-Own auth + storage, multi-region pinning, and offline-friendly mode for air-gapped networks."
+icon: "🏗️"
+order: 51
+tags: ["enterprise", "self-host", "on-prem", "docker", "mcp", "streamable-http", "air-gapped", "byo-storage", "compliance"]
+---
+
+# FAI Orchard — On-Prem & Self-Host Guide
+
+The **enterprise tier** supports self-hosting the FrootAI Orchard MCP server inside your own VPC / on-prem datacenter. Self-hosting is the recommended deployment when you need:
+
+- **Data residency** beyond the 3 hosted regions (`us-east`, `eu-west`, `ap-south`).
+- **Air-gapped** or fully-offline networks (e.g. classified envs, regulated industries).
+- **Bring-Your-Own auth** (your existing OIDC IdP, no FrootAI account).
+- **Bring-Your-Own storage** for audit log segments (your own S3 / Azure Blob / on-prem object store).
+
+> Self-hosting **does not** disable telemetry-back to FrootAI by default — but you can fully opt out via `DO_NOT_TRACK=1` (see [Telemetry](#telemetry-opt-out)).
+
+---
+
+## At a glance
+
+| Property | Value |
+|---|---|
+| Image | `ghcr.io/frootai/mcp-orchard:1.0.0` (multi-stage Alpine, ~85 MiB compressed) |
+| Base | `node:22-alpine` |
+| User | `frootai` (UID `1001`, GID `1001`) — non-root |
+| Default transport | Streamable HTTP on `0.0.0.0:3000/mcp` |
+| Health check | `GET /health` returns `{ok, server, capabilities, endpoint}` |
+| MCP spec | `2025-03-26` |
+| Tools | `orchard.search`, `orchard.show`, `orchard.install_command`, `orchard.find_play` (paid), `orchard.list_pollinations` |
+| Auth | Bearer token (env `FROOTAI_TOKEN`) OR anonymous (free tools only) |
+
+---
+
+## Prerequisites
+
+- Docker 24+ or any OCI-compliant runtime (containerd, Podman ≥4, CRI-O).
+- Linux kernel ≥ 5.4 (for cgroup v2 + seccomp).
+- TLS-terminating reverse proxy (Nginx / Envoy / Caddy) — the container itself listens HTTP.
+- (Enterprise tier) An admin token from the FrootAI control plane to call `/api/entitlements/*` endpoints. Run `admin-provision-org.js` (A9.19) to mint the org first.
+
+---
+
+## Quickstart — Docker
+
+Pull and run the image with a free-tier anonymous configuration:
+
+```bash
+docker pull ghcr.io/frootai/mcp-orchard:1.0.0
+
+docker run --rm -p 3000:3000 \
+  --read-only --tmpfs /tmp \
+  --cap-drop=ALL --security-opt no-new-privileges \
+  ghcr.io/frootai/mcp-orchard:1.0.0
+```
+
+Verify the server boots:
+
+```bash
+curl -s http://localhost:3000/health | jq .
+# → {"ok": true, "server": "frootai-orchard", "capabilities": {...}, "endpoint": "/mcp"}
+```
+
+Issue a `tools/list` request:
+
+```bash
+curl -sX POST http://localhost:3000/mcp \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","clientInfo":{"name":"curl","version":"0"},"capabilities":{}}}'
+```
+
+---
+
+## Configuration
+
+The container reads the following environment variables. All are optional unless flagged.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `PORT` | `3000` | HTTP listen port |
+| `HOST` | `0.0.0.0` | bind address (set `127.0.0.1` if reverse-proxy is on the same host) |
+| `MCP_PATH` | `/mcp` | URL path for the JSON-RPC endpoint |
+| `FROOTAI_TOKEN` | _(unset)_ | Bearer token used by the embedded SDK to authenticate against `/api/entitlements/*` |
+| `FROOTAI_API_BASE` | `https://frootai.dev` | Override for the entitlements/registry control plane |
+| `FROOTAI_CDN_BASE` | `https://cdn.frootai.dev` | Override for the Orchard fruit + pollination CDN |
+| `FROOTAI_AZURE_BLOB_CONNSTR_US_EAST` | _(unset)_ | Per-region audit-export backend (one var per region; see [Multi-region pinning](#multi-region-pinning)) |
+| `FROOTAI_AZURE_BLOB_CONNSTR_EU_WEST` | _(unset)_ | Audit-export connection string for `eu-west` |
+| `FROOTAI_AZURE_BLOB_CONNSTR_AP_SOUTH` | _(unset)_ | Audit-export connection string for `ap-south` |
+| `FROOTAI_S3_BUCKET_US_EAST` | _(unset)_ | S3 bucket for `us-east` audit-export |
+| `FROOTAI_S3_BUCKET_EU_WEST` | _(unset)_ | S3 bucket for `eu-west` audit-export |
+| `FROOTAI_S3_BUCKET_AP_SOUTH` | _(unset)_ | S3 bucket for `ap-south` audit-export |
+| `DO_NOT_TRACK` | _(unset)_ | Set to `1` to disable all telemetry (overrides per-user opt-in) |
+| `NODE_ENV` | `production` | Standard Node.js env flag |
+
+---
+
+## Auth & identity
+
+Self-hosted Orchard supports the same 3-source token priority as the hosted SDK:
+
+1. **`FROOTAI_TOKEN` env var** (highest precedence) — used by the embedded SDK for every backend call.
+2. **`~/.frootai/.token` file** (mode `0o600`) — written by `frootai login`. _Not_ read inside the container by default; mount your token file as a read-only volume if you want this behavior.
+3. **Anonymous** — free tools (`orchard.search`, `orchard.show`, `orchard.install_command`, `orchard.list_pollinations`) work without a token. `orchard.find_play` requires Pro tier or higher.
+
+For **enterprise SSO**, the container does not perform the SAML / OIDC dance directly — that happens at your IdP and the FrootAI control plane. The resulting Bearer token is injected via `FROOTAI_TOKEN`. See the [Enterprise Guide → SSO setup](/docs/enterprise/orchard#sso-setup-saml--oidc) for the IdP-side configuration.
+
+---
+
+## Multi-region pinning
+
+Audit-export writes are pinned to one of three regions per request, controlled by:
+
+- The **org's `home_region`** (set via `admin-provision-org.js --home-region <r>`), and
+- An optional **`body.region` override** in the audit-export request (requires `cross-region:read` entitlement, automatically granted to the `enterprise` tier).
+
+Each region must have its backend env vars set on the **container that handles that region's traffic**. A common pattern is to run **one container per region**, fronted by a Geo-DNS reverse proxy:
+
+```
+                            ┌────────────────────┐
+              ┌────────────►│ orchard-us-east    │ FROOTAI_AZURE_BLOB_CONNSTR_US_EAST=…
+              │             └────────────────────┘
+   Geo-DNS    │             ┌────────────────────┐
+   (Cloudflare/Route53)─────┤ orchard-eu-west    │ FROOTAI_AZURE_BLOB_CONNSTR_EU_WEST=…
+              │             └────────────────────┘
+              │             ┌────────────────────┐
+              └────────────►│ orchard-ap-south   │ FROOTAI_AZURE_BLOB_CONNSTR_AP_SOUTH=…
+                            └────────────────────┘
+```
+
+Each container only needs the connection string for its own region — cross-region writes are always denied at the backend gate (`selectRegionForRequest({is_write: true}) === {allowed: false}`).
+
+---
+
+## Storage layout
+
+Audit-export object keys follow the **hive-partition** layout so any operator can grant per-region IAM:
+
+```
+audit-export/
+  region=us-east/
+    tenant=acme/
+      2026-05-26/
+        audit-2026-05-26.jsonl
+        audit-2026-05-26.manifest.json
+  region=eu-west/
+    tenant=acme/
+      …
+```
+
+This layout is the same whether the backend is `s3`, `azure_blob`, or `local_fs`. Manifests carry `record_count`, `kinds[]`, and the SHA-256 of the `.jsonl` body — operators MUST verify the SHA-256 on download (defense vs manifest spoofing). See [Enterprise Guide → Audit log export](/docs/enterprise/orchard#audit-log-export) for the response envelope.
+
+---
+
+## Telemetry (opt-out)
+
+By default, the self-hosted Orchard MCP server collects the same opt-in, no-PII telemetry as the hosted version (see [MCP Telemetry](/docs/mcp/orchard#telemetry-opt-in)). To **fully disable**:
+
+```bash
+docker run -e DO_NOT_TRACK=1 ghcr.io/frootai/mcp-orchard:1.0.0
+```
+
+`DO_NOT_TRACK=1` is a hard override — it suppresses telemetry even if individual users have run `frootai telemetry on`.
+
+---
+
+## Updates & version pinning
+
+We publish a new image on every `orchard-v*-mcp` tag. To pin:
+
+```bash
+docker pull ghcr.io/frootai/mcp-orchard:1.0.0     # pinned to v1.0.0
+docker pull ghcr.io/frootai/mcp-orchard:1         # latest 1.x
+docker pull ghcr.io/frootai/mcp-orchard:latest    # not recommended for production
+```
+
+The image is signed with **Sigstore** (cosign). To verify:
+
+```bash
+cosign verify ghcr.io/frootai/mcp-orchard:1.0.0 \
+  --certificate-identity-regexp '^https://github.com/frootai/frootai/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `Bind for 0.0.0.0:3000 failed: port is already allocated` | another container on the same port | `docker run -p 3001:3000 …` |
+| `/health` returns 200 but `tools/call` returns -32603 with `auth probe failed` | `FROOTAI_TOKEN` unset for a paid tool call | mount your env file: `--env-file .env` |
+| audit export returns `forbidden: region routing denied: invalid_requested_region` | request `body.region` not in `us-east`, `eu-west`, `ap-south` | drop the override or use a valid region |
+| audit export returns `forbidden: cross-region write` | trying to export from a region different from `home_region` AND `is_write=true` | cross-region WRITE is **never** allowed; use the home region container or move the home region |
+| Container exits with `Error: Cannot find module '@frootai/orchard'` | broken image (should never happen with `ghcr.io/frootai/mcp-orchard:1.0.0`) | re-pull; SHA-256 should match the published digest |
+| Health check fails after 10s | startup is slow on cold cache | increase `--health-start-period 30s` |
+| `npx -y @frootai/mcp-orchard@latest` works locally but Docker doesn't | local Node version differs from container's Node 22 | upgrade local Node to 22 or pin the container to `:1.0.0` |
+
+---
+
+## See also
+
+- [Enterprise Guide](/docs/enterprise/orchard) — SSO, audit export, multi-region tenancy, quota overrides.
+- [MCP Server reference](/docs/mcp/orchard) — tool catalog + JSON-RPC wire protocol.
+- [Install in MCP clients](/docs/mcp/install-clients) — Cursor / Claude / ChatGPT / Continue / Cline / VS Code.
+- `admin-provision-org.js` (A9.19) — operator runbook for enterprise org provisioning.
+- `admin-sso-test.js` (A9.6) — IdP claim mapper validator (no signature verification).
+- `audit-export.js` (A8.26) — operator CLI for one-off audit exports.

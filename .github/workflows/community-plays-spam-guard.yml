@@ -1,0 +1,183 @@
+name: Community Solution Play — Spam Guard
+
+# ──────────────────────────────────────────────────────────────────────────────
+# [H11.22] Contributor reputation gating + manual review queue for
+# first PR from new contributor.
+#
+# Runs in parallel with `community-plays-validate.yml`:
+#   - validate.yml = manifest content (H11.21 fai-manifest schema)
+#   - spam-guard.yml = contributor reputation + heuristic spam (this file)
+#
+# Triggers on every pull_request open/sync touching
+# `orchard/community-plays/**`. Reads the contributor's prior merged PR
+# count + account age via `gh api`, calls the pure
+# `evaluateContributor()` lib from frootai-core, applies labels, posts a
+# sticky PR comment, and fails the check when decision is `block`.
+#
+# Decision-to-action mapping:
+#   - auto_validate → labels only, exits 0
+#   - manual_review → labels + assign @pavle + appends queue entry to
+#                     `.github/spam-guard-queue.jsonl` (artifact), exits 0
+#   - block         → labels + sticky comment + exits 1 (fails check)
+# ──────────────────────────────────────────────────────────────────────────────
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "orchard/community-plays/**"
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to evaluate"
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: community-play-spam-guard-${{ github.event.pull_request.number || github.event.inputs.pr_number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spam-guard:
+    name: Evaluate contributor reputation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install reputation lib from frootai-core
+        run: |
+          git clone --depth 1 https://github.com/frootai/frootai-core.git "$RUNNER_TEMP/frootai-core"
+
+      - name: Collect contributor signals
+        id: signals
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # Account age (days)
+          CREATED_AT=$(gh api "/users/$PR_AUTHOR" --jq '.created_at')
+          NOW_SEC=$(date -u +%s)
+          CREATED_SEC=$(date -u -d "$CREATED_AT" +%s)
+          AGE_DAYS=$(( (NOW_SEC - CREATED_SEC) / 86400 ))
+          # Prior merged PRs in this repo
+          MERGED_COUNT=$(gh api "/search/issues?q=repo:$REPO+author:$PR_AUTHOR+is:pr+is:merged" --jq '.total_count')
+          # Recent PRs in last 24h
+          SINCE=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)
+          RECENT_JSON=$(gh api "/search/issues?q=repo:$REPO+author:$PR_AUTHOR+is:pr+created:>$SINCE" --jq '[.items[] | {opened_at: .created_at}]')
+          echo "age_days=$AGE_DAYS" >> "$GITHUB_OUTPUT"
+          echo "merged_count=$MERGED_COUNT" >> "$GITHUB_OUTPUT"
+          {
+            echo "recent_prs_json<<EOF"
+            echo "$RECENT_JSON"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Collect PR context
+        id: prcontext
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          PR_JSON=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json title,body,files)
+          echo "$PR_JSON" > "$RUNNER_TEMP/pr-context.json"
+
+      - name: Run reputation evaluator
+        id: evaluate
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          AGE_DAYS: ${{ steps.signals.outputs.age_days }}
+          MERGED_COUNT: ${{ steps.signals.outputs.merged_count }}
+          RECENT_PRS_JSON: ${{ steps.signals.outputs.recent_prs_json }}
+        run: |
+          set -euo pipefail
+          node -e '
+            const path = require("node:path");
+            const fs = require("node:fs");
+            const libPath = path.join(process.env.RUNNER_TEMP, "frootai-core", "cli", "commands", "release", "contributor-reputation.js");
+            const lib = require(libPath);
+            const prCtx = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/pr-context.json", "utf8"));
+            const files = Array.isArray(prCtx.files) ? prCtx.files.map((f) => f.path) : [];
+            const result = lib.evaluateContributor({
+              contributor: {
+                login: process.env.PR_AUTHOR,
+                mergedPrCount: parseInt(process.env.MERGED_COUNT, 10) || 0,
+                accountAgeDays: parseInt(process.env.AGE_DAYS, 10) || 0,
+                recentPrs: JSON.parse(process.env.RECENT_PRS_JSON || "[]"),
+              },
+              prContext: {
+                title: prCtx.title || "",
+                body: prCtx.body || "",
+                files,
+              },
+              blocklist: [],
+            });
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/gate-result.json", JSON.stringify(result, null, 2));
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/gate-comment.md", lib.renderGateComment(result));
+            console.log("decision=" + result.decision);
+            console.log("tier=" + result.tier);
+          '
+          RESULT_JSON=$(cat "$RUNNER_TEMP/gate-result.json")
+          DECISION=$(echo "$RESULT_JSON" | jq -r '.decision')
+          TIER=$(echo "$RESULT_JSON" | jq -r '.tier')
+          LABELS=$(echo "$RESULT_JSON" | jq -r '.labels | join(",")')
+          echo "decision=$DECISION" >> "$GITHUB_OUTPUT"
+          echo "tier=$TIER" >> "$GITHUB_OUTPUT"
+          echo "labels=$LABELS" >> "$GITHUB_OUTPUT"
+
+      - name: Apply labels
+        if: steps.evaluate.outputs.labels != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          LABELS: ${{ steps.evaluate.outputs.labels }}
+        run: |
+          IFS=',' read -ra LABEL_ARR <<< "$LABELS"
+          for label in "${LABEL_ARR[@]}"; do
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "$label" || true
+          done
+
+      - name: Assign founder on manual_review
+        if: steps.evaluate.outputs.decision == 'manual_review'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr edit "$PR_NUMBER" --repo "$REPO" --add-assignee pavle || true
+
+      - name: Post PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: community-play-spam-guard
+          path: ${{ runner.temp }}/gate-comment.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload gate result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spam-guard-result-${{ github.event.pull_request.number }}
+          path: ${{ runner.temp }}/gate-result.json
+          retention-days: 30
+
+      - name: Enforce block decision
+        if: steps.evaluate.outputs.decision == 'block'
+        run: |
+          echo "::error::Spam-guard blocked this PR; see PR comment for reason."
+          exit 1

@@ -1,0 +1,75 @@
+# gcp-only.yaml — GCP-first shop targeting Azure for one specific workload
+#
+# Profile: company's primary cloud is GCP; they use Azure only for a single
+# capability (e.g. Azure OpenAI for models GCP doesn't carry, or a
+# Microsoft-anchor partner SaaS). Terraform-only emit because the platform
+# team's existing GCP IaC is Terraform; modular emit OFF so the single Azure
+# stack lives in one easily-portable file the GCP team can review monolithically.
+# Identity wired to Google primarily, with Entra ID secondary for service principals.
+---
+spec_version: 1
+company: "Acme Cloud Inc. (GCP-first)"
+
+regions:
+  - eastus
+  - westus
+
+models:
+  allow:
+    - gpt-4o
+    - text-embedding-3-large
+
+skus:
+  allow:
+    - Standard_D4s_v3
+    - Standard_D8s_v3
+    - Standard_E4s_v3
+    - Standard_E8s_v3
+
+naming:
+  prefix: gcpco
+  suffix: az
+  separator: "_"
+  max_length: 22
+
+tags:
+  required:
+    - env
+    - team
+    - owner
+    - bridged_from_gcp
+  values:
+    env: "^(prod|staging|dev)$"
+    bridged_from_gcp: "^(yes|no)$"
+
+network:
+  posture: hybrid
+  vnet_required: true
+  private_endpoint_required: false
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: permissive
+
+identity:
+  providers:
+    - google
+    - entra-id
+  guest_account_policy: review-required
+
+iac:
+  format: terraform
+  modular_emit: false
+  gold_allowed: true
+
+encryption:
+  cmk_required: false
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: false
+
+cost:
+  band_target: medium
+  tier_default: standard

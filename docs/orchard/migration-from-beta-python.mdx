@@ -1,0 +1,204 @@
+---
+title: "FAI Orchard — Python SDK Migration (v0.9.x → v1.0.0)"
+description: "frootai-orchard v1.0.0 ships with zero breaking changes. This guide covers the additive v1.0 surface — STABILITY.md, deprecation framework, byte-equality guarantees — and what to do at the next major."
+icon: "🐍"
+order: 4
+tags: ["orchard", "migration", "python", "pypi", "sdk", "v1.0", "semver"]
+---
+
+# Python SDK migration guide (v0.9.x → v1.0.0)
+
+> **TL;DR — `pip install -U "frootai-orchard>=1.0.0,<2.0.0"`. You're done.** No imports change, no signatures change, no exit codes change. The rest of this page documents *why* nothing changed and what the v1.0 contract guarantees.
+
+For the cross-SDK overview, start at [Migration from v0.9.x](./migration-from-beta). For the full reference, see [/docs/sdk/orchard-python](../sdk/orchard-python).
+
+---
+
+## What you do
+
+```bash
+# In your project (any venv / uv / poetry / pipenv)
+pip install -U "frootai-orchard>=1.0.0,<2.0.0"
+```
+
+That's it. The `>=1.0.0,<2.0.0` range pulls every minor + patch for the v1.x lifetime.
+
+If you want a stricter pin:
+
+```bash
+pip install "frootai-orchard==1.0.0"
+```
+
+With `uv`:
+
+```bash
+uv add "frootai-orchard>=1.0.0,<2.0.0"
+```
+
+With Poetry:
+
+```bash
+poetry add "frootai-orchard>=1.0.0,<2.0.0"
+```
+
+---
+
+## Public-surface diff
+
+There is **no public-surface diff** between v0.9.x and v1.0.0. The exports listed in `frootai_orchard.__all__` are identical to what shipped at v0.6.0-sdk (with the A8.27 / A8.28 / A9.x additions already in place at v0.8.0-enterprise / v0.9.0-ops).
+
+The locked surface (every name in `__all__`):
+
+| Category | Symbols (frozen at v1.0) |
+|---|---|
+| Factory | `create_client` |
+| Exception classes | `FrootaiOrchardError`, `AuthError`, `NotSignedInError`, `TokenExpiredError`, `EntitlementRequiredError`, `RateLimitError`, `NetworkError`, `ValidationError`, `NotFoundError`, `ConflictError`, `ServerError` |
+| Error codes | `ERROR_CODES` (mappingproxy; byte-equal with the npm SDK) |
+| Filter language | `parse_filter`, `build_filter_predicate` |
+| Cursor codec | `build_cursor_codec` |
+| Version | `VERSION`, `__version__` (PEP 396 alias) |
+| Submodules | `errors`, `auth`, `http_client`, `filter_lang`, `cursor`, `cache` |
+
+Client method shapes (`client.list`, `client.search`, `client.show`, `client.bushel.*`, `client.whoami`) are frozen — see [STABILITY.md §Client methods](https://github.com/frootai/frootai/blob/main/frootai-core/python-sdk/orchard/STABILITY.md#client-methods).
+
+---
+
+## What's actually new at v1.0
+
+1. **`STABILITY.md`** co-located with the package — explicit public-export list, runtime support matrix, env-var consumption, cross-language byte-equality contract.
+
+2. **Deprecation framework** at `frootai_orchard._deprecate` (byte-equivalent with the npm peer):
+
+   ```python
+   from frootai_orchard._deprecate import emit_deprecation
+
+   # Eventually, from soon-to-be-removed paths:
+   # emit_deprecation(
+   #     symbol="frootai_orchard.legacy_show",
+   #     since="1.4.0",
+   #     removed_in="2.0.0",
+   #     replacement="client.show",
+   #     message="Use client.show(fruit_id) instead.",
+   # )
+   ```
+
+   Today, **no SDK symbols are deprecated**. The framework is in place so the *first* v1.x deprecation has a working channel. You'll see one stderr line per deprecated symbol per process; suppress with `FROOTAI_SUPPRESS_DEPRECATIONS=1`.
+
+3. **CHANGELOG v1.0.0 callout** at the top of `frootai-core/python-sdk/orchard/CHANGELOG.md` referencing tag `orchard-v1.0.0` + linking to STABILITY.md.
+
+---
+
+## What's NOT new (deliberately)
+
+We did not:
+
+- Change any function signature.
+- Change any exception class constructor.
+- Change `ERROR_CODES` keys or values (mappingproxy is byte-equal with the npm `ERROR_CODES`).
+- Change the AST shape returned by `parse_filter`.
+- Change the cursor wire format (interoperable with npm SDK cursors signed with the same key).
+- Change the default `api_base` / `cdn_base` / `timeout_ms` / `max_retries`.
+- Change the User-Agent template (`frootai-orchard/<VERSION>`).
+- Change `ResolvedToken` dataclass field shape — `sso_provider`, `home_region`, `org_id` are still optional fields added at A8.28.
+
+If any of these silently changed for you, file a P0 bug.
+
+---
+
+## Type hints + dataclasses
+
+The SDK ships PEP 561-compliant inline type hints (no `py.typed` marker needed because all hints are inline in the runtime modules). `ResolvedToken` is a `@dataclass(frozen=True)` for safe sharing across threads.
+
+If you run mypy / pyright against your project:
+
+```bash
+mypy --strict src/your_app.py
+# Every frootai_orchard symbol is typed; no `# type: ignore` should be needed.
+```
+
+---
+
+## Cross-language byte-equality
+
+Every contract in [`frootai-core/scripts/orchard/lib/release/cross-contract-manifest.js`](https://github.com/frootai/frootai/blob/main/frootai-core/scripts/orchard/lib/release/cross-contract-manifest.js) produces byte-equal output between this SDK and `@frootai/orchard` (npm). This includes:
+
+- Filter parse + evaluate
+- Cursor encode + decode (cursors minted in npm decode in Python and vice versa)
+- Error code dictionaries
+- Cache key derivation
+- Backoff math
+- Token redaction (last-4 only)
+
+Verified at every release by `sdk-cross-contract.test.js` (A6.27 / A6.28) — 56 cases byte-equal across the two SDKs.
+
+---
+
+## Optional extras
+
+`frootai-mcp-orchard[sdk]` declares this package as an optional extra. Installing the MCP server **without** the `[sdk]` extra still boots the MCP server but tool calls fail with auth-style errors because the embedded SDK isn't present.
+
+If you only need the SDK directly (no MCP server in your process), `pip install frootai-orchard` is enough.
+
+---
+
+## CI gates you can adopt
+
+```yaml
+# .github/workflows/dependencies.yml (example)
+jobs:
+  check-frootai-orchard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: |
+          # Fail if the resolved version is not 1.x
+          VER=$(python -c "import frootai_orchard; print(frootai_orchard.VERSION)")
+          [[ "$VER" =~ ^1\. ]] || (echo "Unexpected major: $VER"; exit 1)
+      - run: |
+          # Surface deprecation warnings to CI
+          pytest tests/ 2>&1 | tee test.log
+          if grep -q '^\[FROOTAI_DEPRECATED\]' test.log; then
+            echo "::warning::FrootAI Orchard deprecation detected — see test.log"
+          fi
+```
+
+---
+
+## What to do at the next major (v2.0)
+
+When v2.0 lands:
+
+1. Read the **v2.0 Python migration guide** (we publish one per major — same shape as this page).
+2. Verify every symbol marked `DeprecationWarning` in the 1.x line either has a replacement you've already adopted, OR appears in the v2.0 migration codemod.
+3. We ship a **`pyupgrade`-compatible recipe** for every breaking signature change so most upgrades are `python -m frootai_codemod orchard_v2`.
+
+You'll have **at least 6 months** notice between any deprecation `since` date and the v2.0 removal.
+
+---
+
+## Runtime + stdlib boundary
+
+This SDK has **zero third-party runtime dependencies**. The only imports are stdlib (`http.client`, `json`, `urllib.request`, `dataclasses`, `re`, etc.) and the package's own submodules. Verified by `mcp-package-size-audit.js` (A9.25) which catches any third-party import on every release.
+
+This matters for:
+
+- Air-gapped enterprise customers who can't `pip install` anything beyond stdlib.
+- Compliance reviews that flag transitive dependency counts.
+- AWS Lambda / Cloudflare Workers where bundle size is metered.
+
+The MCP package `frootai-mcp-orchard` is also zero-runtime-dep (declares this SDK as an *optional extra*).
+
+---
+
+## See also
+
+- [Repo-root STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md)
+- [`frootai-orchard` STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/python-sdk/orchard/STABILITY.md)
+- [Full Python SDK reference](../sdk/orchard-python)
+- [TypeScript SDK migration guide](./migration-from-beta-typescript)
+- [v1.0 aggregate changelog](./v1-changelog)
+- [Getting started](./getting-started)

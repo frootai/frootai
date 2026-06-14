@@ -1,0 +1,115 @@
+# us-defense.yaml — US Defense / FedRAMP-High / DoD IL5 workloads
+#
+# Profile: defense prime, federal civilian agency, or DoD IL5 mission system.
+# Restricted to Azure Government regions, CMK + HSM-backed key vault, strict
+# RBAC, no guests, modular emit, both Bicep + Terraform (Terraform required
+# for some agency CI pipelines), absolute no community modules.
+#
+# This template is the STRICTEST overlay shipped — every flag set to the
+# most-restrictive value the V7.1 schema allows.
+---
+spec_version: 1
+company: "Acme Defense Systems (US gov / DoD IL5)"
+
+regions:
+  - usgovvirginia
+  - usgovarizona
+  - usgovtexas
+
+models:
+  allow:
+    - gpt-4o
+  deny:
+    - gpt-4o-mini
+    - gpt-3.5-turbo
+    - claude-3-5-sonnet
+    - claude-3-haiku
+    - text-davinci-003
+
+skus:
+  allow:
+    - Standard_D8s_v3
+    - Standard_D16s_v3
+    - Standard_E16s_v3
+    - Standard_E32s_v3
+  deny:
+    - Standard_B1s
+    - Standard_B2s
+    - Standard_A1_v2
+    - Standard_A2_v2
+
+naming:
+  prefix: ads
+  suffix: il5
+  separator: "-"
+  max_length: 24
+
+tags:
+  required:
+    - env
+    - bu
+    - costcenter
+    - dataclassification
+    - mission
+    - cui_category
+    - clearance_level
+    - owner
+  values:
+    env: "^(prod|dr)$"
+    dataclassification: "^(CUI-BASIC|CUI-SPECIFIED|SECRET)$"
+    clearance_level: "^(SECRET|TOP_SECRET)$"
+    cui_category: "^(CUI-SP-PRVCY|CUI-SP-EXPT|CUI-SP-LEI|CUI-SP-PROC)$"
+
+network:
+  posture: private
+  vnet_required: true
+  private_endpoint_required: true
+  dns_zone_overrides:
+    "Microsoft.Storage/storageAccounts": "privatelink.blob.core.usgovcloudapi.net"
+    "Microsoft.KeyVault/vaults": "privatelink.vaultcore.usgovcloudapi.net"
+    "Microsoft.Sql/servers": "privatelink.database.usgovcloudapi.net"
+    "Microsoft.CognitiveServices/accounts": "privatelink.openai.usgovcloudapi.net"
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: blocked
+
+iac:
+  format: both
+  modular_emit: true
+  gold_allowed: false
+
+encryption:
+  cmk_required: true
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: xl
+  tier_default: premium
+
+custom_checks:
+  - id: CUSTOM-USGOV-001
+    severity: critical
+    title: All Key Vaults must be HSM-backed (Premium SKU)
+    description: |
+      FedRAMP-High + DoD IL5 require FIPS 140-2 Level 3 key custody. Every
+      Microsoft.KeyVault/vaults instance MUST set sku.name=premium so keys
+      are stored in the managed HSM pool.
+    expression: "resource.type=='Microsoft.KeyVault/vaults' and properties.sku.name=='premium'"
+  - id: CUSTOM-USGOV-002
+    severity: critical
+    title: CUI / SECRET workloads must enable double-encryption at rest
+    description: |
+      Resources with dataclassification=CUI-SPECIFIED or SECRET MUST set
+      encryption.requireInfrastructureEncryption=true so data is encrypted
+      twice at rest (platform + service layer).
+    expression: "resource.tags.dataclassification in ['CUI-SPECIFIED','SECRET'] and properties.encryption.requireInfrastructureEncryption==true"
