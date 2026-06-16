@@ -170,7 +170,7 @@ jobs:
 
       - name: Upload gate result artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: spam-guard-result-${{ github.event.pull_request.number }}
           path: ${{ runner.temp }}/gate-result.json
