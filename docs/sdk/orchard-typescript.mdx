@@ -1,0 +1,542 @@
+---
+title: "@frootai/orchard — TypeScript / Node.js SDK"
+description: "Programmatic SDK for the FrootAI Orchard catalog. Async iterators over the public catalog CDN, authenticated Bushel sync, HMAC-signed pagination cursors, decorrelated-jitter retry, and shared auth with the frootai CLI."
+icon: "📦"
+order: 50
+tags: ["sdk", "orchard", "typescript", "nodejs", "@frootai/orchard", "ai-agents", "accelerators"]
+---
+
+# @frootai/orchard — TypeScript / Node.js SDK
+
+`@frootai/orchard` is the **programmatic surface** for the FrootAI Orchard catalog. It exists so partner apps, CI pipelines, and BI integrations can consume the same data the `frootai` CLI does, without shelling out.
+
+- **Free** to `list` / `search` / `show` the catalog (no sign-in, no API key)
+- **Bushel sync** + **paid surfaces** require a token — the SDK reads the same `~/.frootai/.token` your CLI session writes, so `frootai login` in your terminal transparently authorizes SDK calls
+- **Zero runtime dependencies** — only the `@frootai/orchard-types` peer dep for the byte-equal type contract
+- **Cross-runtime portability** — a cursor minted by this SDK decodes byte-equal in the [Python SDK](./orchard-python) with a shared signing key
+
+> **Also available as an MCP server** — `@frootai/mcp-orchard` wraps this SDK as a Model Context Protocol server so AI agents can call `list` / `search` / `show` (plus 2 more tools) via natural-language tool calls. See [`/docs/mcp/orchard`](../mcp/orchard).
+
+> All examples assume Node 18+. The SDK uses the built-in global `fetch`; no polyfills required.
+
+---
+
+## At a glance
+
+| Surface | Method | Sign-in? |
+|---|---|---|
+| List the catalog | `client.list({ variety?, where?, limit? })` | no |
+| Search with scoring | `client.search(query, { where?, limit? })` | no |
+| Single fruit detail | `client.show(id)` | no |
+| Bushel list | `client.bushel.list()` | optional (anonymous returns `{ ids: [] }`) |
+| Bushel add / remove | `client.bushel.add(id)` / `.remove(id)` | **yes (Team tier+)** |
+| Auth probe | `client.whoami()` | never throws |
+| Pagination cursor | `client.cursor.encode/decode` | no |
+
+---
+
+## Install
+
+```bash
+npm install @frootai/orchard @frootai/orchard-types
+```
+
+The `@frootai/orchard-types` package is declared as a `peerDependency` — it ships the frozen enum tables that both the npm + Python SDKs pin against. Installing both ensures byte-equal enum tables at runtime.
+
+Both packages publish with **npm provenance** (`--provenance` flag) so a partner can audit the build via:
+
+```bash
+npm audit signatures @frootai/orchard
+npm view @frootai/orchard --json | jq '.dist.attestations'
+```
+
+---
+
+## Quickstart
+
+```js
+const { createClient } = require("@frootai/orchard");
+
+const client = createClient();
+
+// Anonymous catalog reads
+for await (const fruit of client.list({ variety: "azure" })) {
+  console.log(fruit.id, fruit.name);
+}
+
+// Search with the filter expression language
+for await (const hit of client.search("rag", {
+  where: "trust_badge:eval_proven AND variety:azure",
+  limit: 25,
+})) {
+  console.log(`[${hit._score}]`, hit.name);
+}
+
+// Single fruit detail (with index-scan fallback)
+const detail = await client.show("ms-azure-openai-rag");
+
+// Never-raises auth probe
+const me = await client.whoami();
+if (me.signed_in) console.log(`Signed in as ${me.redacted} (tier=${me.tier})`);
+```
+
+---
+
+## `createClient(opts)`
+
+```ts
+import type { ClientOptions } from "@frootai/orchard";
+
+function createClient(opts?: ClientOptions): Client;
+```
+
+| Option | Default | Notes |
+|---|---|---|
+| `baseUrl` | `https://frootai.dev/api` | Backend API base for paid surfaces |
+| `cdnBaseUrl` | `https://cdn.frootai.dev/orchard/v1` | CDN base for read-only catalog |
+| `token` | (resolved from `FROOTAI_TOKEN` env or `~/.frootai/.token`) | Explicit override; precedence wins over env + file |
+| `tokenPath` | `~/.frootai/.token` | Override the shared token file path |
+| `disableCache` | `false` | Disable the 1h disk cache (useful in ephemeral environments) |
+| `fetchImpl` | `globalThis.fetch` | Inject for tests / proxying |
+| `maxRetries` | `3` | Retries per request (decorrelated-jitter backoff) |
+| `timeoutMs` | `15000` | Per-attempt timeout (each retry gets a fresh clock) |
+| `cursorSigningKey` | (random 32 bytes per process) | Stable key for cross-process cursors |
+| `onRetry` | (none) | Observability hook fired on every retry — see below |
+
+**Auth resolution priority** (matches the [Python SDK](./orchard-python) byte-for-byte):
+
+1. `opts.token` — explicit per-client override
+2. `FROOTAI_TOKEN` environment variable (CI pipelines)
+3. `~/.frootai/.token` — shared with the `frootai login` command
+
+---
+
+## Surface reference
+
+### `client.list({ variety?, where?, limit? })`
+
+Returns an `AsyncIterableIterator<Fruit>` over the catalog. Memory-bounded for catalogs of 1000+ items.
+
+```js
+for await (const fruit of client.list({
+  variety: "azure",
+  where: "category:rag AND ripeness:Mature",
+  limit: 50,
+})) {
+  // ...
+}
+```
+
+- `variety` hits a per-variety CDN file (smaller payload) instead of the full index. Values: `azure` | `gcp` | `aws` | `oss` | `hybrid`.
+- `where` is a filter expression — see the [Filter expression language](#filter-expression-language) section.
+- `limit` caps total yielded items.
+
+### `client.search(query, { where?, limit? })`
+
+Same client-side scoring as `frootai search` in the CLI — results rank-identical. When the backend exposes `/api/search` in Phase A7, the public API will stay the same.
+
+```js
+for await (const hit of client.search("rag", { limit: 10 })) {
+  console.log(`[${hit._score}]`, hit.name);
+}
+```
+
+Empty query throws `ValidationError` with `code === "invalid_input"`.
+
+### `client.show(id)`
+
+Fetches one fruit by id or slug. Tries `/fruit/<id>.json` (single-fruit fast path) first; on 404 falls back to scanning the index for `fruit.id === id || fruit.slug === id`. Genuinely missing fruits throw `NotFoundError` with `code === "fruit_not_found"`.
+
+```js
+try {
+  const fruit = await client.show("ms-azure-openai-rag");
+} catch (e) {
+  if (e instanceof NotFoundError) console.log("not in catalog");
+}
+```
+
+### `client.bushel.list() / .add(id) / .remove(id)`
+
+CRUD against `POST /api/bushel/sync` (backend A5.23). The bushel is your team's saved-accelerators list.
+
+```js
+await client.bushel.add("ms-azure-openai-rag");
+const { ids } = await client.bushel.list();
+await client.bushel.remove("ms-azure-openai-rag");
+```
+
+- **Entitlement gating**: `bushel.add/.remove` require Team tier+. Free/Pro tokens throw `EntitlementRequiredError` with `e.context.entitlement === "bushel-sync"`.
+- **Anonymous fallback**: `bushel.list()` with no token returns `{ ids: [] }` instead of throwing — partner code can degrade gracefully.
+- **Idempotency**: adding a fruit already in the bushel is a no-op (no second POST).
+
+### `client.whoami()`
+
+```ts
+function whoami(): Promise<WhoamiResult>;
+```
+
+NEVER throws. Returns `{ signed_in: false, anonymous: true }` when no token sources exist. Useful for conditionally enabling paid surfaces in your UI:
+
+```js
+const me = await client.whoami();
+if (me.signed_in && me.tier !== "free") showBushelTab();
+```
+
+The `redacted` field is `"…<last-4>"` of the access token. The SDK **NEVER returns the raw token** in any log line or error message.
+
+### `client.cursor.encode / decode`
+
+```js
+const c = client.cursor.encode({
+  offset: 50,
+  page_size: 25,
+  query: { where: "variety:azure" },
+});
+// → "eyJ2IjoxLC...XXX.<hmac-hex>"
+
+const decoded = client.cursor.decode(c, { where: "variety:azure" });
+// → { v: 1, offset: 50, page_size: 25, query_hash: "..." }
+```
+
+Opaque HMAC-signed pagination cursors. Wire format: `<base64url(JSON)>.<hmac_sha256_hex[0:32]>`.
+
+> The codec is also exported standalone as `buildCursorCodec({ signingKey })` for partners who need to mint / decode cursors outside the `Client` context — e.g. a serverless function that only paginates and never lists.
+
+**Important guarantees** (validated by the [cross-SDK contract suite](#cross-sdk-portability)):
+
+- The `query_hash` field binds the cursor to the original query — using a cursor with a different filter expression OR sort order throws `ValidationError(invalid_cursor)`.
+- Cursors signed by codec A are rejected by codec B (different signing keys).
+- A cursor minted in this SDK decodes byte-equal in the [Python SDK](./orchard-python) with a shared key.
+- Pass `cursorSigningKey: Buffer` (≥32 bytes) to `createClient()` to make cursors survive worker restarts.
+
+---
+
+## Filter expression language
+
+A deliberately tiny grammar shared with the [Python SDK](./orchard-python) — the AST is byte-equal between runtimes.
+
+```
+expr      ::= term (' ' ('AND' | 'OR') ' ' term)*
+term      ::= NOT? predicate
+predicate ::= '(' expr ')' | field ':' value
+field     ::= [a-z_][a-z0-9_]*
+value     ::= /[a-zA-Z0-9._-]+/ | '"' string '"'
+```
+
+| Surface | Example |
+|---|---|
+| Single predicate | `variety:azure` |
+| AND | `variety:azure AND category:rag` |
+| OR | `variety:azure OR variety:gcp` |
+| NOT | `NOT category:eval` |
+| Parens | `category:rag AND (variety:azure OR variety:gcp)` |
+| Quoted value | `name:"Azure RAG"` |
+
+**Array-contains via explicit plural aliases**: `category:rag` matches a fruit with `categories: ["rag", ...]`. The plural map is EXPLICIT — only `category` → `categories`, `tag` → `tags`, `trust_badge` → `trust_badges`, `pollination` → `pollinations`. (Naive `+ "s"` would produce `categorys` — we don't do that.)
+
+**Limits**: `MAX_EXPR_LEN = 512`, `MAX_AST_DEPTH = 16`. Bad syntax throws `ValidationError(invalid_filter_expression)`.
+
+**Predicate behavior**: `buildFilterPredicate(expr)` NEVER throws at call time — only at build time when the expression is malformed. Bad fruit input returns `false`, not an exception.
+
+---
+
+## Typed error hierarchy
+
+Partners catch by TYPE not by string match. Every error inherits from `FrootaiOrchardError`:
+
+```
+FrootaiOrchardError                (base — instanceof check works for any SDK error)
+  ├─ AuthError                     (401/403)
+  │   ├─ NotSignedInError          (no token on disk + no FROOTAI_TOKEN env)
+  │   ├─ TokenExpiredError         (token present but past expiry)
+  │   └─ EntitlementRequiredError  (signed in but missing required scope/tier)
+  ├─ RateLimitError                (429 — includes retry_after_ms)
+  ├─ NetworkError                  (ECONNREFUSED, ETIMEDOUT, AbortError)
+  ├─ ValidationError               (400 — bad input to SDK call)
+  ├─ NotFoundError                 (404)
+  ├─ ConflictError                 (409 — concurrent write, etag mismatch)
+  └─ ServerError                   (5xx)
+```
+
+Every error carries:
+
+- `.code` — snake_case stable identifier for programmatic catch
+- `.status` — HTTP-like status code
+- `.public_message` — UX-safe; safe to surface to users
+- `.context` — server-internal; NEVER display to users; available for debug logging
+- `.retryable` — boolean; safe to retry without state contamination
+
+```js
+const { NotSignedInError, EntitlementRequiredError, RateLimitError } = require("@frootai/orchard");
+
+try {
+  await client.bushel.add("some-fruit");
+} catch (e) {
+  if (e instanceof NotSignedInError) console.log("Run `frootai login` first");
+  else if (e instanceof EntitlementRequiredError) console.log(`Upgrade required: ${e.context.entitlement}`);
+  else if (e instanceof RateLimitError) console.log(`Slow down — retry after ${e.retry_after_ms} ms`);
+  else throw e;
+}
+```
+
+**Doctrine**: the SDK NEVER throws plain `Error` from any public surface. Every failure becomes a typed subclass.
+
+### Error code reference
+
+| Code | Class | When |
+|---|---|---|
+| `not_signed_in` | `NotSignedInError` | No token sources available |
+| `token_expired` | `TokenExpiredError` | Token past expiry (60s safety margin) |
+| `entitlement_required` | `EntitlementRequiredError` | Token valid but missing scope/tier |
+| `auth_failed` | `AuthError` | 403 without entitlement context |
+| `rate_limited` | `RateLimitError` | 429 — check `e.retry_after_ms` |
+| `network_failed` | `NetworkError` | Transport-layer failure |
+| `request_timeout` | `NetworkError` | Per-attempt timeout exceeded |
+| `request_aborted` | `NetworkError` | Caller AbortSignal fired |
+| `invalid_input` | `ValidationError` | Bad input to SDK call |
+| `invalid_filter_expression` | `ValidationError` | Filter expression parse failure |
+| `invalid_cursor` | `ValidationError` | Cursor tampered / wrong signing key / query_hash mismatch |
+| `not_found` | `NotFoundError` | 404 without specific resource code |
+| `fruit_not_found` | `NotFoundError` | Fruit id / slug not in catalog |
+| `play_not_found` | `NotFoundError` | Play recipe not in registry |
+| `conflict` | `ConflictError` | 409 |
+| `etag_mismatch` | `ConflictError` | Optimistic concurrency lost |
+| `server_error` | `ServerError` | 5xx |
+| `service_unavailable` | `ServerError` | 503 or circuit breaker open |
+
+The full frozen map is exported as `ERROR_CODES`.
+
+---
+
+## HTTP retry + circuit breaker behavior
+
+The SDK's HTTP client uses **decorrelated-jitter backoff** (AWS Architecture Blog formula):
+
+```
+backoff = min(cap, random(base, prev * 3))
+```
+
+Constants:
+
+| Constant | Default |
+|---|---|
+| `DEFAULT_MAX_RETRIES` | `3` |
+| `BACKOFF_BASE_MS` | `200` |
+| `BACKOFF_CAP_MS` | `10_000` |
+| `DEFAULT_TIMEOUT_MS` | `15_000` (per attempt — each retry gets a fresh clock) |
+| `CIRCUIT_OPEN_THRESHOLD` | `5` consecutive failures per host |
+| `CIRCUIT_OPEN_MS` | `30_000` (half-open after window) |
+| `USER_AGENT` | `@frootai/orchard@<version>` |
+| `RESPONSE_BODY_MAX_BYTES` | `8 MiB` |
+
+**Retry status codes** (only): `408`, `425`, `429`, `500`, `502`, `503`, `504`.
+
+**Retry-After takes precedence** over our backoff for `429` and `503`.
+
+**Circuit breaker** is per-host. After `CIRCUIT_OPEN_THRESHOLD` consecutive 5xx / network failures, subsequent requests fail fast with `ServerError(503, code: "service_unavailable")` until the half-open window passes.
+
+### Observability — `onRetry` hook
+
+```js
+const client = createClient({
+  onRetry: (ctx) => {
+    // ctx = { attempt, host, reason, delay_ms }
+    metrics.counter("frootai_orchard_retry_total", {
+      host: ctx.host,
+      reason: ctx.reason,  // "network" | "status_<code>"
+    }).inc();
+  },
+});
+```
+
+See [Example 5 — Observability](#example-5--observability-via-onretry-hook) for a complete Prometheus integration.
+
+---
+
+## Cache + stale-while-error
+
+Three tiers (matching the [Python SDK](./orchard-python) byte-for-byte):
+
+1. **In-process LRU**: 1000 entries / 60s TTL with touch-on-get
+2. **Disk cache**: `~/.frootai/cache/sdk/<key>.json` / 1h TTL / atomic tmp+rename / cache-poisoning defense via URL storage
+3. **Network**: through the HTTP client
+
+**Stale-while-error**: when the network read fails AND any cached entry exists (even past TTL), the cache returns the cached value with `_stale: true` flag instead of throwing. Use this to surface a "showing cached data" banner.
+
+**Cache key derivation**: `compute_cache_key(method, url, body)` strips `?token=...` query params for token-rotation-safe caching — the cache works correctly across `frootai login` refresh.
+
+---
+
+## Cross-SDK portability
+
+The npm SDK and the Python SDK satisfy a shared **contract surface** enforced by a 56-entry cross-SDK conformance manifest. The conformance certificate is uploaded as a 90-day workflow artifact on every tag push so partners can verify:
+
+```bash
+# Inspect the certificate from the latest release
+gh run download <run-id> --name orchard-conformance-certificate
+cat orchard-conformance.json | jq '.summary'
+# → { total: 56, byte_equal_passes: 56, drifts: 0, errors: 0, ... }
+```
+
+Contract categories covered:
+
+- **Enum byte-equality** — every `@frootai/orchard-types` export matches `frootai_orchard._orchard_types`
+- **Cursor wire format** — JS-minted cursor decodes byte-equal in Python (shared signing key)
+- **Filter AST shape** — `parseFilter(expr)` produces identical dict trees
+- **Filter evaluation** — `(ast, fruit)` produces same boolean
+- **Error codes** — `ERROR_CODES` map is identical
+- **Cache key** — `computeCacheKey(method, url, body)` produces same hex
+- **HTTP retry-status matrix** — agrees on every status code
+- **Backoff formula** — same `prev_ms` + RNG produces same `delay_ms`
+- **Token redaction** — same `…<last4>` shape
+
+A **multi-runtime ETL** (Node Cloud Function → Python notebook) can hand off pagination state across language boundaries via a single env var. See the [`05-cross-language-cursor-handoff`](https://github.com/frootai/frootai-core/tree/main/examples/orchard/py/05-cross-language-cursor-handoff) example.
+
+---
+
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `FROOTAI_TOKEN` | Override token resolution (beats `~/.frootai/.token`, beaten by `opts.token`) |
+| `DO_NOT_TRACK=1` | Honored by the SDK + CLI for any telemetry hooks |
+| `NO_COLOR=1` | Honored by example apps' CLI bootstraps |
+| `FROOTAI_PLAYS_DIR` | Override the Play recipes directory for `client.show()` integration with CLI install |
+| `DEBUG=frootai-orchard:*` | Enable internal debug logging |
+
+---
+
+## Worked examples
+
+Every example below lives in [`examples/orchard/ts/`](https://github.com/frootai/frootai-core/tree/main/examples/orchard/ts) and exposes a pure `runExample({ fetchImpl })` callable so the regression suite injects deterministic data without network.
+
+### Example 1 — Anonymous catalog listing
+
+```js
+const { createClient } = require("@frootai/orchard");
+
+const client = createClient();
+for await (const fruit of client.list({ variety: "azure", limit: 10 })) {
+  console.log(fruit.name, "—", fruit.tagline || "");
+}
+```
+
+### Example 2 — Filtered search
+
+```js
+for await (const hit of client.search("rag", {
+  where: "trust_badge:eval_proven AND variety:azure",
+  limit: 10,
+})) {
+  console.log(`[${hit._score}]`, hit.name);
+}
+```
+
+### Example 3 — Bushel team sync
+
+```js
+const me = await client.whoami();
+if (!me.signed_in) {
+  console.log("Run `frootai login` first.");
+  process.exit(1);
+}
+
+await client.bushel.add("ms-azure-openai-rag");
+console.log((await client.bushel.list()).ids);
+```
+
+### Example 4 — Paginated export with HMAC cursor
+
+```js
+const PAGE_SIZE = 25;
+const query = { variety: "azure", where: "category:rag" };
+
+const client = createClient({
+  cursorSigningKey: Buffer.alloc(32, "a"),  // stable across processes
+});
+
+let cursor = client.cursor.encode({ offset: 0, page_size: PAGE_SIZE, query });
+while (true) {
+  const decoded = client.cursor.decode(cursor, query);
+  const page = [];
+  for await (const fruit of client.list({
+    ...query,
+    limit: decoded.offset + decoded.page_size,
+  })) {
+    page.push(fruit);
+  }
+  const slice = page.slice(decoded.offset, decoded.offset + decoded.page_size);
+  console.log(`page offset=${decoded.offset} size=${slice.length}`);
+  if (slice.length < decoded.page_size) break;
+  cursor = client.cursor.encode({
+    offset: decoded.offset + decoded.page_size,
+    page_size: PAGE_SIZE,
+    query,
+  });
+}
+```
+
+### Example 5 — Observability via `onRetry` hook
+
+```js
+const client = createClient({
+  onRetry: (ctx) => {
+    // ctx = { attempt, host, reason, delay_ms }
+    prometheus
+      .counter("frootai_orchard_retry_total", { host: ctx.host, reason: ctx.reason })
+      .inc();
+  },
+});
+```
+
+`ctx.reason` is either `"network"` (timeout / connection refused) or `"status_<code>"` — easy to label as a Prometheus metric tag.
+
+---
+
+## Exit codes
+
+When running the SDK as part of a CLI script, propagate exit codes consistently:
+
+| Code | Meaning |
+|---|---|
+| `0` | Success |
+| `1` | Caught `FrootaiOrchardError` |
+| `2` | Unexpected exception |
+
+```js
+(async () => {
+  try {
+    await runExample({});
+    process.exit(0);
+  } catch (e) {
+    if (e instanceof FrootaiOrchardError) {
+      console.error(`[${e.code}] ${e.public_message}`);
+      process.exit(1);
+    }
+    console.error("unexpected:", e);
+    process.exit(2);
+  }
+})();
+```
+
+---
+
+## Versioning
+
+Follows **semver strict**. Breaking changes (renaming a method, dropping a category, changing the cursor wire format) require a major bump + a new `@frootai/orchard-types` major. The cross-SDK conformance certificate's `manifest_fingerprint_sha256` field changes whenever the contract surface evolves.
+
+The current package version is also exposed at runtime as `VERSION`:
+
+```js
+const { VERSION } = require("@frootai/orchard");
+console.log(`Running @frootai/orchard@${VERSION}`);
+```
+
+---
+
+## See also
+
+- [Python SDK reference](./orchard-python) — the byte-equal Python parallel
+- [CLI reference](../cli/orchard) — the `frootai` CLI
+- [Examples directory](https://github.com/frootai/frootai-core/tree/main/examples/orchard) — 10 worked examples (5 TS + 5 Python)
+- [Cross-SDK contract manifest](https://github.com/frootai/frootai-core/blob/main/scripts/orchard/lib/release/cross-contract-manifest.js) — canonical contract surface

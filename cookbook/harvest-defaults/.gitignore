@@ -1,0 +1,106 @@
+# ── Secrets and local config (NEVER commit) ────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+secrets/
+.azure/
+.aws/credentials
+gcp-key.json
+service-account*.json
+
+# ── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+dist/
+build/
+.venv/
+venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Node / TypeScript ──────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+.parcel-cache/
+*.tsbuildinfo
+
+# ── Terraform ──────────────────────────────────────────────────────────────
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ── Bicep ──────────────────────────────────────────────────────────────────
+*.bicep.bak
+main.json
+
+# ── Container / cloud tooling ──────────────────────────────────────────────
+.dockerignore.bak
+.azurefunctions/
+local.settings.json
+.func/
+
+# ── Editors and OS cruft ───────────────────────────────────────────────────
+.vscode/*.log
+.vscode-test/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs and run artefacts ─────────────────────────────────────────────────
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+.cache/
+tmp/
+.tmp/
+
+# ── Evaluation / eval artefacts ────────────────────────────────────────────
+evaluation/runs/
+evaluation/*.csv
+evaluation/*.parquet
+
+# ── FAI-specific ───────────────────────────────────────────────────────────
+.fai-cache/
+.fai-runs/
+harvest-cost-log.jsonl

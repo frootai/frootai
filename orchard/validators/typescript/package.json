@@ -1,0 +1,53 @@
+{
+  "name": "@frootai/orchard",
+  "version": "0.1.0",
+  "description": "Reference TypeScript validator for FAI Orchard schemas (Accelerator + Manifest). Apache-2.0 — commercial use OK.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "frootai",
+    "orchard",
+    "jsonschema",
+    "validator",
+    "accelerator"
+  ],
+  "homepage": "https://frootai.dev/orchard",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frootai/frootai.git",
+    "directory": "orchard/validators/typescript"
+  },
+  "bugs": "https://github.com/frootai/frootai/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}

@@ -1,0 +1,145 @@
+---
+title: "FAI Orchard — Migrating from v0.9.x to v1.0.0"
+description: "Zero-breaking-change upgrade guide for every Orchard package. v1.0.0 is the v0.9.0-ops surface, locked under a per-package STABILITY.md semver promise. Most readers will be done in 30 seconds."
+icon: "🧭"
+order: 2
+tags: ["orchard", "migration", "upgrade", "v1.0", "semver", "stability", "ga"]
+---
+
+# Migrating from v0.9.x to v1.0.0
+
+> **TL;DR — there are zero breaking changes.** v1.0.0 ships the v0.9.0-ops surface unchanged, plus an explicit semver promise per [`STABILITY.md`](https://github.com/frootai/frootai/blob/main/STABILITY.md) and a `STABILITY.md` in every package. If your code worked under v0.9.x, it works under v1.0.0 without modification.
+
+---
+
+## At a glance
+
+| You're upgrading | What you need to do | Time |
+|---|---|---|
+| `@frootai/orchard` (npm SDK) | `npm install @frootai/orchard@^1.0.0` — done. See [TS SDK guide](./migration-from-beta-typescript). | 30 s |
+| `frootai-orchard` (PyPI SDK) | `pip install -U "frootai-orchard>=1.0.0,<2.0.0"` — done. See [Py SDK guide](./migration-from-beta-python). | 30 s |
+| `@frootai/mcp-orchard` (npm MCP) | Restart your MCP client. `npx -y @frootai/mcp-orchard@latest` already resolves to v1.0.0. | 30 s |
+| `frootai-mcp-orchard` (PyPI MCP) | `uvx frootai-mcp-orchard[sdk]@latest` already resolves to v1.0.0. | 30 s |
+| `ghcr.io/frootai/mcp-orchard` (Docker) | `docker pull ghcr.io/frootai/mcp-orchard:1.0.0` and update your `image:` reference. | 1 min |
+| Self-hosted multi-instance behind Redis | `FROOTAI_RATE_LIMITER_BACKEND=redis` was added at A9.21; verify it's still set. | 0 s |
+
+If you were running pre-v0.9 (e.g. v0.8.0-enterprise), apply the upgrade ladder in order: v0.8 → v0.9 → v1.0. Each step is non-breaking; the only reason to walk the ladder is for the additive capabilities you'll pick up at each tag.
+
+---
+
+## 1. What v1.0.0 actually adds
+
+These are all **additive** — no existing call site needs to change.
+
+1. **Repo-root `STABILITY.md`** declaring the v1.0 semver contract (15-row breaking-change table, CVSS-tiered security policy, 6-month minimum deprecation window, LTS window).
+2. **Per-package `STABILITY.md`** in all 5 packages declaring the explicit public-export list + runtime support matrix + env-var consumption.
+3. **Deprecation framework** at `@frootai/orchard-types/lib/deprecate` (npm) and `frootai_orchard._deprecate` (Python). Currently quiescent — no symbols are deprecated at v1.0. The framework is in place for the first v1.x deprecation to use.
+4. **Cross-package version-consistency gate** (`scripts/orchard/check-cross-package-versions.js`) that asserts all 5 packages report the same `1.x.y` version.
+
+That's it. Everything else is a no-op upgrade.
+
+---
+
+## 2. What v1.0.0 promises (the contract you can rely on)
+
+| Promise | Reference |
+|---|---|
+| No breaking changes in any `1.x.y` release. Ever. | STABILITY.md §1 |
+| Deprecations get a **6-month minimum window** before removal at the next major. | STABILITY.md §3 |
+| Critical security patches within **7 calendar days** of disclosure. | STABILITY.md §5 |
+| LTS backports for the current minor + the previous minor. | STABILITY.md §6 |
+| Wire protocol pinned at MCP spec **`2025-03-26`**. A bump is a major-version event. | STABILITY.md §1 |
+| Cross-region **WRITE** is denied for every tier + every entitlement combination. Enforced by test invariant. | A9.18 + STABILITY.md §7 |
+| Default install **does not phone home**. Telemetry is opt-in; `DO_NOT_TRACK=1` is a hard override. | A7.27 doctrine |
+
+---
+
+## 3. Per-surface upgrade notes
+
+### TypeScript / Node SDK (`@frootai/orchard`)
+
+Read the dedicated [TypeScript migration guide](./migration-from-beta-typescript). Summary: bump your `package.json` dependency to `^1.0.0`, run `npm install`, you're done.
+
+### Python SDK (`frootai-orchard`)
+
+Read the dedicated [Python migration guide](./migration-from-beta-python). Summary: `pip install -U "frootai-orchard>=1.0.0,<2.0.0"`, you're done.
+
+### MCP server (npm and PyPI)
+
+Both MCP servers are at v1.0.0. The wire protocol (`tools/list`, `tools/call`, `resources/*`, `prompts/*`, `ping`) is unchanged from v0.9.0-ops. Every existing MCP client config keeps working.
+
+The HTTP transport gained `closeGraceful({drainMs})` at A9.23 — this is additive (the original `close()` still works); if you're not yet calling it, your old shutdown path is fine. Adding it is recommended for multi-instance deployments behind a load balancer.
+
+### On-prem Docker image
+
+`ghcr.io/frootai/mcp-orchard:1.0.0` is signed at publish time with Sigstore cosign via our GitHub Actions OIDC issuer. Update your image reference + (optionally) add a cosign-verify step to your deploy pipeline:
+
+```bash
+cosign verify ghcr.io/frootai/mcp-orchard:1.0.0 \
+  --certificate-identity-regexp '^https://github.com/frootai/frootai/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+### CLI (`frootai`)
+
+The CLI is unchanged. Every flag + exit code + JSON envelope shape is identical to v0.9.x.
+
+### Hosted control plane
+
+`/api/audit/export`, `/api/whoami`, `/api/entitlements/*` shapes are unchanged. Multi-region routing rules (A8.27, A9.11+) are unchanged. SAML / OIDC claim mappers (A8.25) are unchanged.
+
+---
+
+## 4. Pinning strategy
+
+| You want | Use |
+|---|---|
+| Always the latest 1.x (most users) | `"@frootai/orchard": "^1.0.0"` / `"frootai-orchard>=1.0.0,<2.0.0"` |
+| Pin to a specific 1.x.y for reproducibility | `"@frootai/orchard": "1.0.0"` / `"frootai-orchard==1.0.0"` |
+| Track LTS only | Pin to the previous minor; we backport security fixes. See STABILITY.md §6. |
+| Self-host Docker | Pin the major: `ghcr.io/frootai/mcp-orchard:1` for latest 1.x; `:1.0.0` for exact pin |
+
+---
+
+## 5. Deprecation framework — what to expect over the v1.x lifetime
+
+The deprecation framework is shipped + tested at v1.0 but **quiescent** — no symbols are marked deprecated today. When we do deprecate something:
+
+1. The symbol is annotated with `@deprecated` (JSDoc) or `DeprecationWarning` (Python).
+2. The first call to it in your process emits **one** line to stderr:
+
+   ```
+   [FROOTAI_DEPRECATED] symbol="@frootai/orchard.legacyShow" since="1.4.0" removed_in="2.0.0" replacement="client.show" message="..."
+   ```
+
+3. Subsequent calls in the same process do **not** re-warn (warn-once-per-process-per-symbol).
+4. You have **at least 6 months** from the `since` date before the symbol is removed at the next major.
+5. To silence the warnings in noisy CI: `FROOTAI_SUPPRESS_DEPRECATIONS=1`.
+
+The line format above is **wire-stable** for the v1.x lifetime — your log scrapers can parse it deterministically.
+
+---
+
+## 6. If something does break
+
+In the unlikely event a v1.x release breaks your integration:
+
+1. **It's a bug**, not a contract change. We owe you a fix.
+2. Pin to the prior `1.x.y-1` patch immediately.
+3. File a GitHub Security Advisory at [github.com/frootai/frootai/security/advisories](https://github.com/frootai/frootai/security/advisories) if the break exposes data; otherwise file a regular issue.
+4. Email `support@frootai.dev` for enterprise customers (paid tiers get same-day acknowledgement; see your MSA for the SLA).
+5. Reference your version, the prior working version, and the minimal reproduction.
+
+We treat any regression in `1.x.y` as a P0 — the v1.0 semver promise is the whole point of the GA tag.
+
+---
+
+## See also
+
+- [Repo-root STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md) — semver contract
+- [TypeScript SDK migration guide](./migration-from-beta-typescript)
+- [Python SDK migration guide](./migration-from-beta-python)
+- [v1.0 changelog (aggregated across 5 packages)](./v1-changelog)
+- [v1.0 GA landing page](https://frootai.dev/orchard/v1)
+- [Enterprise guide](../enterprise/orchard)
+- [Self-host guide](../enterprise/self-host)

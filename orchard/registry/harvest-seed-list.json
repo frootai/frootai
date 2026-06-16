@@ -1,0 +1,458 @@
+{
+  "$schema": "https://frootai.dev/schemas/harvest-seed-list.v1.json",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-06-04T19:00:00Z",
+  "count": 50,
+  "items": [
+    {
+      "full_name": "Azure-Samples/azure-search-openai-demo",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "Canonical Azure RAG: hybrid retrieval + Azure OpenAI + Bicep + azd template. The reference every other RAG sample is benchmarked against.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/ai-agents-for-beginners",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "12-lesson agentic AI course. Global default starting point for 'how do I learn agents'. Multi-framework coverage.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/cognitive-services-speech-sdk",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "voice",
+      "reason": "Cross-language Speech SDK samples (C#, Python, JS, Java, etc.). Canonical voice-IO reference.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/Generative-AI-for-beginners-dotnet",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": ".NET-first GenAI fundamentals. Anchor for the Microsoft enterprise developer segment.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/graphrag-accelerator",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "One-click GraphRAG on Azure. Novel topology beyond vanilla vector RAG — knowledge graph + LLM.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/openai",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Notebooks complementing the OpenAI cookbook. Long-tail samples across modalities and patterns.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/chat-with-your-data-solution-accelerator",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "Production-grade RAG with best practices baked in. Goes deeper than the demo on enterprise concerns.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/GPT-RAG",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "Enterprise-secure GPT RAG reference. Network isolation + Bicep + scaled-out architecture.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/Cognitive-Speech-TTS",
+      "priority": "high",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "voice",
+      "reason": "Custom neural voice + TTS samples. Speech-synthesis depth covering prosody, transformers, traditional TTS.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/AI-Gateway",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "APIM-as-AI-Gateway labs: AI Models + MCP servers + agents + Foundry. The 'production AI traffic' story.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/serverless-chat-langchainjs",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "Serverless RAG with LangChain.js + Azure Functions + MongoDB. JavaScript-first RAG path.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/aoai-realtime-audio-sdk",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "voice",
+      "reason": "gpt-4o-realtime audio SDK. Bidirectional low-latency voice — frontier voice-agent capability.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/azure-search-openai-demo-csharp",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "C# port of the canonical Azure RAG demo. Same architecture, .NET ecosystem.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/contoso-chat",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "End-to-end Prompty + Foundry RAG with evals + LLMOps + GitHub Actions deployment. The 'production chat' archetype.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/miyagi",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Copilot stack showcase: Semantic Kernel, agents, Llama, Phi, prompt flow, TaskWeaver, TypeChat.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/AI-in-a-Box",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Microsoft-curated Azure AI solution accelerator collection. Meta-repo of meta-repos — high signal density.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/aisearch-openai-rag-audio",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "multimodal",
+      "reason": "VoiceRAG pattern: gpt-4o-realtime + AI Search hybrid retrieval. Voice + grounding = enterprise voice agent.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/azureai-samples",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Official community-driven Azure AI examples. Breadth catalog under the Azure AI Foundry umbrella.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/azure-dev",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "The azd CLI itself. Foundational: every other azd-template depends on this. F-layer essential.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/rag-postgres-openai-python",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "rag",
+      "reason": "RAG over Postgres rows with pgvector + Container Apps + FastAPI. Database-native RAG path.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/reliable-web-app-pattern-dotnet",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "WAF-aligned reliable web app reference (.NET). Anchors the cost/reliability/security pillars for cloud-native apps.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/azure-ai-travel-agents",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Enterprise multi-agent app: ACA + MCP + LangChain.js + LlamaIndex + Agent Framework. Polyglot agent reference.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/contoso-creative-writer",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Multi-agent creative writing showcase. Azure AI Agent Service + AI Search + Bing grounding.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/foundry-samples",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Canonical Microsoft Foundry samples embedded in official docs. Living source of truth.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/get-started-with-ai-agents",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Basic AI Foundry agent web-app starter. The 'hello world' for Azure AI agents.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/python-ai-agent-frameworks-demos",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Side-by-side Python agent frameworks (Semantic Kernel, AutoGen, LangChain, LlamaIndex). Framework comparison anchor.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/ai-rag-chat-evaluator",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "evaluation",
+      "reason": "RAG quality evaluation toolkit using Azure AI Evaluate SDK. The eval-layer reference Play 17 will pollinate to.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/mcp-foundry",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "MCP server for Azure AI Foundry. The bridge between Cursor/Claude users and Foundry resources.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/content-processing-solution-accelerator",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "multimodal",
+      "reason": "Doc-intel + schema extraction over multi-modal content. Foundry + AI Content Understanding + Cosmos.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/aca-landing-zone-accelerator",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "Azure Container Apps Landing Zone reference. Production-grade ACA + Bicep + Terraform variants.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/intelligent-app-workshop",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Agent Framework + Foundry immersive workshop. Showcase of integrating foundation models into product experiences.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure-Samples/mcp-agent-langchainjs",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Serverless MCP agent using LangChain.js. Burger-ordering reference for MCP + agents.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "Azure/ai-solution-accelerators-list",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Microsoft-maintained Azure AI Solution Accelerators index. The 'official' list — our doctrine line 1 reference point.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/simplechat",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "chatbot",
+      "reason": "Secure RBAC chat with docs/video/audio. Personal + group workspaces. Modular feature extension model.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/AzureOpenAI-with-APIM",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "Auto-configure APIM in front of Azure OpenAI. Zero-trust pattern; Azure Government compatible.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft/spec-to-agents",
+      "priority": "normal",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Multi-agent event-planning workflow combining Semantic Kernel + AutoGen patterns via Agent Framework.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/foundry-agent-webapp",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Copilot-enabled agent webapp with Entra ID auth + Foundry Agents integration. Identity-aware agent UX.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/ai-tutorials",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Hands-on Foundry tutorials. Step-by-step generative AI app builds. Onboarding-tier content.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/Foundry-Local-Lab",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Foundry Local workshop — local AI without cloud. RAG + agents in Python/JS/C# offline.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/Conversational-Azure-OpenAI-Accelerator",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "chatbot",
+      "reason": "ChatGPT-powered customer support (Zammo.ai partner). Voice + text channels + telephony integration.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/foundry-mcp-playground",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "infra",
+      "reason": "Experimental Foundry MCP playground. Early-access surface for MCP-via-Foundry exploration.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/AI-Powered-Call-Center-Intelligence-Accelerator",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "voice",
+      "reason": "Call-center NLU: real-time + recorded transcription, custom speech models, industry NLP. Vertical-ready.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/fine-tuning",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "fine-tune",
+      "reason": "Fine-tuning examples + sample datasets. Foundry's authoritative fine-tune reference.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/voicelive-samples",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "voice",
+      "reason": "Speech Service Voice Live API samples. Real-time voice surface beyond the audio SDK.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/Intelligent-Document-Processing-Accelerator",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "vision",
+      "reason": "Document workflow automation: classify, extract, route. The doc-process-automation industry vertical.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/Foundry_Toolkit_for_VSCode_Lab",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "cookbook",
+      "reason": "Hands-on workshop: build, test, deploy single + multi-agent Foundry Hosted Agents from VS Code.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/AI-Powered-Insurance-Claims-Automation-Accelerator",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "multimodal",
+      "reason": "Insurance-claims AI: image/ID/document processing. Industry-finance vertical anchor.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/Intelligent-Supply-Chain-Management",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "data-pipeline",
+      "reason": "Supply-chain forecasting + inventory optimization with Ray on AKS. Industry-retail vertical anchor.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "microsoft-foundry/Foundry-Agent-Lab",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "agent",
+      "reason": "Progressively complex agent demos with how-it-works narratives. Pedagogical agent reference.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    },
+    {
+      "full_name": "MSUSAzureAccelerators/Risk-Classification-and-Loan-Modeling-Accelerator",
+      "priority": "low",
+      "expected_primary_cloud": "azure",
+      "expected_domain": "data-pipeline",
+      "reason": "Predictive loan-risk modeling with Synapse + ML. Industry-finance second vertical anchor.",
+      "added_at": "2026-06-04T19:00:00Z",
+      "added_by": "github:pavle"
+    }
+  ]
+}

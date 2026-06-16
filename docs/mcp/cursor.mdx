@@ -1,0 +1,64 @@
+---
+title: "Install Orchard Harvest MCP in Cursor"
+description: "Add the FrootAI Orchard Harvest MCP server (@frootai/orchard-mcp) to Cursor — turn any GitHub repo into a production-ready Solution Play from your editor."
+icon: "🅒"
+order: 43
+tags: ["mcp", "orchard", "harvest", "cursor", "install"]
+---
+
+# Install Orchard Harvest MCP in Cursor
+
+The **Orchard Harvest** MCP server (`@frootai/orchard-mcp`) runs the FAI Harvest pipeline as 8 callable tools: discover, extract, retrieve, and list for free, plus `import_accelerator` / `customize_play` / `re_harvest` (Pro) and `approve_play` (founder). This guide wires it into **Cursor**.
+
+> Looking for the read-only catalog server instead? See [Install FrootAI Orchard MCP](./install-clients).
+
+## 1. Add the server config
+
+Cursor reads MCP server configs from `~/.cursor/mcp.json`. Add the `frootai-orchard` entry (or drop our [one-click template](https://frootai.dev/templates/orchard-mcp.json) into your project's `.vscode/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/orchard-mcp@latest"]
+    }
+  }
+}
+```
+
+Prefer Python? Swap the launch command for the byte-equal PyPI runtime:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "uvx",
+      "args": ["frootai-orchard-mcp@latest"]
+    }
+  }
+}
+```
+
+## 2. Sign in for the Pro pipeline (`frootai login`)
+
+The free tools (`discover_repo`, `extract_facts`, `retrieve_exemplars`, `list_plays`) work anonymously. The paid pipeline tools use the **OAuth device flow** — you do **not** paste a token into the config:
+
+```bash
+npm install -g frootai
+frootai login
+```
+
+This opens your browser, you authorize, and the token is persisted to the MCP server's session store. `import_accelerator`, `customize_play`, and `re_harvest` unlock on your next call (Pro plan required).
+
+## 3. Verify
+
+Restart Cursor. The server appears in **Settings → Features → MCP Servers** with a green dot when healthy:
+
+![Cursor MCP Servers settings showing frootai-orchard connected with a green status dot and 8 tools listed](https://frootai.dev/orchard/screenshots/harvest-cursor.png)
+
+Now ask Cursor:
+
+> *"Import github.com/Azure-Samples/azure-search-openai-demo as a Solution Play"*
+
+It calls `discover_repo` then `import_accelerator` and returns the signed bundle URL. If you see a `-32003` / `-32004` error, run `frootai login` and confirm your plan at <https://frootai.dev/upgrade>.

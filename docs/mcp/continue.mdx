@@ -1,0 +1,68 @@
+---
+title: "Install Orchard Harvest MCP in Continue.dev"
+description: "Add the FrootAI Orchard Harvest MCP server (@frootai/orchard-mcp) to Continue.dev (VS Code / JetBrains) — turn any GitHub repo into a production-ready Solution Play."
+icon: "🅒"
+order: 45
+tags: ["mcp", "orchard", "harvest", "continue", "continue-dev", "install"]
+---
+
+# Install Orchard Harvest MCP in Continue.dev
+
+The **Orchard Harvest** MCP server (`@frootai/orchard-mcp`) runs the FAI Harvest pipeline as 8 callable tools. This guide wires it into **Continue.dev** (the VS Code / JetBrains AI assistant).
+
+> Looking for the read-only catalog server instead? See [Install FrootAI Orchard MCP](./install-clients).
+
+## 1. Add the server config
+
+Continue reads `~/.continue/config.json`. Add the harvest server to `experimental.modelContextProtocolServers`:
+
+```json
+{
+  "experimental": {
+    "modelContextProtocolServers": [
+      {
+        "transport": {
+          "type": "stdio",
+          "command": "npx",
+          "args": ["-y", "@frootai/orchard-mcp@latest"]
+        }
+      }
+    ]
+  }
+}
+```
+
+Prefer Python? Swap the transport command for the byte-equal PyPI runtime:
+
+```json
+{
+  "transport": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": ["frootai-orchard-mcp@latest"]
+  }
+}
+```
+
+## 2. Sign in for the Pro pipeline (`frootai login`)
+
+Free tools (`discover_repo`, `extract_facts`, `retrieve_exemplars`, `list_plays`) work anonymously. The paid tools use the **OAuth device flow** — no token is passed through the config:
+
+```bash
+npm install -g frootai
+frootai login
+```
+
+The token persists to the MCP server's session store; `import_accelerator`, `customize_play`, and `re_harvest` unlock on your next call (Pro plan required).
+
+## 3. Verify
+
+Reload Continue (`Continue: Reload Window` from the command palette). The harvest tools appear in the slash-command / tool menu:
+
+![Continue.dev tool menu in VS Code listing the frootai-orchard harvest tools including discover_repo and import_accelerator](https://frootai.dev/orchard/screenshots/harvest-continue.png)
+
+Now ask Continue:
+
+> *"discover and import github.com/Azure-Samples/azure-search-openai-demo"*
+
+It calls `discover_repo` then `import_accelerator` and returns the signed bundle URL. A `-32003` / `-32004` error means you need to `frootai login` (and possibly upgrade at <https://frootai.dev/upgrade>).

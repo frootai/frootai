@@ -1,0 +1,29 @@
+{
+  "id": "azure__gpt-rag",
+  "overrides": {
+    "tagline": "Enterprise reference architecture for production RAG on Azure with zero-trust networking and CI/CD",
+    "categories": ["rag", "infra", "security"],
+    "froot_layer": "R",
+    "cost_band": "$800-3500/mo",
+    "trust_badges": [
+      "microsoft_official",
+      "azd_template",
+      "production_ready",
+      "safety_layer"
+    ],
+    "pollinates": [
+      {
+        "play_id": "01",
+        "play_slug": "01-rag-on-azure-ai-search",
+        "relation": "extends_to",
+        "confidence": 0.95,
+        "reason": "GPT-RAG is the enterprise-hardened evolution of Play 01's baseline RAG pattern: adds private endpoints, AAD-only auth, App Gateway WAF, and per-tenant isolation while keeping the same retrieve-rerank-generate core.",
+        "source": "community_pr"
+      }
+    ]
+  },
+  "reason": "Auto-classifier extracted the wrong README section (top-of-file 'quickstart' instead of the architecture overview) and missed the zero-trust security posture that is the actual differentiator. Manual pollination to Play 01 documents the relationship between the baseline pattern and this enterprise-hardened variant; the auto-suggester missed it because the README does not name-drop Play 01 directly.",
+  "submitted_by": "github:pavle",
+  "reviewed_by": "@frootai/core",
+  "submitted_at": "2026-05-25T12:00:00Z"
+}

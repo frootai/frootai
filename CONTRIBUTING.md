@@ -68,7 +68,7 @@ solution-plays/XX-your-solution/
 ### 4. Platform Features
 
 - MCP server tools (`npm-mcp/index.js`)
-- VS Code extension features (`vscode-extension/src/extension.js`)
+- VS Code extension features ([`frootai-core/vscode-extension/src/extension.ts`](https://github.com/frootai/frootai-core/tree/main/vscode-extension) — published as `frootai-vscode` on the Marketplace; `frootai/vscode-extension/` here is asset CDN only)
 - Website improvements (`website/src/pages/*.tsx`)
 
 ---

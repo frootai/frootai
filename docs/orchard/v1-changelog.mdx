@@ -1,0 +1,160 @@
+---
+title: "FAI Orchard v1.0 — Aggregate Changelog"
+description: "One-page changelog aggregating the v1.0.0 entries from all 5 FAI Orchard packages — orchard-types, npm + py SDK, npm + py MCP server — with cross-links to per-package CHANGELOG.md and STABILITY.md files."
+icon: "📜"
+order: 5
+tags: ["orchard", "changelog", "v1.0", "ga", "stability"]
+---
+
+# FAI Orchard v1.0 — Aggregate Changelog
+
+> **Released under tag `orchard-v1.0.0`** (Phase A10 — General Availability, 2026-05-26). This page aggregates the `[1.0.0]` entries across all 5 published packages. Every change is **additive** to v0.9.0-ops — there are no breaking changes. See the [Migration guide](./migration-from-beta) for the 30-second upgrade.
+
+---
+
+## At a glance
+
+| Package | Distribution | Version | STABILITY.md | CHANGELOG |
+|---|---|---|---|---|
+| `@frootai/orchard-types` | [npm](https://www.npmjs.com/package/@frootai/orchard-types) | `1.0.0` | [orchard-types/STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/orchard-types/STABILITY.md) | [CHANGELOG.md](https://github.com/frootai/frootai/blob/main/frootai-core/orchard-types/CHANGELOG.md) |
+| `@frootai/orchard` | [npm](https://www.npmjs.com/package/@frootai/orchard) | `1.0.0` | [npm-sdk/orchard/STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/STABILITY.md) | [CHANGELOG.md](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/CHANGELOG.md) |
+| `frootai-orchard` | [PyPI](https://pypi.org/project/frootai-orchard/) | `1.0.0` | [python-sdk/orchard/STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/python-sdk/orchard/STABILITY.md) | [CHANGELOG.md](https://github.com/frootai/frootai/blob/main/frootai-core/python-sdk/orchard/CHANGELOG.md) |
+| `@frootai/mcp-orchard` | [npm](https://www.npmjs.com/package/@frootai/mcp-orchard) | `1.0.0` | [npm-mcp/orchard/STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/npm-mcp/orchard/STABILITY.md) | [CHANGELOG.md](https://github.com/frootai/frootai/blob/main/frootai-core/npm-mcp/orchard/CHANGELOG.md) |
+| `frootai-mcp-orchard` | [PyPI](https://pypi.org/project/frootai-mcp-orchard/) | `1.0.0` | [python-mcp/orchard/STABILITY.md](https://github.com/frootai/frootai/blob/main/frootai-core/python-mcp/orchard/STABILITY.md) | [CHANGELOG.md](https://github.com/frootai/frootai/blob/main/frootai-core/python-mcp/orchard/CHANGELOG.md) |
+
+Repo-root semver contract: [STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md).
+
+---
+
+## What v1.0 adds (additive across all 5 packages)
+
+### Semver discipline + v1.0 surface lock (A10.1–A10.6)
+
+- **Repo-root `STABILITY.md`** declaring the v1.0 contract: 15-row breaking-change table, CVSS-tiered security patch timelines, 6-month minimum deprecation window, LTS window for the current minor + previous minor, supported runtime matrix (Node ≥ 18, Python ≥ 3.10), explicit "what we do NOT promise" section.
+- **Per-package `STABILITY.md`** in all 5 packages declaring the explicit public-export list + sub-path exports + env-var consumption + peer-dep guarantees.
+- **Deprecation framework** at `@frootai/orchard-types/lib/deprecate` (npm) and `frootai_orchard._deprecate` (Python): `emitDeprecation` / `emit_deprecation` with warn-once-per-process-per-symbol semantics, machine-readable `[FROOTAI_DEPRECATED] symbol="..." since="..." removed_in="..." message="..."` line shape, opt-out via `FROOTAI_SUPPRESS_DEPRECATIONS=1`. NO symbols currently deprecated — framework is in place for the first v1.x deprecation.
+- **Cross-package version-consistency gate** (`scripts/orchard/check-cross-package-versions.js`) asserts all 5 packages report the same `1.x.y` version on every release.
+
+### What you had at v0.9.0-ops is preserved verbatim
+
+Every capability shipped in v0.9.0-ops + earlier tags is present in v1.0.0 unchanged. The full carried-forward feature set:
+
+#### MCP wire surface (frozen at MCP spec `2025-03-26`)
+
+- **5 tools**: `orchard.search`, `orchard.show`, `orchard.install_command`, `orchard.find_play` (paid; `upgrade-to-play` entitlement), `orchard.list_pollinations`.
+- **`resources/list` + `resources/read`** with `orchard://fruit/<id>` URI scheme (A8.19–A8.20). Markdown body byte-equal with `orchard.show` tool.
+- **`resources/subscribe` + `resources/unsubscribe`** + `notifications/resources/updated` push hook (A8.21). Capability gated on `sendNotification` injection.
+- **6 canned prompt templates** via `prompts/list` + `prompts/get` (A8.22): setup_rag_starter / find_alternative / explain_play_recipe / compare_accelerators / recommend_for_use_case / bootstrap_with_play.
+- **12-check headless MCP compliance probe** (A8.24) replaces the UI-only Inspector tool for CI gating.
+- **3-runtime byte-equality** (A9.1–A9.3): npm + Python + VSCode-embedded MCP servers produce byte-equal tool-call output for all 27 contracts in `cross-mcp-manifest.js`.
+
+#### Transports
+
+- **stdio** (default for every MCP client).
+- **Streamable HTTP** at `POST /mcp` + `GET /health` + CORS preflight (defaults: `host=0.0.0.0`, `port=3000`, `path=/mcp`, `MAX_BODY_BYTES=1 MiB`).
+- **Graceful HTTP shutdown** (`closeGraceful({drainMs})`, A9.23): new POSTs receive `503 + Retry-After: 5`; `/health` continues responding with `draining: true` + `in_flight: <n>`; default drain 15 s.
+
+#### Enterprise tier (Phase A8)
+
+- **SSO** (SAML 2.0 + OIDC) with Azure AD + Okta default attribute maps; `admin-sso-test.js` validator (A9.6) for IdP pre-flight without hitting the network.
+- **Per-tenant MCP quota overrides** via `admin-quota-override.js` (A8.16).
+- **Audit-log batch export** to S3 / Azure Blob / `local_fs` / `memory` (A8.26) + `POST /api/audit/export` HTTP handler (A9.5). SHA-256-against-bytes manifest verification — defense vs manifest spoofing.
+- **Multi-region tenancy** — `us-east` (default), `eu-west`, `ap-south` (A8.27 + A9.9–A9.10). Cross-region READ requires `cross-region:read` entitlement (auto-granted to enterprise tier). **Cross-region WRITE is denied for every tier + every entitlement combination** — locked invariant enforced by test (A9.18).
+- **Enterprise whoami surface** — `sso_provider` + `home_region` + `org_id` fields pass through CLI / SDK / MCP / VSCode (A8.28).
+
+#### Operational hardening (Phase A9)
+
+- **Redis rate-limiter backend** (A9.21) — env-flag selector `FROOTAI_RATE_LIMITER_BACKEND=redis` + `buildRedisRateLimiterDatastore({redisClient})` adapter. Zero invasive changes; existing rate-limiter logic unchanged.
+- **Audit segment compaction** (A9.22) — atomic tmp + rename + unlink-originals-only-after-rename.
+- **Telemetry pipeline alerts** (A9.24) — Slack-shaped `{text, blocks}` payload, fetch-injectable, never-throws. Webhook URL from env never argv.
+- **MCP package size + tree-shake audit** (A9.25) — 128 KiB budget per ecosystem + zero third-party runtime deps gate + every `require()` resolves to stdlib + sibling + peer.
+- **Regression perf budget** (A9.26) — 120 s total / 30 s per-suite. Operator-driven (not in `orchard:test` chain to avoid recursion).
+
+#### On-prem Docker
+
+- **`ghcr.io/frootai/mcp-orchard:1.0.0`** (A9.13) — multi-stage Alpine, non-root UID 1001, HEALTHCHECK via Node built-in fetch, EXPOSE 3000, ENTRYPOINT `bin/mcp-orchard.js`, CMD `--http`. **NO `npm install` inside the image** (peer SDK + types vendored at build time — air-gap friendly).
+- **`cosign verify`** recipe in [self-host docs](../enterprise/self-host).
+
+#### Enterprise documentation
+
+- **[`/docs/enterprise/orchard`](../enterprise/orchard)** — 14 canonical sections + Operations (v0.9.0-ops) sub-section.
+- **[`/docs/enterprise/self-host`](../enterprise/self-host)** — 10 canonical sections, multi-region pinning, Docker hardening, cosign verification.
+- **[`/docs/enterprise/pricing`](../enterprise/pricing)** — 5-tier matrix, capability table, self-serve + sales-assisted upgrade flows, 3 wireframes.
+
+---
+
+## Regression footprint at v1.0 GA
+
+- **5,969+ test cases** across **109 suites** with **0 failures** (cumulative across A2 → A10 buckets).
+- **120 s wall-clock budget** enforced by `npm run orchard:perf-budget`.
+- **128 KiB tarball/wheel size** budget per ecosystem enforced by `npm run orchard:mcp-package-audit`.
+- **27/27 byte-equal contracts** across all 3 MCP runtimes (npm + Python + VSCode-embedded).
+- **34/34 phase-close gates** for Phase A9 pass; A10 close gates will land at A10.30.
+
+---
+
+## Supply chain
+
+| Artifact | Distribution | Provenance |
+|---|---|---|
+| `@frootai/orchard-types` 1.0.0 | npm | npm provenance (SLSA L2+ via OIDC) |
+| `@frootai/orchard` 1.0.0 | npm | npm provenance (SLSA L2+ via OIDC) + CycloneDX 1.5 SBOM |
+| `frootai-orchard` 1.0.0 | PyPI | Trusted publishing + PEP 740 attestations |
+| `@frootai/mcp-orchard` 1.0.0 | npm | npm provenance (SLSA L2+ via OIDC) |
+| `frootai-mcp-orchard` 1.0.0 | PyPI | Trusted publishing + PEP 740 attestations |
+| `ghcr.io/frootai/mcp-orchard:1.0.0` | OCI | cosign signature via GitHub Actions OIDC issuer |
+| Cross-MCP conformance certificate | GitHub Actions artifact | 90-day retention; tag-pinned; 27/27 byte-equal |
+
+Verification recipes in [self-host §Updates & version pinning](../enterprise/self-host#updates--version-pinning) and [STABILITY.md §9 How to audit conformance](https://github.com/frootai/frootai/blob/main/STABILITY.md#9-how-to-audit-conformance).
+
+---
+
+## Deprecations at v1.0
+
+**Zero.** The deprecation framework ships ready to use, but no symbol is marked deprecated today. The framework is here so the first v1.x deprecation has a working warn-once channel with a stable, machine-readable line format.
+
+When deprecations do land in a future 1.x.y, they appear:
+
+1. In the per-package CHANGELOG `### Deprecated` section of the `since` release.
+2. As a single `[FROOTAI_DEPRECATED] symbol="..." since="..." removed_in="..." ...` line on stderr the first time the deprecated symbol is invoked in a process.
+3. With **at least 6 months** of advance notice before removal at the next major.
+
+---
+
+## Known issues / deferred
+
+Nothing breaking blocks v1.0 — but a few capabilities are deferred to post-GA work:
+
+- **Cosign-signed npm + PyPI** — npm provenance + PEP 740 attestations already ship at v1.0; full Sigstore cosign on the language-package tarballs is targeted for v1.1.x as the tooling matures.
+- **SLSA L3** — provenance (L2) ships today; L3 (hermetic builds) is targeted for v1.x with the next CI infra refresh.
+- **Cursor / Cline integration walk-through videos** — referenced in [`/docs/mcp/install-clients`](../mcp/install-clients) text sections; recorded GIFs land in Phase A10.16.
+- **Recorded GIF demos per MCP client** — `npm-mcp/orchard/demo/*.gif` lands at A10.16.
+- **Three named enterprise case studies** — pipeline in progress; first published case study lands at A10.14.
+- **SOC 2 Type II report** — third-party audit engagement scheduled; readiness pack referenced in [STABILITY.md §10](https://github.com/frootai/frootai/blob/main/STABILITY.md#10-see-also).
+
+Track these via Phase A10 sub-phase status in [`planning/retros/orchard-phase10-kickoff.md`](https://github.com/frootai/frootai/blob/main/planning/retros/orchard-phase10-kickoff.md).
+
+---
+
+## How to read this changelog
+
+- **Tags** in this repo follow the pattern `orchard-v<MAJOR>.<MINOR>.<PATCH>[-<label>]`. Every v1.x.y tag triggers the publish workflow that produces all 5 packages + Docker image with provenance.
+- **Phase numbering** (A6.x, A7.x, etc.) maps to internal phases — not to the published version. Phase A10 = v1.0.0 GA.
+- **Sub-phase tags** like `(A8.27)` in this changelog point at the canonical retro for that ship; e.g. [`planning/retros/orchard-phase8.md`](https://github.com/frootai/frootai/blob/main/planning/retros/orchard-phase8.md).
+
+---
+
+## See also
+
+- [Repo-root STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md) — semver contract
+- [Migration from v0.9.x](./migration-from-beta) — umbrella migration guide
+- [TypeScript SDK migration](./migration-from-beta-typescript)
+- [Python SDK migration](./migration-from-beta-python)
+- [Getting started — 5-minute quickstart](./getting-started)
+- [v1.0 GA landing page](https://frootai.dev/orchard/v1) — procurement + security overview
+- [Enterprise guide](../enterprise/orchard)
+- [Self-host guide](../enterprise/self-host)
+- [Enterprise pricing](../enterprise/pricing)
+- [MCP reference](../mcp/orchard) · [MCP listings (Smithery + Glama)](../mcp/listings) · [Install in MCP clients](../mcp/install-clients)
+- [TypeScript SDK reference](../sdk/orchard-typescript) · [Python SDK reference](../sdk/orchard-python)
+- [Phase A10 kickoff](https://github.com/frootai/frootai/blob/main/planning/retros/orchard-phase10-kickoff.md)

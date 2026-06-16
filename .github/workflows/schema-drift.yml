@@ -1,0 +1,35 @@
+name: schema-drift gate ([H0.27])
+
+# Enforces byte-equality between the canonical reference schemas at
+# frootai/schemas/*.schema.json and their authoring mirrors at
+# frootai/orchard/schema/*.json. See scripts/check-schema-drift.mjs.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "schemas/**"
+      - "orchard/schema/**"
+      - "scripts/check-schema-drift.mjs"
+      - ".github/workflows/schema-drift.yml"
+  pull_request:
+    paths:
+      - "schemas/**"
+      - "orchard/schema/**"
+      - "scripts/check-schema-drift.mjs"
+      - ".github/workflows/schema-drift.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run schema-drift gate
+        run: node scripts/check-schema-drift.mjs

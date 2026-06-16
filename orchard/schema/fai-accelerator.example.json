@@ -1,0 +1,661 @@
+[
+  {
+    "$schema": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+    "schema_version": "1.0.0",
+
+    "id": "azure-samples__azure-search-openai-demo",
+    "name": "Azure Search OpenAI Demo",
+    "slug": "azure-search-openai-demo",
+    "variety": "azure",
+    "owner": "Azure-Samples",
+    "owner_type": "first_party",
+    "repo_url": "https://github.com/Azure-Samples/azure-search-openai-demo",
+    "default_branch": "main",
+    "homepage": null,
+
+    "tagline": "RAG quickstart with Azure AI Search + Azure OpenAI, complete with hybrid retrieval and Bicep IaC.",
+    "description": "A reference RAG application showing how to combine Azure AI Search hybrid retrieval with Azure OpenAI gpt-4o for grounded chat over enterprise documents. Includes Bicep, azd template, evaluation harness, and a React frontend.",
+    "categories": ["rag", "chat", "search"],
+    "tech": ["Azure OpenAI", "Azure AI Search", "Container Apps", "Bicep", "azd", "Python", "TypeScript"],
+    "languages": ["Python", "TypeScript", "Bicep"],
+    "tags": ["enterprise", "production-ready", "hybrid-search"],
+
+    "froot_layer": "R",
+    "froot_layer_confidence": 0.92,
+    "froot_layer_reason": "Heavy retrieval + reasoning pattern; thin orchestration; minimal infra novelty.",
+
+    "ripeness": "Mature",
+    "ripeness_signals": {
+      "stars": 7843,
+      "forks": 4912,
+      "contributors": 124,
+      "open_issues": 89,
+      "closed_issues_30d": 23,
+      "commit_velocity_30d": 47,
+      "has_releases": true,
+      "latest_release": "v0.9.1"
+    },
+    "season": "Autumn",
+    "season_reason": "No major releases in 90 days but high install + low issue rate — stable and in production use.",
+    "first_seen": "2023-04-12T00:00:00Z",
+    "last_commit": "2026-05-21T11:22:00Z",
+    "last_release": "2026-03-14T09:00:00Z",
+
+    "license": "MIT",
+    "license_url": "https://github.com/Azure-Samples/azure-search-openai-demo/blob/main/LICENSE",
+    "trust_badges": ["microsoft_official", "azd_template", "production_ready", "eval_proven"],
+    "code_of_conduct": true,
+    "security_md": true,
+
+    "cost_band": "$200-800/mo",
+    "cost_estimate": {
+      "currency": "USD",
+      "monthly_dev_low": 50,
+      "monthly_dev_high": 200,
+      "monthly_prod_low": 200,
+      "monthly_prod_high": 800,
+      "drivers": ["Azure OpenAI gpt-4o tokens", "AI Search S1", "Container Apps replicas", "Storage egress"],
+      "method": "llm_estimate_v1",
+      "estimated_at": "2026-05-24T02:14:00Z"
+    },
+
+    "deployment": {
+      "azd_template": true,
+      "iac": ["bicep"],
+      "containers": true,
+      "serverless": false,
+      "one_click_url": null,
+      "estimated_deploy_minutes": 15,
+      "requires_quota": ["Azure OpenAI GPT-4o", "Azure AI Search"]
+    },
+
+    "eval_signals": {
+      "has_eval_folder": true,
+      "has_tests": true,
+      "has_safety_layer": true,
+      "has_observability": false,
+      "has_load_tests": false,
+      "fai_eval_score": null,
+      "fai_eval_run_id": null
+    },
+
+    "fai_compatible": "partial",
+    "fai_compatibility_report": {
+      "has_fai_manifest": false,
+      "has_dot_github_agentic_os": false,
+      "primitives_present": ["instructions", "prompts"],
+      "missing_primitives": ["agents", "skills", "hooks", "workflows"],
+      "upgrade_path": "Run `frootai harvest --upgrade azure-samples__azure-search-openai-demo` to scaffold FAI primitives matched to this repo's structure."
+    },
+
+    "pollinates": [
+      {
+        "play_id": "01",
+        "play_slug": "01-enterprise-rag",
+        "relation": "baseline",
+        "confidence": 0.95,
+        "reason": "Same RAG topology, simpler than Play 01 but excellent Bicep + azd starter.",
+        "source": "auto"
+      },
+      {
+        "play_id": "21",
+        "play_slug": "21-agentic-rag",
+        "relation": "extends_to",
+        "confidence": 0.80,
+        "reason": "Play 21 layers agentic reasoning on top of this baseline retrieval pattern.",
+        "source": "auto"
+      }
+    ],
+
+    "origin": "harvested",
+
+    "provenance": {
+      "harvested_at": "2026-05-24T02:14:00Z",
+      "harvested_by": "fai-orchard-harvester/v1.0",
+      "source": "github-api",
+      "first_party": false,
+      "enriched_by": [
+        { "step": "froot_layer_classification", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:14:32Z" },
+        { "step": "cost_estimation", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:14:48Z" },
+        { "step": "tagline_polish", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:15:02Z" },
+        { "step": "pollination_suggest", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:15:21Z" }
+      ],
+      "overrides_applied": []
+    },
+
+    "search_keywords": ["rag", "search", "openai", "enterprise", "quickstart", "bicep", "azd", "hybrid-search"],
+    "readme_excerpt": "This sample demonstrates a few approaches for creating ChatGPT-like experiences over your own data using the Retrieval Augmented Generation pattern. It uses Azure OpenAI Service to access a GPT model and Azure AI Search for data indexing and retrieval.",
+    "semantic_embedding_id": null
+  },
+
+  {
+    "$schema": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+    "schema_version": "1.0.0",
+
+    "id": "googlecloudplatform__generative-ai",
+    "name": "Google Cloud Generative AI Samples",
+    "slug": "generative-ai",
+    "variety": "gcp",
+    "owner": "GoogleCloudPlatform",
+    "owner_type": "first_party",
+    "repo_url": "https://github.com/GoogleCloudPlatform/generative-ai",
+    "default_branch": "main",
+    "homepage": "https://cloud.google.com/ai",
+
+    "tagline": "Sample code and notebooks for Generative AI on Google Cloud — Vertex AI, Gemini API, and Workbench.",
+    "description": "Curated notebooks and end-to-end samples showing how to use Generative AI services on Google Cloud. Covers Vertex AI Gemini, Embeddings API, AutoSxS evaluation, RAG with Vertex Search, agent patterns with LangChain on Vertex, and production deployment via Cloud Run.",
+    "categories": ["rag", "agent", "chat", "search"],
+    "tech": ["Vertex AI", "Gemini", "Cloud Run", "Cloud Storage", "Terraform", "Python", "Jupyter"],
+    "languages": ["Jupyter Notebook", "Python", "TypeScript"],
+    "tags": ["enterprise", "notebooks", "gemini"],
+
+    "froot_layer": "R",
+    "froot_layer_confidence": 0.88,
+    "froot_layer_reason": "Mix of foundation + reasoning samples; classified at Reasoning because most paths route through RAG/embeddings.",
+
+    "ripeness": "Mature",
+    "ripeness_signals": {
+      "stars": 8421,
+      "forks": 2304,
+      "contributors": 197,
+      "open_issues": 142,
+      "closed_issues_30d": 38,
+      "commit_velocity_30d": 89,
+      "has_releases": false,
+      "latest_release": null
+    },
+    "season": "Summer",
+    "season_reason": "High commit velocity + 800+ stars added in last 30 days = trending.",
+    "first_seen": "2023-05-18T00:00:00Z",
+    "last_commit": "2026-05-23T19:04:00Z",
+    "last_release": null,
+
+    "license": "Apache-2.0",
+    "license_url": "https://github.com/GoogleCloudPlatform/generative-ai/blob/main/LICENSE",
+    "trust_badges": ["google_official", "production_ready"],
+    "code_of_conduct": true,
+    "security_md": false,
+
+    "cost_band": "$50-500/mo",
+    "cost_estimate": {
+      "currency": "USD",
+      "monthly_dev_low": 10,
+      "monthly_dev_high": 50,
+      "monthly_prod_low": 50,
+      "monthly_prod_high": 500,
+      "drivers": ["Vertex AI Gemini API calls", "Vertex Search queries", "Cloud Run vCPU-hours"],
+      "method": "llm_estimate_v1",
+      "estimated_at": "2026-05-24T02:18:11Z"
+    },
+
+    "deployment": {
+      "azd_template": false,
+      "iac": ["terraform"],
+      "containers": true,
+      "serverless": true,
+      "one_click_url": null,
+      "estimated_deploy_minutes": 20,
+      "requires_quota": ["Vertex AI Gemini Pro", "Vertex AI Embeddings"]
+    },
+
+    "eval_signals": {
+      "has_eval_folder": true,
+      "has_tests": false,
+      "has_safety_layer": false,
+      "has_observability": true,
+      "has_load_tests": false,
+      "fai_eval_score": null,
+      "fai_eval_run_id": null
+    },
+
+    "fai_compatible": "none",
+    "fai_compatibility_report": {
+      "has_fai_manifest": false,
+      "has_dot_github_agentic_os": false,
+      "primitives_present": [],
+      "missing_primitives": ["agents", "skills", "prompts", "instructions", "hooks", "workflows"],
+      "upgrade_path": "Run `frootai harvest --upgrade googlecloudplatform__generative-ai` to scaffold FAI primitives over the existing notebook structure."
+    },
+
+    "pollinates": [
+      {
+        "play_id": "01",
+        "play_slug": "01-enterprise-rag",
+        "relation": "alternative",
+        "confidence": 0.85,
+        "reason": "GCP-native equivalent of the Azure RAG Play. Cross-cloud comparison anchor.",
+        "source": "auto"
+      }
+    ],
+
+    "origin": "harvested",
+
+    "provenance": {
+      "harvested_at": "2026-05-24T02:18:00Z",
+      "harvested_by": "fai-orchard-harvester/v1.0",
+      "source": "github-api",
+      "first_party": false,
+      "enriched_by": [
+        { "step": "froot_layer_classification", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:18:32Z" },
+        { "step": "cost_estimation", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:18:48Z" }
+      ],
+      "overrides_applied": []
+    },
+
+    "search_keywords": ["gcp", "gemini", "vertex-ai", "generative-ai", "notebooks"],
+    "readme_excerpt": "Welcome to the Generative AI repository on Google Cloud. This repository contains notebooks, code samples, sample apps, and other resources that demonstrate how to use, develop and manage generative AI workflows using Vertex AI.",
+    "semantic_embedding_id": null
+  },
+
+  {
+    "$schema": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+    "schema_version": "1.0.0",
+
+    "id": "aws-samples__amazon-bedrock-samples",
+    "name": "Amazon Bedrock Samples",
+    "slug": "amazon-bedrock-samples",
+    "variety": "aws",
+    "owner": "aws-samples",
+    "owner_type": "first_party",
+    "repo_url": "https://github.com/aws-samples/amazon-bedrock-samples",
+    "default_branch": "main",
+    "homepage": null,
+
+    "tagline": "End-to-end samples for Amazon Bedrock — Claude, Llama, Titan models with RAG, agents, and knowledge bases.",
+    "description": "Reference implementations and notebooks showing how to use foundation models on Amazon Bedrock (Anthropic Claude, Meta Llama, Amazon Titan, Cohere) for RAG, agents, function calling, and knowledge bases. Includes CDK and CloudFormation deployment patterns.",
+    "categories": ["rag", "agent", "chat"],
+    "tech": ["Bedrock", "Claude", "Lambda", "OpenSearch Serverless", "CDK", "CloudFormation", "Python"],
+    "languages": ["Jupyter Notebook", "Python"],
+    "tags": ["enterprise", "bedrock", "claude"],
+
+    "froot_layer": "O1",
+    "froot_layer_confidence": 0.78,
+    "froot_layer_reason": "Strong agent/orchestration emphasis (Bedrock Agents, function calling); reasoning is secondary.",
+
+    "ripeness": "Bearing",
+    "ripeness_signals": {
+      "stars": 1842,
+      "forks": 712,
+      "contributors": 67,
+      "open_issues": 41,
+      "closed_issues_30d": 12,
+      "commit_velocity_30d": 23,
+      "has_releases": false,
+      "latest_release": null
+    },
+    "season": "Autumn",
+    "season_reason": "Steady commits, no recent star spike, AWS-official source — stable and in use.",
+    "first_seen": "2023-09-28T00:00:00Z",
+    "last_commit": "2026-05-22T08:15:00Z",
+    "last_release": null,
+
+    "license": "MIT-0",
+    "license_url": "https://github.com/aws-samples/amazon-bedrock-samples/blob/main/LICENSE",
+    "trust_badges": ["aws_official", "production_ready"],
+    "code_of_conduct": true,
+    "security_md": false,
+
+    "cost_band": "$100-600/mo",
+    "cost_estimate": {
+      "currency": "USD",
+      "monthly_dev_low": 20,
+      "monthly_dev_high": 100,
+      "monthly_prod_low": 100,
+      "monthly_prod_high": 600,
+      "drivers": ["Bedrock Claude tokens", "OpenSearch Serverless OCU", "Lambda invocations"],
+      "method": "llm_estimate_v1",
+      "estimated_at": "2026-05-24T02:22:14Z"
+    },
+
+    "deployment": {
+      "azd_template": false,
+      "iac": ["cdk", "cloudformation"],
+      "containers": false,
+      "serverless": true,
+      "one_click_url": null,
+      "estimated_deploy_minutes": 25,
+      "requires_quota": ["Bedrock Claude model access", "OpenSearch Serverless"]
+    },
+
+    "eval_signals": {
+      "has_eval_folder": false,
+      "has_tests": true,
+      "has_safety_layer": false,
+      "has_observability": false,
+      "has_load_tests": false,
+      "fai_eval_score": null,
+      "fai_eval_run_id": null
+    },
+
+    "fai_compatible": "none",
+    "fai_compatibility_report": {
+      "has_fai_manifest": false,
+      "has_dot_github_agentic_os": false,
+      "primitives_present": [],
+      "missing_primitives": ["agents", "skills", "prompts", "instructions", "hooks", "workflows"],
+      "upgrade_path": "Run `frootai harvest --upgrade aws-samples__amazon-bedrock-samples` to scaffold FAI primitives."
+    },
+
+    "pollinates": [
+      {
+        "play_id": "01",
+        "play_slug": "01-enterprise-rag",
+        "relation": "alternative",
+        "confidence": 0.82,
+        "reason": "AWS-native equivalent of the Azure RAG Play. Completes the cross-cloud triple (Azure / GCP / AWS).",
+        "source": "auto"
+      },
+      {
+        "play_id": "22",
+        "play_slug": "22-multi-agent-orchestration",
+        "relation": "uses_pattern",
+        "confidence": 0.65,
+        "reason": "Bedrock Agents pattern matches Play 22's orchestration model.",
+        "source": "auto"
+      }
+    ],
+
+    "origin": "harvested",
+
+    "provenance": {
+      "harvested_at": "2026-05-24T02:22:00Z",
+      "harvested_by": "fai-orchard-harvester/v1.0",
+      "source": "github-api",
+      "first_party": false,
+      "enriched_by": [
+        { "step": "froot_layer_classification", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:22:32Z" },
+        { "step": "cost_estimation", "model": "gpt-4o-mini-2024-07-18", "at": "2026-05-24T02:22:48Z" }
+      ],
+      "overrides_applied": []
+    },
+
+    "search_keywords": ["aws", "bedrock", "claude", "llama", "titan"],
+    "readme_excerpt": "This repository contains examples and best-practices for building Generative AI applications using Amazon Bedrock. Examples are organized by use case and include notebooks, scripts, and full CDK applications.",
+    "semantic_embedding_id": null
+  },
+
+  {
+    "$schema": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+    "schema_version": "1.0.0",
+
+    "id": "frootai__ai-foundry-rag-production",
+    "name": "FrootAI Cultivated — AI Foundry RAG Production",
+    "slug": "ai-foundry-rag-production",
+    "variety": "azure",
+    "owner": "frootai",
+    "owner_type": "frootai",
+    "repo_url": "https://github.com/frootai/ai-foundry-rag-production",
+    "default_branch": "main",
+    "homepage": "https://frootai.dev/orchard/azure/ai-foundry-rag-production",
+
+    "tagline": "Production-grade RAG on Azure AI Foundry — cultivated from 5 Azure Verified Modules with full provenance.",
+    "description": "A cultivated accelerator composed by FrootAI's Builder agent (FAI Greenhouse) from Microsoft-maintained Azure Verified Modules. Includes hybrid retrieval (Azure AI Search), vector storage, container-hosted RAG service, KMS-managed secrets via Key Vault, and Foundry-grade governance. Every line of Bicep is traceable to a pinned upstream AVM module — no hand-written gold IaC.",
+    "categories": ["rag", "search", "infra"],
+    "tech": ["Azure AI Foundry", "Azure AI Search", "Container Apps", "Key Vault", "Bicep", "AVM"],
+    "languages": ["Bicep"],
+    "tags": ["cultivated", "verified-composition", "production-ready", "waf-compliant"],
+
+    "froot_layer": "O2",
+    "froot_layer_confidence": 0.95,
+    "froot_layer_reason": "Pure Operations pattern — wires verified infra modules into a production-ready RAG topology.",
+
+    "ripeness": "Mature",
+    "ripeness_signals": {
+      "stars": 0,
+      "forks": 0,
+      "contributors": 1,
+      "open_issues": 0,
+      "closed_issues_30d": 0,
+      "commit_velocity_30d": 0,
+      "has_releases": true,
+      "latest_release": "v1.0.0"
+    },
+    "season": "Spring",
+    "season_reason": "Freshly cultivated by FAI Greenhouse; published today.",
+    "first_seen": "2026-05-24T00:00:00Z",
+    "last_commit": "2026-05-24T14:32:18Z",
+    "last_release": "2026-05-24T14:32:18Z",
+
+    "license": "Apache-2.0",
+    "license_url": "https://github.com/frootai/ai-foundry-rag-production/blob/main/LICENSE",
+    "trust_badges": ["microsoft_official", "production_ready", "frootai_compatible_full", "safety_layer"],
+    "code_of_conduct": true,
+    "security_md": true,
+
+    "cost_band": "$300-1200/mo",
+    "cost_estimate": {
+      "currency": "USD",
+      "monthly_dev_low": 80,
+      "monthly_dev_high": 300,
+      "monthly_prod_low": 300,
+      "monthly_prod_high": 1200,
+      "drivers": ["Azure AI Foundry hub", "AI Search S2 with vectors", "Container Apps replicas", "Key Vault HSM"],
+      "method": "llm_estimate_v1",
+      "estimated_at": "2026-05-24T14:32:20Z"
+    },
+
+    "deployment": {
+      "azd_template": true,
+      "iac": ["bicep"],
+      "containers": true,
+      "serverless": false,
+      "one_click_url": null,
+      "estimated_deploy_minutes": 18,
+      "requires_quota": ["Azure OpenAI GPT-4o", "Azure AI Search", "AI Foundry hub"]
+    },
+
+    "eval_signals": {
+      "has_eval_folder": true,
+      "has_tests": true,
+      "has_safety_layer": true,
+      "has_observability": true,
+      "has_load_tests": true,
+      "fai_eval_score": 0.91,
+      "fai_eval_run_id": "eval-2026-05-24-001"
+    },
+
+    "fai_compatible": "full",
+    "fai_compatibility_report": {
+      "has_fai_manifest": true,
+      "has_dot_github_agentic_os": true,
+      "primitives_present": ["agents", "skills", "prompts", "instructions", "hooks", "workflows", "evals"],
+      "missing_primitives": [],
+      "upgrade_path": null
+    },
+
+    "pollinates": [
+      {
+        "play_id": "01",
+        "play_slug": "01-enterprise-rag",
+        "relation": "provides_infra",
+        "confidence": 1.00,
+        "reason": "This accelerator IS the production infrastructure layer for Play 01.",
+        "source": "manual"
+      }
+    ],
+
+    "origin": "cultivated",
+
+    "composed_from": [
+      {
+        "module_path": "avm/ptn/ai-ml/ai-foundry",
+        "version": "0.4.2",
+        "upstream_url": "https://github.com/Azure/bicep-registry-modules/tree/main/avm/ptn/ai-ml/ai-foundry",
+        "integrity_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "registry": "avm-bicep",
+        "role": "pattern"
+      },
+      {
+        "module_path": "avm/res/cognitive-services/account",
+        "version": "0.10.1",
+        "upstream_url": "https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/cognitive-services/account",
+        "integrity_sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "registry": "avm-bicep",
+        "role": "resource"
+      },
+      {
+        "module_path": "avm/res/search/search-service",
+        "version": "0.8.3",
+        "upstream_url": "https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/search/search-service",
+        "integrity_sha256": "60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c752",
+        "registry": "avm-bicep",
+        "role": "resource"
+      },
+      {
+        "module_path": "avm/res/app/container-app",
+        "version": "0.11.0",
+        "upstream_url": "https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/app/container-app",
+        "integrity_sha256": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
+        "registry": "avm-bicep",
+        "role": "resource"
+      },
+      {
+        "module_path": "avm/res/key-vault/vault",
+        "version": "0.9.2",
+        "upstream_url": "https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/key-vault/vault",
+        "integrity_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "registry": "avm-bicep",
+        "role": "resource"
+      }
+    ],
+    "composition_method": "frootai-greenhouse/v1.0",
+    "composed_at": "2026-05-24T14:32:18Z",
+    "composed_by_agent": "builder-v3.2",
+    "gold_iac": false,
+    "gold_iac_reason": null,
+
+    "provenance": {
+      "harvested_at": "2026-05-24T14:32:18Z",
+      "harvested_by": "fai-greenhouse-cultivator/v1.0",
+      "source": "frootai-greenhouse",
+      "first_party": true,
+      "enriched_by": [
+        { "step": "module_selection", "model": "gpt-4o-2024-08-06", "at": "2026-05-24T14:31:48Z" },
+        { "step": "composition", "model": "gpt-4o-2024-08-06", "at": "2026-05-24T14:32:02Z" },
+        { "step": "waf_compliance_check", "model": "deterministic", "at": "2026-05-24T14:32:14Z" },
+        { "step": "cost_estimation", "model": "deterministic", "at": "2026-05-24T14:32:17Z" }
+      ],
+      "overrides_applied": []
+    },
+
+    "search_keywords": ["cultivated", "rag", "azure", "foundry", "avm", "verified"],
+    "readme_excerpt": "Production-grade RAG on Azure AI Foundry, composed from Azure Verified Modules. This accelerator was cultivated by FrootAI's Builder agent — every Bicep module is pinned to a Microsoft-signed upstream version with integrity hashes recorded in provenance.composed_from[].",
+    "semantic_embedding_id": null
+  },
+
+  {
+    "$schema": "https://frootai.dev/schemas/fai-accelerator.v1.json",
+    "schema_version": "1.0.0",
+
+    "id": "frootai__solution-play-21-baseline-infra",
+    "name": "FrootAI Solution Play 21 — Agentic RAG Baseline Infra",
+    "slug": "solution-play-21-baseline-infra",
+    "variety": "azure",
+    "owner": "frootai",
+    "owner_type": "frootai",
+    "repo_url": "https://github.com/frootai/solution-play-21-baseline-infra",
+    "default_branch": "main",
+    "homepage": null,
+
+    "tagline": "Hand-authored baseline infrastructure for Solution Play 21 (Agentic RAG). Legacy — to be re-cultivated in Phase A11.27.",
+    "description": "The original infrastructure layer for Solution Play 21 (Agentic RAG), hand-authored by FrootAI before the FAI Greenhouse cultivation pipeline existed. Kept as origin=first_party for historical accuracy and to surface the contrast with the cultivated equivalent. Will be re-cultivated via the Greenhouse pipeline in Phase [A11.27] (batch re-cultivation of all 101 existing Plays).",
+    "categories": ["rag", "agent", "infra"],
+    "tech": ["Azure OpenAI", "Container Apps", "Cosmos DB", "Bicep"],
+    "languages": ["Bicep", "Python"],
+    "tags": ["first-party", "legacy", "pending-recultivation"],
+
+    "froot_layer": "O2",
+    "froot_layer_confidence": 1.0,
+    "froot_layer_reason": "Pure Operations — infrastructure baseline for an agentic Play.",
+
+    "ripeness": "Bearing",
+    "ripeness_signals": {
+      "stars": 0,
+      "forks": 0,
+      "contributors": 3,
+      "open_issues": 0,
+      "closed_issues_30d": 0,
+      "commit_velocity_30d": 0,
+      "has_releases": true,
+      "latest_release": "v0.7.0"
+    },
+    "season": "Autumn",
+    "season_reason": "Stable, in production use by Solution Play 21, no commits in 90 days — flagged for Phase A11.27 re-cultivation.",
+    "first_seen": "2025-09-14T00:00:00Z",
+    "last_commit": "2026-02-11T16:22:00Z",
+    "last_release": "2026-02-11T16:22:00Z",
+
+    "license": "Apache-2.0",
+    "license_url": "https://github.com/frootai/solution-play-21-baseline-infra/blob/main/LICENSE",
+    "trust_badges": ["frootai_compatible_full", "production_ready"],
+    "code_of_conduct": true,
+    "security_md": true,
+
+    "cost_band": "$150-700/mo",
+    "cost_estimate": {
+      "currency": "EUR",
+      "monthly_dev_low": 40,
+      "monthly_dev_high": 150,
+      "monthly_prod_low": 150,
+      "monthly_prod_high": 700,
+      "drivers": ["Azure OpenAI gpt-4o tokens", "Cosmos DB RU/s", "Container Apps replicas"],
+      "method": "manual_override",
+      "estimated_at": "2026-02-11T16:25:00Z"
+    },
+
+    "deployment": {
+      "azd_template": true,
+      "iac": ["bicep"],
+      "containers": true,
+      "serverless": false,
+      "one_click_url": null,
+      "estimated_deploy_minutes": 12,
+      "requires_quota": ["Azure OpenAI GPT-4o"]
+    },
+
+    "eval_signals": {
+      "has_eval_folder": true,
+      "has_tests": true,
+      "has_safety_layer": false,
+      "has_observability": true,
+      "has_load_tests": false,
+      "fai_eval_score": 0.78,
+      "fai_eval_run_id": "eval-2026-02-11-021"
+    },
+
+    "fai_compatible": "full",
+    "fai_compatibility_report": {
+      "has_fai_manifest": true,
+      "has_dot_github_agentic_os": true,
+      "primitives_present": ["agents", "skills", "prompts", "instructions", "hooks", "workflows", "evals"],
+      "missing_primitives": [],
+      "upgrade_path": null
+    },
+
+    "pollinates": [
+      {
+        "play_id": "21",
+        "play_slug": "21-agentic-rag",
+        "relation": "provides_infra",
+        "confidence": 1.0,
+        "reason": "This IS the infrastructure layer of Play 21.",
+        "source": "manual"
+      }
+    ],
+
+    "origin": "first_party",
+
+    "provenance": {
+      "harvested_at": "2025-09-14T00:00:00Z",
+      "harvested_by": "fai-orchard-harvester/v1.0",
+      "source": "manual-seed",
+      "first_party": true,
+      "enriched_by": [],
+      "overrides_applied": []
+    },
+
+    "search_keywords": ["first-party", "frootai", "play-21", "agentic-rag", "legacy"],
+    "readme_excerpt": "Baseline infrastructure for FrootAI Solution Play 21 (Agentic RAG). Hand-authored before the FAI Greenhouse pipeline existed. Marked for re-cultivation in Phase A11.27.",
+    "semantic_embedding_id": null
+  }
+]

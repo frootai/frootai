@@ -1,0 +1,217 @@
+---
+title: "FAI Orchard — Agent Skills Marketplace"
+description: "Discover, publish, install, and rate agent skills that extend FrootAI MCP servers with new capabilities."
+icon: "🧩"
+order: 6
+tags: ["orchard", "skills", "marketplace", "mcp", "agents", "enterprise", "v1.1"]
+---
+
+## At a glance
+
+The FrootAI Agent Skills Marketplace is a curated registry of composable
+capabilities that extend FrootAI MCP servers. Each skill is a versioned,
+schema-validated package that ships with:
+
+- A **skill manifest** (`skill.v1.json`) declaring dependencies, MCP capabilities,
+  entitlements, and publisher identity.
+- A **verification gate** that rejects third-party deps outside the v1.0 allowlist,
+  unknown capabilities, and unknown entitlements.
+- Optional **Sigstore signed-publisher attestation** for verified publishers.
+- **Ratings + download counters** so the community can surface high-quality skills.
+
+Skills are accessible via 2 MCP tools:
+
+| Tool | Tier | What it does |
+|---|---|---|
+| `orchard.list_skills` | free | Paginated listing of skills sorted by downloads |
+| `orchard.show_skill` | free | Full Markdown rendering of a skill manifest |
+
+And via 2 REST endpoints:
+
+| Endpoint | Method | Response |
+|---|---|---|
+| `/api/skills/list` | GET | `{ items, next_cursor, total }` — cursor-paginated |
+| `/api/skills/get/:skill_id` | GET | Canonical skill manifest + attestation URL |
+
+**Tier gating**: free tier sees the top 100 skills by downloads. Pro/Team sees
+top 500. Business/Enterprise sees everything.
+
+---
+
+## Publishing a skill
+
+### 1. Author the skill manifest
+
+Create a `skill-manifest.json` file conforming to the
+[skill.v1.json schema](../../frootai-core/marketplace/schemas/skill.v1.json):
+
+```json
+{
+  "schema_version": 1,
+  "skill_id": "your-org/your-skill",
+  "version": "1.0.0",
+  "display_name": "Your Skill Name",
+  "description": "What the skill does (10-1000 chars).",
+  "runtime": "npm",
+  "dependencies": [
+    { "name": "@frootai/mcp-orchard", "version": "^1.0.0" }
+  ],
+  "capabilities": ["tools/call"],
+  "entitlements_required": [],
+  "publisher": {
+    "name": "Your Org",
+    "contact": "you@your-org.dev",
+    "signed_attestation_url": null,
+    "homepage": "https://your-org.dev"
+  },
+  "license": "MIT",
+  "tags": ["your-tag"]
+}
+```
+
+**Required fields**: `schema_version`, `skill_id` (namespace/name format),
+`version` (semver), `display_name`, `description`, `runtime` (npm/pypi/wasm),
+`dependencies`, `capabilities`, `entitlements_required`, `publisher` (name + contact).
+
+### 2. Validate locally
+
+```bash
+node scripts/orchard/validate-skill-manifest.js --file skill-manifest.json --json
+```
+
+### 3. Pass the verification gate
+
+The verification gate (A11.15) enforces:
+
+- **Dependencies**: only `@frootai/*` and `frootai-*` prefixed packages allowed
+  (third-party deps must be peer dependencies in your package.json, not in the manifest).
+- **Capabilities**: must be from the frozen MCP capability list (`tools/call`,
+  `tools/list`, `resources/read`, `resources/list`, `resources/subscribe`,
+  `prompts/get`, `prompts/list`, `logging/setLevel`, `completion/complete`).
+- **Entitlements**: must reference known entitlements (`upgrade-to-play`,
+  `bushel-sync`, `telemetry-dash`, `sso-saml`, `audit-export`, `cross-region:read`).
+- **Attestation**: verified publishers must provide a valid `https://` Sigstore
+  attestation URL.
+
+### 4. Publish
+
+```bash
+# Without signing (community contributor)
+node scripts/orchard/skill-publish.js \
+  --manifest skill-manifest.json \
+  --reason "Initial publish of my-skill v1.0.0"
+
+# With Sigstore signing (verified publisher)
+node scripts/orchard/skill-publish.js \
+  --manifest skill-manifest.json \
+  --reason "Signed publish of my-skill v1.0.0" \
+  --sign
+```
+
+The `--sign` flag generates a Sigstore keyless attestation via
+`gh attestation sign --predicate-type https://frootai.dev/skills/publish/v1`.
+
+---
+
+## Installing a skill
+
+### Via MCP client (Cursor / Claude Desktop / etc.)
+
+Ask the AI to list and install skills:
+
+> "List available FrootAI skills"
+> → The agent calls `orchard.list_skills` and shows a table.
+
+> "Show me the bicep-avm-compose skill"
+> → The agent calls `orchard.show_skill("frootai/bicep-avm-compose")`.
+
+### Via REST API
+
+```bash
+# List skills (paginated)
+curl -s https://frootai.dev/api/skills/list?page_size=10 | jq .
+
+# Get a specific skill
+curl -s https://frootai.dev/api/skills/get/frootai/bicep-avm-compose | jq .
+```
+
+---
+
+## Rating + reviewing
+
+### Rating a skill
+
+Users can rate skills 1-5 stars. Ratings are:
+
+- **Integer only**: 1, 2, 3, 4, or 5.
+- **One per day**: each (user, skill, day) tuple gets at most one rating.
+  You can update your rating the next day.
+- **Recorded in the audit log**: every rating emits a `skill_rate` audit event
+  with `{ skill_id, rating, day }`.
+
+### Downloads counter
+
+Every skill install emits a `skill_install` audit event. The download count:
+
+- Determines **sort order** in `orchard.list_skills` (descending).
+- Determines **free-tier visibility**: the top 100 skills by downloads are
+  visible to free-tier users.
+- Is **cached for 6 hours** in the top-skills index.
+
+### Reviewing guidelines
+
+When rating a skill, consider:
+
+1. **Does it work?** Install → use → does it produce correct results?
+2. **Is it well-documented?** Does the manifest description explain the use case?
+3. **Is it maintained?** Check the publisher's homepage + repository.
+4. **Is it safe?** Does it only declare `@frootai/*` dependencies?
+
+---
+
+## Skill marketplace policies
+
+### Dependency allowlist
+
+At v1.1, skill manifests may only declare `@frootai/*` or `frootai-*` prefixed
+packages as runtime dependencies. This restricts supply-chain risk to packages
+published by FrootAI. Third-party dependencies must be declared as
+`peerDependencies` in the skill's own `package.json` — the marketplace does
+NOT auto-install them.
+
+### Capability freeze
+
+Skills may only declare capabilities from the frozen MCP capability list.
+New capabilities are added when the MCP spec evolves. Unknown capabilities
+are rejected at the verification gate.
+
+### Entitlement enforcement
+
+Skills that require paid-tier entitlements (e.g. `upgrade-to-play`) are only
+accessible to users with the corresponding tier. The entitlements resolver
+checks at runtime — the skill manifest's `entitlements_required` array is
+informational for the marketplace listing.
+
+### Publisher verification
+
+Verified publishers must provide a Sigstore signed-publisher attestation URL
+in their manifest. Community contributors may publish without attestation
+(their skills appear without a "verified" badge).
+
+### Content moderation
+
+Skills are reviewed by the FrootAI team before appearing in the marketplace.
+The verification gate performs automated checks; human review covers:
+
+- Skill description accuracy
+- Publisher legitimacy
+- No malicious behavior in the skill's handler code
+
+---
+
+## See also
+
+- [Getting started](./getting-started) — 5-minute quickstart
+- [MCP tools reference](../mcp/orchard) — full tool documentation
+- [Enterprise guide](../enterprise/orchard) — SSO, MFA, audit export
+- [skill.v1.json schema](../../frootai-core/marketplace/schemas/skill.v1.json) — JSON Schema

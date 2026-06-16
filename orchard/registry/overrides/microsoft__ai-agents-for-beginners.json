@@ -1,0 +1,23 @@
+{
+  "id": "microsoft__ai-agents-for-beginners",
+  "overrides": {
+    "tagline": "10-lesson curriculum that teaches multi-agent patterns hands-on with Azure OpenAI + Semantic Kernel + AutoGen",
+    "categories": ["agent", "multi-agent", "chat"],
+    "froot_layer": "O1",
+    "trust_badges": [
+      "microsoft_official",
+      "production_ready"
+    ],
+    "tags": [
+      "curriculum",
+      "beginner-friendly",
+      "lesson-series",
+      "semantic-kernel",
+      "autogen"
+    ]
+  },
+  "reason": "Auto-classifier picked only 'chat' from the README's chatbot examples and missed the primary intent. Repo is a 10-lesson curriculum (lessons 01..10 each teach a different agent pattern) so 'agent' + 'multi-agent' are the actual categories. 'production_ready' justified by the fully-pinned versions, reproducible notebooks, and Microsoft Learn cross-publication.",
+  "submitted_by": "github:pavle",
+  "reviewed_by": "@frootai/core",
+  "submitted_at": "2026-05-25T12:00:00Z"
+}

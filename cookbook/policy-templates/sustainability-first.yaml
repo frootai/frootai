@@ -1,0 +1,101 @@
+# sustainability-first.yaml — Carbon-conscious / sustainability-pinned policy
+#
+# Profile: company with measurable scope-3 emission targets (CDP A-list,
+# Science-Based Targets initiative member). Regions restricted to those
+# Microsoft has published as 100% renewable-energy-matched (Northern Europe
+# / France Central / Sweden Central / Switzerland North / Canada Central);
+# small SKUs only (energy / Watt ratio matters); tags carry sustainability
+# metadata so cost+carbon engine (V8) can attribute footprint per workload.
+---
+spec_version: 1
+company: "Acme Sustainable Co."
+
+regions:
+  - northeurope
+  - francecentral
+  - swedencentral
+  - switzerlandnorth
+  - canadacentral
+
+models:
+  allow:
+    - gpt-4o-mini
+    - text-embedding-3-small
+  deny:
+    - gpt-4o
+    - gpt-4
+    - claude-3-opus
+
+skus:
+  allow:
+    - Standard_B2s
+    - Standard_D2s_v5
+    - Standard_D4s_v5
+    - Standard_E2s_v5
+
+naming:
+  prefix: green
+  suffix: eco
+  separator: "-"
+  max_length: 28
+
+tags:
+  required:
+    - env
+    - costcenter
+    - sbti_scope
+    - carbon_owner
+    - renewable_certified
+  values:
+    env: "^(prod|staging|dev)$"
+    sbti_scope: "^(scope1|scope2|scope3-upstream|scope3-downstream)$"
+    renewable_certified: "^(true|false)$"
+
+network:
+  posture: hybrid
+  vnet_required: true
+  private_endpoint_required: false
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: blocked
+
+iac:
+  format: bicep
+  modular_emit: true
+  gold_allowed: false
+
+encryption:
+  cmk_required: false
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: small
+  tier_default: standard
+
+custom_checks:
+  - id: CUSTOM-GREEN-001
+    severity: high
+    title: Every taggable resource must declare its SBTi scope
+    description: |
+      Sustainability accounting requires every infrastructure resource to
+      carry an sbti_scope tag so Scope-3 footprint can be apportioned per
+      workload by the V8 Cost+Carbon Engine.
+    expression: "resource.tags.sbti_scope in ['scope1','scope2','scope3-upstream','scope3-downstream']"
+  - id: CUSTOM-GREEN-002
+    severity: medium
+    title: Storage accounts should use cool / archive tier when applicable
+    description: |
+      Hot-tier storage carries ~3x the embodied carbon of cool-tier on a
+      per-month basis. Recommend cool / archive for any storage tagged
+      with access pattern 'infrequent' or 'archive'.
+    expression: "resource.type=='Microsoft.Storage/storageAccounts' and resource.tags.access_pattern in ['cool','archive']"

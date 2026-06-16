@@ -1,0 +1,85 @@
+# mid-market-eu.yaml — Mid-market EU enterprise (~500-5000 employees)
+#
+# Profile: multi-team Azure landing zone, full EU coverage incl. Switzerland,
+# CMK encryption everywhere, modular emit so platform team can split per-team
+# stacks, both Bicep + Terraform formats emitted so federated teams can choose,
+# regular contractor presence (Entra guest accounts allowed under review).
+---
+spec_version: 1
+company: "Acme Holdings AG (EU mid-market)"
+
+regions:
+  - westeurope
+  - northeurope
+  - switzerlandnorth
+  - francecentral
+
+models:
+  allow:
+    - gpt-4o
+    - gpt-4o-mini
+    - text-embedding-3-large
+  deny:
+    - text-davinci-003
+    - gpt-3.5-turbo
+
+skus:
+  allow:
+    - Standard_D2s_v3
+    - Standard_D4s_v3
+    - Standard_D8s_v3
+    - Standard_D16s_v3
+    - Standard_E4s_v3
+    - Standard_E8s_v3
+
+naming:
+  prefix: ach
+  suffix: lz
+  separator: "-"
+  max_length: 30
+
+tags:
+  required:
+    - env
+    - bu
+    - costcenter
+    - dataclassification
+    - owner
+  values:
+    env: "^(prod|staging|qa|dev)$"
+    dataclassification: "^(public|internal|confidential|restricted)$"
+
+network:
+  posture: private
+  vnet_required: true
+  private_endpoint_required: true
+  dns_zone_overrides:
+    "Microsoft.Storage/storageAccounts": "privatelink.blob.core.windows.net"
+    "Microsoft.KeyVault/vaults": "privatelink.vaultcore.azure.net"
+    "Microsoft.Sql/servers": "privatelink.database.windows.net"
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: review-required
+
+iac:
+  format: both
+  modular_emit: true
+  gold_allowed: false
+
+encryption:
+  cmk_required: true
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: large
+  tier_default: standard

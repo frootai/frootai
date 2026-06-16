@@ -1,0 +1,523 @@
+---
+title: "FAI Orchard MCP — Server Reference"
+description: "Model Context Protocol (MCP) server for the FrootAI Orchard catalog — 5 tools (search / show / install_command / find_play / list_pollinations) over stdio + Streamable HTTP, byte-equal across @frootai/mcp-orchard (npm) and frootai-mcp-orchard (PyPI)."
+icon: "🧰"
+order: 40
+tags: ["mcp", "orchard", "cursor", "claude", "chatgpt", "continue", "cline", "tool-reference"]
+---
+
+# FAI Orchard MCP — Server Reference
+
+`@frootai/mcp-orchard` (npm) and `frootai-mcp-orchard` (PyPI) are **byte-equal Model Context Protocol servers** that expose the FrootAI Orchard catalog as 5 natural-language tools any MCP-aware AI agent can call. This page is the **full reference** for the wire protocol, the 5 tools, the auth gate, transports, and the cross-runtime conformance guarantee.
+
+- **Free** to call `orchard.search` · `orchard.show` · `orchard.install_command` · `orchard.list_pollinations` (no sign-in)
+- **Pro entitlement** required for `orchard.find_play` (`upgrade-to-play` entitlement)
+- **OPT-IN telemetry**, default OFF, with no-PII enforcement at the emitter
+
+> **Two runtimes, one contract** — pick `@frootai/mcp-orchard` (Node) or `frootai-mcp-orchard` (Python) based on your machine. Same MCP spec, same tools, same Markdown output. Byte-equality enforced per release by the cross-MCP conformance certificate (see [Cross-runtime portability](#cross-runtime-portability)).
+
+> All examples assume MCP spec **2025-03-26**. Install instructions for Cursor / Claude Desktop / ChatGPT MCP / Continue / Cline live at [`/docs/mcp/install-clients`](./install-clients).
+
+---
+
+## At a glance
+
+| Surface | What it does | Sign-in? |
+|---|---|---|
+| `tools/list` (MCP) | Enumerate the 5 registered tools | no |
+| `orchard.search` | Search the catalog by query + filter | no |
+| `orchard.show` | Fetch full detail for a single accelerator | no |
+| `orchard.install_command` | Return the canonical install one-liner | no |
+| `orchard.find_play` | Search Play recipes (paid) | **Pro+** |
+| `orchard.list_pollinations` | Cross-Variety equivalents (the "see also" graph) | no |
+| `initialize` (MCP handshake) | Capability negotiation + clientInfo capture | no |
+| `ping` (MCP keep-alive) | Returns empty result `{}` | no |
+| `tool_invoked` (telemetry) | Opt-in event with `cmd: "mcp.<tool>"` + `client: <name>` | requires opt-in |
+
+**Wire format**: JSON-RPC 2.0 over stdio (line-delimited) or Streamable HTTP (POST `/mcp` returning `application/json`). Both runtimes implement MCP spec `2025-03-26` with byte-equal responses for identical inputs.
+
+---
+
+## Install
+
+Both runtimes are zero-runtime-deps. Pick the one that fits your stack:
+
+### npm (`@frootai/mcp-orchard`)
+
+```bash
+# One-shot (Cursor / Claude Desktop / ChatGPT MCP / Continue / Cline use this form):
+npx -y @frootai/mcp-orchard@latest
+
+# Or install globally:
+npm install -g @frootai/mcp-orchard
+mcp-orchard --help
+```
+
+### PyPI (`frootai-mcp-orchard`)
+
+```bash
+# One-shot via uvx (recommended — matches `npx -y` ergonomics):
+uvx frootai-mcp-orchard[sdk]@latest
+
+# Or install with pip:
+pip install 'frootai-mcp-orchard[sdk]'
+mcp-orchard --help
+```
+
+The `[sdk]` extra also installs `frootai-orchard` (the underlying SDK that talks to the catalog). If you already have it pinned, you can drop the extra: `pip install frootai-mcp-orchard`.
+
+Both binaries are called `mcp-orchard`. See [`/docs/mcp/install-clients`](./install-clients) for per-client wiring snippets (Cursor, Claude Desktop, ChatGPT MCP, Continue, Cline, plus a raw stdio fallback).
+
+---
+
+## Quickstart
+
+The smallest end-to-end MCP session looks like this — send these 3 JSON-RPC messages over stdin (one per line):
+
+```jsonc
+// 1. Capability negotiation
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{
+  "protocolVersion":"2025-03-26",
+  "clientInfo":{"name":"my-app","version":"0.1.0"}
+}}
+
+// 2. Discover tools
+{"jsonrpc":"2.0","id":2,"method":"tools/list"}
+
+// 3. Call orchard.search
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{
+  "name":"orchard.search",
+  "arguments":{"query":"rag","where":"variety:azure"}
+}}
+```
+
+The server responds with one JSON-RPC envelope per request, terminated by `\n`. The `tools/call` response carries the canonical content shape:
+
+```jsonc
+{"jsonrpc":"2.0","id":3,"result":{
+  "content":[{"type":"text","text":"Top 3 match(es) for \"rag\" filtered by `variety:azure`:\n\n| Score | ID | Name | Variety | Tagline |\n|---|---|---|---|---|\n| 12 | `az1` | Azure RAG Starter | azure | Quickstart ... |"}],
+  "isError":false
+}}
+```
+
+> **Note**: in agent clients (Cursor, Claude, etc.) you never write JSON-RPC by hand — the client speaks the protocol on your behalf. The raw transport is documented here so partners building MCP clients can integrate against us.
+
+---
+
+## Tool reference
+
+Every tool returns an MCP `content[]` array. Text content is rendered as Markdown in the calling client. Errors arrive as `{content:[{type:"text",text:"Error: ..."}], isError:true}` for handler-level failures or as a JSON-RPC `error` envelope for protocol-level failures (unknown tool, auth-gate denial).
+
+### `orchard.search(query, where?, limit?)`
+
+Search the FrootAI Orchard catalog by free-text query plus an optional filter expression. Returns a Markdown table of the top-N results sorted by relevance score.
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | yes | Free-text search query. Empty string is an error. |
+| `where` | string | no | Filter expression (see [Filter expression language](#filter-expression-language)). |
+| `limit` | integer | no | Max results (default 10, max 50). |
+
+**Example call:**
+
+```jsonc
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{
+  "name":"orchard.search",
+  "arguments":{"query":"rag","where":"variety:azure AND trust_badge:eval_proven","limit":5}
+}}
+```
+
+**Tier:** free. **Error codes:** `tool_returned_is_error` (empty query), `tool_execution_error` (SDK throw).
+
+### `orchard.show(id)`
+
+Fetch full detail for a single fruit by canonical id OR URL slug. Falls back to an index scan on 404 so partners can pass either form.
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | yes | Canonical accelerator id or URL slug. |
+
+**Output shape**: Markdown summary with `# Name`, blockquote tagline, then backtick-wrapped fields for **ID**, **Slug**, **Variety**, **Ripeness**, **Season**, **License**, **Repo**, **Categories**, **Trust badges**, **Tags**, and pollination count.
+
+**Tier:** free. **Error codes:** `fruit_not_found` (unknown id), `tool_returned_is_error` (empty id).
+
+### `orchard.install_command(id, target?)`
+
+Generate the canonical bash one-liner to install a fruit. The CLI handles auth + entitlement gating + post-install hooks (`azd init`, `npm install`, `pip install`, `dotnet restore`).
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | yes | Canonical accelerator id or URL slug. |
+| `target` | string | no | Target directory (default `./<slug>`). |
+
+**Output shape**: Markdown with `## Install: <name>`, the bash one-liner inside a fenced code block, and a fallback `git clone --depth 1 <repo_url> <target>` for environments without the CLI.
+
+**Doctrine**: NEVER fabricates URLs. Only emits commands referencing the fruit's real `repo_url` and `slug`.
+
+**Tier:** free. **Error codes:** `fruit_not_found`, `tool_returned_is_error` (empty id).
+
+### `orchard.find_play(query, fruit_id?, limit?)` **— paid**
+
+Search Play recipes by description. Plays are step-by-step "drop this on top of a free accelerator to add X capability" recipes (e.g. add Azure AI Search vector retrieval to any Azure OpenAI chatbot).
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | yes | Free-text search across play name + description + capability tags. |
+| `fruit_id` | string | no | Restrict to plays compatible with this specific accelerator. |
+| `limit` | integer | no | Max plays (default 5, max 20). |
+
+**Tier:** **Pro+** (`requires_entitlement: "upgrade-to-play"`). Anonymous + Free-tier callers get a JSON-RPC error with code `-32004` (`ENTITLEMENT_REQUIRED`) and a friendly message pointing them at https://frootai.dev/upgrade.
+
+**Output shape**: Markdown table with columns Play / Fruit / Relation / Source / Install command (the install command is `frootai orchard install <fruit_id> --upgrade-to-play <play_id>` ready to copy).
+
+### `orchard.list_pollinations(fruit_id)`
+
+Return the cross-Variety "see also" graph for a single fruit. Use case: *"what's the GCP equivalent of this Azure RAG starter?"*
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `fruit_id` | string | yes | Canonical accelerator id or URL slug. |
+
+**Output shape**: Markdown table with columns Play ID / Slug / Relation / Source. When the fruit has no pollinations, the server returns a friendly message rather than `isError:true`.
+
+**Tier:** free. **Error codes:** `fruit_not_found`, `tool_returned_is_error` (empty `fruit_id`).
+
+---
+
+## Wire protocol
+
+Both runtimes implement [MCP spec 2025-03-26](https://spec.modelcontextprotocol.io/specification/2025-03-26/) over [JSON-RPC 2.0](https://www.jsonrpc.org/specification).
+
+### Supported methods
+
+| Method | Direction | Purpose |
+|---|---|---|
+| `initialize` | client → server | Capability negotiation + `clientInfo` capture |
+| `initialized` / `notifications/initialized` | client → server (notification) | Handshake-complete signal — no response |
+| `tools/list` | client → server | Enumerate registered tools |
+| `tools/call` | client → server | Invoke a tool with arguments |
+| `ping` | client → server | Keep-alive — returns `{}` |
+
+Calling `tools/list` or `tools/call` before `initialize` returns `INVALID_REQUEST` (-32600).
+
+### Error codes
+
+The server uses the standard JSON-RPC range plus the MCP server-error range (`-32000` to `-32099`):
+
+| Code | Constant | Meaning |
+|---|---|---|
+| `-32700` | `PARSE_ERROR` | Malformed JSON on the wire |
+| `-32600` | `INVALID_REQUEST` | Wrong envelope shape or method called out of order |
+| `-32601` | `METHOD_NOT_FOUND` | Method other than the 5 supported |
+| `-32602` | `INVALID_PARAMS` | Missing required param (e.g. `tools/call` without `name`) |
+| `-32603` | `INTERNAL_ERROR` | Server-side bug (should never reach a client) |
+| `-32001` | `TOOL_NOT_FOUND` | Unknown tool name in `tools/call` |
+| `-32002` | `TOOL_EXECUTION_ERROR` | Tool handler threw an unexpected exception |
+| `-32003` | `AUTH_REQUIRED` | Anonymous caller hit a tool needing auth |
+| `-32004` | `ENTITLEMENT_REQUIRED` | Signed-in caller missing the required entitlement |
+| `-32005` | `RATE_LIMITED` | Per-token rate limit hit (reserved; not currently emitted) |
+
+Errors carry an optional `data` field with `{tool, required}` for auth/entitlement denials so the LLM can explain what's needed.
+
+---
+
+## Auth + entitlement gate
+
+The server reuses the same auth contract as the [`frootai` CLI](../cli/orchard) and the [SDKs](../sdk/orchard-typescript). A single `frootai login` in your terminal authorizes all three surfaces transparently.
+
+### Token resolution order
+
+1. `FROOTAI_TOKEN` env var (highest priority — useful for CI)
+2. `~/.frootai/.token` (mode 0o600 on POSIX, written by `frootai login`)
+3. Anonymous (free tools still work)
+
+The server NEVER returns the raw access_token in any tool result, log line, or error envelope. Authentication state is opaque to MCP clients — they only see the JSON-RPC error envelope when a tool requires auth.
+
+### Tier-based gating
+
+| Tier | Rank | `orchard.find_play` |
+|---|---|---|
+| (anonymous) | — | denied with `AUTH_REQUIRED` |
+| free | 0 | denied with `ENTITLEMENT_REQUIRED` |
+| pro | 1 | ✅ allowed |
+| team | 2 | ✅ allowed |
+| business | 3 | ✅ allowed |
+| enterprise | 4 | ✅ allowed |
+
+The auth gate calls the SDK's `whoami()` once per paid-tool invocation. The SDK's built-in 60s in-process cache prevents disk thrashing.
+
+---
+
+## Transports
+
+### stdio (default)
+
+Line-delimited JSON-RPC over stdin/stdout. This is what Cursor, Claude Desktop, ChatGPT MCP, Continue, and Cline use. Each message is a single line of JSON terminated by `\n`. The server NEVER writes to stdout for anything except JSON-RPC — diagnostics go to stderr.
+
+```bash
+mcp-orchard          # stdio mode (default)
+```
+
+Notifications (messages without an `id` like `notifications/initialized`) produce no response.
+
+### Streamable HTTP
+
+Single endpoint at `/mcp` accepting POST with a JSON-RPC body. Health check at `GET /health` returns server info + capabilities. Wide-open CORS so browser-based MCP clients can call us.
+
+```bash
+mcp-orchard --http              # listen on 0.0.0.0:3000
+mcp-orchard --http --port 8080  # custom port
+```
+
+Defaults: `host=0.0.0.0`, `port=3000`, `path=/mcp`, `max body=1 MiB`.
+
+| Path | Method | Response |
+|---|---|---|
+| `/mcp` | POST | JSON-RPC envelope (200 even on `error` envelopes; 200 with `-32700` for parse errors; 413 if body > 1 MiB) |
+| `/mcp` | GET | 405 Method Not Allowed |
+| `/health` | GET | 200 `{ok: true, server, capabilities, endpoint, draining, in_flight}` |
+| `/health` | OPTIONS | 204 + CORS preflight headers |
+| `<anything else>` | POST | 404 Not Found |
+
+#### Graceful shutdown
+
+The HTTP transport tracks in-flight POSTs. Calling `closeGraceful({drainMs})` on the returned handle:
+
+- Flips an internal `draining` flag — new POSTs immediately receive `503 Service Unavailable` with `Retry-After: 5`.
+- Lets in-flight tool calls run to completion (no truncation).
+- `GET /health` keeps responding (with `draining: true` + `in_flight: <n>` fields) so orchestrators (Kubernetes / Nomad / ECS) can confirm liveness during the drain.
+- Resolves to `{drained, in_flight_remaining, waited_ms}` so operators can alert on under-budget drains.
+
+Default drain window is **15 s** (`DEFAULT_DRAIN_MS`). For self-hosted deployments, see the [Self-host guide](../enterprise/self-host).
+
+---
+
+## Cross-runtime portability
+
+The two runtimes produce **byte-equal tool results** for identical inputs. A query that returns 12 Markdown rows in `@frootai/mcp-orchard` returns the same 12 rows in `frootai-mcp-orchard`. The contract is enforced per release by the **cross-MCP conformance suite** (A7.23–A7.26):
+
+- A 27-entry canonical manifest at `scripts/orchard/lib/release/cross-mcp-manifest.js` enumerates one tool-call per (tool × input variation)
+- Dual-runtime runners embed each MCP server in-process with a shared stub SDK + dispatch every entry via `tools/call`
+- An orchestrator runs both runners and asserts `assert.deepStrictEqual` on every response envelope
+- A signed **conformance certificate** is uploaded per release at `artifacts/conformance/orchard-mcp-conformance.json` (`surface: "cross-mcp"`, distinct from the cross-SDK A6.28 cert)
+
+Partners verifying portability themselves can run:
+
+```bash
+node frootai-core/scripts/orchard/generate-mcp-certificate.js --stdout
+```
+
+The certificate carries a `manifest_fingerprint_sha256` so reviewers can diff certificates between releases to see exactly which contracts changed.
+
+### Picking a runtime
+
+| Constraint | Recommended runtime |
+|---|---|
+| Already have Node on the box | npm (`@frootai/mcp-orchard`) |
+| Already have Python / `uv` | PyPI (`frootai-mcp-orchard`) |
+| Want lowest cold-start | npm (Node 22 is faster than Python 3.13 for stdio loop) |
+| Embedding in an existing Python service | PyPI (avoid mixed-runtime ops) |
+| Want async generator iteration in handlers | npm (Python uses sync generators by design) |
+
+---
+
+## Telemetry (opt-in)
+
+OPT-IN. Default OFF. No PII. No tool arguments. No tool results.
+
+When you've opted in with `frootai telemetry on`, the server fires a `tool_invoked` event after every `tools/call` dispatch through the same `/api/telemetry` pipeline the CLI uses (A5.3 privacy-floor enforcement applies):
+
+```jsonc
+{
+  "event": "tool_invoked",
+  "cli_version": "mcp-orchard/1.0.0",
+  "ts": "2026-05-26T00:00:00.000Z",
+  "anon_id": "<machine-scoped uuid>",
+  "platform": "linux",
+  "props": {
+    "cmd": "mcp.orchard.search",
+    "client": "cursor",
+    "success": "true",
+    "ms_elapsed": "42",
+    "tier_class": "free",
+    "has_args": "true"
+  }
+}
+```
+
+### What we collect
+
+| Field | Allowed values | Why |
+|---|---|---|
+| `cmd` | `mcp.orchard.<tool>` | which tool the LLM picked |
+| `client` | `cursor` / `claude` / `chatgpt` / `continue` / `cline` / `other` | detected from MCP `clientInfo.name` |
+| `success` | `"true"` / `"false"` | did the tool return content or `isError:true`? |
+| `ms_elapsed` | integer string | end-to-end latency of the tool call |
+| `error_code` | code-name string | only on failure; reverse-mapped from MCP error codes |
+| `tier_class` | `"free"` / `"paid"` | which tier the tool belongs to |
+| `has_args` | `"true"` / `"false"` | boolean indicator — NEVER the values themselves |
+
+### What we explicitly DO NOT collect
+
+- Tool arguments (`query` strings, `fruit_id` values, `target` paths, etc.)
+- Tool result content (Markdown tables, fruit metadata, install commands)
+- User/org/account identifiers (sub, email, org_id)
+- Access tokens (raw OR redacted — the auth gate already redacts; the telemetry shim never sees the token)
+- `clientInfo.version` (could correlate with rare client builds — fingerprint risk)
+
+The scrubber lives in `npm-mcp/orchard/src/telemetry.js` / `python-mcp/orchard/frootai_mcp_orchard/telemetry.py` and **drops every prop key not in the allow-listed `MCP_PROP_KEYS` set** even if a future engineer accidentally passes one in.
+
+### How to opt in / opt out
+
+```bash
+frootai telemetry on              # opt in (writes ~/.frootai/config.json)
+frootai telemetry status --json   # show exactly what would be sent
+frootai telemetry off             # opt out
+frootai telemetry reset           # rotate anonymous id
+```
+
+The `DO_NOT_TRACK=1` env var overrides any opt-in setting and forces silent no-op.
+
+### Dashboard
+
+Operators can aggregate the JSONL segments with the bundled CLI:
+
+```bash
+node frootai-core/scripts/orchard/mcp-telemetry-dashboard.js \
+  --dir /path/to/event-store \
+  --region all \
+  --start 2026-05-01 --end 2026-05-31 \
+  --top-n 10
+```
+
+The output includes 4 leaderboards including the canonical *"Which client uses us most"* metric.
+
+---
+
+## Environment variables
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `FROOTAI_TOKEN` | (unset) | Override the `~/.frootai/.token` file; useful in CI |
+| `DO_NOT_TRACK` | (unset) | Set to `1` to force telemetry off even when opted in |
+| `FROOTAI_API_BASE` | `https://frootai.dev/api` | Override the catalog backend (staging / on-prem) |
+| `FROOTAI_CDN_BASE` | `https://cdn.frootai.dev/orchard/v1` | Override the catalog CDN |
+
+The server NEVER reads `clientInfo.env` or any unknown env var — only the four above influence behavior.
+
+---
+
+## Worked examples
+
+### Example 1 — Find an Azure RAG accelerator with eval coverage
+
+User asks the agent: *"find me an Azure RAG starter with eval coverage."* The LLM calls:
+
+```jsonc
+{"name":"orchard.search","arguments":{
+  "query":"rag",
+  "where":"variety:azure AND trust_badge:eval_proven",
+  "limit":5
+}}
+```
+
+Returns a Markdown table the client renders inline. The user picks the top result and asks for details:
+
+```jsonc
+{"name":"orchard.show","arguments":{"id":"az1"}}
+```
+
+### Example 2 — Generate an install command
+
+After confirming the fruit, the LLM emits:
+
+```jsonc
+{"name":"orchard.install_command","arguments":{"id":"az1","target":"./my-rag-app"}}
+```
+
+The agent renders:
+
+```bash
+frootai orchard install azure-rag --target ./my-rag-app
+```
+
+The user copies the one-liner and runs it in their terminal.
+
+### Example 3 — Find a cross-cloud equivalent
+
+User asks: *"is there a GCP version of this?"*
+
+```jsonc
+{"name":"orchard.list_pollinations","arguments":{"fruit_id":"az1"}}
+```
+
+Returns the cross-Variety "see also" table linking to the equivalent GCP / AWS / OSS accelerators.
+
+### Example 4 — Search for a Play recipe (paid)
+
+User asks: *"how do I add vector search to this?"*
+
+```jsonc
+{"name":"orchard.find_play","arguments":{"query":"vector","fruit_id":"az1"}}
+```
+
+If the user is signed in with Pro+, the server returns the matching Play recipes + the install command. If anonymous, the LLM gets a JSON-RPC error with code `-32004` and a message explaining the upgrade path so it can suggest `frootai login` + `https://frootai.dev/upgrade`.
+
+### Example 5 — Streamable HTTP from a partner backend
+
+Self-hosted MCP partners can run the server in HTTP mode:
+
+```bash
+mcp-orchard --http --port 8080
+```
+
+Then POST JSON-RPC requests:
+
+```bash
+curl -sS -X POST http://localhost:8080/mcp \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","clientInfo":{"name":"my-backend"}}}'
+
+curl -sS -X POST http://localhost:8080/mcp \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"orchard.search","arguments":{"query":"rag"}}}'
+```
+
+The `/health` endpoint returns server info + capabilities for liveness probes.
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `tools/list` returns `-32600 "must call initialize first"` | Client skipped the handshake | Send `initialize` before any other method |
+| `tools/call` returns `-32001 "tool not registered"` | Typo in tool name | Verify against [`tools/list`](#wire-protocol) — names are `orchard.<lowercase>` |
+| `tools/call` returns `-32004 "requires Pro tier"` | Anonymous or Free-tier caller hit `orchard.find_play` | Run `frootai login` + upgrade at https://frootai.dev/upgrade |
+| `orchard.show` returns `isError:true "No accelerator found"` | Unknown id or slug | Use `orchard.search` first to find candidates |
+| HTTP transport returns 404 | Wrong path | Default endpoint is `POST /mcp` — check your client config |
+| HTTP transport returns 413 | Request body > 1 MiB | Tool arguments are tiny by design — investigate why your client is sending so much |
+| Server hangs after `initialize` | stdio handler not flushing | Ensure your client writes `\n` after each JSON message + reads line-by-line |
+| Telemetry says "opted_out" in `frootai telemetry status` | Opt-in flag not set in `~/.frootai/config.json` | Run `frootai telemetry on` if you want to participate |
+
+To capture wire traffic for debugging, run the CLI with `stderr` redirected to a file:
+
+```bash
+mcp-orchard 2>mcp-orchard.log
+```
+
+The server NEVER writes to stdout for anything except JSON-RPC responses, so stdout-stderr separation is reliable.
+
+---
+
+## See also
+
+- [`/docs/mcp/install-clients`](./install-clients) — copy-pasteable install snippets for the 5 supported MCP clients
+- [`/docs/mcp/listings`](./listings) — Smithery + Glama marketplace listings + verified-publisher badges
+- [`/docs/cli/orchard`](../cli/orchard) — the equivalent `frootai orchard` terminal commands
+- [`/docs/sdk/orchard-typescript`](../sdk/orchard-typescript) — the underlying TypeScript SDK
+- [`/docs/sdk/orchard-python`](../sdk/orchard-python) — the underlying Python SDK
+- [`@frootai/mcp-orchard` on npm](https://www.npmjs.com/package/@frootai/mcp-orchard)
+- [`frootai-mcp-orchard` on PyPI](https://pypi.org/project/frootai-mcp-orchard/)
+- [MCP spec 2025-03-26](https://spec.modelcontextprotocol.io/specification/2025-03-26/)
+- [JSON-RPC 2.0 spec](https://www.jsonrpc.org/specification)

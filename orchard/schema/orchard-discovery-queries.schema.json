@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/orchard-discovery-queries.v1.json",
+  "title": "FAI Orchard Discovery Queries",
+  "description": "The GitHub Search API queries the Orchard crawler runs to discover candidate Accelerators per Variety. Read by `discover.js` (Phase [A1.1]) alongside `seed-list.json`. Each query is independently disable-able. Schema is CC0-1.0.",
+  "$comment": "License: CC0-1.0 (Creative Commons Zero v1.0 Universal — public domain dedication). SPDX-License-Identifier: CC0-1.0. Authored by FrootAI 2026-05-25 as part of Phase [A0.26] of the FAI Orchard master plan.",
+
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": ["schema_version", "queries"],
+
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URL of the schema this document validates against."
+    },
+
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Strict semver. v1.0.0 is the initial release."
+    },
+
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC. When the file was last regenerated or hand-edited."
+    },
+
+    "generated_by": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "Pipeline identifier OR 'manual'. Examples: 'fai-orchard-discovery-curator/v1.0', 'manual'."
+    },
+
+    "comment": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Free-form note about this revision."
+    },
+
+    "queries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "description": "Ordered list of GitHub Search queries the crawler runs. Order is non-significant (each query produces a candidate set; union is deduped against seed-list.json in `[A1.2]`).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "variety", "query", "reason"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "minLength": 3,
+            "maxLength": 100,
+            "description": "Stable kebab-case identifier (so the crawler can log per-query results and we can disable individual queries by id)."
+          },
+          "variety": {
+            "type": "string",
+            "enum": ["azure", "gcp", "aws", "oss", "hybrid"],
+            "description": "Which Variety this query feeds. Matches the variety enum in fai-accelerator.schema.json."
+          },
+          "query": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 256,
+            "description": "GitHub Search API query string. See https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories"
+          },
+          "min_stars": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000,
+            "description": "Minimum stars filter applied after the query returns. Default 50 if absent."
+          },
+          "max_results": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "How many results to fetch per query. GitHub Search API caps at 1000. Default 100 if absent."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Why this query exists — what gap it covers vs the seed list."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "If false, the crawler skips this query. Default true."
+          },
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 UTC. When this query was added to the registry."
+          }
+        }
+      }
+    }
+  }
+}

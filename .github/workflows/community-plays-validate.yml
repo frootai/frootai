@@ -1,0 +1,156 @@
+name: Community Solution Play — Auto-Validate
+
+# ──────────────────────────────────────────────────────────────────────────────
+# [H11.21] Auto-validate community Solution Play PRs.
+#
+# Triggers on PR open/sync against any path under
+# `orchard/community-plays/**`. For each play subdirectory the PR touches:
+#   1. Parse `fai-manifest.json`
+#   2. Collect the file list under the play dir
+#   3. Run `validateCommunityPr(manifest, {files})` from
+#      `cli/commands/release/community-pr-validate.js`
+#   4. Post a PR comment with the result (replaces prior bot comment)
+#   5. Fail the check when errors > 0; warnings only → pass
+#
+# The validator lib is pulled from a sibling-repo path
+# (`../frootai-core/cli/commands/release/community-pr-validate.js`) so this
+# workflow assumes the founder maintains both repos under one parent dir
+# during CI. Real implementation will be a thin shim that npm-installs
+# the validator + invokes it — kept simple here to match H11.20's
+# "ship the structure, defer the automation" doctrine.
+# ──────────────────────────────────────────────────────────────────────────────
+
+on:
+  pull_request:
+    paths:
+      - "orchard/community-plays/**"
+  workflow_dispatch:
+    inputs:
+      play_dir:
+        description: "Play directory (relative to repo root)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: community-play-validate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate community plays
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # ── Discover changed play dirs ────────────────────────────────────
+      - name: List touched play directories
+        id: list_plays
+        run: |
+          # Diff against base ref to find which play dirs are touched.
+          BASE_SHA="${{ github.event.pull_request.base.sha || github.event.before }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          CHANGED_PLAYS=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" \
+            | grep -E '^orchard/community-plays/[^/]+/' \
+            | awk -F/ '{ print $1 "/" $2 "/" $3 }' \
+            | sort -u || true)
+          if [ -z "$CHANGED_PLAYS" ] && [ -n "${{ inputs.play_dir }}" ]; then
+            CHANGED_PLAYS="${{ inputs.play_dir }}"
+          fi
+          if [ -z "$CHANGED_PLAYS" ]; then
+            echo "no_plays=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::No community play directories changed; skipping validation."
+            exit 0
+          fi
+          # Save as multi-line output
+          {
+            echo "play_dirs<<EOF"
+            echo "$CHANGED_PLAYS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── Install validator (sibling repo) ────────────────────────────
+      - name: Install validator from frootai-core
+        if: steps.list_plays.outputs.no_plays != 'true'
+        run: |
+          # The validator lib lives in the frootai-core sibling repo.
+          # In CI we clone it shallow. In a multi-repo monorepo setup the
+          # path would be a workspace-relative require.
+          git clone --depth 1 https://github.com/frootai/frootai-core.git "$RUNNER_TEMP/frootai-core"
+
+      # ── Run validator per play ──────────────────────────────────────
+      - name: Validate each touched play
+        if: steps.list_plays.outputs.no_plays != 'true'
+        id: run_validator
+        env:
+          PLAY_DIRS: ${{ steps.list_plays.outputs.play_dirs }}
+        run: |
+          set -euo pipefail
+          OVERALL_OK="true"
+          : > "$RUNNER_TEMP/pr-comment.md"
+          while IFS= read -r play_dir; do
+            [ -z "$play_dir" ] && continue
+            echo "::group::Validating $play_dir"
+            MANIFEST="$play_dir/fai-manifest.json"
+            if [ ! -f "$MANIFEST" ]; then
+              echo "::error::Missing $MANIFEST"
+              OVERALL_OK="false"
+              echo "## ❌ $play_dir" >> "$RUNNER_TEMP/pr-comment.md"
+              echo "" >> "$RUNNER_TEMP/pr-comment.md"
+              echo "Missing required \`fai-manifest.json\` at the play root." >> "$RUNNER_TEMP/pr-comment.md"
+              echo "" >> "$RUNNER_TEMP/pr-comment.md"
+              echo "::endgroup::"
+              continue
+            fi
+            # Files: list every relative path under the play dir
+            FILE_LIST=$(cd "$play_dir" && find . -type f | sed 's|^\./||' | jq -R . | jq -s .)
+            MANIFEST_JSON=$(cat "$MANIFEST")
+            PLAY_DIR_REL="$play_dir" \
+            MANIFEST_JSON="$MANIFEST_JSON" \
+            FILE_LIST="$FILE_LIST" \
+            node -e '
+              const path = require("node:path");
+              const validatorPath = path.join(process.env.RUNNER_TEMP, "frootai-core", "cli", "commands", "release", "community-pr-validate.js");
+              const lib = require(validatorPath);
+              const manifest = JSON.parse(process.env.MANIFEST_JSON);
+              const files = JSON.parse(process.env.FILE_LIST);
+              const result = lib.validateCommunityPr(manifest, { files });
+              const md = lib.renderPrComment(result);
+              const fs = require("node:fs");
+              fs.appendFileSync(process.env.RUNNER_TEMP + "/pr-comment.md", "## " + (result.ok ? "✅" : "❌") + " " + process.env.PLAY_DIR_REL + "\n\n" + md + "\n\n---\n\n");
+              if (!result.ok) {
+                console.error("Validation failed for " + process.env.PLAY_DIR_REL + ": " + result.errors.length + " error(s)");
+                process.exit(1);
+              }
+            ' || OVERALL_OK="false"
+            echo "::endgroup::"
+          done <<< "$PLAY_DIRS"
+          echo "overall_ok=$OVERALL_OK" >> "$GITHUB_OUTPUT"
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      # ── Post PR comment ──────────────────────────────────────────────
+      - name: Post PR comment
+        if: always() && steps.list_plays.outputs.no_plays != 'true' && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: community-play-validator
+          path: ${{ runner.temp }}/pr-comment.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Fail the check when any play failed ─────────────────────────
+      - name: Enforce validation result
+        if: steps.list_plays.outputs.no_plays != 'true' && steps.run_validator.outputs.overall_ok == 'false'
+        run: |
+          echo "::error::One or more community-play validations failed; see PR comment for details."
+          exit 1

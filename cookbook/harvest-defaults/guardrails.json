@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "pwsh -NoProfile -Command \"Write-Output ((@{systemMessage='You are in the {play_name} workspace. Available specialists: {agents_line}.'} | ConvertTo-Json -Compress))\"",
+        "timeout": 3
+      }
+    ]
+  }
+}

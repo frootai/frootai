@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/orchard-seed-list.v1.json",
+  "title": "FAI Orchard Seed List",
+  "description": "The hand-curated bootstrap input for the Orchard crawler. Each entry is a discovery hint — one repo the crawler should harvest in addition to whatever the GitHub Search queries return. NOT a full manifest (those live in fai-accelerator.json after normalize.js runs). Per doctrine #1 (NO HAND-MAINTAINED FRUIT LISTS), this is the ONLY manual catalog input. New entries arrive via single-line PRs. Schema is CC0-1.0.",
+  "$comment": "License: CC0-1.0 (Creative Commons Zero v1.0 Universal — public domain dedication). SPDX-License-Identifier: CC0-1.0. Authored by FrootAI 2026-05-25 as part of Phase [A0.28] of the FAI Orchard master plan. Formalizes the input-shape contract committed in Phase [A0.7].",
+
+  "type": "array",
+  "minItems": 1,
+  "maxItems": 5000,
+  "description": "Top-level array of seed entries. Order is non-significant. The crawler dedupes against the union of discovery-queries.json results.",
+
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["full_name", "variety", "stars", "first_party", "reason"],
+    "properties": {
+
+      "full_name": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$",
+        "minLength": 3,
+        "maxLength": 256,
+        "description": "GitHub <owner>/<repo>. Case preserved exactly as it appears on GitHub. Example: Azure-Samples/azure-search-openai-demo."
+      },
+
+      "variety": {
+        "type": "string",
+        "enum": ["azure", "gcp", "aws", "oss", "hybrid"],
+        "description": "Cloud variety. Matches the variety enum in fai-accelerator.schema.json. Drives which CDN bundle the resulting fruit ships in."
+      },
+
+      "stars": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Snapshot star count at curation time. Refreshed by the crawler on every harvest run."
+      },
+
+      "first_party": {
+        "type": "boolean",
+        "description": "True when the repo owner is a recognized cloud-vendor org (Azure-Samples, microsoft, GoogleCloudPlatform, aws-samples, etc.). Drives the owner_type field in the resulting manifest."
+      },
+
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500,
+        "description": "Why this is a strong seed. Encoded as a one-line technical justification (≤200 chars recommended). Used as audit context when reviewers triage seed PRs."
+      },
+
+      "added_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Optional ISO 8601 UTC. When this seed was first added. Older entries may omit this field; the crawler does not depend on it."
+      },
+
+      "added_by": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "Optional. GitHub username of the seed PR author OR pipeline identifier. Examples: 'github:pavle', 'fai-orchard-seed-curator/v1.0'."
+      },
+
+      "notes": {
+        "type": "string",
+        "maxLength": 2000,
+        "description": "Optional free-form notes. Use for: known caveats (archived/deprecated repos), licensing flags, reviewer comments. NOT used at runtime — pure metadata."
+      }
+    }
+  }
+}

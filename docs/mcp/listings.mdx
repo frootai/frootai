@@ -1,0 +1,65 @@
+---
+title: "FrootAI Orchard — MCP server listings"
+description: "Where to find and install the FrootAI Orchard MCP server (npm + Python runtimes, listed on Smithery + Glama)"
+icon: "🛒"
+order: 41
+tags: ["mcp", "orchard", "smithery", "glama", "marketplace", "listings"]
+---
+
+# FrootAI Orchard MCP — marketplace listings
+
+The FrootAI Orchard MCP server lets any [MCP](https://modelcontextprotocol.io)-aware AI agent (Cursor, Claude Desktop, ChatGPT, Continue, Cline, …) discover and install Solution Accelerators from the FrootAI Orchard catalog via 5 natural-language tool calls.
+
+We ship **two byte-equal runtimes** so partners pick the one that fits their stack:
+
+| Runtime | Package | Install | Smithery | Glama |
+|---|---|---|---|---|
+| npm | [`@frootai/mcp-orchard@1.0.0`](https://www.npmjs.com/package/@frootai/mcp-orchard) | `npx -y @frootai/mcp-orchard@latest` | [smithery.ai/server/frootai-orchard](https://smithery.ai/server/frootai-orchard) | [glama.ai/mcp/servers/frootai-orchard](https://glama.ai/mcp/servers/frootai-orchard) |
+| Python | [`frootai-mcp-orchard@1.0.0`](https://pypi.org/project/frootai-mcp-orchard/) | `uvx frootai-mcp-orchard[sdk]@latest` | [smithery.ai/server/frootai-orchard-py](https://smithery.ai/server/frootai-orchard-py) | [glama.ai/mcp/servers/frootai-orchard-py](https://glama.ai/mcp/servers/frootai-orchard-py) |
+
+Both runtimes:
+
+- Implement MCP spec **2025-03-26**
+- Expose the same 5 tools with the same JSON-RPC error code surface
+- Read the same `~/.frootai/.token` so a `frootai login` in your terminal transparently signs in the MCP server
+- Are verified byte-equal at every release by the **cross-MCP conformance suite** (A7.23–A7.26) and shipped with a `orchard-mcp-conformance-certificate` artifact
+
+## Tools
+
+| Name | Tier | Description |
+|---|---|---|
+| `orchard.search` | Free | Search the catalog by query + optional filter expression |
+| `orchard.show` | Free | Fetch full detail for a single accelerator |
+| `orchard.install_command` | Free | Return the canonical `frootai orchard install` command |
+| `orchard.find_play` | **Pro+** | Search Play recipes (requires `upgrade-to-play` entitlement) |
+| `orchard.list_pollinations` | Free | List cross-Variety equivalents (the "see also" graph) |
+
+The auth gate enforces tier-based access at the protocol layer — anonymous + free-tier callers get a structured `ENTITLEMENT_REQUIRED` JSON-RPC error pointing them at [`frootai.dev/upgrade`](https://frootai.dev/upgrade), never a silent failure.
+
+## Install in your client
+
+See the per-client install guide: [Install in Cursor / Claude Desktop / ChatGPT / Continue / Cline](./install-clients).
+
+## Verified-publisher badges
+
+Both runtimes have **Verified Publisher** badges on Smithery + Glama. The badge is granted because we:
+
+- Maintain stable v1.0.0+ releases on npm and PyPI with provenance / attestations
+- Publish a cross-runtime conformance certificate per release
+- Operate the publishing GitHub organization on the same domain (`frootai.dev`) as the listed servers
+
+## Source
+
+The MCP server source lives in the [`frootai-core`](https://github.com/frootai/frootai-core) monorepo:
+
+- npm runtime: [`npm-mcp/orchard/`](https://github.com/frootai/frootai-core/tree/main/npm-mcp/orchard)
+- Python runtime: [`python-mcp/orchard/`](https://github.com/frootai/frootai-core/tree/main/python-mcp/orchard)
+
+Both runtimes are zero-runtime-deps (stdlib + `@frootai/orchard` / `frootai-orchard` SDK as peer / optional extra).
+
+## See also
+
+- [`/docs/mcp/orchard`](./orchard) — full tool reference + JSON-RPC examples
+- [`/docs/sdk/orchard-typescript`](../sdk/orchard-typescript) — the underlying npm SDK
+- [`/docs/sdk/orchard-python`](../sdk/orchard-python) — the underlying Python SDK
+- [`/docs/cli/orchard`](../cli/orchard) — the `frootai orchard` CLI surface

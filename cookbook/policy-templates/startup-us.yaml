@@ -1,0 +1,73 @@
+# startup-us.yaml — Early-stage US startup (SF / NYC / Austin)
+#
+# Profile: 5-50 engineers, single Azure subscription, US-only data residency
+# (eastus / westus2 / centralus), GitHub-first SSO, third-party contractors
+# require Entra guest accounts under review. Slightly higher cost ceiling than
+# the EU sibling (Bay Area dev-tools spend).
+---
+spec_version: 1
+company: "Acme Inc. (US startup)"
+
+regions:
+  - eastus
+  - westus2
+  - centralus
+
+models:
+  allow:
+    - gpt-4o
+    - gpt-4o-mini
+    - claude-3-5-sonnet
+    - text-embedding-3-large
+
+skus:
+  allow:
+    - Standard_B2s
+    - Standard_D2s_v3
+    - Standard_D4s_v3
+    - Standard_D8s_v3
+
+naming:
+  prefix: acme
+  separator: "-"
+  max_length: 24
+
+tags:
+  required:
+    - env
+    - team
+    - owner
+  values:
+    env: "^(prod|staging|dev|preview)$"
+
+network:
+  posture: hybrid
+  vnet_required: true
+  private_endpoint_required: false
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: permissive
+
+identity:
+  providers:
+    - entra-id
+    - github
+  guest_account_policy: review-required
+
+iac:
+  format: bicep
+  modular_emit: true
+  gold_allowed: true
+
+encryption:
+  cmk_required: false
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: medium
+  tier_default: standard

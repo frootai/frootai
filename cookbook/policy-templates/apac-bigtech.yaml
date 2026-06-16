@@ -1,0 +1,84 @@
+# apac-bigtech.yaml — APAC big-tech / global hyperscaler (Tokyo / Singapore / Sydney)
+#
+# Profile: large APAC-headquartered consumer-tech or telco with multi-region
+# active-active topology, follows industry-leading practices (every overlay
+# nearly maxed) but with Bicep + Terraform both emitted because internal
+# platform teams have heterogeneous IaC preferences. Higher cost ceiling
+# (xl band) — performance is more important than per-month cost.
+---
+spec_version: 1
+company: "Acme APAC Co. Ltd."
+
+regions:
+  - japaneast
+  - southeastasia
+  - australiaeast
+  - koreacentral
+
+models:
+  allow:
+    - gpt-4o
+    - gpt-4o-mini
+    - claude-3-5-sonnet
+    - text-embedding-3-large
+
+skus:
+  allow:
+    - Standard_D8s_v3
+    - Standard_D16s_v3
+    - Standard_D32s_v3
+    - Standard_D64s_v3
+    - Standard_E16s_v3
+    - Standard_E32s_v3
+    - Standard_E64s_v3
+
+naming:
+  prefix: aap
+  separator: "-"
+  max_length: 30
+
+tags:
+  required:
+    - env
+    - bu
+    - costcenter
+    - region_locality
+    - owner
+  values:
+    env: "^(prod|staging|qa|dev|canary)$"
+    region_locality: "^(JP|SG|AU|KR|GLOBAL)$"
+
+network:
+  posture: hybrid
+  vnet_required: true
+  private_endpoint_required: true
+  dns_zone_overrides:
+    "Microsoft.Storage/storageAccounts": "privatelink.blob.core.windows.net"
+    "Microsoft.KeyVault/vaults": "privatelink.vaultcore.azure.net"
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+    - okta
+  guest_account_policy: review-required
+
+iac:
+  format: both
+  modular_emit: true
+  gold_allowed: true
+
+encryption:
+  cmk_required: true
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: xl
+  tier_default: premium

@@ -1,0 +1,80 @@
+# cost-conscious.yaml — Aggressive cost-optimisation overlay
+#
+# Profile: company prioritising every-dollar-counts spend posture (frugal
+# bootstrapped startup OR enterprise cost-rationalisation initiative). Only
+# basic-tier SKUs allowed, no premium services, micro cost band, modular emit
+# OFF (less surface = less to bill). Encryption + Key Vault still on because
+# they're free; CMK off because it carries Key Vault Premium spend.
+---
+spec_version: 1
+company: "Frugal Co. Ltd."
+
+regions:
+  - westeurope
+  - eastus
+
+models:
+  allow:
+    - gpt-4o-mini
+    - text-embedding-3-small
+  deny:
+    - gpt-4o
+    - gpt-4
+    - claude-3-opus
+
+skus:
+  allow:
+    - Standard_B1s
+    - Standard_B2s
+    - Standard_D2s_v3
+    - Standard_F2s_v2
+  deny:
+    - Standard_D16s_v3
+    - Standard_D32s_v3
+    - Standard_E16s_v3
+    - Standard_E32s_v3
+    - Standard_M128ms
+
+naming:
+  prefix: f
+  separator: ""
+  max_length: 18
+
+tags:
+  required:
+    - env
+    - costcenter
+    - owner
+  values:
+    env: "^(prod|dev)$"
+
+network:
+  posture: public
+  vnet_required: false
+  private_endpoint_required: false
+
+rbac:
+  managed_identity_required: false
+  role_assignment_policy: permissive
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: allowed
+
+iac:
+  format: bicep
+  modular_emit: false
+  gold_allowed: true
+
+encryption:
+  cmk_required: false
+  key_vault_required: false
+
+observability:
+  log_analytics_required: false
+  app_insights_required: false
+
+cost:
+  band_target: micro
+  tier_default: basic

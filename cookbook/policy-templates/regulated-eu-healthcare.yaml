@@ -1,0 +1,95 @@
+# regulated-eu-healthcare.yaml — Regulated EU healthcare (GDPR Art.9 / MDR / NIS2)
+#
+# Profile: hospital network, medical-device manufacturer, or pharma R&D under
+# GDPR Article 9 (special-category personal data) + EU MDR + NIS2. Private
+# network only, CMK mandatory, restricted to specific EU regions with
+# medical-device residency commitments, no guest accounts, every resource
+# tagged with patient-data scope.
+---
+spec_version: 1
+company: "MedTech B.V. (EU healthcare)"
+
+regions:
+  - westeurope
+  - northeurope
+
+models:
+  allow:
+    - gpt-4o
+    - text-embedding-3-large
+  deny:
+    - gpt-3.5-turbo
+    - gpt-4
+
+skus:
+  allow:
+    - Standard_D4s_v3
+    - Standard_D8s_v3
+    - Standard_D16s_v3
+    - Standard_E8s_v3
+
+naming:
+  prefix: mt
+  suffix: hc
+  separator: "-"
+  max_length: 24
+
+tags:
+  required:
+    - env
+    - bu
+    - costcenter
+    - phi_scope
+    - regulatoryscope
+    - dpo_owner
+  values:
+    env: "^(prod|qa|dev)$"
+    phi_scope: "^(none|pseudonymised|identified)$"
+    regulatoryscope: "^(GDPR-Art9|MDR|NIS2)$"
+
+network:
+  posture: private
+  vnet_required: true
+  private_endpoint_required: true
+  dns_zone_overrides:
+    "Microsoft.Storage/storageAccounts": "privatelink.blob.core.windows.net"
+    "Microsoft.KeyVault/vaults": "privatelink.vaultcore.azure.net"
+    "Microsoft.Sql/servers": "privatelink.database.windows.net"
+    "Microsoft.CognitiveServices/accounts": "privatelink.openai.azure.com"
+
+rbac:
+  managed_identity_required: true
+  role_assignment_policy: strict
+
+identity:
+  providers:
+    - entra-id
+  guest_account_policy: blocked
+
+iac:
+  format: bicep
+  modular_emit: true
+  gold_allowed: false
+
+encryption:
+  cmk_required: true
+  key_vault_required: true
+
+observability:
+  log_analytics_required: true
+  app_insights_required: true
+
+cost:
+  band_target: medium
+  tier_default: premium
+
+custom_checks:
+  - id: CUSTOM-MEDTECH-001
+    severity: critical
+    title: PHI-bearing storage accounts must be soft-delete + immutable enabled
+    description: |
+      GDPR Article 32 (security of processing) + EU MDR clinical-evidence
+      retention require that every storage account tagged phi_scope=identified
+      OR phi_scope=pseudonymised has soft-delete enabled with min 90-day
+      retention AND blob versioning enabled.
+    expression: "resource.tags.phi_scope in ['identified','pseudonymised'] and properties.deleteRetentionPolicy.days >= 90"

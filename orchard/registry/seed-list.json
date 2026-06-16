@@ -1,0 +1,352 @@
+[
+  {
+    "full_name": "Azure-Samples/azure-search-openai-demo",
+    "variety": "azure",
+    "stars": 7665,
+    "first_party": true,
+    "reason": "Canonical Azure RAG: hybrid retrieval + Azure OpenAI + Bicep + azd template. The reference every other RAG sample is benchmarked against."
+  },
+  {
+    "full_name": "microsoft/ai-agents-for-beginners",
+    "variety": "azure",
+    "stars": 65368,
+    "first_party": true,
+    "reason": "12-lesson agentic AI course. The global default starting point for 'how do I learn agents'. Multi-framework coverage."
+  },
+  {
+    "full_name": "Azure-Samples/cognitive-services-speech-sdk",
+    "variety": "azure",
+    "stars": 3421,
+    "first_party": true,
+    "reason": "Cross-language Speech SDK samples (C#, Python, JS, Java, etc.). The canonical voice-IO reference."
+  },
+  {
+    "full_name": "microsoft/Generative-AI-for-beginners-dotnet",
+    "variety": "azure",
+    "stars": 2750,
+    "first_party": true,
+    "reason": ".NET-first GenAI fundamentals. Anchor for the Microsoft enterprise developer segment."
+  },
+  {
+    "full_name": "Azure-Samples/graphrag-accelerator",
+    "variety": "azure",
+    "stars": 2414,
+    "first_party": true,
+    "reason": "One-click GraphRAG on Azure. Novel topology beyond vanilla vector RAG — knowledge graph + LLM."
+  },
+  {
+    "full_name": "Azure-Samples/openai",
+    "variety": "azure",
+    "stars": 1328,
+    "first_party": true,
+    "reason": "Notebooks complementing the OpenAI cookbook. Long-tail samples across modalities and patterns."
+  },
+  {
+    "full_name": "Azure-Samples/chat-with-your-data-solution-accelerator",
+    "variety": "azure",
+    "stars": 1167,
+    "first_party": true,
+    "reason": "Production-grade RAG with best practices baked in. Goes deeper than the demo on enterprise concerns."
+  },
+  {
+    "full_name": "Azure/GPT-RAG",
+    "variety": "azure",
+    "stars": 1151,
+    "first_party": true,
+    "reason": "Enterprise-secure GPT RAG reference. Network isolation + Bicep + scaled-out architecture."
+  },
+  {
+    "full_name": "Azure-Samples/Cognitive-Speech-TTS",
+    "variety": "azure",
+    "stars": 1004,
+    "first_party": true,
+    "reason": "Custom neural voice + TTS samples. Speech-synthesis depth covering prosody, transformers, traditional TTS."
+  },
+  {
+    "full_name": "Azure-Samples/AI-Gateway",
+    "variety": "azure",
+    "stars": 931,
+    "first_party": true,
+    "reason": "APIM-as-AI-Gateway labs: AI Models + MCP servers + agents + Foundry. The 'production AI traffic' story."
+  },
+  {
+    "full_name": "Azure-Samples/serverless-chat-langchainjs",
+    "variety": "azure",
+    "stars": 856,
+    "first_party": true,
+    "reason": "Serverless RAG with LangChain.js + Azure Functions + MongoDB. JavaScript-first RAG path."
+  },
+  {
+    "full_name": "Azure-Samples/aoai-realtime-audio-sdk",
+    "variety": "azure",
+    "stars": 837,
+    "first_party": true,
+    "reason": "gpt-4o-realtime audio SDK. Bidirectional low-latency voice — frontier voice-agent capability."
+  },
+  {
+    "full_name": "Azure-Samples/azure-search-openai-demo-csharp",
+    "variety": "azure",
+    "stars": 836,
+    "first_party": true,
+    "reason": "C# port of the canonical Azure RAG demo. Same architecture, .NET ecosystem."
+  },
+  {
+    "full_name": "Azure-Samples/contoso-chat",
+    "variety": "azure",
+    "stars": 761,
+    "first_party": true,
+    "reason": "End-to-end Prompty + Foundry RAG with evals + LLMOps + GitHub Actions deployment. The 'production chat' archetype."
+  },
+  {
+    "full_name": "Azure-Samples/miyagi",
+    "variety": "azure",
+    "stars": 752,
+    "first_party": true,
+    "reason": "Copilot stack showcase: Semantic Kernel, agents, Llama, Phi, prompt flow, TaskWeaver, TypeChat."
+  },
+  {
+    "full_name": "Azure/AI-in-a-Box",
+    "variety": "azure",
+    "stars": 599,
+    "first_party": true,
+    "reason": "Microsoft-curated Azure AI solution accelerator collection. Meta-repo of meta-repos — high signal density."
+  },
+  {
+    "full_name": "Azure-Samples/aisearch-openai-rag-audio",
+    "variety": "azure",
+    "stars": 555,
+    "first_party": true,
+    "reason": "VoiceRAG pattern: gpt-4o-realtime + AI Search hybrid retrieval. Voice + grounding = enterprise voice agent."
+  },
+  {
+    "full_name": "Azure-Samples/azureai-samples",
+    "variety": "azure",
+    "stars": 543,
+    "first_party": true,
+    "reason": "Official community-driven Azure AI examples. The breadth catalog under the Azure AI Foundry umbrella."
+  },
+  {
+    "full_name": "Azure/azure-dev",
+    "variety": "azure",
+    "stars": 534,
+    "first_party": true,
+    "reason": "The azd CLI itself. Foundational: every other azd-template depends on this. F-layer essential."
+  },
+  {
+    "full_name": "Azure-Samples/rag-postgres-openai-python",
+    "variety": "azure",
+    "stars": 490,
+    "first_party": true,
+    "reason": "RAG over Postgres rows with pgvector + Container Apps + FastAPI. Database-native RAG path."
+  },
+  {
+    "full_name": "Azure/reliable-web-app-pattern-dotnet",
+    "variety": "azure",
+    "stars": 459,
+    "first_party": true,
+    "reason": "WAF-aligned reliable web app reference (.NET). Anchors the cost/reliability/security pillars for cloud-native apps."
+  },
+  {
+    "full_name": "Azure-Samples/azure-ai-travel-agents",
+    "variety": "azure",
+    "stars": 436,
+    "first_party": true,
+    "reason": "Enterprise multi-agent app: ACA + MCP + LangChain.js + LlamaIndex + Agent Framework. Polyglot agent reference."
+  },
+  {
+    "full_name": "Azure-Samples/contoso-creative-writer",
+    "variety": "azure",
+    "stars": 422,
+    "first_party": true,
+    "reason": "Multi-agent creative writing showcase. Azure AI Agent Service + AI Search + Bing grounding."
+  },
+  {
+    "full_name": "microsoft-foundry/foundry-samples",
+    "variety": "azure",
+    "stars": 347,
+    "first_party": true,
+    "reason": "Canonical Microsoft Foundry samples embedded in official docs. Living source of truth."
+  },
+  {
+    "full_name": "Azure-Samples/get-started-with-ai-agents",
+    "variety": "azure",
+    "stars": 336,
+    "first_party": true,
+    "reason": "Basic AI Foundry agent web-app starter. The 'hello world' for Azure AI agents."
+  },
+  {
+    "full_name": "Azure-Samples/python-ai-agent-frameworks-demos",
+    "variety": "azure",
+    "stars": 331,
+    "first_party": true,
+    "reason": "Side-by-side Python agent frameworks (Semantic Kernel, AutoGen, LangChain, LlamaIndex). Framework comparison anchor."
+  },
+  {
+    "full_name": "Azure-Samples/ai-rag-chat-evaluator",
+    "variety": "azure",
+    "stars": 330,
+    "first_party": true,
+    "reason": "RAG quality evaluation toolkit using Azure AI Evaluate SDK. The eval-layer reference Play 17 will pollinate to."
+  },
+  {
+    "full_name": "microsoft-foundry/mcp-foundry",
+    "variety": "azure",
+    "stars": 248,
+    "first_party": true,
+    "reason": "MCP server for Azure AI Foundry. The bridge between Cursor/Claude users and Foundry resources."
+  },
+  {
+    "full_name": "microsoft/content-processing-solution-accelerator",
+    "variety": "azure",
+    "stars": 219,
+    "first_party": true,
+    "reason": "Doc-intel + schema extraction over multi-modal content. Foundry + AI Content Understanding + Cosmos."
+  },
+  {
+    "full_name": "Azure/aca-landing-zone-accelerator",
+    "variety": "azure",
+    "stars": 217,
+    "first_party": true,
+    "reason": "Azure Container Apps Landing Zone reference. Production-grade ACA + Bicep + Terraform variants."
+  },
+  {
+    "full_name": "Azure/intelligent-app-workshop",
+    "variety": "azure",
+    "stars": 204,
+    "first_party": true,
+    "reason": "Agent Framework + Foundry immersive workshop. Showcase of integrating foundation models into product experiences."
+  },
+  {
+    "full_name": "Azure-Samples/mcp-agent-langchainjs",
+    "variety": "azure",
+    "stars": 183,
+    "first_party": true,
+    "reason": "Serverless MCP agent using LangChain.js. Burger-ordering reference for MCP + agents."
+  },
+  {
+    "full_name": "Azure/ai-solution-accelerators-list",
+    "variety": "azure",
+    "stars": 147,
+    "first_party": true,
+    "reason": "Microsoft-maintained Azure AI Solution Accelerators index. The 'official' list — our doctrine line 1 reference point."
+  },
+  {
+    "full_name": "microsoft/simplechat",
+    "variety": "azure",
+    "stars": 134,
+    "first_party": true,
+    "reason": "Secure RBAC chat with docs/video/audio. Personal + group workspaces. Modular feature extension model."
+  },
+  {
+    "full_name": "microsoft/AzureOpenAI-with-APIM",
+    "variety": "azure",
+    "stars": 114,
+    "first_party": true,
+    "reason": "Auto-configure APIM in front of Azure OpenAI. Zero-trust pattern; Azure Government compatible."
+  },
+  {
+    "full_name": "microsoft/spec-to-agents",
+    "variety": "azure",
+    "stars": 108,
+    "first_party": true,
+    "reason": "Multi-agent event-planning workflow combining Semantic Kernel + AutoGen patterns via Agent Framework."
+  },
+  {
+    "full_name": "microsoft-foundry/foundry-agent-webapp",
+    "variety": "azure",
+    "stars": 97,
+    "first_party": true,
+    "reason": "Copilot-enabled agent webapp with Entra ID auth + Foundry Agents integration. Identity-aware agent UX."
+  },
+  {
+    "full_name": "microsoft-foundry/ai-tutorials",
+    "variety": "azure",
+    "stars": 78,
+    "first_party": true,
+    "reason": "Hands-on Foundry tutorials. Step-by-step generative AI app builds. Onboarding-tier content."
+  },
+  {
+    "full_name": "microsoft-foundry/Foundry-Local-Lab",
+    "variety": "azure",
+    "stars": 75,
+    "first_party": true,
+    "reason": "Foundry Local workshop — local AI without cloud. RAG + agents in Python/JS/C# offline."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/Conversational-Azure-OpenAI-Accelerator",
+    "variety": "azure",
+    "stars": 63,
+    "first_party": true,
+    "reason": "ChatGPT-powered customer support (Zammo.ai partner). Voice + text channels + telephony integration."
+  },
+  {
+    "full_name": "microsoft-foundry/foundry-mcp-playground",
+    "variety": "azure",
+    "stars": 62,
+    "first_party": true,
+    "reason": "Experimental Foundry MCP playground. Early-access surface for MCP-via-Foundry exploration."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/AI-Powered-Call-Center-Intelligence-Accelerator",
+    "variety": "azure",
+    "stars": 56,
+    "first_party": true,
+    "reason": "Call-center NLU: real-time + recorded transcription, custom speech models, industry NLP. Vertical-ready."
+  },
+  {
+    "full_name": "microsoft-foundry/fine-tuning",
+    "variety": "azure",
+    "stars": 47,
+    "first_party": true,
+    "reason": "Fine-tuning examples + sample datasets. Foundry's authoritative fine-tune reference."
+  },
+  {
+    "full_name": "microsoft-foundry/voicelive-samples",
+    "variety": "azure",
+    "stars": 37,
+    "first_party": true,
+    "reason": "Speech Service Voice Live API samples. Real-time voice surface beyond the audio SDK."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/Intelligent-Document-Processing-Accelerator",
+    "variety": "azure",
+    "stars": 24,
+    "first_party": true,
+    "reason": "Document workflow automation: classify, extract, route. The doc-process-automation industry vertical."
+  },
+  {
+    "full_name": "microsoft-foundry/Foundry_Toolkit_for_VSCode_Lab",
+    "variety": "azure",
+    "stars": 19,
+    "first_party": true,
+    "reason": "Hands-on workshop: build, test, deploy single + multi-agent Foundry Hosted Agents from VS Code."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/AI-Powered-Insurance-Claims-Automation-Accelerator",
+    "variety": "azure",
+    "stars": 19,
+    "first_party": true,
+    "reason": "Insurance-claims AI: image/ID/document processing. Industry-finance vertical anchor."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/Intelligent-Supply-Chain-Management",
+    "variety": "azure",
+    "stars": 18,
+    "first_party": true,
+    "reason": "Supply-chain forecasting + inventory optimization with Ray on AKS. Industry-retail vertical anchor."
+  },
+  {
+    "full_name": "microsoft-foundry/Foundry-Agent-Lab",
+    "variety": "azure",
+    "stars": 13,
+    "first_party": true,
+    "reason": "Progressively complex agent demos with how-it-works narratives. Pedagogical agent reference."
+  },
+  {
+    "full_name": "MSUSAzureAccelerators/Risk-Classification-and-Loan-Modeling-Accelerator",
+    "variety": "azure",
+    "stars": 7,
+    "first_party": true,
+    "reason": "Predictive loan-risk modeling with Synapse + ML. Industry-finance second vertical anchor."
+  }
+]

@@ -1,0 +1,71 @@
+---
+title: "Install Orchard Harvest MCP in Claude Desktop"
+description: "Add the FrootAI Orchard Harvest MCP server (@frootai/orchard-mcp) to Claude Desktop — turn any GitHub repo into a production-ready Solution Play."
+icon: "🅒"
+order: 44
+tags: ["mcp", "orchard", "harvest", "claude", "claude-desktop", "install"]
+---
+
+# Install Orchard Harvest MCP in Claude Desktop
+
+The **Orchard Harvest** MCP server (`@frootai/orchard-mcp`) runs the FAI Harvest pipeline as 8 callable tools. This guide wires it into **Claude Desktop**.
+
+> Looking for the read-only catalog server instead? See [Install FrootAI Orchard MCP](./install-clients).
+
+## 1. Add the server config
+
+Claude Desktop reads `claude_desktop_config.json`:
+
+| OS | Path |
+|---|---|
+| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+Add the `frootai-orchard` entry:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/orchard-mcp@latest"]
+    }
+  }
+}
+```
+
+Prefer Python? Use the byte-equal PyPI runtime:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "uvx",
+      "args": ["frootai-orchard-mcp@latest"]
+    }
+  }
+}
+```
+
+## 2. Sign in for the Pro pipeline (`frootai login`)
+
+Free tools (`discover_repo`, `extract_facts`, `retrieve_exemplars`, `list_plays`) need no sign-in. The paid tools use the **OAuth device flow** — no token goes in the config:
+
+```bash
+npm install -g frootai
+frootai login
+```
+
+The token is persisted to the MCP server's session store; `import_accelerator`, `customize_play`, and `re_harvest` unlock on your next call (Pro plan required).
+
+## 3. Verify
+
+Fully quit and reopen Claude Desktop. The server appears under the **hammer / tools icon** in the chat input:
+
+![Claude Desktop chat input with the tools icon expanded, showing the frootai-orchard server and its 8 harvest tools](https://frootai.dev/orchard/screenshots/harvest-claude-desktop.png)
+
+Now ask Claude:
+
+> *"Use the /import-rag prompt for github.com/Azure-Samples/azure-search-openai-demo"*
+
+It calls `discover_repo` then `import_accelerator` and returns the signed bundle URL. A `-32003` / `-32004` error means you need to `frootai login` (and possibly upgrade at <https://frootai.dev/upgrade>).

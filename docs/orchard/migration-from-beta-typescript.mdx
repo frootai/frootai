@@ -1,0 +1,157 @@
+---
+title: "FAI Orchard — TypeScript SDK Migration (v0.9.x → v1.0.0)"
+description: "@frootai/orchard v1.0.0 ships with zero breaking changes. This guide covers the additive v1.0 surface — STABILITY.md, deprecation framework, byte-equality guarantees — and what to do at the next major."
+icon: "🟦"
+order: 3
+tags: ["orchard", "migration", "typescript", "npm", "sdk", "v1.0", "semver"]
+---
+
+# TypeScript SDK migration guide (v0.9.x → v1.0.0)
+
+> **TL;DR — bump your `package.json` to `"@frootai/orchard": "^1.0.0"` and run `npm install`. You're done.** No imports change, no signatures change, no exit codes change. The rest of this page documents *why* nothing changed and what the v1.0 contract guarantees.
+
+For the cross-SDK overview, start at [Migration from v0.9.x](./migration-from-beta). For the full reference, see [/docs/sdk/orchard-typescript](../sdk/orchard-typescript).
+
+---
+
+## What you do
+
+```bash
+# In your project root
+npm install @frootai/orchard@^1.0.0
+```
+
+That's it. The `^1.0.0` range will pull in every minor + patch for the v1.x lifetime.
+
+If you want a stricter pin:
+
+```bash
+npm install --save-exact @frootai/orchard@1.0.0
+```
+
+---
+
+## Public-surface diff
+
+There is **no public-surface diff** between v0.9.x and v1.0.0. The exports listed in [`@frootai/orchard/STABILITY.md`](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/STABILITY.md) are identical to what shipped at v0.6.0-sdk (with the A8.27 / A8.28 / A9.x additions already in place at v0.8.0-enterprise / v0.9.0-ops).
+
+The locked surface:
+
+| Category | Symbols (frozen at v1.0) |
+|---|---|
+| Factory | `createClient` |
+| Error classes | `FrootaiOrchardError`, `AuthError`, `NotSignedInError`, `TokenExpiredError`, `EntitlementRequiredError`, `RateLimitError`, `NetworkError`, `ValidationError`, `NotFoundError`, `ConflictError`, `ServerError` |
+| Error codes | `ERROR_CODES` (frozen object; values are strings; new codes are additive) |
+| Filter language | `parseFilter`, `buildFilterPredicate` |
+| Cursor codec | `buildCursorCodec` |
+| Version | `VERSION` (string, always equals `package.json` `version`) |
+
+Client method shapes (`client.list`, `client.search`, `client.show`, `client.bushel.*`, `client.whoami`, `client.cursor.*`) are also frozen — see [STABILITY.md §Client methods](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/STABILITY.md#client-methods-frozen-at-v10).
+
+---
+
+## What's actually new at v1.0
+
+1. **`STABILITY.md` co-located with the package.** Auditors and procurement reviewers no longer have to dig through release notes; the explicit public-export list lives one click away from `package.json`.
+
+2. **Deprecation framework via the peer.** The SDK re-uses the helper exported from `@frootai/orchard-types/lib/deprecate`:
+
+   ```js
+   const { emitDeprecation } = require("@frootai/orchard-types/lib/deprecate");
+
+   // Inside the SDK we will, eventually, call this from soon-to-be-removed paths:
+   // emitDeprecation({
+   //   symbol: "@frootai/orchard.legacyShow",
+   //   since: "1.4.0",
+   //   removed_in: "2.0.0",
+   //   replacement: "client.show",
+   //   message: "Use client.show(id) instead.",
+   // });
+   ```
+
+   Today, **no SDK symbols are deprecated**. The framework is in place so the *first* v1.x deprecation has a working channel. You'll see one stderr line per deprecated symbol per process; suppress with `FROOTAI_SUPPRESS_DEPRECATIONS=1`.
+
+3. **CHANGELOG v1.0.0 callout** at the top of `frootai-core/npm-sdk/orchard/CHANGELOG.md` referencing tag `orchard-v1.0.0`. Aggregates the v0.6.0-sdk through v1.0.0 surface into one auditable record.
+
+---
+
+## What's NOT new (deliberately)
+
+We did not:
+
+- Change any function signature.
+- Change any error class constructor.
+- Change `ERROR_CODES` values.
+- Change the AST shape returned by `parseFilter`.
+- Change the cursor wire format.
+- Change the default `apiBase` / `cdnBase` / `timeoutMs` / `maxRetries`.
+- Change the HTTP retry / backoff timings beyond previously-published bounds.
+- Change the User-Agent template (`@frootai/orchard/<VERSION>` — the `<VERSION>` placeholder is still a placeholder per A6.29 doctrine).
+
+If any of these silently changed for you, file a P0 bug.
+
+---
+
+## Peer dependency: `@frootai/orchard-types ^1.0.0`
+
+`@frootai/orchard-types` ships v1.0.0 in the same release wave. The peerDep range `^1.0.0` accepts every 1.x.y. If your project also depends on `@frootai/mcp-orchard` you'll get the same `orchard-types` peer pinned across the whole stack — the [cross-package version-consistency gate](https://github.com/frootai/frootai/blob/main/frootai-core/scripts/orchard/check-cross-package-versions.js) enforces this on every release.
+
+---
+
+## TypeScript declaration files
+
+`index.d.ts` ships in the published tarball. Every symbol in the [STABILITY.md §Public exports](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/STABILITY.md#public-exports-frozen-at-v10) has a corresponding type — `createClient`, the error class hierarchy, `ERROR_CODES` literal type, etc.
+
+If you're using TypeScript ≥ 5.0 you'll also get the JSDoc `@deprecated` markings (none at v1.0, but tools like ESLint + your IDE will surface them automatically when the first v1.x deprecation lands).
+
+---
+
+## CI gates you can adopt
+
+Add these to your own CI to catch any v1.x bump that might surprise you:
+
+```yaml
+# .github/workflows/dependencies.yml (example)
+jobs:
+  check-frootai-orchard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: |
+          # Fail if the resolved version is not 1.x
+          VER=$(node -p "require('@frootai/orchard/package.json').version")
+          [[ "$VER" =~ ^1\. ]] || (echo "Unexpected major: $VER"; exit 1)
+      - run: |
+          # Surface any deprecation warnings as a build artifact
+          npm test 2>&1 | tee test.log
+          if grep -q '^\[FROOTAI_DEPRECATED\]' test.log; then
+            echo "::warning::FrootAI Orchard deprecation detected — see test.log"
+          fi
+```
+
+---
+
+## What to do at the next major (v2.0)
+
+When v2.0 lands:
+
+1. Read the **v2.0 migration guide** (we'll publish a fresh one — same shape as this page).
+2. Verify every symbol marked `@deprecated` in the 1.x line either has a replacement you've already adopted, OR appears in the v2.0 codemod.
+3. We ship a **codemod** for every breaking signature change so most upgrades are `npx @frootai/codemod orchard-v2`.
+
+You'll have **at least 6 months** notice between any deprecation `since` date and the v2.0 removal (see [STABILITY.md §3](https://github.com/frootai/frootai/blob/main/STABILITY.md#3-deprecation-policy----6-month-minimum-window)).
+
+---
+
+## See also
+
+- [Repo-root STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md)
+- [`@frootai/orchard/STABILITY.md`](https://github.com/frootai/frootai/blob/main/frootai-core/npm-sdk/orchard/STABILITY.md)
+- [Full TS SDK reference](../sdk/orchard-typescript)
+- [Python SDK migration guide](./migration-from-beta-python)
+- [v1.0 aggregate changelog](./v1-changelog)
+- [Getting started](./getting-started)

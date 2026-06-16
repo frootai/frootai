@@ -1,0 +1,369 @@
+---
+title: "FAI Orchard CLI Reference"
+description: "Full reference for `frootai orchard` (cross-cloud Solution Accelerator catalog + scaffold engine) plus auth + telemetry commands"
+icon: "🍊"
+order: 40
+tags: ["cli", "orchard", "accelerators", "install", "diff", "scaffold", "auth", "telemetry"]
+---
+
+# FAI Orchard CLI Reference
+
+The FAI Orchard is the cross-cloud catalog of Solution Accelerators that ship with the FrootAI ecosystem. This page is the **full reference** for the `frootai orchard` command family plus the related auth + telemetry surfaces.
+
+- **Free** to browse, search, show, install, diff, pollinate, and bushel (no sign-in)
+- **Pro entitlement** required to drop a Play recipe onto a free accelerator (`install --upgrade-to-play` or `diff --apply`)
+- **OPT-IN telemetry**, default OFF, with no-PII enforcement at the emitter
+
+> **Also available as an MCP server** — every CLI surface below is also exposed as Model Context Protocol tools so AI agents (Cursor, Claude Desktop, ChatGPT, Continue, Cline) can call them directly. See [`/docs/mcp/orchard`](../mcp/orchard) for the tool reference and [`/docs/mcp/listings`](../mcp/listings) for install commands.
+
+> All examples assume `frootai` installed globally (`npm install -g frootai`). Substitute `npx frootai` if you prefer a one-shot run.
+
+---
+
+## At a glance
+
+| Surface | Command | Sign-in? |
+|---|---|---|
+| Browse the catalog | `frootai orchard list` | no |
+| Fuzzy search | `frootai orchard search <query>` | no |
+| Show one accelerator | `frootai orchard show <slug>` | no |
+| Free install | `frootai orchard install <slug>` | no |
+| Paid install with Play | `frootai orchard install <slug> --upgrade-to-play <id>` | **yes (Pro)** |
+| Preview diff with a Play | `frootai orchard diff <slug> --play <id>` | no |
+| Per-file diff vs target | `frootai orchard diff <slug> --play <id> --target <dir>` | no |
+| Apply Play to existing install | `frootai orchard diff <slug> --play <id> --target <dir> --apply` | **yes (Pro)** |
+| Contribute a Play↔fruit edge | `frootai orchard pollinate <slug> <play-id>` | no |
+| Manage saved accelerators | `frootai orchard bushel add\|remove\|list\|clear` | no |
+| Sign in / out / status | `frootai login` / `logout` / `whoami` | n/a |
+| Telemetry opt-in | `frootai telemetry on\|off\|status\|reset\|export` | export requires sign-in |
+
+---
+
+## Subcommand reference
+
+### `frootai orchard list`
+
+Browse the catalog with column-aligned output.
+
+```text
+frootai orchard list [--variety <v>] [--ripeness <r>] [--category <c>] [--limit <n>] [--json] [--no-color]
+```
+
+| Flag | Notes |
+|---|---|
+| `--variety` | `azure` \| `gcp` \| `aws` \| `oss` \| `hybrid` |
+| `--ripeness` | `Mature` \| `Bearing` \| `Sapling` \| `Seedling` |
+| `--category` | one of the schema category enum values (see `frootai orchard list --json | jq '.[].categories'`) |
+| `--limit` | cap rows shown (default 50) |
+| `--json` | emit the filtered entries array directly (machine-readable) |
+
+Sorts stars-DESC then name-ASC.
+
+---
+
+### `frootai orchard search <query>`
+
+Fuzzy search across name / tagline / tech / category.
+
+```text
+frootai orchard search <query> [--variety <v>] [--limit <n>] [--json]
+```
+
+Uses the same scoring algorithm as the website search at [frootai.dev/orchard](https://frootai.dev/orchard) — results rank-identical.
+
+---
+
+### `frootai orchard show <slug-or-id>`
+
+Pretty-print full manifest + tech + cost + deployment + pollinations + provenance.
+
+```text
+frootai orchard show <slug-or-id> [--variety <v>] [--json]
+```
+
+`--json` emits `{ fruit, pollinations }`.
+
+---
+
+### `frootai orchard install <slug-or-id>`
+
+Real install. Phases:
+
+1. **Clone** the upstream repo (shallow: `--depth 1 --single-branch --no-tags`)
+2. **Write** `.frootai/config.json` with manifest reference
+3. **Drop Play recipe** (`--upgrade-to-play <id>` only — requires Pro)
+4. **Detect post-install hooks** (`azd init`, `npm install`, `pip install`, `dotnet restore`)
+
+```text
+frootai orchard install <slug-or-id>
+  [--target <dir>]              # default: ./<slug>
+  [--variety <v>]               # skip slim-index lookup
+  [--upgrade-to-play <id>]      # PAID — requires sign-in + Pro entitlement
+  [--force]                     # overwrite conflicts + non-empty target
+  [--dry-run]                   # plan + print without touching disk
+  [--skip-clone]                # assume target is already a clone (re-apply only)
+  [--run-hooks]                 # actually execute post-install hooks (default: advisory)
+  [--json]                      # emit combined plan + engine report
+```
+
+**Error codes** you might encounter on the paid path:
+
+| Code | Meaning | Fix |
+|---|---|---|
+| `not_signed_in` | No local token | Run `frootai login` |
+| `token_expired` | Token's `expires_at` is past | Run `frootai login` again |
+| `entitlement_required` | Tier lacks `upgrade-to-play` | Upgrade at [frootai.dev/upgrade](https://frootai.dev/upgrade) |
+| `invalid_play_id` | Play has no pollination edge to this fruit | Run `frootai orchard show <slug>` to see valid Plays |
+| `conflict_detected` | Existing files would be overwritten | Re-run with `--force` or remove manually |
+| `git_not_installed` | `git` binary not on `$PATH` | Install git from [git-scm.com/downloads](https://git-scm.com/downloads) |
+| `target_not_empty` | Target dir already has files | Re-run with `--force` |
+
+---
+
+### `frootai orchard diff <slug-or-id> --play <play-id>`
+
+Three modes:
+
+| Mode | Trigger | Sign-in? |
+|---|---|---|
+| **Preview** (default) | no `--target` | no |
+| **Real diff** | `--target <dir>` | no |
+| **Apply** | `--target <dir> --apply` | **yes (Pro)** |
+
+```text
+frootai orchard diff <slug-or-id> --play <play-id>
+  [--target <dir>]
+  [--apply]
+  [--force]
+  [--context <n>]               # lines of context per hunk (default 3)
+  [--show-identical]            # show identical files (always counted in summary)
+  [--run-hooks]                 # only meaningful with --apply
+  [--json]
+```
+
+**Preview-equals-execute** doctrine: the diff classifies each file as NEW / IDENTICAL / MODIFIED using the same `buildDropPlan` logic as `install --upgrade-to-play`. What you see is exactly what apply would do.
+
+---
+
+### `frootai orchard pollinate <slug-or-id> <play-id>`
+
+Generate a ready-to-paste community-PR pollinations.json edge.
+
+```text
+frootai orchard pollinate <slug-or-id> <play-id>
+  [--relation <r>]              # baseline | extends_to | alternative | uses_pattern | provides_infra
+  [--confidence <0..1>]         # default 0.85
+  [--reason <text>]
+  [--json]
+```
+
+Prints a GitHub edit URL for [`frootai/orchard/registry/pollinations.json`](https://github.com/frootai/frootai/blob/main/orchard/registry/pollinations.json) so contributors can open a PR in one click.
+
+---
+
+### `frootai orchard bushel <add|remove|list|clear>`
+
+Manage saved accelerators in `~/.frootai/bushels.json`. Shape-compatible with the browser localStorage at [frootai.dev/orchard/bushels](https://frootai.dev/orchard/bushels).
+
+```text
+frootai orchard bushel add <id>
+frootai orchard bushel remove <id>     # alias: rm
+frootai orchard bushel list [--json]
+frootai orchard bushel clear --force
+```
+
+---
+
+### Auth: `frootai login` / `logout` / `whoami`
+
+Top-level commands (not under `orchard`) because they apply to anything Pro-gated. The three commands — `frootai login`, `frootai logout`, and `frootai whoami` — share storage at `~/.frootai/.token`.
+
+```text
+frootai login              # opens browser to frootai.dev/login + polls for token (5-min timeout)
+frootai logout             # clears local token + cached entitlements (preserves anon-id + telemetry opt-in)
+frootai whoami [--json]    # shows current sign-in + tier + entitlements
+```
+
+Token storage: `~/.frootai/.token` (mode `0o600` on POSIX). Entitlements cached at `~/.frootai/entitlements.json` (1h TTL + stale-while-revalidate).
+
+---
+
+### Telemetry: `frootai telemetry <on|off|status|reset>`
+
+Default **OFF**. Anonymous events only. Per-machine anon-id (NOT per-user). `DO_NOT_TRACK=1` env always wins.
+
+```text
+frootai telemetry on              # enable + create ~/.frootai/anon-id (UUIDv4, mode 0o600)
+frootai telemetry off             # disable (preserves anon-id file)
+frootai telemetry status [--json] # full audit: events + props + endpoint + DNT state
+frootai telemetry reset           # delete anon-id (fresh on next event)
+frootai telemetry export [--json] # GDPR Article 20 — download your own events as JSONL
+                                  # Requires sign-in + Pro tier. Writes to ~/.frootai/telemetry-export-<ts>.jsonl
+```
+
+**What we collect** (frozen enum, surfaced by `telemetry status`):
+
+- Events: `subcommand_invoked`, `install_succeeded`, `upgrade_to_play_attempted`
+- Props (whitelist): `cmd`, `variety`, `paid`, `dry_run`, `success`, `exit_code`, `has_json`, `tier_class`, `hooks_count`, `error_code`, `ms_elapsed`
+
+**What we NEVER collect**: tokens, email, subject, target_dir, repo_url, fruit_id, Play recipe content, file paths, usernames.
+
+**Endpoint**: `https://frootai.dev/api/telemetry`. Payload capped at 4 KiB. 2-second timeout. Fire-and-forget — telemetry NEVER blocks or fails the CLI.
+
+---
+
+## Worked examples
+
+### Example 1 — Discover and install an Azure RAG accelerator (free path)
+
+```bash
+# 1. Browse mature Azure accelerators in the RAG category
+frootai orchard list --variety azure --category rag --ripeness Mature
+
+# 2. Inspect one in detail
+frootai orchard show azure-search-openai-demo
+
+# 3. Plan the install (dry-run prints the engine report without touching disk)
+frootai orchard install azure-search-openai-demo --target ./my-rag --dry-run --json | jq
+
+# 4. Actually install (git clone + write .frootai/config.json + advisory hooks)
+frootai orchard install azure-search-openai-demo --target ./my-rag
+
+# 5. Follow the advisory hooks printed at the end
+cd ./my-rag && azd init --from-code
+```
+
+### Example 2 — Search → show → save to bushel workflow
+
+```bash
+# Fuzzy search across name/tagline/tech/category
+frootai orchard search "graphrag azure"
+
+# Save interesting candidates to your bushel
+frootai orchard bushel add azure-samples__graphrag-accelerator
+frootai orchard bushel add microsoft__autogen
+
+# Review your shortlist (matches the localStorage shape at frootai.dev/orchard/bushels)
+frootai orchard bushel list --json | jq '.ids'
+
+# Drop one later
+frootai orchard bushel remove microsoft__autogen
+```
+
+### Example 3 — Sign in and upgrade an install with a paid Play (full chain)
+
+```bash
+# 1. Sign in (opens browser; polls for completion)
+frootai login
+
+# 2. Confirm tier
+frootai whoami --json | jq '.entitlements.tier'
+
+# 3. Install with Play 01 (Enterprise RAG) layered on top of the free accelerator
+frootai orchard install azure-search-openai-demo \
+  --target ./my-rag \
+  --upgrade-to-play 01
+
+# 4. Done. Inspect what the Play dropped:
+ls ./my-rag/.github/agents/
+ls ./my-rag/.github/skills/
+cat ./my-rag/.github/copilot-instructions.md
+```
+
+If you hit `entitlement_required`, upgrade at [frootai.dev/upgrade](https://frootai.dev/upgrade).
+
+### Example 4 — Diff an existing free install vs a Play, then apply
+
+```bash
+# 1. Inspect the diff WITHOUT committing (works for unauthenticated users — inspect-before-paying)
+frootai orchard diff azure-search-openai-demo \
+  --play 01 \
+  --target ./my-rag
+
+# Output shows [NEW]/[MOD]/[SAME] chips + standard `@@` hunks +
+#   summary footer "+18 added -3 removed across 1 modified file, 3 new, 1 identical"
+
+# 2. Want machine-readable? Pipe to jq:
+frootai orchard diff azure-search-openai-demo \
+  --play 01 \
+  --target ./my-rag \
+  --json | jq '.diff_set.summary'
+
+# 3. Apply it (requires sign-in + Pro entitlement)
+frootai orchard diff azure-search-openai-demo \
+  --play 01 \
+  --target ./my-rag \
+  --apply
+
+# 4. Conflicts? Re-run with --force to overwrite
+frootai orchard diff azure-search-openai-demo \
+  --play 01 \
+  --target ./my-rag \
+  --apply --force
+```
+
+### Example 5 — Contribute a new pollination edge (community PR)
+
+```bash
+# Suppose you discovered that fruit X is a great baseline for Play 22.
+# Generate a ready-to-paste pollinations.json edge:
+frootai orchard pollinate microsoft__autogen 22 \
+  --relation baseline \
+  --confidence 0.9 \
+  --reason "AutoGen IS the canonical multi-agent swarm baseline"
+
+# The output prints:
+#   - the JSON edge (source: "community_pr")
+#   - a GitHub edit URL for orchard/registry/pollinations.json
+# Open the URL, paste the edge, commit + open PR.
+```
+
+---
+
+## File system contract
+
+The CLI stores all state under `~/.frootai/` (override with `$HOME` / `$USERPROFILE`). Every file is versioned (`v: 1`) and atomic-written (tmp + rename).
+
+| File | Purpose | Mode (POSIX) | Versioned? |
+|---|---|---|---|
+| `~/.frootai/config.json` | Non-secret preferences (anonymous_mode, telemetry_opt_in, last_user, first_run_at) | 0o644 | yes |
+| `~/.frootai/.token` | Auth token (access + refresh + subject + email + tier + expires_at) | **0o600** | yes |
+| `~/.frootai/entitlements.json` | Cached entitlement response (1h TTL, stale-while-revalidate) | 0o644 | yes |
+| `~/.frootai/anon-id` | Per-machine UUIDv4 for telemetry (NOT user-scoped) | **0o600** | n/a |
+| `~/.frootai/bushels.json` | Saved accelerator ids (mirrors browser localStorage shape) | 0o644 | yes |
+| `~/.frootai/cache/orchard/` | CDN bundle cache (1h TTL, mirrors A2.19 policy) | 0o755 | n/a |
+
+---
+
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `DO_NOT_TRACK=1` | Suppresses telemetry even if opted in |
+| `NO_COLOR=1` | Disables ANSI colors |
+| `FROOTAI_PLAYS_DIR` | Override local Play recipe directory (default: walks up to find `frootai/solution-plays`) |
+| `DEBUG=1` | Prints full stack traces on unexpected errors |
+
+---
+
+## Exit codes
+
+Every subcommand follows the standard contract:
+
+| Code | Meaning |
+|---|---|
+| `0` | Success |
+| `1` | Validation / not-found / config error (`OrchardCliError`) |
+| `2` | Unexpected error (catch-all) |
+
+`OrchardCliError` always carries a typed `code` (e.g. `invalid_input`, `not_signed_in`, `conflict_detected`) and a `context` object. Pipe `--json` for machine-readable error shapes.
+
+---
+
+## See also
+
+- [Orchard browse surface (frootai.dev/orchard)](https://frootai.dev/orchard) — the same catalog in a browser
+- [Phase A4 masterplan rows](https://github.com/frootai/frootai/blob/main/planning/fai-orchard-masterplan.md#phase-a4) — sub-phase status
+- [`frootai orchard` source](https://github.com/frootai/frootai-core/tree/main/cli/lib/orchard) — the CLI library
+- [`frootai/solution-plays/`](https://github.com/frootai/frootai/tree/main/solution-plays) — Play recipes
+- [`frootai/orchard/registry/pollinations.json`](https://github.com/frootai/frootai/blob/main/orchard/registry/pollinations.json) — fruit↔play edges

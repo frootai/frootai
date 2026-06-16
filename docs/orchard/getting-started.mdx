@@ -1,0 +1,243 @@
+---
+title: "FAI Orchard — Getting Started (5-minute quickstart)"
+description: "Install @frootai/mcp-orchard (or frootai-mcp-orchard), wire it into Cursor / Claude Desktop / Continue / Cline / VS Code, and ship your first successful MCP tools/call in under 5 minutes."
+icon: "🚀"
+order: 1
+tags: ["orchard", "getting-started", "quickstart", "mcp", "cursor", "claude-desktop", "vscode", "ga", "v1.0"]
+---
+
+# Getting Started — 5-minute quickstart
+
+> **You're reading the v1.0 GA quickstart.** This page is the canonical "first 5 minutes" with the FAI Orchard. For the procurement / security overview, see [/orchard/v1](https://frootai.dev/orchard/v1). For the full reference, see [/docs/mcp/orchard](../mcp/orchard).
+
+By the end of this page you will have:
+
+1. Installed `@frootai/mcp-orchard` (or `frootai-mcp-orchard`) on your laptop.
+2. Wired it into your MCP client (Cursor / Claude Desktop / ChatGPT / Continue / Cline / VS Code).
+3. Made your agent call `orchard.search` and render a Markdown table inline.
+
+Total time: **5 minutes**. Required: Node ≥ 18 *or* Python ≥ 3.10 + `uv`. No FrootAI account needed for the free tools.
+
+---
+
+## At a glance
+
+| Step | Time | What you'll do |
+|---|---|---|
+| 1. Install | 30 s | `npx -y @frootai/mcp-orchard@latest` or `uvx frootai-mcp-orchard[sdk]@latest` |
+| 2. Wire into MCP client | 2 min | One JSON snippet in the client's config file |
+| 3. Verify | 1 min | `tools/call` to `orchard.search` via your agent |
+| 4. (Optional) Sign in for paid tools | 1 min | `frootai login` for `orchard.find_play` and bushels |
+| 5. (Optional) Explore the catalog | 30 s | `https://frootai.dev/orchard` in a browser |
+
+---
+
+## 1. Install the MCP server
+
+The server has **two byte-equal runtimes** — pick whichever is already on your machine. Both speak MCP spec **2025-03-26** with the same 5 tools and identical Markdown output (verified by the 3-runtime byte-equality conformance suite).
+
+### Option A — npm (Node ≥ 18)
+
+```bash
+npx -y @frootai/mcp-orchard@latest --help
+```
+
+That prints the help banner to stderr and exits 0. No global install needed; `npx` runs the latest published tarball on demand.
+
+To pin a version:
+
+```bash
+npx -y @frootai/mcp-orchard@1.0.0
+```
+
+### Option B — PyPI (Python ≥ 3.10)
+
+```bash
+uvx frootai-mcp-orchard[sdk]@latest --help
+```
+
+`uv` is the recommended Python launcher for MCP servers. Install once with `pip install uv` (or follow [the uv install guide](https://docs.astral.sh/uv/)).
+
+### Option C — On-prem Docker (self-host)
+
+Enterprise customers can run the published cosign-signed image directly:
+
+```bash
+docker pull ghcr.io/frootai/mcp-orchard:1.0.0
+
+docker run --rm -p 3000:3000 \
+  --read-only --tmpfs /tmp \
+  --cap-drop=ALL --security-opt no-new-privileges \
+  ghcr.io/frootai/mcp-orchard:1.0.0
+```
+
+Full self-host guide at [/docs/enterprise/self-host](../enterprise/self-host).
+
+---
+
+## 2. Wire into your MCP client
+
+Pick the section for your client. Every snippet uses the npm runtime; swap `npx -y @frootai/mcp-orchard@latest` with `uvx frootai-mcp-orchard[sdk]@latest` for the Python runtime.
+
+### Cursor
+
+Edit `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/mcp-orchard@latest"]
+    }
+  }
+}
+```
+
+Restart Cursor. Confirm the green dot next to **frootai-orchard** in the MCP servers list.
+
+### Claude Desktop
+
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "frootai-orchard": {
+      "command": "npx",
+      "args": ["-y", "@frootai/mcp-orchard@latest"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop. The 🔌 icon in the message bar shows **5 tools** when wired correctly.
+
+### ChatGPT MCP / Continue / Cline / VS Code
+
+See the per-client snippets at [/docs/mcp/install-clients](../mcp/install-clients). Every client uses the same canonical JSON shape.
+
+---
+
+## 3. Verify with a tool call
+
+Ask your agent any of these in plain English:
+
+> *"Search the FrootAI Orchard for Azure RAG accelerators with eval coverage."*
+
+> *"Show me the install command for orchard/az1."*
+
+> *"Find Solution Plays that use Azure AI Foundry."*
+
+Behind the scenes:
+
+```json
+// tools/list response (truncated)
+{
+  "tools": [
+    {"name": "orchard.search", "description": "Search the catalog by query + filter"},
+    {"name": "orchard.show", "description": "Full Markdown summary of one fruit"},
+    {"name": "orchard.install_command", "description": "Generate frootai install command"},
+    {"name": "orchard.find_play", "description": "Find Solution Plays (paid tool)"},
+    {"name": "orchard.list_pollinations", "description": "Cross-Variety equivalents"}
+  ]
+}
+```
+
+```jsonc
+// tools/call → orchard.search
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "orchard.search",
+    "arguments": { "query": "rag", "where": "variety:azure AND trust_badge:eval_proven" }
+  }
+}
+```
+
+The agent renders a Markdown table inline. If you see **"tool not found"** the server failed to start — check the client's MCP log for the stderr output (`mcp-orchard --help` should also work standalone).
+
+---
+
+## 4. (Optional) Sign in for paid tools
+
+`orchard.find_play` requires the `upgrade-to-play` entitlement (Pro tier or higher). For everything else (search / show / install_command / list_pollinations), anonymous access is fine.
+
+```bash
+# Install the CLI (optional — only needed for sign-in)
+npm install -g @frootai/cli
+frootai login
+```
+
+`frootai login` writes a token to `~/.frootai/.token` (mode `0o600`). The MCP server picks it up automatically on the next call — no client restart needed.
+
+Want to verify your tier?
+
+```bash
+frootai whoami --json
+# { "signed_in": true, "tier": "pro", "entitlements": ["upgrade-to-play", ...] }
+```
+
+---
+
+## 5. (Optional) Explore the catalog in a browser
+
+The Orchard is also a public website:
+
+- [`/orchard`](https://frootai.dev/orchard) — browse by variety / category / FROOT layer.
+- [`/orchard/search`](https://frootai.dev/orchard/search) — full-text search.
+- [`/orchard/v1`](https://frootai.dev/orchard/v1) — v1.0 GA brand page (procurement / security overview).
+
+Every fruit on the website has a one-click "Install via MCP" button that copies the canonical install command to your clipboard.
+
+---
+
+## What you got at v1.0 GA
+
+| Capability | Where it lives |
+|---|---|
+| 5 MCP tools (search / show / install_command / find_play / list_pollinations) | [MCP reference](../mcp/orchard#tool-reference) |
+| 6 canned prompt templates | [MCP reference §prompts](../mcp/orchard#prompts) |
+| Resources URI scheme (`orchard://fruit/<id>`) | [MCP reference §resources](../mcp/orchard#resources) |
+| Streamable HTTP transport + `closeGraceful` | [MCP reference §transports](../mcp/orchard#transports) |
+| 3-runtime byte-equality (npm + Python + VS Code embedded) | [Cross-runtime portability](../mcp/orchard#cross-runtime-portability) |
+| Multi-region tenancy (us-east / eu-west / ap-south) | [Enterprise → Multi-region](../enterprise/orchard#multi-region-tenancy) |
+| SSO (SAML + OIDC) + audit export + on-prem Docker | [Enterprise guide](../enterprise/orchard) |
+| v1.0 semver promise + per-package STABILITY.md | [/STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md) |
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `npx: command not found` | Node not installed or PATH misconfigured | Install Node ≥ 18 from [nodejs.org](https://nodejs.org/) |
+| `uvx: command not found` | `uv` not installed | `pip install uv` (or see [uv docs](https://docs.astral.sh/uv/)) |
+| MCP client shows red dot next to `frootai-orchard` | Server failed to start — check the client's MCP log | First line in stderr usually tells you why; common cause is wrong path in the JSON config |
+| `tools/call` returns `ENTITLEMENT_REQUIRED` (-32004) for `orchard.find_play` | Calling a paid tool while signed out | Run `frootai login` and upgrade to Pro at [https://frootai.dev/upgrade](https://frootai.dev/upgrade) |
+| Cursor / Claude doesn't see the new server | Client wasn't restarted after editing the config | Fully quit and reopen the client (not just the window) |
+| Docker container exits immediately | Image-pull failed or platform mismatch | `docker pull --platform linux/amd64 ghcr.io/frootai/mcp-orchard:1.0.0` |
+
+For anything else, the canonical fix matrix lives in the [MCP reference §troubleshooting](../mcp/orchard#troubleshooting) and the [self-host guide §troubleshooting](../enterprise/self-host#troubleshooting).
+
+---
+
+## Next steps
+
+| Want to | Go here |
+|---|---|
+| Read the full tool reference + wire protocol | [/docs/mcp/orchard](../mcp/orchard) |
+| Install in a less common MCP client | [/docs/mcp/install-clients](../mcp/install-clients) |
+| Run on your own infrastructure | [/docs/enterprise/self-host](../enterprise/self-host) |
+| Understand the v1.0 semver contract | [/STABILITY.md](https://github.com/frootai/frootai/blob/main/STABILITY.md) |
+| Migrate an existing v0.9.x integration | [/docs/orchard/migration-from-beta](./migration-from-beta) |
+| See the consolidated v1.0 changelog | [/docs/orchard/v1-changelog](./v1-changelog) |
+| Build against the SDK instead of MCP | [/docs/sdk/orchard-typescript](../sdk/orchard-typescript) · [/docs/sdk/orchard-python](../sdk/orchard-python) |
+
+## See also
+
+- [v1.0 GA landing page](https://frootai.dev/orchard/v1) — procurement + security overview
+- [Enterprise pricing](../enterprise/pricing) — 5-tier matrix + upgrade flow
+- [Browse the catalog](https://frootai.dev/orchard)

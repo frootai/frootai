@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/fai-manifest.v2.json",
+  "title": "FAI Manifest Schema v2",
+  "description": "The FAI Protocol glue file — single JSON wiring all primitives together for a Solution Play. v2.0.0 adds the `provenance` extension required for Harvest-pipeline-emitted plays: every fact traces back to either a deterministic extractor or a logged LLM call with token + cost accounting. v1 fields are preserved verbatim so the 101 first-party plays migrate cleanly via [H0.8].",
+  "$comment": "License: CC0-1.0 (matches v1). Authored 2026-06-04 as part of Phase [H0.3] of the Repo→Solution-Play Converter masterplan. Bumped from JSON Schema Draft-07 (v1) to Draft 2020-12 (v2) to align with `repo-facts.v1.json` ([H0.2]) and the Ajv2020 standard used by 13 call-sites under `frootai-core/scripts/orchard/lib/`. Provenance block fields per masterplan §H0.3: `harvested_from`, `pipeline_version`, `llm_steps[]`, `policy_overlay`, `composition`, `confidence_aggregate`. `provenance` is OPTIONAL at v2.0.0 (so v1 plays migrate non-breakingly); a future v2.1+ tightening or runtime gate may require it for marketplace-badge eligibility.",
+
+  "type": "object",
+  "required": ["play", "version", "context", "primitives"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URL of the schema this document validates against. Conventionally https://frootai.dev/schemas/fai-manifest.v2.json."
+    },
+
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Strict semver of THIS schema (not the play). v2.0.0 is the initial release of the v2 manifest. Lets tools dispatch v1 vs v2 manifests deterministically."
+    },
+
+    "play": {
+      "type": "string",
+      "pattern": "^[0-9]{2,3}-[a-z0-9-]+$",
+      "description": "Solution play identifier (e.g. '01-enterprise-rag', '100-meta-orchestrator', '200-azure-search-openai-demo'). 2–3 digit prefix assigned at [H8] commit time."
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.]+)?$",
+      "description": "Semver of this PLAY (orthogonal to schema_version)."
+    },
+
+    "context": {
+      "type": "object",
+      "required": ["knowledge", "waf"],
+      "additionalProperties": false,
+      "properties": {
+        "knowledge": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "description": "FROOT knowledge module IDs this play depends on (e.g. 'R2-RAG-Architecture', 'O3-MCP-Tools')."
+        },
+        "waf": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "WAF pillars enforced for this play. All primitives must respect these guardrails."
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Scenario scope identifier (e.g. 'enterprise-rag-qa'). Used for context isolation."
+        }
+      },
+      "description": "Shared knowledge context — which FROOT modules, WAF pillars, and scenario scope apply to all primitives."
+    },
+
+    "primitives": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agents":       { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "instructions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "skills":       { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "hooks":        { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "workflows":    { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "guardrails": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "groundedness": { "type": "number", "minimum": 0, "maximum": 1 },
+            "coherence":    { "type": "number", "minimum": 0, "maximum": 1 },
+            "relevance":    { "type": "number", "minimum": 0, "maximum": 1 },
+            "safety":       { "type": "integer", "minimum": 0, "maximum": 0 },
+            "costPerQuery": { "type": "number", "minimum": 0 }
+          },
+          "description": "Quality gates the FAI Engine evaluates after every agent response."
+        }
+      },
+      "description": "All primitives wired into this play — agents, instructions, skills, hooks, workflows, and quality guardrails."
+    },
+
+    "infrastructure": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bicep":      { "type": "string" },
+        "parameters": { "type": "string" },
+        "terraform":  { "type": "string" },
+        "pulumi":     { "type": "string" },
+        "docker":     { "type": "string" },
+        "kubernetes": { "type": "string" },
+        "helm":       { "type": "string" }
+      },
+      "description": "Infrastructure as Code declarations — multi-cloud + multi-runtime."
+    },
+
+    "toolkit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "devkit":  { "type": "string" },
+        "tunekit": { "type": "string" },
+        "speckit": { "type": "string" }
+      },
+      "description": "FAI Toolkit paths — the three kits that equip every play."
+    },
+
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-1: Cross-agent memory federation contract.",
+      "properties": {
+        "scope":      { "type": "string", "enum": ["play-local", "session", "shared", "federated", "global"] },
+        "backend":    { "type": "string", "enum": ["in-memory", "redis", "cosmos-db", "postgres", "custom"] },
+        "retention":  { "type": "string" },
+        "pii":        { "type": "string", "enum": ["allow", "redact-before-store", "block"] },
+        "encryption": { "type": "boolean" },
+        "maxSizeKB":  { "type": "number", "minimum": 0 },
+        "eviction":   { "type": "string", "enum": ["lru", "ttl", "priority", "none"] },
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["agent", "access"],
+            "properties": {
+              "agent":  { "type": "string" },
+              "access": { "type": "string", "enum": ["read", "write", "admin"] }
+            }
+          }
+        },
+        "federation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":      { "type": "boolean" },
+            "peers":        { "type": "array", "items": { "type": "string" } },
+            "syncInterval": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-2: Cross-agent distributed tracing contract.",
+      "properties": {
+        "traceProvider":     { "type": "string", "enum": ["opentelemetry", "langfuse", "appinsights", "datadog", "console", "none"] },
+        "correlationHeader": { "type": "string", "default": "x-fai-trace-id" },
+        "requiredMetrics":   { "type": "array", "items": { "type": "string" } },
+        "samplingRate":      { "type": "number", "minimum": 0, "maximum": 1 },
+        "redactPii":         { "type": "boolean" },
+        "exportInterval":    { "type": "string" },
+        "endpoint":          { "type": "string", "format": "uri" }
+      }
+    },
+
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-3: Recursive cost attribution contract.",
+      "properties": {
+        "maxPerQuery":   { "type": "number", "minimum": 0 },
+        "maxPerSession": { "type": "number", "minimum": 0 },
+        "maxPerDay":     { "type": "number", "minimum": 0 },
+        "attribution":   { "type": "string", "enum": ["flat", "recursive", "proportional"] },
+        "alertAt":       { "type": "number", "minimum": 0, "maximum": 1 },
+        "currency":      { "type": "string", "default": "USD" },
+        "tags":          { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-4: DID-based agent identity and capability tokens.",
+      "properties": {
+        "issuer":                { "type": "string" },
+        "capabilities":          { "type": "array", "items": { "type": "string" } },
+        "maxCallDepth":          { "type": "integer", "minimum": 1, "maximum": 10 },
+        "revocable":             { "type": "boolean" },
+        "tokenTtl":              { "type": "string" },
+        "requireSignedRequests": { "type": "boolean" }
+      }
+    },
+
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-5: Continuous compliance monitoring contract.",
+      "properties": {
+        "frameworks": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["GDPR", "HIPAA", "EU-AI-Act", "SOC2", "ISO27001", "NIST-AI-RMF", "CCPA"] }
+        },
+        "riskLevel":           { "type": "string", "enum": ["minimal", "limited", "high", "unacceptable"] },
+        "preDeploymentChecks": { "type": "boolean" },
+        "auditTrail":          { "type": "string", "enum": ["immutable", "mutable", "none"] },
+        "dataRetentionDays":   { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "providers": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-6: Provider agility contract.",
+      "required": ["primary"],
+      "properties": {
+        "primary":       { "type": "string" },
+        "fallback":      { "type": "array", "items": { "type": "string" } },
+        "routing":       { "type": "string", "enum": ["cost-optimized", "latency-optimized", "quality-optimized", "round-robin", "primary-only"] },
+        "dataResidency": { "type": "string", "enum": ["eu", "us", "global", "local"] },
+        "timeout":       { "type": "integer", "minimum": 1000 },
+        "retries":       { "type": "integer", "minimum": 0, "maximum": 10 }
+      }
+    },
+
+    "modalities": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-7: Multi-modal agent chain contract.",
+      "properties": {
+        "input":  { "type": "array", "items": { "type": "string", "enum": ["text", "image", "audio", "video", "document", "structured", "json"] } },
+        "output": { "type": "array", "items": { "type": "string", "enum": ["text", "json", "image", "audio", "structured"] } },
+        "transforms":       { "type": "object", "additionalProperties": { "type": "string" } },
+        "maxFileSize":      { "type": "string" },
+        "allowedMimeTypes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "prompts": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-8: Prompt artifact versioning contract.",
+      "properties": {
+        "registry":      { "type": "string" },
+        "signing":       { "type": "boolean" },
+        "versionLock":   { "type": "boolean" },
+        "minEvalScore":  { "type": "number", "minimum": 0, "maximum": 5 },
+        "allowedModels": { "type": "array", "items": { "type": "string" } },
+        "artifacts":     { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-9: Reproducible evaluation benchmark contract.",
+      "properties": {
+        "goldenSet":       { "type": "string" },
+        "metrics":         { "type": "array", "items": { "type": "string" } },
+        "weights":         { "type": "object", "additionalProperties": { "type": "number" } },
+        "thresholds":      { "type": "object", "additionalProperties": { "type": "number" } },
+        "regressionGate":  { "type": "boolean" },
+        "baselineVersion": { "type": "string" },
+        "outputDir":       { "type": "string" }
+      }
+    },
+
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "M-10: Privacy consent protocol.",
+      "properties": {
+        "dataResidency":   { "type": "string", "enum": ["eu-west", "eu-central", "us-east", "us-west", "ap-southeast", "global"] },
+        "consentRequired": { "type": "boolean" },
+        "rightToDeletion": { "type": "string", "enum": ["automated", "manual", "none"] },
+        "piiCategories":   { "type": "array", "items": { "type": "string" } },
+        "retentionPolicy": { "type": "string" },
+        "frameworks":      { "type": "array", "items": { "type": "string", "enum": ["GDPR", "CCPA", "HIPAA"] } },
+        "anonymization":   { "type": "string", "enum": ["redact", "pseudonymize", "none"] }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pipeline_version", "confidence_aggregate"],
+      "description": "v2.0.0 Harvest extension. REQUIRED for harvested plays; OPTIONAL for v1-migrated first-party plays at v2.0.0 (a future v2.1+ may tighten this to required). Every emitted fact in the play traces back to either a deterministic extractor (RepoFacts field → file + line) or a logged LLM call here.",
+      "properties": {
+
+        "pipeline_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.-]+)?$",
+          "description": "Semver of the harvest orchestrator (scripts/harvest/00-pipeline.js) that produced this manifest. Bumps on any stage-contract change."
+        },
+
+        "confidence_aggregate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Single-number trust signal in [0,1]. Weighted-mean of per-file confidence per [H0.15] (R files weight 1.0, O files 0.3). Drives marketplace badge threshold; values < 0.6 cannot earn the 'Verified' badge."
+        },
+
+        "harvested_from": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repo_url", "owner", "repo", "commit_sha", "harvested_at", "run_id"],
+          "description": "Present for harvested plays; absent for hand-authored first-party plays.",
+          "properties": {
+            "repo_url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://github\\.com/[^/]+/[^/]+/?$"
+            },
+            "owner":          { "type": "string", "minLength": 1, "maxLength": 100 },
+            "repo":           { "type": "string", "minLength": 1, "maxLength": 200 },
+            "commit_sha":     { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+            "default_branch": { "type": "string", "minLength": 1, "maxLength": 200 },
+            "harvested_at":   { "type": "string", "format": "date-time" },
+            "run_id": {
+              "type": "string",
+              "pattern": "^harvest-[0-9]+-[a-f0-9]{8}$",
+              "description": "Correlation id from scripts/harvest/00-pipeline.js. Round-trips to the JSONL run log under tmp/harvest/runs/<run-id>/run.jsonl."
+            }
+          }
+        },
+
+        "llm_steps": {
+          "type": "array",
+          "description": "Append-only log of every LLM call made by the pipeline. Powers cost attribution ([H0.20]) + fact-check audit trail ([H0.12]). Empty array is valid (zero-LLM extract-only runs).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["step_name", "model", "in_tokens", "out_tokens", "cache_hit", "timestamp"],
+            "properties": {
+              "step_name":     { "type": "string", "minLength": 1, "maxLength": 100, "description": "Logical stage step (e.g. 'scaffold:agent.md', 'scaffold:architecture.md', 'compose:infra-summary')." },
+              "model":         { "type": "string", "minLength": 1, "maxLength": 200, "description": "Provider/model literal (e.g. 'openai/gpt-4o-mini', 'azure-openai/gpt-4o-2024-08-06')." },
+              "in_tokens":     { "type": "integer", "minimum": 0 },
+              "out_tokens":    { "type": "integer", "minimum": 0 },
+              "cost_usd":      { "type": "number", "minimum": 0, "description": "Resolved via pricing-catalog at call-time ([H0.17])." },
+              "cache_hit":     { "type": "boolean", "description": "True when the result came from the prompt-content-hash cache; false otherwise." },
+              "timestamp":     { "type": "string", "format": "date-time" },
+              "prompt_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "sha256 of the full rendered prompt; cache key + audit anchor." }
+            }
+          }
+        },
+
+        "policy_overlay": {
+          "oneOf": [
+            { "type": "string", "enum": ["default"], "description": "Sentinel for the baseline overlay shipped under frootai/cookbook/harvest-defaults/." },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source", "sha256"],
+              "properties": {
+                "source": { "type": "string", "minLength": 1, "maxLength": 500, "description": "Path or URL of the overlay file applied (e.g. 'overlays/eu-gdpr.json', 'https://customer.example/overlay.json')." },
+                "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "sha256 of the overlay file content at apply-time. Stable across re-runs; mismatch = drift." }
+              }
+            }
+          ],
+          "description": "Which policy-overlay-v1 file (regions/models/naming/tags/network/rbac/iac) was applied at S6 compose time. Either the literal 'default' sentinel or a {source,sha256} pair for non-default overlays. Reproduce-bit: same RepoFacts + same overlay sha = same composed infra."
+        },
+
+        "composition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["composer_version", "modules"],
+          "description": "Inventory of AVM modules composed by Stage S6 ([H6]). One entry per Bicep/TF module that contributed to the emitted infra.",
+          "properties": {
+            "composer_version": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.-]+)?$",
+              "description": "Semver of the AVM composer ([V3]) that produced the infra."
+            },
+            "modules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["kind", "name", "version"],
+                "properties": {
+                  "kind":       { "type": "string", "enum": ["avm-bicep", "avm-terraform", "local-bicep", "local-terraform"] },
+                  "name":       { "type": "string", "minLength": 1, "maxLength": 200, "description": "Canonical module name (e.g. 'avm/res/key-vault/vault', 'avm/res/cognitive-services/account')." },
+                  "version":    { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.-]+)?$" },
+                  "source_url": { "type": "string", "format": "uri", "description": "Registry URL the composer resolved the module from (mcr.microsoft.com/bicep/avm/... or Terraform Registry)." },
+                  "weight":     { "type": "number", "minimum": 0, "maximum": 1, "description": "Fractional contribution to confidence_aggregate (e.g. 0.4 for a primary compute module, 0.05 for a supporting tag-policy)." }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

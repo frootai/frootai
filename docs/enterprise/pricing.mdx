@@ -1,0 +1,214 @@
+---
+title: "FAI Orchard — Pricing & Upgrade Flow"
+description: "Self-serve tiers (free / pro / team / business) + sales-assisted enterprise tier, with upgrade flow wireframes and tier-rank semantics across CLI / SDK / MCP."
+icon: "💳"
+order: 52
+tags: ["pricing", "tiers", "upgrade", "enterprise", "billing", "stripe", "design-partner"]
+---
+
+# FAI Orchard — Pricing & Upgrade Flow
+
+The FrootAI Orchard is built on **tier-rank cumulative entitlements**: every tier inherits everything below it, and only the top tier (`enterprise`) is sales-assisted. The four tiers below are self-serve Stripe checkouts.
+
+| Tier | Monthly (USD) | Annual (USD, ~17% off) | Who it's for |
+|---|---|---|---|
+| `free` | $0 | $0 | Hobbyists / try-before-you-buy / OSS contributors |
+| `pro` | $19 / user | $190 / user | Individual developers using `orchard.find_play` (paid tool) |
+| `team` | $49 / user | $490 / user | Small teams (≤25 seats) sharing a bushel |
+| `business` | $199 / user | $1990 / user | Mid-market (≤250 seats) with telemetry dashboard access |
+| `enterprise` | _contact sales_ | _contact sales_ | SSO, audit export, multi-region, on-prem |
+
+> **Tier rank** (cumulative): `free` (0) < `pro` (1) < `team` (2) < `business` (3) < `enterprise` (4). Every paid tier inherits all entitlements of the tiers below it.
+
+---
+
+## What's included at every tier
+
+| Capability | free | pro | team | business | enterprise |
+|---|:---:|:---:|:---:|:---:|:---:|
+| `orchard.search` / `show` / `install_command` / `list_pollinations` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `orchard.find_play` (`upgrade-to-play`) |  | ✓ | ✓ | ✓ | ✓ |
+| Bushel sync (`bushel-sync`) |  |  | ✓ | ✓ | ✓ |
+| Telemetry dashboard (`telemetry-dash`) |  |  |  | ✓ | ✓ |
+| SSO — SAML 2.0 + OIDC (`sso-saml`) |  |  |  |  | ✓ |
+| Audit log batch export (`audit-export`) |  |  |  |  | ✓ |
+| Multi-region data residency (`us-east` / `eu-west` / `ap-south`) |  |  |  |  | ✓ |
+| Cross-region read (`cross-region:read`) |  |  |  |  | ✓ |
+| Per-tenant quota overrides |  |  |  |  | ✓ |
+| On-prem / self-host Docker image |  |  |  |  | ✓ |
+
+---
+
+## Upgrade flow — self-serve (free → pro → team → business)
+
+```
+┌────────────┐   ┌────────────┐   ┌────────────┐   ┌────────────┐
+│ free user  │──►│ "Upgrade"  │──►│ Stripe     │──►│ Webhook    │
+│ hits paid  │   │ CTA shown  │   │ Checkout   │   │ → setTier  │
+│ tool       │   │ in stderr  │   │ (Pro plan) │   │ (A5.5)     │
+└────────────┘   └────────────┘   └────────────┘   └────────────┘
+                                                          │
+                                                          ▼
+                                                  ┌────────────┐
+                                                  │ Next call: │
+                                                  │ whoami     │
+                                                  │ tier=pro   │
+                                                  └────────────┘
+```
+
+**Touchpoints:**
+
+1. **Free user calls `orchard.find_play`** in any MCP client (Cursor / Claude / etc.). Auth gate returns:
+
+    ```json
+    {
+      "ok": false,
+      "error": "tool \"orchard.find_play\" requires Pro tier or higher (current: free). Upgrade at https://frootai.dev/upgrade"
+    }
+    ```
+
+    The MCP error code is **`-32004 ENTITLEMENT_REQUIRED`** so clients can render a deep link.
+
+2. **CLI users** see the same hint when running `frootai orchard play find <query>` while on the free tier. The stderr message contains the canonical `https://frootai.dev/upgrade` URL.
+
+3. **Stripe checkout** (one-page flow: pick plan → enter email + payment → confirm). Plan IDs are stable per tier (`price_pro_monthly`, `price_pro_annual`, etc.).
+
+4. **Webhook → `setTier`** (A5.5) marks the user (or org, for `team`/`business` group buys) as the new tier. The next `whoami` call (free in-process cache: 60s) surfaces the new tier without restart.
+
+5. **Down-tier** (cancellation, expired card) gracefully reverts to the previous paid tier on grace-period expiry, then to `free`. The CLI/SDK/MCP `whoami` always shows the **current effective tier** including the `expires_at` ISO timestamp.
+
+---
+
+## Upgrade flow — sales-assisted (business → enterprise)
+
+Enterprise is **never** self-serve checkout. The flow:
+
+```
+┌────────────┐   ┌─────────────┐   ┌────────────────┐   ┌────────────────┐
+│ Lead       │──►│ Sales call: │──►│ Design partner │──►│ Provisioning:  │
+│ (form OR   │   │ scoping +   │   │ kickoff form   │   │ admin-provision-│
+│ business   │   │ pricing     │   │ filled (A9.15) │   │ org.js (A9.19) │
+│ user CTA)  │   │             │   │                │   │                │
+└────────────┘   └─────────────┘   └────────────────┘   └────────────────┘
+                                                                │
+                                                                ▼
+                                                       ┌─────────────────┐
+                                                       │ SSO test:       │
+                                                       │ admin-sso-test  │
+                                                       │ (A9.6) → ok     │
+                                                       └─────────────────┘
+                                                                │
+                                                                ▼
+                                                       ┌─────────────────┐
+                                                       │ Customer       │
+                                                       │ verification    │
+                                                       │ smoke (§6 of    │
+                                                       │ kickoff form)   │
+                                                       └─────────────────┘
+                                                                │
+                                                                ▼
+                                                       ┌─────────────────┐
+                                                       │ Live — first    │
+                                                       │ audit export +  │
+                                                       │ 30d check-in    │
+                                                       └─────────────────┘
+```
+
+**Touchpoints:**
+
+1. **Lead capture** — either via the marketing form (`https://frootai.dev/enterprise`) or in-product when a `business` tier user calls a feature gated to `enterprise` (e.g. attempting to set an org `home_region`). The same `-32004` error envelope surfaces `Contact sales` instead of a Stripe link.
+
+2. **Sales call** — scoping (anticipated MCP usage, data residency requirement, SSO IdP, target go-live), pricing (annual contract value, multi-year discount). At the end of the call, the founder + technical contact open the **design partner integration kickoff form** at `planning/listings/enterprise-design-partner-kickoff.md` and fill it together.
+
+3. **Provisioning** — operator runs `admin-provision-org.js` (A9.19) with the slug, home region, customer ID, and audit reason. The CLI is idempotent; safe to re-run if any field changes.
+
+4. **SSO validation** — operator runs `admin-sso-test.js` (A9.6) against a sample IdP assertion the customer provides (NEVER live credentials). Confirms the claim map produces canonical claims with `tier=enterprise`.
+
+5. **Customer smoke** — customer logs in via their IdP, runs `frootai whoami`, gets `tier=enterprise + home_region=<expected>`, and runs an audit-export dry-run. Every step is captured in §6 of the kickoff form before the partner moves to "live" in the CRM.
+
+6. **30-day check-in** — telemetry review (call volume, error rate, quota utilization), optional quota tuning via `admin-quota-override.js` (A8.16), feedback on UX rough edges.
+
+---
+
+## Wireframes (text — for hand-off to design)
+
+### Wireframe 1: in-product `tier=free` paywall in MCP client
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🚫 Pro tier required                                                │
+│                                                                     │
+│ Tool: orchard.find_play                                             │
+│ Your tier: free                                                     │
+│ Required: pro (or higher)                                           │
+│                                                                     │
+│ ┌──────────────────────────┐  ┌─────────────────────────────────┐  │
+│ │ Upgrade to Pro — $19/mo  │  │ See all plans                   │  │
+│ └──────────────────────────┘  └─────────────────────────────────┘  │
+│                                                                     │
+│ After upgrade, this tool is unlocked everywhere you're signed in.   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Wireframe 2: in-product `tier=business` enterprise upsell
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🏢 Enterprise tier required                                         │
+│                                                                     │
+│ Action: set home_region (eu-west)                                   │
+│ Your tier: business                                                 │
+│ Required: enterprise (SSO + audit export + multi-region)            │
+│                                                                     │
+│ ┌──────────────────────────┐  ┌─────────────────────────────────┐  │
+│ │ Contact sales            │  │ View enterprise capabilities    │  │
+│ └──────────────────────────┘  └─────────────────────────────────┘  │
+│                                                                     │
+│ Enterprise is sales-assisted — no self-serve checkout.              │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Wireframe 3: `/upgrade` landing page tier grid
+
+```
+┌────────────┬────────────┬────────────┬────────────┬────────────────┐
+│  free      │  pro       │  team      │  business  │  enterprise    │
+│  $0        │  $19/u/mo  │  $49/u/mo  │  $199/u/mo │  contact sales │
+│            │            │            │            │                │
+│  3 tools   │  + find    │  + bushel  │  + telem.  │  + SSO         │
+│            │    _play   │    sync    │    dash    │  + audit       │
+│            │            │            │            │  + multi-region│
+│            │            │            │            │  + on-prem     │
+│            │            │            │            │                │
+│ [start]    │ [upgrade]  │ [upgrade]  │ [upgrade]  │ [contact]      │
+└────────────┴────────────┴────────────┴────────────┴────────────────┘
+```
+
+---
+
+## FAQ
+
+**Q: Are tier prices final?**
+A: Subject to change before v1.0 GA. The price grid above is the design-partner-era plan; final GA pricing will be locked at Phase A10.
+
+**Q: Can I downgrade?**
+A: Yes — Stripe customer portal lets you cancel or switch plans any time. The downgrade takes effect at end of the current billing cycle; mid-cycle the user keeps the higher tier's entitlements.
+
+**Q: What happens to my audit log exports if I downgrade from enterprise?**
+A: Existing exports remain in your bucket forever (FrootAI never had a copy). The `audit-export` entitlement is removed at downgrade, so no new exports can be triggered. Re-upgrade restores access.
+
+**Q: Is there a non-profit / OSS discount?**
+A: Yes — 50% off `pro`/`team`/`business` tiers for qualifying 501(c)(3) and major OSS projects. Email `sales@frootai.dev` with proof of status.
+
+**Q: Can I prepay for a year?**
+A: Yes — annual billing is the default on `pro`/`team`/`business` (toggle to monthly at checkout). Enterprise contracts default to multi-year with a discount.
+
+---
+
+## See also
+
+- [Enterprise Guide](/docs/enterprise/orchard) — full enterprise capability reference.
+- [Self-host Guide](/docs/enterprise/self-host) — on-prem deployment.
+- [MCP Server reference](/docs/mcp/orchard) — entitlement gates per tool.
+- [Tier rank semantics](/docs/cli/orchard#tier-rank) — how the CLI / SDK / MCP all share the same 5-tier ladder.
+- `planning/listings/enterprise-design-partner-kickoff.md` (A9.15) — kickoff form template.
