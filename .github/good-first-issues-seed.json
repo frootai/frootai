@@ -1,0 +1,41 @@
+{
+  "_comment": "5 curated good-first-issues for first-time contributors (P1.6.008 · PRD-008 §5.3). One per acceptance category: typo, doc improvement, test coverage gap, config lint fix, i18n string. Each has a clear scope, acceptance criteria, and a file pointer. Seed with: node scripts/seed-good-first-issues.mjs (requires gh CLI authenticated). The script is idempotent — it skips issues whose exact title already exists open.",
+  "labels": ["good first issue", "help wanted"],
+  "issues": [
+    {
+      "title": "docs: fix typos and broken links in solution-play READMEs",
+      "category": "typo",
+      "extra_labels": ["documentation"],
+      "file_pointer": "solution-plays/*/README.md",
+      "body": "## Summary\n\nWe want our docs to be trustworthy down to the last character. This is a perfect first issue: find and fix typos, grammar slips, or broken relative links in one or more `solution-plays/*/README.md` files.\n\n## Where to look\n\n- `solution-plays/` — each subfolder has a `README.md`.\n- Pick **one** play to start (you don't have to do all of them).\n\n## Acceptance criteria\n\n- [ ] At least one real typo / grammar / broken-link fix in a `solution-plays/*/README.md`.\n- [ ] No content meaning changed — wording fixes only.\n- [ ] PR description names the play(s) you touched and what you fixed.\n- [ ] `npm run validate:primitives` passes locally.\n\n## Getting started\n\nSee [CONTRIBUTING.md](../CONTRIBUTING.md). Comment \"I'll take this\" and a maintainer will help you scope it. A maintainer reviews first PRs within **24h**. 🌱"
+    },
+    {
+      "title": "docs: add a troubleshooting section to the Setup Guide",
+      "category": "doc-improvement",
+      "extra_labels": ["documentation"],
+      "file_pointer": "docs/",
+      "body": "## Summary\n\nNewcomers sometimes hit the same setup snags. Add a short **Troubleshooting** section to the setup docs covering 3–5 common issues and their fixes.\n\n## Where to look\n\n- `docs/` — the setup / getting-started docs.\n\n## Acceptance criteria\n\n- [ ] A new `## Troubleshooting` section with at least 3 problem→fix entries.\n- [ ] Each entry is a real, reproducible issue (e.g. Node version, missing env var, lockfile mismatch).\n- [ ] Markdown renders cleanly (no broken headings/links).\n- [ ] PR links to the doc file you changed.\n\n## Getting started\n\nSee [CONTRIBUTING.md](../CONTRIBUTING.md). No question is too small — ask on [Discord](https://frootai.dev/community). First-PR review SLA: **24h**. 🌱"
+    },
+    {
+      "title": "test: add coverage for an untested validate-primitives edge case",
+      "category": "test-coverage",
+      "extra_labels": ["tests"],
+      "file_pointer": "scripts/validate-primitives.js",
+      "body": "## Summary\n\nOur primitive validator (`scripts/validate-primitives.js`) has edge cases that aren't yet covered by tests. Add a focused test (or test fixture) for one of them.\n\n## Where to look\n\n- `scripts/validate-primitives.js` — the validator.\n- Existing tests / fixtures (search for `validate` test files).\n\n## Acceptance criteria\n\n- [ ] One new test covering a currently-untested branch (e.g. missing `description`, bad `applyTo`, kebab-case filename violation).\n- [ ] Test fails against the bug it guards (red), passes with current correct code (green).\n- [ ] PR explains which edge case is now covered.\n\n## Getting started\n\nSee [CONTRIBUTING.md](../CONTRIBUTING.md). Run `npm run validate:primitives` to see the validator in action. First-PR review SLA: **24h**. 🌱"
+    },
+    {
+      "title": "chore: fix lint / formatting issues in a config JSON file",
+      "category": "config-lint",
+      "extra_labels": ["configuration"],
+      "file_pointer": "solution-plays/*/config/*.json",
+      "body": "## Summary\n\nConfig files should be consistent and lint-clean. Find a `config/*.json` in a solution play with a formatting or schema-comment inconsistency and tidy it.\n\n## Where to look\n\n- `solution-plays/*/config/*.json` — `openai.json`, `guardrails.json`, `agents.json`, etc.\n- Each value should have a matching `_comments` entry explaining it (see [CONTRIBUTING.md](../CONTRIBUTING.md) Quality Standards).\n\n## Acceptance criteria\n\n- [ ] JSON parses without errors (`python3 -c \"import json; json.load(open('FILE'))\"`).\n- [ ] Consistent 2-space indentation; no trailing commas.\n- [ ] Any missing `_comments` entries added for documented keys.\n- [ ] No behavioural value changes unless explicitly described in the PR.\n\n## Getting started\n\nSee [CONTRIBUTING.md](../CONTRIBUTING.md). First-PR review SLA: **24h**. 🌱"
+    },
+    {
+      "title": "i18n: extract a hard-coded UI string into the strings file",
+      "category": "i18n",
+      "extra_labels": ["i18n"],
+      "file_pointer": "frootai.dev/src/",
+      "body": "## Summary\n\nTo support translation, user-facing copy should live in a strings/locale file rather than be hard-coded in components. Move **one** hard-coded string into the appropriate strings file and reference it.\n\n## Where to look\n\n- `frootai.dev/src/` — find a component with a hard-coded English label.\n- The locale / strings file the project uses for UI copy.\n\n## Acceptance criteria\n\n- [ ] One hard-coded UI string moved into the strings/locale file with a sensible key.\n- [ ] Component renders identically (no visible change).\n- [ ] If a translation scaffold exists, the English value is filled in; other locales left as TODO.\n- [ ] PR names the component and the new string key.\n\n## Getting started\n\nSee [CONTRIBUTING.md](../CONTRIBUTING.md). Unsure where strings live? Ask on [Discord](https://frootai.dev/community) — we'll point you. First-PR review SLA: **24h**. 🌱"
+    }
+  ]
+}

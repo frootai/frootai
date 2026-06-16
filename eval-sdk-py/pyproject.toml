@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "frootai-eval-sdk"
+version = "0.1.0"
+description = "FrootAI Eval-as-Service SDK — run eval suites, fetch datasets, manage scheduled runs, and mint CI tokens against the FrootAI Cloud eval API. Standard-library only."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Pavleen Bali", email = "pavleenbali@frootai.dev" }]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["frootai", "eval", "evaluation", "llm-eval", "agent-eval", "groundedness", "ai", "sdk"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://frootai.dev/methodology/eval"
+Repository = "https://github.com/frootai/frootai"
+Documentation = "https://frootai.dev/methodology/eval"
+
+[tool.setuptools]
+packages = ["frootai_eval"]

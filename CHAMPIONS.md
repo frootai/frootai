@@ -1,84 +1,122 @@
 # FrootAI Champions Program
 
-> **From the Roots to the Fruits — Champions are the people who help the whole community grow.**
+> **From the roots to the fruits — Champions are the people who keep the soil rich.**
+>
+> The Champions Program is a small, hand-picked cohort of community members who
+> embody FrootAI's culture of **kindness, quality, and craft**. Champions are not
+> our most prolific committers or our biggest followings — they are the people who
+> make everyone else around them better.
 
 ---
 
-## What a Champion is
+## What is a Champion?
 
-A FrootAI Champion is a hand-picked community member who upholds our culture of kindness, brings monthly feedback to the founder, and produces one piece of community work per quarter. Champions are not employees, ambassadors with quotas, or a sales channel — they're people who already showed up and were generous, recognised publicly because that generosity matters.
+> **A Champion is a hand-picked community member who upholds the kindness culture,
+> brings monthly feedback to the founder, and produces one piece of community work
+> per quarter.**
 
-The program exists because **belonging is a brand pillar**. If we say "kindness is the brand" (and we do — see [Code of Conduct](CODE_OF_CONDUCT.md)), the people who model it most consistently deserve to be named, recognised, and given a seat at the founder's table.
+Champions are chosen for *who they are in the community*, not for vanity metrics.
+A Champion is the person who patiently walks a newcomer through their first
+manifest, who answers the "dumb" question warmly, who files the honest bug report,
+who shows up. We hand-pick them — in Phase 1 this is **not** an application-based
+program (PB-CM Champions §).
 
-## Phase 1 v0 — 5 founding Champions (hand-picked)
+---
 
-The first cohort is small and intentional:
+## Phase 1 — Champions v0 (the founding cohort)
 
-- **5 people**, all selected by the founder from community members who showed up across Discord, GitHub PRs, content engine, and the studio MVP.
-- **6-month cohort** running from the program's launch.
-- **No application form yet.** Phase 2 v1 (12 people) opens applications; Phase 3+ v2 (50+) introduces a tiered program. Phase 1 is small + relationship-based on purpose.
+| Attribute | Phase 1 v0 |
+|---|---|
+| **Cohort size** | 5 founding Champions |
+| **Term** | 6-month cohort |
+| **Selection** | Hand-picked by the founder (not application-based) |
+| **Diversity bar** | ≥ 3 timezones AND ≥ 2 genders represented across the 5 |
+
+The public roster of consenting v0 Champions lives at
+**[frootai.dev/champions](https://frootai.dev/champions)** — listed only with each
+person's explicit consent (G.012 attribution; consent always).
+
+---
 
 ## Benefits
 
-- **Champion badge** on Discord + GitHub + a printed certificate.
-- **Monthly 60-min video call** with the founder. Recorded; shared in the private Champions channel.
-- **Early access** to Studio v1 + Cloud beta features.
-- **€500 / quarter swag + tools budget** (Notion / Linear / Cursor seats or branded swag — Champion picks per quarterly preference).
-- **Co-authorship opportunities** on `/blog` posts.
-- **Public listing** at `frootai.dev/champions` (consent-required).
+Being a Champion is a *gift*, never an obligation. Champions receive:
 
-## Expectations
-
-- **Active in Discord** — ≥ 3 helpful replies/week on average across public channels.
-- **Monthly feedback** brought to the founder via the call or async note.
-- **One piece of community work per quarter** — could be a talk, post, video, contribution, hackathon judging, or Tuesday Demo guest spot. Quality > quantity.
-- **Uphold the kindness culture** — first-line example for new members. No "rough genius" tolerated.
-
-## Exit
-
-- 6-month cohort by default; alumni status with badge retained when cohort ends.
-- Mutual: Champion or founder can step out with 30-day notice + warm transition. The relationship survives.
-- **Champions are never publicly "removed".** If someone can't continue, the framing is *graduated*, not removed. Privacy + dignity always.
-
-## How to become a Champion (Phase 1)
-
-Phase 1 is hand-picked — no application. The founder watches who shows up across surfaces:
-
-1. **GitHub** — first-PR experience, follow-up contributions, kindness in code review.
-2. **Discord** — `#plays`, `#primitives`, `#studio` replies. Helping newcomers > showing off.
-3. **Tuesday Demo / Friday Office Hours** — showing up, asking real questions, giving honest answers.
-4. **Community Challenges + Hackathon** — submitting, judging, helping others submit.
-
-If the founder DMs you — that's the invite. If not, that's not failure; the v1 cohort opens in Phase 2.
-
-## What this program is **not**
-
-- ❌ A free engineering team. Champions aren't unpaid labour.
-- ❌ A sales channel. Champions aren't selling Cloud Pro tiers.
-- ❌ A gated content pipeline. Champion work is opt-in, not assigned.
-- ❌ An exclusivity wall. The MIT-licensed product remains fully accessible to everyone.
-- ❌ A ranking. We don't compare Champions to each other.
-- ❌ Tied to enterprise procurement, design-partner deals, or Cloud paid tiers in any way.
-
-## Recognition philosophy
-
-- **Founder shows up.** Monthly calls happen even at 1,000 employees later (PB-CM principle 5).
-- **Champion-of-the-year is not a thing.** Phase 1 — everyone is equal. (Phase 3+ may introduce tiers based on track record, but Phase 1 is intentionally flat.)
-- **Public listing requires consent.** Some Champions prefer privacy; that's honoured.
-- **Swag is meaningful, not branded-corporate.** Handwritten card > €100 mug.
-
-## Cross-references
-
-- [Code of Conduct](CODE_OF_CONDUCT.md) — what kindness looks like in practice.
-- [CONTRIBUTING.md](CONTRIBUTING.md) — how to ship a first PR.
-- Architecture spec: `frootai-blueprint/prds/PRD-008-community-foundation.md` §5.5
+- 🏅 **A Champion badge** — a Discord role + public listing on
+  [frootai.dev/champions](https://frootai.dev/champions) (with consent).
+- 📞 **A monthly call with the founder** — direct line, real influence on the roadmap.
+- 🚀 **Early access** — new features and plays before public release.
+- 🎁 **A quarterly welcome pack** — curated swag + tools, **up to €500 per Champion
+  per quarter** (you choose what's meaningful; nothing is forced).
+- ✍️ **Co-authorship opportunities** — blog posts, plays, and talks, credited to you.
+- 🌍 **A seat at the table** — Champions shape the program itself in the quarterly retro.
 
 ---
 
-## Phase 1 v0 cohort
+## Expectations
 
-_Public listing — Champions who consented to be named appear here. Updated as the cohort confirms._
+Champions are asked — gently — to:
 
-_(Roster appears here once Champions are confirmed per P1.6.001 ops portion.)_
+- 💬 Make **≥ 3 helpful public replies per week** (Discord, GitHub, Discussions).
+- 🗣️ Bring **monthly feedback** to the founder call — the honest kind.
+- 🛠️ Produce **one piece of community work per quarter** — a play, a doc, a talk, a
+  tutorial, a tool. Whatever feels meaningful to you.
+- 🤝 **Uphold the kindness culture** — model the [Code of Conduct](./CODE_OF_CONDUCT.md),
+  never punch down, welcome every newcomer the way you'd want to have been welcomed.
 
-— Pavleen 🍓
+> If life gets in the way — it will, for all of us — just tell us. There is no
+> penalty for being human. A Champion who needs a quiet quarter is still a Champion.
+
+---
+
+## How Champions are chosen (Phase 1)
+
+In Phase 1 the founder hand-picks Champions using a private rubric (PRD-008 §5.5.1),
+scoring candidates 0–2 on each of five dimensions (0–10 total; threshold ≥ 7):
+
+1. **Multi-surface activity** — present across Discord, GitHub, and Discussions.
+2. **Helped others** — visibly made other people's experience better.
+3. **Kindness signal** — warm, patient, never punch-down.
+4. **Diversity vs. the pool** — broadens the cohort's perspective.
+5. **Commitment signal** — shows up consistently over time.
+
+The invitation itself is **personal** — a real DM from the founder, specific to you,
+never a form letter (PB-CM kindness principle; G.011 LOVE).
+
+---
+
+## Exit policy — Champions graduate, they are never "removed"
+
+A cohort is a season, not a life sentence. When a Champion's term ends — or when
+someone steps back — they **graduate warmly**. We thank them publicly (with consent),
+they keep the alumni badge, and the door stays open. **No one is ever "removed" in
+public.** If a rare conduct issue arises it is handled privately and kindly, per the
+[Code of Conduct](./CODE_OF_CONDUCT.md).
+
+---
+
+## Phase 2 and beyond
+
+In Phase 2 the program grows to ~12 Champions and opens to **applications** (PB-CM).
+Phase 1 v0 alumni continue receiving packs for the full duration of their 6-month
+cohort. The Phase 2 budget requires fresh GA-09 approval before kickoff.
+
+---
+
+## Want to become a Champion?
+
+You don't apply in Phase 1 — but you *do* get noticed. The path is simple and it is
+the same path that earns LOVE everywhere in FrootAI:
+
+1. **Contribute** — open a PR, file a thoughtful issue, ship a play. See
+   [CONTRIBUTING.md](./CONTRIBUTING.md) and our
+   [`good first issue`](https://github.com/frootai/frootai/labels/good%20first%20issue) board.
+2. **Be kind** — help the next person the way someone helped you.
+3. **Show up** — consistency over intensity.
+
+That's it. The roots feed the fruits. 🌱🍓
+
+---
+
+> *Champions help shape FrootAI's culture. Learn more, then come build with us:*
+> *[Discord](https://frootai.dev/community) · [CONTRIBUTING.md](./CONTRIBUTING.md) · [Code of Conduct](./CODE_OF_CONDUCT.md)*

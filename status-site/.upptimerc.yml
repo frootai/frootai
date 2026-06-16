@@ -1,34 +1,52 @@
-# FrootAI Status Page Configuration
+# FrootAI Status Page Configuration (GA)
 # https://upptime.js.org/docs/configuration
+#
+# Monitors 7 services. Auto-updates status page within 2 min of state change.
+# Tracker: P3.1.006
 
 owner: frootai
 repo: status
 
 sites:
+  # ── Core Cloud Services ────────────────────────────────────────────────
+
+  - name: Cloud Engine
+    url: https://engine.frootai.dev/health
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+    __dangerous__body_down: '"status":"error"'
+
+  - name: Cloud Eval
+    url: https://eval.frootai.dev/health
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
+  - name: Cloud Registry
+    url: https://registry.frootai.dev/health
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
+  # ── Web Properties ─────────────────────────────────────────────────────
+
+  - name: Studio
+    url: https://studio.frootai.dev
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
   - name: FrootAI Website
     url: https://frootai.dev
     icon: https://frootai.dev/favicon.ico
     expectedStatusCodes:
       - 200
 
-  - name: FrootAI Docs
-    url: https://docs.frootai.dev
-    icon: https://frootai.dev/favicon.ico
-    expectedStatusCodes:
-      - 200
-
-  - name: FrootAI API
-    url: https://api.frootai.dev/health
-    expectedStatusCodes:
-      - 200
+  # ── Package Registries ─────────────────────────────────────────────────
 
   - name: npm — frootai-mcp
     url: https://registry.npmjs.org/frootai-mcp
-    expectedStatusCodes:
-      - 200
-
-  - name: npm — frootai
-    url: https://registry.npmjs.org/frootai
     expectedStatusCodes:
       - 200
 
@@ -36,8 +54,6 @@ sites:
     url: https://pypi.org/pypi/frootai/json
     expectedStatusCodes:
       - 200
-
-  - name: PyPI — frootai-mcp
     url: https://pypi.org/pypi/frootai-mcp/json
     expectedStatusCodes:
       - 200
