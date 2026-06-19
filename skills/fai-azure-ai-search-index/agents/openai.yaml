@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-azure-ai-search-index). Safe to delete or edit.
 interface:
   display_name: "Azure AI Search Index"
-  short_description: "Create Azure AI Search vector indexes with HNSW profiles, semantic ranker…"
-  default_prompt: "Create Azure AI Search vector indexes with HNSW profiles, semantic ranker configuration, hybrid BM25+vector search, field mappings for chunked RAG documents"
+  short_description: "Create Azure AI Search vector indexes — HNSW profiles, semantic ranker, hybrid…"
+  default_prompt: "Create Azure AI Search vector indexes — HNSW profiles, semantic ranker, hybrid BM25+vector search, field mappings for chunked RAG documents, and batch"

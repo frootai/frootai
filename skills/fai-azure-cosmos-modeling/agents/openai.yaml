@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-azure-cosmos-modeling). Safe to delete or edit.
 interface:
   display_name: "Azure Cosmos Modeling"
-  short_description: "Design Cosmos DB data models with optimal partition keys, Request Unit (RU)…"
-  default_prompt: "Design Cosmos DB data models with optimal partition keys, Request Unit (RU) estimation, vector search embedding storage, and analytical workload isolation"
+  short_description: "Design Cosmos DB data models — partition keys, Request Unit (RU) estimation…"
+  default_prompt: "Design Cosmos DB data models — partition keys, Request Unit (RU) estimation, vector-search embedding storage, and analytical workload isolation for RAG and"

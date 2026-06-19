@@ -1,11 +1,18 @@
 {
-  "mean": 62.8,
+  "mean": 63.0,
   "total": 637,
-  "below_threshold": 442,
+  "below_threshold": 438,
+  "sensei_tiers": {
+    "Low": 442,
+    "Medium": 191,
+    "Medium-High": 0,
+    "High": 4
+  },
   "skills": [
     {
       "name": "fai-evaluate-06-document-intelligence",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -18,6 +25,7 @@
     {
       "name": "fai-evaluate-07-multi-agent-service",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -30,6 +38,7 @@
     {
       "name": "fai-evaluate-08-copilot-studio-bot",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -42,6 +51,7 @@
     {
       "name": "fai-evaluate-10-content-moderation",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -54,6 +64,7 @@
     {
       "name": "fai-evaluate-11-ai-landing-zone-advanced",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -66,6 +77,7 @@
     {
       "name": "fai-evaluate-13-fine-tuning-workflow",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -78,6 +90,7 @@
     {
       "name": "fai-evaluate-14-cost-optimized-ai-gateway",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -90,6 +103,7 @@
     {
       "name": "fai-evaluate-15-multi-modal-docproc",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -102,6 +116,7 @@
     {
       "name": "fai-evaluate-16-copilot-teams-extension",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -114,6 +129,7 @@
     {
       "name": "fai-evaluate-17-ai-observability",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -126,6 +142,7 @@
     {
       "name": "fai-evaluate-18-prompt-management",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -138,6 +155,7 @@
     {
       "name": "fai-implementation-plan-generator",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -150,6 +168,7 @@
     {
       "name": "fai-inference-optimization",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -162,6 +181,7 @@
     {
       "name": "fai-jest-test",
       "score": 33,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -174,6 +194,7 @@
     {
       "name": "fai-build-etl-pipeline",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -185,6 +206,7 @@
     {
       "name": "fai-build-genai-rag",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -196,6 +218,7 @@
     {
       "name": "fai-build-github-workflow",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -207,6 +230,7 @@
     {
       "name": "fai-build-integration-test",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -218,6 +242,7 @@
     {
       "name": "fai-build-kubernetes-manifest",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -229,6 +254,7 @@
     {
       "name": "fai-cloud-design-patterns",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -240,6 +266,7 @@
     {
       "name": "fai-comment-tutorial",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -251,6 +278,7 @@
     {
       "name": "fai-containerize-aspnet",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -262,6 +290,7 @@
     {
       "name": "fai-containerize-aspnet-framework",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -273,6 +302,7 @@
     {
       "name": "fai-context-map",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -284,6 +314,7 @@
     {
       "name": "fai-copilot-usage-metrics",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -295,6 +326,7 @@
     {
       "name": "fai-daily-prep",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -306,6 +338,7 @@
     {
       "name": "fai-dead-code-removal",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -317,6 +350,7 @@
     {
       "name": "fai-design-responsive",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -328,6 +362,7 @@
     {
       "name": "fai-design-system-tokens",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -339,6 +374,7 @@
     {
       "name": "fai-docker-containerize",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -350,6 +386,7 @@
     {
       "name": "fai-documentation-writer",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -361,6 +398,7 @@
     {
       "name": "fai-epic-breakdown-arch",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -372,6 +410,7 @@
     {
       "name": "fai-epic-breakdown-pm",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -383,6 +422,7 @@
     {
       "name": "fai-feature-breakdown",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -394,6 +434,7 @@
     {
       "name": "fai-finalize-agent-prompt",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -405,6 +446,7 @@
     {
       "name": "fai-fine-tune-llm",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -416,6 +458,7 @@
     {
       "name": "fai-github-issue-triage",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -427,6 +470,7 @@
     {
       "name": "fai-github-issues",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -438,6 +482,7 @@
     {
       "name": "fai-load-test-ai-endpoint",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -449,6 +494,7 @@
     {
       "name": "fai-make-repo-contribution",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -460,6 +506,7 @@
     {
       "name": "fai-mermaid-generator",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -471,6 +518,7 @@
     {
       "name": "fai-model-recommendation",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -482,6 +530,7 @@
     {
       "name": "fai-multi-stage-docker",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -493,6 +542,7 @@
     {
       "name": "fai-plan-breakdown",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -504,6 +554,7 @@
     {
       "name": "fai-rag-pipeline-test",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -515,6 +566,7 @@
     {
       "name": "fai-update-avm-bicep",
       "score": 40,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -526,6 +578,7 @@
     {
       "name": "fai-deploy-21-agentic-rag",
       "score": 43,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -537,6 +590,7 @@
     {
       "name": "fai-fabric-lakehouse",
       "score": 43,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -548,6 +602,7 @@
     {
       "name": "fai-junit-test",
       "score": 43,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -559,6 +614,7 @@
     {
       "name": "fai-deploy-05-it-ticket-resolution",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -570,6 +626,7 @@
     {
       "name": "fai-design-accessibility",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -581,6 +638,7 @@
     {
       "name": "fai-drawio-generator",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -592,6 +650,7 @@
     {
       "name": "fai-evaluate-01-enterprise-rag",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -603,6 +662,7 @@
     {
       "name": "fai-evaluate-03-deterministic-agent",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -614,6 +674,7 @@
     {
       "name": "fai-evaluate-04-call-center-voice-ai",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -625,6 +686,7 @@
     {
       "name": "fai-evaluate-05-it-ticket-resolution",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -636,6 +698,7 @@
     {
       "name": "fai-evaluate-09-ai-search-portal",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -647,6 +710,7 @@
     {
       "name": "fai-evaluate-12-model-serving-aks",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -658,6 +722,7 @@
     {
       "name": "fai-evaluate-20-anomaly-detection",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -669,6 +734,7 @@
     {
       "name": "fai-evaluate-22-multi-agent-swarm",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -680,6 +746,7 @@
     {
       "name": "fai-excalidraw-generator",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -691,6 +758,7 @@
     {
       "name": "fai-streaming-response-implement",
       "score": 45,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')",
@@ -702,6 +770,7 @@
     {
       "name": "agent-chain-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -712,6 +781,7 @@
     {
       "name": "api-rate-limit-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -722,6 +792,7 @@
     {
       "name": "app-insights-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -732,6 +803,7 @@
     {
       "name": "audit-log-implement",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -742,6 +814,7 @@
     {
       "name": "azure-openai-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -752,6 +825,7 @@
     {
       "name": "backup-restore-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -762,6 +836,7 @@
     {
       "name": "bicep-module-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -772,6 +847,7 @@
     {
       "name": "canary-deploy-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -782,6 +858,7 @@
     {
       "name": "circuit-breaker-add",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -792,6 +869,7 @@
     {
       "name": "compliance-audit-run",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -802,6 +880,7 @@
     {
       "name": "embedding-model-select",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -812,6 +891,7 @@
     {
       "name": "fai-agent-chain-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -822,6 +902,7 @@
     {
       "name": "fai-agent-governance",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -832,6 +913,7 @@
     {
       "name": "fai-api-docs-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -842,6 +924,7 @@
     {
       "name": "fai-api-endpoint-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -852,6 +935,7 @@
     {
       "name": "fai-api-rate-limit-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -862,6 +946,7 @@
     {
       "name": "fai-app-insights-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -872,6 +957,7 @@
     {
       "name": "fai-architecture-blueprint",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -882,6 +968,7 @@
     {
       "name": "fai-aspire-orchestration",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -892,6 +979,7 @@
     {
       "name": "fai-aspnet-minimal-api",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -902,6 +990,7 @@
     {
       "name": "fai-audit-log-implement",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -910,18 +999,9 @@
       "path": "skills\\fai-audit-log-implement\\SKILL.md"
     },
     {
-      "name": "fai-az-cost-optimize",
-      "score": 55,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')"
-      ],
-      "description": "Analyze Azure AI workload spend with Cost Management API queries, flag overprovisioned PTU, identify semantic cache gaps, right-size model SKUs, and produce actionable FinOps recommendations with ROI estimates.",
-      "path": "skills\\fai-az-cost-optimize\\SKILL.md"
-    },
-    {
       "name": "fai-azure-ai-foundry-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -930,18 +1010,9 @@
       "path": "skills\\fai-azure-ai-foundry-setup\\SKILL.md"
     },
     {
-      "name": "fai-azure-ai-search-index",
-      "score": 55,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')"
-      ],
-      "description": "Create Azure AI Search vector indexes with HNSW profiles, semantic ranker configuration, hybrid BM25+vector search, field mappings for chunked RAG documents, and batch indexing pipelines \u2014 resolving recall failures and irrelevant chunk retrieval.",
-      "path": "skills\\fai-azure-ai-search-index\\SKILL.md"
-    },
-    {
       "name": "fai-azure-app-config",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -952,6 +1023,7 @@
     {
       "name": "fai-azure-architecture-review",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -962,6 +1034,7 @@
     {
       "name": "fai-azure-blob-lifecycle",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -972,6 +1045,7 @@
     {
       "name": "fai-azure-cognitive-services",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -982,6 +1056,7 @@
     {
       "name": "fai-azure-container-registry",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -990,18 +1065,9 @@
       "path": "skills\\fai-azure-container-registry\\SKILL.md"
     },
     {
-      "name": "fai-azure-cosmos-modeling",
-      "score": 55,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')"
-      ],
-      "description": "Design Cosmos DB data models with optimal partition keys, Request Unit (RU) estimation, vector search embedding storage, and analytical workload isolation \u2014 exceeding relational DB performance on RAG and time-series queries.",
-      "path": "skills\\fai-azure-cosmos-modeling\\SKILL.md"
-    },
-    {
       "name": "fai-azure-data-explorer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1012,6 +1078,7 @@
     {
       "name": "fai-azure-event-grid-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1022,6 +1089,7 @@
     {
       "name": "fai-azure-event-hubs-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1032,6 +1100,7 @@
     {
       "name": "fai-azure-functions-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1042,6 +1111,7 @@
     {
       "name": "fai-azure-key-vault-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1052,6 +1122,7 @@
     {
       "name": "fai-azure-openai-integration",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1062,6 +1133,7 @@
     {
       "name": "fai-azure-openai-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1072,6 +1144,7 @@
     {
       "name": "fai-azure-resource-graph",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1082,6 +1155,7 @@
     {
       "name": "fai-azure-resource-health",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1092,6 +1166,7 @@
     {
       "name": "fai-backup-restore-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1102,6 +1177,7 @@
     {
       "name": "fai-bicep-module-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1112,6 +1188,7 @@
     {
       "name": "fai-boost-prompt",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1122,6 +1199,7 @@
     {
       "name": "fai-build-agentic-loops",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1132,6 +1210,7 @@
     {
       "name": "fai-build-bicep-module",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1142,6 +1221,7 @@
     {
       "name": "fai-build-data-lakehouse",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1152,6 +1232,7 @@
     {
       "name": "fai-build-docker-image",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1162,6 +1243,7 @@
     {
       "name": "fai-build-llm-evaluator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1172,6 +1254,7 @@
     {
       "name": "fai-build-nosql-data-model",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1182,6 +1265,7 @@
     {
       "name": "fai-build-prompting-system",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1192,6 +1276,7 @@
     {
       "name": "fai-build-semantic-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1202,6 +1287,7 @@
     {
       "name": "fai-build-sql-migration",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1212,6 +1298,7 @@
     {
       "name": "fai-build-terraform-module",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1222,6 +1309,7 @@
     {
       "name": "fai-build-test-harness",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1232,6 +1320,7 @@
     {
       "name": "fai-build-tokenizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1242,6 +1331,7 @@
     {
       "name": "fai-build-unit-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1252,6 +1342,7 @@
     {
       "name": "fai-build-vector-store",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1262,6 +1353,7 @@
     {
       "name": "fai-canary-deploy-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1272,6 +1364,7 @@
     {
       "name": "fai-changelog-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1282,6 +1375,7 @@
     {
       "name": "fai-circuit-breaker-add",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1292,6 +1386,7 @@
     {
       "name": "fai-code-smell-detector",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1302,6 +1397,7 @@
     {
       "name": "fai-codeql-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1312,6 +1408,7 @@
     {
       "name": "fai-compliance-audit-run",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1322,6 +1419,7 @@
     {
       "name": "fai-component-docs",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1332,6 +1430,7 @@
     {
       "name": "fai-content-safety-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1342,6 +1441,7 @@
     {
       "name": "fai-content-safety-review",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1352,6 +1452,7 @@
     {
       "name": "fai-contextual-rag",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1362,6 +1463,7 @@
     {
       "name": "fai-conventional-commit",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1372,6 +1474,7 @@
     {
       "name": "fai-copilot-cli-quickstart",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1382,6 +1485,7 @@
     {
       "name": "fai-copilot-instructions-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1392,6 +1496,7 @@
     {
       "name": "fai-copilot-sdk-integration",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1402,6 +1507,7 @@
     {
       "name": "fai-copilot-spaces-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1412,6 +1518,7 @@
     {
       "name": "fai-cosmosdb-datamodeling",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1422,6 +1529,7 @@
     {
       "name": "fai-cost-dashboard-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1432,6 +1540,7 @@
     {
       "name": "fai-cost-estimator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1442,6 +1551,7 @@
     {
       "name": "fai-data-chunking-optimize",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1452,6 +1562,7 @@
     {
       "name": "fai-database-migrate-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1462,6 +1573,7 @@
     {
       "name": "fai-database-schema-designer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1472,6 +1584,7 @@
     {
       "name": "fai-deploy-01-enterprise-rag",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1482,6 +1595,7 @@
     {
       "name": "fai-deploy-02-ai-landing-zone",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1492,6 +1606,7 @@
     {
       "name": "fai-deploy-03-deterministic-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1502,6 +1617,7 @@
     {
       "name": "fai-deploy-04-call-center-voice-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1512,6 +1628,7 @@
     {
       "name": "fai-deploy-06-document-intelligence",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1522,6 +1639,7 @@
     {
       "name": "fai-deploy-07-multi-agent-service",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1532,6 +1650,7 @@
     {
       "name": "fai-deploy-08-copilot-studio-bot",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1542,6 +1661,7 @@
     {
       "name": "fai-deploy-09-ai-search-portal",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1552,6 +1672,7 @@
     {
       "name": "fai-deploy-10-content-moderation",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1562,6 +1683,7 @@
     {
       "name": "fai-deploy-11-ai-landing-zone-advanced",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1572,6 +1694,7 @@
     {
       "name": "fai-deploy-12-model-serving-aks",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1582,6 +1705,7 @@
     {
       "name": "fai-deploy-13-fine-tuning-workflow",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1592,6 +1716,7 @@
     {
       "name": "fai-deploy-14-cost-optimized-ai-gateway",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1602,6 +1727,7 @@
     {
       "name": "fai-deploy-15-multi-modal-docproc",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1612,6 +1738,7 @@
     {
       "name": "fai-deploy-16-copilot-teams-extension",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1622,6 +1749,7 @@
     {
       "name": "fai-deploy-17-ai-observability",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1632,6 +1760,7 @@
     {
       "name": "fai-deploy-18-prompt-management",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1642,6 +1771,7 @@
     {
       "name": "fai-deploy-19-edge-ai-phi4",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1652,6 +1782,7 @@
     {
       "name": "fai-deploy-20-anomaly-detection",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1662,6 +1793,7 @@
     {
       "name": "fai-deploy-22-multi-agent-swarm",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1672,6 +1804,7 @@
     {
       "name": "fai-deploy-23-browser-automation-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1682,6 +1815,7 @@
     {
       "name": "fai-deploy-preflight",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1692,6 +1826,7 @@
     {
       "name": "fai-design-animations",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1702,6 +1837,7 @@
     {
       "name": "fai-design-data-visualization",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1712,6 +1848,7 @@
     {
       "name": "fai-design-dialog-system",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1722,6 +1859,7 @@
     {
       "name": "fai-design-error-states",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1732,6 +1870,7 @@
     {
       "name": "fai-design-forms",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1742,6 +1881,7 @@
     {
       "name": "fai-design-icon-system",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1752,6 +1892,7 @@
     {
       "name": "fai-design-layouts",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1762,6 +1903,7 @@
     {
       "name": "fai-design-loading-states",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1772,6 +1914,7 @@
     {
       "name": "fai-design-onboarding",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1782,6 +1925,7 @@
     {
       "name": "fai-design-themes",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1792,6 +1936,7 @@
     {
       "name": "fai-design-ui-components",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1802,6 +1947,7 @@
     {
       "name": "fai-deterministic-agent-skill",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1812,6 +1958,7 @@
     {
       "name": "fai-dynamic-prompt",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1822,6 +1969,7 @@
     {
       "name": "fai-editorconfig-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1832,6 +1980,7 @@
     {
       "name": "fai-eval-runner",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1842,6 +1991,7 @@
     {
       "name": "fai-evaluate-02-ai-landing-zone",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1852,6 +2002,7 @@
     {
       "name": "fai-evaluate-19-edge-ai-phi4",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1862,6 +2013,7 @@
     {
       "name": "fai-evaluate-21-agentic-rag",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1872,6 +2024,7 @@
     {
       "name": "fai-evaluate-23-browser-automation-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1882,6 +2035,7 @@
     {
       "name": "fai-evaluation-framework",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1892,6 +2046,7 @@
     {
       "name": "fai-evaluation-pipeline-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1902,6 +2057,7 @@
     {
       "name": "fai-fastapi-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1912,6 +2068,7 @@
     {
       "name": "fai-feature-flag-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1922,6 +2079,7 @@
     {
       "name": "fai-git-flow-branch",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1932,6 +2090,7 @@
     {
       "name": "fai-github-actions-ai-pipeline",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1942,6 +2101,7 @@
     {
       "name": "fai-incident-runbook-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1952,6 +2112,7 @@
     {
       "name": "fai-key-vault-integrate",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1962,6 +2123,7 @@
     {
       "name": "fai-langchain-integration",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1972,6 +2134,7 @@
     {
       "name": "fai-llms-txt-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1982,6 +2145,7 @@
     {
       "name": "fai-manifest-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -1992,6 +2156,7 @@
     {
       "name": "fai-mcp-csharp-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2000,18 +2165,9 @@
       "path": "skills\\fai-mcp-csharp-generator\\SKILL.md"
     },
     {
-      "name": "fai-mcp-python-generator",
-      "score": 55,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')"
-      ],
-      "description": "Scaffold a production-ready Python MCP server with FastMCP decorators, async tools, structured outputs, and Azure integration.",
-      "path": "skills\\fai-mcp-python-generator\\SKILL.md"
-    },
-    {
       "name": "fai-mcp-python-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2022,6 +2178,7 @@
     {
       "name": "fai-mcp-ruby-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2032,6 +2189,7 @@
     {
       "name": "fai-mcp-rust-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2042,6 +2200,7 @@
     {
       "name": "fai-mcp-swift-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2052,6 +2211,7 @@
     {
       "name": "fai-mcp-typescript-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2062,6 +2222,7 @@
     {
       "name": "fai-mcp-typescript-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2072,6 +2233,7 @@
     {
       "name": "fai-mstest-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2082,6 +2244,7 @@
     {
       "name": "fai-multi-model-routing",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2092,6 +2255,7 @@
     {
       "name": "fai-nextjs-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2102,6 +2266,7 @@
     {
       "name": "fai-nunit-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2112,6 +2277,7 @@
     {
       "name": "fai-observability-dashboard",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2122,6 +2288,7 @@
     {
       "name": "fai-openapi-to-app",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2132,6 +2299,7 @@
     {
       "name": "fai-pii-detection-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2142,6 +2310,7 @@
     {
       "name": "fai-plantuml-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2152,6 +2321,7 @@
     {
       "name": "fai-play-initializer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2162,6 +2332,7 @@
     {
       "name": "fai-playwright-dotnet-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2172,6 +2343,7 @@
     {
       "name": "fai-playwright-python-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2182,6 +2354,7 @@
     {
       "name": "fai-playwright-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2192,6 +2365,7 @@
     {
       "name": "fai-polyglot-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2202,6 +2376,7 @@
     {
       "name": "fai-postgresql-code-review",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2212,6 +2387,7 @@
     {
       "name": "fai-postgresql-optimization",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2222,6 +2398,7 @@
     {
       "name": "fai-power-apps-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2232,6 +2409,7 @@
     {
       "name": "fai-power-automate-flow",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2242,6 +2420,7 @@
     {
       "name": "fai-power-bi-dashboard",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2252,6 +2431,7 @@
     {
       "name": "fai-power-bi-report",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2262,6 +2442,7 @@
     {
       "name": "fai-power-platform-connector",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2272,6 +2453,7 @@
     {
       "name": "fai-powerbi-modeling",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2282,6 +2464,7 @@
     {
       "name": "fai-prd-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2292,6 +2475,7 @@
     {
       "name": "fai-premium-frontend-ui",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2302,6 +2486,7 @@
     {
       "name": "fai-prompt-builder",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2312,6 +2497,7 @@
     {
       "name": "fai-pytest-coverage",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2322,6 +2508,7 @@
     {
       "name": "fai-quality-playbook",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2332,6 +2519,7 @@
     {
       "name": "fai-rbac-setup-play",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2342,6 +2530,7 @@
     {
       "name": "fai-react-component-scaffold",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2352,6 +2541,7 @@
     {
       "name": "fai-semantic-cache-implement",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2362,6 +2552,7 @@
     {
       "name": "fai-sla-monitor-setup",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2372,6 +2563,7 @@
     {
       "name": "fai-ssl-cert-configure",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2382,6 +2574,7 @@
     {
       "name": "fai-structured-output-enforce",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2392,6 +2585,7 @@
     {
       "name": "fai-token-budget-enforce",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2402,6 +2596,7 @@
     {
       "name": "fai-tune-05-it-ticket-resolution",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2412,6 +2607,7 @@
     {
       "name": "fai-tune-07-multi-agent-service",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2422,6 +2618,7 @@
     {
       "name": "fai-tune-08-copilot-studio-bot",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2432,6 +2629,7 @@
     {
       "name": "fai-tune-09-ai-search-portal",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2442,6 +2640,7 @@
     {
       "name": "fai-tune-10-content-moderation",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2452,6 +2651,7 @@
     {
       "name": "fai-tune-11-ai-landing-zone-advanced",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2462,6 +2662,7 @@
     {
       "name": "fai-tune-12-model-serving-aks",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2472,6 +2673,7 @@
     {
       "name": "fai-tune-13-fine-tuning-workflow",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2482,6 +2684,7 @@
     {
       "name": "fai-tune-14-cost-optimized-ai-gateway",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2492,6 +2695,7 @@
     {
       "name": "fai-tune-15-multi-modal-docproc",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2502,6 +2706,7 @@
     {
       "name": "fai-tune-16-copilot-teams-extension",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2512,6 +2717,7 @@
     {
       "name": "fai-tune-17-ai-observability",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2522,6 +2728,7 @@
     {
       "name": "fai-tune-18-prompt-management",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2532,6 +2739,7 @@
     {
       "name": "fai-tune-19-edge-ai-phi4",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2542,6 +2750,7 @@
     {
       "name": "fai-tune-20-anomaly-detection",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2552,6 +2761,7 @@
     {
       "name": "fai-tune-21-agentic-rag",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2562,6 +2772,7 @@
     {
       "name": "fai-tune-22-multi-agent-swarm",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2572,6 +2783,7 @@
     {
       "name": "fai-tune-23-browser-automation-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2582,6 +2794,7 @@
     {
       "name": "fai-tutorial-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2592,6 +2805,7 @@
     {
       "name": "fai-vector-index-create",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2602,6 +2816,7 @@
     {
       "name": "fai-web-coder",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2612,6 +2827,7 @@
     {
       "name": "fai-webapp-testing",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2622,6 +2838,7 @@
     {
       "name": "fai-webhook-ai-event",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2632,6 +2849,7 @@
     {
       "name": "fai-xunit-test",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2642,6 +2860,7 @@
     {
       "name": "deploy-fai-meta-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2652,6 +2871,7 @@
     {
       "name": "evaluate-fai-meta-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2662,6 +2882,7 @@
     {
       "name": "tune-fai-meta-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2672,6 +2893,7 @@
     {
       "name": "deploy-ai-meeting-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2682,6 +2904,7 @@
     {
       "name": "evaluate-ai-meeting-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2692,6 +2915,7 @@
     {
       "name": "tune-ai-meeting-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2702,6 +2926,7 @@
     {
       "name": "deploy-copilot-studio-advanced",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2712,6 +2937,7 @@
     {
       "name": "evaluate-copilot-studio-advanced",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2722,6 +2948,7 @@
     {
       "name": "tune-copilot-studio-advanced",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2732,6 +2959,7 @@
     {
       "name": "deploy-ai-red-teaming",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2742,6 +2970,7 @@
     {
       "name": "evaluate-ai-red-teaming",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2752,6 +2981,7 @@
     {
       "name": "tune-ai-red-teaming",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2762,6 +2992,7 @@
     {
       "name": "deploy-computer-use-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2772,6 +3003,7 @@
     {
       "name": "evaluate-computer-use-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2782,6 +3014,7 @@
     {
       "name": "tune-computer-use-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2792,6 +3025,7 @@
     {
       "name": "deploy-ai-video-generation",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2802,6 +3036,7 @@
     {
       "name": "evaluate-ai-video-generation",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2812,6 +3047,7 @@
     {
       "name": "tune-ai-video-generation",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2822,6 +3058,7 @@
     {
       "name": "deploy-foundry-local-on-device",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2832,6 +3069,7 @@
     {
       "name": "evaluate-foundry-local-on-device",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2842,6 +3080,7 @@
     {
       "name": "tune-foundry-local-on-device",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2852,6 +3091,7 @@
     {
       "name": "deploy-realtime-event-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2862,6 +3102,7 @@
     {
       "name": "evaluate-realtime-event-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2872,6 +3113,7 @@
     {
       "name": "tune-realtime-event-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2882,6 +3124,7 @@
     {
       "name": "deploy-healthcare-clinical-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2892,6 +3135,7 @@
     {
       "name": "evaluate-healthcare-clinical-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2902,6 +3146,7 @@
     {
       "name": "tune-healthcare-clinical-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2912,6 +3157,7 @@
     {
       "name": "deploy-synthetic-data-factory",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2922,6 +3168,7 @@
     {
       "name": "evaluate-synthetic-data-factory",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2932,6 +3179,7 @@
     {
       "name": "tune-synthetic-data-factory",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2942,6 +3190,7 @@
     {
       "name": "deploy-ai-model-governance",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2952,6 +3201,7 @@
     {
       "name": "evaluate-ai-model-governance",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2962,6 +3212,7 @@
     {
       "name": "tune-ai-model-governance",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2972,6 +3223,7 @@
     {
       "name": "deploy-creative-ai-studio",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2982,6 +3234,7 @@
     {
       "name": "evaluate-creative-ai-studio",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -2992,6 +3245,7 @@
     {
       "name": "tune-creative-ai-studio",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3002,6 +3256,7 @@
     {
       "name": "deploy-financial-risk-intelligence",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3012,6 +3267,7 @@
     {
       "name": "evaluate-financial-risk-intelligence",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3022,6 +3278,7 @@
     {
       "name": "tune-financial-risk-intelligence",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3032,6 +3289,7 @@
     {
       "name": "deploy-autonomous-coding-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3042,6 +3300,7 @@
     {
       "name": "evaluate-autonomous-coding-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3052,6 +3311,7 @@
     {
       "name": "tune-autonomous-coding-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3062,6 +3322,7 @@
     {
       "name": "deploy-ai-api-gateway-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3072,6 +3333,7 @@
     {
       "name": "evaluate-ai-api-gateway-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3082,6 +3344,7 @@
     {
       "name": "tune-ai-api-gateway-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3092,6 +3355,7 @@
     {
       "name": "deploy-legal-document-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3102,6 +3366,7 @@
     {
       "name": "evaluate-legal-document-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3112,6 +3377,7 @@
     {
       "name": "tune-legal-document-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3122,6 +3388,7 @@
     {
       "name": "deploy-ai-customer-support-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3132,6 +3399,7 @@
     {
       "name": "evaluate-ai-customer-support-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3142,6 +3410,7 @@
     {
       "name": "tune-ai-customer-support-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3152,6 +3421,7 @@
     {
       "name": "deploy-supply-chain-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3162,6 +3432,7 @@
     {
       "name": "evaluate-supply-chain-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3172,6 +3443,7 @@
     {
       "name": "tune-supply-chain-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3182,6 +3454,7 @@
     {
       "name": "deploy-semantic-code-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3192,6 +3465,7 @@
     {
       "name": "evaluate-semantic-code-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3202,6 +3476,7 @@
     {
       "name": "tune-semantic-code-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3212,6 +3487,7 @@
     {
       "name": "deploy-ai-translation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3222,6 +3498,7 @@
     {
       "name": "evaluate-ai-translation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3232,6 +3509,7 @@
     {
       "name": "tune-ai-translation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3242,6 +3520,7 @@
     {
       "name": "deploy-digital-twin-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3252,6 +3531,7 @@
     {
       "name": "evaluate-digital-twin-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3262,6 +3542,7 @@
     {
       "name": "tune-digital-twin-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3272,6 +3553,7 @@
     {
       "name": "deploy-ai-recruiter-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3282,6 +3564,7 @@
     {
       "name": "evaluate-ai-recruiter-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3292,6 +3575,7 @@
     {
       "name": "tune-ai-recruiter-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3302,6 +3586,7 @@
     {
       "name": "deploy-responsible-ai-dashboard",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3312,6 +3597,7 @@
     {
       "name": "evaluate-responsible-ai-dashboard",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3322,6 +3608,7 @@
     {
       "name": "tune-responsible-ai-dashboard",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3332,6 +3619,7 @@
     {
       "name": "deploy-content-moderation-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3342,6 +3630,7 @@
     {
       "name": "evaluate-content-moderation-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3352,6 +3641,7 @@
     {
       "name": "tune-content-moderation-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3362,6 +3652,7 @@
     {
       "name": "deploy-federated-learning-pipeline",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3372,6 +3663,7 @@
     {
       "name": "evaluate-federated-learning-pipeline",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3382,6 +3674,7 @@
     {
       "name": "tune-federated-learning-pipeline",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3392,6 +3685,7 @@
     {
       "name": "deploy-fraud-detection-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3402,6 +3696,7 @@
     {
       "name": "evaluate-fraud-detection-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3412,6 +3707,7 @@
     {
       "name": "tune-fraud-detection-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3422,6 +3718,7 @@
     {
       "name": "deploy-ai-sales-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3432,6 +3729,7 @@
     {
       "name": "evaluate-ai-sales-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3442,6 +3740,7 @@
     {
       "name": "tune-ai-sales-assistant",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3452,6 +3751,7 @@
     {
       "name": "deploy-ai-training-curriculum",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3462,6 +3762,7 @@
     {
       "name": "evaluate-ai-training-curriculum",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3472,6 +3773,7 @@
     {
       "name": "tune-ai-training-curriculum",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3482,6 +3784,7 @@
     {
       "name": "deploy-ai-infrastructure-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3492,6 +3795,7 @@
     {
       "name": "evaluate-ai-infrastructure-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3502,6 +3806,7 @@
     {
       "name": "tune-ai-infrastructure-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3512,6 +3817,7 @@
     {
       "name": "deploy-ai-knowledge-management",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3522,6 +3828,7 @@
     {
       "name": "evaluate-ai-knowledge-management",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3532,6 +3839,7 @@
     {
       "name": "tune-ai-knowledge-management",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3542,6 +3850,7 @@
     {
       "name": "deploy-predictive-maintenance-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3552,6 +3861,7 @@
     {
       "name": "evaluate-predictive-maintenance-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3562,6 +3872,7 @@
     {
       "name": "tune-predictive-maintenance-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3572,6 +3883,7 @@
     {
       "name": "deploy-carbon-footprint-tracker",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3582,6 +3894,7 @@
     {
       "name": "evaluate-carbon-footprint-tracker",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3592,6 +3905,7 @@
     {
       "name": "tune-carbon-footprint-tracker",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3602,6 +3916,7 @@
     {
       "name": "deploy-esg-compliance-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3612,6 +3927,7 @@
     {
       "name": "evaluate-esg-compliance-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3622,6 +3938,7 @@
     {
       "name": "tune-esg-compliance-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3632,6 +3949,7 @@
     {
       "name": "deploy-smart-energy-grid-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3642,6 +3960,7 @@
     {
       "name": "evaluate-smart-energy-grid-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3652,6 +3971,7 @@
     {
       "name": "tune-smart-energy-grid-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3662,6 +3982,7 @@
     {
       "name": "deploy-climate-risk-assessor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3672,6 +3993,7 @@
     {
       "name": "evaluate-climate-risk-assessor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3682,6 +4004,7 @@
     {
       "name": "tune-climate-risk-assessor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3692,6 +4015,7 @@
     {
       "name": "deploy-waste-recycling-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3702,6 +4026,7 @@
     {
       "name": "evaluate-waste-recycling-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3712,6 +4037,7 @@
     {
       "name": "tune-waste-recycling-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3722,6 +4048,7 @@
     {
       "name": "deploy-ai-tutoring-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3732,6 +4059,7 @@
     {
       "name": "evaluate-ai-tutoring-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3742,6 +4070,7 @@
     {
       "name": "tune-ai-tutoring-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3752,6 +4081,7 @@
     {
       "name": "deploy-exam-generation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3762,6 +4092,7 @@
     {
       "name": "evaluate-exam-generation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3772,6 +4103,7 @@
     {
       "name": "tune-exam-generation-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3782,6 +4114,7 @@
     {
       "name": "deploy-accessibility-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3792,6 +4125,7 @@
     {
       "name": "evaluate-accessibility-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3802,6 +4136,7 @@
     {
       "name": "tune-accessibility-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3812,6 +4147,7 @@
     {
       "name": "deploy-research-paper-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3822,6 +4158,7 @@
     {
       "name": "evaluate-research-paper-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3832,6 +4169,7 @@
     {
       "name": "tune-research-paper-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3842,6 +4180,7 @@
     {
       "name": "deploy-precision-agriculture-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3852,6 +4191,7 @@
     {
       "name": "evaluate-precision-agriculture-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3862,6 +4202,7 @@
     {
       "name": "tune-precision-agriculture-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3872,6 +4213,7 @@
     {
       "name": "deploy-food-safety-inspector-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3882,6 +4224,7 @@
     {
       "name": "evaluate-food-safety-inspector-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3892,6 +4235,7 @@
     {
       "name": "tune-food-safety-inspector-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3902,6 +4246,7 @@
     {
       "name": "deploy-biodiversity-monitor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3912,6 +4257,7 @@
     {
       "name": "evaluate-biodiversity-monitor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3922,6 +4268,7 @@
     {
       "name": "tune-biodiversity-monitor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3932,6 +4279,7 @@
     {
       "name": "deploy-property-valuation-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3942,6 +4290,7 @@
     {
       "name": "evaluate-property-valuation-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3952,6 +4301,7 @@
     {
       "name": "tune-property-valuation-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3962,6 +4312,7 @@
     {
       "name": "deploy-construction-safety-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3972,6 +4323,7 @@
     {
       "name": "evaluate-construction-safety-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3982,6 +4334,7 @@
     {
       "name": "tune-construction-safety-ai",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -3992,6 +4345,7 @@
     {
       "name": "deploy-building-energy-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4002,6 +4356,7 @@
     {
       "name": "evaluate-building-energy-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4012,6 +4367,7 @@
     {
       "name": "tune-building-energy-optimizer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4022,6 +4378,7 @@
     {
       "name": "deploy-citizen-services-chatbot",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4032,6 +4389,7 @@
     {
       "name": "evaluate-citizen-services-chatbot",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4042,6 +4400,7 @@
     {
       "name": "tune-citizen-services-chatbot",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4052,6 +4411,7 @@
     {
       "name": "deploy-policy-impact-analyzer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4062,6 +4422,7 @@
     {
       "name": "evaluate-policy-impact-analyzer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4072,6 +4433,7 @@
     {
       "name": "tune-policy-impact-analyzer",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4082,6 +4444,7 @@
     {
       "name": "deploy-public-safety-analytics",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4092,6 +4455,7 @@
     {
       "name": "evaluate-public-safety-analytics",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4102,6 +4466,7 @@
     {
       "name": "tune-public-safety-analytics",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4112,6 +4477,7 @@
     {
       "name": "deploy-dynamic-pricing-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4122,6 +4488,7 @@
     {
       "name": "evaluate-dynamic-pricing-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4132,6 +4499,7 @@
     {
       "name": "tune-dynamic-pricing-engine",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4142,6 +4510,7 @@
     {
       "name": "deploy-visual-product-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4152,6 +4521,7 @@
     {
       "name": "evaluate-visual-product-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4162,6 +4532,7 @@
     {
       "name": "tune-visual-product-search",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4172,6 +4543,7 @@
     {
       "name": "deploy-retail-inventory-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4182,6 +4554,7 @@
     {
       "name": "evaluate-retail-inventory-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4192,6 +4565,7 @@
     {
       "name": "tune-retail-inventory-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4202,6 +4576,7 @@
     {
       "name": "deploy-network-optimization-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4212,6 +4587,7 @@
     {
       "name": "evaluate-network-optimization-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4222,6 +4598,7 @@
     {
       "name": "tune-network-optimization-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4232,6 +4609,7 @@
     {
       "name": "deploy-customer-churn-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4242,6 +4620,7 @@
     {
       "name": "evaluate-customer-churn-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4252,6 +4631,7 @@
     {
       "name": "tune-customer-churn-predictor",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4262,6 +4642,7 @@
     {
       "name": "deploy-telecom-fraud-shield",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4272,6 +4653,7 @@
     {
       "name": "evaluate-telecom-fraud-shield",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4282,6 +4664,7 @@
     {
       "name": "tune-telecom-fraud-shield",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4292,6 +4675,7 @@
     {
       "name": "deploy-continual-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4302,6 +4686,7 @@
     {
       "name": "evaluate-continual-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4312,6 +4697,7 @@
     {
       "name": "tune-continual-learning-agent",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4322,6 +4708,7 @@
     {
       "name": "deploy-ai-podcast-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4332,6 +4719,7 @@
     {
       "name": "evaluate-ai-podcast-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4342,6 +4730,7 @@
     {
       "name": "tune-ai-podcast-generator",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4352,6 +4741,7 @@
     {
       "name": "deploy-multimodal-search-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4362,6 +4752,7 @@
     {
       "name": "evaluate-multimodal-search-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4372,6 +4763,7 @@
     {
       "name": "tune-multimodal-search-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4382,6 +4774,7 @@
     {
       "name": "deploy-realtime-voice-agent-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4392,6 +4785,7 @@
     {
       "name": "evaluate-realtime-voice-agent-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4402,6 +4796,7 @@
     {
       "name": "tune-realtime-voice-agent-v2",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4412,6 +4807,7 @@
     {
       "name": "deploy-ai-data-marketplace",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4422,6 +4818,7 @@
     {
       "name": "evaluate-ai-data-marketplace",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4432,6 +4829,7 @@
     {
       "name": "tune-ai-data-marketplace",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4442,6 +4840,7 @@
     {
       "name": "deploy-agent-evaluation-platform",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4452,6 +4851,7 @@
     {
       "name": "evaluate-agent-evaluation-platform",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4462,6 +4862,7 @@
     {
       "name": "tune-agent-evaluation-platform",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4472,6 +4873,7 @@
     {
       "name": "deploy-enterprise-ai-governance-hub",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4482,6 +4884,7 @@
     {
       "name": "evaluate-enterprise-ai-governance-hub",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4492,6 +4895,7 @@
     {
       "name": "tune-enterprise-ai-governance-hub",
       "score": 55,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "no context/'when' phrasing (not 'pushy')"
@@ -4502,6 +4906,7 @@
     {
       "name": "fai-what-context-needed",
       "score": 60,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')",
         "doesn't lead with an action verb ('determine')"
@@ -4512,6 +4917,7 @@
     {
       "name": "fai-agentic-eval",
       "score": 75,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')"
       ],
@@ -4521,6 +4927,7 @@
     {
       "name": "fai-architecture-decision-record",
       "score": 75,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')"
       ],
@@ -4530,6 +4937,7 @@
     {
       "name": "fai-health-check-implement",
       "score": 75,
+      "tier": "Low",
       "reasons": [
         "no explicit trigger cue ('Use this skill when\u2026')"
       ],
@@ -4537,8 +4945,39 @@
       "path": "skills\\fai-health-check-implement\\SKILL.md"
     },
     {
+      "name": "fai-az-cost-optimize",
+      "score": 80,
+      "tier": "High",
+      "reasons": [
+        "no context/'when' phrasing (not 'pushy')"
+      ],
+      "description": "Analyze Azure AI workload spend \u2014 Cost Management API queries, overprovisioned PTU flags, semantic-cache gaps, model-SKU right-sizing, and FinOps recommendations with ROI estimates. USE FOR: reducing Azure AI/OpenAI bills, finding cost anomalies, deciding PTU vs pay-as-you-go, right-sizing deployments, building a FinOps report. DO NOT USE FOR: non-Azure cloud costs, generic budgeting, infrastructure provisioning, performance tuning unrelated to cost. Triggers: \"azure cost\", \"finops\", \"reduce spend\", \"ptu\", \"cost optimization\", \"overprovisioned\", \"save money\", \"bill\", \"budget\".",
+      "path": "skills\\fai-az-cost-optimize\\SKILL.md"
+    },
+    {
+      "name": "fai-azure-ai-search-index",
+      "score": 80,
+      "tier": "High",
+      "reasons": [
+        "no context/'when' phrasing (not 'pushy')"
+      ],
+      "description": "Create Azure AI Search vector indexes \u2014 HNSW profiles, semantic ranker, hybrid BM25+vector search, field mappings for chunked RAG documents, and batch indexing pipelines. USE FOR: building a RAG retrieval index, fixing poor recall or irrelevant chunks, configuring hybrid/semantic search, designing index schema, batch ingestion of documents. DO NOT USE FOR: Cosmos DB modeling, embedding-model selection (use the embedding skill), non-Azure search engines (Elastic, Pinecone), full-text-only search without vectors. Triggers: \"ai search\", \"vector index\", \"hnsw\", \"semantic ranker\", \"hybrid search\", \"rag index\", \"retrieval\", \"chunk\", \"recall\".",
+      "path": "skills\\fai-azure-ai-search-index\\SKILL.md"
+    },
+    {
+      "name": "fai-azure-cosmos-modeling",
+      "score": 80,
+      "tier": "High",
+      "reasons": [
+        "no context/'when' phrasing (not 'pushy')"
+      ],
+      "description": "Design Cosmos DB data models \u2014 partition keys, Request Unit (RU) estimation, vector-search embedding storage, and analytical workload isolation for RAG and time-series workloads. USE FOR: choosing a partition key, fixing hot partitions or RU spikes, modeling chat/conversation history, storing vector embeddings, isolating analytics from OLTP, denormalization and indexing strategy. DO NOT USE FOR: relational schema design (use Azure SQL), graph modeling, Cosmos infrastructure provisioning (use the Bicep skill), non-Azure databases. Triggers: \"cosmos db\", \"partition key\", \"RU\", \"request units\", \"hot partition\", \"vector store\", \"nosql model\", \"data model\", \"embedding storage\".",
+      "path": "skills\\fai-azure-cosmos-modeling\\SKILL.md"
+    },
+    {
       "name": "fai-embedding-model-select",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4546,8 +4985,19 @@
       "path": "skills\\fai-embedding-model-select\\SKILL.md"
     },
     {
+      "name": "fai-mcp-python-generator",
+      "score": 80,
+      "tier": "High",
+      "reasons": [
+        "no context/'when' phrasing (not 'pushy')"
+      ],
+      "description": "Scaffold a production-ready Python MCP server \u2014 FastMCP decorators, async tools, structured outputs, and Azure integration. USE FOR: building a new MCP server in Python, exposing tools/resources to an LLM, wiring FastMCP, adding Azure-backed MCP tools, stdio or HTTP transport. DO NOT USE FOR: TypeScript/Node MCP servers (use the TS generator), MCP client code, non-MCP REST APIs, consuming existing MCP servers. Triggers: \"mcp server\", \"fastmcp\", \"python mcp\", \"model context protocol\", \"expose tools\", \"build an mcp\", \"tool server\".",
+      "path": "skills\\fai-mcp-python-generator\\SKILL.md"
+    },
+    {
       "name": "deploy-enterprise-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4557,6 +5007,7 @@
     {
       "name": "evaluate-enterprise-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4566,6 +5017,7 @@
     {
       "name": "tune-enterprise-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4575,6 +5027,7 @@
     {
       "name": "deploy-landing-zone",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4584,6 +5037,7 @@
     {
       "name": "evaluate-landing-zone",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4593,6 +5047,7 @@
     {
       "name": "tune-landing-zone",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4602,6 +5057,7 @@
     {
       "name": "deploy-deterministic-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4611,6 +5067,7 @@
     {
       "name": "evaluate-deterministic-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4620,6 +5077,7 @@
     {
       "name": "tune-deterministic-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4629,6 +5087,7 @@
     {
       "name": "deploy-call-center-voice-ai",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4638,6 +5097,7 @@
     {
       "name": "evaluate-call-center-voice-ai",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4647,6 +5107,7 @@
     {
       "name": "tune-call-center-voice-ai",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4656,6 +5117,7 @@
     {
       "name": "deploy-it-ticket-resolution",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4665,6 +5127,7 @@
     {
       "name": "evaluate-it-ticket-resolution",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4674,6 +5137,7 @@
     {
       "name": "tune-it-ticket-resolution",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4683,6 +5147,7 @@
     {
       "name": "deploy-document-intelligence",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4692,6 +5157,7 @@
     {
       "name": "evaluate-document-intelligence",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4701,6 +5167,7 @@
     {
       "name": "tune-document-intelligence",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4710,6 +5177,7 @@
     {
       "name": "deploy-multi-agent-service",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4719,6 +5187,7 @@
     {
       "name": "evaluate-multi-agent-service",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4728,6 +5197,7 @@
     {
       "name": "tune-multi-agent-service",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4737,6 +5207,7 @@
     {
       "name": "deploy-copilot-studio-bot",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4746,6 +5217,7 @@
     {
       "name": "evaluate-copilot-studio-bot",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4755,6 +5227,7 @@
     {
       "name": "tune-copilot-studio-bot",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4764,6 +5237,7 @@
     {
       "name": "deploy-ai-search-portal",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4773,6 +5247,7 @@
     {
       "name": "evaluate-ai-search-portal",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4782,6 +5257,7 @@
     {
       "name": "tune-ai-search-portal",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4791,6 +5267,7 @@
     {
       "name": "deploy-content-moderation",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4800,6 +5277,7 @@
     {
       "name": "evaluate-content-moderation",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4809,6 +5287,7 @@
     {
       "name": "tune-content-moderation",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4818,6 +5297,7 @@
     {
       "name": "deploy-pester-test-development",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4827,6 +5307,7 @@
     {
       "name": "evaluate-pester-test-development",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4836,6 +5317,7 @@
     {
       "name": "generate-tests",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4845,6 +5327,7 @@
     {
       "name": "tune-pester-test-development",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4854,6 +5337,7 @@
     {
       "name": "deploy-ai-landing-zone-advanced",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4863,6 +5347,7 @@
     {
       "name": "evaluate-ai-landing-zone-advanced",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4872,6 +5357,7 @@
     {
       "name": "tune-ai-landing-zone-advanced",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4881,6 +5367,7 @@
     {
       "name": "deploy-model-serving-aks",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4890,6 +5377,7 @@
     {
       "name": "evaluate-model-serving-aks",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4899,6 +5387,7 @@
     {
       "name": "tune-model-serving-aks",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4908,6 +5397,7 @@
     {
       "name": "deploy-fine-tuning-workflow",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4917,6 +5407,7 @@
     {
       "name": "evaluate-fine-tuning-workflow",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4926,6 +5417,7 @@
     {
       "name": "tune-fine-tuning-workflow",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4935,6 +5427,7 @@
     {
       "name": "deploy-cost-optimized-ai-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4944,6 +5437,7 @@
     {
       "name": "evaluate-cost-optimized-ai-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4953,6 +5447,7 @@
     {
       "name": "tune-cost-optimized-ai-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4962,6 +5457,7 @@
     {
       "name": "deploy-multi-modal-docproc",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4971,6 +5467,7 @@
     {
       "name": "evaluate-multi-modal-docproc",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4980,6 +5477,7 @@
     {
       "name": "tune-multi-modal-docproc",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4989,6 +5487,7 @@
     {
       "name": "deploy-copilot-teams-extension",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -4998,6 +5497,7 @@
     {
       "name": "evaluate-copilot-teams-extension",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5007,6 +5507,7 @@
     {
       "name": "tune-copilot-teams-extension",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5016,6 +5517,7 @@
     {
       "name": "deploy-ai-observability",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5025,6 +5527,7 @@
     {
       "name": "evaluate-ai-observability",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5034,6 +5537,7 @@
     {
       "name": "tune-ai-observability",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5043,6 +5547,7 @@
     {
       "name": "deploy-prompt-management",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5052,6 +5557,7 @@
     {
       "name": "evaluate-prompt-management",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5061,6 +5567,7 @@
     {
       "name": "tune-prompt-management",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5070,6 +5577,7 @@
     {
       "name": "deploy-edge-ai-phi4",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5079,6 +5587,7 @@
     {
       "name": "evaluate-edge-ai-phi4",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5088,6 +5597,7 @@
     {
       "name": "tune-edge-ai-phi4",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5097,6 +5607,7 @@
     {
       "name": "deploy-anomaly-detection",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5106,6 +5617,7 @@
     {
       "name": "evaluate-anomaly-detection",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5115,6 +5627,7 @@
     {
       "name": "tune-anomaly-detection",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5124,6 +5637,7 @@
     {
       "name": "deploy-agentic-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5133,6 +5647,7 @@
     {
       "name": "evaluate-agentic-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5142,6 +5657,7 @@
     {
       "name": "tune-agentic-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5151,6 +5667,7 @@
     {
       "name": "deploy-multi-agent-swarm",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5160,6 +5677,7 @@
     {
       "name": "evaluate-multi-agent-swarm",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5169,6 +5687,7 @@
     {
       "name": "tune-multi-agent-swarm",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5178,6 +5697,7 @@
     {
       "name": "deploy-browser-automation-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5187,6 +5707,7 @@
     {
       "name": "evaluate-browser-automation-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5196,6 +5717,7 @@
     {
       "name": "tune-browser-automation-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5205,6 +5727,7 @@
     {
       "name": "deploy-ai-code-review-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5214,6 +5737,7 @@
     {
       "name": "evaluate-ai-code-review-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5223,6 +5747,7 @@
     {
       "name": "tune-ai-code-review-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5232,6 +5757,7 @@
     {
       "name": "deploy-conversation-memory-layer",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5241,6 +5767,7 @@
     {
       "name": "evaluate-conversation-memory-layer",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5250,6 +5777,7 @@
     {
       "name": "tune-conversation-memory-layer",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5259,6 +5787,7 @@
     {
       "name": "deploy-semantic-search-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5268,6 +5797,7 @@
     {
       "name": "evaluate-semantic-search-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5277,6 +5807,7 @@
     {
       "name": "tune-semantic-search-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5286,6 +5817,7 @@
     {
       "name": "deploy-ai-data-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5295,6 +5827,7 @@
     {
       "name": "evaluate-ai-data-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5304,6 +5837,7 @@
     {
       "name": "tune-ai-data-pipeline",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5313,6 +5847,7 @@
     {
       "name": "deploy-knowledge-graph-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5322,6 +5857,7 @@
     {
       "name": "evaluate-knowledge-graph-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5331,6 +5867,7 @@
     {
       "name": "tune-knowledge-graph-rag",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5340,6 +5877,7 @@
     {
       "name": "deploy-mcp-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5349,6 +5887,7 @@
     {
       "name": "evaluate-mcp-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5358,6 +5897,7 @@
     {
       "name": "tune-mcp-gateway",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5367,6 +5907,7 @@
     {
       "name": "deploy-ai-security-hardening",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5376,6 +5917,7 @@
     {
       "name": "evaluate-ai-security-hardening",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5385,6 +5927,7 @@
     {
       "name": "tune-ai-security-hardening",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5394,6 +5937,7 @@
     {
       "name": "deploy-low-code-ai-builder",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5403,6 +5947,7 @@
     {
       "name": "evaluate-low-code-ai-builder",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5412,6 +5957,7 @@
     {
       "name": "tune-low-code-ai-builder",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5421,6 +5967,7 @@
     {
       "name": "deploy-ai-powered-testing",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5430,6 +5977,7 @@
     {
       "name": "evaluate-ai-powered-testing",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5439,6 +5987,7 @@
     {
       "name": "tune-ai-powered-testing",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5448,6 +5997,7 @@
     {
       "name": "deploy-voice-ai-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5457,6 +6007,7 @@
     {
       "name": "evaluate-voice-ai-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5466,6 +6017,7 @@
     {
       "name": "tune-voice-ai-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5475,6 +6027,7 @@
     {
       "name": "deploy-edge-ai-deployment",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5484,6 +6037,7 @@
     {
       "name": "evaluate-edge-ai-deployment",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5493,6 +6047,7 @@
     {
       "name": "tune-edge-ai-deployment",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5502,6 +6057,7 @@
     {
       "name": "deploy-ai-compliance-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5511,6 +6067,7 @@
     {
       "name": "evaluate-ai-compliance-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5520,6 +6077,7 @@
     {
       "name": "tune-ai-compliance-engine",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5529,6 +6087,7 @@
     {
       "name": "deploy-multimodal-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5538,6 +6097,7 @@
     {
       "name": "evaluate-multimodal-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5547,6 +6107,7 @@
     {
       "name": "tune-multimodal-agent",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5556,6 +6117,7 @@
     {
       "name": "deploy-ai-powered-devops",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5565,6 +6127,7 @@
     {
       "name": "evaluate-ai-powered-devops",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5574,6 +6137,7 @@
     {
       "name": "tune-ai-powered-devops",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5583,6 +6147,7 @@
     {
       "name": "deploy-document-understanding-v2",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5592,6 +6157,7 @@
     {
       "name": "evaluate-document-understanding-v2",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5601,6 +6167,7 @@
     {
       "name": "tune-document-understanding-v2",
       "score": 80,
+      "tier": "Medium",
       "reasons": [
         "no context/'when' phrasing (not 'pushy')"
       ],
@@ -5610,6 +6177,7 @@
     {
       "name": "fai-azure-storage-patterns",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('apply')"
       ],
@@ -5619,6 +6187,7 @@
     {
       "name": "fai-domain-driven-design",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('apply')"
       ],
@@ -5628,6 +6197,7 @@
     {
       "name": "fai-eval-driven-dev",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('adopt')"
       ],
@@ -5637,6 +6207,7 @@
     {
       "name": "fai-first-ask",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('craft')"
       ],
@@ -5646,6 +6217,7 @@
     {
       "name": "fai-gh-cli",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('automate')"
       ],
@@ -5655,6 +6227,7 @@
     {
       "name": "fai-gtm-ai-strategy",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('define')"
       ],
@@ -5664,6 +6237,7 @@
     {
       "name": "fai-gtm-enterprise-planning",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('plan')"
       ],
@@ -5673,6 +6247,7 @@
     {
       "name": "fai-gtm-investor-comms",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('craft')"
       ],
@@ -5682,6 +6257,7 @@
     {
       "name": "fai-gtm-launch",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('execute')"
       ],
@@ -5691,6 +6267,7 @@
     {
       "name": "fai-gtm-operating-cadence",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('establish')"
       ],
@@ -5700,6 +6277,7 @@
     {
       "name": "fai-gtm-positioning",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('define')"
       ],
@@ -5709,6 +6287,7 @@
     {
       "name": "fai-guardrails-policy",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('define')"
       ],
@@ -5718,6 +6297,7 @@
     {
       "name": "fai-import-iac",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('import')"
       ],
@@ -5727,6 +6307,7 @@
     {
       "name": "fai-java-extract-method",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('refactor')"
       ],
@@ -5736,6 +6317,7 @@
     {
       "name": "fai-model-comparison-benchmark",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('benchmark')"
       ],
@@ -5745,6 +6327,7 @@
     {
       "name": "fai-prompt-version-manage",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('version')"
       ],
@@ -5754,6 +6337,7 @@
     {
       "name": "fai-refactor-complexity",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('reduce')"
       ],
@@ -5763,6 +6347,7 @@
     {
       "name": "fai-refactor-skill",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('apply')"
       ],
@@ -5772,6 +6357,7 @@
     {
       "name": "fai-remember",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('manage')"
       ],
@@ -5781,6 +6367,7 @@
     {
       "name": "fai-review-and-refactor",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('combine')"
       ],
@@ -5790,6 +6377,7 @@
     {
       "name": "fai-secret-scanning",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('detect')"
       ],
@@ -5799,6 +6387,7 @@
     {
       "name": "fai-suggest-agents",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('recommend')"
       ],
@@ -5808,6 +6397,7 @@
     {
       "name": "fai-suggest-instructions",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('recommend')"
       ],
@@ -5817,6 +6407,7 @@
     {
       "name": "fai-suggest-skills",
       "score": 85,
+      "tier": "Medium",
       "reasons": [
         "doesn't lead with an action verb ('recommend')"
       ],
@@ -5826,6 +6417,7 @@
     {
       "name": "fai-azure-resource-visualizer",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Generate visual topology diagrams of Azure resources with dependency overlays, compliance annotations, and cost heatmaps. Use when creating architecture documentation, reviewing resource layouts, or presenting infrastructure to stakeholders.",
       "path": "skills\\fai-azure-resource-visualizer\\SKILL.md"
@@ -5833,6 +6425,7 @@
     {
       "name": "fai-azure-role-selector",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Select least-privilege Azure RBAC roles by mapping required actions to built-in roles. Use when assigning permissions to Managed Identities, service principals, or users for AI workloads.",
       "path": "skills\\fai-azure-role-selector\\SKILL.md"
@@ -5840,6 +6433,7 @@
     {
       "name": "fai-azure-service-bus-setup",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Configure Azure Service Bus queues and topics with dead-letter handling, sessions, retry policies, and throughput tuning. Use when building reliable messaging for AI pipeline orchestration, async processing, or event-driven architectures.",
       "path": "skills\\fai-azure-service-bus-setup\\SKILL.md"
@@ -5847,6 +6441,7 @@
     {
       "name": "fai-azure-sql-setup",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Provision Azure SQL Database with AAD-only auth, private networking, backup policies, and workload performance tuning. Use when setting up relational storage for AI application metadata, conversation history, or evaluation results.",
       "path": "skills\\fai-azure-sql-setup\\SKILL.md"
@@ -5854,6 +6449,7 @@
     {
       "name": "fai-azure-static-web-apps-setup",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Set up Azure Static Web Apps with custom auth, staged preview environments, API backend linking, and route-level access control. Use when deploying frontend apps with serverless APIs, GitHub/Azure DevOps CI/CD, and role-based route protection.",
       "path": "skills\\fai-azure-static-web-apps-setup\\SKILL.md"
@@ -5861,6 +6457,7 @@
     {
       "name": "fai-basic-prompt-optimization",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Optimize baseline prompts with role framing, output constraints, few-shot examples, and deterministic output validation. Use when improving prompt quality, reducing hallucinations, or standardizing LLM output format.",
       "path": "skills\\fai-basic-prompt-optimization\\SKILL.md"
@@ -5868,6 +6465,7 @@
     {
       "name": "fai-bicep-module-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold reusable Bicep modules with typed parameters, secure defaults, test hooks, and versioning. Use when creating infrastructure modules that follow AVM conventions and need what-if validation before deployment.",
       "path": "skills\\fai-bicep-module-scaffold\\SKILL.md"
@@ -5875,6 +6473,7 @@
     {
       "name": "fai-design-state-management",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Design UI state management for multi-turn AI interactions \u2014 conversation state, streaming updates, optimistic UI, and error recovery. Use this skill when building a chat/agent frontend, handling in-flight responses, or managing complex interaction state \u2014 even if the user only says \"manage the chat state\".",
       "path": "skills\\fai-design-state-management\\SKILL.md"
@@ -5882,6 +6481,7 @@
     {
       "name": "fai-edge-case-generator",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Generate edge-case test inputs for AI workflows \u2014 boundary values, adversarial prompts, malformed data, and rare paths. Use this skill when hardening a feature before launch, writing test suites, or probing failure modes \u2014 even if the user only says \"what could break this\" or \"write tests\".",
       "path": "skills\\fai-edge-case-generator\\SKILL.md"
@@ -5889,6 +6489,7 @@
     {
       "name": "fai-flowstudio-design",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Design automation workflows in Azure Flow Studio, Power Automate, or Zapier \u2014 triggers, actions, branching, and error handling. Use this skill when wiring no-code/low-code automations, connecting SaaS apps, or orchestrating event-driven flows \u2014 even if the user only says \"automate this process\".",
       "path": "skills\\fai-flowstudio-design\\SKILL.md"
@@ -5896,6 +6497,7 @@
     {
       "name": "fai-folder-structure",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold a convention-aligned project folder structure for AI solution plays, separating agents, skills, infrastructure, and tests. Use this skill when starting a new project, reorganizing a messy repo, or aligning a codebase to FAI Protocol conventions \u2014 even if the user only says \"set up the project\" or \"where should this file go\".",
       "path": "skills\\fai-folder-structure\\SKILL.md"
@@ -5903,6 +6505,7 @@
     {
       "name": "fai-gdpr-compliance",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Review and harden AI data processing and storage for GDPR \u2014 data minimization, consent, right-to-erasure, retention, and cross-border transfer controls. Use this skill when handling EU personal data, building data pipelines, or when the user mentions privacy, PII, consent, or retention \u2014 even if they don't say \"GDPR\" explicitly.",
       "path": "skills\\fai-gdpr-compliance\\SKILL.md"
@@ -5910,6 +6513,7 @@
     {
       "name": "fai-git-commit-best-practices",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Write conventional-commit messages with meaningful scope, body, and footer for clean, automatable git history. Use this skill when committing changes, preparing a PR, or configuring commitlint/semantic-release \u2014 even if the user just says \"commit this\" or asks how to phrase a commit.",
       "path": "skills\\fai-git-commit-best-practices\\SKILL.md"
@@ -5917,6 +6521,7 @@
     {
       "name": "fai-github-pr-review",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria. Use this skill when reviewing a PR, responding to review comments, or setting up review standards \u2014 even if the user only says \"check this PR\" or \"is this ready to merge\".",
       "path": "skills\\fai-github-pr-review\\SKILL.md"
@@ -5924,6 +6529,7 @@
     {
       "name": "fai-gtm-developer-ecosystem",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Build a developer ecosystem and community-engagement program \u2014 docs, samples, DevRel, and contribution paths. Use this skill when growing adoption of an API/SDK/platform, planning DevRel, or improving developer experience \u2014 even if the user only says \"how do we get developers to use this\".",
       "path": "skills\\fai-gtm-developer-ecosystem\\SKILL.md"
@@ -5931,6 +6537,7 @@
     {
       "name": "fai-gtm-enterprise-onboarding",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Design enterprise onboarding for AI solutions \u2014 provisioning, security review, training, and success milestones. Use this skill when standing up a new enterprise customer, reducing time-to-value, or formalizing onboarding \u2014 even if the user only says \"onboard this customer\".",
       "path": "skills\\fai-gtm-enterprise-onboarding\\SKILL.md"
@@ -5938,6 +6545,7 @@
     {
       "name": "fai-gtm-partnerships",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Build a partnership strategy for an AI platform ecosystem \u2014 partner tiers, co-sell motions, integration programs, and incentives. Use this skill when planning alliances, recruiting integration partners, or structuring a partner program \u2014 even if the user only says \"who should we partner with\".",
       "path": "skills\\fai-gtm-partnerships\\SKILL.md"
@@ -5945,6 +6553,7 @@
     {
       "name": "fai-gtm-product-led-growth",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Implement a product-led growth strategy for AI tools \u2014 free tier, activation, in-product conversion, and usage-based expansion. Use this skill when designing a self-serve funnel, improving activation/retention, or shifting to PLG \u2014 even if the user only says \"how do we grow without sales\".",
       "path": "skills\\fai-gtm-product-led-growth\\SKILL.md"
@@ -5952,6 +6561,7 @@
     {
       "name": "fai-human-in-the-loop",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Implement human-in-the-loop workflows for AI decisions \u2014 approval gates, confidence thresholds, escalation, and audit trails. Use this skill when adding oversight to autonomous actions, meeting compliance review needs, or handling low-confidence outputs \u2014 even if the user only says \"add a human approval step\".",
       "path": "skills\\fai-human-in-the-loop\\SKILL.md"
@@ -5959,6 +6569,7 @@
     {
       "name": "fai-managed-identity-setup",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Set up Azure Managed Identity with least-privilege RBAC role assignments for AI workloads. Use when connecting services to Azure OpenAI, Storage, Key Vault, or other resources without credentials.",
       "path": "skills\\fai-managed-identity-setup\\SKILL.md"
@@ -5966,6 +6577,7 @@
     {
       "name": "fai-mcp-csharp-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold C# MCP servers with the ModelContextProtocol NuGet package, typed tool definitions, input validation, and ASP.NET hosting. Use when building MCP servers in .NET for AI agent tool access.",
       "path": "skills\\fai-mcp-csharp-scaffold\\SKILL.md"
@@ -5973,6 +6585,7 @@
     {
       "name": "fai-mcp-go-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Go MCP servers with the mcp-go SDK, typed tool handlers, middleware, and production deployment. Use when building high-performance MCP servers in Go for AI agent tool access.",
       "path": "skills\\fai-mcp-go-scaffold\\SKILL.md"
@@ -5980,6 +6593,7 @@
     {
       "name": "fai-mcp-java-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Java MCP servers with Spring Boot integration, typed tool beans, and structured error handling. Use when building MCP servers in Java for enterprise AI agent tool access.",
       "path": "skills\\fai-mcp-java-scaffold\\SKILL.md"
@@ -5987,6 +6601,7 @@
     {
       "name": "fai-mcp-kotlin-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Kotlin MCP servers with coroutines, typed tool definitions, and Ktor or Spring integration. Use when building MCP servers in Kotlin with idiomatic async patterns.",
       "path": "skills\\fai-mcp-kotlin-scaffold\\SKILL.md"
@@ -5994,6 +6609,7 @@
     {
       "name": "fai-mcp-php-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold PHP MCP servers with typed tool handlers, JSON-RPC processing, and Composer project structure. Use when building MCP servers in PHP for web application or CMS integration.",
       "path": "skills\\fai-mcp-php-scaffold\\SKILL.md"
@@ -6001,6 +6617,7 @@
     {
       "name": "fai-readme-generator",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Generate README files with badges, quickstart, architecture overview, and contribution guide. Use when creating or improving project documentation for open-source or team repositories.",
       "path": "skills\\fai-readme-generator\\SKILL.md"
@@ -6008,6 +6625,7 @@
     {
       "name": "fai-refactor-plan",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Create refactoring plans with scope assessment, risk ranking, incremental execution, and regression protection. Use when planning systematic code improvements over multiple sprints.",
       "path": "skills\\fai-refactor-plan\\SKILL.md"
@@ -6015,6 +6633,7 @@
     {
       "name": "fai-rollout-plan",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Create deployment rollout plans with staged promotion, health checks, rollback triggers, and communication templates. Use when deploying changes to production with risk-managed incremental rollout.",
       "path": "skills\\fai-rollout-plan\\SKILL.md"
@@ -6022,6 +6641,7 @@
     {
       "name": "fai-scoutqa-test",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Run ScoutQA automated test generation and execution for web applications with AI-driven test discovery and self-healing selectors. Use when adding comprehensive E2E test coverage with minimal manual test writing.",
       "path": "skills\\fai-scoutqa-test\\SKILL.md"
@@ -6029,6 +6649,7 @@
     {
       "name": "fai-security-review-skill",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Conduct security reviews for AI applications covering OWASP LLM Top 10, prompt injection defense, data leakage prevention, and access control. Use when auditing AI code for security vulnerabilities.",
       "path": "skills\\fai-security-review-skill\\SKILL.md"
@@ -6036,6 +6657,7 @@
     {
       "name": "fai-semantic-kernel-integration",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Integrate Semantic Kernel with Azure OpenAI, plugins, planners, and memory. Use when building AI orchestration in .NET or Python with Microsoft's Semantic Kernel framework.",
       "path": "skills\\fai-semantic-kernel-integration\\SKILL.md"
@@ -6043,6 +6665,7 @@
     {
       "name": "fai-skill-template",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Create SKILL.md files following the Agent Skills specification with proper frontmatter, structured content, and progressive disclosure. Use when authoring new skills for VS Code Copilot, Claude, or other agent platforms.",
       "path": "skills\\fai-skill-template\\SKILL.md"
@@ -6050,6 +6673,7 @@
     {
       "name": "fai-specification-generator",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Generate technical specifications with requirements, API contracts, data models, and acceptance criteria. Use when creating detailed specs for engineering handoff or system design documentation.",
       "path": "skills\\fai-specification-generator\\SKILL.md"
@@ -6057,6 +6681,7 @@
     {
       "name": "fai-springboot-kotlin-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Spring Boot applications in Kotlin with coroutines, WebFlux, and Gradle configuration. Use when building Kotlin-based microservices with Spring Boot.",
       "path": "skills\\fai-springboot-kotlin-scaffold\\SKILL.md"
@@ -6064,6 +6689,7 @@
     {
       "name": "fai-springboot-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Spring Boot Java applications with REST controllers, JPA/Hibernate, security configuration, and test setup. Use when building Java microservices with Spring Boot.",
       "path": "skills\\fai-springboot-scaffold\\SKILL.md"
@@ -6071,6 +6697,7 @@
     {
       "name": "fai-springboot-test",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Write Spring Boot tests with MockMvc, TestContainers, slice testing, and test profiles. Use when building comprehensive test suites for Spring Boot applications.",
       "path": "skills\\fai-springboot-test\\SKILL.md"
@@ -6078,6 +6705,7 @@
     {
       "name": "fai-sql-code-review-skill",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Review SQL code for correctness, performance, security, and maintainability across PostgreSQL, SQL Server, and MySQL. Use when auditing SQL in PRs or reviewing database migration scripts.",
       "path": "skills\\fai-sql-code-review-skill\\SKILL.md"
@@ -6085,6 +6713,7 @@
     {
       "name": "fai-sql-optimization-skill",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Optimize SQL queries with execution plan analysis, index tuning, query rewriting, and statistics management. Use when diagnosing slow queries across PostgreSQL, SQL Server, or MySQL.",
       "path": "skills\\fai-sql-optimization-skill\\SKILL.md"
@@ -6092,6 +6721,7 @@
     {
       "name": "fai-tech-stack-blueprint",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Design technology stack blueprints with component selection, tradeoff analysis, integration patterns, and upgrade paths. Use when selecting technologies for new AI projects or evaluating stack changes.",
       "path": "skills\\fai-tech-stack-blueprint\\SKILL.md"
@@ -6099,6 +6729,7 @@
     {
       "name": "fai-technical-spike",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Run timeboxed technical spikes to de-risk unknowns with structured experiments, decision criteria, and actionable conclusions. Use when evaluating technologies, patterns, or approaches before committing to implementation.",
       "path": "skills\\fai-technical-spike\\SKILL.md"
@@ -6106,6 +6737,7 @@
     {
       "name": "fai-terraform-module-scaffold",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Scaffold Terraform module projects with variables, outputs, validation rules, and automated testing. Use when creating reusable infrastructure modules for Azure, AWS, or multi-cloud environments.",
       "path": "skills\\fai-terraform-module-scaffold\\SKILL.md"
@@ -6113,6 +6745,7 @@
     {
       "name": "fai-threat-model",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Conduct threat modeling for AI applications with STRIDE analysis, trust boundaries, attack surface mapping, and mitigation priorities. Use when assessing security risks before production deployment.",
       "path": "skills\\fai-threat-model\\SKILL.md"
@@ -6120,6 +6753,7 @@
     {
       "name": "fai-tldr-prompt",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Generate concise TL;DR summaries from long documents, code reviews, or conversation threads. Use when condensing lengthy content into actionable summaries.",
       "path": "skills\\fai-tldr-prompt\\SKILL.md"
@@ -6127,6 +6761,7 @@
     {
       "name": "fai-tune-01-enterprise-rag",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Tune Enterprise RAG (Play 01) configuration for retrieval quality, latency, cost efficiency, and guardrail thresholds. Use when optimizing an existing RAG deployment for production performance.",
       "path": "skills\\fai-tune-01-enterprise-rag\\SKILL.md"
@@ -6134,6 +6769,7 @@
     {
       "name": "fai-tune-02-ai-landing-zone",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Tune AI Landing Zone (Play 02) for policy compliance, network performance, identity governance, and cost controls. Use when optimizing an existing landing zone deployment.",
       "path": "skills\\fai-tune-02-ai-landing-zone\\SKILL.md"
@@ -6141,6 +6777,7 @@
     {
       "name": "fai-tune-03-deterministic-agent",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Tune Deterministic Agent (Play 03) for output repeatability, schema compliance, and guardrail calibration. Use when optimizing agents that must produce consistent, structured outputs.",
       "path": "skills\\fai-tune-03-deterministic-agent\\SKILL.md"
@@ -6148,6 +6785,7 @@
     {
       "name": "fai-tune-04-call-center-voice-ai",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Tune Call Center Voice AI (Play 04) for voice latency, transcription accuracy, TTS naturalness, and escalation sensitivity. Use when optimizing a deployed voice AI pipeline for call quality.",
       "path": "skills\\fai-tune-04-call-center-voice-ai\\SKILL.md"
@@ -6155,6 +6793,7 @@
     {
       "name": "fai-tune-06-document-intelligence",
       "score": 100,
+      "tier": "Medium",
       "reasons": [],
       "description": "Tune Document Intelligence OCR model selection, field extraction confidence, and multi-format processing. Use when optimizing Azure Document Intelligence for invoice, receipt, ID, or custom form extraction.",
       "path": "skills\\fai-tune-06-document-intelligence\\SKILL.md"

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-az-cost-optimize). Safe to delete or edit.
 interface:
   display_name: "Az Cost Optimize"
-  short_description: "Analyze Azure AI workload spend with Cost Management API queries, flag…"
-  default_prompt: "Analyze Azure AI workload spend with Cost Management API queries, flag overprovisioned PTU, identify semantic cache gaps, right-size model SKUs, and produce"
+  short_description: "Analyze Azure AI workload spend — Cost Management API queries, overprovisioned…"
+  default_prompt: "Analyze Azure AI workload spend — Cost Management API queries, overprovisioned PTU flags, semantic-cache gaps, model-SKU right-sizing, and FinOps"

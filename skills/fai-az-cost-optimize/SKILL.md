@@ -1,6 +1,10 @@
 ---
 name: fai-az-cost-optimize
-description: Analyze Azure AI workload spend with Cost Management API queries, flag overprovisioned PTU, identify semantic cache gaps, right-size model SKUs, and produce actionable FinOps recommendations with ROI estimates.
+description: |
+  Analyze Azure AI workload spend — Cost Management API queries, overprovisioned PTU flags, semantic-cache gaps, model-SKU right-sizing, and FinOps recommendations with ROI estimates.
+  USE FOR: reducing Azure AI/OpenAI bills, finding cost anomalies, deciding PTU vs pay-as-you-go, right-sizing deployments, building a FinOps report.
+  DO NOT USE FOR: non-Azure cloud costs, generic budgeting, infrastructure provisioning, performance tuning unrelated to cost.
+  Triggers: "azure cost", "finops", "reduce spend", "ptu", "cost optimization", "overprovisioned", "save money", "bill", "budget".
 ---
 
 # FAI Azure Cost Optimize

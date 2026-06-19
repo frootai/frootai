@@ -98,6 +98,24 @@ def iter_skills():
                 yield name, " ".join(desc.split()), skill_md
 
 
+def sensei_tier(desc: str) -> str:
+    """Microsoft 'Sensei' description-quality tier (adapted to description-level
+    signals): Low → Medium → Medium-High → High based on USE FOR / DO NOT USE
+    FOR / Triggers structure."""
+    low = desc.lower()
+    use_for = "use for:" in low
+    not_for = "do not use for:" in low
+    triggers = "triggers:" in low
+    has_cue = use_for or "use this skill when" in low or "use when" in low
+    if use_for and not_for and triggers:
+        return "High"
+    if use_for and not_for:
+        return "Medium-High"
+    if len(desc) > 150 and has_cue:
+        return "Medium"
+    return "Low"
+
+
 def score_description(name: str, desc: str) -> tuple[int, list[str]]:
     """Return (0-100 score, list of reasons for lost points)."""
     score, reasons = 0, []
@@ -150,9 +168,12 @@ def score_description(name: str, desc: str) -> tuple[int, list[str]]:
 
 def cmd_lint(args):
     rows = []
+    tiers = {"Low": 0, "Medium": 0, "Medium-High": 0, "High": 0}
     for name, desc, path in iter_skills():
         score, reasons = score_description(name, desc)
-        rows.append({"name": name, "score": score, "reasons": reasons,
+        tier = sensei_tier(desc)
+        tiers[tier] += 1
+        rows.append({"name": name, "score": score, "tier": tier, "reasons": reasons,
                      "description": desc, "path": str(path.relative_to(BASE))})
     rows.sort(key=lambda r: r["score"])
     total = len(rows)
@@ -160,17 +181,20 @@ def cmd_lint(args):
     mean = round(sum(r["score"] for r in rows) / total, 1) if total else 0
 
     print(f"Scored {total} skill descriptions. Mean score: {mean}/100.")
-    print(f"Below threshold ({args.threshold}): {len(below)} ({round(len(below)/total*100)}%)\n")
+    print(f"Below threshold ({args.threshold}): {len(below)} ({round(len(below)/total*100)}%)")
+    print(f"Sensei tiers: High={tiers['High']} Medium-High={tiers['Medium-High']} "
+          f"Medium={tiers['Medium']} Low={tiers['Low']}\n")
     print(f"--- Weakest {min(args.bottom, total)} descriptions (optimization targets) ---")
     for r in rows[: args.bottom]:
-        print(f"  [{r['score']:>3}] {r['name']}")
+        print(f"  [{r['score']:>3}] ({r['tier']}) {r['name']}")
         print(f"        why: {'; '.join(r['reasons'])}")
 
     if args.json:
         out = BASE / args.json
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps({"mean": mean, "total": total,
-                                   "below_threshold": len(below), "skills": rows},
+                                   "below_threshold": len(below), "sensei_tiers": tiers,
+                                   "skills": rows},
                                   indent=2) + "\n", encoding="utf-8")
         print(f"\nFull report written to {out.relative_to(BASE)}")
     return 0

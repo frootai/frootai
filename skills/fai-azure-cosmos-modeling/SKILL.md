@@ -1,6 +1,10 @@
 ---
 name: fai-azure-cosmos-modeling
-description: Design Cosmos DB data models with optimal partition keys, Request Unit (RU) estimation, vector search embedding storage, and analytical workload isolation — exceeding relational DB performance on RAG and time-series queries.
+description: |
+  Design Cosmos DB data models — partition keys, Request Unit (RU) estimation, vector-search embedding storage, and analytical workload isolation for RAG and time-series workloads.
+  USE FOR: choosing a partition key, fixing hot partitions or RU spikes, modeling chat/conversation history, storing vector embeddings, isolating analytics from OLTP, denormalization and indexing strategy.
+  DO NOT USE FOR: relational schema design (use Azure SQL), graph modeling, Cosmos infrastructure provisioning (use the Bicep skill), non-Azure databases.
+  Triggers: "cosmos db", "partition key", "RU", "request units", "hot partition", "vector store", "nosql model", "data model", "embedding storage".
 ---
 
 # FAI Azure Cosmos DB Modeling

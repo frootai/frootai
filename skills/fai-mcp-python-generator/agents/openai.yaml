@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-mcp-python-generator). Safe to delete or edit.
 interface:
   display_name: "MCP Python Generator"
-  short_description: "Scaffold a production-ready Python MCP server with FastMCP decorators, async…"
-  default_prompt: "Scaffold a production-ready Python MCP server with FastMCP decorators, async tools, structured outputs, and Azure integration"
+  short_description: "Scaffold a production-ready Python MCP server — FastMCP decorators, async…"
+  default_prompt: "Scaffold a production-ready Python MCP server — FastMCP decorators, async tools, structured outputs, and Azure integration"

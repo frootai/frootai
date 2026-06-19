@@ -1,6 +1,10 @@
 ---
 name: fai-mcp-python-generator
-description: "Scaffold a production-ready Python MCP server with FastMCP decorators, async tools, structured outputs, and Azure integration."
+description: |
+  Scaffold a production-ready Python MCP server — FastMCP decorators, async tools, structured outputs, and Azure integration.
+  USE FOR: building a new MCP server in Python, exposing tools/resources to an LLM, wiring FastMCP, adding Azure-backed MCP tools, stdio or HTTP transport.
+  DO NOT USE FOR: TypeScript/Node MCP servers (use the TS generator), MCP client code, non-MCP REST APIs, consuming existing MCP servers.
+  Triggers: "mcp server", "fastmcp", "python mcp", "model context protocol", "expose tools", "build an mcp", "tool server".
 waf: ["Security", "Reliability", "Performance Efficiency", "Operational Excellence"]
 plays: ["29-mcp-platform-integration", "01-enterprise-rag", "21-agentic-rag"]
 ---
