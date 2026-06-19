@@ -1,0 +1,63 @@
+# Adoption fixture: GitHub-track example
+# Demonstrates using FrootAI Action v6 with the GitHub MCP area
+# (ms_learn) for documentation-aware validation and evaluation.
+#
+# This track is ideal for repos that want to validate their AI
+# architecture against Microsoft Learn documentation and best practices.
+#
+# Copy this workflow into your repo's .github/workflows/ directory.
+
+name: FrootAI — GitHub + MS Learn Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-github:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Evaluate MCP gateway play
+        id: frootai
+        uses: frootai/frootai@v6
+        with:
+          command: evaluate
+          play: 29-mcp-gateway
+          mcp-attach: ms_learn
+          version: '6.0.0-alpha.2'
+          threshold: '0.7'
+          format: json
+
+      - name: Search primitives
+        uses: frootai/frootai@v6
+        with:
+          command: primitives
+          play: 29-mcp-gateway
+          mcp-attach: ms_learn
+          version: '6.0.0-alpha.2'
+          format: markdown
+
+      - name: Doctor check
+        uses: frootai/frootai@v6
+        with:
+          command: doctor
+          mcp-attach: ms_learn
+          version: '6.0.0-alpha.2'
+
+      - name: Summary
+        run: |
+          echo "## GitHub + MS Learn Track Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: ${{ steps.frootai.outputs.status }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Score: ${{ steps.frootai.outputs.eval-score }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Areas: ${{ steps.frootai.outputs.mcp-attached }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tools: ${{ steps.frootai.outputs.mcp-tools-count }}" >> "$GITHUB_STEP_SUMMARY"

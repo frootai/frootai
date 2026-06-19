@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/provides-mcp-v1.json",
+  "title": "FAI Plugin Provides MCP v1",
+  "description": "Validates the `providesMcp` field on `plugin.json`. Declares that a plugin ships an external MCP server with it. Read by the FrootAI marketplace (for the federation-ready badge) and the auto-discovery flow (registers the plugin's server in the federated areas catalog on install).",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M0.5] of the FAI MCP Federation Kernel masterplan. Doctrine principle 3 — NO HARD-CODED PUBLISHER LIST: a plugin can declare a tier-1/2/3 server, but the trust verdict is always evaluated against the shipped trust.json + user overrides — never trusted just because the plugin says so.",
+
+  "type": "object",
+  "required": ["name", "transport", "trust"],
+  "additionalProperties": false,
+
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "Kebab-case slug for the area name. Becomes the prefix in `<area>.<tool>`."
+    },
+    "transport": {
+      "type": "string",
+      "enum": ["stdio", "http-sse", "http-streaming"],
+      "description": "Wire protocol the bundled server speaks. `stdio` is the most common (spawned as subprocess). `http-*` requires a URL spec in the plugin's install hook."
+    },
+    "trust": {
+      "type": "string",
+      "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"],
+      "description": "Trust tier the plugin author CLAIMS. The kernel re-evaluates against the shipped trust manifest — `untrusted` is always blocked regardless of claim."
+    },
+    "publisher": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "GitHub-org-style publisher slug (e.g. `microsoft`, `upstash`, `notion`). Optional; if absent, defaults to the plugin's `author.name` (lowercased + kebab-cased)."
+    },
+    "command": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "For `transport: stdio` — the executable command (e.g. `npx`, `node`, `python`). Required when transport is stdio."
+    },
+    "args": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 32,
+      "description": "For `transport: stdio` — args passed to the command (e.g. `['-y', '@azure/mcp-server']`)."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "For `transport: http-sse` or `http-streaming` — the endpoint URL. Required when transport is http-*."
+    }
+  },
+
+  "allOf": [
+    {
+      "if": { "properties": { "transport": { "const": "stdio" } } },
+      "then": { "required": ["command"] }
+    },
+    {
+      "if": {
+        "properties": { "transport": { "enum": ["http-sse", "http-streaming"] } }
+      },
+      "then": { "required": ["url"] }
+    }
+  ],
+
+  "examples": [
+    {
+      "name": "azure",
+      "transport": "stdio",
+      "trust": "first-party-ms",
+      "publisher": "microsoft",
+      "command": "npx",
+      "args": ["-y", "@azure/mcp-server"]
+    },
+    {
+      "name": "context7",
+      "transport": "stdio",
+      "trust": "verified-publisher",
+      "publisher": "upstash",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  ]
+}

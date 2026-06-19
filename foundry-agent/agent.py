@@ -1,42 +1,78 @@
+# [M8.2] CANONICAL: frootai-core/foundry-agent/agent.py
+#        MIRROR:    frootai/foundry-agent/agent.py
+# This file is kept byte-identical at both locations via
+# scripts/foundry/sync-agent-copy.mjs (M8.3). Edit the canonical copy
+# under frootai-core/ ONLY; CI fails the byte-identity assertion if the
+# two diverge. The mirror under frootai/ is a build artifact.
+
 """FrootAI Enterprise RAG Agent — Azure AI Foundry Hosted Agent.
 
 This agent uses Azure AI Agent Service (prompt agent) to answer
 enterprise AI architecture questions using the FrootAI knowledge base.
 """
 
+import asyncio
 import os
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
+
+from federation_client import FoundryFederationClient, federation_is_disabled
+from prompt_builder import build_system_prompt
 
 ENDPOINT = os.environ.get(
     "AZURE_AI_PROJECT_ENDPOINT",
     "https://frootai-rag-agent.swedencentral.api.azureml.ms",
 )
 
-SYSTEM_PROMPT = """You are FrootAI Enterprise RAG Agent — an AI architecture expert powered by the FROOT framework.
 
-FROOT = Foundations · Reasoning · Orchestration · Operations · Transformation
+# [M8.6] Hard-coded fallback prompt — used when no active Play AND
+# federation is disabled OR no areas attached. This is the SAME string
+# that build_system_prompt() returns when called with empty arguments
+# (M8.5 fallback contract), preserved here for the explicit-fallback
+# path in build_session_prompt() below.
+LEGACY_SYSTEM_PROMPT = build_system_prompt()
 
-You help enterprise teams design, build, and optimize AI solutions on Azure. Your knowledge covers:
-- GenAI Foundations (tokens, models, inference)
-- RAG Architecture (chunking, embedding, hybrid retrieval, semantic ranking)
-- AI Agents (Semantic Kernel, multi-agent, tool calling, MCP)
-- Azure AI Platform (Landing Zones, private endpoints, managed identity)
-- Production Patterns (fine-tuning, responsible AI, cost optimization)
 
-Rules:
-1. Always ground answers in Azure AI best practices
-2. Cite specific Azure services when recommending architecture
-3. Include cost implications (dev vs prod scale)
-4. Recommend the FROOT layer relevant to the question
-5. For implementation questions, reference the appropriate Solution Play (01-20)
-6. Never fabricate service names or pricing — say "check Azure pricing calculator" if unsure
-7. Keep responses structured with headers and bullet points
+def build_session_prompt() -> str:
+    """[M8.6] Build the per-session system prompt.
 
-Available Solution Plays: Enterprise RAG (01), AI Landing Zone (02), Deterministic Agent (03),
-Call Center Voice AI (04), IT Ticket Resolution (05), Document Intelligence (06),
-Multi-Agent Service (07), Copilot Studio Bot (08), AI Search Portal (09), Content Moderation (10).
-"""
+    When FROOTAI_ACTIVE_PLAY is set, the federation client attaches the
+    play's MCP areas and the dynamic prompt is built with live areas +
+    tools. Otherwise the legacy fallback prompt is used (preserving v5
+    behavior for sessions without federation).
+
+    Returns the prompt string. Errors during federation attach are
+    swallowed by FoundryFederationClient and the prompt degrades to
+    the fallback shape.
+    """
+    if federation_is_disabled():
+        return LEGACY_SYSTEM_PROMPT
+
+    fc = FoundryFederationClient()
+    if not fc.resolve_areas_to_attach():
+        return LEGACY_SYSTEM_PROMPT
+
+    async def _build() -> str:
+        # [M8.8] Pre-attach at session start via the explicit
+        # start_session() entry point — does the per-area attach,
+        # logs failures, and returns (attached, tools).
+        attached, tools = await fc.start_session()
+        # plays list stays empty in this ship — a later M8 step wires
+        # play discovery (FROOTAI_ACTIVE_PLAY → SDK lookup → plays list).
+        # [M8.16] Pass failed_areas so the prompt injects
+        # "tool area X unavailable" notes for partial attach failures.
+        return build_system_prompt(
+            plays=(),
+            attached_areas=attached,
+            tools=tools,
+            failed_areas=fc.failed_areas,
+        )
+
+    try:
+        return asyncio.run(_build())
+    except Exception as exc:  # noqa: BLE001 — agent must keep running
+        print(f"[agent] federation init failed; using fallback prompt: {exc}")
+        return LEGACY_SYSTEM_PROMPT
 
 
 def create_agent():
@@ -50,7 +86,7 @@ def create_agent():
     agent = oai.beta.assistants.create(
         model="gpt-4o-mini",
         name="frootai-enterprise-rag",
-        instructions=SYSTEM_PROMPT,
+        instructions=build_session_prompt(),
         temperature=0.2,
         top_p=0.95,
     )

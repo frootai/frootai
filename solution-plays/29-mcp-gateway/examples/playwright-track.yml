@@ -1,0 +1,52 @@
+# Adoption fixture: Playwright-track example
+# Demonstrates using FrootAI Action v6 with Playwright MCP federation
+# for browser automation agent validation and testing.
+#
+# Copy this workflow into your repo's .github/workflows/ directory.
+
+name: FrootAI — Playwright Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Evaluate browser automation play
+        id: frootai
+        uses: frootai/frootai@v6
+        with:
+          command: evaluate
+          play: 23-browser-automation-agent
+          mcp-attach: playwright
+          version: '6.0.0-alpha.2'
+          threshold: '0.7'
+          format: json
+
+      - name: Validate with WAF
+        uses: frootai/frootai@v6
+        with:
+          command: validate
+          waf: 'true'
+          mcp-attach: playwright
+          version: '6.0.0-alpha.2'
+
+      - name: Summary
+        run: |
+          echo "## Playwright Track Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: ${{ steps.frootai.outputs.status }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Score: ${{ steps.frootai.outputs.eval-score }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Areas: ${{ steps.frootai.outputs.mcp-attached }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tools: ${{ steps.frootai.outputs.mcp-tools-count }}" >> "$GITHUB_STEP_SUMMARY"

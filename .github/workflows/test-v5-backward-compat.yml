@@ -1,0 +1,117 @@
+# [M7.12] Backward compatibility test workflow
+#
+# This workflow uses ONLY the v5 input surface (command, play, scale,
+# waf, format, threshold, version). No federation inputs (mcp-attach,
+# mcp-trust-file, mcp-federation) are specified — they must default
+# gracefully so the v6 action behaves identically to v5.
+#
+# Used by tests/action-integration.sh and tests/action-backward-compat.sh
+# to verify the M7.12 backward-compat contract.
+
+name: Test — V5 Backward Compatibility
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  v5-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Run FrootAI validate (v5 surface only)
+        id: frootai-validate
+        uses: ./
+        with:
+          command: validate
+          format: json
+
+      - name: Assert v5 outputs populated
+        shell: bash
+        run: |
+          # status must be present
+          if [ -z "${{ steps.frootai-validate.outputs.status }}" ]; then
+            echo "::error::v5 compat — 'status' output missing"
+            exit 1
+          fi
+          echo "status=${{ steps.frootai-validate.outputs.status }}"
+
+          # result must be present
+          if [ -z "${{ steps.frootai-validate.outputs.result }}" ]; then
+            echo "::error::v5 compat — 'result' output missing"
+            exit 1
+          fi
+          echo "result present (length: ${#RESULT})"
+
+          # Federation outputs must default to empty/zero (not error)
+          ATTACHED='${{ steps.frootai-validate.outputs.mcp-attached }}'
+          TOOLS='${{ steps.frootai-validate.outputs.mcp-tools-count }}'
+
+          if [ "$ATTACHED" != "[]" ] && [ -n "$ATTACHED" ]; then
+            echo "::error::v5 compat — mcp-attached should be '[]' when no federation inputs, got: $ATTACHED"
+            exit 1
+          fi
+
+          if [ "$TOOLS" != "0" ] && [ -n "$TOOLS" ]; then
+            echo "::error::v5 compat — mcp-tools-count should be '0' when no federation inputs, got: $TOOLS"
+            exit 1
+          fi
+
+          echo "Federation outputs correctly defaulted (attached=[], tools=0)"
+
+  v5-evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Run FrootAI evaluate (v5 surface only)
+        id: frootai-evaluate
+        uses: ./
+        with:
+          command: evaluate
+          play: 01-enterprise-rag
+          threshold: '0.7'
+          format: json
+
+      - name: Assert v5 evaluate outputs
+        shell: bash
+        run: |
+          if [ -z "${{ steps.frootai-evaluate.outputs.status }}" ]; then
+            echo "::error::v5 compat — evaluate 'status' output missing"
+            exit 1
+          fi
+          echo "evaluate status=${{ steps.frootai-evaluate.outputs.status }}"
+          echo "evaluate score=${{ steps.frootai-evaluate.outputs.eval-score }}"
+
+  v5-cost:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Run FrootAI cost (v5 surface only)
+        id: frootai-cost
+        uses: ./
+        with:
+          command: cost
+          play: 01-enterprise-rag
+          scale: dev
+          format: json
+
+      - name: Assert v5 cost outputs
+        shell: bash
+        run: |
+          if [ -z "${{ steps.frootai-cost.outputs.status }}" ]; then
+            echo "::error::v5 compat — cost 'status' output missing"
+            exit 1
+          fi
+          echo "cost status=${{ steps.frootai-cost.outputs.status }}"
+          echo "cost estimate=${{ steps.frootai-cost.outputs.cost-estimate }}"

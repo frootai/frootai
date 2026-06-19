@@ -1,0 +1,97 @@
+# [M7.24] Cross-runner test: verify the action runs identically on
+# ubuntu-latest, windows-latest, and macos-latest via matrix strategy.
+#
+# This workflow exercises the full composite action (including the M7.6
+# env-mapping, M7.13 trust validation, M7.14 auto-attach, M7.15 trust
+# merge, M7.16 telemetry, M7.17 debug propagation, M7.18 error
+# reporting) on all three GitHub-hosted runner OS families to ensure
+# shell compatibility (bash is available on all via `shell: bash`).
+
+name: Test — Cross-Runner Matrix
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'action.yml'
+      - 'src/action-runtime.js'
+  pull_request:
+    paths:
+      - 'action.yml'
+      - 'src/action-runtime.js'
+
+permissions:
+  contents: read
+
+jobs:
+  cross-runner:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        command: [validate, evaluate]
+        include:
+          - command: validate
+            play: ''
+            mcp-attach: ''
+          - command: evaluate
+            play: 01-enterprise-rag
+            mcp-attach: azure
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Run FrootAI action
+        id: frootai
+        uses: ./
+        with:
+          command: ${{ matrix.command }}
+          play: ${{ matrix.play }}
+          mcp-attach: ${{ matrix.mcp-attach }}
+          mcp-federation: 'on'
+          version: '6.0.0-alpha.2'
+          format: json
+
+      - name: Assert status output exists
+        shell: bash
+        run: |
+          STATUS="${{ steps.frootai.outputs.status }}"
+          if [ -z "$STATUS" ]; then
+            echo "::error::[${{ matrix.os }}/${{ matrix.command }}] 'status' output missing"
+            exit 1
+          fi
+          echo "[${{ matrix.os }}/${{ matrix.command }}] status=$STATUS"
+
+      - name: Assert federation outputs exist
+        shell: bash
+        run: |
+          ATTACHED='${{ steps.frootai.outputs.mcp-attached }}'
+          TOOLS='${{ steps.frootai.outputs.mcp-tools-count }}'
+
+          # Both outputs must be present (even if default empty)
+          if [ -z "$ATTACHED" ] && [ "$ATTACHED" != "[]" ]; then
+            echo "::error::[${{ matrix.os }}/${{ matrix.command }}] 'mcp-attached' output missing"
+            exit 1
+          fi
+
+          if [ -z "$TOOLS" ]; then
+            echo "::error::[${{ matrix.os }}/${{ matrix.command }}] 'mcp-tools-count' output missing"
+            exit 1
+          fi
+
+          echo "[${{ matrix.os }}/${{ matrix.command }}] attached=$ATTACHED tools=$TOOLS"
+
+      - name: Verify bash availability
+        shell: bash
+        run: |
+          echo "Runner OS: $RUNNER_OS"
+          echo "Shell: bash $(bash --version | head -1)"
+          echo "jq: $(jq --version 2>/dev/null || echo 'not available')"
+          # jq is pre-installed on all GitHub-hosted runners
+          if ! command -v jq &> /dev/null; then
+            echo "::error::jq not available on ${{ matrix.os }}"
+            exit 1
+          fi

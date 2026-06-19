@@ -1,0 +1,62 @@
+# [M7.23] Dist build: compile action runtime via @vercel/ncc
+#
+# Produces dist/index.js — a single-file bundle of src/action-runtime.js
+# with all dependencies inlined. This mirrors the standard GitHub Actions
+# pattern for JS/TS actions (e.g. actions/checkout, actions/setup-node).
+#
+# The dist/ folder is committed with each release tag so consumers
+# don't need to install node_modules when referencing frootai/frootai@v6.
+#
+# Usage:
+#   npm run build:action     # local build
+#   bash scripts/build-dist.sh  # CI-friendly wrapper
+
+name: Build Action Dist
+
+on:
+  push:
+    branches: [main, v6]
+    paths:
+      - 'src/action-runtime.js'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-dist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@1d817b8ab0d3e8b4c6ae4b2ea6bdf44e7d99c54b  # v4.2.0
+        with:
+          node-version: '22'
+
+      - name: Install ncc
+        run: npm install -g @vercel/ncc
+
+      - name: Build dist
+        run: |
+          ncc build src/action-runtime.js -o dist --minify --no-source-map-register
+          echo "Built dist/index.js ($(wc -c < dist/index.js) bytes)"
+
+      - name: Verify dist
+        run: node dist/index.js
+
+      - name: Commit dist if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist/
+          if git diff --cached --quiet; then
+            echo "No changes to dist/"
+          else
+            git commit -m "chore: rebuild dist/ via ncc [M7.23]"
+            git push
+          fi

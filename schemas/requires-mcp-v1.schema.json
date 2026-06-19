@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/requires-mcp-v1.json",
+  "title": "FAI Skill Requires MCP v1",
+  "description": "Validates the `requiresMcp` field on `SKILL.md` frontmatter. Declares which federated MCP areas a skill needs at invocation time. Read by the FrootAI engine pre-flight validator — refuses to run the skill if any area is unavailable.",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M0.4] of the FAI MCP Federation Kernel masterplan. Doctrine principle 2 — NO SILENT ATTACH: skills with non-empty requiresMcp trigger the trust gate before the skill body executes.",
+
+  "type": "array",
+  "description": "Flat array of federated MCP area slugs. Each slug must match the kebab-case area name registered by the kernel. Max 32 entries per skill (keeps trust prompts reasonable for `community` tier areas).",
+  "items": {
+    "type": "string",
+    "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+    "minLength": 2,
+    "maxLength": 64
+  },
+  "uniqueItems": true,
+  "maxItems": 32,
+
+  "examples": [
+    ["azure"],
+    ["playwright", "github"],
+    []
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/fai-mcp-trust-v1.json",
+  "title": "FAI MCP Trust Manifest v1",
+  "description": "Canonical schema for the FAI MCP federation trust manifest (`src/federation/trust.json` in npm-mcp; mirrored byte-identical to python-mcp + frootai.dev). Defines the 4 trust tiers + the seeded `knownPublishers` map + user `overrides`. Authority file for moat FM2 (the open, curated trust list).",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M0.7] of the FAI MCP Federation Kernel masterplan. Doctrine principle 3 — NO HARD-CODED PUBLISHER LIST: this is the ONLY source of truth; the kernel never carries inline lists.",
+
+  "type": "object",
+  "required": ["version", "policies", "knownPublishers"],
+  "additionalProperties": false,
+
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Conventionally https://frootai.dev/schemas/fai-mcp-trust-v1.json"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Major version of the trust manifest format. v2+ requires a migration helper per doctrine principle 8."
+    },
+    "policies": {
+      "type": "object",
+      "required": [
+        "first-party-ms",
+        "verified-publisher",
+        "community",
+        "untrusted"
+      ],
+      "additionalProperties": false,
+      "description": "Per-tier policy block. All 4 tiers MUST be present; no opt-out (else doctrine principle 2 — NO SILENT ATTACH — cannot be enforced).",
+      "properties": {
+        "first-party-ms": { "$ref": "#/$defs/policyBlock" },
+        "verified-publisher": { "$ref": "#/$defs/policyBlock" },
+        "community": { "$ref": "#/$defs/policyBlock" },
+        "untrusted": { "$ref": "#/$defs/policyBlock" }
+      }
+    },
+    "knownPublishers": {
+      "type": "object",
+      "description": "Map of publisher slug → trust tier. Maintained by the sister `02-marketplace-and-trust-masterplan.md` (each entry has an evidence file under `frootai/community-plugins/trust-evidence/<slug>/`).",
+      "patternProperties": {
+        "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$": {
+          "type": "string",
+          "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"]
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1024
+    },
+    "overrides": {
+      "type": "object",
+      "description": "User-attached + per-tenant additions, merged on top of `knownPublishers` at evaluator init. Shallow merge — user wins.",
+      "patternProperties": {
+        "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$": {
+          "type": "string",
+          "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"]
+        }
+      },
+      "additionalProperties": false,
+      "maxProperties": 1024
+    }
+  },
+
+  "$defs": {
+    "policyBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "attachWithoutPrompt": {
+          "type": "boolean",
+          "description": "If true, the kernel attaches without surfacing an MCP elicitation/prompt to the user."
+        },
+        "allowDestructive": {
+          "type": "boolean",
+          "description": "If true, downstream tools marked `destructive: true` in their MCP tool schema can run without per-call confirmation."
+        },
+        "metering": {
+          "type": "string",
+          "enum": ["azure-aoai", "per-publisher", "none"],
+          "description": "Which usage-meter bucket the attach lands in (`azure-aoai` rolls up to the Azure AOAI MRR line; `per-publisher` rolls up per-publisher in the sister marketplace plan; `none` excludes from cost meters)."
+        },
+        "blockedAtAttach": {
+          "type": "boolean",
+          "description": "If true, the attach is refused before transport spawn. Used by `untrusted` tier."
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "version": 1,
+      "policies": {
+        "first-party-ms":     { "attachWithoutPrompt": true,  "allowDestructive": true,  "metering": "azure-aoai" },
+        "verified-publisher": { "attachWithoutPrompt": true,  "allowDestructive": false, "metering": "per-publisher" },
+        "community":          { "attachWithoutPrompt": false, "allowDestructive": false, "metering": "per-publisher" },
+        "untrusted":          { "attachWithoutPrompt": false, "allowDestructive": false, "blockedAtAttach": true }
+      },
+      "knownPublishers": {
+        "microsoft": "first-party-ms",
+        "github":    "first-party-ms",
+        "upstash":   "verified-publisher"
+      },
+      "overrides": {}
+    }
+  ]
+}

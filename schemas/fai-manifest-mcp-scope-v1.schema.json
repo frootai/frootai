@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/fai-manifest-mcp-scope-v1.json",
+  "title": "FAI Manifest v2 — `mcp_scope` Extension",
+  "description": "Extension schema validating the optional `mcp_scope` block of `fai-manifest.v2.json`. Declares the federated MCP areas a Solution Play attaches at run-time, plus per-play trust overrides and pre-attach hints. Read by the engine (auto-attach + budget gate), Studio builder (UI dropdown), and Foundry agent (dynamic system prompt).",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M0.6] of the FAI MCP Federation Kernel masterplan. Composes WITH `fai-manifest.v2.json` — the parent schema treats `mcp_scope` as `additionalProperties: false`-tolerant via the v2 extension contract. Authored as a standalone schema (rather than mutating the v2 manifest in place) so plays migrate non-breakingly: plays without `mcp_scope` continue to validate.",
+
+  "type": "object",
+  "required": ["attached"],
+  "additionalProperties": false,
+
+  "properties": {
+    "attached": {
+      "type": "array",
+      "description": "Federated MCP area slugs this play REQUIRES at invocation. Engine attaches each before primitive wiring; refuses to run if any is blocked by trust.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+        "minLength": 2,
+        "maxLength": 64
+      },
+      "uniqueItems": true,
+      "minItems": 0,
+      "maxItems": 32
+    },
+    "router_config": {
+      "type": "object",
+      "description": "Per-play overrides applied to the shipped trust manifest before evaluation. Only union with user overrides; never replaces them.",
+      "additionalProperties": false,
+      "properties": {
+        "trust_overrides": {
+          "type": "object",
+          "description": "Map of publisher slug → trust tier override. Used to elevate `community` to `verified-publisher` for a play the user has already vetted.",
+          "patternProperties": {
+            "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$": {
+              "type": "string",
+              "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"]
+            }
+          },
+          "additionalProperties": false,
+          "maxProperties": 32
+        },
+        "pre_attach": {
+          "type": "array",
+          "description": "Subset of `attached` to spawn at engine cold-start (rather than first-use). Trades cold-start latency for first-call latency. Default empty.",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+            "minLength": 2,
+            "maxLength": 64
+          },
+          "uniqueItems": true,
+          "maxItems": 8
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "attached": ["azure", "playwright"],
+      "router_config": {
+        "trust_overrides": { "playwright": "first-party-ms" },
+        "pre_attach": ["azure"]
+      }
+    },
+    { "attached": ["github"] },
+    { "attached": [] }
+  ]
+}

@@ -1,0 +1,53 @@
+# Adoption fixture: Azure-track example
+# Demonstrates using FrootAI Action v6 with Azure MCP federation
+# in a typical enterprise repo that validates Azure infrastructure plays.
+#
+# Copy this workflow into your repo's .github/workflows/ directory.
+
+name: FrootAI — Azure Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-azure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Evaluate with Azure federation
+        id: frootai
+        uses: frootai/frootai@v6
+        with:
+          command: evaluate
+          play: 02-ai-landing-zone
+          mcp-attach: azure
+          version: '6.0.0-alpha.2'
+          threshold: '0.8'
+          format: json
+
+      - name: Cost estimate (Azure scale)
+        uses: frootai/frootai@v6
+        with:
+          command: cost
+          play: 02-ai-landing-zone
+          scale: prod
+          mcp-attach: azure
+          version: '6.0.0-alpha.2'
+
+      - name: Summary
+        run: |
+          echo "## Azure Track Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: ${{ steps.frootai.outputs.status }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Score: ${{ steps.frootai.outputs.eval-score }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Areas: ${{ steps.frootai.outputs.mcp-attached }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tools: ${{ steps.frootai.outputs.mcp-tools-count }}" >> "$GITHUB_STEP_SUMMARY"

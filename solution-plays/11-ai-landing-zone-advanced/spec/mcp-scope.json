@@ -1,0 +1,6 @@
+{
+  "attached": ["azure"],
+  "router_config": {
+    "trust_overrides": {}
+  }
+}

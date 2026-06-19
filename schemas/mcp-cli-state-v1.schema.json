@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/mcp-cli-state-v1.json",
+  "title": "FAI MCP CLI State v1",
+  "description": "Validates `~/.frootai/mcp-state.json`, the persistent state file for the `frootai mcp` CLI family. Records the pre-attach roster (areas to attach on next kernel boot) and the most recent health-check snapshot per area.",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M4.15] of the FAI MCP Federation Kernel masterplan. Tolerance contract: the CLI reader treats a missing file as an empty state (first-run UX) and defaults absent top-level arrays to `[]`. This schema therefore validates what the file CONTAINS, not whether all top-level keys are present.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version. v1 is the only supported value today; future versions land via an explicit migrator."
+    },
+
+    "preAttach": {
+      "type": "array",
+      "description": "Names of federated areas to attach eagerly when the next `frootai-mcp` process boots. Order is the operator's append order (not alphabetical) so attach priority is preserved across runs.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "maxItems": 256
+    },
+
+    "lastHealthCheck": {
+      "type": "array",
+      "description": "Most recent `frootai mcp test`/`frootai mcp test --all` snapshot, one entry per area. Upserted by area name (M4.10 + M4.11).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["area", "status"],
+        "properties": {
+          "area": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]+$",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ok", "fail"]
+          },
+          "latencyMs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "toolCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      },
+      "maxItems": 1024
+    }
+  }
+}

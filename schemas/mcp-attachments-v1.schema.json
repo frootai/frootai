@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/mcp-attachments-v1.json",
+  "title": "FAI MCP Attachments v1",
+  "description": "Validates the `mcpAttachments` field on `.agent.md` frontmatter. Declares which federated MCP areas an agent depends on. Read by the FrootAI engine and VS Code extension to pre-attach areas before the agent runs.",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [M0.3] of the FAI MCP Federation Kernel masterplan. JSON Schema 2020-12 (matches `fai-manifest.v2.json`). Doctrine principle 8 — NO FORWARD-INCOMPATIBLE SCHEMA: any breaking change bumps the major version + ships a migration helper.",
+
+  "type": "object",
+  "required": ["areas"],
+  "additionalProperties": false,
+
+  "properties": {
+    "areas": {
+      "type": "array",
+      "description": "Federated MCP area slugs this agent REQUIRES. Engine pre-flight validator fails the run if any area is unavailable (no trust override + no install).",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+        "minLength": 2,
+        "maxLength": 64
+      },
+      "uniqueItems": true,
+      "minItems": 0,
+      "maxItems": 32,
+      "examples": [
+        ["azure", "github"],
+        ["playwright", "context7"]
+      ]
+    },
+    "optional": {
+      "type": "array",
+      "description": "Federated MCP area slugs this agent CAN USE if available, but does NOT require. Engine attaches if pre-attached; never blocks if missing.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+        "minLength": 2,
+        "maxLength": 64
+      },
+      "uniqueItems": true,
+      "minItems": 0,
+      "maxItems": 32,
+      "examples": [
+        ["markitdown", "mslearn"]
+      ]
+    }
+  },
+
+  "examples": [
+    { "areas": ["azure", "playwright"], "optional": ["context7"] },
+    { "areas": ["github"] },
+    { "areas": [] }
+  ]
+}

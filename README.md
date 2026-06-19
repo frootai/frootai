@@ -296,6 +296,85 @@ frootai/frootai
 
 ---
 
+### GitHub Action
+
+Use `frootai/frootai@v6` in any workflow. The v6 action adds **MCP federation** — pre-attach Tier-1 areas (Azure, Playwright, MS Learn) so evaluations and validations run with full federated context.
+
+#### Inputs
+
+| Input | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `command` | ✅ | `validate` | CLI command: validate, cost, search, doctor, evaluate, primitives, factory |
+| `play` | | | Solution play ID (e.g. `29-mcp-gateway`) |
+| `scale` | | `dev` | Scale tier for cost estimation |
+| `waf` | | `false` | Run WAF alignment check |
+| `format` | | `json` | Output format: json, markdown, table |
+| `threshold` | | `0.8` | Minimum evaluation score (0.0–1.0) |
+| `version` | | `5.2.0` | frootai-mcp version (`6.0.0-alpha.2` for federation) |
+| `mcp-attach` | | | Comma-separated MCP areas to pre-attach (e.g. `azure,playwright`) |
+| `mcp-trust-file` | | | Path to trust-override JSON (relative to repo root) |
+| `mcp-federation` | | `on` | Federation kill-switch: `on` or `off` |
+
+#### Outputs
+
+| Output | Description |
+|--------|-------------|
+| `result` | JSON output from the command |
+| `status` | Exit status (`pass` / `fail`) for CI gating |
+| `cost-estimate` | Monthly cost in USD (cost command only) |
+| `eval-score` | Evaluation score (evaluate command only) |
+| `mcp-attached` | JSON array of attached area names (e.g. `["azure","playwright"]`) |
+| `mcp-tools-count` | Total MCP tools registered across attached areas |
+
+#### Basic usage (v5 compatible)
+
+```yaml
+- uses: frootai/frootai@v6
+  with:
+    command: validate
+```
+
+#### Federation usage
+
+```yaml
+- uses: frootai/frootai@v6
+  with:
+    command: evaluate
+    play: 29-mcp-gateway
+    mcp-attach: azure
+    version: '6.0.0-alpha.2'
+```
+
+#### Auto-attach from Play manifest
+
+When a play declares `spec/mcp-scope.json` with an `attached` array, the action auto-populates `mcp-attach` — no workflow change needed:
+
+```yaml
+- uses: frootai/frootai@v6
+  with:
+    command: evaluate
+    play: 29-mcp-gateway       # auto-attaches "azure" from play manifest
+    version: '6.0.0-alpha.2'
+```
+
+#### Sample workflows
+
+- [`.github/workflows/example-federation.yml`](.github/workflows/example-federation.yml) — single-area federation with Azure
+- [`.github/workflows/example-multi-mcp.yml`](.github/workflows/example-multi-mcp.yml) — multi-area federation with Azure + Playwright
+
+#### Secrets handling
+
+The action automatically masks all `FROOTAI_*` env values in logs via `::add-mask::`. For area-specific credentials, use the `FROOTAI_SECRET_*` naming convention — any env var matching that prefix is masked before the kernel starts:
+
+```yaml
+env:
+  FROOTAI_SECRET_AZURE_KEY: ${{ secrets.AZURE_KEY }}
+```
+
+Values injected via `${{ secrets.* }}` are also masked by GitHub Actions itself. The double-masking ensures federation debug logs (`ACTIONS_STEP_DEBUG=true`) never leak credentials.
+
+---
+
 ### Links
 
 | Resource | Link |

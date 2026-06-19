@@ -1,0 +1,109 @@
+# [M8.10] FrootAI Foundry Agent — deployment manifest
+#
+# Defines how the canonical agent under frootai-core/foundry-agent/agent.py
+# is deployed to Azure AI Foundry as a hosted prompt agent. Read by
+# scripts/foundry/deploy.sh (M8.18) and the Foundry CLI.
+#
+# Reference: https://learn.microsoft.com/azure/ai-foundry/concepts/ai-agents
+
+apiVersion: foundry.azure.com/v1
+kind: PromptAgent
+metadata:
+  name: frootai-enterprise-rag
+  version: 2.0.0   # bumped to v2.0.0 in M8.29 for the federation surface
+  labels:
+    track: federation
+    canonical: frootai-core/foundry-agent
+    phase: M8
+
+spec:
+  # Model deployment
+  model: gpt-4o-mini
+  temperature: 0.2
+  topP: 0.95
+
+  # Entry point — references the canonical Python module
+  entryPoint: agent:create_agent
+  runtime:
+    image: mcr.microsoft.com/azure-ai-foundry/python:3.12
+    pythonVersion: "3.12"
+
+  # Azure auth: managed identity (no secrets in this manifest)
+  identity:
+    type: SystemAssigned
+  azureCredential: DefaultAzureCredential
+
+  # Hosted endpoint defaults — overridable via deploy.sh inputs
+  endpoint:
+    project: frootai-rag-agent
+    region: swedencentral
+    # Override via env var AZURE_AI_PROJECT_ENDPOINT at runtime
+
+  # Federation environment contract
+  #
+  # The agent at session start reads these env vars (see federation_client.py).
+  # All three are OPTIONAL — when absent, the agent runs in legacy v5 mode
+  # (no federation, hard-coded SYSTEM_PROMPT). When set, the agent attaches
+  # the requested MCP areas via the federation kernel and the system prompt
+  # is built dynamically from the live tool surface.
+  env:
+    # [M8.7] Active solution play. When set, the agent loads the play's
+    # spec/mcp-scope.json manifest and uses its `attached` list + trust
+    # overrides for the session. Example: "29-mcp-gateway".
+    FROOTAI_ACTIVE_PLAY:
+      description: "Solution play ID to scope this session to (e.g. 29-mcp-gateway)"
+      required: false
+
+    # [M8.8] Comma-separated MCP areas to pre-attach. Overrides the
+    # active play's mcp-scope.json `attached` field when set. Example:
+    # "azure,playwright,ms_learn".
+    FROOTAI_PREATTACH:
+      description: "Comma-separated Tier-1 MCP area names to pre-attach"
+      required: false
+
+    # [M8.9] Path to a trust-override JSON file. Merged with the active
+    # play's router_config.trust_overrides (workflow-wins on conflicts).
+    # Example: "/etc/frootai/trust.json" or a path relative to workspace.
+    FROOTAI_TRUST_FILE:
+      description: "Path to trust-override JSON; merged with play overrides"
+      required: false
+
+    # [M8.6] Federation kill-switch. Set to "off" to disable the
+    # federation kernel surface entirely (matches the v5 hard-coded
+    # prompt path). Default: federation enabled.
+    FROOTAI_FEDERATION:
+      description: "Federation kill-switch (on|off). Default: on."
+      required: false
+      default: on
+
+    # Plays root directory inside the Foundry runtime container.
+    # Defaults to ./solution-plays relative to CWD.
+    FROOTAI_PLAYS_ROOT:
+      description: "Path to the solution-plays directory inside the runtime"
+      required: false
+      default: /opt/frootai/solution-plays
+
+    # Azure AI project endpoint override (overrides spec.endpoint)
+    AZURE_AI_PROJECT_ENDPOINT:
+      description: "Override the default Foundry project endpoint URL"
+      required: false
+
+  # Resource limits — keep cold-start under the M8.17 20s target
+  resources:
+    cpu: "1"
+    memory: "2Gi"
+    timeoutSeconds: 60
+
+  # Observability — the agent emits foundry_session_started events
+  # consumed by status.frootai.dev (M8.14, M8.25).
+  telemetry:
+    sessionEvents: true
+    appInsights:
+      enabled: true
+      role: frootai-foundry-agent
+
+# Deployment metadata — populated by deploy.sh on each push
+deployment:
+  changelog: .foundry/changelog.json   # M8.29 deployment audit trail
+  sourceCommit: ""                      # populated at deploy time
+  deployedAt: ""                        # populated at deploy time

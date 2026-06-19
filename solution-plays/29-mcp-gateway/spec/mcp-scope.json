@@ -1,0 +1,6 @@
+{
+  "attached": ["azure", "github", "playwright"],
+  "router_config": {
+    "trust_overrides": {}
+  }
+}

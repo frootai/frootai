@@ -1,5 +1,5 @@
 name: 'FrootAI MCP Server'
-description: 'AI architecture knowledge for GitHub Actions — 45 MCP tools, 104 solution plays, 862+ primitives. Validate configs, estimate costs, run evaluations, and enforce WAF alignment in CI/CD.'
+description: 'AI architecture knowledge for GitHub Actions with MCP federation — 45+ MCP tools, 104 solution plays, 862+ primitives. Pre-attach Azure, Playwright, and MS Learn areas for federated evaluations. Validate configs, estimate costs, run evaluations, and enforce WAF alignment in CI/CD.'
 author: 'FrootAI'
 
 branding:
@@ -31,9 +31,21 @@ inputs:
     required: false
     default: '0.8'
   version:
-    description: 'FrootAI MCP Server version to use'
+    description: 'FrootAI MCP Server version to use. Compatible with frootai-mcp@5.x (stable) AND frootai-mcp@6.x (federation-aware pre-release, e.g. "6.0.0-alpha.2"). Action runtime is pinned to Node 22 via the Setup Node.js step ([M7.8]). Default "5.2.0" preserves v5 workflow YAML behaviour (M7.12 backward-compat); opt into the federation surface by passing version: "6.0.0-alpha.2" or any 6.x semver. The version flows through to `npx frootai-mcp@${{ inputs.version }}` so any version published to npm is supported.'
     required: false
     default: '5.2.0'
+  mcp-attach:
+    description: 'Comma-separated list of Tier-1 MCP area names to pre-attach to the federated kernel (e.g. "azure", "azure,playwright", "azure,playwright,ms_learn"). Valid Tier-1 areas: azure (Microsoft Azure), playwright (Playwright Browser), ms_learn (Microsoft Learn). Pass-through to the spawned MCP server via the FROOTAI_PREATTACH env var (see M6 federation-env-core.js contract). Default empty = no pre-attach (federation surface still available; areas attach on demand via fai_attach_mcp). [M7.1]'
+    required: false
+    default: ''
+  mcp-trust-file:
+    description: 'Path to a trust-override JSON file (relative to the repository root, e.g. ".frootai/trust.json"). Pass-through to the spawned MCP server via the FROOTAI_TRUST_FILE env var (see M6 federation-env-core.js contract). The kernel merges these per-area trust decisions on top of the shipped trust manifest so workflow authors can pre-approve federated areas without an interactive prompt. Default empty = no trust override (kernel uses the shipped manifest only). The M7.13 ship adds workspace-existence validation + warn-then-fallback when the path is missing. [M7.2]'
+    required: false
+    default: ''
+  mcp-federation:
+    description: 'Federation kill-switch: "on" enables the federated MCP kernel surface (default + recommended); "off" disables federation (M7.6 mapper-step will set FROOTAI_FEDERATION=off, matching the M6 federation-env-core.js FEDERATION_DISABLE_VALUE byte-for-byte so the kernel skips all attach/discover/invoke/detach plumbing). Valid values: "on" | "off" (string enum, validated by the M7.6 mapper-step). Default "on" preserves the v5-equivalent surface for v5 workflow YAML running against v6 action (M7.12 backward-compat). [M7.3]'
+    required: false
+    default: 'on'
 
 outputs:
   result:
@@ -48,21 +60,200 @@ outputs:
   eval-score:
     description: 'Evaluation score (only for evaluate command)'
     value: ${{ steps.run-frootai.outputs.score }}
+  mcp-attached:
+    description: 'JSON array of federated MCP area names successfully attached during this action run (e.g. ''["azure","playwright"]''). Populated by the M7.7 post-run step which parses the spawned MCP server''s structured JSONL log + extracts federation_attach_completed events. Default empty array ''[]'' when mcp-attach input is empty or federation is disabled (mcp-federation=off). Workflow authors consume via ${{ steps.<id>.outputs.mcp-attached }} + parse with fromJSON() for matrix expansion. [M7.4]'
+    value: ${{ steps.run-frootai.outputs.mcp-attached }}
+  mcp-tools-count:
+    description: 'Number of MCP tools registered across all attached federated areas during this action run (e.g. "47"). Populated by the M7.7 post-run step from the same JSONL stream that drives mcp-attached, summing tool counts across federation_attach_completed events. Emitted as a stringified integer (GitHub Actions outputs are always strings; consumers parse via fromJSON() or arithmetic ${{ ... }} expressions). Default "0" when mcp-attach input is empty or federation is disabled (mcp-federation=off). [M7.5]'
+    value: ${{ steps.run-frootai.outputs.mcp-tools-count }}
 
 runs:
   using: 'composite'
   steps:
+    # [M7.8] Action runtime pin: Node 22 via actions/setup-node (SHA-pinned
+    # for supply-chain integrity). Compatible with frootai-mcp@5.x (stable
+    # default '5.2.0') AND frootai-mcp@6.x (federation-aware pre-release
+    # '6.0.0-alpha.2' as of M6.30 close). Workflow authors opt into the
+    # 6.x federation surface via the `version` input; the runtime + npx
+    # invocation are version-agnostic so future frootai-mcp@7.x ships
+    # land here without action.yml changes.
     - name: Setup Node.js
       uses: actions/setup-node@1d817b8ab0d3e8b4c6ae4b2ea6bdf44e7d99c54b  # v4.2.0
       with:
         node-version: '22'
 
+    # [M7.6] Map M7.1-M7.3 federation inputs to FROOTAI_* env vars
+    # consumed by the spawned `npx frootai-mcp` kernel. Env-var keys
+    # match the M6 federation-env-core.js contract byte-for-byte
+    # (PREATTACH_ENV_KEY / TRUST_FILE_ENV_KEY / FEDERATION_DISABLE_ENV_KEY).
+    # FROOTAI_FEDERATION is set ONLY when mcp-federation=off (per M6
+    # FEDERATION_DISABLE_VALUE doctrine — env var presence IS the
+    # disable signal). Empty inputs skip the corresponding env var so
+    # downstream behaviour matches the M5/M6 omit-key semantic.
+    - name: Map M7 federation inputs to env
+      id: map-federation-env
+      shell: bash
+      env:
+        MCP_ATTACH_INPUT: ${{ inputs.mcp-attach }}
+        MCP_TRUST_FILE_INPUT: ${{ inputs.mcp-trust-file }}
+        MCP_FEDERATION_INPUT: ${{ inputs.mcp-federation }}
+      run: |
+        if [ -n "$MCP_ATTACH_INPUT" ]; then
+          echo "FROOTAI_PREATTACH=$MCP_ATTACH_INPUT" >> "$GITHUB_ENV"
+        fi
+        if [ -n "$MCP_TRUST_FILE_INPUT" ]; then
+          echo "FROOTAI_TRUST_FILE=$MCP_TRUST_FILE_INPUT" >> "$GITHUB_ENV"
+        fi
+        if [ "$MCP_FEDERATION_INPUT" = "off" ]; then
+          echo "FROOTAI_FEDERATION=off" >> "$GITHUB_ENV"
+        elif [ -n "$MCP_FEDERATION_INPUT" ] && [ "$MCP_FEDERATION_INPUT" != "on" ]; then
+          echo "::error::mcp-federation input must be 'on' or 'off' (got: $MCP_FEDERATION_INPUT)"
+          exit 1
+        fi
+
+        # [M7.17] Propagate ACTIONS_STEP_DEBUG to the spawned MCP server
+        # when federation is enabled. This ensures runner-level debug
+        # logging (set via re-run with debug or the ACTIONS_STEP_DEBUG
+        # secret) flows through to the kernel for full attach/discover/
+        # invoke traceability in federation mode.
+        if [ "$MCP_FEDERATION_INPUT" != "off" ] && [ "${ACTIONS_STEP_DEBUG:-}" = "true" ]; then
+          echo "FROOTAI_DEBUG=true" >> "$GITHUB_ENV"
+          echo "Federation debug logging enabled (ACTIONS_STEP_DEBUG propagated)"
+        fi
+
+    # [M7.25] Secrets masking: if FROOTAI_PREATTACH or FROOTAI_TRUST_FILE
+    # contain values that were injected from ${{ secrets.* }}, GitHub
+    # Actions auto-masks them in logs. However, area-spec env vars that
+    # flow THROUGH the kernel (e.g. AZURE_TENANT_ID set separately in
+    # the workflow) may appear in federation debug logs. This step
+    # registers any FROOTAI_* env values as masked secrets so they never
+    # leak into step output or JSONL logs visible in the Actions UI.
+    - name: Mask federation env values
+      shell: bash
+      run: |
+        # Mask the preattach value itself (may contain area slugs that
+        # are not secret, but belt-and-suspenders for custom area specs)
+        if [ -n "${FROOTAI_PREATTACH:-}" ]; then
+          echo "::add-mask::${FROOTAI_PREATTACH}"
+        fi
+        if [ -n "${FROOTAI_TRUST_FILE:-}" ]; then
+          echo "::add-mask::${FROOTAI_TRUST_FILE}"
+        fi
+        # Mask any FROOTAI_SECRET_* env vars that workflow authors may
+        # pass for area-specific credentials (convention documented in
+        # README). These flow through to the kernel as-is but must never
+        # appear in logs.
+        env | grep '^FROOTAI_SECRET_' | while IFS='=' read -r key value; do
+          if [ -n "$value" ]; then
+            echo "::add-mask::${value}"
+          fi
+        done
+
+    # [M7.14] Per-Play auto-attach: when a play declares
+    # mcp_scope.attached in its spec/mcp-scope.json AND the mcp-attach
+    # input was not explicitly set by the workflow author, auto-populate
+    # FROOTAI_PREATTACH from the play's manifest. This lets play authors
+    # declare their federation dependencies declaratively without
+    # requiring every consumer workflow to pass mcp-attach explicitly.
+    - name: Per-Play auto-attach from manifest
+      if: ${{ inputs.mcp-attach == '' && inputs.play != '' && inputs.mcp-federation != 'off' }}
+      shell: bash
+      env:
+        PLAY_ID: ${{ inputs.play }}
+      run: |
+        SCOPE_FILE="solution-plays/${PLAY_ID}/spec/mcp-scope.json"
+        if [ -f "$SCOPE_FILE" ]; then
+          # Extract the "attached" array and join into comma-separated string
+          ATTACHED=$(jq -r '(.attached // []) | join(",")' "$SCOPE_FILE" 2>/dev/null || echo "")
+          if [ -n "$ATTACHED" ]; then
+            echo "Auto-attaching from play manifest: $ATTACHED"
+            echo "FROOTAI_PREATTACH=$ATTACHED" >> "$GITHUB_ENV"
+          fi
+        fi
+
+    # [M7.13] Trust file path validation: when mcp-trust-file is set,
+    # verify the file exists in the workspace. If missing, emit a
+    # warning annotation and unset FROOTAI_TRUST_FILE so the kernel
+    # falls back to the shipped trust manifest (safe default).
+    - name: Validate trust file path
+      if: ${{ inputs.mcp-trust-file != '' }}
+      shell: bash
+      env:
+        TRUST_FILE: ${{ inputs.mcp-trust-file }}
+      run: |
+        # Resolve relative to workspace root ($GITHUB_WORKSPACE)
+        RESOLVED="${GITHUB_WORKSPACE}/${TRUST_FILE}"
+        if [ ! -f "$RESOLVED" ]; then
+          echo "::warning::mcp-trust-file '${TRUST_FILE}' not found in workspace. Falling back to shipped trust manifest."
+          # Unset the env var so the kernel uses the default manifest
+          echo "FROOTAI_TRUST_FILE=" >> "$GITHUB_ENV"
+        else
+          echo "Trust file validated: ${TRUST_FILE}"
+        fi
+
+    # [M7.15] Per-Play trust merge: when a play declares
+    # router_config.trust_overrides in its spec/mcp-scope.json, merge
+    # those overrides into the runtime trust surface. If the workflow
+    # author also passed mcp-trust-file, the play-level overrides are
+    # written into a merged temp file that combines both (workflow-level
+    # trust takes precedence on key conflicts). The merged path is then
+    # set as FROOTAI_TRUST_FILE so the kernel sees a single source.
+    - name: Per-Play trust merge
+      if: ${{ inputs.play != '' && inputs.mcp-federation != 'off' }}
+      shell: bash
+      env:
+        PLAY_ID: ${{ inputs.play }}
+        TRUST_FILE_ENV: ${{ inputs.mcp-trust-file }}
+      run: |
+        SCOPE_FILE="solution-plays/${PLAY_ID}/spec/mcp-scope.json"
+        if [ ! -f "$SCOPE_FILE" ]; then
+          exit 0
+        fi
+
+        # Extract trust_overrides from the play manifest
+        PLAY_OVERRIDES=$(jq -c '.router_config.trust_overrides // empty' "$SCOPE_FILE" 2>/dev/null || echo "")
+        if [ -z "$PLAY_OVERRIDES" ] || [ "$PLAY_OVERRIDES" = "{}" ]; then
+          exit 0
+        fi
+
+        echo "Play declares trust_overrides: $PLAY_OVERRIDES"
+
+        # Determine the base trust content (workflow-level or empty object)
+        BASE_TRUST="{}"
+        if [ -n "$TRUST_FILE_ENV" ]; then
+          RESOLVED="${GITHUB_WORKSPACE}/${TRUST_FILE_ENV}"
+          if [ -f "$RESOLVED" ]; then
+            BASE_TRUST=$(cat "$RESOLVED")
+          fi
+        fi
+
+        # Merge: play overrides first, workflow-level trust on top (precedence)
+        MERGED=$(echo "$PLAY_OVERRIDES" "$BASE_TRUST" | jq -s '.[0] * .[1]' 2>/dev/null || echo "$BASE_TRUST")
+
+        # Write merged trust to a temp file and update the env var
+        MERGED_PATH="$RUNNER_TEMP/frootai-trust-merged.json"
+        echo "$MERGED" > "$MERGED_PATH"
+        echo "FROOTAI_TRUST_FILE=$MERGED_PATH" >> "$GITHUB_ENV"
+        echo "Merged trust written to: $MERGED_PATH"
+
     - name: Run FrootAI
       id: run-frootai
       shell: bash
       run: |
-        npx frootai-mcp@${{ inputs.version }} &
+        # [M7.28] Performance instrumentation: capture start time so we
+        # can measure action runtime overhead (target: < 5s on top of
+        # the npx frootai-mcp cold start).
+        ACTION_START_MS=$(($(date +%s%N) / 1000000))
+
+        # [M7.7] Redirect kernel stdout/stderr to a JSONL log file so
+        # the post-run capture block at the end of this step can
+        # parse `federation_attach_completed` events + populate the
+        # M7.4 mcp-attached + M7.5 mcp-tools-count outputs.
+        MCP_LOG="$RUNNER_TEMP/frootai-mcp.jsonl"
+        NPX_START_MS=$(($(date +%s%N) / 1000000))
+        npx frootai-mcp@${{ inputs.version }} > "$MCP_LOG" 2>&1 &
         sleep 2
+        NPX_END_MS=$(($(date +%s%N) / 1000000))
 
         RESULT=""
         STATUS="pass"
@@ -111,3 +302,118 @@ runs:
         if [ "$STATUS" = "fail" ]; then
           echo "::warning::FrootAI ${{ inputs.command }} completed with issues"
         fi
+
+        # [M7.7] Post-run output capture: parse the kernel JSONL log
+        # for federation_attach_completed events + emit mcp-attached
+        # (JSON array of areas) + mcp-tools-count (sum of tool counts)
+        # to $GITHUB_OUTPUT so the M7.4 + M7.5 action outputs resolve.
+        # PIN_ONE_AHEAD honesty: if the kernel did not emit any such
+        # events (M9.22 wire client not yet landed OR mcp-attach input
+        # empty OR mcp-federation=off), defaults are `[]` + `0` per
+        # the M7.4/M7.5 default-empty contracts.
+        MCP_ATTACHED="[]"
+        MCP_TOOLS_COUNT="0"
+        if [ -s "$MCP_LOG" ]; then
+          ATTACHED_AREAS=$(grep '"event":"federation_attach_completed"' "$MCP_LOG" \
+            | jq -rs '[ .[] | .area ] | unique' 2>/dev/null || echo "[]")
+          if [ -n "$ATTACHED_AREAS" ] && [ "$ATTACHED_AREAS" != "null" ]; then
+            MCP_ATTACHED="$ATTACHED_AREAS"
+          fi
+          TOOLS_SUM=$(grep '"event":"federation_attach_completed"' "$MCP_LOG" \
+            | jq -rs '[ .[] | .tool_count // 0 ] | add // 0' 2>/dev/null || echo "0")
+          if [ -n "$TOOLS_SUM" ] && [ "$TOOLS_SUM" != "null" ]; then
+            MCP_TOOLS_COUNT="$TOOLS_SUM"
+          fi
+        fi
+        # mcp-attached must be a single line of JSON (GitHub Actions
+        # multi-line outputs need the heredoc form, but a JSON array
+        # of short slugs always fits on one line in practice).
+        MCP_ATTACHED_ONELINE=$(echo "$MCP_ATTACHED" | tr -d '\n')
+        echo "mcp-attached=$MCP_ATTACHED_ONELINE" >> $GITHUB_OUTPUT
+        echo "mcp-tools-count=$MCP_TOOLS_COUNT" >> $GITHUB_OUTPUT
+
+        # [M7.18] Error reporting: if mcp-attach was specified and
+        # federation is enabled, verify every requested area actually
+        # attached. Emit ::error:: per failed area and exit non-zero
+        # so the workflow step fails visibly.
+        if [ -n "${FROOTAI_PREATTACH:-}" ] && [ "${FROOTAI_FEDERATION:-}" != "off" ]; then
+          IFS=',' read -ra REQUESTED <<< "$FROOTAI_PREATTACH"
+          ATTACH_FAILURES=0
+          for AREA in "${REQUESTED[@]}"; do
+            AREA=$(echo "$AREA" | xargs)  # trim whitespace
+            if ! echo "$MCP_ATTACHED_ONELINE" | jq -e "index(\"$AREA\")" > /dev/null 2>&1; then
+              echo "::error::Federation attach failed for area: $AREA"
+              ATTACH_FAILURES=$((ATTACH_FAILURES + 1))
+            fi
+          done
+          if [ "$ATTACH_FAILURES" -gt 0 ]; then
+            echo "::error::$ATTACH_FAILURES of ${#REQUESTED[@]} requested MCP area(s) failed to attach"
+            exit 1
+          fi
+        fi
+
+        # [M7.28] Performance: measure action runtime overhead (total
+        # step time minus npx cold-start time). Emit as debug notice.
+        # Contract: overhead must be < 5000ms. Warn if exceeded.
+        ACTION_END_MS=$(($(date +%s%N) / 1000000))
+        TOTAL_MS=$((ACTION_END_MS - ACTION_START_MS))
+        NPX_MS=$((NPX_END_MS - NPX_START_MS))
+        OVERHEAD_MS=$((TOTAL_MS - NPX_MS))
+        echo "::debug::Action total: ${TOTAL_MS}ms, npx spawn: ${NPX_MS}ms, overhead: ${OVERHEAD_MS}ms"
+        if [ "$OVERHEAD_MS" -gt 5000 ]; then
+          echo "::warning::Action runtime overhead exceeded 5s target (${OVERHEAD_MS}ms). Investigate step complexity."
+        fi
+
+    # [M7.16] Telemetry: emit a GITHUB_STEP_SUMMARY table with attached
+    # areas, tool counts, and per-area latency extracted from the kernel
+    # JSONL log. Gives workflow authors immediate visibility into
+    # federation behaviour without reading raw logs.
+    - name: Federation telemetry summary
+      if: ${{ inputs.mcp-federation != 'off' }}
+      shell: bash
+      run: |
+        MCP_LOG="$RUNNER_TEMP/frootai-mcp.jsonl"
+
+        echo "## 🌐 FrootAI Federation Summary" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+
+        # If no log or federation was off, emit a minimal summary
+        if [ ! -s "$MCP_LOG" ]; then
+          echo "No federation events recorded (kernel log empty)." >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+
+        # Extract per-area attach events with latency
+        EVENTS=$(grep '"event":"federation_attach_completed"' "$MCP_LOG" 2>/dev/null || echo "")
+        if [ -z "$EVENTS" ]; then
+          echo "No areas attached during this run." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|--------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Command | \`${{ inputs.command }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Federation | \`${{ inputs.mcp-federation }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Areas requested | \`${{ inputs.mcp-attach }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+
+        # Build per-area table
+        echo "| Area | Tools | Latency (ms) |" >> "$GITHUB_STEP_SUMMARY"
+        echo "|------|-------|--------------|" >> "$GITHUB_STEP_SUMMARY"
+
+        echo "$EVENTS" | jq -r '[.area, (.tool_count // 0 | tostring), (.latency_ms // "—" | tostring)] | "| " + .[0] + " | " + .[1] + " | " + .[2] + " |"' 2>/dev/null \
+          >> "$GITHUB_STEP_SUMMARY" || true
+
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+
+        # Totals row
+        TOTAL_TOOLS=$(echo "$EVENTS" | jq -rs '[.[] | .tool_count // 0] | add // 0')
+        TOTAL_LATENCY=$(echo "$EVENTS" | jq -rs '[.[] | .latency_ms // 0] | add // 0')
+        AREA_COUNT=$(echo "$EVENTS" | jq -rs '[.[] | .area] | unique | length')
+
+        echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+        echo "|--------|-------|" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Command | \`${{ inputs.command }}\` |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Play | \`${{ inputs.play }}\` |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Areas attached | ${AREA_COUNT} |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Total tools | ${TOTAL_TOOLS} |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Total latency | ${TOTAL_LATENCY} ms |" >> "$GITHUB_STEP_SUMMARY"
