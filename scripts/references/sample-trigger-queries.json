@@ -1,0 +1,8 @@
+[
+  { "query": "I need to design a Cosmos DB data model with the right partition key for a RAG app", "should_trigger": true },
+  { "query": "my cosmos container has hot partitions and RU spikes, how should I model it", "should_trigger": true },
+  { "query": "store vector embeddings for semantic search but keep analytics off the OLTP path", "should_trigger": true },
+  { "query": "write a fibonacci function in python", "should_trigger": false },
+  { "query": "update the formulas in my Excel budget spreadsheet", "should_trigger": false },
+  { "query": "deploy a kubernetes manifest to AKS", "should_trigger": false }
+]
