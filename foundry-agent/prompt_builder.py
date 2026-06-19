@@ -204,27 +204,24 @@ def build_system_prompt(
     if _estimate_tokens(candidate) <= budget:
         return candidate
 
-    # Third attempt: keep names only and drop trailing tools that won't fit
-    base = _assemble("")
-    base_tokens = _estimate_tokens(base)
-    remaining_tokens = budget - base_tokens
-    # Header line ("Available tools (...)" plus blank) ~ 16 tokens
-    header_overhead = 16
-    remaining_tokens -= header_overhead
-
+    # Third attempt: keep names only and drop trailing tools that won't fit.
+    # Build incrementally + re-measure with the same _estimate_tokens used
+    # by callers so we never overshoot due to off-by-one math.
     fitted: list[Mapping[str, str]] = []
-    used_chars = 0
+    truncated_section = ""
     for tool in tools:
-        line = f"  - {tool.get('name', '(unnamed)')}\n"
-        tokens_for_line = _estimate_tokens(line)
-        if (used_chars + len(line)) // 4 + 1 > remaining_tokens:
+        candidate_list = fitted + [tool]
+        section = _format_tools_section(candidate_list, drop_descriptions=True)
+        omitted = len(tools) - len(candidate_list)
+        marker = (
+            f"\n  - … ({omitted} more tool(s) omitted to fit token budget)"
+            if omitted > 0
+            else ""
+        )
+        candidate_prompt = _assemble(section + marker)
+        if _estimate_tokens(candidate_prompt) > budget:
             break
-        fitted.append(tool)
-        used_chars += len(line)
-
-    truncated_section = _format_tools_section(fitted, drop_descriptions=True)
-    omitted = len(tools) - len(fitted)
-    if omitted > 0 and truncated_section:
-        truncated_section += f"\n  - … ({omitted} more tool(s) omitted to fit token budget)"
+        fitted = candidate_list
+        truncated_section = section + marker
 
     return _assemble(truncated_section)
