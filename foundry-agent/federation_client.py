@@ -44,6 +44,7 @@ _TRUST_FILE_ENV_KEY = "FROOTAI_TRUST_FILE"
 _ACTIVE_PLAY_ENV_KEY = "FROOTAI_ACTIVE_PLAY"
 _FEDERATION_DISABLE_ENV_KEY = "FROOTAI_FEDERATION"
 _PLAYS_ROOT_ENV_KEY = "FROOTAI_PLAYS_ROOT"
+_SESSION_RESULT_PATH_ENV_KEY = "FROOTAI_SESSION_RESULT_PATH"  # [M8.19]
 _FEDERATION_DISABLE_VALUE = "off"
 
 
@@ -107,7 +108,7 @@ def emit_session_event(
     attached_areas: Sequence[str],
     failed_areas: Sequence[str] = (),
     tool_count: int = 0,
-) -> None:
+) -> dict[str, Any]:
     """[M8.14] Emit a structured JSON telemetry event to stdout.
 
     The Foundry runtime captures stdout; emitting one JSON object per
@@ -124,19 +125,22 @@ def emit_session_event(
         "tool_count": <int>
       }
 
-    The function never raises — telemetry must not break the session.
+    Returns the emitted payload so callers (e.g. start_session) can
+    archive it on the instance for M8.19 session-result aggregation.
+    Never raises — telemetry must not break the session.
     """
+    payload: dict[str, Any] = {
+        "event": event,
+        "active_play": active_play,
+        "attached_areas": list(attached_areas),
+        "failed_areas": list(failed_areas),
+        "tool_count": int(tool_count),
+    }
     try:
-        payload = {
-            "event": event,
-            "active_play": active_play,
-            "attached_areas": list(attached_areas),
-            "failed_areas": list(failed_areas),
-            "tool_count": int(tool_count),
-        }
         print(json.dumps(payload, separators=(",", ":")))
     except Exception as exc:  # noqa: BLE001
         print(f"[federation_client] telemetry emit failed: {exc}")
+    return payload
 
 
 class FoundryFederationClient:
@@ -154,6 +158,7 @@ class FoundryFederationClient:
         self._invocation_counts: dict[str, int] = {}  # [M8.15] tool → count
         self._failed_areas: list[str] = []  # [M8.16] last session's failures
         self._last_cold_start_ms: float = 0.0  # [M8.17] last start_session() duration
+        self._events: list[dict[str, Any]] = []  # [M8.19] structured event log
 
     @property
     def active_play(self) -> str | None:
@@ -335,11 +340,12 @@ class FoundryFederationClient:
             # [M8.14] Telemetry: emit the session-started event even
             # when no federation happens, so dashboards see the session.
             self._last_cold_start_ms = (time.perf_counter() - t_start) * 1000
-            emit_session_event(
+            event = emit_session_event(
                 "foundry_session_started",
                 active_play=self.active_play,
                 attached_areas=(),
             )
+            self._events.append(event)
             return [], []
 
         # [M8.9] Resolve + merge trust BEFORE attaching so the SDK uses
@@ -375,13 +381,14 @@ class FoundryFederationClient:
 
         # [M8.14] Telemetry: emit the foundry_session_started event with
         # the play + attached areas + tool count for aggregation.
-        emit_session_event(
+        event = emit_session_event(
             "foundry_session_started",
             active_play=self.active_play,
             attached_areas=attached,
             failed_areas=failed,
             tool_count=len(tools),
         )
+        self._events.append(event)
 
         return attached, tools
 
@@ -454,37 +461,57 @@ class FoundryFederationClient:
         return self._last_cold_start_ms
 
     async def end_session(self) -> dict[str, Any]:
-        """[M8.15] Close the session: detach all areas + emit completion event.
+        """[M8.15/M8.19] Close the session: detach + emit completion + write result.
 
-        Emits `foundry_session_completed` with the cost/usage summary:
-          - attached_areas: areas that were attached during the session
-          - total_invocations: sum across all federated tools
-          - invocations_by_tool: per-tool breakdown for billing/audit
+        Emits `foundry_session_completed` and (when
+        FROOTAI_SESSION_RESULT_PATH is set) writes a schema-conforming
+        JSON file at that path for `frootai evaluate` to consume. The
+        schema is documented at schemas/foundry-session-result.schema.json.
 
-        The summary is returned to the caller so the agent can attach
-        it to its own session result (M8.19 surfaces this in
-        `frootai evaluate` reports).
+        Returns:
+            The in-memory session result mapping (same shape as the
+            written file). M8.19 surfaces this in `frootai evaluate`
+            reports.
         """
         attached = list(self._handles.keys())
-        summary = {
-            "active_play": self.active_play,
-            "attached_areas": attached,
-            "total_invocations": self.total_invocations,
-            "invocations_by_tool": dict(self._invocation_counts),
-        }
 
-        emit_session_event(
+        event = emit_session_event(
             "foundry_session_completed",
             active_play=self.active_play,
             attached_areas=attached,
             failed_areas=(),
             tool_count=self.total_invocations,
         )
+        self._events.append(event)
+
+        # [M8.19] Schema-conforming session result for `frootai evaluate`.
+        result: dict[str, Any] = {
+            "schemaVersion": "1",
+            "activePlay": self.active_play,
+            "attachedAreas": attached,
+            "failedAreas": list(self._failed_areas),
+            "totalInvocations": self.total_invocations,
+            "invocationsByTool": dict(self._invocation_counts),
+            "events": list(self._events),
+            "coldStartMs": self._last_cold_start_ms,
+        }
+
+        # Write the result file if the consumer asked for it.
+        result_path = os.environ.get(_SESSION_RESULT_PATH_ENV_KEY)
+        if result_path:
+            try:
+                from pathlib import Path as _P  # noqa: PLC0415
+                _P(result_path).parent.mkdir(parents=True, exist_ok=True)
+                with open(result_path, "w", encoding="utf-8") as fh:
+                    json.dump(result, fh, indent=2)
+                print(f"[federation_client] session result written: {result_path}")
+            except OSError as exc:
+                print(f"[federation_client] session result write failed ({result_path}): {exc}")
 
         await self.detach_all()
         print(
             f"[federation_client] session end: "
-            f"{summary['total_invocations']} tool invocation(s) across "
+            f"{result['totalInvocations']} tool invocation(s) across "
             f"{len(attached)} area(s)"
         )
-        return summary
+        return result

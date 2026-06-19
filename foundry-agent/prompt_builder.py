@@ -56,6 +56,29 @@ _LEGACY_FALLBACK_PLAYS_LINE = (
 )
 
 
+# [M8.23] Token budgets per model. Values chosen to leave room for the
+# user message + assistant response within the model's context window.
+# gpt-4o-mini: 128K context; budget the system prompt to 4K tokens so
+# 124K stay available for I/O. gpt-4o: 128K context but more headroom
+# for richer prompts → 16K system prompt budget.
+MODEL_TOKEN_BUDGETS: dict[str, int] = {
+    "gpt-4o-mini": 4000,
+    "gpt-4o": 16000,
+}
+_DEFAULT_MODEL = "gpt-4o-mini"
+
+
+def _estimate_tokens(text: str) -> int:
+    """Heuristic token count for budget enforcement.
+
+    OpenAI's rule of thumb is ~4 characters per token for English text.
+    This avoids a hard dependency on `tiktoken` while staying within
+    5-10% of the true count for system prompts. Tools that need exact
+    counts can pass through a model-specific tokenizer later.
+    """
+    return (len(text) + 3) // 4
+
+
 def _format_plays_section(plays: Sequence[Mapping[str, str]]) -> str:
     if not plays:
         return _LEGACY_FALLBACK_PLAYS_LINE
@@ -77,12 +100,19 @@ def _format_areas_section(attached_areas: Sequence[str]) -> str:
     return "\n".join(lines)
 
 
-def _format_tools_section(tools: Sequence[Mapping[str, str]]) -> str:
+def _format_tools_section(
+    tools: Sequence[Mapping[str, str]],
+    *,
+    drop_descriptions: bool = False,
+) -> str:
     if not tools:
         return ""
     lines = ["", "Available tools (merged across in-process + federated):"]
     for tool in tools:
         name = tool.get("name", "(unnamed)")
+        if drop_descriptions:
+            lines.append(f"  - {name}")
+            continue
         description = tool.get("description", "")
         if description:
             first_line = description.splitlines()[0] if description else ""
@@ -115,6 +145,7 @@ def build_system_prompt(
     attached_areas: Sequence[str] = (),
     tools: Sequence[Mapping[str, str]] = (),
     failed_areas: Sequence[str] = (),
+    model: str = _DEFAULT_MODEL,
 ) -> str:
     """Build the Foundry agent system prompt from live inputs.
 
@@ -129,9 +160,15 @@ def build_system_prompt(
         failed_areas: Sequence of area names that were requested but
             failed to attach. Each gets a "Note: tool area ... is
             unavailable" line injected into the prompt (M8.16).
+        model: Target model name; controls the token budget (M8.23).
+            Known values: "gpt-4o-mini" (4K), "gpt-4o" (16K). Unknown
+            models default to the gpt-4o-mini budget for safety.
 
     Returns:
-        The fully-assembled system prompt string.
+        The fully-assembled system prompt string. If the dynamic
+        sections push the estimated token count over the model budget,
+        tool descriptions are dropped first; if still over, surplus
+        tools at the tail are omitted with a "(N more …)" line.
     """
     sections = [
         _FROOT_PROSE,
@@ -147,8 +184,47 @@ def build_system_prompt(
     if failed_section:
         sections.append(failed_section)
 
-    tools_section = _format_tools_section(tools)
-    if tools_section:
-        sections.append(tools_section)
+    budget = MODEL_TOKEN_BUDGETS.get(model, MODEL_TOKEN_BUDGETS[_DEFAULT_MODEL])
 
-    return "\n".join(sections) + "\n"
+    def _assemble(_tools_section: str) -> str:
+        local = list(sections)
+        if _tools_section:
+            local.append(_tools_section)
+        return "\n".join(local) + "\n"
+
+    # First attempt: full tool list with descriptions
+    tools_section = _format_tools_section(tools)
+    candidate = _assemble(tools_section)
+    if not tools or _estimate_tokens(candidate) <= budget:
+        return candidate
+
+    # Second attempt: drop descriptions to save tokens
+    tools_section_minimal = _format_tools_section(tools, drop_descriptions=True)
+    candidate = _assemble(tools_section_minimal)
+    if _estimate_tokens(candidate) <= budget:
+        return candidate
+
+    # Third attempt: keep names only and drop trailing tools that won't fit
+    base = _assemble("")
+    base_tokens = _estimate_tokens(base)
+    remaining_tokens = budget - base_tokens
+    # Header line ("Available tools (...)" plus blank) ~ 16 tokens
+    header_overhead = 16
+    remaining_tokens -= header_overhead
+
+    fitted: list[Mapping[str, str]] = []
+    used_chars = 0
+    for tool in tools:
+        line = f"  - {tool.get('name', '(unnamed)')}\n"
+        tokens_for_line = _estimate_tokens(line)
+        if (used_chars + len(line)) // 4 + 1 > remaining_tokens:
+            break
+        fitted.append(tool)
+        used_chars += len(line)
+
+    truncated_section = _format_tools_section(fitted, drop_descriptions=True)
+    omitted = len(tools) - len(fitted)
+    if omitted > 0 and truncated_section:
+        truncated_section += f"\n  - … ({omitted} more tool(s) omitted to fit token budget)"
+
+    return _assemble(truncated_section)
