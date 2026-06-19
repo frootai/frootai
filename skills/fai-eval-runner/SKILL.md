@@ -9,7 +9,7 @@ name: fai-eval-runner
 
 ## Overview
 
-This skill provides a structured, repeatable procedure for name: fai-eval-runner. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+This skill provides a structured, repeatable procedure for running evaluation pipelines with metrics tracking and result reporting. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
 **Category:** Evaluation
 **Complexity:** Medium

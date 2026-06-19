@@ -10,7 +10,7 @@ name: fai-mcp-typescript-generator
 
 ## Overview
 
-This skill provides a structured, repeatable procedure for name: fai-mcp-typescript-generator. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+This skill provides a structured, repeatable procedure for scaffolding a production-ready TypeScript MCP server using the official SDK with strict types, tool handlers, and async utilities. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
 **Category:** MCP Integration
 **Complexity:** Medium

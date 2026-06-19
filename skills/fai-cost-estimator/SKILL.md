@@ -9,7 +9,7 @@ name: fai-cost-estimator
 
 ## Overview
 
-This skill provides a structured, repeatable procedure for name: fai-cost-estimator. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
+This skill provides a structured, repeatable procedure for building cost-estimation models for AI workloads across Azure services, models, and infrastructure. It can be used standalone as a LEGO block or auto-wired inside solution plays via the FAI Protocol.
 
 **Category:** Cost Management
 **Complexity:** Medium
