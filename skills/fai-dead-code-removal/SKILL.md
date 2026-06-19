@@ -1,6 +1,6 @@
 ---
 name: fai-dead-code-removal
-description: Identify and remove dead code paths in Python/TypeScript applications with automated tooling.
+description: Identify and remove dead code in Python/TypeScript — unused exports, unreachable branches, and orphaned files, verified by tooling. Use this skill when cleaning up a codebase, reducing bundle size, or before a refactor — even if the user only says "remove unused code".
 ---
 
 # Fai Dead Code Removal

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-containerize-aspnet). Safe to delete or edit.
 interface:
   display_name: "Containerize ASPNET"
-  short_description: "Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and…"
-  default_prompt: "Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and health checks"
+  short_description: "Containerize ASP.NET Core AI APIs — multi-stage Dockerfiles, health checks…"
+  default_prompt: "Containerize ASP.NET Core AI APIs — multi-stage Dockerfiles, health checks, non-root runtime, and small images"

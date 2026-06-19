@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-docker-containerize). Safe to delete or edit.
 interface:
   display_name: "Docker Containerize"
-  short_description: "Containerize AI applications with multi-stage images, health probes, and…"
-  default_prompt: "Containerize AI applications with multi-stage images, health probes, and secure runtime settings - ship smaller containers and safer deployments"
+  short_description: "Containerize AI applications — multi-stage images, health probes, non-root…"
+  default_prompt: "Containerize AI applications — multi-stage images, health probes, non-root users, and secure runtime settings for smaller, safer deployments"

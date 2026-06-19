@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-context-map). Safe to delete or edit.
 interface:
   display_name: "Context Map"
-  short_description: "Visualize architecture context maps showing bounded domains and integration…"
-  default_prompt: "Visualize architecture context maps showing bounded domains and integration points"
+  short_description: "Visualize DDD context maps — bounded contexts, relationships (partnership…"
+  default_prompt: "Visualize DDD context maps — bounded contexts, relationships (partnership, anti-corruption layer, conformist), and integration points"

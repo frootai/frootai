@@ -1,6 +1,6 @@
 ---
 name: fai-docker-containerize
-description: "Containerize AI applications with multi-stage images, health probes, and secure runtime settings - ship smaller containers and safer deployments"
+description: Containerize AI applications — multi-stage images, health probes, non-root users, and secure runtime settings for smaller, safer deployments. Use this skill when dockerizing any app, preparing for Kubernetes/Container Apps, or hardening an image — even if the user only says "containerize this".
 ---
 
 # Docker Containerize

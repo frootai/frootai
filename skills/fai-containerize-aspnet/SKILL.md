@@ -1,6 +1,6 @@
 ---
 name: fai-containerize-aspnet
-description: Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and health checks.
+description: Containerize ASP.NET Core AI APIs — multi-stage Dockerfiles, health checks, non-root runtime, and small images. Use this skill when dockerizing a .NET service, preparing for AKS/Container Apps, or shrinking image size — even if the user only says "put this in a container".
 ---
 
 # Fai Containerize Aspnet

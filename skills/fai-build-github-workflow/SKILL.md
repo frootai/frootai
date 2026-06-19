@@ -1,6 +1,6 @@
 ﻿---
 name: fai-build-github-workflow
-description: 'Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.'
+description: Build GitHub Actions workflows — matrix testing, SHA-pinned actions, caching, quality gates, and least-privilege permissions. Use this skill when setting up CI/CD, hardening a pipeline, or automating builds/tests/deploys — even if the user only says "add a GitHub workflow".
 ---
 
 # Fai Build Github Workflow

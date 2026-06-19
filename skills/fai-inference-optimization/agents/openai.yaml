@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-inference-optimization). Safe to delete or edit.
 interface:
   display_name: "Inference Optimization"
-  short_description: "Optimize model inference latency and throughput."
-  default_prompt: "Optimize model inference latency and throughput"
+  short_description: "Optimize model inference latency and throughput — batching, quantization…"
+  default_prompt: "Optimize model inference latency and throughput — batching, quantization, caching, KV-cache reuse, and hardware/SKU selection"

@@ -1,10 +1,10 @@
 {
-  "mean": 63.0,
+  "mean": 64.6,
   "total": 637,
-  "below_threshold": 438,
+  "below_threshold": 418,
   "sensei_tiers": {
-    "Low": 442,
-    "Medium": 191,
+    "Low": 422,
+    "Medium": 211,
     "Medium-High": 0,
     "High": 4
   },
@@ -151,249 +151,6 @@
       ],
       "description": "Evaluate prompt versioning and A/B test performance.",
       "path": "skills\\fai-evaluate-18-prompt-management\\SKILL.md"
-    },
-    {
-      "name": "fai-implementation-plan-generator",
-      "score": 33,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (48 chars) \u2014 under-specified",
-        "low specificity (5 distinct words)"
-      ],
-      "description": "Generate implementation plans from architecture.",
-      "path": "skills\\fai-implementation-plan-generator\\SKILL.md"
-    },
-    {
-      "name": "fai-inference-optimization",
-      "score": 33,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (48 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Optimize model inference latency and throughput.",
-      "path": "skills\\fai-inference-optimization\\SKILL.md"
-    },
-    {
-      "name": "fai-jest-test",
-      "score": 33,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (56 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Write Jest tests for JavaScript/TypeScript applications.",
-      "path": "skills\\fai-jest-test\\SKILL.md"
-    },
-    {
-      "name": "fai-build-etl-pipeline",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('creates')"
-      ],
-      "description": "Creates ETL pipeline designs for AI data ingestion with quality checks and scheduling.",
-      "path": "skills\\fai-build-etl-pipeline\\SKILL.md"
-    },
-    {
-      "name": "fai-build-genai-rag",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('builds')"
-      ],
-      "description": "Builds a complete RAG pipeline with embeddings, vector store, retrieval, and evaluation.",
-      "path": "skills\\fai-build-genai-rag\\SKILL.md"
-    },
-    {
-      "name": "fai-build-github-workflow",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('creates')"
-      ],
-      "description": "Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.",
-      "path": "skills\\fai-build-github-workflow\\SKILL.md"
-    },
-    {
-      "name": "fai-build-integration-test",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('generates')"
-      ],
-      "description": "Generates integration tests with real service connections, test containers, and cleanup.",
-      "path": "skills\\fai-build-integration-test\\SKILL.md"
-    },
-    {
-      "name": "fai-build-kubernetes-manifest",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('generates')"
-      ],
-      "description": "Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.",
-      "path": "skills\\fai-build-kubernetes-manifest\\SKILL.md"
-    },
-    {
-      "name": "fai-cloud-design-patterns",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('apply')"
-      ],
-      "description": "Apply cloud design patterns (bulkhead, retry, circuit breaker, CQRS) for AI workloads.",
-      "path": "skills\\fai-cloud-design-patterns\\SKILL.md"
-    },
-    {
-      "name": "fai-comment-tutorial",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('auto-generate')"
-      ],
-      "description": "Auto-generate code tutorials from comments and docstrings with executable examples.",
-      "path": "skills\\fai-comment-tutorial\\SKILL.md"
-    },
-    {
-      "name": "fai-containerize-aspnet",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('containerize')"
-      ],
-      "description": "Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and health checks.",
-      "path": "skills\\fai-containerize-aspnet\\SKILL.md"
-    },
-    {
-      "name": "fai-containerize-aspnet-framework",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('containerize')"
-      ],
-      "description": "Containerize legacy ASP.NET Framework apps for cloud deployment.",
-      "path": "skills\\fai-containerize-aspnet-framework\\SKILL.md"
-    },
-    {
-      "name": "fai-context-map",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('visualize')"
-      ],
-      "description": "Visualize architecture context maps showing bounded domains and integration points.",
-      "path": "skills\\fai-context-map\\SKILL.md"
-    },
-    {
-      "name": "fai-copilot-usage-metrics",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('track')"
-      ],
-      "description": "Track Copilot usage metrics for cost attribution, productivity analysis, and adoption monitoring.",
-      "path": "skills\\fai-copilot-usage-metrics\\SKILL.md"
-    },
-    {
-      "name": "fai-daily-prep",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('automate')"
-      ],
-      "description": "Automate daily prep workflows: code audits, test coverage checks, dependency updates.",
-      "path": "skills\\fai-daily-prep\\SKILL.md"
-    },
-    {
-      "name": "fai-dead-code-removal",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('identify')"
-      ],
-      "description": "Identify and remove dead code paths in Python/TypeScript applications with automated tooling.",
-      "path": "skills\\fai-dead-code-removal\\SKILL.md"
-    },
-    {
-      "name": "fai-design-responsive",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('ensure')"
-      ],
-      "description": "Ensure responsive design across devices for AI tools and dashboards.",
-      "path": "skills\\fai-design-responsive\\SKILL.md"
-    },
-    {
-      "name": "fai-design-system-tokens",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('define')"
-      ],
-      "description": "Define design tokens for colors, spacing, typography in AI UIs.",
-      "path": "skills\\fai-design-system-tokens\\SKILL.md"
-    },
-    {
-      "name": "fai-docker-containerize",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('containerize')"
-      ],
-      "description": "Containerize AI applications with multi-stage images, health probes, and secure runtime settings - ship smaller containers and safer deployments",
-      "path": "skills\\fai-docker-containerize\\SKILL.md"
-    },
-    {
-      "name": "fai-documentation-writer",
-      "score": 40,
-      "tier": "Low",
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('auto-generate')"
-      ],
-      "description": "Auto-generate API and architecture documentation from code annotations.",
-      "path": "skills\\fai-documentation-writer\\SKILL.md"
     },
     {
       "name": "fai-epic-breakdown-arch",
@@ -6185,6 +5942,116 @@
       "path": "skills\\fai-azure-storage-patterns\\SKILL.md"
     },
     {
+      "name": "fai-cloud-design-patterns",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('apply')"
+      ],
+      "description": "Apply cloud design patterns to AI workloads \u2014 bulkhead, retry with backoff, circuit breaker, CQRS, and the saga pattern. Use this skill when hardening resilience, designing distributed services, or fixing cascading failures \u2014 even if the user only says \"make this more reliable\".",
+      "path": "skills\\fai-cloud-design-patterns\\SKILL.md"
+    },
+    {
+      "name": "fai-comment-tutorial",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('auto-generate')"
+      ],
+      "description": "Auto-generate code tutorials from comments and docstrings \u2014 narrative walkthroughs with runnable examples. Use this skill when turning code into a learning guide, building onboarding docs, or producing example-driven documentation \u2014 even if the user only says \"explain how this works\".",
+      "path": "skills\\fai-comment-tutorial\\SKILL.md"
+    },
+    {
+      "name": "fai-containerize-aspnet",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('containerize')"
+      ],
+      "description": "Containerize ASP.NET Core AI APIs \u2014 multi-stage Dockerfiles, health checks, non-root runtime, and small images. Use this skill when dockerizing a .NET service, preparing for AKS/Container Apps, or shrinking image size \u2014 even if the user only says \"put this in a container\".",
+      "path": "skills\\fai-containerize-aspnet\\SKILL.md"
+    },
+    {
+      "name": "fai-containerize-aspnet-framework",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('containerize')"
+      ],
+      "description": "Containerize legacy ASP.NET Framework (.NET Framework 4.x) apps for cloud deployment \u2014 Windows base images, IIS config, and lift-and-shift patterns. Use this skill when modernizing a legacy app, moving on-prem .NET to Azure, or dockerizing Windows workloads \u2014 even if the user only says \"move this old app to the cloud\".",
+      "path": "skills\\fai-containerize-aspnet-framework\\SKILL.md"
+    },
+    {
+      "name": "fai-context-map",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('visualize')"
+      ],
+      "description": "Visualize DDD context maps \u2014 bounded contexts, relationships (partnership, anti-corruption layer, conformist), and integration points. Use this skill when mapping a complex system's domains, planning service boundaries, or aligning teams \u2014 even if the user only says \"map out how these services relate\".",
+      "path": "skills\\fai-context-map\\SKILL.md"
+    },
+    {
+      "name": "fai-copilot-usage-metrics",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('track')"
+      ],
+      "description": "Track GitHub Copilot usage metrics \u2014 seat utilization, acceptance rate, cost attribution, and adoption trends. Use this skill when measuring Copilot ROI, reporting adoption to leadership, or attributing cost by team \u2014 even if the user only says \"how is Copilot being used\".",
+      "path": "skills\\fai-copilot-usage-metrics\\SKILL.md"
+    },
+    {
+      "name": "fai-daily-prep",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('automate')"
+      ],
+      "description": "Automate daily developer prep \u2014 code audits, test-coverage checks, dependency updates, and a prioritized to-do. Use this skill when starting your day, setting up a morning automation, or keeping a repo healthy \u2014 even if the user only says \"what should I work on today\".",
+      "path": "skills\\fai-daily-prep\\SKILL.md"
+    },
+    {
+      "name": "fai-dead-code-removal",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('identify')"
+      ],
+      "description": "Identify and remove dead code in Python/TypeScript \u2014 unused exports, unreachable branches, and orphaned files, verified by tooling. Use this skill when cleaning up a codebase, reducing bundle size, or before a refactor \u2014 even if the user only says \"remove unused code\".",
+      "path": "skills\\fai-dead-code-removal\\SKILL.md"
+    },
+    {
+      "name": "fai-design-system-tokens",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('define')"
+      ],
+      "description": "Define design tokens for AI UIs \u2014 color, spacing, typography, radius, and theming primitives with light/dark support. Use this skill when starting a design system, ensuring visual consistency, or theming an app \u2014 even if the user only says \"set up our colors and styles\".",
+      "path": "skills\\fai-design-system-tokens\\SKILL.md"
+    },
+    {
+      "name": "fai-docker-containerize",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('containerize')"
+      ],
+      "description": "Containerize AI applications \u2014 multi-stage images, health probes, non-root users, and secure runtime settings for smaller, safer deployments. Use this skill when dockerizing any app, preparing for Kubernetes/Container Apps, or hardening an image \u2014 even if the user only says \"containerize this\".",
+      "path": "skills\\fai-docker-containerize\\SKILL.md"
+    },
+    {
+      "name": "fai-documentation-writer",
+      "score": 85,
+      "tier": "Medium",
+      "reasons": [
+        "doesn't lead with an action verb ('auto-generate')"
+      ],
+      "description": "Auto-generate API and architecture documentation from code annotations \u2014 endpoint references, schemas, and diagrams. Use this skill when documenting a service, producing API reference docs, or keeping docs in sync with code \u2014 even if the user only says \"document this\".",
+      "path": "skills\\fai-documentation-writer\\SKILL.md"
+    },
+    {
       "name": "fai-domain-driven-design",
       "score": 85,
       "tier": "Medium",
@@ -6471,6 +6338,54 @@
       "path": "skills\\fai-bicep-module-scaffold\\SKILL.md"
     },
     {
+      "name": "fai-build-etl-pipeline",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Design ETL/ELT pipelines for AI data ingestion \u2014 extraction, transformation, quality checks, scheduling, and idempotent loads. Use this skill when building a data pipeline, ingesting documents for RAG, or fixing data-quality issues \u2014 even if the user only says \"get this data into the system\".",
+      "path": "skills\\fai-build-etl-pipeline\\SKILL.md"
+    },
+    {
+      "name": "fai-build-genai-rag",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Build a complete GenAI RAG pipeline \u2014 chunking, embeddings, vector store, retrieval, prompt assembly, and evaluation. Use this skill when standing up retrieval-augmented generation, grounding an LLM on private data, or fixing poor answer quality \u2014 even if the user only says \"chat with my documents\".",
+      "path": "skills\\fai-build-genai-rag\\SKILL.md"
+    },
+    {
+      "name": "fai-build-github-workflow",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Build GitHub Actions workflows \u2014 matrix testing, SHA-pinned actions, caching, quality gates, and least-privilege permissions. Use this skill when setting up CI/CD, hardening a pipeline, or automating builds/tests/deploys \u2014 even if the user only says \"add a GitHub workflow\".",
+      "path": "skills\\fai-build-github-workflow\\SKILL.md"
+    },
+    {
+      "name": "fai-build-integration-test",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Generate integration tests with real service connections \u2014 test containers, fixtures, setup/teardown, and deterministic cleanup. Use this skill when testing against databases/queues/APIs, validating service wiring, or replacing brittle mocks \u2014 even if the user only says \"test this end to end\".",
+      "path": "skills\\fai-build-integration-test\\SKILL.md"
+    },
+    {
+      "name": "fai-build-kubernetes-manifest",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Generate Kubernetes manifests for AI workloads \u2014 GPU scheduling, health/readiness probes, autoscaling, resource limits, and rollout strategy. Use this skill when deploying to AKS/K8s, scheduling GPU pods, or configuring autoscaling \u2014 even if the user only says \"deploy this to Kubernetes\".",
+      "path": "skills\\fai-build-kubernetes-manifest\\SKILL.md"
+    },
+    {
+      "name": "fai-design-responsive",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Design responsive layouts for AI tools and dashboards \u2014 breakpoints, fluid grids, container queries, and mobile-first patterns. Use this skill when a UI breaks on mobile, building a dashboard, or supporting multiple screen sizes \u2014 even if the user only says \"make it work on phones\".",
+      "path": "skills\\fai-design-responsive\\SKILL.md"
+    },
+    {
       "name": "fai-design-state-management",
       "score": 100,
       "tier": "Medium",
@@ -6565,6 +6480,30 @@
       "reasons": [],
       "description": "Implement human-in-the-loop workflows for AI decisions \u2014 approval gates, confidence thresholds, escalation, and audit trails. Use this skill when adding oversight to autonomous actions, meeting compliance review needs, or handling low-confidence outputs \u2014 even if the user only says \"add a human approval step\".",
       "path": "skills\\fai-human-in-the-loop\\SKILL.md"
+    },
+    {
+      "name": "fai-implementation-plan-generator",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Generate step-by-step implementation plans from an architecture or design \u2014 work breakdown, sequencing, dependencies, and acceptance criteria. Use this skill when turning a design into actionable tasks, planning a sprint, or scoping a build \u2014 even if the user only says \"how do we build this\" or \"break this down\".",
+      "path": "skills\\fai-implementation-plan-generator\\SKILL.md"
+    },
+    {
+      "name": "fai-inference-optimization",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Optimize model inference latency and throughput \u2014 batching, quantization, caching, KV-cache reuse, and hardware/SKU selection. Use this skill when responses are too slow, cost per token is too high, or scaling under load \u2014 even if the user only says \"make the model faster\" or \"reduce latency\".",
+      "path": "skills\\fai-inference-optimization\\SKILL.md"
+    },
+    {
+      "name": "fai-jest-test",
+      "score": 100,
+      "tier": "Medium",
+      "reasons": [],
+      "description": "Write Jest tests for JavaScript/TypeScript \u2014 unit and integration specs, mocking, async assertions, and coverage. Use this skill when adding test coverage to a JS/TS codebase, testing a React/Node module, or fixing flaky specs \u2014 even if the user only says \"write tests for this\".",
+      "path": "skills\\fai-jest-test\\SKILL.md"
     },
     {
       "name": "fai-managed-identity-setup",

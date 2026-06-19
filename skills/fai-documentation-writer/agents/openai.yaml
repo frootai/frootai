@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-documentation-writer). Safe to delete or edit.
 interface:
   display_name: "Documentation Writer"
-  short_description: "Auto-generate API and architecture documentation from code annotations."
-  default_prompt: "Auto-generate API and architecture documentation from code annotations"
+  short_description: "Auto-generate API and architecture documentation from code annotations…"
+  default_prompt: "Auto-generate API and architecture documentation from code annotations — endpoint references, schemas, and diagrams"

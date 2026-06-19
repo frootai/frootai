@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-build-etl-pipeline). Safe to delete or edit.
 interface:
   display_name: "Build ETL Pipeline"
-  short_description: "Creates ETL pipeline designs for AI data ingestion with quality checks and…"
-  default_prompt: "Creates ETL pipeline designs for AI data ingestion with quality checks and scheduling"
+  short_description: "Design ETL/ELT pipelines for AI data ingestion — extraction, transformation…"
+  default_prompt: "Design ETL/ELT pipelines for AI data ingestion — extraction, transformation, quality checks, scheduling, and idempotent loads"

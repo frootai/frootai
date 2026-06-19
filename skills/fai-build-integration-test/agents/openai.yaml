@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-build-integration-test). Safe to delete or edit.
 interface:
   display_name: "Build Integration Test"
-  short_description: "Generates integration tests with real service connections, test containers…"
-  default_prompt: "Generates integration tests with real service connections, test containers, and cleanup"
+  short_description: "Generate integration tests with real service connections — test containers…"
+  default_prompt: "Generate integration tests with real service connections — test containers, fixtures, setup/teardown, and deterministic cleanup"

@@ -1,6 +1,6 @@
 ---
 name: fai-implementation-plan-generator
-description: Generate implementation plans from architecture.
+description: Generate step-by-step implementation plans from an architecture or design — work breakdown, sequencing, dependencies, and acceptance criteria. Use this skill when turning a design into actionable tasks, planning a sprint, or scoping a build — even if the user only says "how do we build this" or "break this down".
 ---
 
 # Fai Implementation Plan Generator

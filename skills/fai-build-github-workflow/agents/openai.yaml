@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-build-github-workflow). Safe to delete or edit.
 interface:
   display_name: "Build GitHub Workflow"
-  short_description: "Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and…"
-  default_prompt: "Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates"
+  short_description: "Build GitHub Actions workflows — matrix testing, SHA-pinned actions, caching…"
+  default_prompt: "Build GitHub Actions workflows — matrix testing, SHA-pinned actions, caching, quality gates, and least-privilege permissions"

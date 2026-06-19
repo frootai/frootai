@@ -1,6 +1,6 @@
 ﻿---
 name: fai-build-genai-rag
-description: 'Builds a complete RAG pipeline with embeddings, vector store, retrieval, and evaluation.'
+description: Build a complete GenAI RAG pipeline — chunking, embeddings, vector store, retrieval, prompt assembly, and evaluation. Use this skill when standing up retrieval-augmented generation, grounding an LLM on private data, or fixing poor answer quality — even if the user only says "chat with my documents".
 ---
 
 # Fai Build Genai Rag

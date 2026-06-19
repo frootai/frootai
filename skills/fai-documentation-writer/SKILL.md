@@ -1,6 +1,6 @@
 ---
 name: fai-documentation-writer
-description: Auto-generate API and architecture documentation from code annotations.
+description: Auto-generate API and architecture documentation from code annotations — endpoint references, schemas, and diagrams. Use this skill when documenting a service, producing API reference docs, or keeping docs in sync with code — even if the user only says "document this".
 ---
 
 # FAI Documentation Writer

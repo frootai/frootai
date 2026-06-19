@@ -1,6 +1,6 @@
 ﻿---
 name: fai-build-etl-pipeline
-description: 'Creates ETL pipeline designs for AI data ingestion with quality checks and scheduling.'
+description: Design ETL/ELT pipelines for AI data ingestion — extraction, transformation, quality checks, scheduling, and idempotent loads. Use this skill when building a data pipeline, ingesting documents for RAG, or fixing data-quality issues — even if the user only says "get this data into the system".
 ---
 
 # Fai Build Etl Pipeline

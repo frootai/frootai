@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-design-responsive). Safe to delete or edit.
 interface:
   display_name: "Design Responsive"
-  short_description: "Ensure responsive design across devices for AI tools and dashboards."
-  default_prompt: "Ensure responsive design across devices for AI tools and dashboards"
+  short_description: "Design responsive layouts for AI tools and dashboards — breakpoints, fluid…"
+  default_prompt: "Design responsive layouts for AI tools and dashboards — breakpoints, fluid grids, container queries, and mobile-first patterns"

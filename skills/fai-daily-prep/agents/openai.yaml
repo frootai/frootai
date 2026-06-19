@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-daily-prep). Safe to delete or edit.
 interface:
   display_name: "Daily Prep"
-  short_description: "Automate daily prep workflows: code audits, test coverage checks, dependency…"
-  default_prompt: "Automate daily prep workflows: code audits, test coverage checks, dependency updates"
+  short_description: "Automate daily developer prep — code audits, test-coverage checks, dependency…"
+  default_prompt: "Automate daily developer prep — code audits, test-coverage checks, dependency updates, and a prioritized to-do"

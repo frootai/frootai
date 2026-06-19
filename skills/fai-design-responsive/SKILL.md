@@ -1,6 +1,6 @@
 ---
 name: fai-design-responsive
-description: Ensure responsive design across devices for AI tools and dashboards.
+description: Design responsive layouts for AI tools and dashboards — breakpoints, fluid grids, container queries, and mobile-first patterns. Use this skill when a UI breaks on mobile, building a dashboard, or supporting multiple screen sizes — even if the user only says "make it work on phones".
 ---
 
 # Fai Design Responsive

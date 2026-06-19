@@ -1,6 +1,6 @@
 ---
 name: fai-daily-prep
-description: Automate daily prep workflows: code audits, test coverage checks, dependency updates.
+description: Automate daily developer prep — code audits, test-coverage checks, dependency updates, and a prioritized to-do. Use this skill when starting your day, setting up a morning automation, or keeping a repo healthy — even if the user only says "what should I work on today".
 ---
 
 # Fai Daily Prep

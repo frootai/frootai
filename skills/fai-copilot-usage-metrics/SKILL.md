@@ -1,6 +1,6 @@
 ---
 name: fai-copilot-usage-metrics
-description: Track Copilot usage metrics for cost attribution, productivity analysis, and adoption monitoring.
+description: Track GitHub Copilot usage metrics — seat utilization, acceptance rate, cost attribution, and adoption trends. Use this skill when measuring Copilot ROI, reporting adoption to leadership, or attributing cost by team — even if the user only says "how is Copilot being used".
 ---
 
 # Fai Copilot Usage Metrics

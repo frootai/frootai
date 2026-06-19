@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-containerize-aspnet-framework). Safe to delete or edit.
 interface:
   display_name: "Containerize ASPNET Framework"
-  short_description: "Containerize legacy ASP.NET Framework apps for cloud deployment."
-  default_prompt: "Containerize legacy ASP.NET Framework apps for cloud deployment"
+  short_description: "Containerize legacy ASP.NET Framework (.NET Framework 4.x) apps for cloud…"
+  default_prompt: "Containerize legacy ASP.NET Framework (.NET Framework 4.x) apps for cloud deployment — Windows base images, IIS config, and lift-and-shift patterns"

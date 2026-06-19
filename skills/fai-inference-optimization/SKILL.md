@@ -1,6 +1,6 @@
 ---
 name: fai-inference-optimization
-description: Optimize model inference latency and throughput.
+description: Optimize model inference latency and throughput — batching, quantization, caching, KV-cache reuse, and hardware/SKU selection. Use this skill when responses are too slow, cost per token is too high, or scaling under load — even if the user only says "make the model faster" or "reduce latency".
 ---
 
 # Fai Inference Optimization

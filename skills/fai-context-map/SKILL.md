@@ -1,6 +1,6 @@
 ---
 name: fai-context-map
-description: Visualize architecture context maps showing bounded domains and integration points.
+description: Visualize DDD context maps — bounded contexts, relationships (partnership, anti-corruption layer, conformist), and integration points. Use this skill when mapping a complex system's domains, planning service boundaries, or aligning teams — even if the user only says "map out how these services relate".
 ---
 
 # Fai Context Map

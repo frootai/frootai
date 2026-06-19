@@ -1,6 +1,6 @@
 ---
 name: fai-containerize-aspnet-framework
-description: Containerize legacy ASP.NET Framework apps for cloud deployment.
+description: Containerize legacy ASP.NET Framework (.NET Framework 4.x) apps for cloud deployment — Windows base images, IIS config, and lift-and-shift patterns. Use this skill when modernizing a legacy app, moving on-prem .NET to Azure, or dockerizing Windows workloads — even if the user only says "move this old app to the cloud".
 ---
 
 # Fai Containerize Aspnet Framework

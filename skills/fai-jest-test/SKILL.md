@@ -1,6 +1,6 @@
 ---
 name: fai-jest-test
-description: Write Jest tests for JavaScript/TypeScript applications.
+description: Write Jest tests for JavaScript/TypeScript — unit and integration specs, mocking, async assertions, and coverage. Use this skill when adding test coverage to a JS/TS codebase, testing a React/Node module, or fixing flaky specs — even if the user only says "write tests for this".
 ---
 
 # Fai Jest Test

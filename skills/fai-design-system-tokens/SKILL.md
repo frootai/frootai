@@ -1,6 +1,6 @@
 ---
 name: fai-design-system-tokens
-description: Define design tokens for colors, spacing, typography in AI UIs.
+description: Define design tokens for AI UIs — color, spacing, typography, radius, and theming primitives with light/dark support. Use this skill when starting a design system, ensuring visual consistency, or theming an app — even if the user only says "set up our colors and styles".
 ---
 
 # Fai Design System Tokens

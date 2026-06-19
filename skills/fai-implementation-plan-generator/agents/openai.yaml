@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-implementation-plan-generator). Safe to delete or edit.
 interface:
   display_name: "Implementation Plan Generator"
-  short_description: "Generate implementation plans from architecture."
-  default_prompt: "Generate implementation plans from architecture"
+  short_description: "Generate step-by-step implementation plans from an architecture or design…"
+  default_prompt: "Generate step-by-step implementation plans from an architecture or design — work breakdown, sequencing, dependencies, and acceptance criteria"

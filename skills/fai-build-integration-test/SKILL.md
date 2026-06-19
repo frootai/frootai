@@ -1,6 +1,6 @@
 ﻿---
 name: fai-build-integration-test
-description: 'Generates integration tests with real service connections, test containers, and cleanup.'
+description: Generate integration tests with real service connections — test containers, fixtures, setup/teardown, and deterministic cleanup. Use this skill when testing against databases/queues/APIs, validating service wiring, or replacing brittle mocks — even if the user only says "test this end to end".
 ---
 
 # Fai Build Integration Test

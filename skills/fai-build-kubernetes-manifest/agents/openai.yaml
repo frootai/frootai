@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-build-kubernetes-manifest). Safe to delete or edit.
 interface:
   display_name: "Build Kubernetes Manifest"
-  short_description: "Generates Kubernetes manifests with GPU scheduling, health probes, and…"
-  default_prompt: "Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling"
+  short_description: "Generate Kubernetes manifests for AI workloads — GPU scheduling…"
+  default_prompt: "Generate Kubernetes manifests for AI workloads — GPU scheduling, health/readiness probes, autoscaling, resource limits, and rollout strategy"

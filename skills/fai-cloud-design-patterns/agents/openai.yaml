@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-cloud-design-patterns). Safe to delete or edit.
 interface:
   display_name: "Cloud Design Patterns"
-  short_description: "Apply cloud design patterns (bulkhead, retry, circuit breaker, CQRS) for AI…"
-  default_prompt: "Apply cloud design patterns (bulkhead, retry, circuit breaker, CQRS) for AI workloads"
+  short_description: "Apply cloud design patterns to AI workloads — bulkhead, retry with backoff…"
+  default_prompt: "Apply cloud design patterns to AI workloads — bulkhead, retry with backoff, circuit breaker, CQRS, and the saga pattern"

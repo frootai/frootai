@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-build-genai-rag). Safe to delete or edit.
 interface:
   display_name: "Build Genai RAG"
-  short_description: "Builds a complete RAG pipeline with embeddings, vector store, retrieval, and…"
-  default_prompt: "Builds a complete RAG pipeline with embeddings, vector store, retrieval, and evaluation"
+  short_description: "Build a complete GenAI RAG pipeline — chunking, embeddings, vector store…"
+  default_prompt: "Build a complete GenAI RAG pipeline — chunking, embeddings, vector store, retrieval, prompt assembly, and evaluation"

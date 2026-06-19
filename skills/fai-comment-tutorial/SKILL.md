@@ -1,6 +1,6 @@
 ---
 name: fai-comment-tutorial
-description: Auto-generate code tutorials from comments and docstrings with executable examples.
+description: Auto-generate code tutorials from comments and docstrings — narrative walkthroughs with runnable examples. Use this skill when turning code into a learning guide, building onboarding docs, or producing example-driven documentation — even if the user only says "explain how this works".
 ---
 
 # Fai Comment Tutorial

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-design-system-tokens). Safe to delete or edit.
 interface:
   display_name: "Design System Tokens"
-  short_description: "Define design tokens for colors, spacing, typography in AI UIs."
-  default_prompt: "Define design tokens for colors, spacing, typography in AI UIs"
+  short_description: "Define design tokens for AI UIs — color, spacing, typography, radius, and…"
+  default_prompt: "Define design tokens for AI UIs — color, spacing, typography, radius, and theming primitives with light/dark support"

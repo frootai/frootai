@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-comment-tutorial). Safe to delete or edit.
 interface:
   display_name: "Comment Tutorial"
-  short_description: "Auto-generate code tutorials from comments and docstrings with executable…"
-  default_prompt: "Auto-generate code tutorials from comments and docstrings with executable examples"
+  short_description: "Auto-generate code tutorials from comments and docstrings — narrative…"
+  default_prompt: "Auto-generate code tutorials from comments and docstrings — narrative walkthroughs with runnable examples"

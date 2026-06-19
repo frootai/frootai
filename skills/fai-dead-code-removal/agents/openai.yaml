@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-dead-code-removal). Safe to delete or edit.
 interface:
   display_name: "Dead Code Removal"
-  short_description: "Identify and remove dead code paths in Python/TypeScript applications with…"
-  default_prompt: "Identify and remove dead code paths in Python/TypeScript applications with automated tooling"
+  short_description: "Identify and remove dead code in Python/TypeScript — unused exports…"
+  default_prompt: "Identify and remove dead code in Python/TypeScript — unused exports, unreachable branches, and orphaned files, verified by tooling"

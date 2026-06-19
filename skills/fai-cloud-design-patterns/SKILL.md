@@ -1,6 +1,6 @@
 ---
 name: fai-cloud-design-patterns
-description: Apply cloud design patterns (bulkhead, retry, circuit breaker, CQRS) for AI workloads.
+description: Apply cloud design patterns to AI workloads — bulkhead, retry with backoff, circuit breaker, CQRS, and the saga pattern. Use this skill when hardening resilience, designing distributed services, or fixing cascading failures — even if the user only says "make this more reliable".
 ---
 
 # Fai Cloud Design Patterns

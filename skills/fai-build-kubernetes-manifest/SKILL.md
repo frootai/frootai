@@ -1,6 +1,6 @@
 ﻿---
 name: fai-build-kubernetes-manifest
-description: 'Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.'
+description: Generate Kubernetes manifests for AI workloads — GPU scheduling, health/readiness probes, autoscaling, resource limits, and rollout strategy. Use this skill when deploying to AKS/K8s, scheduling GPU pods, or configuring autoscaling — even if the user only says "deploy this to Kubernetes".
 ---
 
 # Fai Build Kubernetes Manifest

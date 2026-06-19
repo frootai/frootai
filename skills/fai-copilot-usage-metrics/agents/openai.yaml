@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-copilot-usage-metrics). Safe to delete or edit.
 interface:
   display_name: "Copilot Usage Metrics"
-  short_description: "Track Copilot usage metrics for cost attribution, productivity analysis, and…"
-  default_prompt: "Track Copilot usage metrics for cost attribution, productivity analysis, and adoption monitoring"
+  short_description: "Track GitHub Copilot usage metrics — seat utilization, acceptance rate, cost…"
+  default_prompt: "Track GitHub Copilot usage metrics — seat utilization, acceptance rate, cost attribution, and adoption trends"

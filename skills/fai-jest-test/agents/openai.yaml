@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-jest-test). Safe to delete or edit.
 interface:
   display_name: "Jest Test"
-  short_description: "Write Jest tests for JavaScript/TypeScript applications."
-  default_prompt: "Write Jest tests for JavaScript/TypeScript applications"
+  short_description: "Write Jest tests for JavaScript/TypeScript — unit and integration specs…"
+  default_prompt: "Write Jest tests for JavaScript/TypeScript — unit and integration specs, mocking, async assertions, and coverage"
