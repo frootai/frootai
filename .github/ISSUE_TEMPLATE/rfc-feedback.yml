@@ -1,0 +1,119 @@
+name: "📜 FAI Protocol v1.0 RFC Feedback"
+description: Structured feedback for the FAI Protocol v1.0 RFC (open through T+60 days of launch)
+title: "[RFC v1.0] <one-line summary of your concern>"
+labels: ["rfc-v1.0"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for engaging with the v1.0 RFC
+
+        **Before you file:** please skim the existing [RFC workspace document](https://github.com/frootai/frootai/blob/main/fai-protocol/RFC-v1.0.md) and the [Discussions thread](https://github.com/frootai/frootai/discussions). Your concern may already be tracked there (CONCERN-001 … CONCERN-NNN).
+
+        **Founder triage SLA:** 7 days (must-fix / will-defer / won't-do). Every comment gets a verdict — including critical ones.
+
+        **What's in-scope for v1.0:** editorial fixes, clarifying undefined behaviour, tightening loose specs, adding non-breaking optional fields, defining the URI migration. See RFC-v1.0.md §1.1.
+
+        **What's out of scope (defer to v2 RFC):** new primitive types beyond the current 9, new WAF pillars, reorganising top-level manifest keys, replacing semver, replacing MIT.
+
+  - type: input
+    id: spec-section
+    attributes:
+      label: Spec section
+      description: Which exact section of the v0.9-rc1 spec does this concern? (e.g., "§3.4 Guardrails Section", "Appendix B", "VERSIONING.md §3")
+      placeholder: "§3.4 Guardrails Section"
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+      description: Clear description of the concern. What's broken, missing, ambiguous, or wrong?
+      placeholder: |
+        The spec says X, but in practice [evidence] suggests Y because Z.
+        Specifically, the example in §N.M shows behaviour that contradicts the requirement at §A.B.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed change
+      description: |
+        Concrete proposal (NOT "this is unclear" — "rename X to Y because Z" or "add §N.M.1 with the following text: ...").
+        If you have spec text ready, paste it here. Otherwise describe the intended change precisely.
+      placeholder: |
+        Add §3.4.1 "Custom Guardrails":
+        > `guardrails.custom` is an optional object mapping `string → { threshold: number, comparator: "≥"|"≤"|"=", description: string }`. Engines MUST report unrecognised custom guardrails as "skipped" (not error).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: compat
+    attributes:
+      label: Backward-compatibility assessment
+      description: Is this change additive, breaking, or pure editorial?
+      options:
+        - "Additive (new optional field / new enum value / new section — existing manifests still valid)"
+        - "Editorial (typo, clarification, no behaviour change)"
+        - "Breaking (existing valid manifests would become invalid — requires v2 deferral)"
+        - "Unclear — please advise"
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / counter-examples
+      description: |
+        Real-world plays this affects, links to your own implementation, conformance failures, or other concrete grounding.
+        Optional but strongly preferred — evidence speeds up triage from 7 days to often 24h.
+      placeholder: |
+        - Tried this manifest: [link or snippet]
+        - Engine reported: [error / unexpected behaviour]
+        - Workaround: [what we did instead]
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity (your judgement)
+      description: How strongly do you feel this needs to land in v1.0?
+      options:
+        - "MUST-FIX before v1.0 GA (blocking)"
+        - "SHOULD-FIX (important but not a blocker)"
+        - "NICE-TO-HAVE (defer to v1.1 is fine)"
+        - "I'm just curious / question, not a defect"
+    validations:
+      required: true
+
+  - type: input
+    id: affiliation
+    attributes:
+      label: Affiliation (optional)
+      description: Helps the founder understand which community is represented. Disclose only what you're comfortable disclosing.
+      placeholder: "e.g. independent dev / Acme Corp platform team / Framework X maintainer"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: endorse
+    attributes:
+      label: Endorsement willingness (optional)
+      description: v1.0 GA requires 3+ public endorsements. If you're willing, you can opt in here — founder will follow up if accepted.
+      options:
+        - label: "I'd be open to being a public endorser of v1.0 if my concerns are resolved"
+          required: false
+        - label: "Quote me publicly with attribution (founder will draft + send for approval before posting)"
+          required: false
+
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: Code of Conduct
+      description: All RFC participants follow the FrootAI Code of Conduct.
+      options:
+        - label: "I have read and agree to the [Code of Conduct](https://github.com/frootai/frootai/blob/main/CODE_OF_CONDUCT.md)"
+          required: true

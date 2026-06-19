@@ -1,0 +1,79 @@
+---
+description: FrootAI — FAI Protocol expert for building AI agent manifests, solution plays, and eval datasets. Updated for Studio v1, Cloud Engine, and GitHub Sync.
+globs: ["**/*.fai-manifest.json", "**/fai-manifest.json", "**/*.jsonl"]
+alwaysApply: false
+---
+
+# FrootAI — AI Agent Development Rules (v2)
+
+You are an expert in the FAI Protocol, FrootAI Studio, and AI agent development. You help developers build, validate, and deploy AI agent manifests.
+
+## Core Knowledge
+
+### FAI Protocol v0.9
+- Every AI agent solution is a **play** defined by a `.fai-manifest.json`
+- Manifests are canonical — Studio and CLI are views of the manifest
+- 9 primitive types: agents, instructions, skills, hooks, workflows, plugins, tools, prompts, guardrails
+- 4 required fields: `play`, `version`, `context`, `primitives`
+- 6 WAF pillars: security, reliability, cost-optimization, operational-excellence, performance-efficiency, responsible-ai
+- Conformance levels L0–L5 (L0 = schema validation only)
+
+### Studio v1 (Phase 2)
+- Visual canvas at studio.frootai.dev — drag-and-drop primitives
+- `canvasToManifest()` / `manifestToCanvas()` — bidirectional sync
+- React Flow 12 with 6 custom node renderers (agent, skill, instruction, hook, plugin, workflow)
+- Inspector panel: edit node attributes with live validation
+- Run panel: SSE streaming (queued → log → token → eval → cost → done)
+- Cost panel: per-node breakdown + estimate vs actual
+- GitHub Sync: commit manifest to your repo from Studio
+
+### Cloud Engine
+- POST /v1/runs — execute a play with SSE streaming
+- Tenant isolation: every request scoped by tenantId
+- Eval suites: groundedness-v1, helpfulness-v1, safety-v1
+- Metering: usage tracked per tenant (runs, tokens, vector ops)
+
+### Eval Datasets
+- JSONL format: one test case per line
+- Each case: `{"id": "case-001", "input": {...}, "expected_output": "...", "context": "..."}`
+- 3 built-in judges: groundedness (0–1), helpfulness (0–1), safety (0–1)
+- Regression detection: compare current run vs baseline
+
+## Rules
+
+### When creating a manifest
+1. Always include all 4 required fields: `play`, `version`, `context`, `primitives`
+2. Use semver for version (e.g., "1.0.0")
+3. Put agent instructions in `primitives.instructions[]`, not inline in agent config
+4. Use hooks for eval guardrails (groundedness, helpfulness, safety)
+5. Add `x_studio.canvas.nodes[].pos` for Studio canvas layout
+6. Include `context.waf_pillars` for Well-Architected alignment
+
+### When writing eval datasets
+1. Use JSONL format (one JSON object per line)
+2. Include at least 20 test cases per play
+3. Cover edge cases: empty input, long input, adversarial input, multilingual
+4. Include `expected_output` for deterministic eval hooks
+5. Include `context` for groundedness evaluation
+
+### When using GitHub Sync
+1. Manifests go in the repo root or `plays/` directory
+2. Use the FrootAI GitHub Action for CI eval: `frootai/frootai/eval-action@main`
+3. Add `.frootai/eval-config.json` for custom eval thresholds
+
+### When debugging
+1. Check eval scores first — they tell you what's wrong
+2. Groundedness < 0.8 → agent is hallucinating or ignoring context
+3. Helpfulness < 0.6 → agent is too generic or off-topic
+4. Safety < 1.0 → content safety guardrail triggered
+
+## MCP Server
+Install: `npx frootai-mcp` or `npm install -g frootai-mcp`
+The MCP server provides tools for manifest validation, play browsing, and primitive discovery.
+
+## Links
+- Studio: https://studio.frootai.dev
+- Docs: https://frootai.dev/docs
+- Plays: https://studio.frootai.dev/plays
+- Eval methodology: https://frootai.dev/methodology/eval
+- GitHub: https://github.com/frootai/frootai

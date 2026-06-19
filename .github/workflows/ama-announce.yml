@@ -1,0 +1,119 @@
+name: AMA Announce
+
+# Posts AMA reminders to Discord #announcements at 7 days and 24 hours before
+# each Monthly AMA. Runs daily at 09:00 UTC.
+# Ideology: PRD-008 §5.7 — AMA announced 7 days before.
+# PB-CM principle 5 — founder shows up; the bot makes sure the community knows.
+# Tracker: P1.6.009
+
+on:
+  schedule:
+    # Daily at 09:00 UTC — checks if an AMA is 7 days or 1 day away.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      force_date:
+        description: 'Force announce for a specific AMA date (YYYY-MM-DD) for testing'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    name: AMA reminders
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and announce upcoming AMAs
+        uses: actions/github-script@v7
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ANNOUNCEMENTS_WEBHOOK }}
+        with:
+          script: |
+            const webhook = process.env.DISCORD_WEBHOOK;
+            if (!webhook) {
+              core.warning('DISCORD_ANNOUNCEMENTS_WEBHOOK secret not set — skipping AMA announce.');
+              return;
+            }
+
+            // AMA schedule — first Thursday of each month, 17:00 CEST (15:00 UTC)
+            const AMA_SCHEDULE = [
+              {
+                date: '2026-06-04',
+                theme: 'How FrootAI started — protocol origins, first 100 plays, and what surprised us',
+              },
+              {
+                date: '2026-07-02',
+                theme: 'Building in public — Studio, Cloud beta, and the community roadmap',
+              },
+              {
+                date: '2026-08-06',
+                theme: 'Phase 1 retro — what worked, what didn\'t, what\'s next',
+              },
+            ];
+
+            const now = new Date();
+            const todayStr = now.toISOString().slice(0, 10);
+
+            // Allow manual override for testing
+            const forceDate = '${{ inputs.force_date }}';
+
+            for (const ama of AMA_SCHEDULE) {
+              const amaDate = new Date(ama.date + 'T15:00:00Z');
+              const diffMs = amaDate.getTime() - now.getTime();
+              const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+              const shouldAnnounce7d = diffDays === 7;
+              const shouldAnnounce1d = diffDays === 1;
+              const forced = forceDate === ama.date;
+
+              if (!shouldAnnounce7d && !shouldAnnounce1d && !forced) continue;
+
+              const isReminder = shouldAnnounce1d;
+              const friendlyDate = new Date(ama.date + 'T12:00:00Z')
+                .toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+              const embed = {
+                title: isReminder
+                  ? '🎤 Monthly AMA — Tomorrow!'
+                  : '📅 Monthly AMA — Save the Date',
+                description: [
+                  `**${friendlyDate}** · 17:00 CEST (15:00 UTC) · 60 min`,
+                  '',
+                  `> **Theme:** ${ama.theme}`,
+                  '',
+                  isReminder
+                    ? '⏰ **Tomorrow on Discord stage.** Last chance to submit your questions!'
+                    : '💬 Submit your questions now in the **#ama-with-founder** thread — pinned in the channel.',
+                  '',
+                  '📅 [Add to calendar](https://frootai.dev/monthly-ama.ics) · 🌐 [Events page](https://frootai.dev/events)',
+                  '',
+                  'Ask anything — the protocol, the roadmap, pricing, hiring, or what went wrong this month. Nothing is off-limits.',
+                ].join('\n'),
+                color: isReminder ? 0xf59e0b : 0x22c55e, // amber for reminder, green for 7-day
+                timestamp: new Date().toISOString(),
+                footer: {
+                  text: 'FrootAI Monthly AMA · Recording posted to YouTube within 24h',
+                },
+              };
+
+              const body = JSON.stringify({
+                username: 'FrootAI Events',
+                avatar_url: 'https://frootai.dev/logo.png',
+                embeds: [embed],
+              });
+
+              const resp = await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body,
+              });
+
+              if (!resp.ok) {
+                core.setFailed(`Discord webhook failed for ${ama.date}: ${resp.status} ${resp.statusText}`);
+              } else {
+                const label = isReminder ? '24h reminder' : '7-day notice';
+                core.info(`📢 AMA ${label} posted for ${ama.date}: ${ama.theme}`);
+              }
+            }

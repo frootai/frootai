@@ -1,6 +1,10 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "💬 Discussions"
+  - name: "� FAI Protocol v1.0 RFC"
+    url: https://github.com/frootai/frootai/blob/main/fai-protocol/RFC-v1.0.md
+    about: Read the structured RFC workspace before filing spec feedback (open through T+60 days)  - name: "❓ RFC FAQ (20 Q&A)"
+    url: https://github.com/frootai/frootai/blob/main/frootai-blueprint/content/p1.2-protocol-rfc/03-rfc-faq.md
+    about: Common questions about licence, comparisons (MCP/AG-UI/frameworks), conformance, governance  - name: "�💬 Discussions"
     url: https://github.com/frootai/frootai/discussions
     about: Ask questions and share ideas with the community
   - name: "📖 Documentation"

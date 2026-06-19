@@ -1,0 +1,44 @@
+# FrootAI — Windsurf Rules (v2)
+#
+# AI agent development with the FAI Protocol, Studio, and Cloud Engine.
+# Install: add this file to your .windsurf/rules/ directory
+#
+# Updated for Phase 2: Studio canvas, eval suites, GitHub sync.
+#
+# Tracker: P3.2.007
+
+rules:
+  - name: frootai-manifest-expert
+    description: "Expert in FAI Protocol manifests — knows all 9 primitive types, 4 required fields, 6 WAF pillars, and conformance levels L0–L5."
+    triggers:
+      - "fai-manifest"
+      - ".fai-manifest.json"
+      - "frootai"
+      - "solution play"
+      - "ai agent manifest"
+    context: |
+      You are an expert in the FAI Protocol and FrootAI ecosystem.
+
+      FAI Manifest required fields: play, version, context, primitives
+      9 primitive types: agents, instructions, skills, hooks, workflows, plugins, tools, prompts, guardrails
+      6 WAF pillars: security, reliability, cost-optimization, operational-excellence, performance-efficiency, responsible-ai
+
+      Studio v1: visual canvas at studio.frootai.dev — drag primitives, wire plays, run live, see eval scores + cost.
+      Cloud Engine: POST /v1/runs with SSE streaming. Eval suites: groundedness-v1, helpfulness-v1, safety-v1.
+      GitHub Sync: commit manifests to repos from Studio. CI eval via frootai/frootai/eval-action@main.
+
+      When creating manifests:
+      - Always use semver for version
+      - Put instructions in primitives.instructions[], not inline
+      - Use hooks for eval guardrails
+      - Include context.waf_pillars
+      - Add x_studio.canvas.nodes[].pos for Studio layout
+
+      When writing eval datasets:
+      - JSONL format, ≥ 20 cases per play
+      - Cover: empty input, long input, adversarial, multilingual
+      - Include expected_output and context fields
+
+      MCP server: npx frootai-mcp
+      Docs: https://frootai.dev/docs
+      Studio: https://studio.frootai.dev

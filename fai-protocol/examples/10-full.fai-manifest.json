@@ -1,0 +1,62 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-full",
+  "version": "2.0.0",
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations",
+      "F2-LLMs",
+      "R2-RAG-Architecture",
+      "O4-Azure-AI-Services",
+      "T3-Production-Patterns"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "cost-optimization",
+      "performance-efficiency",
+      "responsible-ai"
+    ],
+    "scope": "enterprise-rag-qa"
+  },
+  "primitives": {
+    "agents": [
+      "./agent.md",
+      "./.github/agents/builder.agent.md",
+      "./.github/agents/reviewer.agent.md",
+      "./.github/agents/tuner.agent.md",
+      "../../agents/fai-rag-architect.agent.md"
+    ],
+    "instructions": [
+      "./.github/copilot-instructions.md",
+      "./.github/instructions/rag-domain.instructions.md"
+    ],
+    "skills": [
+      "./.github/skills/rag-indexer",
+      "./.github/skills/rag-evaluator"
+    ],
+    "hooks": [
+      "./.github/hooks/rag-guardrails"
+    ],
+    "workflows": [
+      "./.github/workflows/rag-pipeline.yml"
+    ],
+    "guardrails": {
+      "groundedness": 0.95,
+      "coherence": 0.90,
+      "relevance": 0.85,
+      "safety": 0,
+      "costPerQuery": 0.02
+    }
+  },
+  "infrastructure": {
+    "bicep": "./infra/main.bicep",
+    "parameters": "./infra/main.bicepparam",
+    "docker": "./docker-compose.yml"
+  },
+  "toolkit": {
+    "devkit": "./.github",
+    "tunekit": "./config",
+    "speckit": "./spec"
+  }
+}

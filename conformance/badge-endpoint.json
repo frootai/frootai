@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "label": "FAI L0",
+  "message": "passing 10/10",
+  "color": "brightgreen",
+  "cacheSeconds": 300,
+  "fai": {
+    "suite": "conformance-v0.9-rc1",
+    "protocol": "v0.9-rc1",
+    "elapsedMs": 17,
+    "generatedAt": "2026-05-22T16:46:33.475Z"
+  }
+}

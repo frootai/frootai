@@ -1,0 +1,19 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-guardrails",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["R2-RAG-Architecture", "T2-Responsible-AI"],
+    "waf": ["responsible-ai", "cost-optimization"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "guardrails": {
+      "groundedness": 0.95,
+      "coherence": 0.90,
+      "relevance": 0.85,
+      "safety": 0,
+      "costPerQuery": 0.02
+    }
+  }
+}

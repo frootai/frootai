@@ -1,0 +1,102 @@
+name: First-PR Celebrate
+
+# Posts a celebration message to Discord #announcements when a first-time
+# contributor's PR is merged.
+# Ideology: PB-CM community playbook — "first-PR experience must be magical".
+# G.012 attribution: contributor named in the celebration post.
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  pull-requests: read
+  issues: read
+
+jobs:
+  celebrate:
+    name: Celebrate first-time contributor
+    runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(toJSON(github.event.pull_request.labels.*.name), 'first-time-contributor')
+    steps:
+      - name: Post to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ANNOUNCEMENTS_WEBHOOK }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const webhook = process.env.DISCORD_WEBHOOK;
+            if (!webhook) {
+              core.warning('DISCORD_ANNOUNCEMENTS_WEBHOOK secret not set — skipping celebration post.');
+              return;
+            }
+
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            const prTitle = pr.title;
+            const prUrl = pr.html_url;
+            const repoName = context.repo.repo;
+
+            const body = JSON.stringify({
+              username: 'FrootAI Bot',
+              avatar_url: 'https://frootai.dev/logo.png',
+              embeds: [{
+                title: '🎉 First PR merged!',
+                description: [
+                  `**[@${author}](https://github.com/${author})** just landed their first contribution to **${repoName}**!`,
+                  '',
+                  `> **${prTitle}**`,
+                  `> ${prUrl}`,
+                  '',
+                  'Thanks for joining the FrootAI build — from the roots to the fruits. 🌱🍎',
+                ].join('\n'),
+                color: 0x22c55e, // green-500
+                timestamp: new Date().toISOString(),
+              }],
+            });
+
+            const resp = await fetch(webhook, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body,
+            });
+
+            if (!resp.ok) {
+              core.setFailed(`Discord webhook failed: ${resp.status} ${resp.statusText}`);
+            } else {
+              core.info(`🎉 Celebration posted for @${author}'s first PR.`);
+            }
+
+      - name: Add celebration comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: [
+                `## 🎉 Congratulations, @${author} — your first PR is merged!`,
+                '',
+                'You are now part of the FrootAI build. A few things to celebrate:',
+                '',
+                '- 🏆 You\'ve earned the **`first-time-contributor`** label on your profile here.',
+                '- 📣 A shout-out has been posted in our Discord `#announcements` channel.',
+                '- 📰 You\'ll be mentioned in this week\'s **Friday Letter** newsletter.',
+                '',
+                '### What\'s next?',
+                '',
+                '- 🌟 Browse more [`good first issue`](https://github.com/frootai/frootai/labels/good%20first%20issue) tasks.',
+                '- 🏅 Learn about the [Champions Program](https://github.com/frootai/frootai/blob/main/CHAMPIONS.md) — hand-picked from contributors like you.',
+                '- 💬 Join us on [Discord](https://frootai.dev/community) — we\'d love to get to know you.',
+                '',
+                'Thank you. Every contribution shapes what FrootAI becomes. 🌱',
+                '',
+                '— The FrootAI maintainers',
+              ].join('\n'),
+            });

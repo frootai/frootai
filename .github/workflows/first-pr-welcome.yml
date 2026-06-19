@@ -1,0 +1,96 @@
+name: First-PR Welcome
+
+# Welcomes a contributor's first PR within 60 seconds with a warm, brand-on message.
+# Ideology: PB-CM community playbook — "first-PR experience must be magical".
+# G.011 LOVE formula applied to onboarding.
+
+on:
+  pull_request_target:
+    types: [opened]
+  issues:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+
+jobs:
+  welcome:
+    name: Warm welcome
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet first-time PR contributor
+        if: github.event_name == 'pull_request_target'
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-message: |
+            ## 🌱 Welcome to FrootAI, @${{ github.event.pull_request.user.login }} — and thank you.
+
+            This is your **first pull request** here. That means a lot to us.
+
+            A maintainer will review your change within **24 hours** (often much faster). While you wait:
+
+            ### A few things to know
+
+            - 🎯 **CI will run automatically.** Watch the checks below; if anything fails, click into the log — error messages are written to help, not blame.
+            - 📖 We follow the [CONTRIBUTING.md](https://github.com/frootai/frootai/blob/main/CONTRIBUTING.md) — give it a quick skim if you haven't.
+            - 🛡️ We are **kind, always**. See the [Code of Conduct](https://github.com/frootai/frootai/blob/main/CODE_OF_CONDUCT.md).
+            - 💬 **Stuck or confused?** Ping us on [Discord](https://frootai.dev/community) or drop a comment here — no question is too small.
+            - 🏆 Your first merged PR earns the **`first-time-contributor`** label and a shout-out in our weekly Friday Letter.
+
+            ### Quick checklist (most PRs pass these)
+
+            - [ ] CI is green (or you've noted why it's not yet)
+            - [ ] A short description of *what* and *why* in the PR body
+            - [ ] If you added a primitive: run `npm run validate:primitives` locally
+            - [ ] If you touched a public API: a CHANGELOG entry in Keep-a-Changelog format
+            - [ ] You're OK with [MIT licensing](https://github.com/frootai/frootai/blob/main/LICENSE) of your contribution
+
+            **Thank you for being here.** From the roots to the fruits — every contribution shapes what FrootAI becomes.
+
+            — The FrootAI maintainers
+
+      - name: Greet first-time issue opener
+        if: github.event_name == 'issues'
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            ## 🌱 Welcome, @${{ github.event.issue.user.login }} — thanks for opening your first issue here.
+
+            We've received it and a maintainer will respond within **48 hours**.
+
+            While you wait, a few helpful things:
+
+            - 💬 If this is a question (not a bug), the [Discussions](https://github.com/frootai/frootai/discussions) tab is the right home — feel free to repost there for faster help.
+            - 🛡️ If this is a **security** issue, please follow [SECURITY.md](https://github.com/frootai/frootai/blob/main/SECURITY.md) — do **not** discuss it in this public issue.
+            - 📖 The [ROADMAP](https://github.com/frootai/frootai/blob/main/ROADMAP.md) may answer "is this planned?".
+            - 🤝 Want to fix this yourself? Look for a [`good first issue`](https://github.com/frootai/frootai/labels/good%20first%20issue) label — or comment "I'll take this" and a maintainer will help you scope it.
+
+            **Thank you for engaging.** Issues are how the project gets better.
+
+            — The FrootAI maintainers
+
+      - name: Label first-time PR contributor
+        if: github.event_name == 'pull_request_target'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              per_page: 100,
+            });
+            const author = context.payload.pull_request.user.login;
+            const authoredCount = prs.filter(p => p.user.login === author).length;
+            if (authoredCount <= 1) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['first-time-contributor'],
+              });
+            }

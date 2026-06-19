@@ -1,6 +1,15 @@
-# FAI Protocol — v0.1 Specification
+# FAI Protocol — v0.9-rc1 Specification
 
 > The declarative context-wiring standard for AI primitive orchestration.
+>
+> **This is the canonical FAI Protocol specification.** Versioned permalink: [v0.9-rc1](https://github.com/frootai/frootai/blob/fai-protocol-v0.9-rc1/fai-protocol/README.md) · Latest: [main](./README.md) · Web: [frootai.dev/spec](https://frootai.dev/spec)
+>
+> Companion documents in this directory:
+> - **[VERSIONING.md](./VERSIONING.md)** — semver policy, backward-compat rules, deprecation timeline
+> - **[examples/](./examples/)** — 10 minimal manifest snippets, one per feature
+> - **[../conformance/](../conformance/)** — automated conformance test suite (L0 → L5)
+> - **[../schemas/](../schemas/)** — formal JSON Schemas (Draft-07) for all manifest types
+> - **[../engine/](../engine/)** — reference implementation in Node.js
 
 ## Abstract
 
@@ -10,14 +19,30 @@ The FAI Protocol defines a JSON-based manifest format (`fai-manifest.json`) for 
 
 | Field | Value |
 |-------|-------|
-| Version | 0.1 (Draft) |
-| Date | 2026-04-06 |
+| Version | **0.9-rc1** (Release Candidate) |
+| Date | 2026-05-22 |
 | Authors | FrootAI Contributors |
 | License | MIT |
 | Reference Implementation | [FAI Engine](../engine/) |
-| Validated Against | Solution plays, AI primitives |
+| Conformance Suite | [../conformance/](../conformance/) |
+| Validated Against | 104 solution plays · 862+ primitives |
+| Open RFC | [github.com/frootai/frootai/discussions/rfc-fai-protocol-v1](https://github.com/frootai/frootai/discussions) |
 
-This specification is at **v0.1 (Draft)**. It is implemented by the FAI Engine reference implementation and validated across solution plays comprising agents, instructions, skills, and plugins.
+This specification is **v0.9 Release Candidate 1**. It is feature-complete for v1.0 and is now in the public comment period. We are seeking endorsements + structured feedback from framework, LLM, and eval-tooling communities before declaring v1.0 GA. See [VERSIONING.md](./VERSIONING.md) for the road to v1.0.
+
+## What changed in v0.9-rc1 (vs v0.1 Draft)
+
+- ➕ **Conformance test suite** added at [`../conformance/`](../conformance/) (5 L0 tests covering parse, schema, paths, context resolution, guardrail evaluation).
+- ➕ **VERSIONING policy** formalised in [VERSIONING.md](./VERSIONING.md): semver across protocol, schema, and manifest; 90-day deprecation rule; v1/v2 parallel-track plan.
+- ➕ **10 minimal examples** at [`examples/`](./examples/), each demonstrating exactly one feature for fast learning + copy-paste authoring.
+- ➕ **Schema URI versioning** clarified: `$schema` references will become version-locked at v1.0 (e.g., `https://frootai.dev/schemas/v1/fai-manifest.schema.json`).
+- ➕ **Marketplace registry schema** ([`../schemas/marketplace.schema.json`](../schemas/marketplace.schema.json), v1.1) now formally locked.
+- 🔄 **Status** moved from "Draft" → "Release Candidate"; clearer governance via GitHub Discussions.
+- 🔄 **Knowledge module ID list** stays the same (16 modules); custom `X*` IDs remain allowed.
+- ✏️ Clarified path traversal rejection in §10.
+- ✏️ Section 11 (Versioning) now references VERSIONING.md as the source of truth.
+
+No breaking changes to the manifest schema or fai-context schema in v0.9-rc1 vs v0.1. Existing plays remain valid.
 
 ---
 
@@ -510,13 +535,17 @@ A conformant implementation SHOULD:
 
 ## 11. Versioning
 
-The FAI Protocol uses semantic versioning. The `version` field in the manifest refers to the play's version, not the protocol version. The protocol version is identified by the `$schema` URI.
+The FAI Protocol uses semantic versioning. The `version` field in the manifest refers to the play's version, not the protocol version. The protocol version is identified by the `$schema` URI (version-locked from v1.0 onward).
 
 | Protocol Version | Schema URI | Status |
 |-----------------|------------|--------|
-| 0.1 | `https://frootai.dev/schemas/fai-manifest.schema.json` | Draft |
+| 0.1 | `https://frootai.dev/schemas/fai-manifest.schema.json` | Draft (superseded) |
+| **0.9-rc1** | `https://frootai.dev/schemas/fai-manifest.schema.json` | **Release Candidate** |
+| 1.0 *(planned)* | `https://frootai.dev/schemas/v1/fai-manifest.schema.json` | Pending RFC + endorsements |
 
 Breaking changes to the schema (removing required fields, changing field types) will increment the major protocol version. Additive changes (new optional fields) will increment the minor version.
+
+**Full policy** — including deprecation timeline (90-day notice), parallel v1/v2 schema hosting, conformance level versioning, and marketplace schema versioning — is documented in [VERSIONING.md](./VERSIONING.md).
 
 ---
 

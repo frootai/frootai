@@ -1,0 +1,16 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-hooks",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["F1-GenAI-Foundations", "T2-Responsible-AI"],
+    "waf": ["security", "responsible-ai"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"],
+    "hooks": [
+      "./hooks/secret-scanner",
+      "./hooks/cost-tracker"
+    ]
+  }
+}

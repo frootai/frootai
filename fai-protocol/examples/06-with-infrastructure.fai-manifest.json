@@ -1,0 +1,18 @@
+{
+  "$schema": "https://frootai.dev/schemas/fai-manifest.schema.json",
+  "play": "99-example-infra",
+  "version": "1.0.0",
+  "context": {
+    "knowledge": ["O4-Azure-AI-Services", "O5-Infrastructure"],
+    "waf": ["security", "reliability", "operational-excellence"]
+  },
+  "primitives": {
+    "agents": ["./agent.md"]
+  },
+  "infrastructure": {
+    "bicep": "./infra/main.bicep",
+    "parameters": "./infra/main.bicepparam",
+    "terraform": "./infra/main.tf",
+    "docker": "./docker-compose.yml"
+  }
+}

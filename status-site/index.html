@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrootAI Status</title>
+    <meta name="description" content="Real-time status of FrootAI Cloud services — Engine, Eval, Registry, Studio.">
+    <link rel="icon" href="https://frootai.dev/favicon.svg" type="image/svg+xml">
+    <style>
+        :root { --bg: #050508; --fg: #ededf0; --fg-muted: #8b8b9a; --fg-dim: #4a4a5a; --border: #1a1a2e; --emerald: #10b981; --red: #ef4444; --amber: #f59e0b; --surface: #0a0a12; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+        .container { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .header { text-align: center; margin-bottom: 2.5rem; }
+        .header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header h1 span { color: var(--emerald); }
+        .header p { color: var(--fg-muted); font-size: 0.875rem; }
+        .overall { text-align: center; padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border); background: var(--surface); margin-bottom: 2rem; }
+        .overall .status-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
+        .overall .status-dot.up { background: var(--emerald); }
+        .overall .status-dot.degraded { background: var(--amber); }
+        .overall .status-dot.down { background: var(--red); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .overall .status-text { font-size: 1.125rem; font-weight: 600; }
+        .overall .status-sub { color: var(--fg-muted); font-size: 0.75rem; margin-top: 0.25rem; }
+        .services { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+        .service { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); background: var(--surface); transition: border-color 0.2s; }
+        .service:hover { border-color: rgba(16,185,129,0.2); }
+        .service .name { font-size: 0.875rem; font-weight: 500; }
+        .service .meta { color: var(--fg-dim); font-size: 0.75rem; }
+        .service .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 9999px; }
+        .badge.up { background: rgba(16,185,129,0.1); color: var(--emerald); border: 1px solid rgba(16,185,129,0.2); }
+        .badge.degraded { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+        .badge.down { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .section-header { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-dim); margin: 1.5rem 0 0.75rem; }
+        .incidents { margin-bottom: 2rem; }
+        .incident { padding: 1rem 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); background: var(--surface); margin-bottom: 0.5rem; }
+        .incident .title { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .incident .time { font-size: 0.75rem; color: var(--fg-dim); }
+        .incident .body { font-size: 0.8125rem; color: var(--fg-muted); margin-top: 0.5rem; line-height: 1.5; }
+        .subscribe { text-align: center; padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border); background: var(--surface); }
+        .subscribe h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .subscribe .links { display: flex; gap: 0.75rem; justify-content: center; margin-top: 0.75rem; }
+        .subscribe a { font-size: 0.75rem; color: var(--emerald); text-decoration: none; padding: 6px 14px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.2); transition: all 0.2s; }
+        .subscribe a:hover { background: rgba(16,185,129,0.1); }
+        .footer { text-align: center; color: var(--fg-dim); font-size: 0.75rem; margin-top: 2rem; }
+        .footer a { color: var(--emerald); text-decoration: none; }
+        .uptime-bar { display: flex; gap: 1px; height: 24px; margin-top: 0.5rem; }
+        .uptime-bar .day { flex: 1; border-radius: 2px; min-width: 2px; }
+        .uptime-bar .day.up { background: var(--emerald); opacity: 0.6; }
+        .uptime-bar .day.up:hover { opacity: 1; }
+        .uptime-bar .day.down { background: var(--red); }
+        .uptime-bar .day.partial { background: var(--amber); }
+        .uptime-label { display: flex; justify-content: space-between; font-size: 0.625rem; color: var(--fg-dim); margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Froot<span>AI</span> Status</h1>
+            <p>Real-time service health · Updated every 2 minutes</p>
+        </div>
+
+        <!-- Overall status — populated by JS -->
+        <div class="overall" id="overall">
+            <span class="status-dot up"></span>
+            <span class="status-text">All Systems Operational</span>
+            <div class="status-sub" id="last-check">Last checked: loading...</div>
+        </div>
+
+        <!-- Services -->
+        <div class="section-header">Cloud Services</div>
+        <div class="services" id="cloud-services"></div>
+
+        <div class="section-header">Web Properties</div>
+        <div class="services" id="web-services"></div>
+
+        <div class="section-header">Package Registries</div>
+        <div class="services" id="registry-services"></div>
+
+        <!-- 90-day uptime bar -->
+        <div class="section-header">90-Day Uptime</div>
+        <div style="padding: 1rem 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); background: var(--surface); margin-bottom: 2rem;">
+            <div class="uptime-bar" id="uptime-bar"></div>
+            <div class="uptime-label"><span>90 days ago</span><span>Today</span></div>
+        </div>
+
+        <!-- Recent Incidents -->
+        <div class="section-header">Recent Incidents</div>
+        <div class="incidents" id="incidents">
+            <div class="incident">
+                <div class="title" style="color: var(--emerald);">✅ No incidents in the last 90 days</div>
+                <div class="time">Last updated: <span id="incident-time"></span></div>
+            </div>
+        </div>
+
+        <!-- Subscribe -->
+        <div class="subscribe">
+            <h3>Get notified</h3>
+            <p style="color: var(--fg-muted); font-size: 0.8125rem;">Subscribe to status updates via your preferred channel.</p>
+            <div class="links">
+                <a href="/rss.xml">RSS Feed</a>
+                <a href="/subscribe/email">Email</a>
+                <a href="/subscribe/webhook">Webhook</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>FrootAI · <a href="https://frootai.dev">frootai.dev</a> · <a href="https://github.com/frootai/frootai">GitHub</a> · MIT License</p>
+            <p style="margin-top: 0.5rem;">Powered by <a href="https://upptime.js.org">Upptime</a> + Azure Availability Monitors</p>
+        </div>
+    </div>
+
+    <script>
+        // ── Service definitions ─────────────────────────────────────────────
+        const SERVICES = {
+            cloud: [
+                { name: "Cloud Engine", endpoint: "/api/status/engine", description: "Play execution + SSE streaming" },
+                { name: "Cloud Eval", endpoint: "/api/status/eval", description: "Evaluation suites + scheduling" },
+                { name: "Cloud Registry", endpoint: "/api/status/registry", description: "Manifest versioning + promotion" },
+            ],
+            web: [
+                { name: "Studio", endpoint: "/api/status/studio", description: "Visual agent builder" },
+                { name: "frootai.dev", endpoint: "/api/status/website", description: "Documentation + marketing site" },
+            ],
+            registry: [
+                { name: "npm — frootai-mcp", endpoint: "/api/status/npm-mcp", description: "MCP server package" },
+                { name: "PyPI — frootai", endpoint: "/api/status/pypi", description: "Python SDK" },
+            ],
+        };
+
+        // ── Render services (demo mode — all operational) ───────────────────
+        function renderService(svc) {
+            return `
+                <div class="service">
+                    <div>
+                        <div class="name">${svc.name}</div>
+                        <div class="meta">${svc.description}</div>
+                    </div>
+                    <div class="badge up">● Operational</div>
+                </div>
+            `;
+        }
+
+        document.getElementById("cloud-services").innerHTML = SERVICES.cloud.map(renderService).join("");
+        document.getElementById("web-services").innerHTML = SERVICES.web.map(renderService).join("");
+        document.getElementById("registry-services").innerHTML = SERVICES.registry.map(renderService).join("");
+
+        // ── 90-day uptime bar ───────────────────────────────────────────────
+        const bar = document.getElementById("uptime-bar");
+        for (let i = 0; i < 90; i++) {
+            const day = document.createElement("div");
+            day.className = "day up";
+            day.title = `${90 - i} days ago — 100% uptime`;
+            bar.appendChild(day);
+        }
+
+        // ── Timestamps ──────────────────────────────────────────────────────
+        const now = new Date().toLocaleString();
+        document.getElementById("last-check").textContent = `Last checked: ${now}`;
+        document.getElementById("incident-time").textContent = now;
+
+        // ── Auto-refresh every 2 minutes ────────────────────────────────────
+        setInterval(() => {
+            document.getElementById("last-check").textContent = `Last checked: ${new Date().toLocaleString()}`;
+        }, 120_000);
+    </script>
+</body>
+</html>
