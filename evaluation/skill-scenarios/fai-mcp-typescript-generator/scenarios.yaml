@@ -1,0 +1,36 @@
+skill: fai-mcp-typescript-generator
+config:
+  language: typescript
+scenarios:
+  - name: official_sdk_stdio_tool
+    prompt: |
+      Build a TypeScript MCP server using the official SDK that exposes a
+      get_weather tool with a zod-validated city parameter, over stdio.
+    expected_patterns:
+      - "@modelcontextprotocol/sdk"
+      - "new McpServer"
+      - "z\\."                       # zod schema validation
+      - "async \\("
+      - "server\\.connect"
+    forbidden_patterns:
+      - ":\\s*any\\b"                # strict types, no any
+      - "require\\("                  # ESM imports, not CommonJS
+    tags: [mcp, typescript, basic]
+    mock_response: |
+      import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+      import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+      import { z } from "zod";
+
+      const server = new McpServer({ name: "weather", version: "1.0.0" });
+
+      server.tool(
+        "get_weather",
+        { city: z.string() },
+        async ({ city }: { city: string }) => {
+          const res = await fetch(`https://api.example.com/weather/${city}`);
+          return { content: [{ type: "text", text: await res.text() }] };
+        },
+      );
+
+      const transport = new StdioServerTransport();
+      await server.connect(transport);

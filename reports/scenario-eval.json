@@ -1,0 +1,187 @@
+{
+  "skills": [
+    {
+      "skill": "fai-aspnet-minimal-api",
+      "passed": 1,
+      "total": 1,
+      "score": 100,
+      "scenarios": [
+        {
+          "name": "minimal_api_health_endpoint",
+          "passed": true,
+          "findings": [
+            {
+              "type": "expected",
+              "pattern": "WebApplication\\.CreateBuilder",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "Map(Get|Post)",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "Results\\.",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "app\\.Run\\(",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": ":\\s*Controller\\b",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "\\[HttpGet\\]",
+              "passed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "skill": "fai-azure-ai-search-index",
+      "passed": 1,
+      "total": 1,
+      "score": 100,
+      "scenarios": [
+        {
+          "name": "vector_index_hnsw_managed_identity",
+          "passed": true,
+          "findings": [
+            {
+              "type": "expected",
+              "pattern": "DefaultAzureCredential",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "VectorSearch",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "HnswAlgorithmConfiguration",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "create_or_update_index",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "AzureKeyCredential\\([\"']",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "admin_key",
+              "passed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "skill": "fai-mcp-python-generator",
+      "passed": 1,
+      "total": 1,
+      "score": 100,
+      "scenarios": [
+        {
+          "name": "fastmcp_async_tool_server",
+          "passed": true,
+          "findings": [
+            {
+              "type": "expected",
+              "pattern": "from fastmcp import FastMCP",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "@mcp\\.tool",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "async def ",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "mcp\\.run\\(",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "api_key\\s*=\\s*[\"']",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "requests\\.get",
+              "passed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "skill": "fai-mcp-typescript-generator",
+      "passed": 1,
+      "total": 1,
+      "score": 100,
+      "scenarios": [
+        {
+          "name": "official_sdk_stdio_tool",
+          "passed": true,
+          "findings": [
+            {
+              "type": "expected",
+              "pattern": "@modelcontextprotocol/sdk",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "new McpServer",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "z\\.",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "async \\(",
+              "passed": true
+            },
+            {
+              "type": "expected",
+              "pattern": "server\\.connect",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": ":\\s*any\\b",
+              "passed": true
+            },
+            {
+              "type": "forbidden",
+              "pattern": "require\\(",
+              "passed": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "total_scenarios": 4,
+  "total_passed": 4
+}

@@ -1,0 +1,33 @@
+skill: fai-mcp-python-generator
+config:
+  language: python
+scenarios:
+  - name: fastmcp_async_tool_server
+    prompt: |
+      Build a Python MCP server that exposes a get_weather(city) tool which
+      calls an external weather API and returns JSON.
+    expected_patterns:
+      - "from fastmcp import FastMCP"
+      - "@mcp\\.tool"
+      - "async def "
+      - "mcp\\.run\\("
+    forbidden_patterns:
+      - "api_key\\s*=\\s*[\"']"   # no hardcoded secrets
+      - "requests\\.get"           # use async httpx, not sync requests
+    tags: [mcp, python, basic]
+    mock_response: |
+      from fastmcp import FastMCP
+      import httpx
+
+      mcp = FastMCP("weather")
+
+      @mcp.tool()
+      async def get_weather(city: str) -> dict:
+          """Return current weather for a city."""
+          async with httpx.AsyncClient() as client:
+              resp = await client.get(f"https://api.example.com/weather/{city}")
+              resp.raise_for_status()
+              return resp.json()
+
+      if __name__ == "__main__":
+          mcp.run()

@@ -1,0 +1,27 @@
+skill: fai-aspnet-minimal-api
+config:
+  language: csharp
+scenarios:
+  - name: minimal_api_health_endpoint
+    prompt: |
+      Scaffold an ASP.NET Core Minimal API with a /health endpoint returning a
+      JSON status, using the minimal-hosting model (no MVC controllers).
+    expected_patterns:
+      - "WebApplication\\.CreateBuilder"
+      - "Map(Get|Post)"
+      - "Results\\."
+      - "app\\.Run\\("
+    forbidden_patterns:
+      - ":\\s*Controller\\b"          # minimal API, not MVC controllers
+      - "\\[HttpGet\\]"                # no MVC attributes
+    tags: [dotnet, aspnet, minimal-api]
+    mock_response: |
+      var builder = WebApplication.CreateBuilder(args);
+      builder.Services.AddEndpointsApiExplorer();
+      builder.Services.AddOpenApi();
+
+      var app = builder.Build();
+
+      app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+
+      app.Run();
