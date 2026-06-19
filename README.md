@@ -57,11 +57,36 @@ FrootAI is an intelligent way of packaging skills, knowledge, and the essential 
 ```bash
 npx frootai-mcp@latest                          # MCP Server — add to any AI agent
 npx frootai init                                 # CLI — scaffold a project
+npx skills add frootai/frootai                   # Skills — install FrootAI skills into any agent
 npm install frootai                              # npm SDK — import in Node.js/TS
 pip install frootai                              # Python SDK
 code --install-extension frootai.frootai-vscode  # VS Code Extension
 docker run -i ghcr.io/frootai/frootai-mcp        # Docker — zero install
 ```
+
+<details>
+<summary><strong>Install skills into any agent (skills.sh)</strong></summary>
+
+FrootAI's skills follow the [Agent Skills](https://agentskills.io) open standard and are installable
+into 70+ agents (GitHub Copilot, Claude Code, Cursor, Codex, Gemini CLI, Windsurf, Goose, and more)
+via the universal [`skills`](https://skills.sh) installer:
+
+```bash
+# Interactive picker — choose the skills you need (avoid context rot; install only what's relevant)
+npx skills add frootai/frootai
+
+# Install a specific skill into a specific agent, non-interactively
+npx skills add frootai/frootai --skill fai-azure-cosmos-modeling --agent github-copilot --yes
+
+# Generate a one-off prompt for a skill without installing it
+npx skills use frootai/frootai@fai-mcp-python-generator
+```
+
+Skills are also browsable as themed bundles in Claude Code via
+`/plugin marketplace add frootai/frootai`, and render as chips with one-click demo prompts in
+VS Code / Codex / Cursor.
+
+</details>
 
 <details>
 <summary><strong>MCP Config (Claude Desktop / VS Code / Cursor)</strong></summary>
