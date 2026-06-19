@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-investor-comms). Safe to delete or edit.
 interface:
   display_name: "GTM Investor Comms"
-  short_description: "Communicate AI value propositions to investors."
-  default_prompt: "Communicate AI value propositions to investors"
+  short_description: "Craft investor communications for AI products — narrative, traction metrics…"
+  default_prompt: "Craft investor communications for AI products — narrative, traction metrics, defensibility, and roadmap framing for decks and updates"

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-git-commit-best-practices). Safe to delete or edit.
 interface:
   display_name: "Git Commit Best Practices"
-  short_description: "Apply conventional commits and meaningful commit messages."
-  default_prompt: "Apply conventional commits and meaningful commit messages"
+  short_description: "Write conventional-commit messages with meaningful scope, body, and footer for…"
+  default_prompt: "Write conventional-commit messages with meaningful scope, body, and footer for clean, automatable git history"

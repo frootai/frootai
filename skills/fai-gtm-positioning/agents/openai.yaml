@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-positioning). Safe to delete or edit.
 interface:
   display_name: "GTM Positioning"
-  short_description: "Define product positioning and competitive differentiation."
-  default_prompt: "Define product positioning and competitive differentiation"
+  short_description: "Define product positioning and competitive differentiation for AI products…"
+  default_prompt: "Define product positioning and competitive differentiation for AI products — category, alternatives, unique value, and proof points"

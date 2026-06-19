@@ -1,6 +1,6 @@
 ---
 name: fai-folder-structure
-description: Establish project folder structure for AI solution plays.
+description: Scaffold a convention-aligned project folder structure for AI solution plays, separating agents, skills, infrastructure, and tests. Use this skill when starting a new project, reorganizing a messy repo, or aligning a codebase to FAI Protocol conventions — even if the user only says "set up the project" or "where should this file go".
 ---
 
 # Fai Folder Structure

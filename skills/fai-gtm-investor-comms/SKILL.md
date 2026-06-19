@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-investor-comms
-description: Communicate AI value propositions to investors.
+description: Craft investor communications for AI products — narrative, traction metrics, defensibility, and roadmap framing for decks and updates. Use this skill when preparing a pitch, board update, or fundraising materials — even if the user only says "investor update" or "pitch deck".
 ---
 
 # Fai Gtm Investor Comms

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-operating-cadence). Safe to delete or edit.
 interface:
   display_name: "GTM Operating Cadence"
-  short_description: "Establish operating cadence for AI product team."
-  default_prompt: "Establish operating cadence for AI product team"
+  short_description: "Establish an operating cadence for an AI product team — planning rituals…"
+  default_prompt: "Establish an operating cadence for an AI product team — planning rituals, metrics reviews, and decision forums on weekly/monthly/quarterly rhythms"

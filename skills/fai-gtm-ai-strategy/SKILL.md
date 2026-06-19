@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-ai-strategy
-description: Define go-to-market strategy for AI products.
+description: Define a go-to-market strategy for AI products — ICP, positioning, pricing, channels, and launch sequencing. Use this skill when planning a launch, entering a new market, or shaping AI commercial strategy — even if the user only says "how do we sell this" or "GTM plan".
 ---
 
 # Fai Gtm Ai Strategy

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-github-pr-review). Safe to delete or edit.
 interface:
   display_name: "GitHub PR Review"
-  short_description: "Execute effective PR reviews with checklists and CI gates."
-  default_prompt: "Execute effective PR reviews with checklists and CI gates"
+  short_description: "Conduct thorough GitHub pull-request reviews using structured checklists, CI…"
+  default_prompt: "Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria"

@@ -1,138 +1,8 @@
 {
-  "mean": 60.1,
+  "mean": 61.3,
   "total": 637,
-  "below_threshold": 467,
+  "below_threshold": 457,
   "skills": [
-    {
-      "name": "fai-folder-structure",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('establish')",
-        "too short (57 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Establish project folder structure for AI solution plays.",
-      "path": "skills\\fai-folder-structure\\SKILL.md"
-    },
-    {
-      "name": "fai-gdpr-compliance",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('ensure')",
-        "too short (57 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Ensure GDPR compliance in AI data processing and storage.",
-      "path": "skills\\fai-gdpr-compliance\\SKILL.md"
-    },
-    {
-      "name": "fai-git-commit-best-practices",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('apply')",
-        "too short (58 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Apply conventional commits and meaningful commit messages.",
-      "path": "skills\\fai-git-commit-best-practices\\SKILL.md"
-    },
-    {
-      "name": "fai-github-pr-review",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('execute')",
-        "too short (58 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Execute effective PR reviews with checklists and CI gates.",
-      "path": "skills\\fai-github-pr-review\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-ai-strategy",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('define')",
-        "too short (45 chars) \u2014 under-specified",
-        "low specificity (5 distinct words)"
-      ],
-      "description": "Define go-to-market strategy for AI products.",
-      "path": "skills\\fai-gtm-ai-strategy\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-enterprise-planning",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('plan')",
-        "too short (47 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Plan enterprise deployments with RFP responses.",
-      "path": "skills\\fai-gtm-enterprise-planning\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-investor-comms",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('communicate')",
-        "too short (47 chars) \u2014 under-specified",
-        "low specificity (4 distinct words)"
-      ],
-      "description": "Communicate AI value propositions to investors.",
-      "path": "skills\\fai-gtm-investor-comms\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-launch",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('execute')",
-        "too short (48 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Execute go-to-market launch plan for AI product.",
-      "path": "skills\\fai-gtm-launch\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-operating-cadence",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('establish')",
-        "too short (48 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Establish operating cadence for AI product team.",
-      "path": "skills\\fai-gtm-operating-cadence\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-positioning",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('define')",
-        "too short (59 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Define product positioning and competitive differentiation.",
-      "path": "skills\\fai-gtm-positioning\\SKILL.md"
-    },
     {
       "name": "fai-guardrails-policy",
       "score": 18,
@@ -5930,6 +5800,60 @@
       "path": "skills\\fai-azure-storage-patterns\\SKILL.md"
     },
     {
+      "name": "fai-gtm-ai-strategy",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('define')"
+      ],
+      "description": "Define a go-to-market strategy for AI products \u2014 ICP, positioning, pricing, channels, and launch sequencing. Use this skill when planning a launch, entering a new market, or shaping AI commercial strategy \u2014 even if the user only says \"how do we sell this\" or \"GTM plan\".",
+      "path": "skills\\fai-gtm-ai-strategy\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-enterprise-planning",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('plan')"
+      ],
+      "description": "Plan enterprise AI deployments and craft RFP/RFI responses \u2014 security questionnaires, rollout phases, and stakeholder maps. Use this skill when pursuing an enterprise deal, answering procurement/security reviews, or scoping a large rollout \u2014 even if the user only mentions \"RFP\", \"enterprise customer\", or \"procurement\".",
+      "path": "skills\\fai-gtm-enterprise-planning\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-investor-comms",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('craft')"
+      ],
+      "description": "Craft investor communications for AI products \u2014 narrative, traction metrics, defensibility, and roadmap framing for decks and updates. Use this skill when preparing a pitch, board update, or fundraising materials \u2014 even if the user only says \"investor update\" or \"pitch deck\".",
+      "path": "skills\\fai-gtm-investor-comms\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-launch",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('execute')"
+      ],
+      "description": "Execute a go-to-market launch plan for an AI product \u2014 messaging, channel sequencing, launch-day checklist, and post-launch metrics. Use this skill when shipping a launch, coordinating announcements, or planning launch timing \u2014 even if the user only says \"we're launching\" or \"launch plan\".",
+      "path": "skills\\fai-gtm-launch\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-operating-cadence",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('establish')"
+      ],
+      "description": "Establish an operating cadence for an AI product team \u2014 planning rituals, metrics reviews, and decision forums on weekly/monthly/quarterly rhythms. Use this skill when setting up team operations, fixing meeting overload, or instituting OKRs/reviews \u2014 even if the user only says \"how should we run the team\".",
+      "path": "skills\\fai-gtm-operating-cadence\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-positioning",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('define')"
+      ],
+      "description": "Define product positioning and competitive differentiation for AI products \u2014 category, alternatives, unique value, and proof points. Use this skill when sharpening messaging, responding to competitors, or writing a positioning statement \u2014 even if the user only says \"how do we stand out\" or \"positioning\".",
+      "path": "skills\\fai-gtm-positioning\\SKILL.md"
+    },
+    {
       "name": "fai-model-comparison-benchmark",
       "score": 85,
       "reasons": [
@@ -6067,6 +5991,34 @@
       "reasons": [],
       "description": "Scaffold reusable Bicep modules with typed parameters, secure defaults, test hooks, and versioning. Use when creating infrastructure modules that follow AVM conventions and need what-if validation before deployment.",
       "path": "skills\\fai-bicep-module-scaffold\\SKILL.md"
+    },
+    {
+      "name": "fai-folder-structure",
+      "score": 100,
+      "reasons": [],
+      "description": "Scaffold a convention-aligned project folder structure for AI solution plays, separating agents, skills, infrastructure, and tests. Use this skill when starting a new project, reorganizing a messy repo, or aligning a codebase to FAI Protocol conventions \u2014 even if the user only says \"set up the project\" or \"where should this file go\".",
+      "path": "skills\\fai-folder-structure\\SKILL.md"
+    },
+    {
+      "name": "fai-gdpr-compliance",
+      "score": 100,
+      "reasons": [],
+      "description": "Review and harden AI data processing and storage for GDPR \u2014 data minimization, consent, right-to-erasure, retention, and cross-border transfer controls. Use this skill when handling EU personal data, building data pipelines, or when the user mentions privacy, PII, consent, or retention \u2014 even if they don't say \"GDPR\" explicitly.",
+      "path": "skills\\fai-gdpr-compliance\\SKILL.md"
+    },
+    {
+      "name": "fai-git-commit-best-practices",
+      "score": 100,
+      "reasons": [],
+      "description": "Write conventional-commit messages with meaningful scope, body, and footer for clean, automatable git history. Use this skill when committing changes, preparing a PR, or configuring commitlint/semantic-release \u2014 even if the user just says \"commit this\" or asks how to phrase a commit.",
+      "path": "skills\\fai-git-commit-best-practices\\SKILL.md"
+    },
+    {
+      "name": "fai-github-pr-review",
+      "score": 100,
+      "reasons": [],
+      "description": "Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria. Use this skill when reviewing a PR, responding to review comments, or setting up review standards \u2014 even if the user only says \"check this PR\" or \"is this ready to merge\".",
+      "path": "skills\\fai-github-pr-review\\SKILL.md"
     },
     {
       "name": "fai-managed-identity-setup",

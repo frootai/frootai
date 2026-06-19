@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-folder-structure). Safe to delete or edit.
 interface:
   display_name: "Folder Structure"
-  short_description: "Establish project folder structure for AI solution plays."
-  default_prompt: "Establish project folder structure for AI solution plays"
+  short_description: "Scaffold a convention-aligned project folder structure for AI solution plays…"
+  default_prompt: "Scaffold a convention-aligned project folder structure for AI solution plays, separating agents, skills, infrastructure, and tests"

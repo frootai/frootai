@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-launch
-description: Execute go-to-market launch plan for AI product.
+description: Execute a go-to-market launch plan for an AI product — messaging, channel sequencing, launch-day checklist, and post-launch metrics. Use this skill when shipping a launch, coordinating announcements, or planning launch timing — even if the user only says "we're launching" or "launch plan".
 ---
 
 # Fai Gtm Launch

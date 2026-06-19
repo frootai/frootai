@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-positioning
-description: Define product positioning and competitive differentiation.
+description: Define product positioning and competitive differentiation for AI products — category, alternatives, unique value, and proof points. Use this skill when sharpening messaging, responding to competitors, or writing a positioning statement — even if the user only says "how do we stand out" or "positioning".
 ---
 
 # Fai Gtm Positioning

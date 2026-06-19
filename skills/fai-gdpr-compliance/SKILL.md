@@ -1,6 +1,6 @@
 ---
 name: fai-gdpr-compliance
-description: Ensure GDPR compliance in AI data processing and storage.
+description: Review and harden AI data processing and storage for GDPR — data minimization, consent, right-to-erasure, retention, and cross-border transfer controls. Use this skill when handling EU personal data, building data pipelines, or when the user mentions privacy, PII, consent, or retention — even if they don't say "GDPR" explicitly.
 ---
 
 # Fai Gdpr Compliance

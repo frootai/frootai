@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gdpr-compliance). Safe to delete or edit.
 interface:
   display_name: "GDPR Compliance"
-  short_description: "Ensure GDPR compliance in AI data processing and storage."
-  default_prompt: "Ensure GDPR compliance in AI data processing and storage"
+  short_description: "Review and harden AI data processing and storage for GDPR — data minimization…"
+  default_prompt: "Review and harden AI data processing and storage for GDPR — data minimization, consent, right-to-erasure, retention, and cross-border transfer controls"

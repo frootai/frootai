@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-operating-cadence
-description: Establish operating cadence for AI product team.
+description: Establish an operating cadence for an AI product team — planning rituals, metrics reviews, and decision forums on weekly/monthly/quarterly rhythms. Use this skill when setting up team operations, fixing meeting overload, or instituting OKRs/reviews — even if the user only says "how should we run the team".
 ---
 
 # Fai Gtm Operating Cadence

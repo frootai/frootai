@@ -1,6 +1,6 @@
 ---
 name: fai-git-commit-best-practices
-description: Apply conventional commits and meaningful commit messages.
+description: Write conventional-commit messages with meaningful scope, body, and footer for clean, automatable git history. Use this skill when committing changes, preparing a PR, or configuring commitlint/semantic-release — even if the user just says "commit this" or asks how to phrase a commit.
 ---
 
 # Fai Git Commit Best Practices

@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-launch). Safe to delete or edit.
 interface:
   display_name: "GTM Launch"
-  short_description: "Execute go-to-market launch plan for AI product."
-  default_prompt: "Execute go-to-market launch plan for AI product"
+  short_description: "Execute a go-to-market launch plan for an AI product — messaging, channel…"
+  default_prompt: "Execute a go-to-market launch plan for an AI product — messaging, channel sequencing, launch-day checklist, and post-launch metrics"

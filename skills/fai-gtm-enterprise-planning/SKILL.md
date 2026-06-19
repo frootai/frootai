@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-enterprise-planning
-description: Plan enterprise deployments with RFP responses.
+description: Plan enterprise AI deployments and craft RFP/RFI responses — security questionnaires, rollout phases, and stakeholder maps. Use this skill when pursuing an enterprise deal, answering procurement/security reviews, or scoping a large rollout — even if the user only mentions "RFP", "enterprise customer", or "procurement".
 ---
 
 # Fai Gtm Enterprise Planning
