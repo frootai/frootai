@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-product-led-growth
-description: Implement product-led growth strategy for AI tools.
+description: Implement a product-led growth strategy for AI tools — free tier, activation, in-product conversion, and usage-based expansion. Use this skill when designing a self-serve funnel, improving activation/retention, or shifting to PLG — even if the user only says "how do we grow without sales".
 ---
 
 # Fai Gtm Product Led Growth

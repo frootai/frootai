@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-developer-ecosystem). Safe to delete or edit.
 interface:
   display_name: "GTM Developer Ecosystem"
-  short_description: "Build developer ecosystem and community engagement."
-  default_prompt: "Build developer ecosystem and community engagement"
+  short_description: "Build a developer ecosystem and community-engagement program — docs, samples…"
+  default_prompt: "Build a developer ecosystem and community-engagement program — docs, samples, DevRel, and contribution paths"

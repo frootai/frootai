@@ -1,6 +1,6 @@
 ---
 name: fai-human-in-the-loop
-description: Implement human-in-the-loop workflows for AI decisions.
+description: Implement human-in-the-loop workflows for AI decisions — approval gates, confidence thresholds, escalation, and audit trails. Use this skill when adding oversight to autonomous actions, meeting compliance review needs, or handling low-confidence outputs — even if the user only says "add a human approval step".
 ---
 
 # Fai Human In The Loop

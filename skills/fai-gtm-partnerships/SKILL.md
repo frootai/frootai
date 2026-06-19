@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-partnerships
-description: Build partnership strategy for AI platform ecosystem.
+description: Build a partnership strategy for an AI platform ecosystem — partner tiers, co-sell motions, integration programs, and incentives. Use this skill when planning alliances, recruiting integration partners, or structuring a partner program — even if the user only says "who should we partner with".
 ---
 
 # Fai Gtm Partnerships

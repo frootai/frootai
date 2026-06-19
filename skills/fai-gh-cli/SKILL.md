@@ -1,6 +1,6 @@
 ---
 name: fai-gh-cli
-description: Use GitHub CLI for repository and issue automation.
+description: Automate GitHub workflows with the gh CLI — repos, issues, PRs, releases, and Actions. Use this skill when scripting GitHub tasks, batch-managing issues/PRs, or wiring CI automation — even if the user only says "do this on GitHub" or names gh commands.
 ---
 
 # Fai Gh Cli

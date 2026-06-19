@@ -1,119 +1,8 @@
 {
-  "mean": 61.3,
+  "mean": 62.8,
   "total": 637,
-  "below_threshold": 457,
+  "below_threshold": 442,
   "skills": [
-    {
-      "name": "fai-guardrails-policy",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('define')",
-        "too short (53 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Define safety guardrails and acceptable use policies.",
-      "path": "skills\\fai-guardrails-policy\\SKILL.md"
-    },
-    {
-      "name": "fai-import-iac",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('import')",
-        "too short (57 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Import existing infrastructure as code for modernization.",
-      "path": "skills\\fai-import-iac\\SKILL.md"
-    },
-    {
-      "name": "fai-java-extract-method",
-      "score": 18,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('refactor')",
-        "too short (47 chars) \u2014 under-specified",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Refactor Java code via extract method patterns.",
-      "path": "skills\\fai-java-extract-method\\SKILL.md"
-    },
-    {
-      "name": "fai-gh-cli",
-      "score": 28,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('use')",
-        "too short (51 chars) \u2014 under-specified"
-      ],
-      "description": "Use GitHub CLI for repository and issue automation.",
-      "path": "skills\\fai-gh-cli\\SKILL.md"
-    },
-    {
-      "name": "fai-design-state-management",
-      "score": 30,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('manage')",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Manage UI state transitions during multi-turn AI interactions.",
-      "path": "skills\\fai-design-state-management\\SKILL.md"
-    },
-    {
-      "name": "fai-domain-driven-design",
-      "score": 30,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('apply')",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Apply Domain-Driven Design principles to AI system architecture.",
-      "path": "skills\\fai-domain-driven-design\\SKILL.md"
-    },
-    {
-      "name": "fai-eval-driven-dev",
-      "score": 30,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('adopt')",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Adopt evaluation-driven development for continuous AI quality assessment.",
-      "path": "skills\\fai-eval-driven-dev\\SKILL.md"
-    },
-    {
-      "name": "fai-first-ask",
-      "score": 30,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "doesn't lead with an action verb ('craft')",
-        "low specificity (7 distinct words)"
-      ],
-      "description": "Craft opening prompts to gather requirements for AI systems.",
-      "path": "skills\\fai-first-ask\\SKILL.md"
-    },
-    {
-      "name": "fai-edge-case-generator",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (51 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Generate test cases for edge cases in AI workflows.",
-      "path": "skills\\fai-edge-case-generator\\SKILL.md"
-    },
     {
       "name": "fai-evaluate-06-document-intelligence",
       "score": 33,
@@ -245,78 +134,6 @@
       ],
       "description": "Evaluate prompt versioning and A/B test performance.",
       "path": "skills\\fai-evaluate-18-prompt-management\\SKILL.md"
-    },
-    {
-      "name": "fai-flowstudio-design",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (48 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Design workflows in Azure Flow Studio or Zapier.",
-      "path": "skills\\fai-flowstudio-design\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-developer-ecosystem",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (51 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Build developer ecosystem and community engagement.",
-      "path": "skills\\fai-gtm-developer-ecosystem\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-enterprise-onboarding",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (56 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Design enterprise onboarding workflows for AI solutions.",
-      "path": "skills\\fai-gtm-enterprise-onboarding\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-partnerships",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (53 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Build partnership strategy for AI platform ecosystem.",
-      "path": "skills\\fai-gtm-partnerships\\SKILL.md"
-    },
-    {
-      "name": "fai-gtm-product-led-growth",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (51 chars) \u2014 under-specified",
-        "low specificity (6 distinct words)"
-      ],
-      "description": "Implement product-led growth strategy for AI tools.",
-      "path": "skills\\fai-gtm-product-led-growth\\SKILL.md"
-    },
-    {
-      "name": "fai-human-in-the-loop",
-      "score": 33,
-      "reasons": [
-        "no explicit trigger cue ('Use this skill when\u2026')",
-        "no context/'when' phrasing (not 'pushy')",
-        "too short (55 chars) \u2014 under-specified",
-        "low specificity (5 distinct words)"
-      ],
-      "description": "Implement human-in-the-loop workflows for AI decisions.",
-      "path": "skills\\fai-human-in-the-loop\\SKILL.md"
     },
     {
       "name": "fai-implementation-plan-generator",
@@ -5800,6 +5617,42 @@
       "path": "skills\\fai-azure-storage-patterns\\SKILL.md"
     },
     {
+      "name": "fai-domain-driven-design",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('apply')"
+      ],
+      "description": "Apply Domain-Driven Design to AI system architecture \u2014 bounded contexts, aggregates, ubiquitous language, and context maps. Use this skill when modeling a complex domain, untangling a tangled codebase, or aligning teams on boundaries \u2014 even if the user only says \"how should we structure this domain\".",
+      "path": "skills\\fai-domain-driven-design\\SKILL.md"
+    },
+    {
+      "name": "fai-eval-driven-dev",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('adopt')"
+      ],
+      "description": "Adopt evaluation-driven development for AI \u2014 define eval sets, gate changes on metrics, and iterate on prompts/models with measured feedback. Use this skill when quality regresses unpredictably, before shipping prompt changes, or to set up CI evals \u2014 even if the user only says \"how do we know it's getting better\".",
+      "path": "skills\\fai-eval-driven-dev\\SKILL.md"
+    },
+    {
+      "name": "fai-first-ask",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('craft')"
+      ],
+      "description": "Craft effective discovery prompts that gather requirements before building an AI system \u2014 goals, constraints, data, and success criteria. Use this skill when starting a new project, scoping an ambiguous request, or running requirements discovery \u2014 even if the user only says \"help me figure out what to build\".",
+      "path": "skills\\fai-first-ask\\SKILL.md"
+    },
+    {
+      "name": "fai-gh-cli",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('automate')"
+      ],
+      "description": "Automate GitHub workflows with the gh CLI \u2014 repos, issues, PRs, releases, and Actions. Use this skill when scripting GitHub tasks, batch-managing issues/PRs, or wiring CI automation \u2014 even if the user only says \"do this on GitHub\" or names gh commands.",
+      "path": "skills\\fai-gh-cli\\SKILL.md"
+    },
+    {
       "name": "fai-gtm-ai-strategy",
       "score": 85,
       "reasons": [
@@ -5852,6 +5705,33 @@
       ],
       "description": "Define product positioning and competitive differentiation for AI products \u2014 category, alternatives, unique value, and proof points. Use this skill when sharpening messaging, responding to competitors, or writing a positioning statement \u2014 even if the user only says \"how do we stand out\" or \"positioning\".",
       "path": "skills\\fai-gtm-positioning\\SKILL.md"
+    },
+    {
+      "name": "fai-guardrails-policy",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('define')"
+      ],
+      "description": "Define AI safety guardrails and acceptable-use policies \u2014 input/output filters, blocked categories, escalation rules, and enforcement points. Use this skill when setting content policy, hardening an agent against misuse, or documenting an AUP \u2014 even if the user only says \"add guardrails\" or \"what should we block\".",
+      "path": "skills\\fai-guardrails-policy\\SKILL.md"
+    },
+    {
+      "name": "fai-import-iac",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('import')"
+      ],
+      "description": "Import existing cloud infrastructure into Bicep or Terraform for modernization \u2014 discover resources, generate templates, and reconcile drift. Use this skill when adopting IaC for unmanaged resources, migrating click-ops infrastructure, or onboarding a brownfield environment \u2014 even if the user only says \"reverse-engineer our Azure setup\".",
+      "path": "skills\\fai-import-iac\\SKILL.md"
+    },
+    {
+      "name": "fai-java-extract-method",
+      "score": 85,
+      "reasons": [
+        "doesn't lead with an action verb ('refactor')"
+      ],
+      "description": "Refactor Java code using extract-method and related patterns to cut complexity and improve testability. Use this skill when a method is too long, logic is duplicated, or a class is hard to test \u2014 even if the user only says \"clean up this Java code\" or \"this function is doing too much\".",
+      "path": "skills\\fai-java-extract-method\\SKILL.md"
     },
     {
       "name": "fai-model-comparison-benchmark",
@@ -5993,6 +5873,27 @@
       "path": "skills\\fai-bicep-module-scaffold\\SKILL.md"
     },
     {
+      "name": "fai-design-state-management",
+      "score": 100,
+      "reasons": [],
+      "description": "Design UI state management for multi-turn AI interactions \u2014 conversation state, streaming updates, optimistic UI, and error recovery. Use this skill when building a chat/agent frontend, handling in-flight responses, or managing complex interaction state \u2014 even if the user only says \"manage the chat state\".",
+      "path": "skills\\fai-design-state-management\\SKILL.md"
+    },
+    {
+      "name": "fai-edge-case-generator",
+      "score": 100,
+      "reasons": [],
+      "description": "Generate edge-case test inputs for AI workflows \u2014 boundary values, adversarial prompts, malformed data, and rare paths. Use this skill when hardening a feature before launch, writing test suites, or probing failure modes \u2014 even if the user only says \"what could break this\" or \"write tests\".",
+      "path": "skills\\fai-edge-case-generator\\SKILL.md"
+    },
+    {
+      "name": "fai-flowstudio-design",
+      "score": 100,
+      "reasons": [],
+      "description": "Design automation workflows in Azure Flow Studio, Power Automate, or Zapier \u2014 triggers, actions, branching, and error handling. Use this skill when wiring no-code/low-code automations, connecting SaaS apps, or orchestrating event-driven flows \u2014 even if the user only says \"automate this process\".",
+      "path": "skills\\fai-flowstudio-design\\SKILL.md"
+    },
+    {
       "name": "fai-folder-structure",
       "score": 100,
       "reasons": [],
@@ -6019,6 +5920,41 @@
       "reasons": [],
       "description": "Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria. Use this skill when reviewing a PR, responding to review comments, or setting up review standards \u2014 even if the user only says \"check this PR\" or \"is this ready to merge\".",
       "path": "skills\\fai-github-pr-review\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-developer-ecosystem",
+      "score": 100,
+      "reasons": [],
+      "description": "Build a developer ecosystem and community-engagement program \u2014 docs, samples, DevRel, and contribution paths. Use this skill when growing adoption of an API/SDK/platform, planning DevRel, or improving developer experience \u2014 even if the user only says \"how do we get developers to use this\".",
+      "path": "skills\\fai-gtm-developer-ecosystem\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-enterprise-onboarding",
+      "score": 100,
+      "reasons": [],
+      "description": "Design enterprise onboarding for AI solutions \u2014 provisioning, security review, training, and success milestones. Use this skill when standing up a new enterprise customer, reducing time-to-value, or formalizing onboarding \u2014 even if the user only says \"onboard this customer\".",
+      "path": "skills\\fai-gtm-enterprise-onboarding\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-partnerships",
+      "score": 100,
+      "reasons": [],
+      "description": "Build a partnership strategy for an AI platform ecosystem \u2014 partner tiers, co-sell motions, integration programs, and incentives. Use this skill when planning alliances, recruiting integration partners, or structuring a partner program \u2014 even if the user only says \"who should we partner with\".",
+      "path": "skills\\fai-gtm-partnerships\\SKILL.md"
+    },
+    {
+      "name": "fai-gtm-product-led-growth",
+      "score": 100,
+      "reasons": [],
+      "description": "Implement a product-led growth strategy for AI tools \u2014 free tier, activation, in-product conversion, and usage-based expansion. Use this skill when designing a self-serve funnel, improving activation/retention, or shifting to PLG \u2014 even if the user only says \"how do we grow without sales\".",
+      "path": "skills\\fai-gtm-product-led-growth\\SKILL.md"
+    },
+    {
+      "name": "fai-human-in-the-loop",
+      "score": 100,
+      "reasons": [],
+      "description": "Implement human-in-the-loop workflows for AI decisions \u2014 approval gates, confidence thresholds, escalation, and audit trails. Use this skill when adding oversight to autonomous actions, meeting compliance review needs, or handling low-confidence outputs \u2014 even if the user only says \"add a human approval step\".",
+      "path": "skills\\fai-human-in-the-loop\\SKILL.md"
     },
     {
       "name": "fai-managed-identity-setup",

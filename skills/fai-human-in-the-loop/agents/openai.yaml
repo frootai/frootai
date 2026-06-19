@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-human-in-the-loop). Safe to delete or edit.
 interface:
   display_name: "Human In The Loop"
-  short_description: "Implement human-in-the-loop workflows for AI decisions."
-  default_prompt: "Implement human-in-the-loop workflows for AI decisions"
+  short_description: "Implement human-in-the-loop workflows for AI decisions — approval gates…"
+  default_prompt: "Implement human-in-the-loop workflows for AI decisions — approval gates, confidence thresholds, escalation, and audit trails"

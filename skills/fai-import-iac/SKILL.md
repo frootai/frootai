@@ -1,6 +1,6 @@
 ---
 name: fai-import-iac
-description: Import existing infrastructure as code for modernization.
+description: Import existing cloud infrastructure into Bicep or Terraform for modernization — discover resources, generate templates, and reconcile drift. Use this skill when adopting IaC for unmanaged resources, migrating click-ops infrastructure, or onboarding a brownfield environment — even if the user only says "reverse-engineer our Azure setup".
 ---
 
 # Fai Import Iac

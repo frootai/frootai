@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-developer-ecosystem
-description: Build developer ecosystem and community engagement.
+description: Build a developer ecosystem and community-engagement program — docs, samples, DevRel, and contribution paths. Use this skill when growing adoption of an API/SDK/platform, planning DevRel, or improving developer experience — even if the user only says "how do we get developers to use this".
 ---
 
 # Fai Gtm Developer Ecosystem

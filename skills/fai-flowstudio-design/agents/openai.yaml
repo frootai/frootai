@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-flowstudio-design). Safe to delete or edit.
 interface:
   display_name: "Flowstudio Design"
-  short_description: "Design workflows in Azure Flow Studio or Zapier."
-  default_prompt: "Design workflows in Azure Flow Studio or Zapier"
+  short_description: "Design automation workflows in Azure Flow Studio, Power Automate, or Zapier…"
+  default_prompt: "Design automation workflows in Azure Flow Studio, Power Automate, or Zapier — triggers, actions, branching, and error handling"

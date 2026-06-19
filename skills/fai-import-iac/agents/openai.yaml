@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-import-iac). Safe to delete or edit.
 interface:
   display_name: "Import IAC"
-  short_description: "Import existing infrastructure as code for modernization."
-  default_prompt: "Import existing infrastructure as code for modernization"
+  short_description: "Import existing cloud infrastructure into Bicep or Terraform for modernization…"
+  default_prompt: "Import existing cloud infrastructure into Bicep or Terraform for modernization — discover resources, generate templates, and reconcile drift"

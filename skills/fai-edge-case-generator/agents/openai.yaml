@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-edge-case-generator). Safe to delete or edit.
 interface:
   display_name: "Edge Case Generator"
-  short_description: "Generate test cases for edge cases in AI workflows."
-  default_prompt: "Generate test cases for edge cases in AI workflows"
+  short_description: "Generate edge-case test inputs for AI workflows — boundary values, adversarial…"
+  default_prompt: "Generate edge-case test inputs for AI workflows — boundary values, adversarial prompts, malformed data, and rare paths"

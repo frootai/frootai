@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-product-led-growth). Safe to delete or edit.
 interface:
   display_name: "GTM Product Led Growth"
-  short_description: "Implement product-led growth strategy for AI tools."
-  default_prompt: "Implement product-led growth strategy for AI tools"
+  short_description: "Implement a product-led growth strategy for AI tools — free tier, activation…"
+  default_prompt: "Implement a product-led growth strategy for AI tools — free tier, activation, in-product conversion, and usage-based expansion"

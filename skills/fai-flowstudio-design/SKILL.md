@@ -1,6 +1,6 @@
 ---
 name: fai-flowstudio-design
-description: Design workflows in Azure Flow Studio or Zapier.
+description: Design automation workflows in Azure Flow Studio, Power Automate, or Zapier — triggers, actions, branching, and error handling. Use this skill when wiring no-code/low-code automations, connecting SaaS apps, or orchestrating event-driven flows — even if the user only says "automate this process".
 ---
 
 # Fai Flowstudio Design

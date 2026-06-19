@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-guardrails-policy). Safe to delete or edit.
 interface:
   display_name: "Guardrails Policy"
-  short_description: "Define safety guardrails and acceptable use policies."
-  default_prompt: "Define safety guardrails and acceptable use policies"
+  short_description: "Define AI safety guardrails and acceptable-use policies — input/output…"
+  default_prompt: "Define AI safety guardrails and acceptable-use policies — input/output filters, blocked categories, escalation rules, and enforcement points"

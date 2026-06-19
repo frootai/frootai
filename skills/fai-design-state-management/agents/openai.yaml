@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-design-state-management). Safe to delete or edit.
 interface:
   display_name: "Design State Management"
-  short_description: "Manage UI state transitions during multi-turn AI interactions."
-  default_prompt: "Manage UI state transitions during multi-turn AI interactions"
+  short_description: "Design UI state management for multi-turn AI interactions — conversation…"
+  default_prompt: "Design UI state management for multi-turn AI interactions — conversation state, streaming updates, optimistic UI, and error recovery"

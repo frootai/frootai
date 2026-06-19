@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gh-cli). Safe to delete or edit.
 interface:
   display_name: "Gh CLI"
-  short_description: "Use GitHub CLI for repository and issue automation."
-  default_prompt: "Use GitHub CLI for repository and issue automation"
+  short_description: "Automate GitHub workflows with the gh CLI — repos, issues, PRs, releases, and…"
+  default_prompt: "Automate GitHub workflows with the gh CLI — repos, issues, PRs, releases, and Actions"

@@ -1,6 +1,6 @@
 ---
 name: fai-first-ask
-description: Craft opening prompts to gather requirements for AI systems.
+description: Craft effective discovery prompts that gather requirements before building an AI system — goals, constraints, data, and success criteria. Use this skill when starting a new project, scoping an ambiguous request, or running requirements discovery — even if the user only says "help me figure out what to build".
 ---
 
 # Fai First Ask

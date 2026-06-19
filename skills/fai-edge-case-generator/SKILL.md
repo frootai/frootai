@@ -1,6 +1,6 @@
 ---
 name: fai-edge-case-generator
-description: Generate test cases for edge cases in AI workflows.
+description: Generate edge-case test inputs for AI workflows — boundary values, adversarial prompts, malformed data, and rare paths. Use this skill when hardening a feature before launch, writing test suites, or probing failure modes — even if the user only says "what could break this" or "write tests".
 ---
 
 # Fai Edge Case Generator

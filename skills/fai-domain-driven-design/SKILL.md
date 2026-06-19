@@ -1,6 +1,6 @@
 ---
 name: fai-domain-driven-design
-description: Apply Domain-Driven Design principles to AI system architecture.
+description: Apply Domain-Driven Design to AI system architecture — bounded contexts, aggregates, ubiquitous language, and context maps. Use this skill when modeling a complex domain, untangling a tangled codebase, or aligning teams on boundaries — even if the user only says "how should we structure this domain".
 ---
 
 # Fai Domain Driven Design

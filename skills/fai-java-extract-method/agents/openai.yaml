@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-java-extract-method). Safe to delete or edit.
 interface:
   display_name: "Java Extract Method"
-  short_description: "Refactor Java code via extract method patterns."
-  default_prompt: "Refactor Java code via extract method patterns"
+  short_description: "Refactor Java code using extract-method and related patterns to cut complexity…"
+  default_prompt: "Refactor Java code using extract-method and related patterns to cut complexity and improve testability"

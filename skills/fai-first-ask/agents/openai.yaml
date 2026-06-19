@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-first-ask). Safe to delete or edit.
 interface:
   display_name: "First Ask"
-  short_description: "Craft opening prompts to gather requirements for AI systems."
-  default_prompt: "Craft opening prompts to gather requirements for AI systems"
+  short_description: "Craft effective discovery prompts that gather requirements before building an…"
+  default_prompt: "Craft effective discovery prompts that gather requirements before building an AI system — goals, constraints, data, and success criteria"

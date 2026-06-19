@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-enterprise-onboarding). Safe to delete or edit.
 interface:
   display_name: "GTM Enterprise Onboarding"
-  short_description: "Design enterprise onboarding workflows for AI solutions."
-  default_prompt: "Design enterprise onboarding workflows for AI solutions"
+  short_description: "Design enterprise onboarding for AI solutions — provisioning, security review…"
+  default_prompt: "Design enterprise onboarding for AI solutions — provisioning, security review, training, and success milestones"

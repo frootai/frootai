@@ -1,6 +1,6 @@
 ---
 name: fai-java-extract-method
-description: Refactor Java code via extract method patterns.
+description: Refactor Java code using extract-method and related patterns to cut complexity and improve testability. Use this skill when a method is too long, logic is duplicated, or a class is hard to test — even if the user only says "clean up this Java code" or "this function is doing too much".
 ---
 
 # Fai Java Extract Method

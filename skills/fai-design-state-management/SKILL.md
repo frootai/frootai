@@ -1,6 +1,6 @@
 ---
 name: fai-design-state-management
-description: Manage UI state transitions during multi-turn AI interactions.
+description: Design UI state management for multi-turn AI interactions — conversation state, streaming updates, optimistic UI, and error recovery. Use this skill when building a chat/agent frontend, handling in-flight responses, or managing complex interaction state — even if the user only says "manage the chat state".
 ---
 
 # Fai Design State Management

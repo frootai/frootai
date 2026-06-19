@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-eval-driven-dev). Safe to delete or edit.
 interface:
   display_name: "Eval Driven Dev"
-  short_description: "Adopt evaluation-driven development for continuous AI quality assessment."
-  default_prompt: "Adopt evaluation-driven development for continuous AI quality assessment"
+  short_description: "Adopt evaluation-driven development for AI — define eval sets, gate changes on…"
+  default_prompt: "Adopt evaluation-driven development for AI — define eval sets, gate changes on metrics, and iterate on prompts/models with measured feedback"

@@ -1,6 +1,6 @@
 ---
 name: fai-gtm-enterprise-onboarding
-description: Design enterprise onboarding workflows for AI solutions.
+description: Design enterprise onboarding for AI solutions — provisioning, security review, training, and success milestones. Use this skill when standing up a new enterprise customer, reducing time-to-value, or formalizing onboarding — even if the user only says "onboard this customer".
 ---
 
 # Fai Gtm Enterprise Onboarding

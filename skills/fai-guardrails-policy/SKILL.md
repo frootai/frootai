@@ -1,6 +1,6 @@
 ---
 name: fai-guardrails-policy
-description: Define safety guardrails and acceptable use policies.
+description: Define AI safety guardrails and acceptable-use policies — input/output filters, blocked categories, escalation rules, and enforcement points. Use this skill when setting content policy, hardening an agent against misuse, or documenting an AUP — even if the user only says "add guardrails" or "what should we block".
 ---
 
 # Fai Guardrails Policy

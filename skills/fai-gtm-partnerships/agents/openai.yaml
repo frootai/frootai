@@ -2,5 +2,5 @@
 # Derived from SKILL.md frontmatter (name: fai-gtm-partnerships). Safe to delete or edit.
 interface:
   display_name: "GTM Partnerships"
-  short_description: "Build partnership strategy for AI platform ecosystem."
-  default_prompt: "Build partnership strategy for AI platform ecosystem"
+  short_description: "Build a partnership strategy for an AI platform ecosystem — partner tiers…"
+  default_prompt: "Build a partnership strategy for an AI platform ecosystem — partner tiers, co-sell motions, integration programs, and incentives"

@@ -1,6 +1,6 @@
 ---
 name: fai-eval-driven-dev
-description: Adopt evaluation-driven development for continuous AI quality assessment.
+description: Adopt evaluation-driven development for AI — define eval sets, gate changes on metrics, and iterate on prompts/models with measured feedback. Use this skill when quality regresses unpredictably, before shipping prompt changes, or to set up CI evals — even if the user only says "how do we know it's getting better".
 ---
 
 # Fai Eval Driven Dev
