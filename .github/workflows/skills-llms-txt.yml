@@ -1,0 +1,49 @@
+name: Skills llms.txt (daily)
+
+# Regenerate the LLM-readable skills catalog (website-data/skills-llms.txt and
+# skills-llms-full.txt) once a day and on demand, committing only when changed.
+
+on:
+  schedule:
+    - cron: '17 6 * * *' # daily 06:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**/SKILL.md'
+      - 'solution-plays/**/SKILL.md'
+      - 'scripts/generate-skills-llms-txt.mjs'
+
+concurrency:
+  group: skills-llms-txt
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Generate skills llms.txt
+        run: node scripts/generate-skills-llms-txt.mjs
+
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain website-data/skills-llms.txt website-data/skills-llms-full.txt)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add website-data/skills-llms.txt website-data/skills-llms-full.txt
+            git commit -m "chore(skills): refresh llms.txt catalog [skip ci]"
+            git push
+          else
+            echo "No changes to skills llms.txt"
+          fi
