@@ -1,0 +1,42 @@
+{
+  "projectTitle": "FrootAI Skills",
+  "description": "638 production-grade Agent Skills for AI coding agents building on Azure SDKs and Microsoft AI Foundry — Python, .NET, TypeScript, and Bicep patterns. Every skill is conformant with the open Agent Skills standard (agentskills.io), uses USE FOR / DO NOT USE FOR / Triggers descriptions for precise invocation, and follows progressive disclosure.",
+  "folders": [
+    "skills",
+    "solution-plays",
+    "agents",
+    "instructions",
+    "hooks",
+    "cookbook",
+    "workflows",
+    "website-data"
+  ],
+  "excludeFolders": [
+    "node_modules",
+    ".next",
+    ".internal",
+    ".factory",
+    ".smithery",
+    "tests",
+    "conformance",
+    "reports",
+    "src",
+    "engine",
+    "data"
+  ],
+  "excludeFiles": [
+    "NOTICE",
+    "LICENSE",
+    "package.json",
+    "validate-output.txt",
+    "BingSiteAuth.xml"
+  ],
+  "rules": [
+    "Load skills selectively — activate only those relevant to the current task to avoid context rot.",
+    "Skills use progressive disclosure: metadata (name + description) at startup, full SKILL.md instructions on activation.",
+    "Match a skill by its USE FOR triggers; respect DO NOT USE FOR boundaries to avoid wrong activation.",
+    "Always use DefaultAzureCredential / Managed Identity for Azure SDK authentication — never hard-coded keys.",
+    "Search the Microsoft Docs MCP and Azure MCP before implementing Azure SDK code.",
+    "Prefer fai-* skills for Azure + Microsoft AI Foundry workloads; they are spec-conformant and scenario-tested."
+  ]
+}
