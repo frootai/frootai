@@ -6,7 +6,7 @@
     "url": "https://frootai.dev"
   },
   "metadata": {
-    "description": "FrootAI Agent Skills — 637 Azure/AI-native skills installable in Claude Code, grouped by domain.",
+    "description": "FrootAI Agent Skills — 638 Azure/AI-native skills installable in Claude Code, grouped by domain.",
     "version": "1.0.0"
   },
   "plugins": [
@@ -661,7 +661,7 @@
     },
     {
       "name": "frootai-general-skills",
-      "description": "FrootAI general-purpose skills that complement the themed bundles. (76 skills)",
+      "description": "FrootAI general-purpose skills that complement the themed bundles. (77 skills)",
       "source": "./",
       "strict": false,
       "skills": [
@@ -694,6 +694,7 @@
         "./skills/fai-cost-estimator",
         "./skills/fai-daily-prep",
         "./skills/fai-dead-code-removal",
+        "./skills/fai-deep-wiki-generator",
         "./skills/fai-edge-case-generator",
         "./skills/fai-epic-breakdown-arch",
         "./skills/fai-epic-breakdown-pm",

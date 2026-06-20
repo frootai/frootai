@@ -1,5 +1,5 @@
 # FrootAI Skills — LLM-Readable Catalog (summaries)
-> 637 self-contained Agent Skills (Azure/AI-native) following the agentskills.io standard.
+> 638 self-contained Agent Skills (Azure/AI-native) following the agentskills.io standard.
 > Install any skill into 70+ agents: npx skills add frootai/frootai
 > Browse: https://frootai.dev/primitives/skills · Generated: 2026-06-20
 
@@ -587,7 +587,7 @@
 - fai-tech-stack-blueprint: Design technology stack blueprints with component selection, tradeoff analysis, integration patterns, and upgrade paths. — https://github.com/frootai/frootai/tree/main/skills/fai-tech-stack-blueprint/
 - fai-tutorial-generator: Generate production-ready tutorials with prerequisites, runnable code, verification steps, and troubleshooting paths. — https://github.com/frootai/frootai/tree/main/skills/fai-tutorial-generator/
 
-## General (76)
+## General (77)
 - azure-openai-setup: Set up Azure OpenAI deployments, RBAC, and monitoring — harden inference endpoints and control latency, quota, and cost — https://github.com/frootai/frootai/tree/main/skills/azure-openai-setup/
 - fai-api-endpoint-generator: Generate typed REST API endpoints with Zod/Pydantic input validation, RFC 7807 error responses, OpenAPI annotation, and Managed Identity auth — eliminating schema drift and IDOR vulnerabilities. — https://github.com/frootai/frootai/tree/main/skills/fai-api-endpoint-generator/
 - fai-aspnet-minimal-api: Scaffold ASP.NET Core Minimal API with typed route groups, FluentValidation, Managed Identity credentials, OpenAPI v3 via Scalar, Serilog structured logging, and health check endpoints — cutting AI service setup time from hours to minutes. — https://github.com/frootai/frootai/tree/main/skills/fai-aspnet-minimal-api/
@@ -617,6 +617,7 @@
 - fai-cost-estimator: Build cost estimation models for AI workloads across Azure, models, and infrastructure. — https://github.com/frootai/frootai/tree/main/skills/fai-cost-estimator/
 - fai-daily-prep: Automate daily developer prep — code audits, test-coverage checks, dependency updates, and a prioritized to-do. — https://github.com/frootai/frootai/tree/main/skills/fai-daily-prep/
 - fai-dead-code-removal: Identify and remove dead code in Python/TypeScript — unused exports, unreachable branches, and orphaned files, verified by tooling. — https://github.com/frootai/frootai/tree/main/skills/fai-dead-code-removal/
+- fai-deep-wiki-generator: Generate a deep, audience-segmented onboarding wiki for any codebase — repo scan, index hub, contributor/staff-engineer/executive/PM guides, architecture overview with Mermaid diagrams, source-cited key files, and an llms.txt. — https://github.com/frootai/frootai/tree/main/skills/fai-deep-wiki-generator/
 - fai-edge-case-generator: Generate edge-case test inputs for AI workflows — boundary values, adversarial prompts, malformed data, and rare paths. — https://github.com/frootai/frootai/tree/main/skills/fai-edge-case-generator/
 - fai-epic-breakdown-arch: Break down epics into architecture tasks and technical stories. — https://github.com/frootai/frootai/tree/main/skills/fai-epic-breakdown-arch/
 - fai-epic-breakdown-pm: Break down epics into product management stories and features. — https://github.com/frootai/frootai/tree/main/skills/fai-epic-breakdown-pm/

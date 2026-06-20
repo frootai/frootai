@@ -1,12 +1,12 @@
 {
   "mean": 64.6,
-  "total": 637,
+  "total": 638,
   "below_threshold": 418,
   "sensei_tiers": {
     "Low": 422,
     "Medium": 211,
     "Medium-High": 0,
-    "High": 4
+    "High": 5
   },
   "skills": [
     {
@@ -4730,6 +4730,16 @@
       ],
       "description": "Design Cosmos DB data models \u2014 partition keys, Request Unit (RU) estimation, vector-search embedding storage, and analytical workload isolation for RAG and time-series workloads. USE FOR: choosing a partition key, fixing hot partitions or RU spikes, modeling chat/conversation history, storing vector embeddings, isolating analytics from OLTP, denormalization and indexing strategy. DO NOT USE FOR: relational schema design (use Azure SQL), graph modeling, Cosmos infrastructure provisioning (use the Bicep skill), non-Azure databases. Triggers: \"cosmos db\", \"partition key\", \"RU\", \"request units\", \"hot partition\", \"vector store\", \"nosql model\", \"data model\", \"embedding storage\".",
       "path": "skills\\fai-azure-cosmos-modeling\\SKILL.md"
+    },
+    {
+      "name": "fai-deep-wiki-generator",
+      "score": 80,
+      "tier": "High",
+      "reasons": [
+        "no context/'when' phrasing (not 'pushy')"
+      ],
+      "description": "Generate a deep, audience-segmented onboarding wiki for any codebase \u2014 repo scan, index hub, contributor/staff-engineer/executive/PM guides, architecture overview with Mermaid diagrams, source-cited key files, and an llms.txt. USE FOR: onboarding new contributors, documenting an unfamiliar codebase, generating architecture docs, producing an llms.txt or AGENTS.md, creating audience-specific guides (exec, PM, staff engineer), refreshing stale internal docs. DO NOT USE FOR: end-user product documentation, API reference from OpenAPI (use fai-api-docs-generator), single-file code walkthroughs (use fai-comment-tutorial), marketing copy. Triggers: \"onboarding guide\", \"deep wiki\", \"document this repo\", \"architecture docs\", \"llms.txt\", \"AGENTS.md\", \"contributor guide\", \"explain the codebase\", \"wiki\".",
+      "path": "skills\\fai-deep-wiki-generator\\SKILL.md"
     },
     {
       "name": "fai-embedding-model-select",
