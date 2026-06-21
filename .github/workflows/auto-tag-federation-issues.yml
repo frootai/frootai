@@ -1,0 +1,105 @@
+name: Auto-tag federation issues
+
+# [M11.23] Auto-tag newly opened issues with federation-* labels based on
+# title + body content. Reduces M11.19 on-call triage burden during launch
+# watch window.
+#
+# Triggers:
+#   - issues.opened — primary surface
+#   - issues.edited — re-evaluate if user edits to add federation context
+#
+# Permissions: needs `issues: write` to apply labels.
+#
+# Setup: this workflow lives in frootai/ (the public open-standard repo) where
+# federation issues land. The matching logic is sourced from frootai-core via
+# a checkout of the sibling repo at runtime — keeps the keyword list in one place.
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  auto-tag:
+    name: Compute + apply federation labels
+    runs-on: ubuntu-latest
+    if: github.event.issue.state == 'open'
+    steps:
+      - name: Checkout public repo (frootai)
+        uses: actions/checkout@v4
+        with:
+          path: frootai
+
+      - name: Checkout frootai-core (for matching script + seed roster)
+        uses: actions/checkout@v4
+        with:
+          repository: frootai/frootai-core
+          path: frootai-core
+          # frootai-core is private; need a PAT with read access.
+          # The PAT must be stored as a repo secret: AUTO_TAG_FROOTAI_CORE_READ_PAT
+          token: ${{ secrets.AUTO_TAG_FROOTAI_CORE_READ_PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Compute labels
+        id: compute
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          echo "$ISSUE_TITLE" "$ISSUE_BODY" | head -c 200
+          echo "{\"title\": $(echo "$ISSUE_TITLE" | jq -Rs .), \"body\": $(echo "$ISSUE_BODY" | jq -Rs .)}" \
+            > issue-payload.json
+          # Override seed roster path to point at the checked-out frootai workspace
+          export SEED_ROSTER_PATH="${{ github.workspace }}/frootai/data/mcp-servers-seed.json"
+          # Invoke the matching script, capture its JSON output
+          cat issue-payload.json | node frootai-core/scripts/orchard/m11/auto-tag-issue.js --json > labels-output.json || true
+          # Extract the labels array as a comma-separated string for the next step
+          LABELS=$(jq -r '.labels | join(",")' labels-output.json)
+          REASONS=$(jq -c '.reasons' labels-output.json)
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
+          echo "reasons=$REASONS" >> $GITHUB_OUTPUT
+          echo "::notice::Computed labels: $LABELS"
+
+      - name: Apply labels (if any matched)
+        if: steps.compute.outputs.labels != ''
+        uses: actions/github-script@v7
+        env:
+          LABELS_CSV: ${{ steps.compute.outputs.labels }}
+          REASONS_JSON: ${{ steps.compute.outputs.reasons }}
+        with:
+          script: |
+            const labels = process.env.LABELS_CSV.split(',').filter(Boolean);
+            const reasons = JSON.parse(process.env.REASONS_JSON || '{}');
+
+            // Apply labels (additive — does not remove existing labels)
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels,
+            });
+
+            // Leave a single-line comment explaining what was tagged + why
+            // (helps the on-call understand the auto-tagger's decisions)
+            const reasonLines = Object.entries(reasons)
+              .map(([label, hits]) => `- \`${label}\` ← ${hits.slice(0, 3).join(', ')}`)
+              .join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '🤖 **Auto-tagged by M11.23 federation auto-tagger**',
+                '',
+                reasonLines,
+                '',
+                '_If any label is wrong, remove it — the on-call will note the mis-tag for the M11.24 retro._',
+              ].join('\n'),
+            });
