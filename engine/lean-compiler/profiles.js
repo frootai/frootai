@@ -35,10 +35,27 @@ export const INSTRUCTION_PROFILE = {
   preservedFrontmatterKeys: ["name", "description", "applyTo", "waf"],
 };
 
+/**
+ * The hook profile. A hook is a FOLDER — a `README.md` (docs, the markdown that
+ * gets Lean-compiled) + a `hooks.json` manifest (event → command/env/timeout
+ * config) + scripts. The compiler only ever touches the README; the manifest is
+ * never compiled, so the events + their config are preserved by construction.
+ * The README carries NO YAML frontmatter, so the load-bearing contract for hooks
+ * lives in the manifest (checked by `assertHookManifestPreserved`), not in
+ * frontmatter keys.
+ */
+export const HOOK_PROFILE = {
+  type: "hook",
+  sourceExt: "README.md",
+  manifestFile: "hooks.json",
+  preservedFrontmatterKeys: [],
+};
+
 /** Registry of known profiles, keyed by primitive type. */
 const PROFILES = {
   agent: AGENT_PROFILE,
   instruction: INSTRUCTION_PROFILE,
+  hook: HOOK_PROFILE,
 };
 
 /**
@@ -94,4 +111,47 @@ export function assertProfilePreserved(profile, full, lean) {
       : "preserved-key-dropped";
 
   return { ok, frontmatterPreserved, missingKeys, reason };
+}
+
+/**
+ * [Z4.3] Event names declared by a `hooks.json` manifest — the keys of its
+ * `hooks` map (e.g. `["Stop"]`). Returns `[]` for malformed JSON.
+ * @param {string} manifestText
+ * @returns {string[]}
+ */
+export function hookEvents(manifestText) {
+  try {
+    const m = JSON.parse(manifestText);
+    return m && m.hooks && typeof m.hooks === "object" ? Object.keys(m.hooks) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * [Z4.3] Enforce the hook preservation contract: the Lean variant ships the same
+ * `hooks.json` as the Full (the compiler only touches the README), so every
+ * event AND its per-event command/env/timeout config must be identical. Guards
+ * against an artifact generator accidentally rewriting the manifest.
+ *
+ * @param {string} fullManifest - the Full hook's hooks.json text.
+ * @param {string} leanManifest - the Lean hook's hooks.json text.
+ * @returns {{ ok:boolean, events:string[], missingEvents:string[], reason:string }}
+ */
+export function assertHookManifestPreserved(fullManifest, leanManifest) {
+  const events = hookEvents(fullManifest);
+  const leanEvents = hookEvents(leanManifest);
+  const missingEvents = events.filter((e) => !leanEvents.includes(e));
+
+  let configPreserved = false;
+  try {
+    configPreserved =
+      JSON.stringify(JSON.parse(fullManifest)) === JSON.stringify(JSON.parse(leanManifest));
+  } catch {
+    configPreserved = false;
+  }
+
+  const ok = missingEvents.length === 0 && configPreserved;
+  const reason = ok ? "ok" : missingEvents.length ? "event-dropped" : "config-mutated";
+  return { ok, events, missingEvents, reason };
 }

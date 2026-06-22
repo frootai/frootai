@@ -12,9 +12,12 @@ import assert from "node:assert/strict";
 import {
   AGENT_PROFILE,
   INSTRUCTION_PROFILE,
+  HOOK_PROFILE,
   getProfile,
   extractFrontmatter,
   assertProfilePreserved,
+  hookEvents,
+  assertHookManifestPreserved,
 } from "./profiles.js";
 import { compile } from "./index.js";
 
@@ -133,4 +136,53 @@ test("[Z4.2] assertion FAILS when a Lean drops applyTo", () => {
   const result = assertProfilePreserved(INSTRUCTION_PROFILE, INSTRUCTION_MD, dropped);
   assert.equal(result.ok, false);
   assert.ok(result.missingKeys.includes("applyTo"));
+});
+
+// ── [Z4.3] hook profile ──────────────────────────────────────────────────────
+
+const HOOK_MANIFEST = `{
+  "version": 1,
+  "hooks": {
+    "Stop": [
+      { "type": "command", "command": "bash hooks/fai-cost-tracker/track-cost.sh", "timeout": 10, "env": { "COST_MODE": "log" } }
+    ]
+  }
+}`;
+
+test("[Z4.3] HOOK_PROFILE declares the README source + hooks.json manifest", () => {
+  assert.equal(HOOK_PROFILE.type, "hook");
+  assert.equal(HOOK_PROFILE.sourceExt, "README.md");
+  assert.equal(HOOK_PROFILE.manifestFile, "hooks.json");
+  // README hook docs have no frontmatter — nothing to preserve there.
+  assert.deepEqual(HOOK_PROFILE.preservedFrontmatterKeys, []);
+});
+
+test("[Z4.3] getProfile resolves the hook profile", () => {
+  assert.equal(getProfile("hook"), HOOK_PROFILE);
+});
+
+test("[Z4.3] hookEvents extracts the event names; tolerant of bad JSON", () => {
+  assert.deepEqual(hookEvents(HOOK_MANIFEST), ["Stop"]);
+  assert.deepEqual(hookEvents("not json"), []);
+});
+
+test("[Z4.3] manifest preserved when identical (events + config survive)", () => {
+  const result = assertHookManifestPreserved(HOOK_MANIFEST, HOOK_MANIFEST);
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.events, ["Stop"]);
+  assert.deepEqual(result.missingEvents, []);
+});
+
+test("[Z4.3] assertion FAILS when an event is dropped", () => {
+  const result = assertHookManifestPreserved(HOOK_MANIFEST, `{ "version": 1, "hooks": {} }`);
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "event-dropped");
+  assert.ok(result.missingEvents.includes("Stop"));
+});
+
+test("[Z4.3] assertion FAILS when the event config is mutated", () => {
+  const mutated = HOOK_MANIFEST.replace('"timeout": 10', '"timeout": 99');
+  const result = assertHookManifestPreserved(HOOK_MANIFEST, mutated);
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "config-mutated");
 });
