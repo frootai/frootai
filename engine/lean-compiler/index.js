@@ -137,4 +137,23 @@ function compile(md, options = {}) {
   };
 }
 
-export { compile, STAGES };
+/**
+ * [Z0.10] Deterministic re-run guarantee.
+ *
+ * The compiler is PURE (no I/O, no clock, no randomness), so determinism —
+ * "same input → byte-identical output" — holds by construction. This helper
+ * checks the stronger IDEMPOTENCE property: compiling an already-Lean document
+ * produces no further change, i.e. `compile(compile(md).lean).lean` is a fixed
+ * point. A `false` here means a stage compresses on a second pass — a bug that
+ * would make Lean artifacts unstable in CI.
+ *
+ * @param {string} md
+ * @param {Object} [options]
+ * @returns {boolean} true if Lean is a fixed point of `compile`.
+ */
+function isFixedPoint(md, options = {}) {
+  const once = compile(md, options).lean;
+  return compile(once, options).lean === once;
+}
+
+export { compile, isFixedPoint, STAGES };
