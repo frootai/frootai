@@ -27,6 +27,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
 const PLAYS_DIR = join(ROOT, "solution-plays");
 const AGENTS_DIR = join(ROOT, "agents");
+const INSTRUCTIONS_DIR = join(ROOT, "instructions");
 
 /** Recursively collect every `SKILL.md` path under a root. */
 function findSkillMd(dir, out = []) {
@@ -81,6 +82,23 @@ function collectAgents() {
 }
 
 /**
+ * [Z4.5] Collect `{ id, path }` for every instruction. Instructions are FLAT
+ * files `instructions/<id>.instructions.md`; the id is the filename stem.
+ */
+function collectInstructions() {
+  let entries;
+  try {
+    entries = readdirSync(INSTRUCTIONS_DIR);
+  } catch {
+    return [];
+  }
+  return entries
+    .filter((name) => name.endsWith(".instructions.md"))
+    .map((name) => ({ id: name.replace(/\.instructions\.md$/, ""), path: join(INSTRUCTIONS_DIR, name) }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+}
+
+/**
  * Plan the Lean artifact for one source — PURE (no I/O). Compiles, runs the
  * fidelity gate, and reports whether a `.lean.md` should be written.
  *
@@ -128,6 +146,7 @@ function run({ write = false } = {}) {
   const sources = [
     ...collectSkills().map((s) => ({ ...s, type: "skill" })),
     ...collectAgents().map((a) => ({ ...a, type: "agent" })),
+    ...collectInstructions().map((i) => ({ ...i, type: "instruction" })),
   ];
   for (const s of sources) {
     const full = readFileSync(s.path, "utf8");
@@ -165,4 +184,4 @@ if (isMain) {
   if (write) console.log(`Wrote ${plans.filter((p) => p.write).length} .lean.md files.\n`);
 }
 
-export { planLeanArtifact, collectSkills, collectAgents, run, SKILLS_DIR, AGENTS_DIR };
+export { planLeanArtifact, collectSkills, collectAgents, collectInstructions, run, SKILLS_DIR, AGENTS_DIR, INSTRUCTIONS_DIR };
