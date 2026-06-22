@@ -14,7 +14,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { compile, isFixedPoint } from "./index.js";
+
+// Resolve the catalog `skills/` dir relative to THIS file (engine/lean-compiler
+// → repo root), so the real-skills gate is cwd-independent — it passes whether
+// `node --test` runs from the repo root or from the engine directory itself.
+const SKILLS_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "skills");
 
 // A document that exercises every stage: heading slack, verbose prose, a padded
 // table, a code fence with blank slack, redundant link, duplicated example,
@@ -80,10 +87,10 @@ test("[Z0.10] sidecar.stages is identical across runs", () => {
 });
 
 test("[Z0.10] determinism + idempotence hold across real skills", () => {
-  const dirs = readdirSync("skills")
+  const dirs = readdirSync(SKILLS_DIR)
     .filter((d) => {
       try {
-        readFileSync("skills/" + d + "/SKILL.md");
+        readFileSync(join(SKILLS_DIR, d, "SKILL.md"));
         return true;
       } catch {
         return false;
@@ -93,7 +100,7 @@ test("[Z0.10] determinism + idempotence hold across real skills", () => {
   assert.ok(dirs.length > 0, "expected real skills to be present");
 
   for (const d of dirs) {
-    const md = readFileSync("skills/" + d + "/SKILL.md", "utf8");
+    const md = readFileSync(join(SKILLS_DIR, d, "SKILL.md"), "utf8");
     const a = compile(md);
     const b = compile(md);
     assert.equal(a.lean, b.lean, `non-deterministic lean for ${d}`);
