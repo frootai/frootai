@@ -23,8 +23,9 @@
  */
 
 import { countTokens } from "./tokens.js";
-import { parse } from "./parse.js";
+import { parse, reassemble } from "./parse.js";
 import { segment } from "./segment.js";
+import { compressProse } from "./compress-prose.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -51,7 +52,17 @@ const STAGES = [
     },
   },
   { id: "segment", fn: (ctx) => { if (ctx.blocks) ctx.blocks = segment(ctx.blocks); return ctx; } }, // [Z0.3]
-  { id: "compress", fn: (ctx) => ctx }, // [Z0.4]-[Z0.6]
+  {
+    id: "compress", // [Z0.4] PROSE rewrite ([Z0.5] EXAMPLE / [Z0.6] TABLE-LIST land here next)
+    fn: (ctx) => {
+      if (ctx.blocks) {
+        ctx.blocks = ctx.blocks.map((b) =>
+          b.role === "PROSE" ? { ...b, raw: compressProse(b.raw) } : b,
+        );
+      }
+      return ctx;
+    },
+  },
   { id: "normalize", fn: (ctx) => ctx }, // [Z0.8]
   { id: "verify", fn: (ctx) => ctx }, // [Z0.5]/[Z1]
 ];
@@ -93,7 +104,11 @@ function compile(md, options = {}) {
     ctx.stagesApplied.push(stage.id);
   }
 
-  const lean = ctx.body;
+  // [Z0.9-stub emit] — rebuild the Lean output from the (possibly compressed)
+  // block AST. With identity stages this equals the source (round-trip, [Z0.2]).
+  const lean = ctx.blocks
+    ? reassemble({ frontmatter: ctx.frontmatter, blocks: ctx.blocks })
+    : ctx.body;
   const tokensAfter = countTokens(lean);
   const saved =
     tokensBefore > 0 ? Math.round((1 - tokensAfter / tokensBefore) * 100) : 0;
