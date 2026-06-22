@@ -22,6 +22,11 @@ const require = createRequire(import.meta.url);
 /** The model tokenizer basis this module encodes against. */
 const ENCODING = "o200k_base";
 
+// Treat any literal special-token sequence (e.g. a chat-template `<|im_start|>`
+// shown inside a primitive) as ORDINARY TEXT rather than throwing — matches how
+// a model API counts user content. Reused frozen object; encode never mutates it.
+const ENCODE_OPTS = { disallowedSpecial: new Set() };
+
 let _encode = null;
 let _exact = false;
 try {
@@ -49,7 +54,7 @@ function isExact() {
 function countTokensExact(text) {
   if (!text) return 0;
   if (!_exact) throw new Error("o200k_base encoder unavailable");
-  return _encode(text).length;
+  return _encode(text, ENCODE_OPTS).length;
 }
 
 export { countTokensExact, isExact, ENCODING };
