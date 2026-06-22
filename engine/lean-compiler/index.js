@@ -24,6 +24,7 @@
 
 import { countTokens } from "./tokens.js";
 import { parse } from "./parse.js";
+import { segment } from "./segment.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -49,7 +50,7 @@ const STAGES = [
       return ctx;
     },
   },
-  { id: "segment", fn: (ctx) => ctx }, // [Z0.3]
+  { id: "segment", fn: (ctx) => { if (ctx.blocks) ctx.blocks = segment(ctx.blocks); return ctx; } }, // [Z0.3]
   { id: "compress", fn: (ctx) => ctx }, // [Z0.4]-[Z0.6]
   { id: "normalize", fn: (ctx) => ctx }, // [Z0.8]
   { id: "verify", fn: (ctx) => ctx }, // [Z0.5]/[Z1]
