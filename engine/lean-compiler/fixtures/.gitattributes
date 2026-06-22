@@ -1,0 +1,4 @@
+# [Z0.11] Golden fixtures are byte-stable Lean snapshots — keep LF so the
+# on-disk bytes match the compiler's normalized output exactly.
+*.md text eol=lf
+*.lean.md text eol=lf
