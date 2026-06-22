@@ -11,6 +11,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   AGENT_PROFILE,
+  INSTRUCTION_PROFILE,
   getProfile,
   extractFrontmatter,
   assertProfilePreserved,
@@ -53,7 +54,6 @@ test("[Z4.1] AGENT_PROFILE declares the load-bearing keys + source extension", (
 
 test("[Z4.1] getProfile resolves the agent profile and is null for unknown types", () => {
   assert.equal(getProfile("agent"), AGENT_PROFILE);
-  assert.equal(getProfile("instruction"), null);
   assert.equal(getProfile("nope"), null);
 });
 
@@ -86,4 +86,51 @@ test("[Z4.1] assertion FAILS when the frontmatter block is mutated", () => {
   const result = assertProfilePreserved(AGENT_PROFILE, AGENT_MD, mutated);
   assert.equal(result.ok, false);
   assert.equal(result.reason, "frontmatter-block-mutated");
+});
+
+// ── [Z4.2] instruction profile ──────────────────────────────────────────────
+
+const INSTRUCTION_MD = `---
+description: "Accessibility standards — WCAG 2.2 AA compliance."
+applyTo: "**/*.tsx, **/*.html, **/*.vue"
+waf:
+  - "responsible-ai"
+  - "reliability"
+---
+
+# Accessibility
+
+Use semantic HTML and ARIA roles. This paragraph is ordinary prose describing
+the rules, free for the compressor to shorten since it carries no frontmatter
+and no behaviour-bearing guardrail — just narration.
+
+## Rules
+
+- Provide alt text for images
+- Ensure 4.5:1 contrast for body text
+`;
+
+test("[Z4.2] INSTRUCTION_PROFILE declares applyTo + source extension", () => {
+  assert.equal(INSTRUCTION_PROFILE.type, "instruction");
+  assert.equal(INSTRUCTION_PROFILE.sourceExt, ".instructions.md");
+  assert.ok(INSTRUCTION_PROFILE.preservedFrontmatterKeys.includes("applyTo"));
+});
+
+test("[Z4.2] getProfile resolves the instruction profile", () => {
+  assert.equal(getProfile("instruction"), INSTRUCTION_PROFILE);
+});
+
+test("[Z4.2] a real compile() preserves the instruction applyTo glob byte-for-byte", () => {
+  const { lean } = compile(INSTRUCTION_MD, { type: "instruction" });
+  const result = assertProfilePreserved(INSTRUCTION_PROFILE, INSTRUCTION_MD, lean);
+  assert.equal(result.ok, true, `expected preserved, got ${result.reason}`);
+  assert.equal(extractFrontmatter(lean), extractFrontmatter(INSTRUCTION_MD));
+  assert.ok(extractFrontmatter(lean).includes('applyTo: "**/*.tsx, **/*.html, **/*.vue"'));
+});
+
+test("[Z4.2] assertion FAILS when a Lean drops applyTo", () => {
+  const dropped = INSTRUCTION_MD.replace(/applyTo: ".*"\n/, "");
+  const result = assertProfilePreserved(INSTRUCTION_PROFILE, INSTRUCTION_MD, dropped);
+  assert.equal(result.ok, false);
+  assert.ok(result.missingKeys.includes("applyTo"));
 });

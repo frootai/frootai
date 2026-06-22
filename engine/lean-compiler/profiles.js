@@ -25,9 +25,20 @@ export const AGENT_PROFILE = {
   preservedFrontmatterKeys: ["name", "description", "tools", "model", "waf", "plays"],
 };
 
+/** The `.instructions.md` profile — preserve the `applyTo` glob (+ waf/identity). */
+export const INSTRUCTION_PROFILE = {
+  type: "instruction",
+  sourceExt: ".instructions.md",
+  // `applyTo` is the load-bearing field: the glob that scopes the instruction to
+  // specific files. Dropping or mutating it silently changes WHERE the guidance
+  // applies, so it must survive byte-for-byte alongside the identity/waf fields.
+  preservedFrontmatterKeys: ["name", "description", "applyTo", "waf"],
+};
+
 /** Registry of known profiles, keyed by primitive type. */
 const PROFILES = {
   agent: AGENT_PROFILE,
+  instruction: INSTRUCTION_PROFILE,
 };
 
 /**
