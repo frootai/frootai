@@ -18,12 +18,12 @@
  */
 
 // ── Param token patterns (high-signal, case-SENSITIVE) ───────────────────────
-const FLAG_RE = /--[A-Za-z][\w-]*/g; // long flags: --write, --output-dir
+const FLAG_RE = /(?<![\w-])--[A-Za-z][\w-]*/g; // long flags: --write, --output-dir (standalone — not a dash-run -----BEGIN nor a mid-identifier --modifier like block-card--featured)
 const ENV_REF_RE = /\$\{?([A-Za-z_][A-Za-z0-9_]*)\}?/g; // $VAR / ${VAR} → bare name
 const SCREAMING_RE = /\b[A-Z][A-Z0-9]*_[A-Z0-9_]+\b/g; // FROOT_API_KEY, API_BASE_URL
 const PATH_RES = [
   /\.{1,2}\/[\w.\-/]*[\w/]/g, // ./x, ../lib/y
-  /(?:\.?[\w-]+\/)+[\w.\-]+\.[A-Za-z][A-Za-z0-9]{0,4}/g, // a/b/file.ts, .github/agents/x.md
+  /(?:\.?[\w-]+\/)+[\w.\-]+\.[A-Za-z][A-Za-z0-9]{0,4}(?![A-Za-z0-9])/g, // a/b/file.ts, .github/agents/x.md (not a truncated prefix of a longer word, e.g. Microsoft.ContainerRegistry)
 ];
 
 /** True when `ch` would continue a path/identifier token (so the match is embedded). */
@@ -62,10 +62,15 @@ function extractParams(text) {
   return tokens;
 }
 
-/** Boundary-aware, case-sensitive presence test for one param token. */
+/** Boundary-aware, case-sensitive presence test for one param token.
+ *  Flags may be extended by `[\w-]` (so `--write` ≠ `--write-all`); identifiers
+ *  and paths are only continued by word chars, so an env var legitimately
+ *  followed by a path separator or hyphen (`$SUB_ID/sub`, `$this->x`) still
+ *  counts as retained. */
 function tokenRetained(token, leanText) {
   const esc = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`(?<![\\w/-])${esc}(?![\\w/-])`).test(leanText);
+  const cont = token.startsWith("--") ? "\\w-" : "\\w";
+  return new RegExp(`(?<![${cont}])${esc}(?![${cont}])`).test(leanText);
 }
 
 /**

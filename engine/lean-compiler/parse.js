@@ -64,7 +64,11 @@ function parse(md) {
       const marker = fenceM[1][0]; // ` or ~
       const start = i;
       i++;
-      const closeRe = new RegExp("^\\s*" + (marker === "`" ? "```+" : "~~~+"));
+      // A CLOSING fence (per CommonMark) is the same marker with NO info string
+      // — only trailing whitespace allowed. So `​```python` is an OPENER, never a
+      // close; without the `\s*$` anchor the parser would wrongly close an outer
+      // ```markdown block at a nested ```lang opener and reflow real code as prose.
+      const closeRe = new RegExp("^\\s*" + (marker === "`" ? "```+" : "~~~+") + "\\s*$");
       while (i < lines.length && !closeRe.test(lines[i])) i++;
       if (i < lines.length) i++; // include the closing fence line
       blocks.push({ type: "fence", raw: lines.slice(start, i).join("\n") });
