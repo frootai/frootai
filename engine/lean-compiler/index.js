@@ -28,6 +28,7 @@ import { segment } from "./segment.js";
 import { compressProse } from "./compress-prose.js";
 import { compressExample, foldDuplicateExamples } from "./compress-example.js";
 import { compressTable, compressList } from "./compress-table-list.js";
+import { assertBehaviourPreserved, snapshotForGuard } from "./preserve-guard.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -53,7 +54,7 @@ const STAGES = [
       return ctx;
     },
   },
-  { id: "segment", fn: (ctx) => { if (ctx.blocks) ctx.blocks = segment(ctx.blocks); return ctx; } }, // [Z0.3]
+  { id: "segment", fn: (ctx) => { if (ctx.blocks) { ctx.blocks = segment(ctx.blocks); ctx.guardSnapshot = snapshotForGuard(ctx.blocks); } return ctx; } }, // [Z0.3] + [Z0.7] snapshot
   {
     id: "compress", // [Z0.4] PROSE rewrite · [Z0.5] EXAMPLE/code · [Z0.6] TABLE/LIST
     fn: (ctx) => {
@@ -73,7 +74,15 @@ const STAGES = [
     },
   },
   { id: "normalize", fn: (ctx) => ctx }, // [Z0.8]
-  { id: "verify", fn: (ctx) => ctx }, // [Z0.5]/[Z1]
+  {
+    id: "verify", // [Z0.7] behaviour-preserve guard · [Z1] full fidelity gate later
+    fn: (ctx) => {
+      if (ctx.blocks && ctx.guardSnapshot) {
+        assertBehaviourPreserved(ctx.guardSnapshot, ctx.blocks);
+      }
+      return ctx;
+    },
+  },
 ];
 
 /**
