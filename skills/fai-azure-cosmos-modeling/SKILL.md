@@ -5,6 +5,7 @@ description: |
   USE FOR: choosing a partition key, fixing hot partitions or RU spikes, modeling chat/conversation history, storing vector embeddings, isolating analytics from OLTP, denormalization and indexing strategy.
   DO NOT USE FOR: relational schema design (use Azure SQL), graph modeling, Cosmos infrastructure provisioning (use the Bicep skill), non-Azure databases.
   Triggers: "cosmos db", "partition key", "RU", "request units", "hot partition", "vector store", "nosql model", "data model", "embedding storage".
+requiresMcp: ["azure"]
 ---
 
 # FAI Azure Cosmos DB Modeling

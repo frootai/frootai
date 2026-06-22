@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize plan accuracy, reduce iteration cycles, improve test coverage, tune auto-merge criteria, minimize token cost per PR"
     prompt: "Tune the Autonomous Coding Agent (Play 51) configuration for: "
+mcp_scope:
+  attached: ["github", "context7"]
 ---
 
 # Autonomous Coding Agent Agent

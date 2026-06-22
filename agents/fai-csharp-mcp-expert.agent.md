@@ -11,6 +11,8 @@ waf:
   - "performance-efficiency"
 plays:
   - "29-mcp-server"
+mcpAttachments:
+  optional: ["azure", "context7"]
 ---
 
 # FAI C# MCP Expert

@@ -51,6 +51,11 @@
           },
           "uniqueItems": true,
           "maxItems": 8
+        },
+        "detach_on_finish": {
+          "type": "boolean",
+          "description": "[M10.4] When true, the engine calls `fai_detach_mcp` for every successfully attached area after the run completes. Default false: areas stay attached for the lifetime of the kernel subprocess so repeat invocations reuse warm handles. Set true for ad-hoc / one-shot runs (CI, single-tool extracts) where holding handles open wastes server-side budget.",
+          "default": false
         }
       }
     }
@@ -61,7 +66,8 @@
       "attached": ["azure", "playwright"],
       "router_config": {
         "trust_overrides": { "playwright": "first-party-ms" },
-        "pre_attach": ["azure"]
+        "pre_attach": ["azure"],
+        "detach_on_finish": true
       }
     },
     { "attached": ["github"] },

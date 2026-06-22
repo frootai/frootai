@@ -9,6 +9,8 @@ waf:
   - "reliability"
 plays:
   - "29-mcp-server"
+mcpAttachments:
+  optional: ["azure", "context7"]
 ---
 
 # FAI Ruby MCP Expert

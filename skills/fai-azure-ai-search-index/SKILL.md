@@ -5,6 +5,7 @@ description: |
   USE FOR: building a RAG retrieval index, fixing poor recall or irrelevant chunks, configuring hybrid/semantic search, designing index schema, batch ingestion of documents.
   DO NOT USE FOR: Cosmos DB modeling, embedding-model selection (use the embedding skill), non-Azure search engines (Elastic, Pinecone), full-text-only search without vectors.
   Triggers: "ai search", "vector index", "hnsw", "semantic ranker", "hybrid search", "rag index", "retrieval", "chunk", "recall".
+requiresMcp: ["azure"]
 ---
 
 # FAI Azure AI Search Index

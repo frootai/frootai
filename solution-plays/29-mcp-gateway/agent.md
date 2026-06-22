@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize tool descriptions for LLM invocation accuracy, response schemas, transport performance"
     prompt: "Tune the MCP Gateway (Play 29) configuration for: "
+mcp_scope:
+  attached: ["azure", "github", "playwright"]
 ---
 
 # Mcp Gateway Agent

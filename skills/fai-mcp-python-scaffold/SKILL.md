@@ -3,6 +3,7 @@ name: fai-mcp-python-scaffold
 description: "Generate a project skeleton for Python MCP servers with FastMCP, async tools, testing harness, and Docker deployment."
 waf: ["Security", "Reliability", "Operational Excellence", "Performance Efficiency"]
 plays: ["29-mcp-platform-integration", "37-devops-automation"]
+requiresMcp: ["context7"]
 ---
 
 # Fai Mcp Python Scaffold

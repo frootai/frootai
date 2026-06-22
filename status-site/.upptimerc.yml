@@ -63,13 +63,48 @@ sites:
     expectedStatusCodes:
       - 200
 
+  # ── Foundry Agent (M8.25) ──────────────────────────────────────────────
+  # The hosted Foundry prompt agent emits foundry_session_started and
+  # foundry_session_completed JSONL events on session lifecycle. See
+  # foundry-observability.md for the event schema + Application Insights
+  # dashboard links.
+
+  - name: Foundry Agent — frootai-enterprise-rag
+    url: https://frootai-rag-agent.swedencentral.api.azureml.ms/health
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+      - 401
+    # 401 is acceptable: the endpoint requires managed identity auth;
+    # any non-5xx response proves the agent is reachable.
+
+  # ── Hosted MCP Service (M9.19) ────────────────────────────────────────
+  # Two health surfaces:
+  #   /healthz   — edge-only, sub-10ms probe (Worker → 200 OK)
+  #   /v1/health — anonymous returns 200 (edge ok); authenticated probes
+  #                the per-tenant ACA backend through the full chain.
+  # Upptime polls anonymously, so a 200 on /v1/health proves the Worker
+  # entry point is responding.
+
+  - name: Hosted MCP — Edge (mcp.frootai.dev/healthz)
+    url: https://mcp.frootai.dev/healthz
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
+  - name: Hosted MCP — Chain (mcp.frootai.dev/v1/health)
+    url: https://mcp.frootai.dev/v1/health
+    icon: https://frootai.dev/favicon.ico
+    expectedStatusCodes:
+      - 200
+
 status-website:
   cname: status.frootai.dev
   name: FrootAI Status
   theme: dark
   logoUrl: https://frootai.dev/favicon.ico
   introTitle: "FrootAI System Status"
-  introMessage: "Real-time monitoring of the FrootAI ecosystem. [Learn more →](https://frootai.dev)"
+  introMessage: "Real-time monitoring of the FrootAI ecosystem. 🟢 **Hosted MCP at [mcp.frootai.dev](https://mcp.frootai.dev/mcp): Operational — Stable** (M11.10 GA, lockstep with `frootai-mcp@6.0.0`) — [read the launch post](https://frootai.dev/blog/hosted-mcp-launch). [Learn more →](https://frootai.dev)"
 
 i18n:
   activeIncidents: Active Incidents

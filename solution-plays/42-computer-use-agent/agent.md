@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize screenshot resolution, action reliability, step efficiency, vision token cost, coordinate accuracy"
     prompt: "Tune the Computer Use Agent (Play 42) configuration for: "
+mcp_scope:
+  attached: ["playwright", "chrome-devtools"]
 ---
 
 # Computer Use Agent Agent

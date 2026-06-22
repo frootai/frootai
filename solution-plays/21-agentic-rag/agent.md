@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize source selection weights, iteration thresholds, cache hit rates, cost per query, max retrieval hops"
     prompt: "Tune the Agentic RAG (Play 21) configuration for: "
+mcp_scope:
+  attached: ["azure", "context7"]
 ---
 
 # Agentic Rag Agent

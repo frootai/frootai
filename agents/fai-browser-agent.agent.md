@@ -11,6 +11,9 @@ waf:
   - "responsible-ai"
 plays:
   - "23-browser-automation-agent"
+mcpAttachments:
+  required: ["playwright"]
+  optional: ["chrome-devtools"]
 ---
 
 # FAI Browser Agent

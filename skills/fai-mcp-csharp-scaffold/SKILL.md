@@ -4,6 +4,7 @@ description: |
   Scaffold C# MCP servers with the ModelContextProtocol NuGet package, typed
   tool definitions, input validation, and ASP.NET hosting. Use when building
   MCP servers in .NET for AI agent tool access.
+requiresMcp: ["context7"]
 ---
 
 # C# MCP Server Scaffold

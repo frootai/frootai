@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize confidence thresholds, abstention rates, latency, model routing, caching"
     prompt: "Tune the Deterministic Agent (Play 03) configuration for: "
+mcp_scope:
+  attached: ["azure"]
 ---
 
 # Deterministic Agent Agent

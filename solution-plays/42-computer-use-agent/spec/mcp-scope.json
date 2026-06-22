@@ -1,0 +1,8 @@
+{
+  "attached": ["playwright", "azure"],
+  "router_config": {
+    "trust_overrides": {
+      "playwright": "verified-publisher"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 ---
 name: fai-github-pr-review
 description: Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria. Use this skill when reviewing a PR, responding to review comments, or setting up review standards — even if the user only says "check this PR" or "is this ready to merge".
+requiresMcp: ["github"]
 ---
 
 # Fai Github Pr Review

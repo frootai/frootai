@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize routing rules, confidence thresholds, model selection, KB retrieval quality"
     prompt: "Tune the IT Ticket Resolution (Play 05) configuration for: "
+mcp_scope:
+  attached: ["azure", "github"]
 ---
 
 # It Ticket Resolution Agent

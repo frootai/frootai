@@ -161,3 +161,193 @@ function buildContext(contextConfig) {
 }
 
 export { resolveKnowledge, resolveWAF, buildContext, MODULE_MAP, WAF_MAP };
+
+/* ════════════════════════════════════════════════════════════════════
+   [M10.2] resolveAttachPlan — merge MCP declarations across artifacts
+   ────────────────────────────────────────────────────────────────────
+   Reads each artifact's federation declaration and produces a merged
+   plan the engine bridge (M10.1 `attachAreasForRun`) can consume:
+
+     play.mcp_scope.attached[]                       → required
+     play.mcp_scope.router_config.trust_overrides    → trustOverrides
+     agent.mcpAttachments.required[]                 → required
+     agent.mcpAttachments.optional[]                 → optional
+     agent.mcpAttachments.trustOverrides{}           → trustOverrides
+     skill.requiresMcp[]                             → required
+
+   Dedup rule: an area in BOTH `required` and `optional` collapses to
+   `required` (the stronger guarantee wins). All areas are returned
+   alphabetically sorted so callers can compare plans byte-equivalent.
+
+   Schema today:
+     - play.mcp_scope     — schemas/fai-manifest-mcp-scope-v1.schema.json
+     - agent.mcpAttachments + skill.requiresMcp — informally documented
+       by the M10.16 instruction file (lands later in M10); the resolver
+       tolerates absent / null fields silently so M10.2 ships before any
+       artifact has populated its declarations (M10.17+ rows).
+   ──────────────────────────────────────────────────────────────────── */
+
+/** Canonical trust tiers (mirror of mcp-scope schema). */
+const TRUST_TIERS = new Set(['first-party-ms', 'verified-publisher', 'community', 'untrusted']);
+
+function _normaliseAreaList(value, dest) {
+  if (!Array.isArray(value)) return;
+  for (const a of value) {
+    if (typeof a === 'string' && a.length > 0) dest.add(a);
+  }
+}
+
+function _mergeTrustOverrides(value, dest) {
+  if (!value || typeof value !== 'object') return;
+  for (const [area, tier] of Object.entries(value)) {
+    if (typeof area !== 'string' || area.length === 0) continue;
+    if (typeof tier !== 'string' || !TRUST_TIERS.has(tier)) continue;
+    dest[area] = tier;
+  }
+}
+
+/**
+ * @typedef {object} ResolvedAttachPlan
+ * @property {string[]}                       requiredAreas    Alphabetically sorted.
+ * @property {string[]}                       optionalAreas    Sorted; never overlaps required.
+ * @property {Record<string, string>}         trustOverrides   area → trust-tier.
+ * @property {object}                         sources          Debug breakdown: which artifact contributed what.
+ */
+
+/**
+ * @param {object} input
+ * @param {object} [input.playManifest] Full play manifest (may have `mcp_scope`).
+ * @param {Array<object>} [input.agents]   Each entry may have `mcpAttachments`.
+ * @param {Array<object>} [input.skills]   Each entry may have `requiresMcp`.
+ * @returns {ResolvedAttachPlan}
+ */
+function resolveAttachPlan(input) {
+  const o = input || {};
+  const playManifest = o.playManifest || null;
+  const agents = Array.isArray(o.agents) ? o.agents : [];
+  const skills = Array.isArray(o.skills) ? o.skills : [];
+
+  const required = new Set();
+  const optional = new Set();
+  const trustOverrides = {};
+  const sources = { play: [], agents: {}, skills: {} };
+
+  // 1. Play
+  const scope = playManifest && playManifest.mcp_scope;
+  if (scope) {
+    if (Array.isArray(scope.attached)) {
+      for (const a of scope.attached) {
+        if (typeof a === 'string' && a.length > 0) {
+          required.add(a);
+          sources.play.push(a);
+        }
+      }
+    }
+    if (scope.router_config && typeof scope.router_config === 'object') {
+      _mergeTrustOverrides(scope.router_config.trust_overrides, trustOverrides);
+    }
+  }
+
+  // 2. Agents
+  for (const agent of agents) {
+    if (!agent || typeof agent !== 'object') continue;
+    const ma = agent.mcpAttachments;
+    if (!ma || typeof ma !== 'object') continue;
+    const agentId = agent.id || agent.name || '?';
+    const contrib = { required: [], optional: [] };
+
+    // Shape A: { required: string[], optional: string[], trustOverrides: {} }
+    if (Array.isArray(ma.required)) {
+      for (const a of ma.required) {
+        if (typeof a === 'string' && a.length > 0) {
+          required.add(a);
+          contrib.required.push(a);
+        }
+      }
+    }
+    if (Array.isArray(ma.optional)) {
+      for (const a of ma.optional) {
+        if (typeof a === 'string' && a.length > 0) {
+          optional.add(a);
+          contrib.optional.push(a);
+        }
+      }
+    }
+    _mergeTrustOverrides(ma.trustOverrides, trustOverrides);
+
+    // Shape B fallback: bare string[] = all optional (backward-compatible).
+    if (Array.isArray(ma) && contrib.required.length === 0 && contrib.optional.length === 0) {
+      for (const a of ma) {
+        if (typeof a === 'string' && a.length > 0) {
+          optional.add(a);
+          contrib.optional.push(a);
+        }
+      }
+    }
+
+    sources.agents[agentId] = contrib;
+  }
+
+  // 3. Skills (`requiresMcp` is by definition required)
+  for (const skill of skills) {
+    if (!skill || typeof skill !== 'object') continue;
+    const rm = skill.requiresMcp;
+    if (!Array.isArray(rm)) continue;
+    const skillId = skill.id || skill.name || '?';
+    const contrib = [];
+    for (const a of rm) {
+      if (typeof a === 'string' && a.length > 0) {
+        required.add(a);
+        contrib.push(a);
+      }
+    }
+    if (contrib.length > 0) sources.skills[skillId] = contrib;
+  }
+
+  // Dedup: required wins over optional.
+  for (const a of required) optional.delete(a);
+
+  return {
+    requiredAreas: [...required].sort(),
+    optionalAreas: [...optional].sort(),
+    trustOverrides,
+    sources,
+  };
+}
+
+/**
+ * Convert a merged plan into the M10.1 `attachAreasForRun({areas})` input.
+ *
+ * @param {ResolvedAttachPlan} merged
+ * @param {object} [opts]
+ * @param {boolean} [opts.includeOptional=false]
+ * @returns {{ areas: Array<{name: string, trustOverride?: boolean}> }}
+ */
+function toAttachPlan(merged, opts) {
+  const o = opts || {};
+  const includeOptional = !!o.includeOptional;
+  if (!merged || typeof merged !== 'object') return { areas: [] };
+  const areas = [];
+  const seen = new Set();
+  const trustOverrides = merged.trustOverrides || {};
+
+  for (const name of merged.requiredAreas || []) {
+    if (seen.has(name)) continue;
+    seen.add(name);
+    const e = { name };
+    if (trustOverrides[name]) e.trustOverride = true;
+    areas.push(e);
+  }
+  if (includeOptional) {
+    for (const name of merged.optionalAreas || []) {
+      if (seen.has(name)) continue;
+      seen.add(name);
+      const e = { name };
+      if (trustOverrides[name]) e.trustOverride = true;
+      areas.push(e);
+    }
+  }
+  return { areas };
+}
+
+export { resolveAttachPlan, toAttachPlan, TRUST_TIERS };

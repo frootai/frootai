@@ -10,10 +10,13 @@
 <p align="center">
   <a href="https://frootai.dev"><img src="https://img.shields.io/badge/frootai.dev-10b981?style=flat-square&logo=cloudflare&logoColor=white" alt="Website"></a>
   <a href="https://github.com/frootai/frootai"><img src="https://img.shields.io/github/stars/frootai/frootai?style=flat-square&logo=github" alt="Stars"></a>
+  <a href="https://github.com/frootai/frootai/actions/workflows/build-dist.yml"><img src="https://img.shields.io/github/actions/workflow/status/frootai/frootai/build-dist.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=build" alt="Build"></a>
   <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/dw/frootai-mcp?style=flat-square&logo=npm&label=npm" alt="npm"></a>
   <a href="https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode"><img src="https://img.shields.io/visual-studio-marketplace/i/frootai.frootai-vscode?style=flat-square&logo=visualstudiocode&label=VS%20Code" alt="VS Code"></a>
   <a href="https://pypi.org/project/frootai/"><img src="https://img.shields.io/pypi/dm/frootai?style=flat-square&logo=python&label=PyPI" alt="PyPI"></a>
-  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=flat-square&logo=npm&label=MCP%20v" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/frootai-mcp"><img src="https://img.shields.io/npm/v/frootai-mcp?style=flat-square&logo=npm&label=MCP%20v" alt="MCP version"></a>
+  <a href="https://www.npmjs.com/package/frootai"><img src="https://img.shields.io/npm/v/frootai?style=flat-square&logo=npm&label=CLI%20v" alt="CLI version"></a>
+  <a href="https://frootai.dev/blog/frootai-mcp-becomes-a-router"><img src="https://img.shields.io/badge/federation-enabled-10b981?style=flat-square&logo=cloudfoundry&logoColor=white" alt="Federation enabled"></a>
   <a href="./conformance/"><img src="./conformance/badge.svg" alt="FAI Protocol L0 conformance"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/MIT-yellow?style=flat-square&label=License" alt="License"></a>
 </p>

@@ -10,6 +10,8 @@ waf:
   - "reliability"
 plays:
   - "29-mcp-server"
+mcpAttachments:
+  optional: ["azure", "context7"]
 ---
 
 # FAI Kotlin MCP Expert

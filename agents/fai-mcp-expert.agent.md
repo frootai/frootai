@@ -11,6 +11,9 @@ waf:
   - "performance-efficiency"
 plays:
   - "29-mcp-server"
+mcpAttachments:
+  required: ["azure", "github"]
+  optional: ["context7"]
 ---
 
 # FAI MCP Expert

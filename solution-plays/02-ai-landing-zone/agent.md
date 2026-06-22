@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize SKU sizing, cost, quota, monitoring thresholds, network configuration"
     prompt: "Tune the AI Landing Zone (Play 02) configuration for: "
+mcp_scope:
+  attached: ["azure"]
 ---
 
 # Ai Landing Zone Agent

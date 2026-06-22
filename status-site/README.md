@@ -12,4 +12,8 @@
 
 ## Configuration
 
-See `.upptimerc.yml` for monitored services.
+See [`.upptimerc.yml`](./.upptimerc.yml) for monitored services.
+
+## Foundry observability (M8.25)
+
+The Foundry hosted agent emits `foundry_session_started` / `foundry_session_completed` JSONL events to its stdout (forwarded to Application Insights). See [`foundry-observability.md`](./foundry-observability.md) for the event schema and dashboard KQL recipes.

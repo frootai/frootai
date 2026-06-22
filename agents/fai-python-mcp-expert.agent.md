@@ -12,6 +12,8 @@ waf:
 plays:
   - "29-mcp-server"
   - "01-enterprise-rag"
+mcpAttachments:
+  optional: ["azure", "context7"]
 ---
 
 # FAI Python MCP Expert

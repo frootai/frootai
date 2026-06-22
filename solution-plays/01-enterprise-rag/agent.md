@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize config values — chunking params, search weights, model routing, caching, evaluation thresholds"
     prompt: "Tune the Enterprise RAG (Play 01) configuration for: "
+mcp_scope:
+  attached: ["azure"]
 ---
 
 # Enterprise Rag Agent

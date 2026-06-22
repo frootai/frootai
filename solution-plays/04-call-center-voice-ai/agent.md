@@ -14,6 +14,8 @@ handoffs:
   - agent: "tuner"
     description: "Optimize response time (STT+LLM+TTS < 2s), model routing, TTS prosody, cost"
     prompt: "Tune the Call Center Voice AI (Play 04) configuration for: "
+mcp_scope:
+  attached: ["azure"]
 ---
 
 # Call Center Voice Ai Agent

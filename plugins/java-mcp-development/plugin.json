@@ -8,6 +8,7 @@
   },
   "repository": "https://github.com/frootai/frootai",
   "license": "MIT",
+  "requiresMcp": ["context7"],
   "keywords": [
     "java",
     "spring-boot",

@@ -1,0 +1,54 @@
+{
+  "$comment": "[M10.5] Canonical MCP server roster — read by scripts/generate-marketplace.js into marketplace.json#mcpServers[]. Every slug declared by a play (mcp_scope.attached), agent (mcpAttachments.required/.optional), or skill (requiresMcp) MUST resolve to an entry here, or the M10.5 validator (frootai-core/scripts/orchard/validate-mcp-area-slugs.js) fails CI. Seeded from the M3 Tier-1 roster in frootai-core/cli/lib/mcp/tier1-trust.js plus areas the M10 content rows will reference (context7, chrome-devtools). Updating this file is the single source of truth — the generator copies it through; never edit marketplace.json#mcpServers by hand.",
+  "mcpServers": [
+    {
+      "id": "azure",
+      "name": "Azure MCP",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Federated access to Azure ARM, ACR, AKS, App Service, and cost-management APIs."
+    },
+    {
+      "id": "github",
+      "name": "GitHub MCP",
+      "publisher": "github",
+      "trust": "first-party-ms",
+      "description": "Federated access to GitHub repos, PRs, issues, and Actions."
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright MCP",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Headless-browser automation: navigate, click, type, screenshot."
+    },
+    {
+      "id": "markitdown",
+      "name": "MarkItDown MCP",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Document-to-markdown conversion (.docx, .pdf, .xlsx, etc.)."
+    },
+    {
+      "id": "ms-learn",
+      "name": "MS Learn MCP",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Search + retrieve content from learn.microsoft.com."
+    },
+    {
+      "id": "context7",
+      "name": "Context7 MCP",
+      "publisher": "upstash",
+      "trust": "verified-publisher",
+      "description": "Up-to-date library docs grounding for code-generation copilots."
+    },
+    {
+      "id": "chrome-devtools",
+      "name": "Chrome DevTools MCP",
+      "publisher": "google",
+      "trust": "verified-publisher",
+      "description": "Chrome DevTools Protocol surface for browser introspection + automation."
+    }
+  ]
+}
