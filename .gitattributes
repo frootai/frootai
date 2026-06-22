@@ -1,0 +1,4 @@
+# [Z2.6] Lean artifacts are byte-stable, deterministic compiler output —
+# pin LF so the on-disk bytes match the compiler exactly and re-running
+# `scripts/compile-lean.mjs --write` produces no diff ([Z2.7] idempotence).
+*.lean.md text eol=lf

@@ -51,18 +51,21 @@ test("[Z2.1] planning is deterministic", () => {
   assert.deepEqual(a, b);
 });
 
-test("[Z2.1] collectSkills finds the real corpus, sorted and de-duplicated", () => {
+test("[Z2.1] collectSkills finds the real corpus (core + play), sorted by unique path", () => {
   const skills = collectSkills();
   assert.ok(skills.length > 100, `expected many skills, got ${skills.length}`);
-  const ids = skills.map((s) => s.id);
-  assert.deepEqual(ids, [...ids].sort((a, b) => a.localeCompare(b)), "must be sorted");
-  assert.equal(new Set(ids).size, ids.length, "no duplicate ids");
+  const paths = skills.map((s) => s.path);
+  assert.deepEqual(paths, [...paths].sort((a, b) => a.localeCompare(b)), "must be sorted by path");
+  assert.equal(new Set(paths).size, paths.length, "no duplicate paths");
+  // Both families are present.
+  assert.ok(paths.some((p) => p.replace(/\\/g, "/").includes("/skills/")), "has core skills");
+  assert.ok(paths.some((p) => p.replace(/\\/g, "/").includes("/solution-plays/")), "has play skills");
 });
 
 test("[Z2.1] a real-corpus sample all plans a faithful Lean (gate-passed)", () => {
   const sample = collectSkills().slice(0, 60);
   for (const s of sample) {
-    const full = readFileSync(join(SKILLS_DIR, s.id, "SKILL.md"), "utf8");
+    const full = readFileSync(s.path, "utf8");
     const p = planLeanArtifact(full, { id: s.id, type: "skill", sourcePath: s.path });
     assert.equal(p.write, true, `${s.id} should plan a Lean: ${p.reason}`);
   }

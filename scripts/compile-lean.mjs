@@ -24,19 +24,40 @@ import { gate } from "../engine/lean-compiler/fidelity-gate.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
+const PLAYS_DIR = join(ROOT, "solution-plays");
 
-/** Collect `{ id, path }` for every `skills/<id>/SKILL.md`, sorted by id. */
-function collectSkills() {
-  const out = [];
-  for (const name of readdirSync(SKILLS_DIR)) {
-    const path = join(SKILLS_DIR, name, "SKILL.md");
-    try {
-      if (statSync(path).isFile()) out.push({ id: name, path });
-    } catch {
-      /* not a skill dir */
-    }
+/** Recursively collect every `SKILL.md` path under a root. */
+function findSkillMd(dir, out = []) {
+  let entries;
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return out;
   }
-  return out.sort((a, b) => a.id.localeCompare(b.id));
+  for (const name of entries) {
+    const full = join(dir, name);
+    let st;
+    try {
+      st = statSync(full);
+    } catch {
+      continue;
+    }
+    if (st.isDirectory()) findSkillMd(full, out);
+    else if (name === "SKILL.md") out.push(full);
+  }
+  return out;
+}
+
+/**
+ * Collect `{ id, path }` for every skill — CORE (`skills/<id>/SKILL.md`) and
+ * PLAY (`solution-plays/<play>/.github/skills/<name>/SKILL.md`) — so the written
+ * artifacts match the catalog's full 638-skill coverage. Sorted by path
+ * (deterministic; play names can legitimately collide with core ids).
+ */
+function collectSkills() {
+  return [...findSkillMd(SKILLS_DIR), ...findSkillMd(PLAYS_DIR)]
+    .map((path) => ({ id: dirname(path).split(/[\\/]/).pop(), path }))
+    .sort((a, b) => a.path.localeCompare(b.path));
 }
 
 /**
