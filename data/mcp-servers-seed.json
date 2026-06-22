@@ -1,54 +1,180 @@
 {
-  "$comment": "[M10.5] Canonical MCP server roster — read by scripts/generate-marketplace.js into marketplace.json#mcpServers[]. Every slug declared by a play (mcp_scope.attached), agent (mcpAttachments.required/.optional), or skill (requiresMcp) MUST resolve to an entry here, or the M10.5 validator (frootai-core/scripts/orchard/validate-mcp-area-slugs.js) fails CI. Seeded from the M3 Tier-1 roster in frootai-core/cli/lib/mcp/tier1-trust.js plus areas the M10 content rows will reference (context7, chrome-devtools). Updating this file is the single source of truth — the generator copies it through; never edit marketplace.json#mcpServers by hand.",
+  "$comment": "[M11+] Canonical MCP server roster — read by scripts/generate-marketplace.js into marketplace.json#mcpServers[]. Every slug declared by a play (mcp_scope.attached), agent (mcpAttachments.required/.optional), or skill (requiresMcp) MUST resolve to an entry here, or the M10.5 validator (frootai-core/scripts/orchard/validate-mcp-area-slugs.js) fails CI. Sourced from frootai-core/scripts/federation/seed-areas-list.json (the runtime spec); kept in sync by drift-check CI. Editing this file is the single source of truth — the generator copies it through; never edit marketplace.json#mcpServers by hand.",
   "mcpServers": [
     {
       "id": "azure",
-      "name": "Azure MCP",
+      "name": "Azure Resource Management",
       "publisher": "microsoft",
       "trust": "first-party-ms",
-      "description": "Federated access to Azure ARM, ACR, AKS, App Service, and cost-management APIs."
-    },
-    {
-      "id": "github",
-      "name": "GitHub MCP",
-      "publisher": "github",
-      "trust": "first-party-ms",
-      "description": "Federated access to GitHub repos, PRs, issues, and Actions."
+      "description": "Microsoft Azure resource lifecycle, monitoring, and cost via the Azure MCP server."
     },
     {
       "id": "playwright",
-      "name": "Playwright MCP",
+      "name": "Browser Automation",
       "publisher": "microsoft",
       "trust": "first-party-ms",
-      "description": "Headless-browser automation: navigate, click, type, screenshot."
+      "description": "Cross-browser automation via the official Playwright MCP server."
+    },
+    {
+      "id": "github",
+      "name": "GitHub Repository Operations",
+      "publisher": "github",
+      "trust": "first-party-ms",
+      "description": "GitHub repo / issue / PR / Actions operations via the official GitHub MCP server."
     },
     {
       "id": "markitdown",
-      "name": "MarkItDown MCP",
+      "name": "Document → Markdown Conversion",
       "publisher": "microsoft",
       "trust": "first-party-ms",
-      "description": "Document-to-markdown conversion (.docx, .pdf, .xlsx, etc.)."
-    },
-    {
-      "id": "ms-learn",
-      "name": "MS Learn MCP",
-      "publisher": "microsoft",
-      "trust": "first-party-ms",
-      "description": "Search + retrieve content from learn.microsoft.com."
+      "description": "Office docs / PDFs / images → clean Markdown via the MarkItDown MCP server."
     },
     {
       "id": "context7",
-      "name": "Context7 MCP",
+      "name": "Live Library Documentation",
       "publisher": "upstash",
       "trust": "verified-publisher",
-      "description": "Up-to-date library docs grounding for code-generation copilots."
+      "description": "Always-current package docs via the Context7 MCP server."
+    },
+    {
+      "id": "ms-learn",
+      "name": "Microsoft Learn Documentation",
+      "publisher": "microsoftdocs",
+      "trust": "first-party-ms",
+      "description": "Authoritative Microsoft Learn doc retrieval via the MS Learn MCP server."
     },
     {
       "id": "chrome-devtools",
-      "name": "Chrome DevTools MCP",
-      "publisher": "google",
+      "name": "Chrome DevTools Protocol",
+      "publisher": "chromedevtools",
       "trust": "verified-publisher",
-      "description": "Chrome DevTools Protocol surface for browser introspection + automation."
+      "description": "Inspect live DOM, network, console — verify rendered output of any deploy."
+    },
+    {
+      "id": "ms-fabric",
+      "name": "Microsoft Fabric",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Microsoft Fabric data + analytics surface (Power BI, Synapse, OneLake)."
+    },
+    {
+      "id": "azure-devops",
+      "name": "Azure DevOps",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Enterprise SCM + boards + pipelines via Azure DevOps MCP — complement to GitHub."
+    },
+    {
+      "id": "ms-nuget",
+      "name": "Microsoft NuGet",
+      "publisher": "nuget",
+      "trust": "first-party-ms",
+      "description": "NuGet package intelligence for .NET-track Plays — search, version, dependency tree."
+    },
+    {
+      "id": "awesome-copilot",
+      "name": "Awesome Copilot Customizations",
+      "publisher": "microsoft",
+      "trust": "first-party-ms",
+      "description": "Browse Copilot customisations from the Awesome Copilot repo — pairs with agent-authoring tools."
+    },
+    {
+      "id": "notion",
+      "name": "Notion Workspace",
+      "publisher": "makenotion",
+      "trust": "verified-publisher",
+      "description": "Notion pages + databases + comments — where specs live for many teams."
+    },
+    {
+      "id": "terraform",
+      "name": "HashiCorp Terraform",
+      "publisher": "hashicorp",
+      "trust": "verified-publisher",
+      "description": "Terraform module discovery + provider docs — IaC complement to Azure MCP / Bicep."
+    },
+    {
+      "id": "firecrawl",
+      "name": "Firecrawl Web Extraction",
+      "publisher": "firecrawl",
+      "trust": "verified-publisher",
+      "description": "Best-in-class web data extraction — seed grounding from arbitrary websites."
+    },
+    {
+      "id": "tavily",
+      "name": "Tavily Web Search",
+      "publisher": "tavily-ai",
+      "trust": "verified-publisher",
+      "description": "Advanced web search optimised for AI agents — the agentic retriever persona."
+    },
+    {
+      "id": "supabase",
+      "name": "Supabase Backend",
+      "publisher": "supabase",
+      "trust": "verified-publisher",
+      "description": "Postgres + auth + storage + edge functions — for app-builder Plays."
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe Payments",
+      "publisher": "stripe",
+      "trust": "verified-publisher",
+      "description": "Customers, subscriptions, invoices, products — for SaaS / billing scaffolds."
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "publisher": "mongodb-js",
+      "trust": "verified-publisher",
+      "description": "MongoDB Atlas + self-hosted clusters — for NoSQL Plays."
+    },
+    {
+      "id": "atlassian",
+      "name": "Atlassian (Jira + Confluence)",
+      "publisher": "atlassian",
+      "trust": "verified-publisher",
+      "description": "Jira issues + Confluence pages + Rovo — for enterprise PM Plays."
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel Next.js DevTools",
+      "publisher": "vercel",
+      "trust": "verified-publisher",
+      "description": "Next.js project inspection + deploy preview — pairs with the Next.js Orchard Plays."
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry Error Monitoring",
+      "publisher": "getsentry",
+      "trust": "verified-publisher",
+      "description": "Issue search + alert rules + release tracking — for any prod-Play."
+    },
+    {
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "publisher": "elastic",
+      "trust": "verified-publisher",
+      "description": "Index search + ML feature queries — for search-track Plays."
+    },
+    {
+      "id": "neon",
+      "name": "Neon Serverless Postgres",
+      "publisher": "neondatabase",
+      "trust": "verified-publisher",
+      "description": "Neon project + branch + query — for serverless-PG Plays."
+    },
+    {
+      "id": "sonarqube",
+      "name": "SonarQube Code Quality",
+      "publisher": "sonarsource",
+      "trust": "verified-publisher",
+      "description": "Code-quality scans + technical-debt reports — for code-review Plays."
+    },
+    {
+      "id": "svelte",
+      "name": "Svelte / SvelteKit",
+      "publisher": "sveltejs",
+      "trust": "verified-publisher",
+      "description": "Svelte/SvelteKit component + route understanding — for Svelte Plays."
     }
   ]
 }
