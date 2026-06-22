@@ -26,6 +26,7 @@ import { countTokens } from "./tokens.js";
 import { parse, reassemble } from "./parse.js";
 import { segment } from "./segment.js";
 import { compressProse } from "./compress-prose.js";
+import { compressExample, foldDuplicateExamples } from "./compress-example.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -53,12 +54,15 @@ const STAGES = [
   },
   { id: "segment", fn: (ctx) => { if (ctx.blocks) ctx.blocks = segment(ctx.blocks); return ctx; } }, // [Z0.3]
   {
-    id: "compress", // [Z0.4] PROSE rewrite ([Z0.5] EXAMPLE / [Z0.6] TABLE-LIST land here next)
+    id: "compress", // [Z0.4] PROSE rewrite · [Z0.5] EXAMPLE/code ([Z0.6] TABLE-LIST lands here next)
     fn: (ctx) => {
       if (ctx.blocks) {
-        ctx.blocks = ctx.blocks.map((b) =>
-          b.role === "PROSE" ? { ...b, raw: compressProse(b.raw) } : b,
-        );
+        ctx.blocks = ctx.blocks.map((b) => {
+          if (b.role === "PROSE") return { ...b, raw: compressProse(b.raw) };
+          if (b.role === "EXAMPLE") return { ...b, raw: compressExample(b.raw) };
+          return b;
+        });
+        ctx.blocks = foldDuplicateExamples(ctx.blocks);
       }
       return ctx;
     },
