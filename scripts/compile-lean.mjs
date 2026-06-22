@@ -15,7 +15,7 @@
  *   node scripts/compile-lean.mjs --write    # write the .lean.md files
  */
 
-import { readdirSync, readFileSync, writeFileSync, statSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, statSync, existsSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "../engine/lean-compiler/index.js";
@@ -143,6 +143,14 @@ function planLeanArtifact(full, { id, type = "skill", sourcePath = "SKILL.md" } 
       reason = `profile:${preserved.reason}`;
     }
   }
+  // [Z4.9] Token-win gate: a Lean that is no smaller in tokens is no win — don't
+  // emit it (mirrors the catalog's computeLean gate so the engine artifacts and
+  // the website agree). Some near-incompressible primitives (heavy frontmatter /
+  // code) tokenise LARGER after whitespace normalisation even though bytes shrink.
+  if (write && sidecar.savedTokens < 0) {
+    write = false;
+    reason = "no-token-saving";
+  }
   return {
     id,
     type,
@@ -169,7 +177,12 @@ function run({ write = false } = {}) {
   for (const s of sources) {
     const full = readFileSync(s.path, "utf8");
     const plan = planLeanArtifact(full, { id: s.id, type: s.type, sourcePath: s.path });
-    if (write && plan.write) writeFileSync(plan.leanPath, plan.lean, "utf8");
+    if (write) {
+      if (plan.write) writeFileSync(plan.leanPath, plan.lean, "utf8");
+      // [Z4.9] prune an orphan: a previously-written `.lean.md` whose primitive
+      // no longer earns a Lean (e.g. now gated out as no-token-saving).
+      else if (existsSync(plan.leanPath)) unlinkSync(plan.leanPath);
+    }
     plans.push(plan);
   }
   return plans;
@@ -181,15 +194,22 @@ function report(plans) {
   const savedPcts = written.map((p) => p.saved).sort((a, b) => a - b);
   const mean = savedPcts.length ? savedPcts.reduce((a, s) => a + s, 0) / savedPcts.length : 0;
   const median = savedPcts.length ? savedPcts[Math.floor(savedPcts.length / 2)] : 0;
-  console.log(`\n[Z2/Z4] compile-lean over ${plans.length} primitives`);
+  console.log(`\n[Z4.9] compile-lean per-type savings over ${plans.length} primitives\n`);
+  console.log(`  ${"type".padEnd(12)} ${"lean".padStart(5)} ${"full-only".padStart(9)} ${"saved% mean/med".padStart(16)} ${"tokens saved".padStart(13)}`);
   for (const t of [...new Set(plans.map((p) => p.type || "skill"))]) {
     const tp = plans.filter((p) => (p.type || "skill") === t);
-    console.log(`  ${t}: ${tp.filter((p) => p.write).length}/${tp.length} lean written`);
+    const w = tp.filter((p) => p.write);
+    const sp = w.map((p) => p.saved).sort((a, b) => a - b);
+    const tmean = sp.length ? sp.reduce((a, s) => a + s, 0) / sp.length : 0;
+    const tmed = sp.length ? sp[Math.floor(sp.length / 2)] : 0;
+    const tok = w.reduce((a, p) => a + p.savedTokens, 0);
+    console.log(`  ${t.padEnd(12)} ${String(w.length).padStart(5)} ${String(tp.length - w.length).padStart(9)} ${`${tmean.toFixed(1)}/${tmed}`.padStart(16)} ${String(tok).padStart(13)}`);
   }
-  console.log(`  lean written (gate-passed): ${written.length}`);
-  console.log(`  rejected (Full-only): ${rejected.length}`);
-  console.log(`  token savings on Lean: mean ${mean.toFixed(1)}% · median ${median}%`);
-  for (const r of rejected.slice(0, 10)) console.log(`    - ${r.type || "skill"}/${r.id}: ${r.reason}`);
+  const reasons = {};
+  for (const r of rejected) reasons[r.reason] = (reasons[r.reason] || 0) + 1;
+  console.log(`\n  lean written (gate-passed): ${written.length} · Full-only: ${rejected.length}`);
+  console.log(`  Full-only reasons: ${JSON.stringify(reasons)}`);
+  console.log(`  token savings on the Lean subset: mean ${mean.toFixed(1)}% · median ${median}%`);
   console.log("");
 }
 
