@@ -29,6 +29,7 @@ import { compressProse } from "./compress-prose.js";
 import { compressExample, foldDuplicateExamples } from "./compress-example.js";
 import { compressTable, compressList } from "./compress-table-list.js";
 import { assertBehaviourPreserved, snapshotForGuard } from "./preserve-guard.js";
+import { normalize } from "./normalize.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -73,7 +74,7 @@ const STAGES = [
       return ctx;
     },
   },
-  { id: "normalize", fn: (ctx) => ctx }, // [Z0.8]
+  { id: "normalize", fn: (ctx) => { if (ctx.blocks) ctx.blocks = normalize(ctx.blocks); return ctx; } }, // [Z0.8]
   {
     id: "verify", // [Z0.7] behaviour-preserve guard · [Z1] full fidelity gate later
     fn: (ctx) => {
