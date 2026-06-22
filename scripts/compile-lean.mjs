@@ -15,7 +15,7 @@
  *   node scripts/compile-lean.mjs --write    # write the .lean.md files
  */
 
-import { readdirSync, readFileSync, writeFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, statSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "../engine/lean-compiler/index.js";
@@ -28,9 +28,10 @@ const SKILLS_DIR = join(ROOT, "skills");
 const PLAYS_DIR = join(ROOT, "solution-plays");
 const AGENTS_DIR = join(ROOT, "agents");
 const INSTRUCTIONS_DIR = join(ROOT, "instructions");
+const HOOKS_DIR = join(ROOT, "hooks");
 
-/** Recursively collect every `SKILL.md` path under a root. */
-function findSkillMd(dir, out = []) {
+/** Recursively collect every path named `filename` under a root. */
+function findNamed(dir, filename, out = []) {
   let entries;
   try {
     entries = readdirSync(dir);
@@ -45,8 +46,8 @@ function findSkillMd(dir, out = []) {
     } catch {
       continue;
     }
-    if (st.isDirectory()) findSkillMd(full, out);
-    else if (name === "SKILL.md") out.push(full);
+    if (st.isDirectory()) findNamed(full, filename, out);
+    else if (name === filename) out.push(full);
   }
   return out;
 }
@@ -58,7 +59,7 @@ function findSkillMd(dir, out = []) {
  * (deterministic; play names can legitimately collide with core ids).
  */
 function collectSkills() {
-  return [...findSkillMd(SKILLS_DIR), ...findSkillMd(PLAYS_DIR)]
+  return [...findNamed(SKILLS_DIR, "SKILL.md"), ...findNamed(PLAYS_DIR, "SKILL.md")]
     .map((path) => ({ id: dirname(path).split(/[\\/]/).pop(), path }))
     .sort((a, b) => a.path.localeCompare(b.path));
 }
@@ -95,6 +96,22 @@ function collectInstructions() {
   return entries
     .filter((name) => name.endsWith(".instructions.md"))
     .map((name) => ({ id: name.replace(/\.instructions\.md$/, ""), path: join(INSTRUCTIONS_DIR, name) }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+}
+
+/**
+ * [Z4.6] Collect `{ id, path }` for every hook. A hook is a FOLDER with a
+ * `hooks.json` manifest; the compiled markdown is its README.md sibling. Keying
+ * off the manifest excludes the top-level `hooks/README.md` index (no manifest).
+ * The manifest itself is never compiled, so events/config are preserved.
+ */
+function collectHooks() {
+  return findNamed(HOOKS_DIR, "hooks.json")
+    .map((manifestPath) => {
+      const dir = dirname(manifestPath);
+      return { id: dir.split(/[\\/]/).pop(), path: join(dir, "README.md") };
+    })
+    .filter((h) => existsSync(h.path))
     .sort((a, b) => a.path.localeCompare(b.path));
 }
 
@@ -147,6 +164,7 @@ function run({ write = false } = {}) {
     ...collectSkills().map((s) => ({ ...s, type: "skill" })),
     ...collectAgents().map((a) => ({ ...a, type: "agent" })),
     ...collectInstructions().map((i) => ({ ...i, type: "instruction" })),
+    ...collectHooks().map((h) => ({ ...h, type: "hook" })),
   ];
   for (const s of sources) {
     const full = readFileSync(s.path, "utf8");
@@ -184,4 +202,4 @@ if (isMain) {
   if (write) console.log(`Wrote ${plans.filter((p) => p.write).length} .lean.md files.\n`);
 }
 
-export { planLeanArtifact, collectSkills, collectAgents, collectInstructions, run, SKILLS_DIR, AGENTS_DIR, INSTRUCTIONS_DIR };
+export { planLeanArtifact, collectSkills, collectAgents, collectInstructions, collectHooks, run, SKILLS_DIR, AGENTS_DIR, INSTRUCTIONS_DIR, HOOKS_DIR };
