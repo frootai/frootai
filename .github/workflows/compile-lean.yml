@@ -1,0 +1,58 @@
+name: Compile Lean (.lean.md, daily)
+
+# [Z2.10] Regenerate the fidelity-gated Lean artifacts
+# (skills/**/SKILL.lean.md and solution-plays/**/SKILL.lean.md) once a day and
+# on demand, plus whenever a SKILL.md or the compiler changes. The compiler is
+# deterministic, so this commits only when the byte-stable output actually
+# changes ([Z2.6]/[Z2.7]).
+
+on:
+  schedule:
+    - cron: '23 6 * * *' # daily 06:23 UTC (just after skills-llms-txt)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**/SKILL.md'
+      - 'solution-plays/**/SKILL.md'
+      - 'scripts/compile-lean.mjs'
+      - 'engine/lean-compiler/**'
+
+concurrency:
+  group: compile-lean
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      # The engine uses gpt-tokenizer (build-time only); install so the exact
+      # o200k_base tokenizer is available rather than the chars/4 fallback.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Compile gated Lean artifacts
+        run: node scripts/compile-lean.mjs --write
+
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain '*.lean.md')" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add '*.lean.md'
+            git commit -m "chore(lean): refresh .lean.md artifacts [skip ci]"
+            git push
+          else
+            echo "No changes to .lean.md artifacts"
+          fi
