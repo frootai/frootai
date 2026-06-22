@@ -76,7 +76,8 @@ test("[Z0.8] normalize is monotone and idempotent", () => {
 test("[Z0.8] compile() collapses double-spacing between blocks", () => {
   const md = "# Title\n\n\n\nFirst paragraph.\n\n\n\nSecond paragraph.\n";
   const out = compile(md);
-  assert.ok(out.stats.saved > 0);
+  // Blank-run collapse drops BYTES; exact token count may be unchanged.
+  assert.ok(out.sidecar.bytesLean < out.sidecar.bytes);
   assert.ok(!out.lean.includes("\n\n\n")); // no triple-newline survives
   assert.ok(out.lean.includes("First paragraph."));
   assert.ok(out.lean.includes("Second paragraph."));

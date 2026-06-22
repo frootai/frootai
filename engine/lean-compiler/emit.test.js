@@ -14,6 +14,7 @@ import {
   artifactPaths,
   serializeSidecar,
 } from "./emit.js";
+import { countTokens } from "./tokens.js";
 import { compile } from "./index.js";
 
 const ctxFrom = (md, stages = ["parse", "segment", "compress", "normalize", "verify"]) => ({
@@ -42,12 +43,16 @@ test("[Z0.9] sidecar is deterministic — no timestamp, identical across runs", 
   assert.deepEqual(a, b);
 });
 
-test("[Z0.9] buildSidecar math: saved percent + savedTokens", () => {
-  const s = buildSidecar({ source: "x".repeat(400), lean: "x".repeat(300), stagesApplied: [] });
-  assert.equal(s.tokens, 100); // 400/4
-  assert.equal(s.tokensLean, 75); // 300/4
-  assert.equal(s.savedTokens, 25);
-  assert.equal(s.saved, 25);
+test("[Z0.9] buildSidecar math: saved percent + savedTokens are self-consistent", () => {
+  const source = "It is important to note that this is a verbose paragraph.\n";
+  const lean = "This is a paragraph.\n";
+  const s = buildSidecar({ source, lean, stagesApplied: [] });
+  const expTokens = countTokens(source);
+  const expLean = countTokens(lean);
+  assert.equal(s.tokens, expTokens);
+  assert.equal(s.tokensLean, expLean);
+  assert.equal(s.savedTokens, expTokens - expLean);
+  assert.equal(s.saved, Math.round(((expTokens - expLean) / expTokens) * 100));
 });
 
 test("[Z0.9] empty document yields zeros, no NaN", () => {

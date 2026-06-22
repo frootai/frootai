@@ -68,7 +68,10 @@ const c = 3;
 \`\`\`
 `;
   const out = compile(md);
-  assert.ok(out.stats.saved > 0);
+  // Whitespace-only compression reliably drops BYTES; token count may be
+  // unchanged because newline runs often map to the same o200k_base token.
+  assert.ok(out.sidecar.bytesLean < out.sidecar.bytes);
+  assert.ok(out.sidecar.tokensLean <= out.sidecar.tokens);
   // code identifiers survive
   assert.ok(out.lean.includes("const a = 1;"));
   assert.ok(out.lean.includes("const c = 3;"));
