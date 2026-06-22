@@ -23,6 +23,7 @@
  */
 
 import { countTokens } from "./tokens.js";
+import { parse } from "./parse.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -39,7 +40,15 @@ import { countTokens } from "./tokens.js";
  * @property {string[]} stagesApplied - ids of stages that have run
  */
 const STAGES = [
-  { id: "parse", fn: (ctx) => ctx }, // [Z0.2]
+  {
+    id: "parse", // [Z0.2] — populate frontmatter + block AST (body unchanged until emit)
+    fn: (ctx) => {
+      const { frontmatter, blocks } = parse(ctx.source);
+      ctx.frontmatter = frontmatter;
+      ctx.blocks = blocks;
+      return ctx;
+    },
+  },
   { id: "segment", fn: (ctx) => ctx }, // [Z0.3]
   { id: "compress", fn: (ctx) => ctx }, // [Z0.4]-[Z0.6]
   { id: "normalize", fn: (ctx) => ctx }, // [Z0.8]
