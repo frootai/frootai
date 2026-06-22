@@ -22,14 +22,14 @@
  * stage for its real implementation without touching this entry contract.
  */
 
-import { countTokens } from "./tokens.js";
-import { parse, reassemble } from "./parse.js";
+import { parse } from "./parse.js";
 import { segment } from "./segment.js";
 import { compressProse } from "./compress-prose.js";
 import { compressExample, foldDuplicateExamples } from "./compress-example.js";
 import { compressTable, compressList } from "./compress-table-list.js";
 import { assertBehaviourPreserved, snapshotForGuard } from "./preserve-guard.js";
 import { normalize } from "./normalize.js";
+import { emit } from "./emit.js";
 
 /**
  * Ordered transform stages. Each later row replaces its `fn` (currently an
@@ -107,8 +107,6 @@ function compile(md, options = {}) {
     throw new TypeError("lean-compiler: compile(md) expects a markdown string");
   }
 
-  const tokensBefore = countTokens(md);
-
   /** @type {LeanCtx} */
   let ctx = {
     source: md,
@@ -123,18 +121,19 @@ function compile(md, options = {}) {
     ctx.stagesApplied.push(stage.id);
   }
 
-  // [Z0.9-stub emit] — rebuild the Lean output from the (possibly compressed)
-  // block AST. With identity stages this equals the source (round-trip, [Z0.2]).
-  const lean = ctx.blocks
-    ? reassemble({ frontmatter: ctx.frontmatter, blocks: ctx.blocks })
-    : ctx.body;
-  const tokensAfter = countTokens(lean);
-  const saved =
-    tokensBefore > 0 ? Math.round((1 - tokensAfter / tokensBefore) * 100) : 0;
+  // [Z0.9] emit — rebuild the Lean string + build the canonical sidecar stats.
+  const { lean, sidecar } = emit(ctx);
 
   return {
     lean,
-    stats: { tokensBefore, tokensAfter, saved, stagesApplied: ctx.stagesApplied },
+    sidecar,
+    // Legacy stats shape kept for back-compat with earlier rows' tests.
+    stats: {
+      tokensBefore: sidecar.tokens,
+      tokensAfter: sidecar.tokensLean,
+      saved: sidecar.saved,
+      stagesApplied: ctx.stagesApplied,
+    },
   };
 }
 
