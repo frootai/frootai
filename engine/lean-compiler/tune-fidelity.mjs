@@ -19,15 +19,15 @@ import { scoreFidelity, DEFAULT_THRESHOLD } from "./fidelity-score.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
-/** Collect (id, full) pairs for a directory of `<id>/<FILE>` primitives. */
-function collectDir(rel, file) {
+/** Collect (id, type, full) pairs for a directory of `<id>/<FILE>` primitives. */
+function collectDir(rel, file, type) {
   const dir = join(ROOT, rel);
   if (!existsSync(dir)) return [];
   const out = [];
   for (const name of readdirSync(dir)) {
     const p = join(dir, name, file);
     try {
-      if (statSync(p).isFile()) out.push({ id: `${rel}/${name}`, full: readFileSync(p, "utf8") });
+      if (statSync(p).isFile()) out.push({ id: `${rel}/${name}`, type, full: readFileSync(p, "utf8") });
     } catch {
       /* not a primitive dir */
     }
@@ -36,7 +36,7 @@ function collectDir(rel, file) {
 }
 
 /** Collect flat `<id>.<ext>` primitives (agents/instructions). */
-function collectFlat(rel, suffix) {
+function collectFlat(rel, suffix, type) {
   const dir = join(ROOT, rel);
   if (!existsSync(dir)) return [];
   const out = [];
@@ -44,7 +44,7 @@ function collectFlat(rel, suffix) {
     if (!name.endsWith(suffix)) continue;
     const p = join(dir, name);
     try {
-      if (statSync(p).isFile()) out.push({ id: `${rel}/${name}`, full: readFileSync(p, "utf8") });
+      if (statSync(p).isFile()) out.push({ id: `${rel}/${name}`, type, full: readFileSync(p, "utf8") });
     } catch {
       /* skip */
     }
@@ -52,10 +52,15 @@ function collectFlat(rel, suffix) {
   return out;
 }
 
+// [Z4.7] Per-type corpus: skills (core) + agents + instructions + hooks. Each
+// item is tagged with its primitive type so the report can break the fidelity
+// distribution down per type and confirm the single DEFAULT_THRESHOLD holds for
+// every type (rather than only in aggregate).
 const corpus = [
-  ...collectDir("skills", "SKILL.md"),
-  ...collectFlat("agents", ".agent.md"),
-  ...collectFlat("instructions", ".instructions.md"),
+  ...collectDir("skills", "SKILL.md", "skill"),
+  ...collectFlat("agents", ".agent.md", "agent"),
+  ...collectFlat("instructions", ".instructions.md", "instruction"),
+  ...collectDir("hooks", "README.md", "hook"),
 ];
 
 if (corpus.length === 0) {
@@ -68,23 +73,30 @@ const scores = [];
 let hardFails = 0;
 const failingExamples = [];
 let savedPctSum = 0;
+const byType = {};
 
-for (const { id, full } of corpus) {
+for (const { id, type, full } of corpus) {
   let lean;
   try {
-    ({ lean } = compile(full));
+    ({ lean } = compile(full, { type }));
   } catch (e) {
     failingExamples.push(`${id}: compile threw ${e.message}`);
     continue;
   }
   const v = scoreFidelity(full, lean);
   scores.push(v.score);
+  const tFull = full.length || 1;
+  const savedPct = Math.max(0, (tFull - lean.length) / tFull) * 100;
   if (v.hardFail) {
     hardFails += 1;
     if (failingExamples.length < 10) failingExamples.push(`${id}: hardFail ${v.reasons.join("; ")}`);
   }
-  const tFull = full.length || 1;
-  savedPctSum += Math.max(0, (tFull - lean.length) / tFull) * 100;
+  savedPctSum += savedPct;
+  const b = (byType[type] ||= { scores: [], hardFails: 0, pass: 0, savedSum: 0 });
+  b.scores.push(v.score);
+  if (v.hardFail) b.hardFails += 1;
+  else if (v.score >= DEFAULT_THRESHOLD) b.pass += 1;
+  b.savedSum += savedPct;
 }
 
 scores.sort((a, b) => a - b);
@@ -92,10 +104,27 @@ const n = scores.length;
 const mean = scores.reduce((a, s) => a + s, 0) / n;
 const pct = (p) => scores[Math.min(n - 1, Math.floor((p / 100) * n))];
 
-console.log(`\n[Z1.11] Fidelity distribution over ${n} primitives (skills+agents+instructions)\n`);
+console.log(`\n[Z4.7] Fidelity distribution over ${n} primitives (skills+agents+instructions+hooks)\n`);
 console.log(`  min ${scores[0].toFixed(1)} · p1 ${pct(1).toFixed(1)} · p5 ${pct(5).toFixed(1)} · median ${pct(50).toFixed(1)} · mean ${mean.toFixed(3)} · max ${scores[n - 1].toFixed(1)}`);
 console.log(`  hard-fails: ${hardFails}`);
 console.log(`  mean byte savings: ${(savedPctSum / n).toFixed(1)}%\n`);
+
+// [Z4.7] Per-type breakdown — the point of this row: confirm the SINGLE default
+// threshold passes 100% for every primitive type, so no per-type override is
+// warranted (an honest "the defaults already generalise" rather than over-tuning).
+console.log("  per-type (pass = no hard-fail AND score >= DEFAULT_THRESHOLD):");
+console.log(`    ${"type".padEnd(12)} ${"n".padStart(4)}  ${"min".padStart(5)}  ${"median".padStart(6)}  ${"mean".padStart(6)}  ${"saved%".padStart(6)}  pass@${DEFAULT_THRESHOLD}`);
+for (const t of ["skill", "agent", "instruction", "hook"]) {
+  const b = byType[t];
+  if (!b) continue;
+  const s = [...b.scores].sort((a, c) => a - c);
+  const bn = s.length;
+  const bmean = s.reduce((a, x) => a + x, 0) / bn;
+  const bmed = s[Math.floor(bn / 2)];
+  const passRate = ((b.pass / bn) * 100).toFixed(1);
+  console.log(`    ${t.padEnd(12)} ${String(bn).padStart(4)}  ${s[0].toFixed(1).padStart(5)}  ${bmed.toFixed(1).padStart(6)}  ${bmean.toFixed(3).padStart(6)}  ${(b.savedSum / bn).toFixed(1).padStart(5)}%  ${passRate.padStart(6)}%`);
+}
+console.log("");
 
 console.log("  threshold  pass-rate (no hard-fail AND score>=t)");
 for (const t of CANDIDATES) {
