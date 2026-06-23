@@ -31,6 +31,7 @@
 import { compile as compileLossless } from "../lean-compiler/index.js";
 import { scoreFidelity, DEFAULT_WEIGHTS, DEFAULT_THRESHOLD } from "../lean-compiler/fidelity-score.js";
 import { StubSemanticCompressor } from "./semantic-stage.js";
+import { RuleSemanticCompressor } from "./semantic-rules.js";
 
 /**
  * @typedef {Object} SemanticCompressor
@@ -146,4 +147,4 @@ export async function compilePlus(md, options = {}) {
     return { lean, stats, verdict };
 }
 
-export { StubSemanticCompressor };
+export { StubSemanticCompressor, RuleSemanticCompressor };

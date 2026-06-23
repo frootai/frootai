@@ -6,20 +6,21 @@
 > tier was tuned against. The goal of Lean+ is the masterplan's 30–40 %
 > token-savings target — measured, not estimated.
 >
-> **Status (Z10.3)**: scaffold + contract only. The harness, the gate re-use,
-> the bloater/guardrail/identity fallback paths and the determinism contract
-> are all in place and tested (7/7 in `index.test.js`). The only backend
-> shipped today is `StubSemanticCompressor` (an identity pass-through) so the
-> harness can be exercised end-to-end without an LLM. A real backend lands in
-> the next Z10 row.
+> **Status (Z10.3)**: scaffold + contract + **first real backend**. The harness,
+> the gate re-use, the bloater/guardrail/identity fallback paths and the
+> determinism contract are all in place and tested. Two backends ship today:
+> `StubSemanticCompressor` (identity pass-through, for wiring tests) and
+> `RuleSemanticCompressor` (`rule-paraphrase-v1`) — the first real, deterministic
+> semantic backend. The model-backed paraphrase + embedding-dedup tier layers
+> on later via the SAME contract.
 
 ## API
 
 ```js
-import { compilePlus, StubSemanticCompressor } from "frootai/engine/lean-compiler-plus";
+import { compilePlus, StubSemanticCompressor, RuleSemanticCompressor } from "frootai/engine/lean-compiler-plus";
 
 const { lean, stats, verdict } = await compilePlus(fullMd, {
-  semantic: StubSemanticCompressor,   // default
+  semantic: RuleSemanticCompressor,   // first real backend; default is the Stub
   primitiveType: "skill",             // skill | agent | instruction | hook | unknown
   threshold: 9.5,                     // Z1 default — overridable
 });
@@ -101,15 +102,25 @@ copy change. The scaffold proves:
   guard trips before the gate even runs.
 - A new backend is one import away.
 
-A real semantic backend — paraphrase pass, redundant-clause folding,
-embedding-based prose dedup, with explicit eval against the same Z1 fidelity
-gate — is the next row.
+A real semantic backend ships now: **`RuleSemanticCompressor`** (`rule-paraphrase-v1`)
+— a deterministic, dependency-free prose-paraphrase pass with a ruleset
+**disjoint** from the [Z0.4] lossless floor (e.g. `utilize`→`use`, `prior to`→`before`,
+`is able to`→`can`). It is safe by construction: it reuses `roleFromText` to leave
+every behaviour-bearing line byte-identical, protects inline code / fenced code,
+and is monotone per line — so it clears the same Z1 gate and earns only the
+**honest marginal** prose savings the corpus actually contains (on already-tight
+content that is ~0). The bigger 30–40 % target needs the model-backed tier
+(paraphrase + redundant-clause fold + embedding-based prose dedup), which slots
+in via the same `SemanticCompressor` contract — the next row.
 
 ## Tests
 
 ```
-node --test engine/lean-compiler-plus/index.test.js
+node --test engine/lean-compiler-plus/index.test.js engine/lean-compiler-plus/semantic-rules.test.js
 ```
 
-7 checks pin the contract: shape, stub semantic-served, bloater fallback,
-guardrail-dropper hard-fail fallback, determinism, two TypeError boundaries.
+`index.test.js` (7) pins the harness contract: shape, stub semantic-served,
+bloater fallback, guardrail-dropper hard-fail fallback, determinism, two
+TypeError boundaries. `semantic-rules.test.js` (13) pins the real backend:
+filler reduction, behaviour/code/inline-code untouched, determinism, never-grow,
+and end-to-end real marginal savings through the same Z1 gate.
