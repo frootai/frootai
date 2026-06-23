@@ -46,6 +46,10 @@ inputs:
     description: 'Federation kill-switch: "on" enables the federated MCP kernel surface (default + recommended); "off" disables federation (M7.6 mapper-step will set FROOTAI_FEDERATION=off, matching the M6 federation-env-core.js FEDERATION_DISABLE_VALUE byte-for-byte so the kernel skips all attach/discover/invoke/detach plumbing). Valid values: "on" | "off" (string enum, validated by the M7.6 mapper-step). Default "on" preserves the v5-equivalent surface for v5 workflow YAML running against v6 action (M7.12 backward-compat). [M7.3]'
     required: false
     default: 'on'
+  lean:
+    description: 'Lean Mode: when "true", the action exports FROOTAI_LEAN=true so the spawned FrootAI MCP server prefers the compressed, fidelity-verified Lean (.lean.md) variant of each primitive — same capability, fewer tokens. A Lean variant ships ONLY if it cleared the FAI fidelity gate (guardrails, parameters, and code blocks preserved exactly), so enabling this never degrades content; it is served Full whenever no gated Lean exists. Valid values: "true" | "false" (string enum, validated by the Lean env-mapping step). Default "false" preserves Full-content behaviour. [Z8.6]'
+    required: false
+    default: 'false'
 
 outputs:
   result:
@@ -119,6 +123,25 @@ runs:
         if [ "$MCP_FEDERATION_INPUT" != "off" ] && [ "${ACTIONS_STEP_DEBUG:-}" = "true" ]; then
           echo "FROOTAI_DEBUG=true" >> "$GITHUB_ENV"
           echo "Federation debug logging enabled (ACTIONS_STEP_DEBUG propagated)"
+        fi
+
+    # [Z8.6] Map the Lean Mode input to the FROOTAI_LEAN env var consumed by
+    # the spawned MCP server. When lean=true the kernel prefers the committed,
+    # fidelity-verified `.lean.md` variant of each primitive (served Full when
+    # no gated Lean exists). Validates the true|false enum; unset env (lean
+    # absent / false) preserves Full-content behaviour.
+    - name: Map Lean Mode input to env
+      id: map-lean-env
+      shell: bash
+      env:
+        LEAN_INPUT: ${{ inputs.lean }}
+      run: |
+        if [ "$LEAN_INPUT" = "true" ]; then
+          echo "FROOTAI_LEAN=true" >> "$GITHUB_ENV"
+          echo "Lean Mode enabled — preferring fidelity-verified .lean.md variants."
+        elif [ -n "$LEAN_INPUT" ] && [ "$LEAN_INPUT" != "false" ]; then
+          echo "::error::lean input must be 'true' or 'false' (got: $LEAN_INPUT)"
+          exit 1
         fi
 
     # [M7.25] Secrets masking: if FROOTAI_PREATTACH or FROOTAI_TRUST_FILE
