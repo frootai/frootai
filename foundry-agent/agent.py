@@ -25,6 +25,18 @@ ENDPOINT = os.environ.get(
 )
 
 
+def lean_mode_enabled() -> bool:
+    """[Z8.7] True when Lean Mode is requested via FROOTAI_LEAN=true.
+
+    Matches the env var the [Z8.6] GitHub Action exports, so a workflow
+    that passes `lean: true` flows straight through to the agent's system
+    prompt. Any value other than the exact string "true" is treated as
+    off (parity with the action's true|false enum).
+    """
+    return os.environ.get("FROOTAI_LEAN", "").strip().lower() == "true"
+
+
+
 # [M8.6] Hard-coded fallback prompt — used when no active Play AND
 # federation is disabled OR no areas attached. This is the SAME string
 # that build_system_prompt() returns when called with empty arguments
@@ -46,11 +58,11 @@ def build_session_prompt() -> str:
     the fallback shape.
     """
     if federation_is_disabled():
-        return LEGACY_SYSTEM_PROMPT
+        return LEGACY_SYSTEM_PROMPT if not lean_mode_enabled() else build_system_prompt(lean=True)
 
     fc = FoundryFederationClient()
     if not fc.resolve_areas_to_attach():
-        return LEGACY_SYSTEM_PROMPT
+        return LEGACY_SYSTEM_PROMPT if not lean_mode_enabled() else build_system_prompt(lean=True)
 
     async def _build() -> str:
         # [M8.8] Pre-attach at session start via the explicit
@@ -61,11 +73,13 @@ def build_session_prompt() -> str:
         # play discovery (FROOTAI_ACTIVE_PLAY → SDK lookup → plays list).
         # [M8.16] Pass failed_areas so the prompt injects
         # "tool area X unavailable" notes for partial attach failures.
+        # [Z8.7] Pass lean so FROOTAI_LEAN=true injects the Lean Mode directive.
         return build_system_prompt(
             plays=(),
             attached_areas=attached,
             tools=tools,
             failed_areas=fc.failed_areas,
+            lean=lean_mode_enabled(),
         )
 
     try:

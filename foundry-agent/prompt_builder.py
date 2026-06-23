@@ -56,6 +56,22 @@ _LEGACY_FALLBACK_PLAYS_LINE = (
 )
 
 
+# [Z8.7] Lean Mode session directive. Injected only when the agent runs with
+# Lean Mode enabled (FROOTAI_LEAN=true — the same env var the [Z8.6] GitHub
+# Action sets). Tells the agent that primitive/tool content is served in its
+# compressed, fidelity-verified Lean form so it treats Lean content as complete.
+_LEAN_INSTRUCTION = (
+    "Lean Mode is ENABLED for this session. FrootAI primitives and tool "
+    "content are served in their compressed, fidelity-verified Lean "
+    "(.lean.md) form — same capability, fewer tokens. Every Lean variant has "
+    "cleared the FAI fidelity gate (guardrails, parameters, and code blocks "
+    "preserved exactly), so treat Lean content as authoritative and complete; "
+    "never assume detail was lost. A primitive with no gated Lean variant is "
+    "served Full, unchanged."
+)
+
+
+
 # [M8.23] Token budgets per model. Values chosen to leave room for the
 # user message + assistant response within the model's context window.
 # gpt-4o-mini: 128K context; budget the system prompt to 4K tokens so
@@ -146,6 +162,7 @@ def build_system_prompt(
     tools: Sequence[Mapping[str, str]] = (),
     failed_areas: Sequence[str] = (),
     model: str = _DEFAULT_MODEL,
+    lean: bool = False,
 ) -> str:
     """Build the Foundry agent system prompt from live inputs.
 
@@ -163,6 +180,9 @@ def build_system_prompt(
         model: Target model name; controls the token budget (M8.23).
             Known values: "gpt-4o-mini" (4K), "gpt-4o" (16K). Unknown
             models default to the gpt-4o-mini budget for safety.
+        lean: When True, inject the [Z8.7] Lean Mode session directive
+            (FROOTAI_LEAN=true). Default False preserves the legacy prompt
+            byte-for-byte (the M8.13 fallback contract).
 
     Returns:
         The fully-assembled system prompt string. If the dynamic
@@ -175,6 +195,10 @@ def build_system_prompt(
         "",
         _format_plays_section(plays),
     ]
+
+    if lean:
+        sections.append("")
+        sections.append(_LEAN_INSTRUCTION)
 
     areas_section = _format_areas_section(attached_areas)
     if areas_section:
