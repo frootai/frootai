@@ -15,6 +15,13 @@
  * Security posture (🔐) — FAIL CLOSED: if a fetch carries no provable fidelity
  * score, `evaluateFetch` denies the Lean and serves Full. An unverified Lean is
  * never served under a fidelity policy; the safe lossless artifact is.
+ *
+ * [Z10.6] Per-tenant Lean defaults (org setting): the same policy object also
+ * carries a `leanDefault` boolean — the org's opt-in/out of Lean entirely. When
+ * a tenant sets `leanDefault: false`, `evaluateFetch` serves Full even for a
+ * perfect-fidelity Lean: that is an org CHOICE, not a fidelity failure, and it
+ * takes precedence over the floor. The global default is `true` (Lean on), so
+ * a fidelity-only policy behaves exactly as before.
  */
 
 import { DEFAULT_THRESHOLD } from "./fidelity-score.js";
@@ -34,19 +41,24 @@ const strOrNull = (v) => {
 
 /**
  * Validate + normalize a raw governance policy into a canonical shape:
- * `{ default: { minFidelity }, tenants: { <id>: { minFidelity } } }`.
+ * `{ default: { minFidelity, leanDefault }, tenants: { <id>: { minFidelity, leanDefault } } }`.
  *
- * The default floor falls back to the Z1 gate threshold; each tenant inherits
- * the default unless it sets its own `minFidelity`. Any out-of-range floor
- * throws (fail loud at config time, not at fetch time).
+ * The default floor falls back to the Z1 gate threshold and `leanDefault` to
+ * `true`; each tenant inherits the defaults unless it sets its own value. Any
+ * out-of-range floor or non-boolean `leanDefault` throws (fail loud at config
+ * time, not at fetch time).
  *
- * @param {{default?:{minFidelity?:number}, tenants?:Record<string,{minFidelity?:number}>}} [raw]
- * @returns {{default:{minFidelity:number}, tenants:Record<string,{minFidelity:number}>}}
+ * @param {{default?:{minFidelity?:number, leanDefault?:boolean}, tenants?:Record<string,{minFidelity?:number, leanDefault?:boolean}>}} [raw]
+ * @returns {{default:{minFidelity:number, leanDefault:boolean}, tenants:Record<string,{minFidelity:number, leanDefault:boolean}>}}
  */
 function normalizePolicy(raw = {}) {
   const rawDefault = raw.default && raw.default.minFidelity != null ? raw.default.minFidelity : DEFAULT_THRESHOLD;
   if (!inRange(rawDefault)) {
     throw new TypeError(`normalizePolicy: default.minFidelity must be a number in 0..10 (got ${rawDefault}).`);
+  }
+  const defaultLean = raw.default && raw.default.leanDefault != null ? raw.default.leanDefault : true;
+  if (typeof defaultLean !== "boolean") {
+    throw new TypeError(`normalizePolicy: default.leanDefault must be a boolean (got ${defaultLean}).`);
   }
 
   const tenants = {};
@@ -55,10 +67,14 @@ function normalizePolicy(raw = {}) {
     if (!inRange(min)) {
       throw new TypeError(`normalizePolicy: tenant "${id}" minFidelity must be a number in 0..10 (got ${min}).`);
     }
-    tenants[id] = { minFidelity: min };
+    const lean = cfg && cfg.leanDefault != null ? cfg.leanDefault : defaultLean;
+    if (typeof lean !== "boolean") {
+      throw new TypeError(`normalizePolicy: tenant "${id}" leanDefault must be a boolean (got ${lean}).`);
+    }
+    tenants[id] = { minFidelity: min, leanDefault: lean };
   }
 
-  return { default: { minFidelity: rawDefault }, tenants };
+  return { default: { minFidelity: rawDefault, leanDefault: defaultLean }, tenants };
 }
 
 /**
@@ -76,24 +92,44 @@ function resolveMinFidelity(policy, actor) {
 }
 
 /**
+ * Resolve the effective Lean org-default for an actor: the tenant override if
+ * present, else the policy default (`true` unless the policy lowered it).
+ *
+ * @param {object} policy  a raw or normalized policy
+ * @param {string|null} [actor]  the tenant/principal id
+ * @returns {boolean} whether Lean is enabled by default for this actor
+ */
+function resolveLeanDefault(policy, actor) {
+  const p = normalizePolicy(policy);
+  const a = strOrNull(actor);
+  return a && p.tenants[a] ? p.tenants[a].leanDefault : p.default.leanDefault;
+}
+
+/**
  * Decide whether a Lean of a given fidelity may be served to an actor under the
- * governance policy. Fail-closed: a missing score denies the Lean.
+ * governance policy. Precedence: the org Lean-default ([Z10.6]) is checked
+ * first — an opted-out org is served Full regardless of fidelity — then the
+ * fidelity floor ([Z10.2], fail-closed on a missing score).
  *
  * @param {object} policy  a raw or normalized policy
  * @param {{actor?:string, fidelity?:number}} fetch  the fetch context
  * @returns {{
- *   actor:string|null, minFidelity:number, fidelity:number|null,
+ *   actor:string|null, leanDefault:boolean, minFidelity:number, fidelity:number|null,
  *   allowed:boolean, variant:"lean"|"full", reason:string
  * }}
  */
 function evaluateFetch(policy, { actor, fidelity } = {}) {
   const minFidelity = resolveMinFidelity(policy, actor);
+  const leanDefault = resolveLeanDefault(policy, actor);
   const a = strOrNull(actor);
   const f = numOrNull(fidelity);
 
   let allowed;
   let reason;
-  if (f === null) {
+  if (!leanDefault) {
+    allowed = false;
+    reason = `org default disables Lean — serve Full (operator opt-out).`;
+  } else if (f === null) {
     allowed = false;
     reason = `no provable fidelity score — fail closed to Full (min ${minFidelity}).`;
   } else if (f >= minFidelity) {
@@ -106,6 +142,7 @@ function evaluateFetch(policy, { actor, fidelity } = {}) {
 
   return {
     actor: a,
+    leanDefault,
     minFidelity,
     fidelity: f,
     allowed,
@@ -114,4 +151,4 @@ function evaluateFetch(policy, { actor, fidelity } = {}) {
   };
 }
 
-export { normalizePolicy, resolveMinFidelity, evaluateFetch };
+export { normalizePolicy, resolveMinFidelity, resolveLeanDefault, evaluateFetch };
