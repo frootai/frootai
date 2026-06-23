@@ -87,6 +87,31 @@ is inherited from the pricing catalog:
 - **Staleness flagged**: prices carry a `priced_at`; a quote older than the
   catalog's `stale_after_days` is flagged stale, never passed off as current.
 
+## 7. Security review — no secret leakage
+
+`[Z10.8]` Threat model: a primitive's Full form may contain secrets — an env var
+like `$STRIPE_LIVE_KEY`, or a guardrail like "NEVER log the API key". Lean must
+never move a secret somewhere it does not already belong (a log line, a metric,
+a metadata field). The adversarial suite `security-review.test.js` exercises the
+whole pipeline against planted secrets and pins these properties:
+
+- **Lean neither adds nor relocates secrets.** A passing Lean preserves a secret
+  param byte-for-byte **in place** (preservation is the point — the secret stays
+  with its capability); it is never duplicated into metadata or a log.
+- **The persisted audit is secret-free even when the secret is the dropped
+  token.** When a Lean drops a secret-bearing param/guardrail and falls back, the
+  append-only audit line (`fetch-audit.js`, `fidelity-audit.js`) records dropped
+  **counts**, never the dropped strings — a leaked secret can never reach the log.
+- **The diagnostic boundary is explicit.** The per-build **receipt**
+  (`fidelity-receipt.js`) MAY name a dropped secret token — that is its job, to
+  explain to an operator what was lost. Receipts are therefore operator-facing
+  and must not be persisted to the audit; the audit line strips them to counts.
+- **A secret-protecting guardrail cannot be dropped silently.** A Lean+ backend
+  that removes a "NEVER log …" guardrail trips the gate's hard-fail trio and the
+  lossless Full is served — the guardrail survives.
+- **Governance and cost outputs carry no secret.** `evaluateFetch` and the
+  cost-meter emit only ids, scores and numbers — never primitive content.
+
 ---
 
 **In one sentence**: Lean is reproducible (byte-identical for the same input),
