@@ -1,0 +1,15 @@
+{
+  "tokens": 1724,
+  "tokensLean": 1718,
+  "savedTokens": 6,
+  "saved": 0,
+  "bytes": 7273,
+  "bytesLean": 7098,
+  "stages": [
+    "parse",
+    "segment",
+    "compress",
+    "normalize",
+    "verify"
+  ]
+}
