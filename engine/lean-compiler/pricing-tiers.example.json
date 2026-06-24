@@ -1,0 +1,60 @@
+{
+  "$comment": [
+    "[Z10.10 / packaging] Pricing tiers scaffold. PACKAGING.md fixes the tier",
+    "STRUCTURE (Lean free, Lean+ enterprise). This file is the DATA SHAPE for",
+    "the eventual dollar figures — left as null because the agent cannot set",
+    "prices; they are a business decision the founder owns.",
+    "",
+    "When you set the numbers: copy this file to `pricing-tiers.json`, replace",
+    "every null with a real value, and wire it into the website pricing page.",
+    "Do NOT commit `pricing-tiers.json` here without a separate review pass."
+  ],
+  "schemaVersion": "1.0.0",
+  "currency": "USD",
+  "tiers": {
+    "lean": {
+      "name": "Lean",
+      "tagline": "Free, everywhere",
+      "audience": "every developer",
+      "listPriceUsdPerMonth": 0,
+      "includesAll": [
+        "Lossless Lean compile (Z0)",
+        "Z1 fidelity gate + receipt",
+        "Lean across all channels (web, CLI, SDKs, MCP, Action)",
+        "Savings benchmark"
+      ],
+      "seatModel": null,
+      "usageLimits": null
+    },
+    "leanPlus": {
+      "name": "Lean+",
+      "tagline": "Enterprise tier — semantic compression + control plane",
+      "audience": "organizations",
+      "listPriceUsdPerMonth": null,
+      "includesAll": [
+        "Everything in Lean",
+        "Lean+ semantic compression (Phase 2)",
+        "Governance policy (per-tenant min-fidelity, per-tenant Lean default)",
+        "Append-only fetch-audit",
+        "Cost-meter integration",
+        "SLA + reproducibility guarantee"
+      ],
+      "seatModel": null,
+      "usageLimits": {
+        "leanPlusCompilesPerMonth": null,
+        "auditRetentionDays": null,
+        "supportSlaHours": null
+      },
+      "trial": {
+        "enabled": null,
+        "lengthDays": null,
+        "creditCardRequired": null
+      }
+    }
+  },
+  "honestyContract": {
+    "neverFakeAPrice": true,
+    "agentDoesNotSetPrices": true,
+    "see": "engine/lean-compiler/PACKAGING.md"
+  }
+}

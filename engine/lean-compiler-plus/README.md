@@ -111,7 +111,54 @@ and is monotone per line — so it clears the same Z1 gate and earns only the
 **honest marginal** prose savings the corpus actually contains (on already-tight
 content that is ~0). The bigger 30–40 % target needs the model-backed tier
 (paraphrase + redundant-clause fold + embedding-based prose dedup), which slots
-in via the same `SemanticCompressor` contract — the next row.
+in via the same `SemanticCompressor` contract.
+
+## Honest state vs the 30–40 % Phase-2 target (measured)
+
+`engine/lean-compiler/phase2-progress.test.js` scans real catalog content (~60
+primitives, ~110 k tokens) and reports the measured marginal each CI run:
+
+| Layer | Saved | Notes |
+|---|---|---|
+| Z0 lossless floor | **~0.64 %** | exact `o200k` recount; the honest baseline |
+| Lean+ rule-paraphrase-v1 marginal | **~0.02 %** | 7/60 files have any marginal; curated content has little verbose filler left |
+| **Phase-2 target** | **30–40 %** | requires the LLM tier; deterministic rules can't close this gap on curated content |
+
+We also probed deterministic dedup (duplicate paragraphs + duplicate bullets
+across 200 catalog files): **0 % potential** — the catalog has no copy-paste
+duplication. That is why no dedup backend ships. Shipping one would earn
+nothing real, and the no-inflated-numbers doctrine forbids it.
+
+The test asserts the rule-tier marginal stays **< 15 %** — if a future change
+broke that ceiling, the test would fail and force a RETRO + framing update.
+
+## Contract for a future LLM-backed backend
+
+When you wire a real LLM-backed `SemanticCompressor`, it MUST satisfy the same
+shape (`{ id, compress(lean, ctx) }`) plus these additional hard pins:
+
+1. **Determinism** — pin `temperature=0` AND a fixed `seed`. Without a seed the
+   same `(input, model)` pair will produce different outputs, breaking the
+   reproducibility guarantee in `SLA.md` §1. CI must record the (model, seed)
+   pair so the same byte-identical Lean re-emerges on replay.
+2. **No content injection** — the prompt MUST constrain the model to use only
+   information present in its input. The Z1 gate catches identifier drift, but
+   the no-injection contract is what keeps prose drift in scope.
+3. **Never grow** — the harness already enforces this via the length guard
+   (`candidate.length > lossless.length` → refuse). The LLM backend may still
+   return a longer candidate; the harness will refuse it.
+4. **Network failure is fallback, not error** — if the LLM call fails or times
+   out, return the input lean unchanged. The harness will serve lossless.
+5. **Key handling** — read the API key from `process.env` (e.g.
+   `FROOTAI_LEAN_PLUS_API_KEY`). NEVER hard-code, NEVER log the key. The
+   `security-review.test.js` adversarial sweep would catch a leak.
+6. **CI behaviour** — the backend's tests must be SKIPPED when no key is
+   present (so OSS contributors and CI without secrets stay green), and only
+   exercised in a guarded job that injects the key.
+
+A future PR shipping the real LLM backend should also update
+`phase2-progress.test.js` to record the new measured marginal — the target
+that finally closes the gap to 30–40 % must be **measured**, never claimed.
 
 ## Tests
 

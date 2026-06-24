@@ -32,6 +32,21 @@ early numbers look big. We never shipped the inflated figure. The headline
 was never preannounced as shipped. The honesty cost us a flashy number and bought
 us a defensible one.
 
+### Phase-2 progress, measured (so the gap is honest)
+
+`phase2-progress.test.js` scans real catalog primitives every CI run:
+
+- Z0 lossless floor: **~0.64 %** saved.
+- Lean+ rule-paraphrase-v1 marginal over lossless: **~0.02 %** — 7/60 files
+  earned any marginal at all.
+- Deterministic dedup probed across 200 catalog files: **0 % potential**
+  (the catalog has no copy-paste duplication). No dedup backend ships
+  because shipping one would earn nothing real.
+- **Conclusion**: the 30–40 % Phase-2 target requires the LLM-backed semantic
+  tier. Deterministic rules can't close this gap on curated content. The
+  test's HONESTY assertion forces a RETRO update if a future rule change
+  crosses the 15 % marginal ceiling.
+
 ## Lessons worth keeping
 
 - **Re-use the gate, never re-implement it.** Governance and Lean+ both import the
