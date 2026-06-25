@@ -1,0 +1,61 @@
+{
+  "$comment": "[X4.18] OpenAI Developer Docs MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `openai`, already verified-publisher in trust.json; this ship backfills its evidence file). http-sse hosted transport (shape === ms-learn.json, X2.7). Scope note: OpenAI publishes NO general 'call-the-OpenAI-API' MCP server (the openai-mcp* packages on npm are all third-party). The official OpenAI-hosted MCP server is the read-only developer-docs server at developers.openai.com/mcp — the honest deliverable for the masterplan 'openai' slot, paralleling ms-learn for Microsoft docs. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "openai",
+  "title": "OpenAI Developer Docs",
+  "publisher": "openai",
+  "trust": "verified-publisher",
+  "tool_prefix": "openai",
+  "description": "Search and read OpenAI developer documentation (API, ChatGPT Apps SDK, Codex) via the official OpenAI-hosted MCP endpoint.",
+
+  "transport": {
+    "kind": "http-sse",
+    "command": null,
+    "args": [],
+    "url": "https://developers.openai.com/mcp",
+    "env_passthrough": []
+  },
+
+  "version_pin": {
+    "package": null,
+    "version_range": "hosted",
+    "tested_version": "2026-06-25"
+  },
+
+  "env_vars": [],
+
+  "auth": {
+    "recipe": "no credentials required; the hosted endpoint serves public OpenAI developer documentation.",
+    "modes": ["none"]
+  },
+
+  "sample_tools": [
+    { "name": "search", "summary": "Search OpenAI developer documentation for a query." },
+    { "name": "fetch", "summary": "Fetch the full content of an OpenAI documentation page." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Hosted remote endpoint — requires outbound network access to developers.openai.com; there is no local subprocess to launch.",
+    "Documentation-only and read-only: it does not call the OpenAI API on your behalf and cannot modify any resource.",
+    "No package version to pin — `version_pin.package` is null and `version_range` is `hosted`; drift is tracked via the snapshot tools-list rather than a semver range.",
+    "Destructive-action audit (X2.18): no destructive tools — documentation search/fetch is read-only."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `openai` with the streamable-HTTP endpoint `https://developers.openai.com/mcp`.",
+    "cursor": "Settings → MCP → Add: name `openai`, type HTTP, URL `https://developers.openai.com/mcp`.",
+    "vscode": "Add to .vscode/mcp.json servers as `openai` with type `http` and url `https://developers.openai.com/mcp` (VS Code Insider, MCP preview)."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/openai.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

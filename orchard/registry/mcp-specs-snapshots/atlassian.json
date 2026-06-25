@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'atlassian'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "atlassian",
+  "publisher": "atlassian",
+  "trust": "verified-publisher",
+  "tool_prefix": "atlassian",
+  "transport_kind": "http-sse",
+  "package": null,
+  "tested_version": "2026-06-25",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "atlassianUserInfo",
+      "prefixed": "atlassian.atlassianUserInfo",
+      "description": "Get the current Atlassian user's profile."
+    },
+    {
+      "name": "getAccessibleAtlassianResources",
+      "prefixed": "atlassian.getAccessibleAtlassianResources",
+      "description": "List the Atlassian Cloud sites the user can access."
+    },
+    {
+      "name": "getConfluencePage",
+      "prefixed": "atlassian.getConfluencePage",
+      "description": "Get the content of a Confluence page."
+    },
+    {
+      "name": "getJiraIssue",
+      "prefixed": "atlassian.getJiraIssue",
+      "description": "Get the details of a Jira issue by id or key."
+    },
+    {
+      "name": "getVisibleJiraProjects",
+      "prefixed": "atlassian.getVisibleJiraProjects",
+      "description": "List the Jira projects visible to the user."
+    },
+    {
+      "name": "searchConfluenceUsingCql",
+      "prefixed": "atlassian.searchConfluenceUsingCql",
+      "description": "Search Confluence content with a CQL query."
+    },
+    {
+      "name": "searchJiraIssuesUsingJql",
+      "prefixed": "atlassian.searchJiraIssuesUsingJql",
+      "description": "Search Jira issues with a JQL query."
+    }
+  ]
+}

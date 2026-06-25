@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'markitdown' — single tool, 5 input variants. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "markitdown",
+  "fixtures": [
+    { "tool": "convert_to_markdown", "input": { "uri": "file:///doc.pdf" }, "expected": { "kind": "text" }, "note": "PDF → Markdown text." },
+    { "tool": "convert_to_markdown", "input": { "uri": "file:///report.docx" }, "expected": { "kind": "text" }, "note": "Word doc → Markdown." },
+    { "tool": "convert_to_markdown", "input": { "uri": "file:///slides.pptx" }, "expected": { "kind": "text" }, "note": "PowerPoint → Markdown." },
+    { "tool": "convert_to_markdown", "input": { "uri": "https://example.com/page.html" }, "expected": { "kind": "text" }, "note": "HTML URL → Markdown." },
+    { "tool": "convert_to_markdown", "input": { "uri": "file:///photo.png" }, "expected": { "kind": "text" }, "note": "Image → Markdown (OCR, optional extra)." }
+  ]
+}

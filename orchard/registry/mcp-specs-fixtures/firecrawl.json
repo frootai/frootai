@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.14] Golden invocation fixtures for 'firecrawl' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "firecrawl",
+  "fixtures": [
+    { "tool": "firecrawl_scrape", "input": { "url": "https://example.com", "formats": ["markdown"] }, "expected": { "kind": "object" }, "note": "scrape a single page to markdown." },
+    { "tool": "firecrawl_search", "input": { "query": "latest open-source LLM benchmarks 2026", "limit": 5 }, "expected": { "kind": "object" }, "note": "web search with a result cap." },
+    { "tool": "firecrawl_map", "input": { "url": "https://example.com" }, "expected": { "kind": "object" }, "note": "discover URLs on a site." },
+    { "tool": "firecrawl_crawl", "input": { "url": "https://example.com/blog/*", "maxDepth": 2, "limit": 50 }, "expected": { "kind": "object" }, "note": "start an async crawl (returns a job id)." },
+    { "tool": "firecrawl_extract", "input": { "urls": ["https://example.com/product"], "prompt": "Extract the product name and price" }, "expected": { "kind": "object" }, "note": "LLM-powered structured extraction." }
+  ]
+}

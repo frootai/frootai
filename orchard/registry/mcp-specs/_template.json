@@ -1,0 +1,92 @@
+{
+  "$comment": "[X2.1] MCP Attach Spec — TEMPLATE. Copy to `<slug>.json` (filename === `slug` === seed area `name` === `tool_prefix` === the federation namespace prefix — doctrine #5 NO COLLISION). This file is the canonical `ExternalMcpSpec` shape consumed by the X2 spec library: snapshot generator (X2.10), attach E2E (X2.11), validators (X2.8/X2.9), and the `marketplace_spec(slug)` MCP tool (X2.23). Underscore-prefixed files (`_template.json`, `_*`) are NOT real specs — every spec-dir reader skips `f.startsWith(\"_\")`. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "_doc": {
+    "slug": "Stable kebab-case identity. MUST equal the filename (minus .json), the `seed-areas-list.json` area `name`, the `tool_prefix`, and the federation namespace prefix. Unique across the registry (doctrine #5).",
+    "title": "Human-readable area name shown in marketplace UI + `marketplace_browse` output.",
+    "publisher": "Lowercase GitHub org/owner. MUST be a `knownPublishers` key in trust.json (doctrine #2 NO SILENT ATTACH) and the filename of the matching `mcp-trust-evidence/<publisher>.md`.",
+    "trust": "Resolved tier — MUST match the publisher's tier in trust.json. One of: first-party-ms | verified-publisher | community | untrusted.",
+    "tool_prefix": "Namespace prefix prepended to every federated tool (`<tool_prefix>.<tool>`). Equals `slug`. Unique (doctrine #5).",
+    "description": "One-sentence summary of what the server does.",
+    "transport": "How the kernel launches/connects to the server. `kind`=stdio-subprocess ⇒ `command`+`args` (+optional `env_passthrough`); `kind`=http-sse ⇒ `url`. `env_passthrough` lists ONLY env-var NAMES forwarded to the subprocess — NEVER literal secret values (doctrine #6 NO LEAKED CREDENTIALS).",
+    "version_pin": "Upstream package + the supported semver `version_range` (X2.16). `tested_version` is the exact version the committed snapshot (X2.10) was captured against. CI warns when upstream `latest` exits `version_range`.",
+    "env_vars": "Env-var matrix (X2.13). One row per variable: `name`, `required` (bool), `auth_mode` (which auth path it belongs to), `description`. Names only — no values.",
+    "auth": "Auth recipe (X2.17). `recipe` is a 1-line summary surfaced in `marketplace_browse`; `modes` enumerates supported auth paths in preference order.",
+    "sample_tools": "Representative tools the server exposes (X2.10). `name` is the bare upstream tool name (the snapshot prepends `tool_prefix`); `summary` is a short description. NOT exhaustive — the snapshot file holds the full tools/list.",
+    "destructive_tools": "Bare names of every tool with destructive side-effects (X2.18). When the publisher's trust policy sets `allowDestructive: false`, the kernel blocks these calls (X2.19).",
+    "known_limitations": "Caveats a consumer must know before attaching (X2.14) — e.g. first-run browser install, subscription-scope requirements, rate limits.",
+    "client_install": "Per-client install hints (X2.15): `claude_desktop` / `cursor` / `vscode` each a short config snippet or instruction string with the federation namespace prefix.",
+    "snapshot": "`path` = repo-relative location of the committed tools/list snapshot (X2.10). `drift_threshold_pct` = max allowed tools/list shape change before the nightly job (X2.12/X2.24) flags drift.",
+    "last_reviewed": "ISO date of the most recent human spec review. Recorded in mcp-specs-changelog.md (X2.28).",
+    "reviewer": "GitHub handle of the maintainer who authored/reviewed this spec."
+  },
+
+  "slug": "example-area",
+  "title": "Example Area",
+  "publisher": "example-org",
+  "trust": "verified-publisher",
+  "tool_prefix": "example-area",
+  "description": "One-sentence summary of what this MCP server does.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@example-org/example-mcp"],
+    "url": null,
+    "env_passthrough": ["EXAMPLE_API_TOKEN"]
+  },
+
+  "version_pin": {
+    "package": "@example-org/example-mcp",
+    "version_range": ">=0.5.0 <1.0.0",
+    "tested_version": "0.5.3"
+  },
+
+  "env_vars": [
+    {
+      "name": "EXAMPLE_API_TOKEN",
+      "required": true,
+      "auth_mode": "api-token",
+      "description": "Personal/service API token. Issue from the provider dashboard; pass via env, never inline in args."
+    },
+    {
+      "name": "EXAMPLE_BASE_URL",
+      "required": false,
+      "auth_mode": "api-token",
+      "description": "Optional self-hosted endpoint override; defaults to the public SaaS URL."
+    }
+  ],
+
+  "auth": {
+    "recipe": "api-token preferred; set EXAMPLE_API_TOKEN from the provider dashboard.",
+    "modes": ["api-token"]
+  },
+
+  "sample_tools": [
+    { "name": "search", "summary": "Full-text search across the provider's index." },
+    { "name": "fetch", "summary": "Retrieve a single record by id." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Requires a valid EXAMPLE_API_TOKEN; unauthenticated attach returns an empty tools/list.",
+    "Rate-limited to N requests/min on the free tier."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `example-area`: { command: npx, args: [-y, @example-org/example-mcp] }.",
+    "cursor": "Settings → MCP → Add: name `example-area`, command `npx -y @example-org/example-mcp`.",
+    "vscode": "Add to .vscode/mcp.json servers as `example-area` (VS Code Insider, MCP preview)."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/example-area.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "your-github-handle"
+}

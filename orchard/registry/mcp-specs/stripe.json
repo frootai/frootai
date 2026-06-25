@@ -1,0 +1,73 @@
+{
+  "$comment": "[X4.3] Stripe MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `stripe` — official Stripe MCP server, com.stripe registry namespace; X1.7 evidence). Shape === mcp-specs/_template.json (X2.1). Auth via STRIPE_SECRET_KEY env (the local server also accepts `--api-key=`, but doctrine #6 forbids `=` in args, so the key is passed via env). CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "stripe",
+  "title": "Stripe Payments & Billing",
+  "publisher": "stripe",
+  "trust": "verified-publisher",
+  "tool_prefix": "stripe",
+  "description": "Create and inspect Stripe customers, products, prices, payment links, and invoices via the official Stripe MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@stripe/mcp"],
+    "url": null,
+    "env_passthrough": ["STRIPE_SECRET_KEY"]
+  },
+
+  "version_pin": {
+    "package": "@stripe/mcp",
+    "version_range": ">=0.3.0 <1.0.0",
+    "tested_version": "0.3.3"
+  },
+
+  "env_vars": [
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "required": true,
+      "auth_mode": "restricted-api-key",
+      "description": "Stripe API key. Strongly prefer a Restricted API Key (`rk_…`) scoped to the exact tool permissions you need over a full secret key (`sk_…`). Tool availability is bounded by the key's permissions; pass via env, never inline in args (doctrine #6)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create a Restricted API Key (`rk_…`) at dashboard.stripe.com/apikeys with the desired tool permissions, then set STRIPE_SECRET_KEY; use a test-mode key (`rk_test_…`) for development.",
+    "modes": ["restricted-api-key"]
+  },
+
+  "sample_tools": [
+    { "name": "create_customer", "summary": "Create a new Stripe customer." },
+    { "name": "list_customers", "summary": "List existing customers." },
+    { "name": "create_product", "summary": "Create a product in the catalog." },
+    { "name": "create_payment_link", "summary": "Create a shareable payment link for a price." },
+    { "name": "create_invoice", "summary": "Create an invoice for a customer." },
+    { "name": "search_documentation", "summary": "Search Stripe's documentation to answer an integration question." },
+    { "name": "retrieve_balance", "summary": "Retrieve the current Stripe account balance." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Requires a Stripe API key (STRIPE_SECRET_KEY); without it the server cannot authenticate and every tool returns an auth error.",
+    "Tool availability is bounded by the Restricted API Key's permissions — a read-only key cannot create customers, invoices, or payment links.",
+    "Operates against real Stripe data when given a live key (`sk_live_…` / `rk_live_…`); use a test-mode key for development to avoid real charges.",
+    "Destructive-action audit (X2.18): the server exposes no delete/destroy tools (`destructive_tools` is empty); financial mutations such as refunds still confirm per-call because the trust policy sets `allowDestructive: false` (X1.7 evidence)."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `stripe`: { command: npx, args: [-y, @stripe/mcp], env: { STRIPE_SECRET_KEY: \"rk_...\" } }.",
+    "cursor": "Settings → MCP → Add: name `stripe`, command `npx -y @stripe/mcp`; set STRIPE_SECRET_KEY in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `stripe` (VS Code Insider, MCP preview); supply STRIPE_SECRET_KEY via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/stripe.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

@@ -1,0 +1,41 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'elastic'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "elastic",
+  "publisher": "elastic",
+  "trust": "verified-publisher",
+  "tool_prefix": "elastic",
+  "transport_kind": "stdio-subprocess",
+  "package": "docker.elastic.co/mcp/elasticsearch",
+  "tested_version": "0.4.6",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 5,
+  "tools": [
+    {
+      "name": "esql",
+      "prefixed": "elastic.esql",
+      "description": "Execute an ES|QL query."
+    },
+    {
+      "name": "get_mappings",
+      "prefixed": "elastic.get_mappings",
+      "description": "Get field mappings for a specific index."
+    },
+    {
+      "name": "get_shards",
+      "prefixed": "elastic.get_shards",
+      "description": "Get shard information for all or specific indices."
+    },
+    {
+      "name": "list_indices",
+      "prefixed": "elastic.list_indices",
+      "description": "List all available Elasticsearch indices."
+    },
+    {
+      "name": "search",
+      "prefixed": "elastic.search",
+      "description": "Run an Elasticsearch search using Query DSL."
+    }
+  ]
+}

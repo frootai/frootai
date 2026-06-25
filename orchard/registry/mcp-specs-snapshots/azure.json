@@ -1,0 +1,41 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'azure'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "azure",
+  "publisher": "microsoft",
+  "trust": "first-party-ms",
+  "tool_prefix": "azure",
+  "transport_kind": "stdio-subprocess",
+  "package": "@azure/mcp-server",
+  "tested_version": "0.5.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 5,
+  "tools": [
+    {
+      "name": "group",
+      "prefixed": "azure.group",
+      "description": "List and manage resource groups."
+    },
+    {
+      "name": "keyvault",
+      "prefixed": "azure.keyvault",
+      "description": "List Key Vault secrets, keys, and certificates (metadata)."
+    },
+    {
+      "name": "monitor",
+      "prefixed": "azure.monitor",
+      "description": "Query Azure Monitor logs and metrics."
+    },
+    {
+      "name": "storage",
+      "prefixed": "azure.storage",
+      "description": "Inspect storage accounts, blobs, and queues."
+    },
+    {
+      "name": "subscription",
+      "prefixed": "azure.subscription",
+      "description": "List and inspect Azure subscriptions in scope."
+    }
+  ]
+}

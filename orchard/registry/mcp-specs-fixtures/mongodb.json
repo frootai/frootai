@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.5] Golden invocation fixtures for 'mongodb' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "mongodb",
+  "fixtures": [
+    { "tool": "list-databases", "input": {}, "expected": { "kind": "object", "keys": ["databases"] }, "note": "list databases on the connection." },
+    { "tool": "list-collections", "input": { "database": "sample_mflix" }, "expected": { "kind": "object" }, "note": "list collections in a database." },
+    { "tool": "find", "input": { "database": "sample_mflix", "collection": "movies", "filter": { "year": 2010 }, "limit": 5 }, "expected": { "kind": "object" }, "note": "find documents with a filter and limit." },
+    { "tool": "aggregate", "input": { "database": "sample_mflix", "collection": "movies", "pipeline": [{ "$group": { "_id": "$year", "count": { "$sum": 1 } } }] }, "expected": { "kind": "object" }, "note": "group documents with an aggregation pipeline." },
+    { "tool": "count", "input": { "database": "sample_mflix", "collection": "movies", "query": { "rated": "PG-13" } }, "expected": { "kind": "object", "keys": ["count"] }, "note": "count documents matching a filter." }
+  ]
+}

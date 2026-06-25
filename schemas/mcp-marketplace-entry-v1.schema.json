@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/mcp-marketplace-entry-v1.json",
+  "title": "FAI MCP Marketplace Entry v1",
+  "description": "Canonical schema for one server record in the FAI MCP Marketplace catalog (persisted at `frootai/orchard/registry/mcp-marketplace-cache.json`, mirrored to the CDN + bundled snapshots). Covers every field from §2.1 of the marketplace masterplan. Crawl-time fields are required; trust + spec fields are filled by later phases ([X1] trust, [X2]/[X5] specs) and are optional until assigned.",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [X0.6] of the FAI MCP Marketplace + Trust masterplan (02-marketplace-and-trust-masterplan.md). Provenance doctrine §0.5 #8 — every entry records (crawled_at, source_url, owner, publisher_classification, attach_spec_version, last_drift_check, snapshot_sha).",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "owner",
+    "title",
+    "description",
+    "install_count",
+    "github_url",
+    "last_synced_at",
+    "provenance"
+  ],
+
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Conventionally https://frootai.dev/schemas/mcp-marketplace-entry-v1.json"
+    },
+
+    "slug": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Server slug (the repo segment of `/mcp/<owner>/<slug>`). GitHub repo names allow mixed case, digits, dot, dash, underscore."
+    },
+    "owner": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Publisher/owner exactly as upstream (e.g. `microsoft`, `ChromeDevTools`, `io.shipbook`). Reverse-DNS namespaces (containing a dot) are legal. NEVER aliased (doctrine #2 — NEVER SHADOW PUBLISHER IDENTITY)."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Human-readable display name from the card (falls back to slug when the card has no name)."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "One-line server description from the card. May be empty."
+    },
+    "category": {
+      "description": "Frozen 6-bucket category ([X0.18] classifies from the description). Null until classified.",
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/category" }
+      ]
+    },
+    "install_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Install count from the card (comma-grouping normalized away). 0 when unknown — never NaN/negative."
+    },
+    "github_url": {
+      "description": "Canonical GitHub repo URL ([X0.5] resolves it from the detail page). Null when not yet resolved (e.g. reverse-DNS owners).",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" }
+      ]
+    },
+    "registry_path": {
+      "type": "string",
+      "pattern": "^/mcp/[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Registry detail path `/mcp/<owner>/<slug>` on github.com/mcp."
+    },
+
+    "github_org": {
+      "description": "Canonical GitHub org parsed from github_url ([X0.21]). May differ from `owner` (e.g. a monorepo server). Null until resolved.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "maxLength": 128 }
+      ]
+    },
+    "github_repo": {
+      "description": "Canonical GitHub repo parsed from github_url ([X0.21]). May differ from `slug`. Null until resolved.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "maxLength": 128 }
+      ]
+    },
+
+    "publisher_classification": {
+      "description": "Publisher tier from classification ([X1]). Mirrors trust_tier; recorded separately for provenance.",
+      "$ref": "#/$defs/trustTier"
+    },
+    "trust_tier": {
+      "description": "Trust tier assigned by the trust manifest ([X1]). Absent until assigned.",
+      "$ref": "#/$defs/trustTier"
+    },
+    "evidence_file": {
+      "description": "Repo-relative path to the per-publisher trust evidence file ([X1]). Null for community/untrusted with no evidence.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^frootai/orchard/registry/mcp-trust-evidence/[A-Za-z0-9][A-Za-z0-9._-]*\\.md$" }
+      ]
+    },
+
+    "npm_package": {
+      "description": "npm package the server ships as ([X0.5]). Null for non-npm servers.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^(@[a-z0-9][\\w.-]*/)?[a-z0-9][\\w.-]*$", "maxLength": 214 }
+      ]
+    },
+    "uvx_package": {
+      "description": "Python (uvx) package the server ships as ([X0.5]). Null for non-Python servers.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "minLength": 1, "maxLength": 214 }
+      ]
+    },
+    "attach_spec": {
+      "description": "Attach invocation hint ([X0.5] inferred; [X2]/[X4] validated). Null until known.",
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/attachSpec" }
+      ]
+    },
+    "attach_spec_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "description": "SemVer of the attach spec shape for this server. Bumped when the validated spec changes (per [X2.16] version pin discipline)."
+    },
+    "tools_snapshot_sha": {
+      "description": "SHA-256 of the captured `tools/list` snapshot ([X2.10]). Null until a snapshot is taken.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      ]
+    },
+
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of the most recent catalog sync for this entry ([X0.16]). Drives the >60-day amber flag."
+    },
+    "last_drift_check_at": {
+      "description": "ISO-8601 timestamp of the most recent attach-drift check ([X0.17]/[X2]). Null until the first nightly validation.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ]
+    },
+    "last_commit_at": {
+      "description": "ISO-8601 timestamp of the upstream repo's last commit ([X0.5]). Null when not resolved.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ]
+    },
+    "detail_source": {
+      "type": "string",
+      "enum": ["live", "offline"],
+      "description": "Provenance of the detail-fetch enrichment ([X0.5]): live Playwright fetch vs offline derivation."
+    },
+    "source_page": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Registry page the card was found on (1-based)."
+    },
+
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+
+  "$defs": {
+    "trustTier": {
+      "type": "string",
+      "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"],
+      "description": "The 4 trust tiers (must match fai-mcp-trust-v1.schema.json)."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "azure-cloud",
+        "browser-automation",
+        "docs-retrieval",
+        "data-stores",
+        "dev-tooling",
+        "specialty"
+      ],
+      "description": "Frozen 6-category vocabulary (mcp-categories.json, [X0.27])."
+    },
+    "attachSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["stdio-subprocess", "http-sse", "http-stream"],
+          "description": "Transport kind for the attach."
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Executable for stdio-subprocess (e.g. `npx`, `uvx`, `docker`)."
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Command arguments (e.g. `[\"-y\", \"@upstash/context7-mcp\"]`)."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint URL for http-sse / http-stream transports."
+        },
+        "source": {
+          "type": "string",
+          "enum": ["inferred", "validated"],
+          "description": "Whether the spec was inferred from the detail page ([X0.5]) or validated against the live upstream ([X2])."
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["crawled_at", "crawler_version", "source_url"],
+      "properties": {
+        "crawled_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp of the crawl that produced this record."
+        },
+        "crawler_version": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+          "description": "Crawler version tag (e.g. `v1.0`)."
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The registry URL the record was crawled from (e.g. https://github.com/mcp?page=1)."
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Optional SHA-256 of the raw crawled source for tamper-evidence."
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "slug": "playwright-mcp",
+      "owner": "microsoft",
+      "title": "Playwright",
+      "category": "browser-automation",
+      "description": "Automate web browsers using accessibility trees for testing and data extraction.",
+      "publisher_classification": "first-party-ms",
+      "trust_tier": "first-party-ms",
+      "install_count": 33906,
+      "github_url": "https://github.com/microsoft/playwright-mcp",
+      "registry_path": "/mcp/microsoft/playwright-mcp",
+      "npm_package": "@microsoft/mcp-playwright",
+      "attach_spec": { "kind": "stdio-subprocess", "command": "npx", "args": ["-y", "@microsoft/mcp-playwright"], "source": "validated" },
+      "attach_spec_version": "1.0.0",
+      "tools_snapshot_sha": "0000000000000000000000000000000000000000000000000000000000000000",
+      "last_synced_at": "2026-06-15T08:00:00Z",
+      "last_drift_check_at": "2026-06-15T03:00:00Z",
+      "evidence_file": "frootai/orchard/registry/mcp-trust-evidence/microsoft.md",
+      "provenance": {
+        "crawled_at": "2026-06-15T08:00:00Z",
+        "crawler_version": "v1.0",
+        "source_url": "https://github.com/mcp?page=1"
+      }
+    },
+    {
+      "slug": "mcp",
+      "owner": "io.shipbook",
+      "title": "Shipbook",
+      "category": null,
+      "description": "Debug production issues using Shipbook logs and Loglytics error insights.",
+      "install_count": 1,
+      "github_url": null,
+      "registry_path": "/mcp/io.shipbook/mcp",
+      "npm_package": null,
+      "attach_spec": null,
+      "last_synced_at": "2026-06-15T08:00:00Z",
+      "source_page": 4,
+      "provenance": {
+        "crawled_at": "2026-06-15T08:00:00Z",
+        "crawler_version": "v1.0",
+        "source_url": "https://github.com/mcp?page=4"
+      }
+    }
+  ]
+}

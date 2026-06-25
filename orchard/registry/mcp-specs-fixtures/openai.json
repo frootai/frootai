@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.18] Golden invocation fixtures for 'openai' — 5 invocations across the (read-only) hosted docs tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "openai",
+  "fixtures": [
+    { "tool": "search", "input": { "query": "how to use the Responses API" }, "expected": { "kind": "object" }, "note": "search the OpenAI docs." },
+    { "tool": "search", "input": { "query": "function calling with structured outputs" }, "expected": { "kind": "object" }, "note": "search a different topic." },
+    { "tool": "search", "input": { "query": "Codex CLI configuration with config.toml" }, "expected": { "kind": "object" }, "note": "search Codex docs." },
+    { "tool": "fetch", "input": { "id": "responses-api-overview" }, "expected": { "kind": "object" }, "note": "fetch a page by id returned from search." },
+    { "tool": "fetch", "input": { "id": "function-calling-guide" }, "expected": { "kind": "object" }, "note": "fetch another doc page." }
+  ]
+}

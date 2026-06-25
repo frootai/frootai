@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.8] Golden invocation fixtures for 'pgedge' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "pgedge",
+  "fixtures": [
+    { "tool": "get_schema_info", "input": { "schema_name": "public" }, "expected": { "kind": "text" }, "note": "discover schema (returns TSV)." },
+    { "tool": "query_database", "input": { "query": "SELECT count(*) FROM users" }, "expected": { "kind": "text" }, "note": "run a read-only SQL query." },
+    { "tool": "count_rows", "input": { "table": "users" }, "expected": { "kind": "object" }, "note": "lightweight row count." },
+    { "tool": "execute_explain", "input": { "query": "SELECT * FROM users WHERE email LIKE '%@example.com'", "analyze": true }, "expected": { "kind": "text" }, "note": "analyze a query plan." },
+    { "tool": "read_resource", "input": { "uri": "pg://system_info" }, "expected": { "kind": "text" }, "note": "read the system_info resource." }
+  ]
+}

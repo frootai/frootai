@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'chromadb'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "chromadb",
+  "publisher": "chroma-core",
+  "trust": "verified-publisher",
+  "tool_prefix": "chromadb",
+  "transport_kind": "stdio-subprocess",
+  "package": "chroma-mcp",
+  "tested_version": "0.2.6",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "chroma_add_documents",
+      "prefixed": "chromadb.chroma_add_documents",
+      "description": "Add documents with optional metadata and custom IDs."
+    },
+    {
+      "name": "chroma_create_collection",
+      "prefixed": "chromadb.chroma_create_collection",
+      "description": "Create a new collection with optional HNSW configuration."
+    },
+    {
+      "name": "chroma_delete_collection",
+      "prefixed": "chromadb.chroma_delete_collection",
+      "description": "Delete a collection and all of its documents."
+    },
+    {
+      "name": "chroma_delete_documents",
+      "prefixed": "chromadb.chroma_delete_documents",
+      "description": "Delete specific documents from a collection."
+    },
+    {
+      "name": "chroma_get_documents",
+      "prefixed": "chromadb.chroma_get_documents",
+      "description": "Retrieve documents by IDs or filters with pagination."
+    },
+    {
+      "name": "chroma_list_collections",
+      "prefixed": "chromadb.chroma_list_collections",
+      "description": "List all collections with pagination support."
+    },
+    {
+      "name": "chroma_query_documents",
+      "prefixed": "chromadb.chroma_query_documents",
+      "description": "Query documents using semantic search with advanced filtering."
+    }
+  ]
+}

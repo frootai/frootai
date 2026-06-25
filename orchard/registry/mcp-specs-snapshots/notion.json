@@ -1,0 +1,46 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'notion'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "notion",
+  "publisher": "notion",
+  "trust": "verified-publisher",
+  "tool_prefix": "notion",
+  "transport_kind": "stdio-subprocess",
+  "package": "@notionhq/notion-mcp-server",
+  "tested_version": "2.1.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 6,
+  "tools": [
+    {
+      "name": "move-page",
+      "prefixed": "notion.move-page",
+      "description": "Move a page to a different parent page or data source."
+    },
+    {
+      "name": "query-data-source",
+      "prefixed": "notion.query-data-source",
+      "description": "Query a Notion data source (database) with filters and sorts (uses `data_source_id`)."
+    },
+    {
+      "name": "retrieve-a-data-source",
+      "prefixed": "notion.retrieve-a-data-source",
+      "description": "Get the schema and metadata for a data source."
+    },
+    {
+      "name": "retrieve-a-database",
+      "prefixed": "notion.retrieve-a-database",
+      "description": "Get database metadata, including its data-source IDs."
+    },
+    {
+      "name": "retrieve-page-markdown",
+      "prefixed": "notion.retrieve-page-markdown",
+      "description": "Read a page's full content as token-efficient Markdown."
+    },
+    {
+      "name": "update-page-markdown",
+      "prefixed": "notion.update-page-markdown",
+      "description": "Edit a page's content with Markdown (`replace_content` or targeted `update_content`)."
+    }
+  ]
+}

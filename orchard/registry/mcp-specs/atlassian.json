@@ -1,0 +1,67 @@
+{
+  "$comment": "[X4.11] Atlassian (Rovo) MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `atlassian` — official Atlassian Rovo MCP server, com.atlassian namespace; X1.14 evidence). Shape === mcp-specs/_template.json (X2.1). HOSTED http-sse remote endpoint (no local package), OAuth 2.1 auth. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "atlassian",
+  "title": "Atlassian Jira & Confluence",
+  "publisher": "atlassian",
+  "trust": "verified-publisher",
+  "tool_prefix": "atlassian",
+  "description": "Search, read, and create Jira work items and Confluence pages via the official hosted Atlassian Rovo MCP server.",
+
+  "transport": {
+    "kind": "http-sse",
+    "command": null,
+    "args": [],
+    "url": "https://mcp.atlassian.com/v1/mcp/authv2",
+    "env_passthrough": []
+  },
+
+  "version_pin": {
+    "package": null,
+    "version_range": "hosted",
+    "tested_version": "2026-06-25"
+  },
+
+  "env_vars": [],
+
+  "auth": {
+    "recipe": "no static credential — the AI client performs an interactive OAuth 2.1 sign-in to your Atlassian Cloud account on first use; an optional API-token mode is also available. Actions run within the signed-in user's existing permissions.",
+    "modes": ["oauth", "api-token"]
+  },
+
+  "sample_tools": [
+    { "name": "getJiraIssue", "summary": "Get the details of a Jira issue by id or key." },
+    { "name": "searchJiraIssuesUsingJql", "summary": "Search Jira issues with a JQL query." },
+    { "name": "getVisibleJiraProjects", "summary": "List the Jira projects visible to the user." },
+    { "name": "getConfluencePage", "summary": "Get the content of a Confluence page." },
+    { "name": "searchConfluenceUsingCql", "summary": "Search Confluence content with a CQL query." },
+    { "name": "atlassianUserInfo", "summary": "Get the current Atlassian user's profile." },
+    { "name": "getAccessibleAtlassianResources", "summary": "List the Atlassian Cloud sites the user can access." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Authenticates via interactive OAuth 2.1 sign-in — the AI client runs a browser auth flow that respects your existing Jira/Confluence/Bitbucket permissions; an optional API-token mode is also available.",
+    "Hosted remote endpoint (https://mcp.atlassian.com/v1/mcp/authv2) — requires outbound network access; no local subprocess. Atlassian Cloud only (no FedRAMP/HIPAA support).",
+    "Site-level rate limits apply by plan (Free 500/hr; Standard/Premium/Enterprise 1000+/hr) — bulk operations can hit the cap.",
+    "Mutating tools (createJiraIssue, editJiraIssue, transitionJiraIssue, createConfluencePage, updateConfluencePage) act on real Atlassian data within the signed-in user's permissions; review high-impact changes before confirming.",
+    "Destructive-action audit (X2.18): no tool matches destructive name patterns (destructive_tools is empty); the trust policy keeps allowDestructive:false so mutating tools confirm per-call."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Claude CLI: `claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp/authv2`, then run `/mcp` to complete the OAuth sign-in.",
+    "cursor": "Add to ~/.cursor/mcp.json as `atlassian`: { type: http, url: https://mcp.atlassian.com/v1/mcp/authv2 }; authenticate via OAuth on first use.",
+    "vscode": "Add to .vscode/mcp.json servers as `atlassian` with type `http` and url `https://mcp.atlassian.com/v1/mcp/authv2`; sign in via OAuth when prompted."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/atlassian.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

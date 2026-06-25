@@ -1,0 +1,46 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'pgedge'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "pgedge",
+  "publisher": "pgedge",
+  "trust": "verified-publisher",
+  "tool_prefix": "pgedge",
+  "transport_kind": "stdio-subprocess",
+  "package": "ghcr.io/pgedge/postgres-mcp",
+  "tested_version": "1.0.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 6,
+  "tools": [
+    {
+      "name": "count_rows",
+      "prefixed": "pgedge.count_rows",
+      "description": "Count rows in a table before querying large datasets."
+    },
+    {
+      "name": "execute_explain",
+      "prefixed": "pgedge.execute_explain",
+      "description": "Run EXPLAIN ANALYZE on a SELECT query to analyze performance."
+    },
+    {
+      "name": "get_schema_info",
+      "prefixed": "pgedge.get_schema_info",
+      "description": "Discover tables, columns, data types, and relationships."
+    },
+    {
+      "name": "query_database",
+      "prefixed": "pgedge.query_database",
+      "description": "Execute a SQL query (runs inside a read-only transaction by default)."
+    },
+    {
+      "name": "read_resource",
+      "prefixed": "pgedge.read_resource",
+      "description": "Read MCP resources such as pg://system_info."
+    },
+    {
+      "name": "similarity_search",
+      "prefixed": "pgedge.similarity_search",
+      "description": "Hybrid vector + BM25 + MMR search over pgvector columns."
+    }
+  ]
+}

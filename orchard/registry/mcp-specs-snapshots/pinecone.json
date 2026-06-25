@@ -1,0 +1,56 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'pinecone'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "pinecone",
+  "publisher": "pinecone-io",
+  "trust": "verified-publisher",
+  "tool_prefix": "pinecone",
+  "transport_kind": "stdio-subprocess",
+  "package": "@pinecone-database/mcp",
+  "tested_version": "0.2.1",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 8,
+  "tools": [
+    {
+      "name": "create-index-for-model",
+      "prefixed": "pinecone.create-index-for-model",
+      "description": "Create a new index that uses an integrated inference model to embed text."
+    },
+    {
+      "name": "describe-index",
+      "prefixed": "pinecone.describe-index",
+      "description": "Describe the configuration of an index."
+    },
+    {
+      "name": "describe-index-stats",
+      "prefixed": "pinecone.describe-index-stats",
+      "description": "Get statistics about an index, including record count and namespaces."
+    },
+    {
+      "name": "list-indexes",
+      "prefixed": "pinecone.list-indexes",
+      "description": "List all Pinecone indexes."
+    },
+    {
+      "name": "rerank-documents",
+      "prefixed": "pinecone.rerank-documents",
+      "description": "Rerank a collection of records or text documents with a reranking model."
+    },
+    {
+      "name": "search-docs",
+      "prefixed": "pinecone.search-docs",
+      "description": "Search the official Pinecone documentation."
+    },
+    {
+      "name": "search-records",
+      "prefixed": "pinecone.search-records",
+      "description": "Search records in an index by text query, with metadata filtering and reranking."
+    },
+    {
+      "name": "upsert-records",
+      "prefixed": "pinecone.upsert-records",
+      "description": "Insert or update records in an index with integrated inference."
+    }
+  ]
+}

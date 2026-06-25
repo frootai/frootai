@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'azure' — recorded input + expected output SHAPE per tool, for regression coverage. Shapes, not live values (offline + deterministic). CC0-1.0.",
+  "slug": "azure",
+  "fixtures": [
+    { "tool": "subscription", "input": { "intent": "list subscriptions in scope" }, "expected": { "kind": "array", "keys": ["id", "name"] }, "note": "subscription listing returns an array of {id,name}." },
+    { "tool": "group", "input": { "subscription": "<sub-id>" }, "expected": { "kind": "array", "keys": ["name", "location"] }, "note": "resource groups for a subscription." },
+    { "tool": "monitor", "input": { "query": "AzureActivity | take 5" }, "expected": { "kind": "object", "keys": ["columns", "rows"] }, "note": "log query returns a tabular result." },
+    { "tool": "storage", "input": { "subscription": "<sub-id>" }, "expected": { "kind": "array", "keys": ["name", "kind"] }, "note": "storage accounts in scope." },
+    { "tool": "keyvault", "input": { "vault": "<vault-name>" }, "expected": { "kind": "array", "keys": ["name"] }, "note": "secret/key metadata names (no values)." }
+  ]
+}

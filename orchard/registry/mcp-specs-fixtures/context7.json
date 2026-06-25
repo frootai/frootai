@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'context7' — 2 tools across 5 invocations. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "context7",
+  "fixtures": [
+    { "tool": "resolve-library-id", "input": { "libraryName": "next.js" }, "expected": { "kind": "text" }, "note": "resolves a package name to a Context7 library id." },
+    { "tool": "resolve-library-id", "input": { "libraryName": "react" }, "expected": { "kind": "text" }, "note": "another resolve." },
+    { "tool": "get-library-docs", "input": { "context7CompatibleLibraryID": "/vercel/next.js" }, "expected": { "kind": "text" }, "note": "fetch docs for a resolved id." },
+    { "tool": "get-library-docs", "input": { "context7CompatibleLibraryID": "/facebook/react", "topic": "hooks" }, "expected": { "kind": "text" }, "note": "docs scoped to a topic." },
+    { "tool": "get-library-docs", "input": { "context7CompatibleLibraryID": "/vercel/next.js", "tokens": 5000 }, "expected": { "kind": "text" }, "note": "docs with a token budget." }
+  ]
+}

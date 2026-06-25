@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.9] Golden invocation fixtures for 'sonatype' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "sonatype",
+  "fixtures": [
+    { "tool": "getComponentVersion", "input": { "packageUrl": "pkg:npm/react@18.2.0" }, "expected": { "kind": "object" }, "note": "intelligence for a specific component version." },
+    { "tool": "getLatestComponentVersion", "input": { "packageUrl": "pkg:maven/org.springframework.boot/spring-boot" }, "expected": { "kind": "object" }, "note": "latest version of a component." },
+    { "tool": "getRecommendedComponentVersions", "input": { "packageUrl": "pkg:npm/lodash@4.17.20" }, "expected": { "kind": "object" }, "note": "upgrade recommendations from a current version." },
+    { "tool": "getComponentVersion", "input": { "packageUrl": "pkg:pypi/requests@2.20.0" }, "expected": { "kind": "object" }, "note": "another specific-version lookup." },
+    { "tool": "getLatestComponentVersion", "input": { "packageUrl": "pkg:npm/express" }, "expected": { "kind": "object" }, "note": "latest version with security analysis." }
+  ]
+}

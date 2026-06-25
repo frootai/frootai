@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'sonarsource'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "sonarsource",
+  "publisher": "sonarsource",
+  "trust": "verified-publisher",
+  "tool_prefix": "sonarsource",
+  "transport_kind": "stdio-subprocess",
+  "package": "sonarsource/sonarqube-mcp",
+  "tested_version": "1.21.0.2975",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "analyze_code_snippet",
+      "prefixed": "sonarsource.analyze_code_snippet",
+      "description": "Analyze file content with SonarQube analyzers for quality and security issues."
+    },
+    {
+      "name": "get_component_measures",
+      "prefixed": "sonarsource.get_component_measures",
+      "description": "Get measures (ncloc, coverage, complexity, …) for a component."
+    },
+    {
+      "name": "get_project_quality_gate_status",
+      "prefixed": "sonarsource.get_project_quality_gate_status",
+      "description": "Get the Quality Gate status for a project."
+    },
+    {
+      "name": "list_quality_gates",
+      "prefixed": "sonarsource.list_quality_gates",
+      "description": "List all quality gates in the SonarQube instance."
+    },
+    {
+      "name": "search_my_sonarqube_projects",
+      "prefixed": "sonarsource.search_my_sonarqube_projects",
+      "description": "Find SonarQube projects (paginated)."
+    },
+    {
+      "name": "search_security_hotspots",
+      "prefixed": "sonarsource.search_security_hotspots",
+      "description": "Search for Security Hotspots in a project."
+    },
+    {
+      "name": "search_sonar_issues_in_projects",
+      "prefixed": "sonarsource.search_sonar_issues_in_projects",
+      "description": "Search issues across projects with severity and quality filters."
+    }
+  ]
+}

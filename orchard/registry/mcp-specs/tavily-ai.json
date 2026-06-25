@@ -1,0 +1,82 @@
+{
+  "$comment": "[X4.4] Tavily MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `tavily-ai` — official Tavily MCP server from github.com/tavily-ai; X1.5/X1.8 evidence). Shape === mcp-specs/_template.json (X2.1). Real-time web search + extract + map + crawl. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "tavily-ai",
+  "title": "Tavily Web Search & Extraction",
+  "publisher": "tavily-ai",
+  "trust": "verified-publisher",
+  "tool_prefix": "tavily-ai",
+  "description": "Real-time web search, page extraction, site mapping, and crawling via the official Tavily MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "tavily-mcp"],
+    "url": null,
+    "env_passthrough": ["TAVILY_API_KEY", "DEFAULT_PARAMETERS", "TAVILY_HUMAN_ID"]
+  },
+
+  "version_pin": {
+    "package": "tavily-mcp",
+    "version_range": ">=0.2.0 <1.0.0",
+    "tested_version": "0.2.20"
+  },
+
+  "env_vars": [
+    {
+      "name": "TAVILY_API_KEY",
+      "required": true,
+      "auth_mode": "api-key",
+      "description": "Tavily API key (`tvly-…`). Issue from app.tavily.com; required for the local server to authenticate. Pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "DEFAULT_PARAMETERS",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Optional JSON object of default `tavily-search` parameters (e.g. include_images, max_results, search_depth) applied to every request unless overridden per call."
+    },
+    {
+      "name": "TAVILY_HUMAN_ID",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Optional opaque end-user identifier forwarded as the `X-Human-Id` header for per-user analytics; hashed server-side (SHA-256). Prefer an internal ID over raw PII."
+    }
+  ],
+
+  "auth": {
+    "recipe": "sign up at app.tavily.com, then set TAVILY_API_KEY to your `tvly-…` key; the free tier works for basic search.",
+    "modes": ["api-key"]
+  },
+
+  "sample_tools": [
+    { "name": "tavily-search", "summary": "Real-time web search with configurable depth, result count, and optional images." },
+    { "name": "tavily-extract", "summary": "Extract clean, structured content from one or more web-page URLs." },
+    { "name": "tavily-map", "summary": "Build a structured map of a website's pages from a root URL." },
+    { "name": "tavily-crawl", "summary": "Systematically crawl a website starting from a base URL." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Requires a Tavily API key (TAVILY_API_KEY); without it the local server cannot authenticate and every tool returns an auth error.",
+    "Search, extract, map, and crawl all consume Tavily API credits — high `max_results` or deep crawls draw down the account quota faster.",
+    "Results reflect live public-web content and Tavily's index freshness; extraction quality varies with page structure (JS-heavy or paywalled pages may return partial content).",
+    "Destructive-action audit (X2.18): no destructive tools — search/extract/map/crawl are read-only web retrieval."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `tavily-ai`: { command: npx, args: [-y, tavily-mcp], env: { TAVILY_API_KEY: \"tvly-...\" } }.",
+    "cursor": "Settings → MCP → Add: name `tavily-ai`, command `npx -y tavily-mcp`; set TAVILY_API_KEY in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `tavily-ai` (VS Code Insider, MCP preview); supply TAVILY_API_KEY via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/tavily-ai.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

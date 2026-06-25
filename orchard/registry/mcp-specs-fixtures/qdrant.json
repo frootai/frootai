@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.15] Golden invocation fixtures for 'qdrant' — 5 invocations across the sample tools (qdrant-store / qdrant-find). Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "qdrant",
+  "fixtures": [
+    { "tool": "qdrant-store", "input": { "information": "FrootAI ships an MCP marketplace with attach specs.", "collection_name": "notes" }, "expected": { "kind": "object" }, "note": "store a memory in a collection." },
+    { "tool": "qdrant-store", "input": { "information": "Use HNSW for fast approximate vector search.", "metadata": { "topic": "vector-db" }, "collection_name": "notes" }, "expected": { "kind": "object" }, "note": "store with metadata." },
+    { "tool": "qdrant-find", "input": { "query": "how does the marketplace work", "collection_name": "notes" }, "expected": { "kind": "object" }, "note": "semantic retrieval." },
+    { "tool": "qdrant-find", "input": { "query": "vector index choices", "collection_name": "notes" }, "expected": { "kind": "object" }, "note": "retrieve on a different query." },
+    { "tool": "qdrant-store", "input": { "information": "def add(a, b): return a + b", "metadata": { "code": "def add(a, b): return a + b" }, "collection_name": "code-snippets" }, "expected": { "kind": "object" }, "note": "code-search store pattern." }
+  ]
+}

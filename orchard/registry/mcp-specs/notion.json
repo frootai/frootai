@@ -1,0 +1,78 @@
+{
+  "$comment": "[X4.2] Notion MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `notion` — brand alias of org `makenotion`; both seeded verified-publisher in trust.json, X1.6 evidence). Official Notion MCP server. Shape === mcp-specs/_template.json (X2.1). v2.0+ migrated to the data-source model (Notion API 2025-09-03). CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "notion",
+  "title": "Notion Workspace Operations",
+  "publisher": "notion",
+  "trust": "verified-publisher",
+  "tool_prefix": "notion",
+  "description": "Search, read, and edit Notion pages, databases, and data sources via the official Notion MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@notionhq/notion-mcp-server"],
+    "url": null,
+    "env_passthrough": ["NOTION_TOKEN", "OPENAPI_MCP_HEADERS"]
+  },
+
+  "version_pin": {
+    "package": "@notionhq/notion-mcp-server",
+    "version_range": ">=2.0.0 <3.0.0",
+    "tested_version": "2.1.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "NOTION_TOKEN",
+      "required": true,
+      "auth_mode": "integration-token",
+      "description": "Notion internal-integration secret (`ntn_…`). Issue from notion.so/profile/integrations; it scopes which pages and databases the server can reach. Pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "OPENAPI_MCP_HEADERS",
+      "required": false,
+      "auth_mode": "integration-token",
+      "description": "Advanced alternative to NOTION_TOKEN: a JSON string of HTTP headers (e.g. an Authorization bearer plus a Notion-Version header). Use either NOTION_TOKEN or this; pass via env, never inline in args (doctrine #6)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create an internal integration at notion.so/profile/integrations, share the target pages/databases with it (Access tab), then set NOTION_TOKEN to the integration secret (`ntn_…`); OPENAPI_MCP_HEADERS is an advanced header-based alternative.",
+    "modes": ["integration-token"]
+  },
+
+  "sample_tools": [
+    { "name": "query-data-source", "summary": "Query a Notion data source (database) with filters and sorts (uses `data_source_id`)." },
+    { "name": "retrieve-a-data-source", "summary": "Get the schema and metadata for a data source." },
+    { "name": "retrieve-a-database", "summary": "Get database metadata, including its data-source IDs." },
+    { "name": "retrieve-page-markdown", "summary": "Read a page's full content as token-efficient Markdown." },
+    { "name": "update-page-markdown", "summary": "Edit a page's content with Markdown (`replace_content` or targeted `update_content`)." },
+    { "name": "move-page", "summary": "Move a page to a different parent page or data source." }
+  ],
+
+  "destructive_tools": ["delete-a-block"],
+
+  "known_limitations": [
+    "Requires a Notion internal-integration token (NOTION_TOKEN); without it the server attaches but every Notion API tool returns an auth error.",
+    "Tools only see pages and databases explicitly shared with the integration — connect each target via the integration's Access tab first, or tools return empty / not-found.",
+    "v2.0+ migrated databases to the data-source model (Notion API 2025-09-03): database operations use `data_source_id`, and the legacy create/update/query `*-a-database` tools were removed.",
+    "Destructive-action audit (X2.18): block deletion (`delete-a-block`) is flagged in `destructive_tools`; the Notion integration scope excludes database deletion, and the trust policy sets `allowDestructive: false` (per-call confirm, X1.6 evidence)."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `notion`: { command: npx, args: [-y, @notionhq/notion-mcp-server], env: { NOTION_TOKEN: \"ntn_...\" } }.",
+    "cursor": "Settings → MCP → Add: name `notion`, command `npx -y @notionhq/notion-mcp-server`; set NOTION_TOKEN in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `notion` (VS Code Insider, MCP preview); supply NOTION_TOKEN via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/notion.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

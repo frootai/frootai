@@ -1,0 +1,46 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'hashicorp-terraform'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "hashicorp-terraform",
+  "publisher": "hashicorp",
+  "trust": "verified-publisher",
+  "tool_prefix": "hashicorp-terraform",
+  "transport_kind": "stdio-subprocess",
+  "package": "hashicorp/terraform-mcp-server",
+  "tested_version": "1.0.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 6,
+  "tools": [
+    {
+      "name": "get_module_details",
+      "prefixed": "hashicorp-terraform.get_module_details",
+      "description": "Get details for a Terraform Registry module."
+    },
+    {
+      "name": "get_provider_details",
+      "prefixed": "hashicorp-terraform.get_provider_details",
+      "description": "Get documentation and details for a Terraform provider."
+    },
+    {
+      "name": "list_workspaces",
+      "prefixed": "hashicorp-terraform.list_workspaces",
+      "description": "List HCP Terraform / Enterprise workspaces (requires TFE_TOKEN)."
+    },
+    {
+      "name": "search_modules",
+      "prefixed": "hashicorp-terraform.search_modules",
+      "description": "Search the Terraform Registry for modules."
+    },
+    {
+      "name": "search_policies",
+      "prefixed": "hashicorp-terraform.search_policies",
+      "description": "Search the Terraform Registry for Sentinel policies."
+    },
+    {
+      "name": "search_providers",
+      "prefixed": "hashicorp-terraform.search_providers",
+      "description": "Search the Terraform Registry for providers matching a query."
+    }
+  ]
+}

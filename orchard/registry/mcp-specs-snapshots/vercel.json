@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'vercel'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "vercel",
+  "publisher": "vercel",
+  "trust": "verified-publisher",
+  "tool_prefix": "vercel",
+  "transport_kind": "http-sse",
+  "package": null,
+  "tested_version": "2026-06-25",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "get_deployment_build_logs",
+      "prefixed": "vercel.get_deployment_build_logs",
+      "description": "Get a deployment's build logs to investigate failures."
+    },
+    {
+      "name": "get_project",
+      "prefixed": "vercel.get_project",
+      "description": "Get details for a project — framework, domains, and latest deployment."
+    },
+    {
+      "name": "get_runtime_logs",
+      "prefixed": "vercel.get_runtime_logs",
+      "description": "Get runtime logs (console output, errors) for a project or deployment."
+    },
+    {
+      "name": "list_deployments",
+      "prefixed": "vercel.list_deployments",
+      "description": "List a project's deployments with state and target."
+    },
+    {
+      "name": "list_projects",
+      "prefixed": "vercel.list_projects",
+      "description": "List Vercel projects for a team."
+    },
+    {
+      "name": "list_teams",
+      "prefixed": "vercel.list_teams",
+      "description": "List the teams the authenticated user belongs to."
+    },
+    {
+      "name": "search_documentation",
+      "prefixed": "vercel.search_documentation",
+      "description": "Search Vercel documentation for a topic (public, no auth)."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.11] Golden invocation fixtures for 'atlassian' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "atlassian",
+  "fixtures": [
+    { "tool": "getVisibleJiraProjects", "input": {}, "expected": { "kind": "object" }, "note": "list visible Jira projects." },
+    { "tool": "searchJiraIssuesUsingJql", "input": { "jql": "project = PROJ AND status = 'In Progress'" }, "expected": { "kind": "object" }, "note": "search in-progress issues via JQL." },
+    { "tool": "getJiraIssue", "input": { "issueIdOrKey": "PROJ-1234" }, "expected": { "kind": "object" }, "note": "fetch a single Jira issue." },
+    { "tool": "searchConfluenceUsingCql", "input": { "cql": "type = page AND space = ENG" }, "expected": { "kind": "object" }, "note": "search Confluence pages via CQL." },
+    { "tool": "getConfluencePage", "input": { "pageId": "123456" }, "expected": { "kind": "object" }, "note": "fetch a Confluence page's content." }
+  ]
+}

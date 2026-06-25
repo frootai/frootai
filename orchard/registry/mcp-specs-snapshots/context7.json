@@ -1,0 +1,26 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'context7'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "context7",
+  "publisher": "upstash",
+  "trust": "verified-publisher",
+  "tool_prefix": "context7",
+  "transport_kind": "stdio-subprocess",
+  "package": "@upstash/context7-mcp",
+  "tested_version": "1.0.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 2,
+  "tools": [
+    {
+      "name": "get-library-docs",
+      "prefixed": "context7.get-library-docs",
+      "description": "Fetch current documentation for a resolved library id (`context7CompatibleLibraryID`), optionally scoped by `topic` and paginated via `page`."
+    },
+    {
+      "name": "resolve-library-id",
+      "prefixed": "context7.resolve-library-id",
+      "description": "Resolve a package/framework name (`libraryName`) to a Context7-compatible library id."
+    }
+  ]
+}

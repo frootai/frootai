@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'mongodb'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "mongodb",
+  "publisher": "mongodb-js",
+  "trust": "verified-publisher",
+  "tool_prefix": "mongodb",
+  "transport_kind": "stdio-subprocess",
+  "package": "mongodb-mcp-server",
+  "tested_version": "1.13.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "aggregate",
+      "prefixed": "mongodb.aggregate",
+      "description": "Run an aggregation pipeline against a collection."
+    },
+    {
+      "name": "atlas-list-clusters",
+      "prefixed": "mongodb.atlas-list-clusters",
+      "description": "List MongoDB Atlas clusters in a project."
+    },
+    {
+      "name": "collection-schema",
+      "prefixed": "mongodb.collection-schema",
+      "description": "Infer and describe a collection's schema."
+    },
+    {
+      "name": "count",
+      "prefixed": "mongodb.count",
+      "description": "Count documents in a collection matching a filter."
+    },
+    {
+      "name": "find",
+      "prefixed": "mongodb.find",
+      "description": "Run a find query against a MongoDB collection."
+    },
+    {
+      "name": "list-collections",
+      "prefixed": "mongodb.list-collections",
+      "description": "List all collections in a database."
+    },
+    {
+      "name": "list-databases",
+      "prefixed": "mongodb.list-databases",
+      "description": "List all databases for the active connection."
+    }
+  ]
+}

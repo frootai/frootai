@@ -1,0 +1,26 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'qdrant'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "qdrant",
+  "publisher": "qdrant",
+  "trust": "verified-publisher",
+  "tool_prefix": "qdrant",
+  "transport_kind": "stdio-subprocess",
+  "package": "mcp-server-qdrant",
+  "tested_version": "0.8.1",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 2,
+  "tools": [
+    {
+      "name": "qdrant-find",
+      "prefixed": "qdrant.qdrant-find",
+      "description": "Retrieve relevant memories from a Qdrant collection via semantic search."
+    },
+    {
+      "name": "qdrant-store",
+      "prefixed": "qdrant.qdrant-store",
+      "description": "Store information (with optional metadata) as a memory in a Qdrant collection."
+    }
+  ]
+}

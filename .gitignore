@@ -46,3 +46,9 @@ app-site/out/
 # Test-set expansion script side-effects
 *.bak
 
+# [X1.2] MCP trust evidence — raw incident-response contact PII (doctrine §0.5 #3).
+# Evidence files (orchard/registry/mcp-trust-evidence/<publisher>.md) ARE committed
+# and reviewable (CC0). Raw contact (email/phone/handle) lives ONLY in gitignored
+# *.contact.local.md overlays and must never reach a public copy.
+orchard/registry/mcp-trust-evidence/*.contact.local.md
+

@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.4] Golden invocation fixtures for 'tavily-ai' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "tavily-ai",
+  "fixtures": [
+    { "tool": "tavily-search", "input": { "query": "latest open-source LLM benchmarks 2026" }, "expected": { "kind": "object", "keys": ["results"] }, "note": "basic real-time web search." },
+    { "tool": "tavily-search", "input": { "query": "Next.js app router caching", "search_depth": "advanced", "max_results": 5 }, "expected": { "kind": "object", "keys": ["results"] }, "note": "advanced search with a result cap." },
+    { "tool": "tavily-extract", "input": { "urls": ["https://example.com/article"] }, "expected": { "kind": "object", "keys": ["results"] }, "note": "extract content from a page URL." },
+    { "tool": "tavily-map", "input": { "url": "https://example.com" }, "expected": { "kind": "object" }, "note": "map a site's page structure." },
+    { "tool": "tavily-crawl", "input": { "url": "https://example.com", "max_depth": 1 }, "expected": { "kind": "object" }, "note": "shallow crawl from a base URL." }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'github' — recorded input + expected output SHAPE per tool. CC0-1.0.",
+  "slug": "github",
+  "fixtures": [
+    { "tool": "search_repositories", "input": { "query": "mcp server in:name" }, "expected": { "kind": "array", "keys": ["full_name", "stargazers_count"] }, "note": "repo search results." },
+    { "tool": "get_file_contents", "input": { "owner": "frootai", "repo": "frootai", "path": "README.md" }, "expected": { "kind": "object", "keys": ["content", "encoding"] }, "note": "file contents (base64)." },
+    { "tool": "list_issues", "input": { "owner": "frootai", "repo": "frootai", "state": "open" }, "expected": { "kind": "array", "keys": ["number", "title", "state"] }, "note": "open issues." },
+    { "tool": "create_issue", "input": { "owner": "frootai", "repo": "frootai", "title": "Test issue" }, "expected": { "kind": "object", "keys": ["number", "html_url"] }, "note": "created issue (write — requires token scope)." },
+    { "tool": "list_pull_requests", "input": { "owner": "frootai", "repo": "frootai", "state": "open" }, "expected": { "kind": "array", "keys": ["number", "title"] }, "note": "open PRs." }
+  ]
+}

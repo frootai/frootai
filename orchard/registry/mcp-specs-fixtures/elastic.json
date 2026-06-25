@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.7] Golden invocation fixtures for 'elastic' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "elastic",
+  "fixtures": [
+    { "tool": "list_indices", "input": {}, "expected": { "kind": "object" }, "note": "list all indices on the cluster." },
+    { "tool": "get_mappings", "input": { "index": "products" }, "expected": { "kind": "object" }, "note": "get field mappings for an index." },
+    { "tool": "search", "input": { "index": "products", "queryBody": { "query": { "match_all": {} }, "size": 5 } }, "expected": { "kind": "object" }, "note": "run a Query DSL search." },
+    { "tool": "esql", "input": { "query": "FROM products | LIMIT 10" }, "expected": { "kind": "object" }, "note": "run an ES|QL query." },
+    { "tool": "get_shards", "input": { "index": "products" }, "expected": { "kind": "object" }, "note": "inspect shard allocation for an index." }
+  ]
+}

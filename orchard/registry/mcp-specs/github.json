@@ -1,0 +1,76 @@
+{
+  "$comment": "[X2.4] GitHub MCP attach spec. Tier-1 first-party-ms (GitHub = MS subsidiary, own verified org identity per X1.4). Shape === mcp-specs/_template.json (X2.1). CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "github",
+  "title": "GitHub Repository Operations",
+  "publisher": "github",
+  "trust": "first-party-ms",
+  "tool_prefix": "github",
+  "description": "GitHub repository, issue, pull-request, and Actions operations via the official GitHub MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@github/github-mcp-server"],
+    "url": null,
+    "env_passthrough": ["GITHUB_TOKEN", "GITHUB_PAT"]
+  },
+
+  "version_pin": {
+    "package": "@github/github-mcp-server",
+    "version_range": ">=0.1.0 <1.0.0",
+    "tested_version": "0.1.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "GITHUB_TOKEN",
+      "required": true,
+      "auth_mode": "pat",
+      "description": "GitHub personal access token (classic or fine-grained). Scopes the operations the server can perform; pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "GITHUB_PAT",
+      "required": false,
+      "auth_mode": "pat",
+      "description": "Alternate token env name accepted by the server; use either GITHUB_TOKEN or GITHUB_PAT (GITHUB_TOKEN preferred)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "set GITHUB_TOKEN to a personal access token; fine-grained tokens scoped to the target repos are preferred over classic.",
+    "modes": ["pat"]
+  },
+
+  "sample_tools": [
+    { "name": "search_repositories", "summary": "Search repositories by query." },
+    { "name": "get_file_contents", "summary": "Read a file from a repository." },
+    { "name": "list_issues", "summary": "List issues on a repository." },
+    { "name": "create_issue", "summary": "Open a new issue." },
+    { "name": "list_pull_requests", "summary": "List pull requests on a repository." }
+  ],
+
+  "destructive_tools": ["delete_branch", "delete_file"],
+
+  "known_limitations": [
+    "Requires a valid GITHUB_TOKEN; without it the server attaches but all repo-scoped tools return an auth error.",
+    "Tool capabilities are bounded by the token's scopes — a read-only token cannot create issues or PRs.",
+    "Destructive-action audit (X2.18): branch/file deletion tools are flagged in `destructive_tools` and are blocked when the trust policy sets `allowDestructive: false`."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `github`: { command: npx, args: [-y, @github/github-mcp-server], env: { GITHUB_TOKEN: \"<token>\" } }.",
+    "cursor": "Settings → MCP → Add: name `github`, command `npx -y @github/github-mcp-server`; set GITHUB_TOKEN in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `github` (VS Code Insider, MCP preview); supply GITHUB_TOKEN via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/github.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

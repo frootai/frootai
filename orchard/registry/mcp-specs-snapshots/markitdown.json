@@ -1,0 +1,21 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'markitdown'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "markitdown",
+  "publisher": "microsoft",
+  "trust": "first-party-ms",
+  "tool_prefix": "markitdown",
+  "transport_kind": "stdio-subprocess",
+  "package": "markitdown-mcp",
+  "tested_version": "0.0.1",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 1,
+  "tools": [
+    {
+      "name": "convert_to_markdown",
+      "prefixed": "markitdown.convert_to_markdown",
+      "description": "Convert a local file or URI (Office/PDF/image/audio) to Markdown."
+    }
+  ]
+}

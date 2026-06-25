@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.12] Golden invocation fixtures for 'vercel' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "vercel",
+  "fixtures": [
+    { "tool": "search_documentation", "input": { "topic": "custom domains" }, "expected": { "kind": "object" }, "note": "search the Vercel docs (public)." },
+    { "tool": "list_teams", "input": {}, "expected": { "kind": "object" }, "note": "list the user's teams." },
+    { "tool": "list_projects", "input": { "teamId": "team_abc123" }, "expected": { "kind": "object" }, "note": "list projects in a team." },
+    { "tool": "get_project", "input": { "projectId": "prj_abc123", "teamId": "team_abc123" }, "expected": { "kind": "object" }, "note": "fetch project details." },
+    { "tool": "list_deployments", "input": { "projectId": "prj_abc123", "teamId": "team_abc123" }, "expected": { "kind": "object" }, "note": "list a project's deployments." }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'ms-learn' — 2 tools across 5 invocations. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "ms-learn",
+  "fixtures": [
+    { "tool": "microsoft_docs_search", "input": { "query": "azure functions bindings" }, "expected": { "kind": "array", "keys": ["title", "url"] }, "note": "doc search returns ranked results." },
+    { "tool": "microsoft_docs_search", "input": { "query": "managed identity" }, "expected": { "kind": "array", "keys": ["title", "url"] }, "note": "another search." },
+    { "tool": "microsoft_docs_fetch", "input": { "url": "https://learn.microsoft.com/azure/azure-functions/functions-bindings-expressions-patterns" }, "expected": { "kind": "text" }, "note": "fetch full doc page content." },
+    { "tool": "microsoft_docs_fetch", "input": { "url": "https://learn.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" }, "expected": { "kind": "text" }, "note": "fetch another doc." },
+    { "tool": "microsoft_docs_search", "input": { "query": "cosmos db change feed" }, "expected": { "kind": "array", "keys": ["title", "url"] }, "note": "search for cosmos docs." }
+  ]
+}

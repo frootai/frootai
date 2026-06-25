@@ -1,0 +1,109 @@
+{
+  "$comment": "[X4.8] pgEdge Postgres MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `pgedge` — official pgEdge Postgres MCP server from github.com/pgEdge/pgedge-postgres-mcp; X1.12 evidence; trust.json key is lowercased `pgedge`). Shape === mcp-specs/_template.json (X2.1). Go server shipped as the Docker image ghcr.io/pgedge/postgres-mcp (stdio mode by default); read-only-by-default query surface. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "pgedge",
+  "title": "pgEdge Distributed Postgres",
+  "publisher": "pgedge",
+  "trust": "verified-publisher",
+  "tool_prefix": "pgedge",
+  "description": "Query and analyze PostgreSQL databases — SQL execution, schema discovery, EXPLAIN analysis, and hybrid vector search — via the official pgEdge Postgres MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "docker",
+    "args": ["run", "-i", "--rm", "-e", "PGEDGE_DB_HOST", "-e", "PGEDGE_DB_PORT", "-e", "PGEDGE_DB_NAME", "-e", "PGEDGE_DB_USER", "-e", "PGEDGE_DB_PASSWORD", "-e", "PGEDGE_DB_SSLMODE", "ghcr.io/pgedge/postgres-mcp"],
+    "url": null,
+    "env_passthrough": ["PGEDGE_DB_HOST", "PGEDGE_DB_PORT", "PGEDGE_DB_NAME", "PGEDGE_DB_USER", "PGEDGE_DB_PASSWORD", "PGEDGE_DB_SSLMODE", "PGEDGE_DB_ALLOW_WRITES"]
+  },
+
+  "version_pin": {
+    "package": "ghcr.io/pgedge/postgres-mcp",
+    "version_range": ">=1.0.0 <2.0.0",
+    "tested_version": "1.0.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "PGEDGE_DB_HOST",
+      "required": false,
+      "auth_mode": "connection",
+      "description": "PostgreSQL host to connect to. Provide the connection via these PGEDGE_DB_* vars or a config file."
+    },
+    {
+      "name": "PGEDGE_DB_PORT",
+      "required": false,
+      "auth_mode": "connection",
+      "description": "PostgreSQL port (default 5432)."
+    },
+    {
+      "name": "PGEDGE_DB_NAME",
+      "required": false,
+      "auth_mode": "connection",
+      "description": "Target database name."
+    },
+    {
+      "name": "PGEDGE_DB_USER",
+      "required": false,
+      "auth_mode": "connection",
+      "description": "Database user. Prefer a least-privilege, read-only role."
+    },
+    {
+      "name": "PGEDGE_DB_PASSWORD",
+      "required": false,
+      "auth_mode": "connection",
+      "description": "Database user password; pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "PGEDGE_DB_SSLMODE",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Postgres SSL mode (e.g. require, verify-full, prefer). Use require/verify-full for remote clusters."
+    },
+    {
+      "name": "PGEDGE_DB_ALLOW_WRITES",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Set to `true` to allow write queries (INSERT/UPDATE/DELETE/DDL). Off by default — the server runs read-only transactions."
+    }
+  ],
+
+  "auth": {
+    "recipe": "point the server at PostgreSQL via the PGEDGE_DB_* variables (host/port/name/user/password) and use a least-privilege read-only role; leave PGEDGE_DB_ALLOW_WRITES unset for read-only access.",
+    "modes": ["postgres-connection"]
+  },
+
+  "sample_tools": [
+    { "name": "query_database", "summary": "Execute a SQL query (runs inside a read-only transaction by default)." },
+    { "name": "count_rows", "summary": "Count rows in a table before querying large datasets." },
+    { "name": "get_schema_info", "summary": "Discover tables, columns, data types, and relationships." },
+    { "name": "execute_explain", "summary": "Run EXPLAIN ANALYZE on a SELECT query to analyze performance." },
+    { "name": "similarity_search", "summary": "Hybrid vector + BM25 + MMR search over pgvector columns." },
+    { "name": "read_resource", "summary": "Read MCP resources such as pg://system_info." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Connect to PostgreSQL via the PGEDGE_DB_* variables (host/name/user/password) or a config file; without a configured connection the data tools return no results.",
+    "Distributed as a Docker image (ghcr.io/pgedge/postgres-mcp) — Docker must be installed and running; there is no npm package.",
+    "Read-only by default — query_database runs inside read-only transactions; setting PGEDGE_DB_ALLOW_WRITES=true enables DDL/DML and the server then marks query_database with `destructiveHint`.",
+    "Semantic tools (similarity_search, generate_embedding, search_knowledgebase) require extra setup — pgvector columns, an embedding provider, and/or a prebuilt knowledgebase — and are otherwise unavailable.",
+    "Destructive-action audit (X2.18): no tools match destructive name patterns (destructive_tools is empty); write capability is gated behind the off-by-default PGEDGE_DB_ALLOW_WRITES and the read-only-transaction guardrail."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `pgedge`: { command: docker, args: [run, -i, --rm, -e, PGEDGE_DB_HOST, -e, PGEDGE_DB_NAME, -e, PGEDGE_DB_USER, -e, PGEDGE_DB_PASSWORD, ghcr.io/pgedge/postgres-mcp], env: { PGEDGE_DB_HOST: \"...\", PGEDGE_DB_NAME: \"...\", PGEDGE_DB_USER: \"...\", PGEDGE_DB_PASSWORD: \"...\" } }.",
+    "cursor": "Settings → MCP → Add: name `pgedge`, command `docker run -i --rm -e PGEDGE_DB_HOST -e PGEDGE_DB_NAME -e PGEDGE_DB_USER -e PGEDGE_DB_PASSWORD ghcr.io/pgedge/postgres-mcp`; set the PGEDGE_DB_* vars in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `pgedge` (VS Code Insider, MCP preview); supply the PGEDGE_DB_* connection vars via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/pgedge.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

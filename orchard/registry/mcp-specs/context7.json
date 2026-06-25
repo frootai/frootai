@@ -1,0 +1,86 @@
+{
+  "$comment": "[X4.1] Context7 MCP attach spec — Tier-2 exemplar, upgraded to the full shape (complete env-var matrix + enriched sample tools + destructive-action audit). Sets the template the remaining X4 Tier-2 specs follow. Tier-1 VERIFIED-PUBLISHER (publisher upstash — NOT first-party). Shape === mcp-specs/_template.json (X2.1). Signal grounded: Context7 attached in shipped solution-plays 21/51 + cookbook 19/20 (X1.5 evidence). CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "context7",
+  "title": "Live Library Documentation",
+  "publisher": "upstash",
+  "trust": "verified-publisher",
+  "tool_prefix": "context7",
+  "description": "Always-current package and framework documentation retrieval via the Context7 MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@upstash/context7-mcp"],
+    "url": null,
+    "env_passthrough": ["CONTEXT7_API_KEY", "CONTEXT7_API_URL", "HTTPS_PROXY", "NODE_EXTRA_CA_CERTS"]
+  },
+
+  "version_pin": {
+    "package": "@upstash/context7-mcp",
+    "version_range": ">=1.0.0 <2.0.0",
+    "tested_version": "1.0.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "CONTEXT7_API_KEY",
+      "required": false,
+      "auth_mode": "api-key",
+      "description": "Optional Context7 API key for higher rate limits and private-repo docs. Anonymous use works for basic public doc lookups. Equivalent to the `--api-key` CLI flag (the flag takes precedence when both are set); pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "CONTEXT7_API_URL",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Optional Context7 API endpoint override; defaults to https://context7.com/api. Set when routing through a self-hosted or proxied Context7 backend."
+    },
+    {
+      "name": "HTTPS_PROXY",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Optional standard HTTP(S) egress proxy (also reads `https_proxy`). Set when the host requires an outbound proxy to reach the Context7 API."
+    },
+    {
+      "name": "NODE_EXTRA_CA_CERTS",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Optional path to an extra CA-certificate bundle for TLS — for corporate proxies or certificate-inspecting gateways that re-sign the Context7 endpoint."
+    }
+  ],
+
+  "auth": {
+    "recipe": "no key required for basic public doc lookups; set CONTEXT7_API_KEY (or pass `--api-key`) for higher rate limits and private-repo docs.",
+    "modes": ["none", "api-key"]
+  },
+
+  "sample_tools": [
+    { "name": "resolve-library-id", "summary": "Resolve a package/framework name (`libraryName`) to a Context7-compatible library id." },
+    { "name": "get-library-docs", "summary": "Fetch current documentation for a resolved library id (`context7CompatibleLibraryID`), optionally scoped by `topic` and paginated via `page`." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Read-only documentation retrieval; cannot modify any resource.",
+    "Anonymous use is rate-limited — set CONTEXT7_API_KEY for production workloads and private-repo docs.",
+    "Network egress to the Context7 API is required; behind a proxy set HTTPS_PROXY (and NODE_EXTRA_CA_CERTS for a custom CA bundle).",
+    "Destructive-action audit (X2.18): no destructive tools — documentation retrieval is read-only."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `context7`: { command: npx, args: [-y, @upstash/context7-mcp] }.",
+    "cursor": "Settings → MCP → Add: name `context7`, command `npx -y @upstash/context7-mcp`.",
+    "vscode": "Add to .vscode/mcp.json servers as `context7` (VS Code Insider, MCP preview)."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/context7.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

@@ -1,0 +1,41 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'github'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "github",
+  "publisher": "github",
+  "trust": "first-party-ms",
+  "tool_prefix": "github",
+  "transport_kind": "stdio-subprocess",
+  "package": "@github/github-mcp-server",
+  "tested_version": "0.1.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 5,
+  "tools": [
+    {
+      "name": "create_issue",
+      "prefixed": "github.create_issue",
+      "description": "Open a new issue."
+    },
+    {
+      "name": "get_file_contents",
+      "prefixed": "github.get_file_contents",
+      "description": "Read a file from a repository."
+    },
+    {
+      "name": "list_issues",
+      "prefixed": "github.list_issues",
+      "description": "List issues on a repository."
+    },
+    {
+      "name": "list_pull_requests",
+      "prefixed": "github.list_pull_requests",
+      "description": "List pull requests on a repository."
+    },
+    {
+      "name": "search_repositories",
+      "prefixed": "github.search_repositories",
+      "description": "Search repositories by query."
+    }
+  ]
+}

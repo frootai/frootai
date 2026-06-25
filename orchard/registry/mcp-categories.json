@@ -1,0 +1,43 @@
+{
+  "$comment": "License: CC0-1.0. Frozen 6-category vocabulary for the FAI MCP Marketplace. Authored as Phase [X0.27] of 02-marketplace-and-trust-masterplan.md. The crawler's classifier (frootai-core/scripts/marketplace/crawler/lib/categorize.js, [X0.18]) maps server descriptions onto these ids; the schema enum (mcp-marketplace-entry-v1.schema.json) and this file MUST stay in lock-step (guarded by a test).",
+  "version": 1,
+  "frozen": true,
+  "categories": [
+    {
+      "id": "azure-cloud",
+      "label": "Azure & Cloud",
+      "description": "Microsoft Azure and first-party cloud services — resource management, Cosmos DB, Fabric, Foundry, AKS, App Service, Cognitive Services, Entra.",
+      "examples": ["Azure MCP", "Microsoft Fabric", "Foundry"]
+    },
+    {
+      "id": "browser-automation",
+      "label": "Browser Automation",
+      "description": "Driving, inspecting, or scraping web browsers — automation via accessibility trees, DevTools, headless control, page capture.",
+      "examples": ["Playwright", "Chrome DevTools", "Puppeteer-based servers"]
+    },
+    {
+      "id": "docs-retrieval",
+      "label": "Docs & Retrieval",
+      "description": "Fetching and searching documentation, knowledge, or the web — up-to-date code docs, semantic retrieval, RAG, web search.",
+      "examples": ["Context7", "Tavily", "MS Learn"]
+    },
+    {
+      "id": "data-stores",
+      "label": "Data Stores",
+      "description": "Databases, vector stores, and search indexes — SQL/NoSQL, embeddings, full-text search, replication.",
+      "examples": ["MongoDB", "Supabase", "Elastic", "Qdrant", "pgEdge"]
+    },
+    {
+      "id": "dev-tooling",
+      "label": "Dev Tooling",
+      "description": "Software development workflow — source control, CI/CD, code intelligence, build/deploy, infrastructure-as-code, IDE/editor integration.",
+      "examples": ["GitHub", "HashiCorp Terraform", "SonarSource", "Unity"]
+    },
+    {
+      "id": "specialty",
+      "label": "Specialty",
+      "description": "Domain-specific servers that don't fit the other buckets — the explicit catch-all (format conversion, monitoring, payments, vertical SaaS, etc.).",
+      "examples": ["Markitdown", "Netdata", "Stripe"]
+    }
+  ]
+}

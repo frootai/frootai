@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.2] Golden invocation fixtures for 'notion' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "notion",
+  "fixtures": [
+    { "tool": "query-data-source", "input": { "data_source_id": "a1b2c3d4-0000-0000-0000-000000000001", "page_size": 5 }, "expected": { "kind": "object", "keys": ["results"] }, "note": "query a data source for its first rows." },
+    { "tool": "retrieve-a-data-source", "input": { "data_source_id": "a1b2c3d4-0000-0000-0000-000000000001" }, "expected": { "kind": "object" }, "note": "fetch a data source's schema + metadata." },
+    { "tool": "retrieve-a-database", "input": { "database_id": "b2c3d4e5-0000-0000-0000-000000000002" }, "expected": { "kind": "object" }, "note": "fetch database metadata incl. data-source IDs." },
+    { "tool": "retrieve-page-markdown", "input": { "page_id": "c3d4e5f6-0000-0000-0000-000000000003" }, "expected": { "kind": "text" }, "note": "read a page's content as Markdown." },
+    { "tool": "move-page", "input": { "page_id": "c3d4e5f6-0000-0000-0000-000000000003", "parent": { "page_id": "d4e5f6a7-0000-0000-0000-000000000004" } }, "expected": { "kind": "object" }, "note": "move a page under a new parent." }
+  ]
+}

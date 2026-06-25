@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'firecrawl'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "firecrawl",
+  "publisher": "firecrawl",
+  "trust": "verified-publisher",
+  "tool_prefix": "firecrawl",
+  "transport_kind": "stdio-subprocess",
+  "package": "firecrawl-mcp",
+  "tested_version": "3.22.0",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "firecrawl_batch_scrape",
+      "prefixed": "firecrawl.firecrawl_batch_scrape",
+      "description": "Scrape multiple known URLs efficiently in one batch."
+    },
+    {
+      "name": "firecrawl_check_crawl_status",
+      "prefixed": "firecrawl.firecrawl_check_crawl_status",
+      "description": "Check the status of a crawl job."
+    },
+    {
+      "name": "firecrawl_crawl",
+      "prefixed": "firecrawl.firecrawl_crawl",
+      "description": "Start an async crawl of a site and extract content from its pages."
+    },
+    {
+      "name": "firecrawl_extract",
+      "prefixed": "firecrawl.firecrawl_extract",
+      "description": "Extract structured data from web pages using an LLM and a schema."
+    },
+    {
+      "name": "firecrawl_map",
+      "prefixed": "firecrawl.firecrawl_map",
+      "description": "Discover all indexed URLs on a website."
+    },
+    {
+      "name": "firecrawl_scrape",
+      "prefixed": "firecrawl.firecrawl_scrape",
+      "description": "Scrape a single URL into clean structured data or markdown."
+    },
+    {
+      "name": "firecrawl_search",
+      "prefixed": "firecrawl.firecrawl_search",
+      "description": "Search the web and optionally scrape result content."
+    }
+  ]
+}

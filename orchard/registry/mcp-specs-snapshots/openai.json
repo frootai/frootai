@@ -1,0 +1,26 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'openai'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "openai",
+  "publisher": "openai",
+  "trust": "verified-publisher",
+  "tool_prefix": "openai",
+  "transport_kind": "http-sse",
+  "package": null,
+  "tested_version": "2026-06-25",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 2,
+  "tools": [
+    {
+      "name": "fetch",
+      "prefixed": "openai.fetch",
+      "description": "Fetch the full content of an OpenAI documentation page."
+    },
+    {
+      "name": "search",
+      "prefixed": "openai.search",
+      "description": "Search OpenAI developer documentation for a query."
+    }
+  ]
+}

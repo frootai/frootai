@@ -1,0 +1,41 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'playwright'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "playwright",
+  "publisher": "microsoft",
+  "trust": "first-party-ms",
+  "tool_prefix": "playwright",
+  "transport_kind": "stdio-subprocess",
+  "package": "@playwright/mcp",
+  "tested_version": "0.0.20",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 5,
+  "tools": [
+    {
+      "name": "browser_click",
+      "prefixed": "playwright.browser_click",
+      "description": "Click an element by accessible selector."
+    },
+    {
+      "name": "browser_navigate",
+      "prefixed": "playwright.browser_navigate",
+      "description": "Navigate the active page to a URL."
+    },
+    {
+      "name": "browser_snapshot",
+      "prefixed": "playwright.browser_snapshot",
+      "description": "Capture an accessibility snapshot of the page."
+    },
+    {
+      "name": "browser_take_screenshot",
+      "prefixed": "playwright.browser_take_screenshot",
+      "description": "Capture a screenshot of the page or element."
+    },
+    {
+      "name": "browser_type",
+      "prefixed": "playwright.browser_type",
+      "description": "Type text into a focused input."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.10] Golden invocation fixtures for 'sonarsource' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "sonarsource",
+  "fixtures": [
+    { "tool": "search_my_sonarqube_projects", "input": { "page": "1" }, "expected": { "kind": "object" }, "note": "find the user's projects." },
+    { "tool": "search_sonar_issues_in_projects", "input": { "projects": ["my_project"], "severities": ["HIGH", "BLOCKER"] }, "expected": { "kind": "object" }, "note": "search high/blocker issues." },
+    { "tool": "get_project_quality_gate_status", "input": { "projectKey": "my_project" }, "expected": { "kind": "object" }, "note": "check the quality gate status." },
+    { "tool": "get_component_measures", "input": { "projectKey": "my_project", "metricKeys": ["coverage", "ncloc"] }, "expected": { "kind": "object" }, "note": "read coverage + lines-of-code measures." },
+    { "tool": "analyze_code_snippet", "input": { "projectKey": "my_project", "fileContent": "public class A { void f() {} }", "language": "java" }, "expected": { "kind": "object" }, "note": "analyze a Java snippet." }
+  ]
+}

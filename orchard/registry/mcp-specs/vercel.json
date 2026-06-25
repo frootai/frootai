@@ -1,0 +1,67 @@
+{
+  "$comment": "[X4.12] Vercel MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `vercel` — official Vercel MCP server, com.vercel namespace; X1.14 evidence). Completes the 12 verified-publisher core (X4.1–X4.12). Shape === mcp-specs/_template.json (X2.1). HOSTED http-sse remote endpoint (no local package), OAuth auth + public docs tools. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "vercel",
+  "title": "Vercel Projects & Deployments",
+  "publisher": "vercel",
+  "trust": "verified-publisher",
+  "tool_prefix": "vercel",
+  "description": "Search Vercel docs and manage teams, projects, deployments, and logs via the official hosted Vercel MCP server.",
+
+  "transport": {
+    "kind": "http-sse",
+    "command": null,
+    "args": [],
+    "url": "https://mcp.vercel.com",
+    "env_passthrough": []
+  },
+
+  "version_pin": {
+    "package": null,
+    "version_range": "hosted",
+    "tested_version": "2026-06-25"
+  },
+
+  "env_vars": [],
+
+  "auth": {
+    "recipe": "no static credential — the AI client performs an interactive OAuth sign-in to your Vercel account on first use (granting the same access as your user); the documentation tools work without authentication.",
+    "modes": ["oauth"]
+  },
+
+  "sample_tools": [
+    { "name": "search_documentation", "summary": "Search Vercel documentation for a topic (public, no auth)." },
+    { "name": "list_teams", "summary": "List the teams the authenticated user belongs to." },
+    { "name": "list_projects", "summary": "List Vercel projects for a team." },
+    { "name": "get_project", "summary": "Get details for a project — framework, domains, and latest deployment." },
+    { "name": "list_deployments", "summary": "List a project's deployments with state and target." },
+    { "name": "get_deployment_build_logs", "summary": "Get a deployment's build logs to investigate failures." },
+    { "name": "get_runtime_logs", "summary": "Get runtime logs (console output, errors) for a project or deployment." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Authenticates via interactive OAuth — the AI client signs in to your Vercel account and gains the same access as your user; the public documentation tools work without auth.",
+    "Hosted remote endpoint (https://mcp.vercel.com) — requires outbound network access; no local subprocess. Vercel only approves a reviewed list of MCP clients.",
+    "Some tools take real-world actions — `buy_domain` purchases a domain (charges your account) and `deploy_to_vercel` ships a deployment; enable human confirmation before executing.",
+    "Tool access mirrors your Vercel permissions; team-scoped tools require a teamId (find it via list_teams or .vercel/project.json).",
+    "Destructive-action audit (X2.18): no tool matches destructive name patterns (destructive_tools is empty); high-impact tools (buy_domain, deploy_to_vercel, toolbar edits) are gated by the trust policy's allowDestructive:false and per-call confirmation."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Claude CLI: `claude mcp add --transport http vercel https://mcp.vercel.com`, then run `/mcp` to complete the OAuth sign-in.",
+    "cursor": "Add to ~/.cursor/mcp.json as `vercel`: { url: https://mcp.vercel.com }; click the `Needs login` prompt to authorize.",
+    "vscode": "Run `MCP: Add Server` → HTTP, URL `https://mcp.vercel.com`, name `Vercel` (VS Code with Copilot); authorize via OAuth on first start."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/vercel.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

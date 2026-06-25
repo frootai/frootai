@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.13] Golden invocation fixtures for 'hashicorp-terraform' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "hashicorp-terraform",
+  "fixtures": [
+    { "tool": "search_providers", "input": { "query": "aws" }, "expected": { "kind": "object" }, "note": "search the registry for AWS providers." },
+    { "tool": "get_provider_details", "input": { "providerNamespace": "hashicorp", "providerName": "aws" }, "expected": { "kind": "object" }, "note": "fetch provider docs/details." },
+    { "tool": "search_modules", "input": { "query": "vpc" }, "expected": { "kind": "object" }, "note": "search the registry for VPC modules." },
+    { "tool": "get_module_details", "input": { "moduleNamespace": "terraform-aws-modules", "moduleName": "vpc", "moduleProvider": "aws" }, "expected": { "kind": "object" }, "note": "fetch module details." },
+    { "tool": "search_policies", "input": { "query": "cost" }, "expected": { "kind": "object" }, "note": "search the registry for Sentinel policies." }
+  ]
+}

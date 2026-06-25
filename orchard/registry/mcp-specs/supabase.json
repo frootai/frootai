@@ -1,0 +1,73 @@
+{
+  "$comment": "[X4.6] Supabase MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `supabase` — official Supabase MCP server from github.com/supabase/mcp; X1.x evidence). Shape === mcp-specs/_template.json (X2.1). Pre-1.0 (expect breaking changes between minors). HAS a destructive branch-delete tool (see destructive_tools + X2.18 audit). CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "supabase",
+  "title": "Supabase Project & Database",
+  "publisher": "supabase",
+  "trust": "verified-publisher",
+  "tool_prefix": "supabase",
+  "description": "Manage Supabase projects, run SQL, inspect tables, generate types, and deploy edge functions via the official Supabase MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@supabase/mcp-server-supabase"],
+    "url": null,
+    "env_passthrough": ["SUPABASE_ACCESS_TOKEN"]
+  },
+
+  "version_pin": {
+    "package": "@supabase/mcp-server-supabase",
+    "version_range": ">=0.8.0 <1.0.0",
+    "tested_version": "0.8.2"
+  },
+
+  "env_vars": [
+    {
+      "name": "SUPABASE_ACCESS_TOKEN",
+      "required": true,
+      "auth_mode": "personal-access-token",
+      "description": "Supabase personal access token. Create one at supabase.com/dashboard/account/tokens; authenticates the server to the Management API. Pass via env, never inline in args (doctrine #6)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create a personal access token at supabase.com/dashboard/account/tokens, then set SUPABASE_ACCESS_TOKEN; scope the server to one project with `--project-ref` and prefer `--read-only`.",
+    "modes": ["personal-access-token"]
+  },
+
+  "sample_tools": [
+    { "name": "list_projects", "summary": "List all Supabase projects for the user (account-scoped)." },
+    { "name": "list_tables", "summary": "List all tables within the specified schemas." },
+    { "name": "execute_sql", "summary": "Execute raw SQL against the database (runs as a read-only Postgres user in read-only mode)." },
+    { "name": "search_docs", "summary": "Search the Supabase documentation for up-to-date guidance." },
+    { "name": "get_logs", "summary": "Get logs for a project by service type (api, postgres, auth, storage, …)." },
+    { "name": "generate_typescript_types", "summary": "Generate TypeScript types from the database schema." },
+    { "name": "list_edge_functions", "summary": "List all Edge Functions in a project." }
+  ],
+
+  "destructive_tools": ["delete_branch"],
+
+  "known_limitations": [
+    "Requires a Supabase personal access token (SUPABASE_ACCESS_TOKEN); without it the server cannot authenticate to the Management API and tools return an auth error.",
+    "Without `--project-ref` the server can access every project in your Supabase account; scope it to a single project (account-level tools like list_projects are then disabled).",
+    "Mutating tools (apply_migration, create_project, deploy_edge_function, branch operations) act on real infrastructure — Supabase recommends `--read-only` and a non-production project; read-only mode runs execute_sql as a read-only Postgres user and disables mutating tools.",
+    "Destructive-action audit (X2.18): delete_branch is flagged in `destructive_tools` and is blocked when the trust policy sets `allowDestructive: false`."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `supabase`: { command: npx, args: [-y, @supabase/mcp-server-supabase, --read-only, --project-ref=<ref>], env: { SUPABASE_ACCESS_TOKEN: \"sbp_...\" } }.",
+    "cursor": "Settings → MCP → Add: name `supabase`, command `npx -y @supabase/mcp-server-supabase --read-only --project-ref=<ref>`; set SUPABASE_ACCESS_TOKEN in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `supabase` (VS Code Insider, MCP preview); supply SUPABASE_ACCESS_TOKEN via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/supabase.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

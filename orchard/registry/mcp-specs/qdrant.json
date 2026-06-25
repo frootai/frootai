@@ -1,0 +1,92 @@
+{
+  "$comment": "[X4.15] Qdrant MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `qdrant` — official Qdrant MCP server from github.com/qdrant/mcp-server-qdrant; candidate set, trust elevated in X4.15). Shape === mcp-specs/_template.json (X2.1). Semantic-memory layer over the Qdrant vector search engine. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "qdrant",
+  "title": "Qdrant Vector Memory",
+  "publisher": "qdrant",
+  "trust": "verified-publisher",
+  "tool_prefix": "qdrant",
+  "description": "Store and retrieve semantic memories in the Qdrant vector search engine via the official Qdrant MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "uvx",
+    "args": ["mcp-server-qdrant"],
+    "url": null,
+    "env_passthrough": ["QDRANT_URL", "QDRANT_API_KEY", "COLLECTION_NAME", "EMBEDDING_MODEL", "QDRANT_READ_ONLY"]
+  },
+
+  "version_pin": {
+    "package": "mcp-server-qdrant",
+    "version_range": ">=0.8.0 <1.0.0",
+    "tested_version": "0.8.1"
+  },
+
+  "env_vars": [
+    {
+      "name": "QDRANT_URL",
+      "required": true,
+      "auth_mode": "any",
+      "description": "URL of the Qdrant server (e.g. https://xyz.cloud.qdrant.io:6333 for Qdrant Cloud, or http://localhost:6333 for a local instance). An embedded QDRANT_LOCAL_PATH may be used instead."
+    },
+    {
+      "name": "QDRANT_API_KEY",
+      "required": true,
+      "auth_mode": "api-key",
+      "description": "API key for the Qdrant server. Required for Qdrant Cloud; optional for a local/unauthenticated instance. Pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "COLLECTION_NAME",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Name of the default collection to read/write. Created automatically if it does not exist."
+    },
+    {
+      "name": "EMBEDDING_MODEL",
+      "required": false,
+      "auth_mode": "any",
+      "description": "FastEmbed model used to encode memories (default sentence-transformers/all-MiniLM-L6-v2). Only FastEmbed models are supported."
+    },
+    {
+      "name": "QDRANT_READ_ONLY",
+      "required": false,
+      "auth_mode": "any",
+      "description": "When set to true, disables the qdrant-store write tool — a read-only retrieval posture."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create a Qdrant Cloud cluster (cloud.qdrant.io) and set QDRANT_URL + QDRANT_API_KEY; or run a local Qdrant and point QDRANT_URL at http://localhost:6333.",
+    "modes": ["api-key"]
+  },
+
+  "sample_tools": [
+    { "name": "qdrant-store", "summary": "Store information (with optional metadata) as a memory in a Qdrant collection." },
+    { "name": "qdrant-find", "summary": "Retrieve relevant memories from a Qdrant collection via semantic search." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "First run downloads the FastEmbed embedding model (default sentence-transformers/all-MiniLM-L6-v2) into the local cache, adding startup latency and disk usage; only FastEmbed models are supported.",
+    "Runs via `uvx mcp-server-qdrant`, so the host needs uv / Python available on PATH; the package is fetched and installed on first launch.",
+    "Targeting Qdrant Cloud requires QDRANT_URL plus a QDRANT_API_KEY credential; a local instance or embedded QDRANT_LOCAL_PATH can run unauthenticated, and QDRANT_READ_ONLY=true disables the write tool.",
+    "Destructive-action audit (X2.18): no destructive tools — qdrant-store appends a memory and qdrant-find reads; neither drops collections or removes points."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `qdrant`: { command: uvx, args: [mcp-server-qdrant], env: { QDRANT_URL, QDRANT_API_KEY, COLLECTION_NAME } }.",
+    "cursor": "Run `uvx mcp-server-qdrant --transport sse` and point Cursor/Windsurf at the SSE endpoint; set QDRANT_URL + COLLECTION_NAME in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `qdrant` with promptString inputs for QDRANT_URL, QDRANT_API_KEY, and COLLECTION_NAME."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/qdrant.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

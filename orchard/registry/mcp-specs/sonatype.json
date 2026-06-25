@@ -1,0 +1,70 @@
+{
+  "$comment": "[X4.9] Sonatype MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `sonatype` — official Sonatype dependency-management MCP server, com.sonatype namespace; X1.13 evidence). Shape === mcp-specs/_template.json (X2.1). HOSTED http-sse remote endpoint (no local package), API-token auth. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "sonatype",
+  "title": "Sonatype Dependency Intelligence",
+  "publisher": "sonatype",
+  "trust": "verified-publisher",
+  "tool_prefix": "sonatype",
+  "description": "Look up open-source component versions, security vulnerabilities, license compliance, and upgrade recommendations via the hosted Sonatype dependency-management MCP server.",
+
+  "transport": {
+    "kind": "http-sse",
+    "command": null,
+    "args": [],
+    "url": "https://mcp.guide.sonatype.com/mcp",
+    "env_passthrough": ["SONATYPE_GUIDE_MCP_TOKEN"]
+  },
+
+  "version_pin": {
+    "package": null,
+    "version_range": "hosted",
+    "tested_version": "2026-06-25"
+  },
+
+  "env_vars": [
+    {
+      "name": "SONATYPE_GUIDE_MCP_TOKEN",
+      "required": true,
+      "auth_mode": "api-token",
+      "description": "Sonatype Guide personal API token (from guide.sonatype.com/settings/tokens). Sent as an `Authorization: Bearer <token>` header; pass via env, never inline in args (doctrine #6)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create a Sonatype Guide account, generate a personal API token at guide.sonatype.com/settings/tokens, then send it as an `Authorization: Bearer` header (clients that read env use SONATYPE_GUIDE_MCP_TOKEN).",
+    "modes": ["api-token"]
+  },
+
+  "sample_tools": [
+    { "name": "getComponentVersion", "summary": "Get component intelligence (CVEs, CVSS, licenses, EOL status) for a specific version of a component." },
+    { "name": "getLatestComponentVersion", "summary": "Get intelligence for the latest version of a component, with security analysis and upgrade guidance." },
+    { "name": "getRecommendedComponentVersions", "summary": "Get recommended versions to upgrade to from a component's current version." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Requires a Sonatype Guide personal API token (SONATYPE_GUIDE_MCP_TOKEN) sent as an `Authorization: Bearer` header; without it every request is unauthenticated and rejected.",
+    "Hosted remote endpoint (https://mcp.guide.sonatype.com/mcp) — requires outbound network access; no local subprocess. stdio-only clients (e.g. IntelliJ) bridge via `mcp-remote`.",
+    "Read-only dependency intelligence — component-version, security, license, and upgrade-recommendation lookups; no resource is modified.",
+    "No package version to pin — `version_pin.package` is null and `version_range` is `hosted`; drift is tracked via the snapshot tools-list rather than a semver range.",
+    "Destructive-action audit (X2.18): no destructive tools — all three tools are read-only dependency lookups."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Claude CLI: `claude mcp add --transport http --scope user sonatype https://mcp.guide.sonatype.com/mcp --header \"Authorization: Bearer <your-token>\"`.",
+    "cursor": "Add to ~/.cursor/mcp.json as `sonatype`: { type: http, url: https://mcp.guide.sonatype.com/mcp, headers: { Authorization: \"Bearer <your-token>\" } }.",
+    "vscode": "Add to .vscode/mcp.json servers as `sonatype` with type `http` and url `https://mcp.guide.sonatype.com/mcp`; supply the bearer token header via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/sonatype.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

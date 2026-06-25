@@ -2,7 +2,7 @@
 
 > Step-by-step recipes for common FrootAI tasks. Each recipe is self-contained with runnable commands, code examples, and best practices.
 
-## Recipes (16)
+## Recipes
 
 ### Getting Started
 
@@ -49,6 +49,19 @@
 | # | Recipe | Difficulty | Time | What You'll Learn |
 |---|--------|-----------|------|-------------------|
 | 14 | [Configure VS Code](./14-configure-vscode.md) | Easy | 10 min | File associations, schema validation, tasks, MCP integration |
+
+### MCP Composition Recipes — Phase X8 preview
+
+> Cross-spec workflows that attach **2+ marketplace MCP servers** in a single play.
+> Drafted in Phase X4 ([X4.24] / [X4.27]) as a preview of the composition patterns
+> Phase X8 will formalize. Each surfaces on its servers' marketplace detail pages
+> under "Used in recipes".
+
+| # | Recipe | Servers attached | What You'll Build |
+|---|--------|------------------|-------------------|
+| 24 | [Research-to-Notion](./24-research-to-notion.md) | Context7 + Tavily + Notion | Research → synthesize → publish a findings page |
+| 25 | [Web-to-Vector RAG](./25-web-to-vector-rag.md) | Firecrawl + Qdrant + OpenAI Docs | Crawl → embed → retrieve grounded answers |
+| 26 | [Vector-Memory Bake-off](./26-vector-memory-bakeoff.md) | Pinecone + Chroma | A/B two vector DBs behind one agent |
 
 ## Quick Start
 

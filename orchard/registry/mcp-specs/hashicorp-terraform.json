@@ -1,0 +1,90 @@
+{
+  "$comment": "[X4.13] HashiCorp Terraform MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `hashicorp` — official Terraform MCP server from github.com/hashicorp/terraform-mcp-server; X1.x evidence; first of the 6 candidate set). Shape === mcp-specs/_template.json (X2.1). Go server shipped as the Docker image hashicorp/terraform-mcp-server (stdio default); public Registry tools need no auth, HCP/TFE workspace tools need TFE_TOKEN. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "hashicorp-terraform",
+  "title": "HashiCorp Terraform Registry & Cloud",
+  "publisher": "hashicorp",
+  "trust": "verified-publisher",
+  "tool_prefix": "hashicorp-terraform",
+  "description": "Search the Terraform Registry for providers, modules, and policies, and manage HCP Terraform / Enterprise workspaces via the official Terraform MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "docker",
+    "args": ["run", "-i", "--rm", "-e", "TFE_TOKEN", "-e", "TFE_ADDRESS", "hashicorp/terraform-mcp-server"],
+    "url": null,
+    "env_passthrough": ["TFE_TOKEN", "TFE_ADDRESS", "TFE_SKIP_TLS_VERIFY", "ENABLE_TF_OPERATIONS"]
+  },
+
+  "version_pin": {
+    "package": "hashicorp/terraform-mcp-server",
+    "version_range": ">=1.0.0 <2.0.0",
+    "tested_version": "1.0.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "TFE_TOKEN",
+      "required": false,
+      "auth_mode": "api-token",
+      "description": "HCP Terraform / Terraform Enterprise API token. Only needed for the workspace and private-registry tools; the public Registry tools work without it. Pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "TFE_ADDRESS",
+      "required": false,
+      "auth_mode": "any",
+      "description": "HCP Terraform or Terraform Enterprise address (default https://app.terraform.io)."
+    },
+    {
+      "name": "TFE_SKIP_TLS_VERIFY",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Set to `true` to skip HCP/TFE TLS verification. Development/testing only."
+    },
+    {
+      "name": "ENABLE_TF_OPERATIONS",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Set to `true` to enable mutating workspace tools that require explicit approval (create/update/delete workspace, runs). Off by default."
+    }
+  ],
+
+  "auth": {
+    "recipe": "no credentials needed for the public Terraform Registry tools; for HCP Terraform / Enterprise workspace tools set TFE_TOKEN (and TFE_ADDRESS for self-hosted TFE).",
+    "modes": ["none", "api-token"]
+  },
+
+  "sample_tools": [
+    { "name": "search_providers", "summary": "Search the Terraform Registry for providers matching a query." },
+    { "name": "get_provider_details", "summary": "Get documentation and details for a Terraform provider." },
+    { "name": "search_modules", "summary": "Search the Terraform Registry for modules." },
+    { "name": "get_module_details", "summary": "Get details for a Terraform Registry module." },
+    { "name": "search_policies", "summary": "Search the Terraform Registry for Sentinel policies." },
+    { "name": "list_workspaces", "summary": "List HCP Terraform / Enterprise workspaces (requires TFE_TOKEN)." }
+  ],
+
+  "destructive_tools": ["delete_workspace"],
+
+  "known_limitations": [
+    "Public Terraform Registry tools (providers, modules, policies) need no auth; HCP Terraform / Terraform Enterprise workspace tools require an API token (TFE_TOKEN) and TFE_ADDRESS.",
+    "Distributed as a Docker image (hashicorp/terraform-mcp-server) — Docker must be installed and running; a Go binary is also installable from source.",
+    "Workspace mutation tools (create/update/delete workspace, runs) are gated behind ENABLE_TF_OPERATIONS=true and are off by default.",
+    "Destructive-action audit (X2.18): delete_workspace is flagged in `destructive_tools` (and additionally gated behind ENABLE_TF_OPERATIONS); blocked when the trust policy sets allowDestructive:false."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `hashicorp-terraform`: { command: docker, args: [run, -i, --rm, hashicorp/terraform-mcp-server] } (add -e TFE_TOKEN with env for HCP/TFE tools).",
+    "cursor": "Settings → MCP → Add: name `hashicorp-terraform`, command `docker run -i --rm hashicorp/terraform-mcp-server`; set TFE_TOKEN in the env to enable HCP/TFE tools.",
+    "vscode": "Add to .vscode/mcp.json servers as `hashicorp-terraform` (VS Code Insider, MCP preview); supply TFE_TOKEN via inputs for HCP/TFE tools."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/hashicorp-terraform.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

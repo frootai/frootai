@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.3] Golden invocation fixtures for 'stripe' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "stripe",
+  "fixtures": [
+    { "tool": "create_customer", "input": { "name": "Acme Inc", "email": "billing@acme.example" }, "expected": { "kind": "object", "keys": ["id"] }, "note": "create a customer record." },
+    { "tool": "list_customers", "input": { "limit": 5 }, "expected": { "kind": "object", "keys": ["data"] }, "note": "list the first few customers." },
+    { "tool": "create_product", "input": { "name": "Pro Plan" }, "expected": { "kind": "object", "keys": ["id"] }, "note": "create a catalog product." },
+    { "tool": "create_payment_link", "input": { "price": "price_123", "quantity": 1 }, "expected": { "kind": "object", "keys": ["url"] }, "note": "create a shareable payment link." },
+    { "tool": "retrieve_balance", "input": {}, "expected": { "kind": "object", "keys": ["available"] }, "note": "read the current account balance." }
+  ]
+}

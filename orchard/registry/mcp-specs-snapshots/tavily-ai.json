@@ -1,0 +1,36 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'tavily-ai'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "tavily-ai",
+  "publisher": "tavily-ai",
+  "trust": "verified-publisher",
+  "tool_prefix": "tavily-ai",
+  "transport_kind": "stdio-subprocess",
+  "package": "tavily-mcp",
+  "tested_version": "0.2.20",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 4,
+  "tools": [
+    {
+      "name": "tavily-crawl",
+      "prefixed": "tavily-ai.tavily-crawl",
+      "description": "Systematically crawl a website starting from a base URL."
+    },
+    {
+      "name": "tavily-extract",
+      "prefixed": "tavily-ai.tavily-extract",
+      "description": "Extract clean, structured content from one or more web-page URLs."
+    },
+    {
+      "name": "tavily-map",
+      "prefixed": "tavily-ai.tavily-map",
+      "description": "Build a structured map of a website's pages from a root URL."
+    },
+    {
+      "name": "tavily-search",
+      "prefixed": "tavily-ai.tavily-search",
+      "description": "Real-time web search with configurable depth, result count, and optional images."
+    }
+  ]
+}

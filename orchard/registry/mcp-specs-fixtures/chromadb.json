@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.16] Golden invocation fixtures for 'chromadb' — 5 invocations across the (non-destructive) sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "chromadb",
+  "fixtures": [
+    { "tool": "chroma_list_collections", "input": {}, "expected": { "kind": "object" }, "note": "list collections (paginated)." },
+    { "tool": "chroma_create_collection", "input": { "collection_name": "docs" }, "expected": { "kind": "object" }, "note": "create a collection." },
+    { "tool": "chroma_add_documents", "input": { "collection_name": "docs", "documents": ["FrootAI ships an MCP marketplace with attach specs."], "ids": ["d1"] }, "expected": { "kind": "object" }, "note": "add a document with a custom id." },
+    { "tool": "chroma_query_documents", "input": { "collection_name": "docs", "query_texts": ["how does the marketplace work"], "n_results": 3 }, "expected": { "kind": "object" }, "note": "semantic query." },
+    { "tool": "chroma_get_documents", "input": { "collection_name": "docs", "ids": ["d1"] }, "expected": { "kind": "object" }, "note": "fetch by id." }
+  ]
+}

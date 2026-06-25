@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.6] Golden invocation fixtures for 'supabase' — 5 invocations across the sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "supabase",
+  "fixtures": [
+    { "tool": "list_projects", "input": {}, "expected": { "kind": "object" }, "note": "list the user's Supabase projects." },
+    { "tool": "list_tables", "input": { "schemas": ["public"] }, "expected": { "kind": "object" }, "note": "list tables in the public schema." },
+    { "tool": "execute_sql", "input": { "query": "select count(*) from auth.users" }, "expected": { "kind": "object" }, "note": "run a read-only SQL query." },
+    { "tool": "search_docs", "input": { "query": "row level security policies" }, "expected": { "kind": "object" }, "note": "search the Supabase docs." },
+    { "tool": "generate_typescript_types", "input": {}, "expected": { "kind": "text" }, "note": "generate TypeScript types from the schema." }
+  ]
+}

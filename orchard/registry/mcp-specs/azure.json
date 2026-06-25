@@ -1,0 +1,88 @@
+{
+  "$comment": "[X2.2] Azure MCP attach spec. Tier-1 first-party-ms. Shape === mcp-specs/_template.json (X2.1). Validated by spec-fields.checkSpecShape + (X2.8) mcp-spec-v1.schema.json. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "azure",
+  "title": "Azure Resource Management",
+  "publisher": "microsoft",
+  "trust": "first-party-ms",
+  "tool_prefix": "azure",
+  "description": "Microsoft Azure resource lifecycle, monitoring, cost, and data-plane operations via the official Azure MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "@azure/mcp-server"],
+    "url": null,
+    "env_passthrough": ["AZURE_TENANT_ID", "AZURE_CLIENT_ID", "AZURE_CLIENT_SECRET", "AZURE_SUBSCRIPTION_ID"]
+  },
+
+  "version_pin": {
+    "package": "@azure/mcp-server",
+    "version_range": ">=0.5.0 <1.0.0",
+    "tested_version": "0.5.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "AZURE_TENANT_ID",
+      "required": false,
+      "auth_mode": "service-principal",
+      "description": "Entra tenant (directory) ID. Required only for the service-principal auth path; omit when using `az login`."
+    },
+    {
+      "name": "AZURE_CLIENT_ID",
+      "required": false,
+      "auth_mode": "service-principal",
+      "description": "App registration (service principal) client ID. Required only for the service-principal auth path."
+    },
+    {
+      "name": "AZURE_CLIENT_SECRET",
+      "required": false,
+      "auth_mode": "service-principal",
+      "description": "Service-principal client secret. Required only for the service-principal auth path; pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "AZURE_SUBSCRIPTION_ID",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Default subscription scope. Optional; tools accept an explicit subscription argument when unset."
+    }
+  ],
+
+  "auth": {
+    "recipe": "managed identity / `az login` preferred for local dev; service-principal env vars (AZURE_TENANT_ID + AZURE_CLIENT_ID + AZURE_CLIENT_SECRET) for CI.",
+    "modes": ["az-login", "managed-identity", "service-principal"]
+  },
+
+  "sample_tools": [
+    { "name": "subscription", "summary": "List and inspect Azure subscriptions in scope." },
+    { "name": "group", "summary": "List and manage resource groups." },
+    { "name": "monitor", "summary": "Query Azure Monitor logs and metrics." },
+    { "name": "storage", "summary": "Inspect storage accounts, blobs, and queues." },
+    { "name": "keyvault", "summary": "List Key Vault secrets, keys, and certificates (metadata)." }
+  ],
+
+  "destructive_tools": ["resource_delete", "group_delete"],
+
+  "known_limitations": [
+    "Requires an authenticated Azure context (`az login` or service-principal env vars); without it tools return an auth error rather than an empty list.",
+    "Tool surface is large and subscription-scoped — many tools require an explicit subscription or resource-group argument.",
+    "Destructive-action audit (X2.18): resource/group deletion tools are flagged in `destructive_tools` and are blocked when the trust policy sets `allowDestructive: false`."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `azure`: { command: npx, args: [-y, @azure/mcp-server] }; run `az login` first.",
+    "cursor": "Settings → MCP → Add: name `azure`, command `npx -y @azure/mcp-server`.",
+    "vscode": "Add to .vscode/mcp.json servers as `azure` (VS Code Insider, MCP preview)."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/azure.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

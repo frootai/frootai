@@ -1,0 +1,11 @@
+{
+  "$comment": "[X4.17] Golden invocation fixtures for 'pinecone' — 5 invocations across the (non-destructive) sample tools. Recorded input + expected output SHAPE. CC0-1.0.",
+  "slug": "pinecone",
+  "fixtures": [
+    { "tool": "search-docs", "input": { "query": "metadata filtering in queries" }, "expected": { "kind": "object" }, "note": "documentation search (works without an API key)." },
+    { "tool": "list-indexes", "input": {}, "expected": { "kind": "object" }, "note": "list all indexes." },
+    { "tool": "describe-index", "input": { "name": "my-docs" }, "expected": { "kind": "object" }, "note": "describe an index's config." },
+    { "tool": "upsert-records", "input": { "name": "my-docs", "records": [{ "id": "d1", "text": "FrootAI ships an MCP marketplace with attach specs." }] }, "expected": { "kind": "object" }, "note": "upsert with integrated inference." },
+    { "tool": "search-records", "input": { "name": "my-docs", "query": { "inputs": { "text": "how does the marketplace work" }, "topK": 5 } }, "expected": { "kind": "object" }, "note": "semantic record search." }
+  ]
+}

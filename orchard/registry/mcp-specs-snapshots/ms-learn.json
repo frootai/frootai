@@ -1,0 +1,26 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'ms-learn'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "ms-learn",
+  "publisher": "microsoftdocs",
+  "trust": "first-party-ms",
+  "tool_prefix": "ms-learn",
+  "transport_kind": "http-sse",
+  "package": null,
+  "tested_version": "2026-06-25",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 2,
+  "tools": [
+    {
+      "name": "microsoft_docs_fetch",
+      "prefixed": "ms-learn.microsoft_docs_fetch",
+      "description": "Fetch the full content of a Microsoft Learn doc page."
+    },
+    {
+      "name": "microsoft_docs_search",
+      "prefixed": "ms-learn.microsoft_docs_search",
+      "description": "Search Microsoft Learn documentation for a query."
+    }
+  ]
+}

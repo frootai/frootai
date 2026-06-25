@@ -1,0 +1,11 @@
+{
+  "$comment": "[X2.26] Golden invocation fixtures for 'playwright' — recorded input + expected output SHAPE per tool. CC0-1.0.",
+  "slug": "playwright",
+  "fixtures": [
+    { "tool": "browser_navigate", "input": { "url": "https://example.com" }, "expected": { "kind": "text" }, "note": "navigation returns a status/confirmation text." },
+    { "tool": "browser_snapshot", "input": {}, "expected": { "kind": "text" }, "note": "accessibility snapshot rendered as text." },
+    { "tool": "browser_click", "input": { "element": "Sign in button", "ref": "e1" }, "expected": { "kind": "text" }, "note": "click confirmation." },
+    { "tool": "browser_type", "input": { "element": "Search box", "ref": "e2", "text": "frootai" }, "expected": { "kind": "text" }, "note": "type confirmation." },
+    { "tool": "browser_take_screenshot", "input": { "fullPage": true }, "expected": { "kind": "object", "keys": ["data", "mimeType"] }, "note": "screenshot returns an image content block." }
+  ]
+}

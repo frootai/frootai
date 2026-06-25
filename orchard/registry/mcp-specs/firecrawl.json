@@ -1,0 +1,85 @@
+{
+  "$comment": "[X4.14] Firecrawl MCP attach spec. Tier-2 VERIFIED-PUBLISHER (publisher `firecrawl` — official Firecrawl MCP server from github.com/firecrawl/firecrawl-mcp-server; candidate set). Shape === mcp-specs/_template.json (X2.1). Web scraping + search + crawl + extract; read-only over the public web. CC0-1.0.",
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "spec_version": "1.0.0",
+
+  "slug": "firecrawl",
+  "title": "Firecrawl Web Scraping & Search",
+  "publisher": "firecrawl",
+  "trust": "verified-publisher",
+  "tool_prefix": "firecrawl",
+  "description": "Scrape, search, map, crawl, and extract structured data from the live web via the official Firecrawl MCP server.",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "npx",
+    "args": ["-y", "firecrawl-mcp"],
+    "url": null,
+    "env_passthrough": ["FIRECRAWL_API_KEY", "FIRECRAWL_API_URL", "FIRECRAWL_OAUTH_TOKEN"]
+  },
+
+  "version_pin": {
+    "package": "firecrawl-mcp",
+    "version_range": ">=3.0.0 <4.0.0",
+    "tested_version": "3.22.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "FIRECRAWL_API_KEY",
+      "required": true,
+      "auth_mode": "api-key",
+      "description": "Firecrawl API key (`fc-…`) for the cloud API (the default). Optional only when pointing at a self-hosted instance via FIRECRAWL_API_URL. Pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "FIRECRAWL_API_URL",
+      "required": false,
+      "auth_mode": "any",
+      "description": "Custom API endpoint for a self-hosted Firecrawl instance (e.g. https://firecrawl.your-domain.com). Defaults to the Firecrawl cloud API."
+    },
+    {
+      "name": "FIRECRAWL_OAUTH_TOKEN",
+      "required": false,
+      "auth_mode": "oauth-token",
+      "description": "Static Firecrawl OAuth access token (`fco_…`) — an alternative to FIRECRAWL_API_KEY for stdio. Use access tokens only, never refresh tokens (`fcr_…`)."
+    }
+  ],
+
+  "auth": {
+    "recipe": "create a Firecrawl account and set FIRECRAWL_API_KEY to your `fc-…` key (firecrawl.dev/app/api-keys); or point FIRECRAWL_API_URL at a self-hosted instance.",
+    "modes": ["api-key", "oauth-token"]
+  },
+
+  "sample_tools": [
+    { "name": "firecrawl_scrape", "summary": "Scrape a single URL into clean structured data or markdown." },
+    { "name": "firecrawl_search", "summary": "Search the web and optionally scrape result content." },
+    { "name": "firecrawl_map", "summary": "Discover all indexed URLs on a website." },
+    { "name": "firecrawl_crawl", "summary": "Start an async crawl of a site and extract content from its pages." },
+    { "name": "firecrawl_check_crawl_status", "summary": "Check the status of a crawl job." },
+    { "name": "firecrawl_extract", "summary": "Extract structured data from web pages using an LLM and a schema." },
+    { "name": "firecrawl_batch_scrape", "summary": "Scrape multiple known URLs efficiently in one batch." }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Requires a Firecrawl API key (FIRECRAWL_API_KEY) for the default cloud API; a self-hosted instance via FIRECRAWL_API_URL can run without one.",
+    "Scrape, search, crawl, and extract consume Firecrawl credits — deep crawls and the autonomous agent draw down quota faster; credit-warning thresholds are configurable.",
+    "Crawl and agent jobs are asynchronous — they return a job ID and you poll firecrawl_check_crawl_status / firecrawl_agent_status for results, which can take minutes.",
+    "Destructive-action audit (X2.18): no destructive tools — Firecrawl scrapes/searches/extracts public web content and does not mutate your resources."
+  ],
+
+  "client_install": {
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `firecrawl`: { command: npx, args: [-y, firecrawl-mcp], env: { FIRECRAWL_API_KEY: \"fc-...\" } }.",
+    "cursor": "Settings → MCP → Add: name `firecrawl`, command `npx -y firecrawl-mcp`; set FIRECRAWL_API_KEY in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `firecrawl` (VS Code Insider, MCP preview); supply FIRECRAWL_API_KEY via inputs."
+  },
+
+  "snapshot": {
+    "path": "frootai/orchard/registry/mcp-specs-snapshots/firecrawl.json",
+    "drift_threshold_pct": 10
+  },
+
+  "last_reviewed": "2026-06-25",
+  "reviewer": "frootai-maintainer"
+}

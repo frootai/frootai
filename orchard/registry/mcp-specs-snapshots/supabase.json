@@ -1,0 +1,51 @@
+{
+  "$comment": "[X2.10] tools/list snapshot for 'supabase'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "spec_version": "1.0.0",
+  "slug": "supabase",
+  "publisher": "supabase",
+  "trust": "verified-publisher",
+  "tool_prefix": "supabase",
+  "transport_kind": "stdio-subprocess",
+  "package": "@supabase/mcp-server-supabase",
+  "tested_version": "0.8.2",
+  "source": "spec-sample-tools",
+  "captured_at": "2026-06-25",
+  "tool_count": 7,
+  "tools": [
+    {
+      "name": "execute_sql",
+      "prefixed": "supabase.execute_sql",
+      "description": "Execute raw SQL against the database (runs as a read-only Postgres user in read-only mode)."
+    },
+    {
+      "name": "generate_typescript_types",
+      "prefixed": "supabase.generate_typescript_types",
+      "description": "Generate TypeScript types from the database schema."
+    },
+    {
+      "name": "get_logs",
+      "prefixed": "supabase.get_logs",
+      "description": "Get logs for a project by service type (api, postgres, auth, storage, …)."
+    },
+    {
+      "name": "list_edge_functions",
+      "prefixed": "supabase.list_edge_functions",
+      "description": "List all Edge Functions in a project."
+    },
+    {
+      "name": "list_projects",
+      "prefixed": "supabase.list_projects",
+      "description": "List all Supabase projects for the user (account-scoped)."
+    },
+    {
+      "name": "list_tables",
+      "prefixed": "supabase.list_tables",
+      "description": "List all tables within the specified schemas."
+    },
+    {
+      "name": "search_docs",
+      "prefixed": "supabase.search_docs",
+      "description": "Search the Supabase documentation for up-to-date guidance."
+    }
+  ]
+}
