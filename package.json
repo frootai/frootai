@@ -11,6 +11,8 @@
     "generate:website-data": "node scripts/generate-website-data.js",
     "update:readme": "node scripts/update-readme.js",
     "generate:agents-md": "node scripts/generate-agents-md.js",
+    "scorecard": "node scripts/gen-eval-scorecard.mjs",
+    "scorecard:check": "node scripts/gen-eval-scorecard.mjs --check",
     "materialize": "node scripts/materialize-plugins.js",
     "materialize:dry": "node scripts/materialize-plugins.js --dry-run",
     "scaffold": "node scripts/scaffold-primitive.js",
