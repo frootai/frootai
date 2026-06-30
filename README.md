@@ -455,6 +455,7 @@ Values injected via `${{ secrets.* }}` are also masked by GitHub Actions itself.
 | **Platform App** | [app.frootai.dev](https://app.frootai.dev) |
 | **REST API** | [api.frootai.dev](https://api.frootai.dev) |
 | **Status** | [status.frootai.dev](https://status.frootai.dev) |
+| **What Ships This Week** | [Now / Next / Later board](./STATUS.md) |
 | **Solution Plays** | [Browse All Plays](https://frootai.dev/solution-plays) |
 | **Agent FAI** | [Chatbot](https://frootai.dev/chatbot) |
 | **Configurator** | [Play Recommendation Wizard](https://frootai.dev/configurator) |
