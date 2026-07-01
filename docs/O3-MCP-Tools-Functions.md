@@ -472,7 +472,7 @@ await server.connect(transport);
   "mcpServers": {
     "azure": {
       "command": "npx",
-      "args": ["-y", "@azure/mcp-server"],
+      "args": ["-y", "@azure/mcp", "server", "start"],
       "env": {
         "AZURE_SUBSCRIPTION_ID": "${env:AZURE_SUBSCRIPTION_ID}",
         "AZURE_TENANT_ID": "${env:AZURE_TENANT_ID}"

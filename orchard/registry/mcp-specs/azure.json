@@ -13,15 +13,15 @@
   "transport": {
     "kind": "stdio-subprocess",
     "command": "npx",
-    "args": ["-y", "@azure/mcp-server"],
+    "args": ["-y", "@azure/mcp", "server", "start"],
     "url": null,
     "env_passthrough": ["AZURE_TENANT_ID", "AZURE_CLIENT_ID", "AZURE_CLIENT_SECRET", "AZURE_SUBSCRIPTION_ID"]
   },
 
   "version_pin": {
-    "package": "@azure/mcp-server",
-    "version_range": ">=0.5.0 <1.0.0",
-    "tested_version": "0.5.0"
+    "package": "@azure/mcp",
+    "version_range": ">=3.0.0 <4.0.0",
+    "tested_version": "3.0.0-beta.22"
   },
 
   "env_vars": [
@@ -73,8 +73,8 @@
   ],
 
   "client_install": {
-    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `azure`: { command: npx, args: [-y, @azure/mcp-server] }; run `az login` first.",
-    "cursor": "Settings → MCP → Add: name `azure`, command `npx -y @azure/mcp-server`.",
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `azure`: { command: npx, args: [-y, @azure/mcp, server, start] }; run `az login` first.",
+    "cursor": "Settings → MCP → Add: name `azure`, command `npx -y @azure/mcp server start`.",
     "vscode": "Add to .vscode/mcp.json servers as `azure` (VS Code Insider, MCP preview)."
   },
 

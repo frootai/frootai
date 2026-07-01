@@ -44,7 +44,7 @@
       "type": "array",
       "items": { "type": "string" },
       "maxItems": 32,
-      "description": "For `transport: stdio` — args passed to the command (e.g. `['-y', '@azure/mcp-server']`)."
+      "description": "For `transport: stdio` — args passed to the command (e.g. `['-y', '@azure/mcp', 'server', 'start']`)."
     },
     "url": {
       "type": "string",
@@ -73,7 +73,7 @@
       "trust": "first-party-ms",
       "publisher": "microsoft",
       "command": "npx",
-      "args": ["-y", "@azure/mcp-server"]
+      "args": ["-y", "@azure/mcp", "server", "start"]
     },
     {
       "name": "context7",

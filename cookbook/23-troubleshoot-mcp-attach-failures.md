@@ -95,7 +95,7 @@ mcpAttachments:
 which npx  # or: Get-Command npx (PowerShell)
 
 # Verify the package is installed
-npx -y @azure/mcp-server --version
+npx -y @azure/mcp --version
 
 # Check PATH includes the expected binary location
 echo $PATH
@@ -103,7 +103,7 @@ echo $PATH
 
 **Fix**:
 
-- Install the package: `npm install -g @azure/mcp-server`
+- Install the package: `npm install -g @azure/mcp`
 - Or use `npx -y` to auto-install on first run
 - Ensure PATH includes `node_modules/.bin/` if using local installs
 
@@ -206,10 +206,10 @@ npx frootai mcp attach xxx
 
 ```bash
 # Check installed version
-npx @azure/mcp-server --version
+npx @azure/mcp --version
 
 # Check what version your pin expects
-cat package.json | jq '.dependencies["@azure/mcp-server"]'
+cat package.json | jq '.dependencies["@azure/mcp"]'
 ```
 
 **Fix**:
@@ -230,7 +230,7 @@ This outputs:
 
 ```
 [mcp-bridge] Attaching area: azure (transport: stdio)
-[mcp-bridge] Spawning: npx -y @azure/mcp-server
+[mcp-bridge] Spawning: npx -y @azure/mcp server start
 [mcp-bridge] Initialize handshake: OK (142ms)
 [mcp-bridge] Tools registered: 47
 [mcp-bridge] Attaching area: github (transport: stdio)

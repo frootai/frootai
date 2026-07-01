@@ -1,41 +1,341 @@
 {
-  "$comment": "[X2.10] tools/list snapshot for 'azure'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "$comment": "[X2.10] tools/list snapshot for 'azure'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=live. CC0-1.0.",
   "spec_version": "1.0.0",
   "slug": "azure",
   "publisher": "microsoft",
   "trust": "first-party-ms",
   "tool_prefix": "azure",
   "transport_kind": "stdio-subprocess",
-  "package": "@azure/mcp-server",
-  "tested_version": "0.5.0",
-  "source": "spec-sample-tools",
-  "captured_at": "2026-06-25",
-  "tool_count": 5,
+  "package": "@azure/mcp",
+  "tested_version": "3.0.0-beta.22",
+  "source": "live",
+  "captured_at": "2026-07-01",
+  "tool_count": 65,
   "tools": [
     {
-      "name": "group",
-      "prefixed": "azure.group",
-      "description": "List and manage resource groups."
+      "name": "acr",
+      "prefixed": "azure.acr",
+      "description": "Azure Container Registry operations - Commands for managing Azure Container Regi"
+    },
+    {
+      "name": "advisor",
+      "prefixed": "azure.advisor",
+      "description": "Azure Advisor operations - Query Azure Advisor recommendations across subscripti"
+    },
+    {
+      "name": "aks",
+      "prefixed": "azure.aks",
+      "description": "Azure Kubernetes Service operations - Manage and query Azure Kubernetes Service "
+    },
+    {
+      "name": "appconfig",
+      "prefixed": "azure.appconfig",
+      "description": "App Configuration operations - Commands for managing Azure App Configuration sto"
+    },
+    {
+      "name": "applens",
+      "prefixed": "azure.applens",
+      "description": "AppLens diagnostic operations - Primary tool for diagnosing and troubleshooting "
+    },
+    {
+      "name": "applicationinsights",
+      "prefixed": "azure.applicationinsights",
+      "description": "Application Insights operations - Commands for listing and managing Application "
+    },
+    {
+      "name": "appservice",
+      "prefixed": "azure.appservice",
+      "description": "App Service operations - Commands for managing Azure App Service resources inclu"
+    },
+    {
+      "name": "arm",
+      "prefixed": "azure.arm",
+      "description": "MCP server with tools to use Azure Resource Graph to retrieve and filter informa"
+    },
+    {
+      "name": "azd",
+      "prefixed": "azure.azd",
+      "description": "Azure Developer CLI (azd) includes a suite of tools to help build, modernize, an"
+    },
+    {
+      "name": "azurebackup",
+      "prefixed": "azure.azurebackup",
+      "description": "Azure Backup operations - Unified commands to manage backup across Recovery Serv"
+    },
+    {
+      "name": "azuremigrate",
+      "prefixed": "azure.azuremigrate",
+      "description": "Azure Platform Landing Zone operations - Provides best-practice guidance and Ter"
+    },
+    {
+      "name": "azureterraform",
+      "prefixed": "azure.azureterraform",
+      "description": "Azure Terraform tools - Retrieves AzureRM, AzAPI, and AVM (Azure Verified Module"
+    },
+    {
+      "name": "azureterraformbestpractices",
+      "prefixed": "azure.azureterraformbestpractices",
+      "description": "Returns Terraform best practices for Azure. Call this before generating Terrafor"
+    },
+    {
+      "name": "bicepschema",
+      "prefixed": "azure.bicepschema",
+      "description": "Bicep schema operations - Commands for working with Azure Bicep Infrastructure a"
+    },
+    {
+      "name": "cloudarchitect",
+      "prefixed": "azure.cloudarchitect",
+      "description": "Cloud Architecture operations - Commands for generating Azure architecture desig"
+    },
+    {
+      "name": "communication",
+      "prefixed": "azure.communication",
+      "description": "Communication services operations - Commands for managing Azure Communication Se"
+    },
+    {
+      "name": "compute",
+      "prefixed": "azure.compute",
+      "description": "Compute operations - Commands for managing and monitoring Azure Virtual Machines"
+    },
+    {
+      "name": "confidentialledger",
+      "prefixed": "azure.confidentialledger",
+      "description": "Azure Confidential Ledger operations - Commands for appending and querying tampe"
+    },
+    {
+      "name": "containerapps",
+      "prefixed": "azure.containerapps",
+      "description": "Azure Container Apps operations - Commands for managing Azure Container Apps res"
+    },
+    {
+      "name": "cosmos",
+      "prefixed": "azure.cosmos",
+      "description": "Cosmos DB operations - Commands for managing and querying Azure Cosmos DB resour"
+    },
+    {
+      "name": "datadog",
+      "prefixed": "azure.datadog",
+      "description": "Datadog operations - Commands for managing and monitoring Azure resources throug"
+    },
+    {
+      "name": "deploy",
+      "prefixed": "azure.deploy",
+      "description": "Deploy operations - Generate recommended Azure deployment plans, architecture di"
+    },
+    {
+      "name": "deviceregistry",
+      "prefixed": "azure.deviceregistry",
+      "description": "Device Registry operations - Commands to manage Azure Device Registry resources."
+    },
+    {
+      "name": "documentation",
+      "prefixed": "azure.documentation",
+      "description": "Search official Microsoft/Azure documentation to find the most relevant and trus"
+    },
+    {
+      "name": "eventgrid",
+      "prefixed": "azure.eventgrid",
+      "description": "Event Grid operations - Commands for managing and accessing Event Grid topics, d"
+    },
+    {
+      "name": "eventhubs",
+      "prefixed": "azure.eventhubs",
+      "description": "Azure Event Hubs operations - Commands for managing Azure Event Hubs namespaces "
+    },
+    {
+      "name": "extension_azqr",
+      "prefixed": "azure.extension_azqr",
+      "description": "Runs Azure Quick Review CLI (azqr) commands to generate compliance and security "
+    },
+    {
+      "name": "extension_cli_generate",
+      "prefixed": "azure.extension_cli_generate",
+      "description": "Generate Azure CLI (az) commands used to accomplish a goal described by the user"
+    },
+    {
+      "name": "extension_cli_install",
+      "prefixed": "azure.extension_cli_install",
+      "description": "Provide installation instructions for Azure CLI (az), Azure Developer CLI (azd),"
+    },
+    {
+      "name": "fileshares",
+      "prefixed": "azure.fileshares",
+      "description": "File Shares operations - Commands for managing Azure File Shares.This tool is a "
+    },
+    {
+      "name": "foundry",
+      "prefixed": "azure.foundry",
+      "description": "MCP server with tools to read, create, modify resources such as Models, Agents a"
+    },
+    {
+      "name": "foundryextensions",
+      "prefixed": "azure.foundryextensions",
+      "description": "Foundry Extensions service operations - Commands for interacting with Microsoft "
+    },
+    {
+      "name": "functionapp",
+      "prefixed": "azure.functionapp",
+      "description": "Function App operations - Commands for managing and accessing Azure Function App"
+    },
+    {
+      "name": "functions",
+      "prefixed": "azure.functions",
+      "description": "Azure Functions code generation commands. ALWAYS use these tools instead of gene"
+    },
+    {
+      "name": "get_azure_bestpractices",
+      "prefixed": "azure.get_azure_bestpractices",
+      "description": "Azure best practices - Commands return a list of best practices for code generat"
+    },
+    {
+      "name": "grafana",
+      "prefixed": "azure.grafana",
+      "description": "Grafana workspace operations - Commands for managing and accessing Azure Managed"
+    },
+    {
+      "name": "group_list",
+      "prefixed": "azure.group_list",
+      "description": "List all resource groups in a subscription. This command retrieves all resource "
+    },
+    {
+      "name": "group_resource_list",
+      "prefixed": "azure.group_resource_list",
+      "description": "List all resources in a resource group. This command retrieves all resources ava"
     },
     {
       "name": "keyvault",
       "prefixed": "azure.keyvault",
-      "description": "List Key Vault secrets, keys, and certificates (metadata)."
+      "description": "Key Vault operations - Commands for managing and accessing Azure Key Vault resou"
+    },
+    {
+      "name": "kusto",
+      "prefixed": "azure.kusto",
+      "description": "Kusto operations - Commands for managing and querying Azure Data Explorer (Kusto"
+    },
+    {
+      "name": "loadtesting",
+      "prefixed": "azure.loadtesting",
+      "description": "Load Testing operations - Commands for managing Azure Load Testing resources, te"
+    },
+    {
+      "name": "managedlustre",
+      "prefixed": "azure.managedlustre",
+      "description": "Azure Managed Lustre operations - Commands for creating, updating, listing and i"
+    },
+    {
+      "name": "marketplace",
+      "prefixed": "azure.marketplace",
+      "description": "Marketplace operations - Commands for managing and accessing Azure Marketplace p"
     },
     {
       "name": "monitor",
       "prefixed": "azure.monitor",
-      "description": "Query Azure Monitor logs and metrics."
+      "description": "Monitor operations - Commands for managing Azure Monitor workspaces, querying an"
+    },
+    {
+      "name": "mysql",
+      "prefixed": "azure.mysql",
+      "description": "MySQL operations - Commands for managing Azure Database for MySQL Flexible Serve"
+    },
+    {
+      "name": "policy",
+      "prefixed": "azure.policy",
+      "description": "Manage Azure Policy assignments and definitions using Azure CLI. Retrieve policy"
+    },
+    {
+      "name": "postgres",
+      "prefixed": "azure.postgres",
+      "description": "PostgreSQL operations - Commands for managing Azure Database for PostgreSQL Flex"
+    },
+    {
+      "name": "pricing",
+      "prefixed": "azure.pricing",
+      "description": "Azure Retail Pricing operations - Get Azure retail pricing for SKUs, services, r"
+    },
+    {
+      "name": "quota",
+      "prefixed": "azure.quota",
+      "description": "Quota commands for getting the available regions of specific Azure resource type"
+    },
+    {
+      "name": "redis",
+      "prefixed": "azure.redis",
+      "description": "Redis operations - Commands for managing Azure Redis resources. Includes operati"
+    },
+    {
+      "name": "resourcehealth",
+      "prefixed": "azure.resourcehealth",
+      "description": "Resource Health operations ΓÇô Commands to monitor and diagnose Azure resource hea"
+    },
+    {
+      "name": "role",
+      "prefixed": "azure.role",
+      "description": "Authorization operations - Commands for managing Azure Role-Based Access Control"
+    },
+    {
+      "name": "search",
+      "prefixed": "azure.search",
+      "description": "Search operations ΓÇô Commands to manage and query Azure AI Search services, index"
+    },
+    {
+      "name": "servicebus",
+      "prefixed": "azure.servicebus",
+      "description": "Service Bus operations - Commands to manage Azure Service Bus queues, topics, an"
+    },
+    {
+      "name": "servicefabric",
+      "prefixed": "azure.servicefabric",
+      "description": "Azure Service Fabric operations - Manage and query Azure Service Fabric managed "
+    },
+    {
+      "name": "signalr",
+      "prefixed": "azure.signalr",
+      "description": "Azure SignalR operations - Commands for managing Azure SignalR Service resources"
+    },
+    {
+      "name": "speech",
+      "prefixed": "azure.speech",
+      "description": "Speech operations - Commands to work with Azure AI Services Speech, including sp"
+    },
+    {
+      "name": "sql",
+      "prefixed": "azure.sql",
+      "description": "Azure SQL operations - Commands for managing Azure SQL databases, servers, and e"
+    },
+    {
+      "name": "sreagent",
+      "prefixed": "azure.sreagent",
+      "description": "Azure SRE Agent operations - Commands for managing and interacting with Azure SR"
     },
     {
       "name": "storage",
       "prefixed": "azure.storage",
-      "description": "Inspect storage accounts, blobs, and queues."
+      "description": "Storage operations - Commands for creating, listing, getting, and managing Azure"
     },
     {
-      "name": "subscription",
-      "prefixed": "azure.subscription",
-      "description": "List and inspect Azure subscriptions in scope."
+      "name": "storagesync",
+      "prefixed": "azure.storagesync",
+      "description": "Azure Storage Sync Operations - Commands to manage Azure File Sync resources, in"
+    },
+    {
+      "name": "subscription_list",
+      "prefixed": "azure.subscription_list",
+      "description": "List all Azure subscriptions for the current account. Returns subscriptionId, di"
+    },
+    {
+      "name": "virtualdesktop",
+      "prefixed": "azure.virtualdesktop",
+      "description": "Azure Virtual Desktop operations - Commands for managing and accessing Azure Vir"
+    },
+    {
+      "name": "wellarchitectedframework",
+      "prefixed": "azure.wellarchitectedframework",
+      "description": "Azure Well-Architected Framework operations - Commands for accessing guidance, b"
+    },
+    {
+      "name": "workbooks",
+      "prefixed": "azure.workbooks",
+      "description": "Workbooks operations - Commands for managing Azure Workbooks resources and inter"
     }
   ]
 }
