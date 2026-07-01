@@ -234,7 +234,7 @@ This outputs:
 [mcp-bridge] Initialize handshake: OK (142ms)
 [mcp-bridge] Tools registered: 47
 [mcp-bridge] Attaching area: github (transport: stdio)
-[mcp-bridge] Spawning: npx -y @github/mcp-server
+[mcp-bridge] Spawning: npx -y @modelcontextprotocol/server-github
 [mcp-bridge] Initialize handshake: OK (89ms)
 [mcp-bridge] Tools registered: 31
 [mcp-bridge] Attach plan complete: 2/2 areas, 78 tools total

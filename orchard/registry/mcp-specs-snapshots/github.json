@@ -1,41 +1,146 @@
 {
-  "$comment": "[X2.10] tools/list snapshot for 'github'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=spec-sample-tools. CC0-1.0.",
+  "$comment": "[X2.10] tools/list snapshot for 'github'. Baseline for attach E2E (X2.11) + drift job (X2.24). source=live. CC0-1.0.",
   "spec_version": "1.0.0",
   "slug": "github",
   "publisher": "github",
   "trust": "first-party-ms",
   "tool_prefix": "github",
   "transport_kind": "stdio-subprocess",
-  "package": "@github/github-mcp-server",
-  "tested_version": "0.1.0",
-  "source": "spec-sample-tools",
-  "captured_at": "2026-06-25",
-  "tool_count": 5,
+  "package": "@modelcontextprotocol/server-github",
+  "tested_version": "2025.4.8",
+  "source": "live",
+  "captured_at": "2026-07-02",
+  "tool_count": 26,
   "tools": [
+    {
+      "name": "add_issue_comment",
+      "prefixed": "github.add_issue_comment",
+      "description": "Add a comment to an existing issue"
+    },
+    {
+      "name": "create_branch",
+      "prefixed": "github.create_branch",
+      "description": "Create a new branch in a GitHub repository"
+    },
     {
       "name": "create_issue",
       "prefixed": "github.create_issue",
-      "description": "Open a new issue."
+      "description": "Create a new issue in a GitHub repository"
+    },
+    {
+      "name": "create_or_update_file",
+      "prefixed": "github.create_or_update_file",
+      "description": "Create or update a single file in a GitHub repository"
+    },
+    {
+      "name": "create_pull_request",
+      "prefixed": "github.create_pull_request",
+      "description": "Create a new pull request in a GitHub repository"
+    },
+    {
+      "name": "create_pull_request_review",
+      "prefixed": "github.create_pull_request_review",
+      "description": "Create a review on a pull request"
+    },
+    {
+      "name": "create_repository",
+      "prefixed": "github.create_repository",
+      "description": "Create a new GitHub repository in your account"
+    },
+    {
+      "name": "fork_repository",
+      "prefixed": "github.fork_repository",
+      "description": "Fork a GitHub repository to your account or specified organization"
     },
     {
       "name": "get_file_contents",
       "prefixed": "github.get_file_contents",
-      "description": "Read a file from a repository."
+      "description": "Get the contents of a file or directory from a GitHub repository"
+    },
+    {
+      "name": "get_issue",
+      "prefixed": "github.get_issue",
+      "description": "Get details of a specific issue in a GitHub repository."
+    },
+    {
+      "name": "get_pull_request",
+      "prefixed": "github.get_pull_request",
+      "description": "Get details of a specific pull request"
+    },
+    {
+      "name": "get_pull_request_comments",
+      "prefixed": "github.get_pull_request_comments",
+      "description": "Get the review comments on a pull request"
+    },
+    {
+      "name": "get_pull_request_files",
+      "prefixed": "github.get_pull_request_files",
+      "description": "Get the list of files changed in a pull request"
+    },
+    {
+      "name": "get_pull_request_reviews",
+      "prefixed": "github.get_pull_request_reviews",
+      "description": "Get the reviews on a pull request"
+    },
+    {
+      "name": "get_pull_request_status",
+      "prefixed": "github.get_pull_request_status",
+      "description": "Get the combined status of all status checks for a pull request"
+    },
+    {
+      "name": "list_commits",
+      "prefixed": "github.list_commits",
+      "description": "Get list of commits of a branch in a GitHub repository"
     },
     {
       "name": "list_issues",
       "prefixed": "github.list_issues",
-      "description": "List issues on a repository."
+      "description": "List issues in a GitHub repository with filtering options"
     },
     {
       "name": "list_pull_requests",
       "prefixed": "github.list_pull_requests",
-      "description": "List pull requests on a repository."
+      "description": "List and filter repository pull requests"
+    },
+    {
+      "name": "merge_pull_request",
+      "prefixed": "github.merge_pull_request",
+      "description": "Merge a pull request"
+    },
+    {
+      "name": "push_files",
+      "prefixed": "github.push_files",
+      "description": "Push multiple files to a GitHub repository in a single commit"
+    },
+    {
+      "name": "search_code",
+      "prefixed": "github.search_code",
+      "description": "Search for code across GitHub repositories"
+    },
+    {
+      "name": "search_issues",
+      "prefixed": "github.search_issues",
+      "description": "Search for issues and pull requests across GitHub repositories"
     },
     {
       "name": "search_repositories",
       "prefixed": "github.search_repositories",
-      "description": "Search repositories by query."
+      "description": "Search for GitHub repositories"
+    },
+    {
+      "name": "search_users",
+      "prefixed": "github.search_users",
+      "description": "Search for users on GitHub"
+    },
+    {
+      "name": "update_issue",
+      "prefixed": "github.update_issue",
+      "description": "Update an existing issue in a GitHub repository"
+    },
+    {
+      "name": "update_pull_request_branch",
+      "prefixed": "github.update_pull_request_branch",
+      "description": "Update a pull request branch with the latest changes from the base branch"
     }
   ]
 }

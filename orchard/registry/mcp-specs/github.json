@@ -13,34 +13,40 @@
   "transport": {
     "kind": "stdio-subprocess",
     "command": "npx",
-    "args": ["-y", "@github/github-mcp-server"],
+    "args": ["-y", "@modelcontextprotocol/server-github"],
     "url": null,
-    "env_passthrough": ["GITHUB_TOKEN", "GITHUB_PAT"]
+    "env_passthrough": ["GITHUB_PERSONAL_ACCESS_TOKEN", "GITHUB_TOKEN", "GITHUB_PAT"]
   },
 
   "version_pin": {
-    "package": "@github/github-mcp-server",
-    "version_range": ">=0.1.0 <1.0.0",
-    "tested_version": "0.1.0"
+    "package": "@modelcontextprotocol/server-github",
+    "version_range": ">=2025.0.0 <2026.0.0",
+    "tested_version": "2025.4.8"
   },
 
   "env_vars": [
     {
-      "name": "GITHUB_TOKEN",
+      "name": "GITHUB_PERSONAL_ACCESS_TOKEN",
       "required": true,
       "auth_mode": "pat",
-      "description": "GitHub personal access token (classic or fine-grained). Scopes the operations the server can perform; pass via env, never inline in args (doctrine #6)."
+      "description": "GitHub personal access token (classic or fine-grained) — the token env name the reference MCP server reads. Scopes the operations the server can perform; pass via env, never inline in args (doctrine #6)."
+    },
+    {
+      "name": "GITHUB_TOKEN",
+      "required": false,
+      "auth_mode": "pat",
+      "description": "Alternate token env name (e.g. CI `github.token`); use either GITHUB_PERSONAL_ACCESS_TOKEN or GITHUB_TOKEN."
     },
     {
       "name": "GITHUB_PAT",
       "required": false,
       "auth_mode": "pat",
-      "description": "Alternate token env name accepted by the server; use either GITHUB_TOKEN or GITHUB_PAT (GITHUB_TOKEN preferred)."
+      "description": "Alternate token env name accepted by the server."
     }
   ],
 
   "auth": {
-    "recipe": "set GITHUB_TOKEN to a personal access token; fine-grained tokens scoped to the target repos are preferred over classic.",
+    "recipe": "set GITHUB_PERSONAL_ACCESS_TOKEN to a personal access token; fine-grained tokens scoped to the target repos are preferred over classic. CI may pass the Actions `github.token` as GITHUB_PERSONAL_ACCESS_TOKEN.",
     "modes": ["pat"]
   },
 
@@ -61,9 +67,9 @@
   ],
 
   "client_install": {
-    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `github`: { command: npx, args: [-y, @github/github-mcp-server], env: { GITHUB_TOKEN: \"<token>\" } }.",
-    "cursor": "Settings → MCP → Add: name `github`, command `npx -y @github/github-mcp-server`; set GITHUB_TOKEN in the env.",
-    "vscode": "Add to .vscode/mcp.json servers as `github` (VS Code Insider, MCP preview); supply GITHUB_TOKEN via inputs."
+    "claude_desktop": "Add to claude_desktop_config.json mcpServers as `github`: { command: npx, args: [-y, @modelcontextprotocol/server-github], env: { GITHUB_PERSONAL_ACCESS_TOKEN: \"<token>\" } }.",
+    "cursor": "Settings → MCP → Add: name `github`, command `npx -y @modelcontextprotocol/server-github`; set GITHUB_PERSONAL_ACCESS_TOKEN in the env.",
+    "vscode": "Add to .vscode/mcp.json servers as `github` (VS Code Insider, MCP preview); supply GITHUB_PERSONAL_ACCESS_TOKEN via inputs."
   },
 
   "snapshot": {
