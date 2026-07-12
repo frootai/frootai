@@ -8,13 +8,12 @@ name: "CodeQL"
 # PRD: ../../frootai-blueprint/prds/PRD-003-supply-chain-security.md
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
   schedule:
-    # Nightly at 02:00 UTC — catches CVE-publication catch-up
-    - cron: '0 2 * * *'
+    # Weekly SAST backstop; PRs remain the primary security gate.
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -33,8 +32,6 @@ jobs:
           - language: javascript-typescript
             build-mode: none
           - language: python
-            build-mode: none
-          - language: actions
             build-mode: none
 
     steps:

@@ -2,9 +2,14 @@ name: Uptime Monitor
 
 on:
   schedule:
-    # Run every 15 minutes
-    - cron: '*/15 * * * *'
+    # GitHub-hosted uptime is a coarse backstop; edge monitoring handles
+    # high-frequency checks without consuming Actions minutes.
+    - cron: '17 7 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: uptime-monitor
+  cancel-in-progress: true
 
 permissions:
   issues: write
@@ -30,13 +35,13 @@ jobs:
         id: chatbot
         continue-on-error: true
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "https://frootai-chatbot-api.azurewebsites.net/")
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "https://frootai.dev/v1/agent/web/health")
           echo "status=$STATUS" >> $GITHUB_OUTPUT
-          if [ "$STATUS" != "200" ] && [ "$STATUS" != "302" ]; then
-            echo "❌ Chatbot API returned $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Agent FAI readiness returned $STATUS"
             exit 1
           fi
-          echo "✅ Chatbot API is up ($STATUS)"
+          echo "✅ Agent FAI model path is ready ($STATUS)"
 
       - name: Check npm package
         id: npm

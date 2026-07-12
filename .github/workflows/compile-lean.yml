@@ -8,7 +8,7 @@ name: Compile Lean (.lean.md, daily)
 
 on:
   schedule:
-    - cron: '23 6 * * *' # daily 06:23 UTC (just after skills-llms-txt)
+    - cron: '23 6 * * 1' # weekly Monday, after skills-llms-txt
   workflow_dispatch:
   push:
     branches: [main]

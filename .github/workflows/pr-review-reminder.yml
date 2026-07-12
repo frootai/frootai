@@ -6,8 +6,8 @@ name: PR Review Reminder
 
 on:
   schedule:
-    # Runs every 6 hours — catches PRs before the 24h SLA breach.
-    - cron: '0 */6 * * *'
+    # One daily pass is sufficient for the 24-hour review SLA.
+    - cron: '0 9 * * *'
   workflow_dispatch: # Manual trigger for testing
 
 permissions:

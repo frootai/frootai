@@ -94,6 +94,7 @@ jobs:
         id: run_validator
         env:
           PLAY_DIRS: ${{ steps.list_plays.outputs.play_dirs }}
+          RUNNER_TEMP: ${{ runner.temp }}
         run: |
           set -euo pipefail
           OVERALL_OK="true"
@@ -136,8 +137,6 @@ jobs:
             echo "::endgroup::"
           done <<< "$PLAY_DIRS"
           echo "overall_ok=$OVERALL_OK" >> "$GITHUB_OUTPUT"
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
 
       # ── Post PR comment ──────────────────────────────────────────────
       - name: Post PR comment

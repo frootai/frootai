@@ -56,7 +56,10 @@ jobs:
           ENDPOINT="${{ inputs.endpoint || vars.EVAL_ENDPOINT }}"
           EVALUATOR="${{ inputs.evaluator || vars.EVAL_EVALUATOR || 'simple' }}"
           TEST_SET="${{ vars.EVAL_TEST_SET || 'evaluation/test-set.jsonl' }}"
-          THRESHOLDS='${{ vars.EVAL_THRESHOLDS || ''{"groundedness":4.0,"relevance":4.0,"fluency":4.0}'' }}'
+          THRESHOLDS='${{ vars.EVAL_THRESHOLDS }}'
+          if [ -z "$THRESHOLDS" ]; then
+            THRESHOLDS='{"groundedness":4.0,"relevance":4.0,"fluency":4.0}'
+          fi
           if [ -z "$ENDPOINT" ]; then
             echo "::error::EVAL_ENDPOINT not set (variable or workflow input)."
             exit 1
