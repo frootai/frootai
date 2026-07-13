@@ -4,12 +4,37 @@ on:
   push:
     paths:
       - 'solution-plays/**'
+      - 'scripts/build-solution-play-index.mjs'
+      - 'scripts/test-solution-play-index.mjs'
+      - 'orchard/schema/solution-play-index.schema.json'
+      - 'orchard/examples/solution-play-index.example.json'
+      - 'orchard/registry/solution-play-index.json'
   pull_request:
     paths:
       - 'solution-plays/**'
+      - 'scripts/build-solution-play-index.mjs'
+      - 'scripts/test-solution-play-index.mjs'
+      - 'orchard/schema/solution-play-index.schema.json'
+      - 'orchard/examples/solution-play-index.example.json'
+      - 'orchard/registry/solution-play-index.json'
   workflow_dispatch:
 
 jobs:
+  canonical-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Verify canonical 101-play index
+        run: |
+          npm run check:solution-play-index
+          npm run test:solution-play-index
+
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 20

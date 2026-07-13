@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "source": "frootai/solution-plays",
+  "count": 1,
+  "plays": [
+    {
+      "id": "01",
+      "numeric_id": 1,
+      "slug": "01-enterprise-rag",
+      "name": "Enterprise RAG Q&A",
+      "description": "Production RAG with hybrid search, semantic reranking, and pre-tuned guardrails.",
+      "relative_path": "solution-plays/01-enterprise-rag",
+      "readme_path": "solution-plays/01-enterprise-rag/README.md",
+      "spec_path": "solution-plays/01-enterprise-rag/spec/play-spec.json",
+      "spec_version": "0.1.0",
+      "github_url": "https://github.com/frootai/frootai/tree/main/solution-plays/01-enterprise-rag",
+      "detail_url": "https://frootai.dev/solution-plays/01-enterprise-rag"
+    }
+  ]
+}

@@ -7,6 +7,9 @@
     "validate": "node scripts/validate-consistency.js",
     "validate:primitives": "node scripts/validate-primitives.js",
     "validate:primitives:verbose": "node scripts/validate-primitives.js --verbose",
+    "build:solution-play-index": "node scripts/build-solution-play-index.mjs",
+    "check:solution-play-index": "node scripts/build-solution-play-index.mjs --check",
+    "test:solution-play-index": "node --test scripts/test-solution-play-index.mjs",
     "generate:marketplace": "node scripts/generate-marketplace.js",
     "generate:website-data": "node scripts/generate-website-data.js",
     "update:readme": "node scripts/update-readme.js",
@@ -60,6 +63,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "husky": "^9.1.7"
   },

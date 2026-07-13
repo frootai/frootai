@@ -1,6 +1,8 @@
-#  FrootAI Solution Plays
+# FrootAI Solution Plays
 
-> **50 solution plays. Each with DevKit (.github Agentic OS) + TuneKit (AI config + eval) + SpecKit (architecture + wiring) + Bicep infra. All with `fai-manifest.json`.**
+> **101 solution plays. Each has a canonical numeric identity, DevKit (.github Agentic OS), TuneKit (AI config + eval), SpecKit (architecture + wiring), and infrastructure assets.**
+
+The machine-readable source of truth for all 101 identities and links is [`../orchard/registry/solution-play-index.json`](../orchard/registry/solution-play-index.json). The table below is the original first-50 launch roster; the canonical index includes Plays 51-101 without renaming or deleting any play.
 
 | # | Solution | Status | Complexity |
 |---|---------|--------|-----------|
