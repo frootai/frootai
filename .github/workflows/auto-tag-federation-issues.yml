@@ -29,12 +29,12 @@ jobs:
     if: github.event.issue.state == 'open'
     steps:
       - name: Checkout public repo (frootai)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: frootai
 
       - name: Checkout frootai-core (for matching script + seed roster)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: frootai/frootai-core
           path: frootai-core
