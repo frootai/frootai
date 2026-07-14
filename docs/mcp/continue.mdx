@@ -1,6 +1,6 @@
 ---
 title: "Install Orchard Harvest MCP in Continue.dev"
-description: "Add the FrootAI Orchard Harvest MCP server (@frootai/orchard-mcp) to Continue.dev (VS Code / JetBrains) — turn any GitHub repo into a production-ready Solution Play."
+description: "Add the FrootAI Orchard Harvest MCP server (frootai-orchard-mcp) to Continue.dev (VS Code / JetBrains) — turn any GitHub repo into a production-ready Solution Play."
 icon: "🅒"
 order: 45
 tags: ["mcp", "orchard", "harvest", "continue", "continue-dev", "install"]
@@ -8,7 +8,7 @@ tags: ["mcp", "orchard", "harvest", "continue", "continue-dev", "install"]
 
 # Install Orchard Harvest MCP in Continue.dev
 
-The **Orchard Harvest** MCP server (`@frootai/orchard-mcp`) runs the FAI Harvest pipeline as 8 callable tools. This guide wires it into **Continue.dev** (the VS Code / JetBrains AI assistant).
+The **Orchard Harvest** MCP server (`frootai-orchard-mcp`) runs the FAI Harvest pipeline as 9 callable tools. This guide wires it into **Continue.dev** (the VS Code / JetBrains AI assistant).
 
 > Looking for the read-only catalog server instead? See [Install FrootAI Orchard MCP](./install-clients).
 
@@ -24,7 +24,7 @@ Continue reads `~/.continue/config.json`. Add the harvest server to `experimenta
         "transport": {
           "type": "stdio",
           "command": "npx",
-          "args": ["-y", "@frootai/orchard-mcp@latest"]
+          "args": ["-y", "frootai-orchard-mcp@latest"]
         }
       }
     ]

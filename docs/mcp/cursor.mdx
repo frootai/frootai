@@ -1,6 +1,6 @@
 ---
 title: "Install Orchard Harvest MCP in Cursor"
-description: "Add the FrootAI Orchard Harvest MCP server (@frootai/orchard-mcp) to Cursor — turn any GitHub repo into a production-ready Solution Play from your editor."
+description: "Add the FrootAI Orchard Harvest MCP server (frootai-orchard-mcp) to Cursor — turn any GitHub repo into a production-ready Solution Play from your editor."
 icon: "🅒"
 order: 43
 tags: ["mcp", "orchard", "harvest", "cursor", "install"]
@@ -8,7 +8,7 @@ tags: ["mcp", "orchard", "harvest", "cursor", "install"]
 
 # Install Orchard Harvest MCP in Cursor
 
-The **Orchard Harvest** MCP server (`@frootai/orchard-mcp`) runs the FAI Harvest pipeline as 8 callable tools: discover, extract, retrieve, and list for free, plus `import_accelerator` / `customize_play` / `re_harvest` (Pro) and `approve_play` (founder). This guide wires it into **Cursor**.
+The **Orchard Harvest** MCP server (`frootai-orchard-mcp`) runs the FAI Harvest pipeline as 9 callable tools: discover, extract, retrieve, and list for free, plus `import_accelerator` / `customize_play` / `re_harvest` / `list_pending_reviews` (Pro) and `approve_play` (founder). This guide wires it into **Cursor**.
 
 > Looking for the read-only catalog server instead? See [Install FrootAI Orchard MCP](./install-clients).
 
@@ -21,7 +21,7 @@ Cursor reads MCP server configs from `~/.cursor/mcp.json`. Add the `frootai-orch
   "mcpServers": {
     "frootai-orchard": {
       "command": "npx",
-      "args": ["-y", "@frootai/orchard-mcp@latest"]
+      "args": ["-y", "frootai-orchard-mcp@latest"]
     }
   }
 }
