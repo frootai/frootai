@@ -1,0 +1,10 @@
+{
+  "recipe": "28-browser-screenshot-to-bug-report",
+  "areas": [
+    "playwright",
+    "markitdown",
+    "github"
+  ],
+  "prompt": "Visit the failing page, capture a screenshot, DOM snapshot, and console errors, summarize what went wrong, and open a triage-ready GitHub issue.",
+  "url": "https://studio.frootai.dev/builder?recipe=28-browser-screenshot-to-bug-report&areas=playwright,markitdown,github&prompt=Visit%20the%20failing%20page%2C%20capture%20a%20screenshot%2C%20DOM%20snapshot%2C%20and%20console%20errors%2C%20summarize%20what%20went%20wrong%2C%20and%20open%20a%20triage-ready%20GitHub%20issue."
+}

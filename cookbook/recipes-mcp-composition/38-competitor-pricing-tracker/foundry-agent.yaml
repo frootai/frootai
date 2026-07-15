@@ -1,0 +1,57 @@
+# [X8.27] Per-recipe Foundry agent template — Competitor Pricing Tracker (Firecrawl + MongoDB + Notion)
+#
+# Packages this cookbook composition recipe's agent prompt + mcp_scope together
+# as a deployable Azure AI Foundry PromptAgent. Deploy per-recipe via the
+# Foundry CLI / scripts/foundry/deploy.sh. The recipe's attached MCP areas are
+# pre-attached for every session via FROOTAI_PREATTACH.
+
+apiVersion: foundry.azure.com/v1
+kind: PromptAgent
+metadata:
+  name: frootai-recipe-38-competitor-pricing-tracker
+  version: 1.0.0
+  labels:
+    track: cookbook-composition
+    recipe: 38-competitor-pricing-tracker
+    phase: X8
+
+spec:
+  model: gpt-4o-mini
+  temperature: 0.2
+  topP: 0.95
+
+  # The recipe's agent prompt, baked in as the system instructions.
+  instructions: |
+    Crawl competitor pricing pages with Firecrawl, persist each snapshot to MongoDB, diff against history, and publish a pricing digest to Notion.
+
+  # The recipe's mcp_scope — these MCP areas are attached for every session.
+  mcp_scope:
+    attached: ["firecrawl", "mongodb", "notion"]
+    router_config:
+      detach_on_finish: true
+
+  identity:
+    type: SystemAssigned
+  azureCredential: DefaultAzureCredential
+
+  env:
+    # Pre-attach the recipe's MCP areas (mirrors mcp_scope.attached).
+    FROOTAI_PREATTACH:
+      description: "Comma-separated MCP areas to pre-attach for this recipe"
+      required: false
+      default: firecrawl,mongodb,notion
+    FROOTAI_FEDERATION:
+      description: "Federation kill-switch (on|off). Default: on."
+      required: false
+      default: on
+
+  resources:
+    cpu: "1"
+    memory: "2Gi"
+    timeoutSeconds: 60
+
+  telemetry:
+    sessionEvents: true
+    appInsights:
+      enabled: true
+      role: frootai-recipe-38-competitor-pricing-tracker

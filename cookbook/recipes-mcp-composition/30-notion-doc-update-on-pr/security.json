@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "github", "credential": "GITHUB_TOKEN", "scope": "PR + contents read" },
+    { "server": "notion", "credential": "NOTION_TOKEN", "scope": "page write on the shared workspace" },
+    { "server": "stripe", "credential": "STRIPE_SECRET_KEY", "scope": "catalog write (use a test-mode key)" }
+  ]
+}

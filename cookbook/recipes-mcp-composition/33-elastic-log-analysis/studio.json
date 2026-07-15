@@ -1,0 +1,10 @@
+{
+  "recipe": "33-elastic-log-analysis",
+  "areas": [
+    "elastic",
+    "context7",
+    "ms-learn"
+  ],
+  "prompt": "Analyze recent Elastic logs, correlate errors with library docs via Context7, and ground fixes in MS Learn guidance.",
+  "url": "https://studio.frootai.dev/builder?recipe=33-elastic-log-analysis&areas=elastic,context7,ms-learn&prompt=Analyze%20recent%20Elastic%20logs%2C%20correlate%20errors%20with%20library%20docs%20via%20Context7%2C%20and%20ground%20fixes%20in%20MS%20Learn%20guidance."
+}

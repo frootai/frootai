@@ -1,0 +1,6 @@
+{
+  "servers": [
+    { "server": "azure", "credential": "AZURE_SUBSCRIPTION_ID", "scope": "Cost Management read" },
+    { "server": "mongodb", "credential": "MDB_MCP_CONNECTION_STRING", "scope": "collection read (MDB_MCP_READ_ONLY=true)" }
+  ]
+}

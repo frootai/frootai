@@ -1,0 +1,1 @@
+{ "invocations": 100, "monthlyCostUsd": 5.00, "currency": "USD", "note": "Model tokens only; Azure ARM reads + MongoDB aggregates are free at this volume." }

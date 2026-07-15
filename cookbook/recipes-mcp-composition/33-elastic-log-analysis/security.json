@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "elastic", "credential": "ES_API_KEY", "scope": "index read (do not set ES_SSL_SKIP_VERIFY)" },
+    { "server": "context7", "credential": "CONTEXT7_API_KEY", "scope": "docs read-only" },
+    { "server": "ms-learn", "credential": "none", "scope": "public docs" }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "servers": [
+    { "server": "azure", "credential": "AZURE_SUBSCRIPTION_ID", "scope": "resource read (Reader role)" },
+    { "server": "ms-learn", "credential": "none", "scope": "public docs" }
+  ]
+}

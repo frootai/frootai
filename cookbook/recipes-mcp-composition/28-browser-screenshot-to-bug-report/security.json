@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "playwright", "credential": "none", "scope": "local browser automation" },
+    { "server": "markitdown", "credential": "none", "scope": "local file/URI read" },
+    { "server": "github", "credential": "GITHUB_TOKEN", "scope": "issues:write on the target repo" }
+  ]
+}

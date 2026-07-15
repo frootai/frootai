@@ -1,0 +1,1 @@
+{ "invocations": 100, "monthlyCostUsd": 9.50, "currency": "USD", "note": "Model tokens + Firecrawl crawls (the metered third-party calls); MongoDB + Notion are flat-rate." }

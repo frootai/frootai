@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "markitdown", "credential": "none", "scope": "local file/URI read" },
+    { "server": "context7", "credential": "CONTEXT7_API_KEY", "scope": "docs read-only" },
+    { "server": "tavily-ai", "credential": "TAVILY_API_KEY", "scope": "web search" }
+  ]
+}

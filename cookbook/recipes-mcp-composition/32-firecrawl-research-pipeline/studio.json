@@ -1,0 +1,10 @@
+{
+  "recipe": "32-firecrawl-research-pipeline",
+  "areas": [
+    "firecrawl",
+    "tavily-ai",
+    "context7"
+  ],
+  "prompt": "Crawl the target site with Firecrawl, enrich findings via Tavily search, ground them with Context7 docs, and assemble a research brief.",
+  "url": "https://studio.frootai.dev/builder?recipe=32-firecrawl-research-pipeline&areas=firecrawl,tavily-ai,context7&prompt=Crawl%20the%20target%20site%20with%20Firecrawl%2C%20enrich%20findings%20via%20Tavily%20search%2C%20ground%20them%20with%20Context7%20docs%2C%20and%20assemble%20a%20research%20brief."
+}

@@ -57,11 +57,22 @@
 > Phase X8 will formalize. Each surfaces on its servers' marketplace detail pages
 > under "Used in recipes".
 
-| # | Recipe | Servers attached | What You'll Build |
-|---|--------|------------------|-------------------|
-| 24 | [Research-to-Notion](./24-research-to-notion.md) | Context7 + Tavily + Notion | Research → synthesize → publish a findings page |
-| 25 | [Web-to-Vector RAG](./25-web-to-vector-rag.md) | Firecrawl + Qdrant + OpenAI Docs | Crawl → embed → retrieve grounded answers |
-| 26 | [Vector-Memory Bake-off](./26-vector-memory-bakeoff.md) | Pinecone + Chroma | A/B two vector DBs behind one agent |
+| # | Recipe | Servers attached | What You'll Build | Est. cost/mo (100 inv.) |
+|---|--------|------------------|-------------------|-------------------------|
+| 24 | [Research-to-Notion](./24-research-to-notion.md) | Context7 + Tavily + Notion | Research → synthesize → publish a findings page | — |
+| 25 | [Web-to-Vector RAG](./25-web-to-vector-rag.md) | Firecrawl + Qdrant + OpenAI Docs | Crawl → embed → retrieve grounded answers | — |
+| 26 | [Vector-Memory Bake-off](./26-vector-memory-bakeoff.md) | Pinecone + Chroma | A/B two vector DBs behind one agent | — |
+| 28 | [Browser Screenshot to Bug Report](./28-browser-screenshot-to-bug-report.md) | Playwright + Markitdown + GitHub | Capture a browser failure → file a triage-ready issue | ~$3.00 |
+| 29 | [Azure Resource Audit](./29-azure-resource-audit.md) | Azure + MS Learn | Inventory resources → grounded best-practice audit | ~$6.00 |
+| 30 | [Notion Doc Update on PR](./30-notion-doc-update-on-pr.md) | GitHub + Notion + Stripe | Merged docs PR → mirror to Notion → reconcile billing | ~$3.00 |
+| 31 | [Multi-Cloud Cost Report](./31-multi-cloud-cost-report.md) | Azure + MongoDB | Live spend + cached history → cross-period cost trend | ~$5.00 |
+| 32 | [Firecrawl Research Pipeline](./32-firecrawl-research-pipeline.md) | Firecrawl + Tavily + Context7 | Crawl + search + ground → cited research brief | ~$17.80 |
+| 33 | [Elastic Log Analysis](./33-elastic-log-analysis.md) | Elastic + Context7 + MS Learn | Log spike → grounded root-cause + remediation report | ~$6.00 |
+| 34 | [Vector DB Comparison](./34-vector-db-comparison.md) | Qdrant + ChromaDB + Pinecone | Same corpus + queries → recall/latency/cost bake-off | ~$18.00 |
+| 35 | [pgEdge Replication Monitor](./35-pgedge-replication-monitor.md) | pgEdge + Elastic | Live replication state + logs → per-node health verdict | ~$4.00 |
+| 36 | [PDF to Research Deck](./36-pdf-to-research-deck.md) | Markitdown + Context7 + Tavily | PDF → grounded, cited research summary | ~$5.40 |
+| 37 | [RAG from a GitHub Repo](./37-rag-from-github-repo.md) | GitHub + Markitdown + Azure AI Search | Repo → normalized → queryable vector index | ~$22.00 |
+| 38 | [Competitor Pricing Tracker](./38-competitor-pricing-tracker.md) | Firecrawl + MongoDB + Notion | Crawl pricing → track history → publish a diffed digest | ~$9.50 |
 
 ## Quick Start
 

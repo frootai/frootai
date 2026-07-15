@@ -1,0 +1,10 @@
+{
+  "recipe": "37-rag-from-github-repo",
+  "areas": [
+    "github",
+    "markitdown",
+    "azure"
+  ],
+  "prompt": "Index a GitHub repo: convert its docs to Markdown and build a RAG index in Azure AI Search.",
+  "url": "https://studio.frootai.dev/builder?recipe=37-rag-from-github-repo&areas=github,markitdown,azure&prompt=Index%20a%20GitHub%20repo%3A%20convert%20its%20docs%20to%20Markdown%20and%20build%20a%20RAG%20index%20in%20Azure%20AI%20Search."
+}

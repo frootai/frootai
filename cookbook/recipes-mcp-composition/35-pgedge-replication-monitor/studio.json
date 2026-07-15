@@ -1,0 +1,9 @@
+{
+  "recipe": "35-pgedge-replication-monitor",
+  "areas": [
+    "pgedge",
+    "elastic"
+  ],
+  "prompt": "Monitor pgEdge replication lag and ship the metrics to Elastic for alerting.",
+  "url": "https://studio.frootai.dev/builder?recipe=35-pgedge-replication-monitor&areas=pgedge,elastic&prompt=Monitor%20pgEdge%20replication%20lag%20and%20ship%20the%20metrics%20to%20Elastic%20for%20alerting."
+}

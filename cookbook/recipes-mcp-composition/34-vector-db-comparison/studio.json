@@ -1,0 +1,10 @@
+{
+  "recipe": "34-vector-db-comparison",
+  "areas": [
+    "qdrant",
+    "chromadb",
+    "pinecone"
+  ],
+  "prompt": "Run the same embedding workload across Qdrant, ChromaDB, and Pinecone and produce a recall, latency, and cost comparison.",
+  "url": "https://studio.frootai.dev/builder?recipe=34-vector-db-comparison&areas=qdrant,chromadb,pinecone&prompt=Run%20the%20same%20embedding%20workload%20across%20Qdrant%2C%20ChromaDB%2C%20and%20Pinecone%20and%20produce%20a%20recall%2C%20latency%2C%20and%20cost%20comparison."
+}

@@ -1,0 +1,1 @@
+{ "invocations": 100, "monthlyCostUsd": 22.00, "currency": "USD", "note": "Model tokens + embeddings + the Azure AI Search service (the metered components)." }

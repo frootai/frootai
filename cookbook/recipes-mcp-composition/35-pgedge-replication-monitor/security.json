@@ -1,0 +1,6 @@
+{
+  "servers": [
+    { "server": "pgedge", "credential": "PGEDGE_DB_PASSWORD", "scope": "DB read (read-only txn; do not set PGEDGE_DB_ALLOW_WRITES)" },
+    { "server": "elastic", "credential": "ES_API_KEY", "scope": "index read" }
+  ]
+}

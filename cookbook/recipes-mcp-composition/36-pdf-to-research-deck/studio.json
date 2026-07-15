@@ -1,0 +1,10 @@
+{
+  "recipe": "36-pdf-to-research-deck",
+  "areas": [
+    "markitdown",
+    "context7",
+    "tavily-ai"
+  ],
+  "prompt": "Convert the source PDF to Markdown, enrich it with Context7 docs and Tavily search, and assemble a research deck.",
+  "url": "https://studio.frootai.dev/builder?recipe=36-pdf-to-research-deck&areas=markitdown,context7,tavily-ai&prompt=Convert%20the%20source%20PDF%20to%20Markdown%2C%20enrich%20it%20with%20Context7%20docs%20and%20Tavily%20search%2C%20and%20assemble%20a%20research%20deck."
+}

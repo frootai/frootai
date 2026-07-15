@@ -1,0 +1,9 @@
+{
+  "recipe": "29-azure-resource-audit",
+  "areas": [
+    "azure",
+    "ms-learn"
+  ],
+  "prompt": "Audit my Azure subscription's resources against Well-Architected guidance and produce a prioritized remediation report grounded in MS Learn.",
+  "url": "https://studio.frootai.dev/builder?recipe=29-azure-resource-audit&areas=azure,ms-learn&prompt=Audit%20my%20Azure%20subscription's%20resources%20against%20Well-Architected%20guidance%20and%20produce%20a%20prioritized%20remediation%20report%20grounded%20in%20MS%20Learn."
+}

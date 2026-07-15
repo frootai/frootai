@@ -1,0 +1,10 @@
+{
+  "recipe": "38-competitor-pricing-tracker",
+  "areas": [
+    "firecrawl",
+    "mongodb",
+    "notion"
+  ],
+  "prompt": "Crawl competitor pricing pages with Firecrawl, persist each snapshot to MongoDB, diff against history, and publish a pricing digest to Notion.",
+  "url": "https://studio.frootai.dev/builder?recipe=38-competitor-pricing-tracker&areas=firecrawl,mongodb,notion&prompt=Crawl%20competitor%20pricing%20pages%20with%20Firecrawl%2C%20persist%20each%20snapshot%20to%20MongoDB%2C%20diff%20against%20history%2C%20and%20publish%20a%20pricing%20digest%20to%20Notion."
+}

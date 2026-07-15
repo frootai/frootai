@@ -1,0 +1,9 @@
+{
+  "recipe": "31-multi-cloud-cost-report",
+  "areas": [
+    "azure",
+    "mongodb"
+  ],
+  "prompt": "Pull Azure cost data, store it read-only in MongoDB, and produce a multi-cloud monthly cost report.",
+  "url": "https://studio.frootai.dev/builder?recipe=31-multi-cloud-cost-report&areas=azure,mongodb&prompt=Pull%20Azure%20cost%20data%2C%20store%20it%20read-only%20in%20MongoDB%2C%20and%20produce%20a%20multi-cloud%20monthly%20cost%20report."
+}

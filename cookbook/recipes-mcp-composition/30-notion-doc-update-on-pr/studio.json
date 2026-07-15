@@ -1,0 +1,10 @@
+{
+  "recipe": "30-notion-doc-update-on-pr",
+  "areas": [
+    "github",
+    "notion",
+    "stripe"
+  ],
+  "prompt": "When a pull request merges, update the linked Notion doc and reconcile the Stripe billing catalog.",
+  "url": "https://studio.frootai.dev/builder?recipe=30-notion-doc-update-on-pr&areas=github,notion,stripe&prompt=When%20a%20pull%20request%20merges%2C%20update%20the%20linked%20Notion%20doc%20and%20reconcile%20the%20Stripe%20billing%20catalog."
+}

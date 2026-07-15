@@ -1,0 +1,8 @@
+{
+  "mcp_scope": {
+    "attached": ["markitdown", "context7", "tavily-ai"],
+    "router_config": {
+      "detach_on_finish": true
+    }
+  }
+}

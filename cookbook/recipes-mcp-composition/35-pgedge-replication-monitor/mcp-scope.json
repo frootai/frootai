@@ -1,0 +1,8 @@
+{
+  "mcp_scope": {
+    "attached": ["pgedge", "elastic"],
+    "router_config": {
+      "detach_on_finish": true
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "github", "credential": "GITHUB_TOKEN", "scope": "repo read (read-only)" },
+    { "server": "markitdown", "credential": "none", "scope": "local file/URI read" },
+    { "server": "azure", "credential": "AZURE_SUBSCRIPTION_ID", "scope": "AI Search data-plane (scoped service principal)" }
+  ]
+}

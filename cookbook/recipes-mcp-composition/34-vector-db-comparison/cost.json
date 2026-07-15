@@ -1,0 +1,1 @@
+{ "invocations": 100, "monthlyCostUsd": 18.00, "currency": "USD", "note": "Model tokens + embeddings + the managed Pinecone index; Qdrant/ChromaDB self-host." }

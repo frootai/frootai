@@ -1,0 +1,8 @@
+{
+  "mcp_scope": {
+    "attached": ["github", "markitdown", "azure"],
+    "router_config": {
+      "detach_on_finish": true
+    }
+  }
+}

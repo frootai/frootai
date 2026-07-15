@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "qdrant", "credential": "QDRANT_API_KEY", "scope": "collection read/write (throwaway collection)" },
+    { "server": "chromadb", "credential": "CHROMA_API_KEY", "scope": "collection read/write (throwaway collection)" },
+    { "server": "pinecone", "credential": "PINECONE_API_KEY", "scope": "index read/write (non-prod project)" }
+  ]
+}

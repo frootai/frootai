@@ -1,0 +1,7 @@
+{
+  "servers": [
+    { "server": "firecrawl", "credential": "FIRECRAWL_API_KEY", "scope": "crawl/scrape pricing pages" },
+    { "server": "mongodb", "credential": "MDB_MCP_CONNECTION_STRING", "scope": "read/write the pricing_snapshots collection" },
+    { "server": "notion", "credential": "NOTION_TOKEN", "scope": "create/update the digest page" }
+  ]
+}

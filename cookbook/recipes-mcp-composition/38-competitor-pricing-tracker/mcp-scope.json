@@ -1,0 +1,8 @@
+{
+  "mcp_scope": {
+    "attached": ["firecrawl", "mongodb", "notion"],
+    "router_config": {
+      "detach_on_finish": true
+    }
+  }
+}
