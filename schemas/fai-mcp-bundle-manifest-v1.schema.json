@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/fai-mcp-bundle-manifest-v1.json",
+  "title": "FAI MCP Bundle Manifest v1",
+  "description": "Canonical schema for the `manifest.json` at the root of a `.fai-mcp` air-gap bundle. The manifest is the single Cosign-signed artifact: `signature.sig` covers these bytes, and these bytes carry the SHA256 of every other file in the bundle. Format spec: frootai-core/docs/specs/fai-mcp-bundle-v1.md ([X6.1]).",
+  "$comment": "License: CC0-1.0. Authored as part of Phase [X6.2] of the FAI MCP Marketplace + Trust masterplan. Doctrine #4 — NEVER BUNDLE WITHOUT SIGNATURE: a manifest with a valid `signature` block + a verifying `signature.sig` is what makes a bundle attachable behind a firewall.",
+
+  "type": "object",
+  "required": ["manifest_version", "bundle", "signature", "specs", "snapshots", "packages"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Lowercase hex SHA256 of the referenced file's bytes."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "description": "Kebab-case spec slug === the spec filename (doctrine #5)."
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "trustTier": {
+      "type": "string",
+      "enum": ["first-party-ms", "verified-publisher", "community", "untrusted"]
+    }
+  },
+
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "$comment": { "type": "string" },
+
+    "manifest_version": {
+      "const": "1.0.0",
+      "description": "Always 1.0.0 for v1. Bumped only on a breaking manifest-shape change."
+    },
+
+    "bundle": {
+      "type": "object",
+      "required": ["name", "version", "created_at", "created_by", "tier", "spec_count"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+          "description": "Stable kebab-case bundle identity. Deploy dir is ~/.frootai/bundles/<name>/ ([X6.8])."
+        },
+        "version": { "$ref": "#/$defs/semver", "description": "SemVer per bundle ([X6.17])." },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp; doubles as SOURCE_DATE_EPOCH for deterministic tar mtimes ([X6.3])."
+        },
+        "created_by": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "tier": { "$ref": "#/$defs/trustTier", "description": "HIGHEST trust tier in the bundle (informational; per-spec trust is authoritative)." },
+        "spec_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "MUST equal specs.length — a cheap tamper check (enforced by the verifier, not the schema)."
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "public_key_url", "signature_file", "rekor"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": { "const": "cosign", "description": "v1 signs with Cosign. Reserved for future signers." },
+        "public_key_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Where to fetch the verifying key; kernels SHOULD also ship it bundled for true air-gap ([X6.6])."
+        },
+        "signature_file": {
+          "const": "signature.sig",
+          "description": "Reserved bundle-root path of the detached signature over manifest.json."
+        },
+        "rekor": {
+          "type": "object",
+          "required": ["logged"],
+          "additionalProperties": false,
+          "properties": {
+            "logged": { "type": "boolean", "description": "Whether the signature was logged to a Sigstore Rekor transparency log. Air-gap bundles may set false." },
+            "log_index": { "type": ["integer", "null"], "description": "Rekor log index when logged; null otherwise." }
+          }
+        }
+      }
+    },
+
+    "specs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["slug", "path", "publisher", "trust", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": { "$ref": "#/$defs/slug" },
+          "path": {
+            "type": "string",
+            "pattern": "^specs/[a-z0-9]([a-z0-9-]*[a-z0-9])?\\.json$",
+            "description": "Bundle-relative path; MUST be specs/<slug>.json."
+          },
+          "publisher": { "type": "string", "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$" },
+          "trust": { "$ref": "#/$defs/trustTier" },
+          "sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+
+    "snapshots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "path", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": { "$ref": "#/$defs/slug" },
+          "path": {
+            "type": "string",
+            "pattern": "^snapshots/[a-z0-9]([a-z0-9-]*[a-z0-9])?\\.json$"
+          },
+          "sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+
+    "packages": {
+      "type": "array",
+      "description": "npm/uvx tarballs the specs' transports reference. Empty for an all-hosted bundle.",
+      "items": {
+        "type": "object",
+        "required": ["name", "version", "path", "manager", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "description": "Package id (e.g. @playwright/mcp)." },
+          "version": { "type": "string", "minLength": 1 },
+          "path": {
+            "type": "string",
+            "pattern": "^packages/.+\\.(tgz|tar\\.gz|whl)$",
+            "description": "Bundle-relative path of the package tarball/wheel."
+          },
+          "manager": { "type": "string", "enum": ["npm", "uvx"], "description": "Drives how the kernel runs the bundled package ([X6.7])." },
+          "sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+
+    "sbom": {
+      "type": "object",
+      "description": "CycloneDX SBOM reference ([X6.23]). REQUIRED for signed bundles; may be omitted for unsigned.",
+      "required": ["path", "format", "spec_version", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "const": "sbom/bundle.cdx.json" },
+        "format": { "const": "CycloneDX" },
+        "spec_version": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

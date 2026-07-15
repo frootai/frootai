@@ -171,6 +171,84 @@ Requirements: `version: 1`, valid events, bash script exists.
 
 ---
 
+## Contributing MCP Specs
+
+MCP attach specs in [`orchard/registry/mcp-specs/`](orchard/registry/mcp-specs/)
+are first-class community contributions — they let any FrootAI user
+attach an MCP server with one config line. The community-tier flow is
+designed so a non-FrootAI publisher can land a spec **without** founder
+mediation; promotion to `verified-publisher` is a separate, deliberate
+follow-up.
+
+### Where to start
+
+1. **Read the front door**:
+   [`frootai-core/docs/contributing-mcp-specs.md`](https://github.com/frootai/frootai-core/blob/main/docs/contributing-mcp-specs.md) ([X5.2])
+   — the canonical authoring guide with the community-tier section.
+2. **Walk a worked example**:
+   [`cookbook/27-submit-mcp-spec.md`](cookbook/27-submit-mcp-spec.md) ([X5.28])
+   — 6 numbered steps from `frootai mcp test <slug>` to merged-and-rendering.
+3. **Open the PR** using
+   [`.github/PULL_REQUEST_TEMPLATE/mcp-spec.md`](.github/PULL_REQUEST_TEMPLATE/mcp-spec.md) ([X5.1])
+   — auto-applies labels `mcp-spec`, `community`, `needs-founder-review`
+   and assigns `@pavle`.
+
+### What gates your PR
+
+Three sequential workflows run on every push touching `mcp-specs/`:
+
+- **Anti-abuse** ([X5.13]) — ≤3 open PRs per author + sock-puppet check.
+- **Tier-escalation guard** ([X5.12]) — no-op for bare community submissions;
+  fires only when a PR raises a publisher's trust tier.
+- **PR triage** ([X5.8]) — ajv-cli schema validation against
+  `mcp-spec-v1.schema.json`, doctrine #2 publisher cross-check against
+  the trust manifest, [X5.6] attach-test dry-run. Posts a sticky summary
+  comment.
+
+A maintainer reviews within the [X5.9] 14-day SLA.
+
+### Sister flows (separate PRs)
+
+- **Promotion `community → verified-publisher`** → use the dedicated
+  [`tier-promotion.md`](.github/PULL_REQUEST_TEMPLATE/tier-promotion.md)
+  PR template; walkthrough at
+  [`docs/tier-promotion.md`](https://github.com/frootai/frootai-core/blob/main/docs/tier-promotion.md) ([X5.11]).
+- **Handing off maintenance** → use
+  [`ownership-transfer.md`](.github/PULL_REQUEST_TEMPLATE/ownership-transfer.md);
+  walkthrough at
+  [`docs/ownership-transfer.md`](https://github.com/frootai/frootai-core/blob/main/docs/ownership-transfer.md) ([X5.24]).
+- **Reporting breakage / requesting a snapshot refresh** → open an issue
+  with [`mcp-spec-issue.md`](.github/ISSUE_TEMPLATE/mcp-spec-issue.md) ([X5.25]).
+
+### Anti-bundling rule
+
+Each PR does exactly **one thing**: ship a spec, OR promote a tier, OR
+transfer ownership. Bundling escalates review complexity disproportionately
+and the [X5.12] escalation guard will block the PR until the trust change
+is separated out.
+
+### Trust posture
+
+Community-tier specs attach **with a per-call prompt**
+(`attachWithoutPrompt: false`) — the user reads a clear elicitation before
+the transport spawns. That's the safer-by-default posture and exactly what
+the [X5.2] guide promises. Promotion to `verified-publisher` removes the
+prompt; see the [§5.4 trust criteria](https://github.com/frootai/frootai-core/blob/main/docs/internal/trust-assignment-criteria.md)
+for the substantive-signal bar.
+
+### Spec lifecycle (after merge)
+
+- Nightly attach validation against the upstream server ([X2.12]).
+- 14-day flag → 90-day archive cascade for unmaintained servers
+  ([X5.18] → [X5.19]); full policy in
+  [`docs/spec-deprecation.md`](https://github.com/frootai/frootai-core/blob/main/docs/spec-deprecation.md) ([X5.23]).
+- Per-spec shields.io badges for your upstream README ([X5.26]).
+- Marketplace listing on `frootai.dev/ecosystem/mcp/marketplace/<slug>`
+  with contributor list, freshness stamps, and a "Help improve this spec"
+  CTA when inferred.
+
+---
+
 ## Naming Conventions
 
 | Term | Meaning |

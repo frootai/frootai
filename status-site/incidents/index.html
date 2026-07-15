@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrootAI MCP Incidents</title>
+<meta name="description" content="Per-area federation incidents for FrootAI MCP marketplace servers, with linked post-mortems.">
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#050508;color:#ededf0;max-width:720px;margin:0 auto;padding:2.5rem 1.5rem}
+  h1{font-size:1.4rem}h1 span{color:#10b981}a{color:#10b981;text-decoration:none}
+  .inc{padding:.9rem 1rem;border:1px solid #1a1a2e;border-radius:.6rem;margin-bottom:.5rem;background:#0a0a12}
+  .badge{font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:999px;text-transform:uppercase}
+  .open{background:rgba(239,68,68,.12);color:#ef4444}.resolved{background:rgba(16,185,129,.12);color:#10b981}
+  .meta{color:#8b8b9a;font-size:.75rem;margin-top:.3rem}
+</style></head><body>
+<h1>Froot<span>AI</span> · MCP Incidents</h1>
+<p style="color:#8b8b9a;font-size:.85rem">Auto-created on outage; resolved on recovery. Deep-link: <code>/incidents/#&lt;id&gt;</code>.</p>
+<div id="list"></div>
+<script>
+fetch('./incidents.json').then(r=>r.json()).then(d=>{
+  const sel=location.hash.slice(1);
+  const rows=d.incidents.filter(i=>!sel||i.id===sel);
+  document.getElementById('list').innerHTML=rows.map(i=>
+    '<div class="inc"><div style="display:flex;justify-content:space-between"><strong>'+i.title+'</strong>'+
+    '<span class="badge '+i.status+'">'+i.status+'</span></div>'+
+    '<div class="meta">'+i.detail+' · opened '+i.openedAt.slice(0,10)+(i.resolvedAt?' · resolved '+i.resolvedAt.slice(0,10):'')+
+    ' · <a href="'+i.postmortemUrl+'">post-mortem</a></div></div>').join('')||'<p>No matching incident.</p>';
+});
+addEventListener('hashchange',()=>location.reload());
+</script>
+</body></html>

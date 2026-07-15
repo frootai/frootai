@@ -1,0 +1,67 @@
+{
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "$comment": "[X5.10] First community-PR rehearsal — synthetic Tier-3 sample spec that proves the [X5.1]–[X5.9] pipeline works end-to-end without polluting the production roster. Filename starts with `_` so every spec-dir reader (`isSpecFile`, `listSpecFiles`, public-feed builder, candidate-trust gate, attach-validate matrix) skips it. Publisher `netdata` is a real community-tier knownPublishers key (doctrine #2). Transport is intentionally a TODO placeholder so a human-author PR is required to promote — same posture as an [X5.3] auto-discovered stub. License: CC0-1.0.",
+  "spec_version": "1.0.0",
+
+  "slug": "netdata-mcp-server",
+  "title": "Netdata (community sample)",
+  "publisher": "netdata",
+  "trust": "community",
+  "tool_prefix": "netdata-mcp-server",
+  "description": "Real-time infrastructure monitoring with metrics, logs, alerts, and ML-based anomaly detection — exposed as an MCP server. [X5.10 rehearsal sample.]",
+
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "TODO",
+    "args": [],
+    "url": null,
+    "env_passthrough": ["NETDATA_API_TOKEN"]
+  },
+
+  "version_pin": {
+    "package": null,
+    "version_range": "0.0.0",
+    "tested_version": "0.0.0"
+  },
+
+  "env_vars": [
+    {
+      "name": "NETDATA_API_TOKEN",
+      "required": false,
+      "auth_mode": "api-token",
+      "description": "Optional Netdata Cloud API token; unset = local-only access to the Netdata agent on $NETDATA_HOST."
+    }
+  ],
+
+  "auth": {
+    "recipe": "[X5.10 rehearsal] Local-agent flow needs no credentials; cloud flow requires NETDATA_API_TOKEN. Human-author PR must replace this with a verified recipe before promotion to verified-publisher.",
+    "modes": ["none", "api-token"]
+  },
+
+  "sample_tools": [
+    {
+      "name": "query_metrics",
+      "summary": "Query time-series metrics from a Netdata agent or Netdata Cloud space."
+    },
+    {
+      "name": "list_alarms",
+      "summary": "List active alarms and their severity across monitored nodes."
+    }
+  ],
+
+  "destructive_tools": [],
+
+  "known_limitations": [
+    "Destructive-action audit (X2.18): no destructive tools — read-only metrics + alarm queries.",
+    "[X5.10 rehearsal] Transport is a TODO placeholder; this spec does NOT live-attach. A human-author PR must fill in the real npx/uvx invocation before flipping to verified-publisher."
+  ],
+
+  "client_install": {
+    "claude_desktop": "[X5.10 rehearsal] Pending real transport — see the source repo for current install instructions.",
+    "cursor": "[X5.10 rehearsal] Pending real transport — see the source repo for current install instructions.",
+    "vscode": "[X5.10 rehearsal] Pending real transport — see the source repo for current install instructions."
+  },
+
+  "last_reviewed": "2026-06-26",
+  "reviewer": "frootai-maintainer"
+}

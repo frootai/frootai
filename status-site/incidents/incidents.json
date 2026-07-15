@@ -1,0 +1,35 @@
+{
+  "$comment": "[X9.12] Auto-managed per-area incidents. Opened on [X9.10] major-outage, resolved on recovery; each links a post-mortem.",
+  "generated_at": "2026-06-28T00:44:44.006Z",
+  "source": "seed",
+  "counts": {
+    "open": 2,
+    "resolved": 0
+  },
+  "incidents": [
+    {
+      "id": "inc-elastic-2026-06-27",
+      "area": "elastic",
+      "status": "open",
+      "severity": "major",
+      "title": "elastic attach outage",
+      "openedAt": "2026-06-27T06:00:00.000Z",
+      "resolvedAt": null,
+      "detail": "30-day uptime 83.3%",
+      "url": "https://status.frootai.dev/incidents/inc-elastic-2026-06-27",
+      "postmortemUrl": "https://status.frootai.dev/incidents/inc-elastic-2026-06-27#postmortem"
+    },
+    {
+      "id": "inc-playwright-2026-06-27",
+      "area": "playwright",
+      "status": "open",
+      "severity": "major",
+      "title": "playwright attach outage",
+      "openedAt": "2026-06-27T06:00:00.000Z",
+      "resolvedAt": null,
+      "detail": "30-day uptime 93.3%",
+      "url": "https://status.frootai.dev/incidents/inc-playwright-2026-06-27",
+      "postmortemUrl": "https://status.frootai.dev/incidents/inc-playwright-2026-06-27#postmortem"
+    }
+  ]
+}

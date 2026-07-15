@@ -1,0 +1,153 @@
+# ═══════════════════════════════════════════════════════════════════════
+# [X5.9] MCP-Spec SLA Watcher — daily check for community `mcp-spec` PRs
+# that have been open >14d without a substantive review.
+#
+# Companion to:
+#   - [X5.1] PR template — applies the `mcp-spec` label
+#   - [X5.2] contributing guide — promises a 14-day SLA
+#   - [X5.8] mcp-spec-pr.yml — per-push schema validation
+#
+# Once per day:
+#   1. List every open PR carrying the `mcp-spec` label via `gh pr list`.
+#   2. Pipe the JSON into `scripts/marketplace/sla-watcher.mjs` (which lives
+#      in frootai-core and is checked out as a sibling) to compute the
+#      stale set + sticky comment bodies + Slack payload.
+#   3. Upsert a sticky "14-day SLA reminder" comment on each stale PR.
+#   4. POST the Slack digest payload to `SLACK_SLA_WEBHOOK_URL` if set.
+#
+# Idempotent: comments are upserted with `peter-evans/create-or-update-comment`
+# in `edit-mode: replace`; the body is freshly composed every run so the
+# `<age>d` field stays accurate.
+# ═══════════════════════════════════════════════════════════════════════
+
+name: MCP Spec SLA Watcher
+
+on:
+  schedule:
+    # Daily at 09:00 UTC.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      sla-days:
+        description: 'Override the SLA window (default 14)'
+        required: false
+        default: '14'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: mcp-spec-sla-watcher
+  cancel-in-progress: false
+
+jobs:
+  sla-watch:
+    name: Scan open mcp-spec PRs against 14-day SLA
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout frootai (this repo)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: frootai
+
+      - name: Checkout frootai-core (sibling, holds the watcher script)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: ${{ github.repository_owner }}/frootai-core
+          path: frootai-core
+          # ref omitted: defaults to the default branch (main)
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: List open mcp-spec PRs
+        id: list
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          gh pr list \
+            --state open \
+            --label mcp-spec \
+            --json number,title,url,author,createdAt,labels,reviews,isDraft \
+            --limit 200 > "$RUNNER_TEMP/prs.json"
+          # `gh` returns author as an object; flatten to login string so the
+          # watcher's pure schema sees a string.
+          node -e "const fs=require('fs');const arr=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/prs.json','utf8'));for(const p of arr){p.author=p.author&&p.author.login||'';}fs.writeFileSync(process.env.RUNNER_TEMP+'/prs.json',JSON.stringify(arr));"
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/prs.json','utf8')).length)")
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Open mcp-spec PRs: $COUNT"
+
+      - name: Compute stale set (X5.9 watcher)
+        id: audit
+        run: |
+          set -euo pipefail
+          SLA="${{ github.event.inputs.sla-days || '14' }}"
+          node frootai-core/scripts/marketplace/sla-watcher.mjs \
+            --pr-json "$RUNNER_TEMP/prs.json" \
+            --sla-days "$SLA" \
+            2> "$RUNNER_TEMP/watcher.json" \
+            > "$RUNNER_TEMP/watcher.summary.txt"
+          cat "$RUNNER_TEMP/watcher.summary.txt"
+          STALE=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/watcher.json','utf8')).stale.length)")
+          echo "stale=$STALE" >> "$GITHUB_OUTPUT"
+
+      - name: Upsert sticky nag comment on each stale PR
+        if: steps.audit.outputs.stale != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # `comment-id` is stable per PR via a hidden marker the upsert step
+          # matches on; we use peter-evans via the gh CLI for simplicity here.
+          MARKER='<!-- sla-watcher:x5.9 -->'
+          node -e "
+            const fs=require('fs');
+            const out=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/watcher.json','utf8'));
+            for (const { number, comment } of out.stale) {
+              process.stdout.write(JSON.stringify({ number, comment }) + '\\n');
+            }
+          " | while IFS= read -r line; do
+            NUM=$(node -e "console.log(JSON.parse(process.argv[1]).number)" "$line")
+            BODY=$(node -e "console.log(JSON.parse(process.argv[1]).comment)" "$line")
+            cd frootai
+            # Find an existing sla-watcher comment by the marker; edit it if
+            # present, else create a new one. `gh pr comment` doesn't support
+            # edit-by-marker natively so we use the REST API.
+            EXISTING=$(gh api "/repos/${{ github.repository }}/issues/$NUM/comments" --jq "map(select(.body | contains(\"$MARKER\"))) | .[0].id" || echo "")
+            FULL="$MARKER"$'\n'"$BODY"
+            if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+              gh api --method PATCH "/repos/${{ github.repository }}/issues/comments/$EXISTING" -f body="$FULL" > /dev/null
+              echo "edited sla comment on #$NUM"
+            else
+              gh pr comment "$NUM" --body "$FULL"
+              echo "created sla comment on #$NUM"
+            fi
+            cd ..
+          done
+
+      - name: Send Slack digest (if SLACK_SLA_WEBHOOK_URL is set)
+        if: steps.audit.outputs.stale != '0' && env.SLACK_SLA_WEBHOOK_URL != ''
+        env:
+          SLACK_SLA_WEBHOOK_URL: ${{ secrets.SLACK_SLA_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          PAYLOAD=$(node -e "process.stdout.write(JSON.stringify(JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/watcher.json','utf8')).slack))")
+          curl -fsSL -X POST -H 'Content-Type: application/json' --data "$PAYLOAD" "$SLACK_SLA_WEBHOOK_URL"
+          echo "slack digest sent"
+
+      - name: Step summary
+        if: always()
+        run: |
+          {
+            echo "## MCP-Spec SLA Watcher"
+            echo ""
+            echo "- open \`mcp-spec\` PRs: ${{ steps.list.outputs.count }}"
+            echo "- stale (>${{ github.event.inputs.sla-days || '14' }}d, unreviewed): ${{ steps.audit.outputs.stale || '0' }}"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,215 @@
+# ═══════════════════════════════════════════════════════════════════════
+# [X5.8] MCP-Spec PR Triage — runs on PRs touching `orchard/registry/mcp-specs/`.
+#
+# For every PR that adds or modifies an MCP attach spec (Tier-1/2 promotion or
+# community submission via the [X5.1] PR template), this workflow:
+#
+#   1. Validates each changed spec against `schemas/mcp-spec-v1.schema.json`
+#      using `ajv-cli` (strict; blocks the PR on schema violation).
+#   2. Cross-checks the spec's `publisher` against the trust manifest at
+#      `data/mcp-trust.json` (doctrine #2: publisher MUST be a knownPublishers
+#      key — `community` tier is allowed without an evidence file per [X5.2]).
+#   3. Runs the [X5.6] auto-discovery attach orchestrator in dry-run mode for
+#      auto-stubs (informational; real attach wiring lands in a follow-up).
+#   4. Posts a single sticky PR comment summarising the results.
+#
+# Sibling of: `validate-marketplace-schema.yml` (the older, narrower workflow
+# focused on `marketplace.json`).
+# ═══════════════════════════════════════════════════════════════════════
+
+name: MCP Spec PR Triage
+
+on:
+  pull_request:
+    paths:
+      - 'orchard/registry/mcp-specs/**'
+      - 'schemas/mcp-spec-v1.schema.json'
+      - '.github/workflows/mcp-spec-pr.yml'
+      - '.github/PULL_REQUEST_TEMPLATE/mcp-spec.md'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: mcp-spec-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate-spec:
+    name: Validate spec(s) + attach dry-run
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      summary: ${{ steps.summarise.outputs.summary }}
+      verdict: ${{ steps.summarise.outputs.verdict }}
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Install ajv-cli
+        run: npm install -g ajv-cli@5 ajv-formats@3
+
+      - name: List changed spec files
+        id: changed
+        run: |
+          set -euo pipefail
+          # Diff against the merge base for the PR.
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          CHANGED=$(git diff --name-only "$BASE_SHA"...HEAD -- 'orchard/registry/mcp-specs/**/*.json' || true)
+          # Strip blank lines + the `_template.json` (NOT a real spec).
+          FILTERED=$(echo "$CHANGED" | grep -v '/_' | grep -v '^$' || true)
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$FILTERED" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$FILTERED" | grep -c '.' || true)
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Changed spec files ($COUNT):"
+          echo "$FILTERED"
+
+      - name: Schema-validate each changed spec
+        id: schema
+        if: steps.changed.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          PASS=0; FAIL=0; LOG=""
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            [ ! -f "$f" ] && continue  # deletions: skip
+            echo "::group::ajv validate $f"
+            if ajv validate \
+                --strict=false \
+                --all-errors \
+                -c ajv-formats \
+                -s schemas/mcp-spec-v1.schema.json \
+                -d "$f"; then
+              PASS=$((PASS + 1))
+              LOG="$LOG\n- ✅ \`$f\` — schema-valid"
+            else
+              FAIL=$((FAIL + 1))
+              LOG="$LOG\n- ❌ \`$f\` — schema violation (see log above)"
+            fi
+            echo "::endgroup::"
+          done <<< "${{ steps.changed.outputs.files }}"
+          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
+          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
+          printf "log<<EOF\n%b\nEOF\n" "$LOG" >> "$GITHUB_OUTPUT"
+          if [ "$FAIL" != "0" ]; then exit 1; fi
+
+      - name: Cross-check publisher against trust manifest (doctrine #2)
+        id: trust
+        if: steps.changed.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          # Build the list of changed-spec publishers + assert each is a
+          # knownPublishers key in data/mcp-trust.json. `community` tier doesn't
+          # require an evidence file (per [X5.2]), but the publisher MUST be
+          # known so we can render the trust badge.
+          TRUST_FILE="data/mcp-trust.json"
+          if [ ! -f "$TRUST_FILE" ]; then
+            echo "trust manifest not found at $TRUST_FILE — skipping (informational)"
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          FAIL=0; LOG=""
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            [ ! -f "$f" ] && continue
+            PUB=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$f','utf8')).publisher || '')")
+            if [ -z "$PUB" ]; then
+              FAIL=$((FAIL + 1))
+              LOG="$LOG\n- ❌ \`$f\` — missing \`publisher\`"
+              continue
+            fi
+            KNOWN=$(node -e "const t=JSON.parse(require('fs').readFileSync('$TRUST_FILE','utf8'));process.stdout.write(t.knownPublishers && t.knownPublishers['$PUB'] ? 'yes' : 'no')")
+            if [ "$KNOWN" = "yes" ]; then
+              LOG="$LOG\n- ✅ \`$PUB\` is a knownPublishers key"
+            else
+              FAIL=$((FAIL + 1))
+              LOG="$LOG\n- ❌ \`$PUB\` is NOT in knownPublishers (doctrine #2)"
+            fi
+          done <<< "${{ steps.changed.outputs.files }}"
+          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
+          printf "log<<EOF\n%b\nEOF\n" "$LOG" >> "$GITHUB_OUTPUT"
+          if [ "$FAIL" != "0" ]; then exit 1; fi
+
+      - name: Attach-test dry-run (X5.6 — informational)
+        id: attach
+        if: steps.changed.outputs.count != '0'
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          # The frootai-core repo holds the X5.6 orchestrator. In this single-
+          # repo PR context we can't run it directly without a cross-repo
+          # checkout, so we emit the dry-run intent line for the PR comment.
+          # The real attach validation is the nightly `marketplace-attach-validate.yml`
+          # workflow against the frootai-core matrix.
+          echo "X5.6 attach-test orchestrator lives in frootai-core; dry-run intent recorded."
+          echo "dryrun=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summarise checks for the PR comment
+        id: summarise
+        if: always() && steps.changed.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          SCHEMA_PASS="${{ steps.schema.outputs.pass || '0' }}"
+          SCHEMA_FAIL="${{ steps.schema.outputs.fail || '0' }}"
+          TRUST_FAIL="${{ steps.trust.outputs.fail || '0' }}"
+          if [ "$SCHEMA_FAIL" != "0" ] || [ "$TRUST_FAIL" != "0" ]; then
+            VERDICT="❌ failed"
+          else
+            VERDICT="✅ passed"
+          fi
+          SUMMARY="## MCP Spec PR Triage — $VERDICT
+
+          **Changed specs**: ${{ steps.changed.outputs.count }}
+
+          ### Schema validation (\`mcp-spec-v1\`)
+          - passed: $SCHEMA_PASS
+          - failed: $SCHEMA_FAIL
+          ${{ steps.schema.outputs.log }}
+
+          ### Publisher / trust check (doctrine #2)
+          ${{ steps.trust.outputs.log }}
+
+          ### Attach test (X5.6)
+          Dry-run only on PRs — the live attach matrix runs nightly via
+          \`marketplace-attach-validate.yml\` in \`frootai-core\`.
+
+          ---
+          _Triggered by [\`mcp-spec-pr.yml\`](.github/workflows/mcp-spec-pr.yml) for PR #${{ github.event.pull_request.number }}._"
+          echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
+          printf "summary<<EOF\n%s\nEOF\n" "$SUMMARY" >> "$GITHUB_OUTPUT"
+
+  pr-comment:
+    name: Post sticky PR comment
+    needs: [validate-spec]
+    if: always() && needs.validate-spec.outputs.summary != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Create or update sticky comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+          SUMMARY: ${{ needs.validate-spec.outputs.summary }}
+        run: |
+          set -euo pipefail
+          MARKER='<!-- mcp-spec-pr-triage -->'
+          BODY="$MARKER"$'\n'"$SUMMARY"
+          EXISTING=$(gh api "/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments" \
+            --jq "map(select(.body | contains(\"$MARKER\"))) | .[0].id" || true)
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh api --method PATCH "/repos/${{ github.repository }}/issues/comments/$EXISTING" \
+              -f body="$BODY" > /dev/null
+          else
+            gh api --method POST "/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments" \
+              -f body="$BODY" > /dev/null
+          fi

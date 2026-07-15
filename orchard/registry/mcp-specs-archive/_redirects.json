@@ -1,0 +1,7 @@
+{
+  "$comment": "[X5.19] Auto-deprecation redirect manifest. Maps archived community-spec slugs to their `mcp-specs-archive/` location + the day-count at archival. UI consumers (the marketplace detail page) read this to render a `Deprecated` notice + link to the archived spec.",
+  "generated_at": "2026-06-26T00:00:00.000Z",
+  "threshold_days": 90,
+  "count": 0,
+  "redirects": {}
+}

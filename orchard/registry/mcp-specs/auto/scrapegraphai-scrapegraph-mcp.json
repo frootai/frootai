@@ -1,0 +1,37 @@
+{
+  "$schema": "https://frootai.dev/schemas/mcp-spec-v1.json",
+  "$comment": "[X5.3] auto-discovered stub from mcp-marketplace-cache.json. Transport NOT inferred — needs human review. Promote by moving to mcp-specs/<slug>.json + filling TODOs + adding trust-evidence.",
+  "spec_version": "1.0.0",
+  "slug": "scrapegraphai-scrapegraph-mcp",
+  "title": "ScrapeGraphAI Scrapegraph",
+  "publisher": "scrapegraphai",
+  "trust": "community",
+  "tool_prefix": "scrapegraphai-scrapegraph-mcp",
+  "description": "AI-powered web scraping and data extraction capabilities through ScrapeGraph API",
+  "transport": {
+    "kind": "stdio-subprocess",
+    "command": "TODO",
+    "args": [],
+    "url": null,
+    "env_passthrough": []
+  },
+  "version_pin": {
+    "package": null,
+    "version_range": "0.0.0",
+    "tested_version": "0.0.0"
+  },
+  "env_vars": [],
+  "auth": {
+    "recipe": "TODO — inferred stub; review server docs and fill in the auth recipe before promotion.",
+    "modes": [
+      "unknown"
+    ]
+  },
+  "sample_tools": [],
+  "destructive_tools": [],
+  "known_limitations": [
+    "Auto-discovered stub — tools/list has not been snapshotted; env-var matrix is empty."
+  ],
+  "last_reviewed": "2026-06-26",
+  "reviewer": "auto-discover"
+}

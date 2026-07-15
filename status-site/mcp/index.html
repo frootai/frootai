@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrootAI MCP Area Status</title>
+<meta name="description" content="Per-area federation health for FrootAI MCP marketplace servers — subscribable.">
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#050508;color:#ededf0;max-width:720px;margin:0 auto;padding:2.5rem 1.5rem}
+  h1{font-size:1.4rem}h1 span{color:#10b981}
+  a{color:#10b981;text-decoration:none}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;border:1px solid #1a1a2e;border-radius:.6rem;margin-bottom:.4rem;background:#0a0a12}
+  .badge{font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;text-transform:uppercase}
+  .operational{background:rgba(16,185,129,.12);color:#10b981}
+  .degraded{background:rgba(245,158,11,.12);color:#f59e0b}
+  .major-outage{background:rgba(239,68,68,.12);color:#ef4444}
+  .unknown{background:rgba(255,255,255,.06);color:#8b8b9a}
+  .sub{margin-top:1.5rem;font-size:.8rem;color:#8b8b9a}
+</style></head><body>
+<h1>Froot<span>AI</span> · MCP Area Status</h1>
+<p style="color:#8b8b9a;font-size:.85rem">Per-area federation health. Deep-link a server: <code>/mcp/#&lt;slug&gt;</code>.</p>
+<div id="list"></div>
+<p class="sub">Subscribe: <a href="./feed.xml">RSS feed</a> · data: <a href="./areas.json">areas.json</a></p>
+<script>
+fetch('./areas.json').then(r=>r.json()).then(d=>{
+  const sel=location.hash.slice(1);
+  const rows=d.areas.filter(a=>!sel||a.slug===sel);
+  document.getElementById('list').innerHTML=rows.map(a=>
+    '<div class="row"><div><strong>'+a.slug+'</strong>'+
+    (a.uptimePct==null?'':' <span style="color:#8b8b9a;font-size:.75rem">'+a.uptimePct+'% uptime (30d) · validated '+(a.lastValidated||'—')+'</span>')+
+    '</div><span class="badge '+a.status+'">'+a.status+'</span></div>').join('')||'<p>Unknown area.</p>';
+});
+addEventListener('hashchange',()=>location.reload());
+</script>
+</body></html>

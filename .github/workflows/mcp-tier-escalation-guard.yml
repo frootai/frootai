@@ -1,0 +1,188 @@
+# ═══════════════════════════════════════════════════════════════════════
+# [X5.12] MCP Tier-Escalation Guard — blocks PRs that raise a publisher's
+# trust tier until @pavle posts an `/approve-promotion` comment.
+#
+# Companion to:
+#   - [X5.8] mcp-spec-pr.yml — per-push schema validation
+#   - [X5.9] mcp-spec-sla-watcher.yml — 14-day review nag
+#   - [X5.11] tier-promotion.md walkthrough + tier-promotion.md PR template
+#
+# Escalation signals:
+#   - A spec under `orchard/registry/mcp-specs/` flipped its `trust` field
+#     toward a higher tier (community → verified-publisher, etc.).
+#   - A new file was added under `orchard/registry/mcp-trust-evidence/`.
+#
+# Approval marker: a PR comment from @pavle containing `/approve-promotion`
+# (bare = global, `/approve-promotion <publisher>` = scoped per-publisher).
+#
+# Triggers:
+#   - pull_request (opened, synchronize, reopened) — re-evaluates on each push.
+#   - issue_comment (created, edited) — re-evaluates when @pavle approves.
+# ═══════════════════════════════════════════════════════════════════════
+
+name: MCP Tier-Escalation Guard
+
+on:
+  pull_request:
+    paths:
+      - 'orchard/registry/mcp-specs/**'
+      - 'orchard/registry/mcp-trust-evidence/**'
+      - '.github/workflows/mcp-tier-escalation-guard.yml'
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: mcp-tier-escalation-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: Trust-escalation gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Comment trigger: only run when the comment is on a PR (not a plain issue)
+    # AND mentions our marker — avoids burning runner minutes on every drive-by.
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       contains(github.event.comment.body, '/approve-promotion'))
+    steps:
+      - name: Resolve PR number
+        id: pr
+        run: |
+          set -euo pipefail
+          NUM="${{ github.event.pull_request.number || github.event.issue.number }}"
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout frootai (this repo)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: frootai
+          fetch-depth: 0
+
+      - name: Checkout frootai-core (sibling, holds the helper)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: ${{ github.repository_owner }}/frootai-core
+          path: frootai-core
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Compute spec-diffs + evidence-events for PR #${{ steps.pr.outputs.number }}
+        id: diffs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          # Resolve the PR's base + head SHAs (works on both pull_request and
+          # issue_comment triggers).
+          PR_JSON=$(gh pr view "$PR_NUMBER" --json baseRefOid,headRefOid,number)
+          BASE=$(echo "$PR_JSON" | node -e "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>console.log(JSON.parse(s).baseRefOid))")
+          HEAD=$(echo "$PR_JSON" | node -e "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>console.log(JSON.parse(s).headRefOid))")
+          # File-event list (added/modified/removed) for the PR.
+          gh pr diff "$PR_NUMBER" --name-only > "$RUNNER_TEMP/changed.txt"
+          # Build the spec-diff list: for each changed JSON under mcp-specs/,
+          # parse `before` (from base) + `after` (from head).
+          node <<'NODE' > "$RUNNER_TEMP/spec-diffs.json"
+          const fs=require('fs');const cp=require('child_process');
+          const base=process.env.BASE_SHA || cp.execSync("git rev-parse origin/main",{encoding:'utf8'}).trim();
+          const changed=fs.readFileSync(process.env.RUNNER_TEMP+'/changed.txt','utf8').split(/\r?\n/).filter(Boolean);
+          const specs=changed.filter(f=>/^orchard\/registry\/mcp-specs\/[^/_][^/]*\.json$/.test(f));
+          const out=[];
+          for(const f of specs){
+            let before=null, after=null;
+            try { before=JSON.parse(cp.execSync(`git show ${base}:${f}`,{encoding:'utf8',stdio:['ignore','pipe','ignore']})); } catch {}
+            try { after=JSON.parse(fs.readFileSync(f,'utf8')); } catch {}
+            out.push({file:f,before,after});
+          }
+          process.stdout.write(JSON.stringify(out,null,2));
+          NODE
+          # Build the evidence-events list (status only).
+          node <<'NODE' > "$RUNNER_TEMP/evidence-events.json"
+          const fs=require('fs');const cp=require('child_process');
+          const base=process.env.BASE_SHA || 'origin/main';
+          const changed=fs.readFileSync(process.env.RUNNER_TEMP+'/changed.txt','utf8').split(/\r?\n/).filter(Boolean);
+          const ev=changed.filter(f=>/^orchard\/registry\/mcp-trust-evidence\//.test(f));
+          const out=[];
+          for(const f of ev){
+            let status='modified';
+            try { cp.execSync(`git cat-file -e ${base}:${f}`,{stdio:'ignore'}); }
+            catch { status='added'; }
+            out.push({file:f,status});
+          }
+          process.stdout.write(JSON.stringify(out,null,2));
+          NODE
+          echo "spec-diffs: $(cat $RUNNER_TEMP/spec-diffs.json)"
+          echo "evidence-events: $(cat $RUNNER_TEMP/evidence-events.json)"
+
+      - name: Fetch PR review comments + issue comments
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          # Issue comments (the conversation thread; /approve-promotion lives here).
+          gh api "/repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}/comments" \
+            --jq '[.[] | {author: {login: .user.login}, body: .body}]' \
+            > "$RUNNER_TEMP/comments.json"
+
+      - name: Run trust-escalation gate
+        id: gate
+        run: |
+          set -euo pipefail
+          node frootai-core/scripts/marketplace/trust-escalation.mjs \
+            --spec-diffs "$RUNNER_TEMP/spec-diffs.json" \
+            --evidence-events "$RUNNER_TEMP/evidence-events.json" \
+            --comments "$RUNNER_TEMP/comments.json" \
+            --approver pavle \
+            > "$RUNNER_TEMP/verdict.json" \
+            2> "$RUNNER_TEMP/approval-comment.md" \
+            && echo "blocked=false" >> "$GITHUB_OUTPUT" \
+            || echo "blocked=true" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/verdict.json"
+
+      - name: Upsert sticky approval-request comment (when blocked)
+        if: steps.gate.outputs.blocked == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          MARKER='<!-- trust-escalation:x5.12 -->'
+          BODY=$(cat "$RUNNER_TEMP/approval-comment.md")
+          EXISTING=$(gh api "/repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}/comments" \
+            --jq "map(select(.body | contains(\"$MARKER\"))) | .[0].id" || echo "")
+          FULL="$MARKER"$'\n'"$BODY"
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh api --method PATCH "/repos/${{ github.repository }}/issues/comments/$EXISTING" -f body="$FULL" > /dev/null
+            echo "edited existing escalation comment"
+          else
+            gh pr comment "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --body "$FULL"
+            echo "created new escalation comment"
+          fi
+
+      - name: Fail the check when blocked (gate enforcement)
+        if: steps.gate.outputs.blocked == 'true'
+        run: |
+          echo "::error::Trust escalation requires @pavle to comment \`/approve-promotion\` (or scoped per publisher). See sticky comment on the PR."
+          exit 1
+
+      - name: Step summary
+        if: always()
+        run: |
+          {
+            echo "## MCP Tier-Escalation Guard"
+            echo ""
+            echo "- PR: #${{ steps.pr.outputs.number }}"
+            echo "- blocked: ${{ steps.gate.outputs.blocked }}"
+          } >> "$GITHUB_STEP_SUMMARY"

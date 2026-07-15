@@ -1,0 +1,80 @@
+{
+  "$comment": "[X9.10] Per-area MCP status index for status.frootai.dev/mcp/<slug>. Source: [X9.1] telemetry + [X9.8] uptime.",
+  "generated_at": "2026-06-28T00:37:51.492Z",
+  "source": "seed",
+  "asOf": "2026-06-27T06:00:00.000Z",
+  "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml",
+  "counts": {
+    "operational": 3,
+    "major-outage": 2,
+    "degraded": 1
+  },
+  "areas": [
+    {
+      "slug": "azure",
+      "status": "operational",
+      "uptimePct": 100,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": 1,
+      "p95Ms": 578,
+      "path": "/mcp/azure",
+      "url": "https://status.frootai.dev/mcp/azure",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    },
+    {
+      "slug": "elastic",
+      "status": "major-outage",
+      "uptimePct": 83.3,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": null,
+      "p95Ms": null,
+      "path": "/mcp/elastic",
+      "url": "https://status.frootai.dev/mcp/elastic",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    },
+    {
+      "slug": "github",
+      "status": "operational",
+      "uptimePct": 100,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": 1,
+      "p95Ms": 395,
+      "path": "/mcp/github",
+      "url": "https://status.frootai.dev/mcp/github",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    },
+    {
+      "slug": "ms-learn",
+      "status": "operational",
+      "uptimePct": 100,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": null,
+      "p95Ms": null,
+      "path": "/mcp/ms-learn",
+      "url": "https://status.frootai.dev/mcp/ms-learn",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    },
+    {
+      "slug": "playwright",
+      "status": "major-outage",
+      "uptimePct": 93.3,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": 0.9,
+      "p95Ms": 1507,
+      "path": "/mcp/playwright",
+      "url": "https://status.frootai.dev/mcp/playwright",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    },
+    {
+      "slug": "stripe",
+      "status": "degraded",
+      "uptimePct": 96.7,
+      "lastValidated": "2026-06-27T06:00:00.000Z",
+      "successRate": null,
+      "p95Ms": null,
+      "path": "/mcp/stripe",
+      "url": "https://status.frootai.dev/mcp/stripe",
+      "subscribeUrl": "https://status.frootai.dev/mcp/feed.xml"
+    }
+  ]
+}

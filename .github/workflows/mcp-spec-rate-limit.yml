@@ -1,0 +1,232 @@
+# ═══════════════════════════════════════════════════════════════════════
+# [X5.13] MCP Spec Anti-Abuse Gate — per-author rate-limit (≤3 open PRs)
+# + sock-puppet promotion detection.
+#
+# Companion to:
+#   - [X5.8] mcp-spec-pr.yml — per-push schema validation (X5.13 runs ALONGSIDE)
+#   - [X5.9] mcp-spec-sla-watcher.yml — nags maintainers on stale PRs
+#   - [X5.11] tier-promotion.md — the promotion walkthrough
+#   - [X5.12] mcp-tier-escalation-guard.yml — founder-approval gate;
+#     X5.13 fires BEFORE escalation reaches X5.12 (cheap drop-shipping check first)
+#
+# Triggers:
+#   - pull_request (opened, reopened, synchronize) — re-evaluates on push
+#   - issue_comment (created, edited) — re-evaluates when an insider posts
+#     `/coauthor-attest <publisher>` to unblock a sock-puppet flag
+# ═══════════════════════════════════════════════════════════════════════
+
+name: MCP Spec Anti-Abuse Gate
+
+on:
+  pull_request:
+    paths:
+      - 'orchard/registry/mcp-specs/**'
+      - 'orchard/registry/mcp-trust-evidence/**'
+      - '.github/workflows/mcp-spec-rate-limit.yml'
+    types: [opened, reopened, synchronize]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: mcp-spec-rate-limit-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Rate-limit + sock-puppet check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       contains(github.event.comment.body, '/coauthor-attest'))
+    steps:
+      - name: Resolve PR number
+        id: pr
+        run: |
+          set -euo pipefail
+          NUM="${{ github.event.pull_request.number || github.event.issue.number }}"
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout frootai (this repo)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: frootai
+          fetch-depth: 0
+
+      - name: Checkout frootai-core (sibling — holds the helper)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: ${{ github.repository_owner }}/frootai-core
+          path: frootai-core
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Snapshot current PR (number, author, files, comments)
+        id: snap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          # Current PR — author + changed files + comments
+          gh pr view "$PR_NUMBER" --json number,url,author,files,labels > "$RUNNER_TEMP/pr-base.json"
+          gh api "/repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
+            --jq '[.[] | {author: {login: .user.login}, body: .body}]' \
+            > "$RUNNER_TEMP/pr-comments.json"
+          # Flatten the gh pr view shape: author is {login}, files is [{path}].
+          node -e "
+            const fs=require('fs');
+            const base=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/pr-base.json','utf8'));
+            const comments=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/pr-comments.json','utf8'));
+            const out={
+              number:base.number, url:base.url,
+              author:{login: base.author && base.author.login || ''},
+              files:(base.files||[]).map(f=>f.path),
+              labels:(base.labels||[]).map(l=>({name:l.name})),
+              comments,
+            };
+            fs.writeFileSync(process.env.RUNNER_TEMP+'/current-pr.json', JSON.stringify(out,null,2));
+          "
+
+      - name: List all open mcp-spec / evidence PRs (for the rate-limit count)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          gh pr list \
+            --state open \
+            --json number,url,author,files \
+            --limit 200 \
+            > "$RUNNER_TEMP/open-prs-raw.json"
+          # Flatten + scope to PRs that actually touch mcp-specs/ — the helper's
+          # countOpenPrsByAuthor does its own filter but emptying the input
+          # early keeps the JSON small.
+          node -e "
+            const fs=require('fs');
+            const arr=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/open-prs-raw.json','utf8'));
+            const out=arr.map(p=>({
+              number:p.number, url:p.url,
+              author:{login: p.author && p.author.login || ''},
+              files:(p.files||[]).map(f=>f.path),
+              state:'open',
+            }));
+            fs.writeFileSync(process.env.RUNNER_TEMP+'/open-prs.json', JSON.stringify(out,null,2));
+          "
+
+      - name: Compute spec + evidence + prior-spec snapshots for this PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          cd frootai
+          # First spec file the PR touches under mcp-specs/ — the rate-limit
+          # check is per-author (doesn't need a spec); the sock-puppet check
+          # needs ONE spec + (optionally) its evidence file + the prior-tier
+          # snapshot. We pick the first changed spec; if a PR somehow promotes
+          # multiple, the X5.12 escalation gate enforces approval per-publisher
+          # downstream and the workflow runs the X5.13 helper per spec in a
+          # follow-up.
+          SPEC=$(node -e "
+            const arr=JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/current-pr.json','utf8')).files;
+            const s=arr.find(f=>/^orchard\/registry\/mcp-specs\/[^/_][^/]*\.json$/.test(f));
+            process.stdout.write(s||'');
+          ")
+          if [ -z "$SPEC" ]; then
+            echo "no mcp-specs/<slug>.json touched — sock-puppet check is a no-op for this PR"
+            echo "null" > "$RUNNER_TEMP/spec.json"
+            echo "null" > "$RUNNER_TEMP/evidence.json"
+            echo "null" > "$RUNNER_TEMP/prior.json"
+            exit 0
+          fi
+          # Current spec
+          cp "$SPEC" "$RUNNER_TEMP/spec.json"
+          # Optional evidence file alongside (named after the publisher key)
+          PUB=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/spec.json','utf8')).publisher||'')")
+          EV="orchard/registry/mcp-trust-evidence/$PUB.md"
+          if [ -f "$EV" ]; then
+            # Extract YAML frontmatter into JSON (just the reviewer field we care about)
+            node -e "
+              const fs=require('fs');
+              const raw=fs.readFileSync('$EV','utf8');
+              const m=raw.match(/^---\s*([\s\S]*?)\s*---/);
+              const rev=(m && (m[1].match(/^\s*reviewer:\s*(.+)$/m)||[])[1]||'').trim();
+              fs.writeFileSync(process.env.RUNNER_TEMP+'/evidence.json', JSON.stringify({reviewer: rev}));
+            "
+          else
+            echo "null" > "$RUNNER_TEMP/evidence.json"
+          fi
+          # Prior spec (from base SHA) — feeds the trust-flip detection
+          if git cat-file -e "$BASE_SHA:$SPEC" 2>/dev/null; then
+            git show "$BASE_SHA:$SPEC" | node -e "
+              let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{
+                const before=JSON.parse(s);
+                require('fs').writeFileSync(process.env.RUNNER_TEMP+'/prior.json', JSON.stringify({before:{trust:before.trust}}));
+              });
+            "
+          else
+            # New spec — no prior trust to compare against
+            echo "null" > "$RUNNER_TEMP/prior.json"
+          fi
+
+      - name: Run anti-abuse gate
+        id: gate
+        run: |
+          set -euo pipefail
+          node frootai-core/scripts/marketplace/pr-rate-limit.mjs \
+            --open-prs "$RUNNER_TEMP/open-prs.json" \
+            --current-pr "$RUNNER_TEMP/current-pr.json" \
+            --spec "$RUNNER_TEMP/spec.json" \
+            --evidence "$RUNNER_TEMP/evidence.json" \
+            --prior "$RUNNER_TEMP/prior.json" \
+            > "$RUNNER_TEMP/verdict.json" \
+            2> "$RUNNER_TEMP/comment.md" \
+            && echo "blocked=false" >> "$GITHUB_OUTPUT" \
+            || echo "blocked=true" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/verdict.json"
+
+      - name: Upsert sticky anti-abuse comment (when blocked)
+        if: steps.gate.outputs.blocked == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          MARKER='<!-- pr-rate-limit:x5.13 -->'
+          BODY=$(cat "$RUNNER_TEMP/comment.md")
+          EXISTING=$(gh api "/repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}/comments" \
+            --jq "map(select(.body | contains(\"$MARKER\"))) | .[0].id" || echo "")
+          FULL="$MARKER"$'\n'"$BODY"
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh api --method PATCH "/repos/${{ github.repository }}/issues/comments/$EXISTING" -f body="$FULL" > /dev/null
+            echo "edited existing anti-abuse comment"
+          else
+            gh pr comment "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --body "$FULL"
+            echo "created new anti-abuse comment"
+          fi
+
+      - name: Fail the check when blocked
+        if: steps.gate.outputs.blocked == 'true'
+        run: |
+          echo "::error::Anti-abuse gate blocked this PR (rate-limit or sock-puppet flag). See sticky comment."
+          exit 1
+
+      - name: Step summary
+        if: always()
+        run: |
+          {
+            echo "## MCP Spec Anti-Abuse Gate"
+            echo ""
+            echo "- PR: #${{ steps.pr.outputs.number }}"
+            echo "- blocked: ${{ steps.gate.outputs.blocked }}"
+          } >> "$GITHUB_STEP_SUMMARY"

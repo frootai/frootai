@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>FrootAI MCP Area Status</title>
+    <link>https://status.frootai.dev/mcp</link>
+    <description>Per-area federation health for FrootAI MCP marketplace servers.</description>
+    <lastBuildDate>Sat, 27 Jun 2026 06:00:00 GMT</lastBuildDate>
+    <item>
+      <title>azure — operational (100% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/azure</link>
+      <guid isPermaLink="false">mcp-azure-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: operational. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+    <item>
+      <title>elastic — major-outage (83.3% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/elastic</link>
+      <guid isPermaLink="false">mcp-elastic-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: major-outage. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+    <item>
+      <title>github — operational (100% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/github</link>
+      <guid isPermaLink="false">mcp-github-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: operational. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+    <item>
+      <title>ms-learn — operational (100% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/ms-learn</link>
+      <guid isPermaLink="false">mcp-ms-learn-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: operational. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+    <item>
+      <title>playwright — major-outage (93.3% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/playwright</link>
+      <guid isPermaLink="false">mcp-playwright-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: major-outage. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+    <item>
+      <title>stripe — degraded (96.7% uptime, 30d)</title>
+      <link>https://status.frootai.dev/mcp/stripe</link>
+      <guid isPermaLink="false">mcp-stripe-2026-06-27</guid>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 GMT</pubDate>
+      <description>Status: degraded. Last validated 2026-06-27T06:00:00.000Z.</description>
+    </item>
+  </channel>
+</rss>
