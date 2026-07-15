@@ -54,11 +54,11 @@ test("[Z10.3] compilePlus returns { lean, stats, verdict } with documented shape
     assert.ok(Array.isArray(out.verdict.reasons));
 });
 
-test("[Z10.3] StubSemanticCompressor → identity → fidelity gate passes → semantic served", async () => {
+test("[Z10.3] StubSemanticCompressor → identity → fidelity gate passes → lossless reported", async () => {
     const out = await compilePlus(SAMPLE_FULL, { semantic: StubSemanticCompressor });
     assert.equal(out.stats.backendId, "stub-identity");
     assert.equal(out.verdict.pass, true, `expected pass, reasons=${out.verdict.reasons.join(" | ")}`);
-    assert.equal(out.stats.servedFlavor, "semantic");
+    assert.equal(out.stats.servedFlavor, "lossless");
     // Identity stub → byte-for-byte equal to the lossless floor
     assert.equal(out.stats.servedTokens, out.stats.losslessTokens);
     assert.equal(out.stats.savedTokensVsLossless, 0);
@@ -74,6 +74,17 @@ test("[Z10.3] backend that grows the text is refused, harness falls back to loss
     assert.equal(out.verdict.pass, false);
     assert.equal(out.stats.servedFlavor, "lossless");
     assert.match(out.verdict.reasons.join(" "), /longer than lossless/);
+});
+
+test("[Z10.3] shorter text that grows canonical tokens is refused", async () => {
+    const TokenInflator = {
+        id: "test-token-inflator",
+        compress: () => "🧠🧠🧠",
+    };
+    const out = await compilePlus("aaaaaaaaaaaa", { semantic: TokenInflator });
+    assert.equal(out.verdict.pass, false);
+    assert.equal(out.stats.servedFlavor, "lossless");
+    assert.match(out.verdict.reasons.join(" "), /more tokens than lossless/);
 });
 
 test("[Z10.3] backend that drops a guardrail trips Z1 hard-fail → fallback to lossless", async () => {

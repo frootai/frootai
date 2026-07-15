@@ -6,13 +6,14 @@
 > tier was tuned against. The goal of Lean+ is the masterplan's 30–40 %
 > token-savings target — measured, not estimated.
 >
-> **Status (Z10.3)**: scaffold + contract + **first real backend**. The harness,
+> **Status**: harness + contract + deterministic and model-backed backends. The harness,
 > the gate re-use, the bloater/guardrail/identity fallback paths and the
-> determinism contract are all in place and tested. Two backends ship today:
+> receipt contract are in place and tested. Three backends ship today:
 > `StubSemanticCompressor` (identity pass-through, for wiring tests) and
 > `RuleSemanticCompressor` (`rule-paraphrase-v1`) — the first real, deterministic
-> semantic backend. The model-backed paraphrase + embedding-dedup tier layers
-> on later via the SAME contract.
+> semantic backend — plus the opt-in LLM candidate backend in `semantic-llm.js`.
+> Every candidate runs through the same gate, but that gate's scope is lexical
+> and structural; it is not a mathematical proof of general prose equivalence.
 
 ## API
 
@@ -32,12 +33,17 @@ const { lean, stats, verdict } = await compilePlus(fullMd, {
 {
   lean,                              // the variant ACTUALLY served
   stats: {
+      tokenBasis,                       // o200k_base, or disclosed fallback
     sourceTokens,                    // Full
     losslessTokens,                  // Phase-1 Lean (always computed)
     candidateTokens,                 // what the backend produced
     servedTokens,                    // matches one of lossless/candidate
     savedTokens,                     // sourceTokens − servedTokens
     savedTokensVsLossless,           // losslessTokens − servedTokens
+   sourceBytes,                     // UTF-8 byte counts are separate
+   losslessBytes,
+   candidateBytes,
+   servedBytes,
     servedFlavor,                    // "semantic" | "lossless"
     backendId,                       // SemanticCompressor.id
   },
@@ -49,6 +55,63 @@ const { lean, stats, verdict } = await compilePlus(fullMd, {
   }
 }
 ```
+
+## Local HTTP API
+
+Start the dependency-free API on loopback (default `127.0.0.1:8788`):
+
+```bash
+npm run lean:api
+```
+
+Call the deterministic lossless floor:
+
+```bash
+curl -sS http://127.0.0.1:8788/v1/lean/compile \
+   -H "Content-Type: application/json" \
+   -d '{"text":"# Agent\\n\\nKeep answers concise.  ","mode":"lossless","primitiveType":"agent"}'
+```
+
+PowerShell uses `curl.exe` to avoid the `Invoke-WebRequest` alias:
+
+```powershell
+curl.exe -sS http://127.0.0.1:8788/v1/lean/compile `
+   -H "Content-Type: application/json" `
+   -d '{"text":"# Agent\n\nKeep answers concise.  ","mode":"rules","primitiveType":"agent"}'
+```
+
+Modes:
+
+| Mode | Backend | Posture |
+|---|---|---|
+| `lossless` | Phase-1 deterministic compiler | Default; safest |
+| `rules` | `rule-paraphrase-v1` | Deterministic; same gate |
+| `semantic` | Azure OpenAI candidate generator | Experimental; explicit opt-in |
+
+To enable semantic mode locally, configure `AZURE_OPENAI_ENDPOINT`,
+`AZURE_OPENAI_DEPLOYMENT`, and either `AZURE_OPENAI_KEY` or
+`AZURE_OPENAI_BEARER`, then set `LEAN_API_ENABLE_SEMANTIC=1`. Input text is sent
+to that configured model endpoint. The API never accepts a client-supplied gate
+threshold, caps JSON bodies at 256 KiB, caps input at 200 KiB, and does not log
+document content.
+
+This server intentionally binds to loopback and has no authentication or
+distributed rate limiter. It is suitable for local evaluation, not direct
+Internet exposure. A public endpoint should be ported into the existing
+`api.frootai.dev` Worker and use its API-key, quota, abuse-control, and telemetry
+layers.
+
+### Trust boundary
+
+The gate reliably checks retention of detected guardrails, parameters, code,
+triggers, and imperative lines, and falls back to the deterministic output when
+those checks fail. It also refuses candidates that grow canonical model tokens.
+
+It does **not** prove that arbitrary explanatory prose retains identical meaning.
+The semantic mode must remain experimental until it has downstream task-level
+evaluations, adversarial prompt-injection coverage, model-version pinning, and a
+published quality confidence interval. A `10/10` receipt means all implemented
+retention checks passed; it does not mean universal semantic equivalence.
 
 ## Backend contract
 
@@ -132,9 +195,9 @@ nothing real, and the no-inflated-numbers doctrine forbids it.
 The test asserts the rule-tier marginal stays **< 15 %** — if a future change
 broke that ceiling, the test would fail and force a RETRO + framing update.
 
-## Contract for a future LLM-backed backend
+## Contract for an LLM-backed backend
 
-When you wire a real LLM-backed `SemanticCompressor`, it MUST satisfy the same
+An LLM-backed `SemanticCompressor` MUST satisfy the same
 shape (`{ id, compress(lean, ctx) }`) plus these additional hard pins:
 
 1. **Determinism** — pin `temperature=0` AND a fixed `seed`. Without a seed the

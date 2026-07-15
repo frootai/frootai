@@ -30,6 +30,7 @@
 
 import { compile as compileLossless } from "../lean-compiler/index.js";
 import { scoreFidelity, DEFAULT_WEIGHTS, DEFAULT_THRESHOLD } from "../lean-compiler/fidelity-score.js";
+import { countTokens, TOKEN_BASIS } from "../lean-compiler/tokens.js";
 import { StubSemanticCompressor } from "./semantic-stage.js";
 import { RuleSemanticCompressor } from "./semantic-rules.js";
 
@@ -56,6 +57,11 @@ import { RuleSemanticCompressor } from "./semantic-rules.js";
  * @property {number} servedTokens          - token count of the variant ACTUALLY served
  * @property {number} savedTokens           - sourceTokens - servedTokens
  * @property {number} savedTokensVsLossless - losslessTokens - servedTokens (purely semantic delta)
+ * @property {string} tokenBasis             - tokenizer basis used for all token fields
+ * @property {number} sourceBytes            - UTF-8 byte count of Full source
+ * @property {number} losslessBytes          - UTF-8 byte count of Phase-1 Lean
+ * @property {number} candidateBytes         - UTF-8 byte count of semantic candidate
+ * @property {number} servedBytes            - UTF-8 byte count actually served
  * @property {"lossless"|"semantic"} servedFlavor - which variant was kept
  * @property {string} backendId             - SemanticCompressor.id used
  */
@@ -102,9 +108,13 @@ export async function compilePlus(md, options = {}) {
     }
 
     // Per-stage HARD invariant: a semantic backend must never grow the text.
-    // If a backend returns longer output, treat it as failed and fall back to
-    // lossless — never serve a "compression" that made the artifact worse.
+    // Character length is a cheap early signal; canonical token counts below
+    // decide whether the candidate is a real model-context reduction.
     const candidateLongerThanLossless = candidate.length > lossless.lean.length;
+
+    const sourceTokens = countTokens(md);
+    const losslessTokens = countTokens(lossless.lean);
+    const candidateTokens = countTokens(candidate);
 
     // 3. Fidelity gate — re-use the SAME Z1 module that the lossless tier was
     // tuned against (Z10.4: no second gate, no looser threshold).
@@ -113,24 +123,29 @@ export async function compilePlus(md, options = {}) {
         threshold,
     });
 
-    const passed = !candidateLongerThanLossless && scored.passed;
-    const servedFlavor = passed ? "semantic" : "lossless";
-    const lean = passed ? candidate : lossless.lean;
+    const candidateGrowsTokens = candidateTokens > losslessTokens;
+    const passed = !candidateLongerThanLossless && !candidateGrowsTokens && scored.passed;
+    const semanticReduction = passed && candidateTokens < losslessTokens;
+    const servedFlavor = semanticReduction ? "semantic" : "lossless";
+    const lean = semanticReduction ? candidate : lossless.lean;
 
-    // 4. Stats — measured at the byte level here; the build-time aggregator
-    // re-tokenises with exact o200k_base (Phase-1 has already proven this).
-    const sourceBytes = md.length;
-    const losslessBytes = lossless.lean.length;
-    const candidateBytes = candidate.length;
-    const servedBytes = lean.length;
+    // 4. Stats — use the same canonical tokenizer as the Phase-1 compiler.
+    // Keep byte counts separate so the public receipt never labels JS string
+    // length as model tokens (especially misleading for Unicode input).
+    const servedTokens = countTokens(lean);
 
     const stats = {
-        sourceTokens: sourceBytes,
-        losslessTokens: losslessBytes,
-        candidateTokens: candidateBytes,
-        servedTokens: servedBytes,
-        savedTokens: sourceBytes - servedBytes,
-        savedTokensVsLossless: losslessBytes - servedBytes,
+        tokenBasis: TOKEN_BASIS,
+        sourceTokens,
+        losslessTokens,
+        candidateTokens,
+        servedTokens,
+        savedTokens: sourceTokens - servedTokens,
+        savedTokensVsLossless: losslessTokens - servedTokens,
+        sourceBytes: new TextEncoder().encode(md).length,
+        losslessBytes: new TextEncoder().encode(lossless.lean).length,
+        candidateBytes: new TextEncoder().encode(candidate).length,
+        servedBytes: new TextEncoder().encode(lean).length,
         servedFlavor,
         backendId: semantic.id,
     };
@@ -141,7 +156,9 @@ export async function compilePlus(md, options = {}) {
         threshold,
         reasons: candidateLongerThanLossless
             ? ["candidate longer than lossless lean — refused"]
-            : scored.reasons ?? [],
+            : candidateGrowsTokens
+                ? ["candidate has more tokens than lossless lean — refused"]
+                : scored.reasons ?? [],
     };
 
     return { lean, stats, verdict };
