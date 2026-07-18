@@ -78,6 +78,12 @@ test('loadManifest — validates play field format', () => {
   assert(/^[0-9]{2}-[a-z0-9-]+$/.test(result.manifest.play), 'play must match NN-kebab-case');
 });
 
+test('loadManifest — accepts three-digit Play 101 identity', () => {
+  const result = loadManifest(path.join(ROOT, 'solution-plays/101-pester-test-development/spec/fai-manifest.json'));
+  assertEqual(result.errors.length, 0, `Expected Play 101 identity to validate: ${result.errors.join(', ')}`);
+  assertEqual(result.manifest.play, '101-pester-test-development');
+});
+
 test('loadManifest — validates version is semver', () => {
   const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   assert(/^[0-9]+\.[0-9]+\.[0-9]+/.test(result.manifest.version), 'version must be semver');
@@ -112,7 +118,8 @@ test('loadManifest — validates primitives section exists', () => {
 
 test('loadManifest — loads all play manifests without errors', () => {
   const playsDir = path.join(ROOT, 'solution-plays');
-  const plays = fs.readdirSync(playsDir).filter(f => /^\d{2}-/.test(f) && fs.statSync(path.join(playsDir, f)).isDirectory());
+  const plays = fs.readdirSync(playsDir).filter(f => /^\d{2,3}-/.test(f) && fs.statSync(path.join(playsDir, f)).isDirectory());
+  assertEqual(plays.length, 101, 'all 101 play directories should enter manifest validation');
   let failures = [];
   for (const play of plays) {
     // Check both root and spec/ locations
@@ -131,6 +138,31 @@ test('resolvePaths — converts relative paths to absolute', () => {
   const result = loadManifest(path.join(ROOT, 'solution-plays/01-enterprise-rag/spec/fai-manifest.json'));
   const resolved = resolvePaths(result.manifest, result.playDir);
   assert(resolved, 'resolved should not be null');
+});
+
+test('resolvePaths — preserves infrastructure metadata without treating it as a file path', () => {
+  const result = loadManifest(path.join(ROOT, 'solution-plays/69-carbon-footprint-tracker/spec/fai-manifest.json'));
+  const { resolved, missing } = resolvePaths(result.manifest, result.playDir);
+  assertEqual(resolved.infrastructure.metadata.services.length, 5, 'services metadata should be preserved');
+  assertEqual(resolved.infrastructure.paths.template.exists, true, 'template path should resolve');
+  assertEqual(resolved.infrastructure.paths.parameters.exists, true, 'parameters path should resolve');
+  const missingInfrastructure = missing.filter(item => item.startsWith('infrastructure.'));
+  assertEqual(missingInfrastructure.length, 0, `Expected no missing infrastructure paths, got: ${missingInfrastructure.join(', ')}`);
+});
+
+test('resolvePaths — reports missing declared infrastructure paths only', () => {
+  const playDir = path.join(ROOT, 'solution-plays/69-carbon-footprint-tracker');
+  const { resolved, missing } = resolvePaths({
+    infrastructure: {
+      services: ['Azure OpenAI'],
+      template: 'infra/does-not-exist.bicep',
+      deployment: { region: 'eastus2' }
+    }
+  }, playDir);
+  assertEqual(resolved.infrastructure.metadata.services[0], 'Azure OpenAI');
+  assertEqual(resolved.infrastructure.metadata.deployment.region, 'eastus2');
+  assertEqual(missing.length, 1, `Expected one missing path, got: ${missing.join(', ')}`);
+  assert(missing[0].includes('infrastructure.template'), 'missing path should identify template');
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════

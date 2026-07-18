@@ -5,7 +5,7 @@
   "context": {
     "knowledge": [
       "T3-Production-Patterns",
-      "O3-MCP-Tools"
+      "O3-MCP-Tools-Functions"
     ],
     "waf": [
       "reliability",
@@ -15,19 +15,19 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "pester-test-development-patterns.instructions.md",
-      "azure-coding.instructions.md",
-      "security.instructions.md"
+      ".github/instructions/pester-test-development-patterns.instructions.md",
+      ".github/instructions/azure-coding.instructions.md",
+      ".github/instructions/security.instructions.md"
     ],
     "skills": [
-      "deploy-pester-test-development/",
-      "evaluate-pester-test-development/",
-      "tune-pester-test-development/"
+      ".github/skills/deploy-pester-test-development/",
+      ".github/skills/evaluate-pester-test-development/",
+      ".github/skills/tune-pester-test-development/"
     ]
   },
   "toolkit": {
@@ -36,10 +36,10 @@
     "speckit": "spec/"
   },
   "guardrails": {
-    "line_coverage": 0.90,
-    "branch_coverage": 0.80,
-    "function_coverage": 1.00,
-    "test_pass_rate": 1.00,
+    "line_coverage": 0.9,
+    "branch_coverage": 0.8,
+    "function_coverage": 1,
+    "test_pass_rate": 1,
     "mock_verification": true,
     "pester_version_minimum": "5.5.0"
   }

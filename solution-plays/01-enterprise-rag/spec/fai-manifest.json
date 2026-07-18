@@ -22,7 +22,7 @@
       "./agent.md"
     ],
     "instructions": [
-      "./instructions.md",
+      ".github/instructions/enterprise-rag-patterns.instructions.md",
       "../../instructions/python-waf.instructions.md",
       "../../instructions/bicep-waf.instructions.md"
     ],
@@ -32,13 +32,13 @@
       "./.github/skills/tune-enterprise-rag/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.95,
-      "coherence": 0.90,
+      "coherence": 0.9,
       "relevance": 0.85,
       "safety": 0,
       "costPerQuery": 0.01

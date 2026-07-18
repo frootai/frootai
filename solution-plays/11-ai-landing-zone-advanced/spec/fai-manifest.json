@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "context": {
     "knowledge": [
-      "O5-GPU-Infra",
+      "O5-AI-Infrastructure",
       "T3-Production-Patterns"
     ],
     "waf": [
@@ -32,9 +32,9 @@
       "./.github/skills/tune-ai-landing-zone-advanced/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

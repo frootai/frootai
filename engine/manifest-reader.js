@@ -14,6 +14,10 @@ const WAF_PILLARS = [
   'operational-excellence', 'performance-efficiency', 'responsible-ai'
 ];
 
+const INFRASTRUCTURE_PATH_FIELDS = new Set([
+  'bicep', 'template', 'parameters', 'terraform'
+]);
+
 /**
  * Load and validate a fai-manifest.json file.
  * @param {string} manifestPath - Absolute or relative path to fai-manifest.json
@@ -41,8 +45,8 @@ function loadManifest(manifestPath) {
   }
 
   // Validate required fields
-  if (!manifest.play || !/^[0-9]{2}-[a-z0-9-]+$/.test(manifest.play)) {
-    errors.push(`play must match "NN-kebab-case" (got "${manifest.play}")`);
+  if (!manifest.play || !/^[0-9]{2,3}-[a-z0-9-]+$/.test(manifest.play)) {
+    errors.push(`play must match "NN-or-NNN-kebab-case" (got "${manifest.play}")`);
   }
 
   if (!manifest.version || !/^[0-9]+\.[0-9]+\.[0-9]+/.test(manifest.version)) {
@@ -97,7 +101,10 @@ function resolvePaths(manifest, playDir) {
     skills: [],
     hooks: [],
     workflows: [],
-    infrastructure: {}
+    infrastructure: {
+      paths: {},
+      metadata: {}
+    }
   };
 
   const resolveList = (list, category) => {
@@ -120,11 +127,17 @@ function resolvePaths(manifest, playDir) {
   }
 
   if (manifest.infrastructure) {
-    for (const [key, relPath] of Object.entries(manifest.infrastructure)) {
-      if (relPath) {
-        const abs = resolve(playDir, relPath);
-        resolved.infrastructure[key] = { relative: relPath, absolute: abs, exists: existsSync(abs) };
-        if (!existsSync(abs)) missing.push(`infrastructure.${key}: ${relPath}`);
+    for (const [key, value] of Object.entries(manifest.infrastructure)) {
+      if (!INFRASTRUCTURE_PATH_FIELDS.has(key)) {
+        resolved.infrastructure.metadata[key] = value;
+        continue;
+      }
+      if (typeof value !== 'string' || value.length === 0) continue;
+      const abs = resolve(playDir, value);
+      const exists = existsSync(abs);
+      resolved.infrastructure.paths[key] = { relative: value, absolute: abs, exists };
+      if (!exists) {
+        missing.push(`infrastructure.${key}: ${value}`);
       }
     }
   }

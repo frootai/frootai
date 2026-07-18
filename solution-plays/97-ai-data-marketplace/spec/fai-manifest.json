@@ -6,7 +6,7 @@
     "knowledge": [
       "T3-Production-Patterns",
       "T2-Responsible-AI",
-      "O4-Azure-AI"
+      "O4-Azure-AI-Foundry"
     ],
     "waf": [
       "security",
@@ -17,22 +17,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "97-patterns.instructions.md"
+      ".github/instructions/ai-data-marketplace-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-97/",
-      "evaluate-97/",
-      "tune-97/"
+      ".github/skills/deploy-ai-data-marketplace/",
+      ".github/skills/evaluate-ai-data-marketplace/",
+      ".github/skills/tune-ai-data-marketplace/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -52,9 +52,9 @@
     "speckit": "spec/"
   },
   "guardrails": {
-    "groundedness": 0.80,
-    "coherence": 0.80,
-    "relevance": 0.80,
+    "groundedness": 0.8,
+    "coherence": 0.8,
+    "relevance": 0.8,
     "safety": 0,
     "costPerQuery": 0.06
   }

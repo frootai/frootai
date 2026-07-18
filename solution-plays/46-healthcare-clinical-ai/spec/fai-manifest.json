@@ -5,7 +5,7 @@
     "knowledge": [
       "R2-RAG-Architecture",
       "T2-Responsible-AI",
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "T3-Production-Patterns",
       "R3-Deterministic-AI"
     ],
@@ -33,9 +33,9 @@
       "./.github/skills/tune-healthcare-clinical-ai/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

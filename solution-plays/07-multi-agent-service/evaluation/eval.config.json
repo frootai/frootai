@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "play": "07-multi-agent-service",
+  "endpoint_profile": "offline",
+  "dataset": "evaluation/cases.jsonl",
+  "gate": {
+    "required_pass_rate": 1,
+    "max_p95_latency_ms": 2000,
+    "missing_metric_policy": "fail"
+  }
+}

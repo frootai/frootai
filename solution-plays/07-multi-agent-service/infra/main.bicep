@@ -1,7 +1,7 @@
 targetScope = 'resourceGroup'
 
 @description('Azure region for all resources')
-param location string = resourceGroup().location
+param location string = 'swedencentral'
 
 @description('Environment name (dev, staging, prod)')
 param environment string = 'dev'
@@ -96,6 +96,20 @@ resource cosmosContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
   }
 }
 
+resource serviceBus 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
+  name: 'sb-${projectName}-${suffix}'
+  location: location
+  tags: tags
+  identity: { type: 'SystemAssigned' }
+  sku: { name: 'Standard', tier: 'Standard' }
+  properties: {
+    minimumTlsVersion: '1.2'
+    publicNetworkAccess: 'Enabled'
+    disableLocalAuth: false
+    zoneRedundant: false
+  }
+}
+
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' = {
   name: 'cae-${projectName}-${suffix}'
   location: location
@@ -151,4 +165,5 @@ resource workerApp 'Microsoft.App/containerApps@2023-05-01' = {
 
 output openAiEndpoint string = openAi.properties.endpoint
 output cosmosEndpoint string = cosmosDb.properties.documentEndpoint
+output serviceBusEndpoint string = 'sb://${serviceBus.name}.servicebus.windows.net/'
 output supervisorFqdn string = supervisorApp.properties.configuration.ingress.fqdn

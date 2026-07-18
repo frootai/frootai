@@ -5,8 +5,8 @@
     "knowledge": [
       "F1-GenAI-Foundations",
       "T2-Responsible-AI",
-      "O2-Agent-Coding",
-      "R1-Prompt-Patterns"
+      "O2-AI-Agents",
+      "R1-Prompt-Engineering"
     ],
     "waf": [
       "responsible-ai",
@@ -31,9 +31,9 @@
       "./.github/skills/tune-ai-training-curriculum/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

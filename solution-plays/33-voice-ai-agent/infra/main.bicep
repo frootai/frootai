@@ -11,7 +11,10 @@ targetScope = 'resourceGroup'
 param environment string = 'dev'
 
 @description('Azure region for all resources')
-param location string = resourceGroup().location
+param location string = 'swedencentral'
+
+@description('Azure Communication Services data-residency geography')
+param communicationDataLocation string = 'United States'
 
 @description('Resource name prefix')
 param prefix string = 'voice-ai-age'
@@ -115,6 +118,34 @@ resource openai 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
+@description('Azure AI Speech for streaming STT and neural TTS')
+resource speech 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+  name: '${resourcePrefix}-speech-${uniqueSuffix}'
+  location: location
+  tags: tags
+  kind: 'SpeechServices'
+  sku: { name: 'S0' }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    customSubDomainName: '${prefix}-speech-${uniqueSuffix}'
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+@description('Azure AI Content Safety for caller and response moderation')
+resource contentSafety 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+  name: '${resourcePrefix}-safety-${uniqueSuffix}'
+  location: location
+  tags: tags
+  kind: 'ContentSafety'
+  sku: { name: 'S0' }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    customSubDomainName: '${prefix}-safety-${uniqueSuffix}'
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
 // ─── OPENAI MODEL DEPLOYMENTS ────────────────────────────────────
 
 @description('GPT-4o model deployment for generation')
@@ -167,6 +198,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     networkAcls: {
       defaultAction: isProduction ? 'Deny' : 'Allow'
       bypass: 'AzureServices'
@@ -174,16 +206,143 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
 }
 
-// ─── RBAC ROLE ASSIGNMENTS ───────────────────────────────────────
+// ─── VOICE WORKLOAD SERVICES ────────────────────────────────────
 
-@description('Cognitive Services OpenAI User role for the app')
-var cognitiveServicesOpenAIUser = 'a97b65f3-24c7-4388-baec-2e87135dc908'
+resource communication 'Microsoft.Communication/communicationServices@2023-04-01' = {
+  name: '${resourcePrefix}-acs-${uniqueSuffix}'
+  location: 'global'
+  tags: tags
+  identity: { type: 'SystemAssigned' }
+  properties: { dataLocation: communicationDataLocation }
+}
 
-@description('Key Vault Secrets User role for the app')
-var keyVaultSecretsUser = '4633458b-17de-408a-b874-0445c86b69e6'
+resource redis 'Microsoft.Cache/redis@2024-11-01' = {
+  name: '${resourcePrefix}-redis-${uniqueSuffix}'
+  location: location
+  tags: tags
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    sku: { name: isProduction ? 'Standard' : 'Basic', family: 'C', capacity: isProduction ? 1 : 0 }
+    enableNonSslPort: false
+    minimumTlsVersion: '1.2'
+    publicNetworkAccess: 'Enabled'
+  }
+}
 
-@description('Storage Blob Data Reader role for the app')
-var storageBlobDataReader = '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
+  name: '${resourcePrefix}-cosmos-${uniqueSuffix}'
+  location: location
+  tags: tags
+  kind: 'GlobalDocumentDB'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    locations: [{ locationName: location, failoverPriority: 0 }]
+    capabilities: [{ name: 'EnableServerless' }]
+    consistencyPolicy: { defaultConsistencyLevel: 'Session' }
+    publicNetworkAccess: 'Enabled'
+    ipRules: [{ ipAddressOrRange: '0.0.0.0' }]
+  }
+}
+
+resource appIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: '${resourcePrefix}-identity-${uniqueSuffix}'
+  location: location
+  tags: tags
+}
+
+resource containerEnvironment 'Microsoft.App/managedEnvironments@2024-03-01' = {
+  name: '${resourcePrefix}-env-${uniqueSuffix}'
+  location: location
+  tags: tags
+  properties: {
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: logAnalytics.properties.customerId
+        sharedKey: logAnalytics.listKeys().primarySharedKey
+      }
+    }
+  }
+}
+
+resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
+  name: '${resourcePrefix}-api-${uniqueSuffix}'
+  location: location
+  tags: tags
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: { '${appIdentity.id}': {} }
+  }
+  properties: {
+    managedEnvironmentId: containerEnvironment.id
+    configuration: {
+      ingress: {
+        external: true
+        targetPort: 8000
+        transport: 'http'
+        corsPolicy: {
+          allowedOrigins: ['https://frootai.dev']
+          allowedMethods: ['GET', 'POST']
+          allowedHeaders: ['content-type', 'authorization']
+        }
+      }
+    }
+    template: {
+      containers: [{
+        name: 'voice-api'
+        image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+        resources: { cpu: json('0.5'), memory: '1Gi' }
+        env: [
+          { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
+          { name: 'AZURE_OPENAI_ENDPOINT', value: openai.properties.endpoint }
+          { name: 'AZURE_SPEECH_ENDPOINT', value: speech.properties.endpoint }
+          { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: contentSafety.properties.endpoint }
+          { name: 'AZURE_COMMUNICATION_SERVICE', value: communication.name }
+          { name: 'AZURE_REDIS_HOST', value: redis.properties.hostName }
+          { name: 'AZURE_COSMOS_ENDPOINT', value: cosmosDb.properties.documentEndpoint }
+          { name: 'AZURE_CLIENT_ID', value: appIdentity.properties.clientId }
+        ]
+      }]
+      scale: { minReplicas: isProduction ? 1 : 0, maxReplicas: isProduction ? 10 : 3 }
+    }
+  }
+}
+
+@description('Event Grid system topic for Azure Communication Services events')
+resource communicationEvents 'Microsoft.EventGrid/systemTopics@2023-12-15-preview' = {
+  name: '${resourcePrefix}-events-${uniqueSuffix}'
+  location: 'global'
+  tags: tags
+  properties: {
+    source: communication.id
+    topicType: 'Microsoft.Communication.CommunicationServices'
+  }
+}
+
+@description('IncomingCall delivery to the voice runtime control endpoint')
+resource incomingCallSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@2023-12-15-preview' = {
+  parent: communicationEvents
+  name: 'incoming-call'
+  properties: {
+    destination: {
+      endpointType: 'WebHook'
+      properties: {
+        endpointUrl: 'https://${containerApp.properties.configuration.ingress.fqdn}/api/calls/incoming'
+      }
+    }
+    filter: {
+      includedEventTypes: [
+        'Microsoft.Communication.IncomingCall'
+      ]
+    }
+    eventDeliverySchema: 'EventGridSchema'
+    retryPolicy: {
+      maxDeliveryAttempts: 30
+      eventTimeToLiveInMinutes: 1440
+    }
+  }
+}
 
 // ─── DIAGNOSTIC SETTINGS ─────────────────────────────────────────
 
@@ -221,6 +380,8 @@ resource kvDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview
 
 @description('Azure OpenAI endpoint URL')
 output openaiEndpoint string = openai.properties.endpoint
+output speechEndpoint string = speech.properties.endpoint
+output contentSafetyEndpoint string = contentSafety.properties.endpoint
 
 @description('Key Vault URI')
 output keyVaultUri string = keyVault.properties.vaultUri
@@ -230,6 +391,10 @@ output appInsightsConnectionString string = appInsights.properties.ConnectionStr
 
 @description('Storage account name')
 output storageAccountName string = storage.name
+output communicationServiceName string = communication.name
+output redisHostName string = redis.properties.hostName
+output cosmosEndpoint string = cosmosDb.properties.documentEndpoint
+output containerAppFqdn string = containerApp.properties.configuration.ingress.fqdn
 
 @description('Log Analytics workspace ID')
 output logAnalyticsWorkspaceId string = logAnalytics.id

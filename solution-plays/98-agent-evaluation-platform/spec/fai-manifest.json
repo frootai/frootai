@@ -17,22 +17,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "98-patterns.instructions.md"
+      ".github/instructions/agent-evaluation-platform-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-98/",
-      "evaluate-98/",
-      "tune-98/"
+      ".github/skills/deploy-agent-evaluation-platform/",
+      ".github/skills/evaluate-agent-evaluation-platform/",
+      ".github/skills/tune-agent-evaluation-platform/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {

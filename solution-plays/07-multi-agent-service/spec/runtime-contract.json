@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "play": "07-multi-agent-service",
+  "profile": "offline-first",
+  "scenario": {
+    "id": "agents.execute",
+    "version": "1.0.0",
+    "input_schema": {
+      "type": "object",
+      "required": [
+        "task"
+      ],
+      "properties": {
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maxHops": {
+          "type": "integer"
+        }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "required": [
+        "result",
+        "route",
+        "trace"
+      ]
+    }
+  },
+  "endpoints": {
+    "liveness": "/health/live",
+    "readiness": "/health/ready",
+    "catalog": "/v1/scenarios",
+    "execute": "/v1/scenarios/agents.execute/runs",
+    "status": "/v1/runs/{runId}"
+  },
+  "adapters": {
+    "offline": "solution-plays/runtime/scenarios/index.mjs",
+    "azure_ports": [
+      "AzureOpenAIRouter",
+      "DaprWorkerInvoker",
+      "ServiceBusMessageBus",
+      "CosmosStateStore",
+      "ContentSafety"
+    ]
+  },
+  "infrastructure": {
+    "required_resource_types": [
+      "Microsoft.CognitiveServices/accounts",
+      "Microsoft.ServiceBus/namespaces",
+      "Microsoft.DocumentDB/databaseAccounts",
+      "Microsoft.App/containerApps"
+    ],
+    "required_resource_kinds": {}
+  },
+  "evidence": {
+    "deterministic_output_hash": true,
+    "endpoint_evaluation": true,
+    "unexpected_network_blocked_in_ci": true
+  }
+}

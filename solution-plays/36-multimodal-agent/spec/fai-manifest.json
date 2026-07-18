@@ -4,7 +4,7 @@
   "context": {
     "knowledge": [
       "F1-GenAI-Foundations",
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "R2-RAG-Architecture"
     ],
     "waf": [
@@ -30,9 +30,9 @@
       "./.github/skills/tune-multimodal-agent/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

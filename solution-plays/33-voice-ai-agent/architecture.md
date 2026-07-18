@@ -2,64 +2,84 @@
 
 ## Overview
 
-Conversational voice AI agent that handles real-time phone calls with natural speech interaction. Inbound/outbound calls connect through Azure Communication Services (PSTN/SIP/WebRTC), where audio streams through a low-latency STT→LLM→TTS pipeline on Container Apps. Azure AI Speech converts caller speech to text in real-time, Azure OpenAI processes the conversation with multi-turn context from Redis, and synthesized speech responses stream back to the caller. Cosmos DB stores full call transcripts and analytics. Supports call transfer, DTMF input, barge-in detection, and human escalation.
+Conversational voice AI agent that handles real-time calls with natural speech interaction. Azure Communication Services (ACS) Call Automation controls inbound/outbound PSTN, Direct Routing, and ACS-user calls through an asynchronous action/event model: Event Grid delivers `IncomingCall`, the application issues Call Automation actions, and ACS sends operation results to an HTTPS callback. Media is a separate path: ACS opens a full-duplex WebSocket to the Container Apps media endpoint and exchanges PCM 16-kHz or 24-kHz mono frames plus DTMF events. The runtime relays inbound audio through Azure AI Speech STT, Azure OpenAI dialogue, Content Safety, and Azure AI Speech TTS before returning outbound PCM audio over the same WebSocket. Redis stores active session state; Cosmos DB stores finalized transcripts and analytics.
 
 ## Architecture Diagram
 
 ```mermaid
 graph TB
-    subgraph Caller Layer
-        Caller[Caller / Phone / WebRTC]
+    subgraph Participants
+        Caller[Caller<br/>PSTN · Direct Routing · ACS Client]
+        Human[Human Agent / Contact Center]
     end
 
-    subgraph Communication
-        ACS[Azure Communication Services<br/>PSTN · SIP Trunk · WebRTC Gateway]
+    subgraph Azure Communication Services
+        ACS[ACS Calling + Call Automation<br/>Call Legs · Transfer · DTMF · Media Control]
+        EventGrid[Event Grid<br/>IncomingCall Only]
+        Callbacks[Direct HTTPS Callbacks<br/>Action Results · Call State]
     end
 
-    subgraph Voice Agent Runtime
-        Agent[Container Apps<br/>WebSocket Manager · Call State Machine · Streaming Pipeline]
+    subgraph Container Apps Voice Runtime
+        Control[Call Control API<br/>Answer · Transfer · Start/Stop Media]
+        Media[Media WebSocket<br/>PCM 16/24-kHz Mono · DTMF · Barge-in · 24-to-16-kHz Resampling]
+        Dialog[Turn Orchestrator<br/>State Machine · Timeouts · Escalation]
     end
 
-    subgraph AI Engine
-        STT[Azure AI Speech — STT<br/>Real-time Recognition · Streaming Partial Results]
-        OpenAI[Azure OpenAI — GPT-4o<br/>Conversational Reasoning · Intent Resolution]
-        TTS[Azure AI Speech — TTS<br/>Neural Voice Synthesis · SSML]
+    subgraph AI Processing
+        Speech[Azure AI Speech<br/>Streaming STT · Neural TTS · SSML]
+        OpenAI[Azure OpenAI<br/>Dialogue · Intent · Tool Decisions]
+        Safety[Azure AI Content Safety<br/>Input / Output Moderation]
     end
 
     subgraph Data Layer
-        Redis[Azure Redis Cache<br/>Session State · Conversation Context · Turn Tracking]
-        CosmosDB[Cosmos DB<br/>Call Transcripts · Conversation History · Analytics]
+        Redis[Azure Cache for Redis<br/>Active Session · Turn State · Playback Queue]
+        CosmosDB[Cosmos DB<br/>Final Transcript · Call Metadata · Analytics]
     end
 
     subgraph Security
-        KV[Key Vault<br/>API Keys · SIP Secrets]
-        MI[Managed Identity<br/>Zero-secret Auth]
+        KV[Key Vault<br/>Partner / Direct Routing Secrets Only]
+        MI[User-Assigned Managed Identity<br/>Azure Service Authentication]
     end
 
     subgraph Monitoring
-        AppInsights[Application Insights<br/>Call Latency · STT/TTS Perf · LLM Response Time]
+        AppInsights[Application Insights + Log Analytics<br/>Correlation ID · Turn Latency · Failures · Cost]
     end
 
     Caller -->|Voice Call| ACS
-    ACS -->|Audio Stream / WebSocket| Agent
-    Agent -->|Audio Chunks| STT
-    STT -->|Transcribed Text| Agent
-    Agent -->|Prompt + Context| OpenAI
-    OpenAI -->|Response Text| Agent
-    Agent -->|Text to Synthesize| TTS
-    TTS -->|Audio Stream| Agent
-    Agent -->|Audio Response| ACS
-    Agent -->|Read/Write Context| Redis
-    Agent -->|Store Transcript| CosmosDB
-    MI -->|Secrets| KV
-    Agent -->|Traces| AppInsights
+    ACS -->|IncomingCall Event| EventGrid
+    EventGrid -->|Event Grid Webhook| Control
+    ACS -->|Action + Call-State Webhooks| Callbacks
+    Callbacks -->|Direct HTTPS POST| Control
+    Control -->|Call Automation REST Actions| ACS
+    ACS <-->|Full-duplex PCM WebSocket| Media
+    Media -->|Inbound PCM Frames| Speech
+    Speech -->|Partial / Final Transcript| Dialog
+    Dialog -->|Moderate Input| Safety
+    Dialog -->|Prompt + Context| OpenAI
+    OpenAI -->|Response + Action| Dialog
+    Dialog -->|Moderate Response| Safety
+    Dialog -->|Text / SSML| Speech
+    Speech -->|Outbound PCM Frames| Media
+    Dialog <-->|Active State| Redis
+    Dialog -->|Finalize Transcript| CosmosDB
+    Control -->|Transfer Action| ACS
+    ACS -->|Transferred Call Leg| Human
+    MI -.->|Target RBAC| Speech
+    MI -.->|Target RBAC| OpenAI
+    MI -.->|Target RBAC| CosmosDB
+    MI -.->|Target RBAC| KV
+    Control -->|Traces| AppInsights
+    Media -->|Media Metrics| AppInsights
+    Dialog -->|AI Metrics| AppInsights
 
     style Caller fill:#3b82f6,color:#fff,stroke:#2563eb
     style ACS fill:#3b82f6,color:#fff,stroke:#2563eb
-    style Agent fill:#3b82f6,color:#fff,stroke:#2563eb
-    style STT fill:#10b981,color:#fff,stroke:#059669
+    style Control fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Media fill:#06b6d4,color:#fff,stroke:#0891b2
+    style Dialog fill:#3b82f6,color:#fff,stroke:#2563eb
+    style Speech fill:#10b981,color:#fff,stroke:#059669
     style OpenAI fill:#10b981,color:#fff,stroke:#059669
-    style TTS fill:#10b981,color:#fff,stroke:#059669
+    style Safety fill:#10b981,color:#fff,stroke:#059669
     style Redis fill:#f59e0b,color:#fff,stroke:#d97706
     style CosmosDB fill:#f59e0b,color:#fff,stroke:#d97706
     style KV fill:#7c3aed,color:#fff,stroke:#6d28d9
@@ -69,37 +89,42 @@ graph TB
 
 ## Data Flow
 
-1. **Call Ingestion**: Caller dials a phone number or connects via WebRTC → Azure Communication Services receives the call, establishes a media session → Audio stream forwarded to the Container Apps voice agent via WebSocket with bidirectional audio channels
-2. **Speech Recognition**: Voice agent streams audio chunks to Azure AI Speech STT in real-time → STT returns streaming partial results (enables early LLM processing) and final transcriptions → Barge-in detection: if caller interrupts, TTS playback is cancelled and new STT session begins immediately
-3. **Conversational AI**: Agent loads conversation context from Redis (previous turns, caller profile, intent history) → Constructs prompt with system instructions, conversation history, and current utterance → Azure OpenAI GPT-4o generates contextual response with action directives (respond, transfer, escalate, collect DTMF) → Response parsed for text content and any control actions
-4. **Speech Synthesis**: Response text sent to Azure AI Speech TTS with SSML formatting (prosody, emphasis, pauses) → Neural voice audio streamed back through the agent to Communication Services → Caller hears natural-sounding response within 1-2 seconds of finishing their utterance
-5. **State & Analytics**: Each turn (caller utterance + agent response) stored in Redis for active session context → On call completion, full transcript written to Cosmos DB with metadata (duration, turns, intents, sentiment) → Application Insights tracks end-to-end latency per turn, STT/TTS performance, and LLM token usage
+1. **Call Control**: Event Grid sends `IncomingCall` to the control endpoint → the application answers or rejects with the Call Automation SDK and supplies the default HTTPS callback URI plus media WebSocket URI → subsequent action success/failure events return through HTTPS callbacks
+2. **Media Session**: After the call connects, ACS opens the configured WebSocket to the media endpoint → the WebSocket upgrade headers carry the ACS correlation and call-connection IDs → the first `AudioMetadata` message describes encoding, sample rate, channels, and frame length → ACS streams `AudioData` and optional `DtmfData`; with bidirectional mode enabled, the application sends PCM audio or `StopAudio` messages back
+3. **Speech & Dialogue**: The media endpoint forwards PCM 16-kHz frames to Speech STT, resampling ACS PCM 24-kHz input to 16-kHz before using the Speech SDK custom audio stream → partial/final text enters the turn orchestrator → input is moderated, active context is loaded from Redis, and Azure OpenAI returns response text plus bounded actions such as transfer or escalation
+4. **Safe Playback & Barge-in**: Response text is moderated before Speech TTS creates outbound PCM → the media endpoint returns frames over the ACS WebSocket → voice activity or caller interruption sends `StopAudio`, cancels queued playback, and begins a new turn
+5. **Completion & Evidence**: Redis holds only active call state → on disconnect, the finalized transcript and call metadata are written to Cosmos DB → Application Insights correlates Call Connection ID, ACS Correlation ID, turn latency, Speech/OpenAI failures, tokens, and escalation outcomes
 
 ## Service Roles
 
 | Service | Layer | Role |
 |---------|-------|------|
-| Azure Communication Services | Communication | PSTN/SIP/WebRTC voice connectivity, call routing, media sessions |
-| Container Apps | Compute | Voice agent runtime, WebSocket session manager, STT→LLM→TTS pipeline |
-| Azure AI Speech (STT) | AI | Real-time speech recognition, streaming partial results, language detection |
+| Azure Communication Services | Communication | Calling, Call Automation actions/events, transfer, DTMF, bidirectional media streaming |
+| Event Grid | Control | `IncomingCall` notification delivery to the application webhook |
+| HTTPS callbacks | Control | Direct asynchronous Call Automation action results and call-state events from ACS |
+| Container Apps | Compute | Call-control API, media WebSocket, turn orchestration, cancellation and escalation |
+| Azure AI Speech (STT) | AI | PCM speech recognition, streaming partial results, language detection |
 | Azure OpenAI (GPT-4o) | AI | Multi-turn conversational reasoning, intent resolution, response generation |
 | Azure AI Speech (TTS) | AI | Neural voice synthesis, SSML rendering, prosody control |
+| Azure AI Content Safety | AI | Moderation before model inference and before synthesized playback |
 | Azure Redis Cache | Data | Active call session state, conversation context window, turn tracking |
-| Cosmos DB | Data | Call transcripts, conversation history, analytics, agent knowledge base |
-| Key Vault | Security | Speech API keys, OpenAI credentials, SIP trunk secrets |
-| Managed Identity | Security | Zero-secret authentication across all Azure services |
+| Cosmos DB | Data | Finalized call transcripts, call metadata, retention records, and analytics |
+| Key Vault | Security | Partner or Direct Routing secrets that cannot use managed identity |
+| Managed Identity | Security | Target identity for supported Azure data-plane access; explicit assignments remain required |
 | Application Insights | Monitoring | Call latency, STT/TTS performance, LLM response time, conversation quality |
 
 ## Security Architecture
 
-- **Managed Identity**: Voice agent authenticates to OpenAI, Speech, Cosmos DB, and Redis via managed identity
-- **Key Vault**: SIP trunk credentials and any partner API keys stored in Key Vault — never in environment variables
+- **Managed Identity**: The target deployment uses the Container App's user-assigned identity with explicit data-plane authorization for each supported service; identity attachment alone grants no access, and these assignments must be proven before Deploy Verified promotion
+- **Key Vault**: Only partner or Direct Routing secrets that cannot use identity belong in Key Vault; access requires an explicit Key Vault role assignment
 - **Call Encryption**: All audio streams encrypted in transit (TLS 1.2+ for WebSocket, SRTP for PSTN/SIP)
 - **PII Handling**: Caller phone numbers and personal data encrypted at rest in Cosmos DB — transcripts redactable via retention policies
 - **RBAC**: Agent service principal has least-privilege roles — Cognitive Services User for Speech, Cosmos DB Data Contributor for transcripts
 - **Rate Limiting**: Per-caller rate limits prevent abuse — max 5 concurrent calls per number, 30-minute max call duration
-- **Content Safety**: Response text passed through content safety filter before TTS synthesis — blocks harmful or inappropriate responses
+- **Content Safety**: Caller text is checked before model inference and response text is checked before TTS synthesis
 - **Compliance**: Call recording consent handling integrated with Communication Services — configurable per jurisdiction
+
+The current Bicep is an Evaluation Verified scaffold, not a production network baseline. Deploy Verified requires working identity assignments, private connectivity or approved network controls, a non-placeholder application image, and Azure deployment/smoke evidence.
 
 ## Scaling
 
