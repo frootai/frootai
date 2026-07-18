@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "67",
+    "slug": "67-ai-knowledge-management",
+    "canonical_id": "frootai__67-ai-knowledge-management",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "9b85db10898c00dfa1801d28f4f7b474ffd8f9f56db371efa7d3247ae7cb1b68",
+    "manifest_sha256": "c0e3c8668a658acea2fa5244ce8d9a43cdfe2f38589f0393f34902e74d9d397a",
+    "iac_sha256": "40b31193534e9c639501dda8220aa72335181cc66f1190ed1e2b355ea619aadb",
+    "evaluation_dataset_sha256": "009357be8750015b90654ddb8d5d9004d2e92bd7ebe651b3f436f05ba15ce596"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "e2728a0d8f99c3d9aed205c85be7a386b99644c593484fbc0aa0062fa136f3f0",
+          "metrics": {
+            "detail": "engine loaded 67-ai-knowledge-management"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "05e0cfa7dce53e00eed918f313aceec9552f03be852ab8a9c7f7e6ee6bd10895",
+          "metrics": {
+            "detail": "./infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/67-ai-knowledge-management/spec/fai-manifest.json",
+          "sha256": "c0e3c8668a658acea2fa5244ce8d9a43cdfe2f38589f0393f34902e74d9d397a",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/67-ai-knowledge-management/architecture.md",
+          "sha256": "fb7eb953291e89a7ce003a02738e24b0798278fe501154761aefe09b90fc30e7",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/67-ai-knowledge-management/cost.json",
+          "sha256": "07b6ca4b064b37e7e997e5ed60f15a3afe950cf0786d79a7c23266f04179d3b3",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

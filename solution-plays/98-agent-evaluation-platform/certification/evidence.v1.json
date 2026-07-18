@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "98",
+    "slug": "98-agent-evaluation-platform",
+    "canonical_id": "frootai__98-agent-evaluation-platform",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "e8a970d42c4042605ee8992b6df9a9f3fda747370894c49993968680382ca30c",
+    "manifest_sha256": "ae304ea4d3c94b1bf1f5afc3060efc9683e02ba2577f3c02cb2c6e22858069b5",
+    "iac_sha256": "2d41daf13061bac6540c57e6e7d0bcbeb4e8fbf3a29c7eff2dd2f3be1ec520cb",
+    "evaluation_dataset_sha256": "8ad9bb423494087a097e5090330027c4e7829dacc62ce6849a53d2375cb72eef"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "58dc7628834dab2527f803521050a1442d831f536ce6eb948431d4d70c4f88dc",
+          "metrics": {
+            "detail": "engine loaded 98-agent-evaluation-platform"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/98-agent-evaluation-platform/spec/fai-manifest.json",
+          "sha256": "ae304ea4d3c94b1bf1f5afc3060efc9683e02ba2577f3c02cb2c6e22858069b5",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/98-agent-evaluation-platform/architecture.md",
+          "sha256": "ff774b0d82fd6649a927c64ef1c95a43639bfef97e21f0fa29af788438f42a74",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/98-agent-evaluation-platform/cost.json",
+          "sha256": "76f2da703cb4cf5d289ddbe119b431dc3933246834b628d07b4f631da7eb8621",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

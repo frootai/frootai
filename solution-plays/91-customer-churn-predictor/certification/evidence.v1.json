@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "91",
+    "slug": "91-customer-churn-predictor",
+    "canonical_id": "frootai__91-customer-churn-predictor",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "b90961fb095be510ce868c1a8a0c9a124fb1d17c3412657ace59b982872086ac",
+    "manifest_sha256": "3b4dc3e441a6d4e574b0990398da3063d22f04a6d1d0aef249eda1c67fd3f9ec",
+    "iac_sha256": "59bcf5c6f57ed72438cc6ce5c8cf3a8acf2c5269845762021a04649d3d851b3c",
+    "evaluation_dataset_sha256": "b9e47f82498d2bea1e732c75f779b2fcd7423409aaccc400ffb0d79305e6ab5d"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "bb03942097477e190466a7ceb26ffd65a46a7bac9ad5f3afc2adf00a2cbcdfe7",
+          "metrics": {
+            "detail": "engine loaded 91-customer-churn-predictor"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/91-customer-churn-predictor/spec/fai-manifest.json",
+          "sha256": "3b4dc3e441a6d4e574b0990398da3063d22f04a6d1d0aef249eda1c67fd3f9ec",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/91-customer-churn-predictor/architecture.md",
+          "sha256": "fb0812bf523cd0168988adc404e5ebb0b8a86c7c09e3c3f1370a69d2befee1b1",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/91-customer-churn-predictor/cost.json",
+          "sha256": "410501a264dee1e8e8ea7d58c240ba4830f231a65e9469c8f9980c661ace21b5",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

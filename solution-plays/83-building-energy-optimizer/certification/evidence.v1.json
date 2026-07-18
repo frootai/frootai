@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "83",
+    "slug": "83-building-energy-optimizer",
+    "canonical_id": "frootai__83-building-energy-optimizer",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "ffcfd3d6d40ae487103555ed5f8a43e748a16612338216d5db8cd4e50594a761",
+    "manifest_sha256": "47aa92fb07ea7eecb60dca6d67ebabba9303be7c2051914cca87308e85282f49",
+    "iac_sha256": "76a53a409e42db41d3ab645ce4624b4cc6ea882b8e1de3d4d8c93d3b485708a8",
+    "evaluation_dataset_sha256": "188cd2d30c2538cf89e1612304642e3a514d35021d0aa391d8ecfb1a71450394"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "f4e057942fad036fa1db92324dcd6aa3a9f3bd8db0dd1eff53559c6cefea9d7b",
+          "metrics": {
+            "detail": "engine loaded 83-building-energy-optimizer"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/83-building-energy-optimizer/spec/fai-manifest.json",
+          "sha256": "47aa92fb07ea7eecb60dca6d67ebabba9303be7c2051914cca87308e85282f49",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/83-building-energy-optimizer/architecture.md",
+          "sha256": "2e5ac716819131e454073aafb0a16551b471af482904ae30bb957fed14b3b51e",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/83-building-energy-optimizer/cost.json",
+          "sha256": "e7402124220ee33345370f267d07b17636aa5f6d977635c17dc768eaeb106ea1",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

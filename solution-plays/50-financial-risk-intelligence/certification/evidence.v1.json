@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "50",
+    "slug": "50-financial-risk-intelligence",
+    "canonical_id": "frootai__50-financial-risk-intelligence",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "f20fd5d58d65bada4a77b087886165ce79704b205e752bf3f5e83f5db4b87b0e",
+    "manifest_sha256": "c84db03a4b8788bbf86611ba1258b12faa5f25aeb81cb05624d81c6ff80b03b1",
+    "iac_sha256": "724fb6d114bf6099083fc9062439309398c302cae6ce7b3a54f6ef2dc10765a9",
+    "evaluation_dataset_sha256": "9bec969dae4d4fe68e044d2ac1a0e0ba40e13de544aaa3ad985e4b175092c04d"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "c1da91ce727ec57fb68ffc5ac7a3628227fdc5c2c2c1d42774b46494e533b46e",
+          "metrics": {
+            "detail": "engine loaded 50-financial-risk-intelligence"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "05e0cfa7dce53e00eed918f313aceec9552f03be852ab8a9c7f7e6ee6bd10895",
+          "metrics": {
+            "detail": "./infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/50-financial-risk-intelligence/spec/fai-manifest.json",
+          "sha256": "c84db03a4b8788bbf86611ba1258b12faa5f25aeb81cb05624d81c6ff80b03b1",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/50-financial-risk-intelligence/architecture.md",
+          "sha256": "d733c454c4e77fd9af09a710ab240e944181d5c1b41f3ac40fa8053bb125915e",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/50-financial-risk-intelligence/cost.json",
+          "sha256": "b84059b7218e572c38ca01e5c2935c25b6e25c1e39f1bcf080ea1fcda5290570",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

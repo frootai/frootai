@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0.0",
+  "count": 5,
+  "passed": 5,
+  "failed": 0,
+  "records": [
+    {
+      "play": "01-enterprise-rag",
+      "compiled": true,
+      "conformant": true,
+      "required": [
+        "Microsoft.Storage/storageAccounts",
+        "Microsoft.Search/searchServices",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.App/containerApps"
+      ],
+      "emitted": [
+        "Microsoft.App/containerApps",
+        "Microsoft.App/managedEnvironments",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.CognitiveServices/accounts/deployments",
+        "Microsoft.ManagedIdentity/userAssignedIdentities",
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.Search/searchServices",
+        "Microsoft.Storage/storageAccounts",
+        "Microsoft.Storage/storageAccounts/blobServices",
+        "Microsoft.Storage/storageAccounts/blobServices/containers"
+      ],
+      "emittedKinds": {
+        "Microsoft.CognitiveServices/accounts": [
+          "OpenAI"
+        ],
+        "Microsoft.Storage/storageAccounts": [
+          "StorageV2"
+        ]
+      },
+      "missing": [],
+      "missingKinds": []
+    },
+    {
+      "play": "03-deterministic-agent",
+      "compiled": true,
+      "conformant": true,
+      "required": [
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.Storage/storageAccounts",
+        "Microsoft.App/containerApps"
+      ],
+      "emitted": [
+        "Microsoft.App/containerApps",
+        "Microsoft.App/managedEnvironments",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.CognitiveServices/accounts/deployments",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.ManagedIdentity/userAssignedIdentities",
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.Storage/storageAccounts",
+        "Microsoft.Storage/storageAccounts/blobServices",
+        "Microsoft.Storage/storageAccounts/blobServices/containers"
+      ],
+      "emittedKinds": {
+        "Microsoft.CognitiveServices/accounts": [
+          "ContentSafety",
+          "OpenAI"
+        ],
+        "Microsoft.Storage/storageAccounts": [
+          "StorageV2"
+        ],
+        "Microsoft.DocumentDB/databaseAccounts": [
+          "GlobalDocumentDB"
+        ]
+      },
+      "missing": [],
+      "missingKinds": []
+    },
+    {
+      "play": "06-document-intelligence",
+      "compiled": true,
+      "conformant": true,
+      "required": [
+        "Microsoft.Storage/storageAccounts",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.Search/searchServices",
+        "Microsoft.App/containerApps"
+      ],
+      "emitted": [
+        "Microsoft.App/containerApps",
+        "Microsoft.App/managedEnvironments",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.CognitiveServices/accounts/deployments",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.Insights/components",
+        "Microsoft.Insights/diagnosticSettings",
+        "Microsoft.KeyVault/vaults",
+        "Microsoft.ManagedIdentity/userAssignedIdentities",
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.Search/searchServices",
+        "Microsoft.Storage/storageAccounts"
+      ],
+      "emittedKinds": {
+        "Microsoft.Insights/components": [
+          "web"
+        ],
+        "Microsoft.CognitiveServices/accounts": [
+          "OpenAI"
+        ],
+        "Microsoft.Storage/storageAccounts": [
+          "StorageV2"
+        ],
+        "Microsoft.DocumentDB/databaseAccounts": [
+          "GlobalDocumentDB"
+        ]
+      },
+      "missing": [],
+      "missingKinds": []
+    },
+    {
+      "play": "07-multi-agent-service",
+      "compiled": true,
+      "conformant": true,
+      "required": [
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.ServiceBus/namespaces",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.App/containerApps"
+      ],
+      "emitted": [
+        "Microsoft.App/containerApps",
+        "Microsoft.App/managedEnvironments",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.CognitiveServices/accounts/deployments",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+        "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.ServiceBus/namespaces"
+      ],
+      "emittedKinds": {
+        "Microsoft.CognitiveServices/accounts": [
+          "OpenAI"
+        ],
+        "Microsoft.DocumentDB/databaseAccounts": [
+          "GlobalDocumentDB"
+        ]
+      },
+      "missing": [],
+      "missingKinds": []
+    },
+    {
+      "play": "33-voice-ai-agent",
+      "compiled": true,
+      "conformant": true,
+      "required": [
+        "Microsoft.Communication/communicationServices",
+        "Microsoft.EventGrid/systemTopics",
+        "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.Cache/redis",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.App/containerApps"
+      ],
+      "emitted": [
+        "Microsoft.App/containerApps",
+        "Microsoft.App/managedEnvironments",
+        "Microsoft.Cache/redis",
+        "Microsoft.CognitiveServices/accounts",
+        "Microsoft.CognitiveServices/accounts/deployments",
+        "Microsoft.Communication/communicationServices",
+        "Microsoft.DocumentDB/databaseAccounts",
+        "Microsoft.EventGrid/systemTopics",
+        "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+        "Microsoft.Insights/components",
+        "Microsoft.Insights/diagnosticSettings",
+        "Microsoft.KeyVault/vaults",
+        "Microsoft.ManagedIdentity/userAssignedIdentities",
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.Storage/storageAccounts"
+      ],
+      "emittedKinds": {
+        "Microsoft.Insights/components": [
+          "web"
+        ],
+        "Microsoft.CognitiveServices/accounts": [
+          "ContentSafety",
+          "OpenAI",
+          "SpeechServices"
+        ],
+        "Microsoft.Storage/storageAccounts": [
+          "StorageV2"
+        ],
+        "Microsoft.DocumentDB/databaseAccounts": [
+          "GlobalDocumentDB"
+        ]
+      },
+      "missing": [],
+      "missingKinds": []
+    }
+  ]
+}

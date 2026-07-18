@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "87",
+    "slug": "87-dynamic-pricing-engine",
+    "canonical_id": "frootai__87-dynamic-pricing-engine",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "99edd8073f8a44f392a9a01aebe7feb20fc0543bfbfc63e269aa3a15e59ab1e7",
+    "manifest_sha256": "fa190f5060485cfdd699fcfe5de566c7fe7736ffde70a824b5f77f716e05d24f",
+    "iac_sha256": "f6d770cc48131381443dc7cf0207fbf61b2ca05ef3771de4f0a7f48bf2d635cd",
+    "evaluation_dataset_sha256": "e38a441b4205ed1927237397446dd5cf9aca67f3ebd67956680b09445300c7bb"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "fd9aaa363fe5b07267e1e92782d235dde1421ca816ca9d60e0543ce4ef63412f",
+          "metrics": {
+            "detail": "engine loaded 87-dynamic-pricing-engine"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/87-dynamic-pricing-engine/spec/fai-manifest.json",
+          "sha256": "fa190f5060485cfdd699fcfe5de566c7fe7736ffde70a824b5f77f716e05d24f",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/87-dynamic-pricing-engine/architecture.md",
+          "sha256": "e2772b1bb98347b5d4e9872c5064ef35b0e5197ee6203b178fa16b350b39fbde",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/87-dynamic-pricing-engine/cost.json",
+          "sha256": "a27d02e1bfa9de51ea04309aaa709017d18470084ef3ecd7f5fa74c38922af48",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

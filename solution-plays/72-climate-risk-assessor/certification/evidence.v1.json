@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "72",
+    "slug": "72-climate-risk-assessor",
+    "canonical_id": "frootai__72-climate-risk-assessor",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "bd0712842c9ee4d1fb6071919f8193d80ce4080ed7e61c00c6eb17fbca25cb50",
+    "manifest_sha256": "04719d8578c51e8c9631d983baf403180dcd6f510e97d4347700e3f7e49d3d9e",
+    "iac_sha256": "9d387663f0644708b883c3e29afb7636a52a9894a0bcc6ff185073a5c75784f4",
+    "evaluation_dataset_sha256": "13d101f07c406c237913d61fbfc1f0ccdea3ab4c982874e8696906582a6dae86"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ee2b91a00f59d6007510beab02bf0a04eee90f8255e1fb6499f4dd39ba563fd4",
+          "metrics": {
+            "detail": "engine loaded 72-climate-risk-assessor"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/72-climate-risk-assessor/spec/fai-manifest.json",
+          "sha256": "04719d8578c51e8c9631d983baf403180dcd6f510e97d4347700e3f7e49d3d9e",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/72-climate-risk-assessor/architecture.md",
+          "sha256": "e2b72bab34dd3bd47c51740a2f71eafcc43bd00d79f438943c2220ec0b48aa83",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/72-climate-risk-assessor/cost.json",
+          "sha256": "d1835c84f51ddb7695f1bcb4ed99b94181025c4d57bd9eeb52954a2fb0147cdf",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}
