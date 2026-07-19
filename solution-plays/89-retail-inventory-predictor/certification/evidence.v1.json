@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "89",
+    "slug": "89-retail-inventory-predictor",
+    "canonical_id": "frootai__89-retail-inventory-predictor",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "ba91bc631ed6c86994d938b6115cd36dc0e907676f0ef5d308817e8e835a8b2a",
+    "manifest_sha256": "483e7bc458ba06c77af3df50b255c5d34007bbbffafd626e42fa84adbb7e9fe0",
+    "iac_sha256": "5fc381c0717208cea5bbaed4d343a0f0868965291a4cd6693e02b5de2669b3f2",
+    "evaluation_dataset_sha256": "7739707f9d11f62b8bb55b5fc5f0782577e7d97ebbd490c78cf5f911f52a3a67"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "1e76f3c1bb13b8ba6368e876ec70f8fb3af1dfb3e98942d2b3a18b0c09426113",
+          "metrics": {
+            "detail": "engine loaded 89-retail-inventory-predictor"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/89-retail-inventory-predictor/spec/fai-manifest.json",
+          "sha256": "483e7bc458ba06c77af3df50b255c5d34007bbbffafd626e42fa84adbb7e9fe0",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/89-retail-inventory-predictor/architecture.md",
+          "sha256": "1b8dc96788f510e923eef97df593222ffe3c1fae2ba2757af8bb8e64bfbd8eed",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/89-retail-inventory-predictor/cost.json",
+          "sha256": "b8446664357cc4b1f05cc4ae84d36b2167d33a13a4c7f6b5bdbb54419e08b9c2",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

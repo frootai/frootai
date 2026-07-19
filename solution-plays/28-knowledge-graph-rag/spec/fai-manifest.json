@@ -5,7 +5,7 @@
     "knowledge": [
       "R2-RAG-Architecture",
       "F1-GenAI-Foundations",
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "R3-Deterministic-AI"
     ],
     "waf": [
@@ -32,9 +32,9 @@
       "./.github/skills/tune-knowledge-graph-rag/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "safety": 0,

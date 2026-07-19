@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "28",
+    "slug": "28-knowledge-graph-rag",
+    "canonical_id": "frootai__28-knowledge-graph-rag",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "70d1ba29d5952b55199213f0d134a3787723d5efb25a79a923514ce9287995d3",
+    "manifest_sha256": "f2acab0cc59083ed9fb94ade3ec345610fd0b65ba4fe05bffeefa47c1c87c486",
+    "iac_sha256": "8d487d5f7df87e6127ae42f016e98fddf092d87774f6c452fcb497e4dae94916",
+    "evaluation_dataset_sha256": "abe7a31f48586a7bf833e05c09c9b4513b3a1ce7aac2a78f4bf2a2d9f9c4611d"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "19844a98ec32690355e9a65f2fec3864ce1f298fe0b3633ffaa97aa381d29eea",
+          "metrics": {
+            "detail": "engine loaded 28-knowledge-graph-rag"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "05e0cfa7dce53e00eed918f313aceec9552f03be852ab8a9c7f7e6ee6bd10895",
+          "metrics": {
+            "detail": "./infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/28-knowledge-graph-rag/spec/fai-manifest.json",
+          "sha256": "f2acab0cc59083ed9fb94ade3ec345610fd0b65ba4fe05bffeefa47c1c87c486",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/28-knowledge-graph-rag/architecture.md",
+          "sha256": "7248dac5fb480d574ace04bcea86ffb41f513cfddc1d146ae4c4d6fbeb616aca",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/28-knowledge-graph-rag/cost.json",
+          "sha256": "e75e3ce7c1edad742608add3f729e970ba12e2c0d179440c1ef85dc969ed548d",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

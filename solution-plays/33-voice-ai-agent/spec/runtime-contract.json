@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "play": "33-voice-ai-agent",
+  "profile": "offline-first",
+  "scenario": {
+    "id": "voice.simulate-turn",
+    "version": "1.0.0",
+    "input_schema": {
+      "type": "object",
+      "required": [
+        "transcript"
+      ],
+      "properties": {
+        "transcript": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interrupted": {
+          "type": "boolean"
+        },
+        "dtmf": {
+          "type": "string"
+        }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "required": [
+        "responseText",
+        "sessionState",
+        "transcript"
+      ]
+    }
+  },
+  "endpoints": {
+    "liveness": "/health/live",
+    "readiness": "/health/ready",
+    "catalog": "/v1/scenarios",
+    "execute": "/v1/scenarios/voice.simulate-turn/runs",
+    "status": "/v1/runs/{runId}"
+  },
+  "adapters": {
+    "offline": "solution-plays/runtime/scenarios/index.mjs",
+    "azure_ports": [
+      "EventGridIncomingCall",
+      "AcsCallControl",
+      "AzureSpeechStt",
+      "AzureOpenAIDialog",
+      "AzureSpeechTts",
+      "RedisSessionStore",
+      "CosmosTranscriptStore",
+      "ContentSafety"
+    ]
+  },
+  "infrastructure": {
+    "required_resource_types": [
+      "Microsoft.Communication/communicationServices",
+      "Microsoft.EventGrid/systemTopics",
+      "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+      "Microsoft.CognitiveServices/accounts",
+      "Microsoft.Cache/redis",
+      "Microsoft.DocumentDB/databaseAccounts",
+      "Microsoft.App/containerApps"
+    ],
+    "required_resource_kinds": {
+      "Microsoft.CognitiveServices/accounts": [
+        "OpenAI",
+        "SpeechServices",
+        "ContentSafety"
+      ]
+    }
+  },
+  "evidence": {
+    "deterministic_output_hash": true,
+    "endpoint_evaluation": true,
+    "unexpected_network_blocked_in_ci": true
+  }
+}

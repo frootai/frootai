@@ -51,24 +51,46 @@
       }
     },
     {
+      "name": "Azure AI Content Safety",
+      "category": "AI Services",
+      "purpose": "Input and response moderation before model inference and speech synthesis",
+      "tiers": {
+        "dev": {
+          "sku": "Free tier",
+          "cost": 0,
+          "note": "1K text records/month for offline and integration testing"
+        },
+        "prod": {
+          "sku": "Standard S0",
+          "cost": 15,
+          "note": "Moderation for approximately 100K caller and response text records/month"
+        },
+        "enterprise": {
+          "sku": "Standard S0",
+          "cost": 75,
+          "note": "Moderation for approximately 1M text records/month"
+        }
+      }
+    },
+    {
       "name": "Azure Communication Services",
       "category": "Communication",
-      "purpose": "PSTN calling, SIP trunking, WebRTC — inbound/outbound voice connectivity",
+      "purpose": "PSTN/SIP calling, Call Automation, and separately metered bidirectional audio streaming",
       "tiers": {
         "dev": {
           "sku": "Pay-As-You-Go",
           "cost": 15,
-          "note": "~500 minutes, US local number"
+          "note": "Blended estimate for ~500 calling and mixed-audio-streaming minutes plus a US local number"
         },
         "prod": {
           "sku": "Pay-As-You-Go",
           "cost": 150,
-          "note": "~10K minutes, toll-free + local, SIP trunk"
+          "note": "Blended estimate for ~10K calling and mixed-audio-streaming minutes, toll-free/local numbers, and SIP trunking"
         },
         "enterprise": {
           "sku": "Pay-As-You-Go + Direct Routing",
           "cost": 500,
-          "note": "~50K minutes, multi-region, existing PSTN integration"
+          "note": "Blended estimate for ~50K calling and mixed-audio-streaming minutes, multi-region, and existing PSTN integration"
         }
       }
     },
@@ -80,7 +102,7 @@
         "dev": {
           "sku": "Consumption",
           "cost": 15,
-          "note": "0.5 vCPU, 1GB, scale-to-zero"
+          "note": "0.5 vCPU, 1GB, one warm replica so incoming calls can be answered within the ringing window"
         },
         "prod": {
           "sku": "Dedicated",
@@ -119,7 +141,7 @@
     {
       "name": "Azure Cosmos DB",
       "category": "Data",
-      "purpose": "Call transcripts, conversation history, agent knowledge base, call analytics",
+      "purpose": "Finalized call transcripts, conversation history, retention records, and call analytics",
       "tiers": {
         "dev": {
           "sku": "Serverless",
@@ -141,7 +163,7 @@
     {
       "name": "Key Vault",
       "category": "Security",
-      "purpose": "Speech API keys, OpenAI credentials, SIP trunk authentication secrets",
+      "purpose": "Partner and SIP trunk secrets that cannot use managed identity",
       "tiers": {
         "dev": {
           "sku": "Standard",
@@ -185,14 +207,14 @@
   ],
   "totals": {
     "dev": 101,
-    "prod": 973,
-    "enterprise": 3480
+    "prod": 988,
+    "enterprise": 3555
   },
   "optimization_tips": [
     "Use GPT-4o-mini for simple FAQ and routing intents — reserve GPT-4o for complex multi-turn reasoning and escalation decisions",
     "Enable STT streaming with partial results to start LLM processing before the caller finishes speaking — reduces perceived latency by 40%",
     "Cache frequently asked question responses in Redis with 15-minute TTL — avoids redundant LLM calls for common intents",
-    "Use Communication Services Direct Routing with existing PBX to eliminate per-minute PSTN charges for enterprise telephony",
+    "Use Direct Routing when it improves carrier integration or negotiated telephony rates; still budget ACS Direct Routing and audio-streaming per-minute meters",
     "Right-size Redis tier — Basic C0 handles ~50 concurrent calls; upgrade only when session count exceeds capacity",
     "Implement call summarization with GPT-4o-mini post-call instead of real-time — saves 60% on transcript analysis tokens"
   ]

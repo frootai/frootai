@@ -5,7 +5,7 @@
     "knowledge": [
       "T3-Production-Patterns",
       "F1-GenAI-Foundations",
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "T1-Fine-Tuning-MLOps"
     ],
     "waf": [
@@ -32,9 +32,9 @@
       "./.github/skills/tune-predictive-maintenance-ai/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

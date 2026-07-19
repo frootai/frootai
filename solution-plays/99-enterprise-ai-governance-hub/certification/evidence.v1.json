@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "99",
+    "slug": "99-enterprise-ai-governance-hub",
+    "canonical_id": "frootai__99-enterprise-ai-governance-hub",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "ef3b430dd381c16f6b26d27b20df5e818fb4db468d48aff4f145b16618d4f260",
+    "manifest_sha256": "f4d33a0e188bdb1ae5ea66364f6bb0d02a68e22348e4479729554148bc7fef23",
+    "iac_sha256": "336ac617fc943aaae25665fa01e0f4d3e5583aacaf38cc07928fb201b058325e",
+    "evaluation_dataset_sha256": "5fcc7ff954e3f35e40937e4e5e2bf3521c2cec7159d4f5760707216acc5a8ffc"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "38305073a8e4aabdb934f460ad39f0a95a4e3f69847ce00a03483e168f8d0a62",
+          "metrics": {
+            "detail": "engine loaded 99-enterprise-ai-governance-hub"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/99-enterprise-ai-governance-hub/spec/fai-manifest.json",
+          "sha256": "f4d33a0e188bdb1ae5ea66364f6bb0d02a68e22348e4479729554148bc7fef23",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/99-enterprise-ai-governance-hub/architecture.md",
+          "sha256": "93d2ecf570f30d667ab59e23e9ef75c83419bbd68230c9680746c35ef1cd3e7e",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/99-enterprise-ai-governance-hub/cost.json",
+          "sha256": "a877ca2056a042d93a6c15106bf04572f5b0aa505dde7b1a295143498c847865",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

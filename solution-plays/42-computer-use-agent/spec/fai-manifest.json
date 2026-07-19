@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "context": {
     "knowledge": [
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "O3-MCP-Tools-Functions",
-      "F2-LLM-Selection",
+      "F2-LLM-Landscape",
       "T3-Production-Patterns",
       "R3-Deterministic-AI"
     ],
@@ -32,9 +32,9 @@
       "./.github/skills/tune-computer-use-agent/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.85,

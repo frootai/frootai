@@ -4,7 +4,7 @@
   "context": {
     "knowledge": [
       "R2-RAG-Architecture",
-      "O2-Agent-Coding",
+      "O2-AI-Agents",
       "O1-Semantic-Kernel",
       "F1-GenAI-Foundations"
     ],
@@ -32,9 +32,9 @@
       "./.github/skills/tune-conversation-memory-layer/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "safety": 0,

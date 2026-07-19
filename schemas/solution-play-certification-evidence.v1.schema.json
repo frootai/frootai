@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "title": "Solution Play Certification Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "subject", "policy", "generated_at", "stages"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["play_id", "slug", "commit_sha", "content_sha256", "manifest_sha256"],
+      "properties": {
+        "play_id": { "type": "string", "pattern": "^[0-9]{2,3}$" },
+        "slug": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+        "canonical_id": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "format": "uri" },
+        "commit_sha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "manifest_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "iac_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "evaluation_dataset_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "profile_sha256"],
+      "properties": {
+        "profile": { "type": "string", "minLength": 1 },
+        "profile_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "designed": { "$ref": "#/$defs/stage" },
+        "scaffold_verified": { "$ref": "#/$defs/stage" },
+        "build_verified": { "$ref": "#/$defs/stage" },
+        "evaluation_verified": { "$ref": "#/$defs/stage" },
+        "deploy_verified": { "$ref": "#/$defs/stage" },
+        "production_observed": { "$ref": "#/$defs/stage" }
+      }
+    },
+    "cost": { "type": "object" },
+    "integrity": { "type": "object" }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "generated_at", "checks", "artifacts"],
+      "properties": {
+        "status": { "enum": ["passed", "failed", "unavailable", "expired", "not_run"] },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "provenance": { "type": "object" },
+        "environment": { "type": "object" },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status", "blocking", "output_sha256"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["passed", "failed", "unavailable", "not_run"] },
+              "blocking": { "type": "boolean" },
+              "duration_ms": { "type": "integer", "minimum": 0 },
+              "output_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "metrics": { "type": "object" }
+            }
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "sha256"],
+            "properties": {
+              "type": { "type": "string", "minLength": 1 },
+              "url": { "type": "string" },
+              "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "media_type": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

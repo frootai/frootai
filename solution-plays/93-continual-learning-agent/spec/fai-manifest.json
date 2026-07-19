@@ -6,7 +6,7 @@
     "knowledge": [
       "O2-AI-Agents",
       "T3-Production-Patterns",
-      "R2-RAG"
+      "R2-RAG-Architecture"
     ],
     "waf": [
       "reliability",
@@ -17,22 +17,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "93-patterns.instructions.md"
+      ".github/instructions/continual-learning-agent-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-93/",
-      "evaluate-93/",
-      "tune-93/"
+      ".github/skills/deploy-continual-learning-agent/",
+      ".github/skills/evaluate-continual-learning-agent/",
+      ".github/skills/tune-continual-learning-agent/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -53,7 +53,7 @@
   },
   "guardrails": {
     "groundedness": 0.85,
-    "coherence": 0.80,
+    "coherence": 0.8,
     "relevance": 0.85,
     "safety": 0,
     "costPerQuery": 0.08

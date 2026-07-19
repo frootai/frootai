@@ -1,0 +1,2 @@
+{"id":"voice-normal","scenario":"voice.simulate-turn","input":{"transcript":"What is my account status?","interrupted":false},"expected":{"sessionState":"completed"},"tags":["offline","dialog"]}
+{"id":"voice-escalate","scenario":"voice.simulate-turn","input":{"transcript":"I need a human agent","interrupted":true},"expected":{"sessionState":"escalated"},"tags":["offline","escalation"]}

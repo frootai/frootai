@@ -6,7 +6,7 @@ targetScope = 'resourceGroup'
 // 
 
 @description('Azure region for all resources')
-param location string = resourceGroup().location
+param location string = 'swedencentral'
 
 @description('Environment: dev, staging, or prod')
 @allowed(['dev', 'staging', 'prod'])
@@ -72,6 +72,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   properties: {
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     supportsHttpsTrafficOnly: true
   }
 }
@@ -84,6 +85,23 @@ resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01'
 resource logsContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   parent: blobService
   name: 'conversation-logs'
+}
+
+// Cosmos DB deterministic response cache
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
+  name: '${projectName}-cosmos-${suffix}'
+  location: location
+  tags: tags
+  kind: 'GlobalDocumentDB'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    locations: [{ locationName: location, failoverPriority: 0 }]
+    capabilities: [{ name: 'EnableServerless' }]
+    consistencyPolicy: { defaultConsistencyLevel: 'Session' }
+    publicNetworkAccess: 'Enabled'
+    ipRules: [{ ipAddressOrRange: '0.0.0.0' }]
+  }
 }
 
 //  Container Apps Environment & App 
@@ -134,6 +152,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             { name: 'AZURE_OPENAI_TEMPERATURE', value: '0' }
             { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: contentSafety.properties.endpoint }
             { name: 'AZURE_STORAGE_ACCOUNT', value: storage.name }
+            { name: 'AZURE_COSMOS_ENDPOINT', value: cosmosDb.properties.documentEndpoint }
             { name: 'AZURE_CLIENT_ID', value: identity.properties.clientId }
           ]
         }
@@ -147,5 +166,6 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
 output openaiEndpoint string = openai.properties.endpoint
 output contentSafetyEndpoint string = contentSafety.properties.endpoint
 output storageAccountName string = storage.name
+output cosmosEndpoint string = cosmosDb.properties.documentEndpoint
 output containerAppFqdn string = containerApp.properties.configuration.ingress.fqdn
 output identityClientId string = identity.properties.clientId

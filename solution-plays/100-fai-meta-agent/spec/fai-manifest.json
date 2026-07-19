@@ -5,10 +5,10 @@
   "context": {
     "knowledge": [
       "O2-AI-Agents",
-      "O3-MCP-Tools",
+      "O3-MCP-Tools-Functions",
       "T3-Production-Patterns",
-      "O4-Azure-AI",
-      "R2-RAG"
+      "O4-Azure-AI-Foundry",
+      "R2-RAG-Architecture"
     ],
     "waf": [
       "reliability",
@@ -21,22 +21,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "100-patterns.instructions.md"
+      ".github/instructions/fai-meta-agent-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-100/",
-      "evaluate-100/",
-      "tune-100/"
+      ".github/skills/deploy-fai-meta-agent/",
+      ".github/skills/evaluate-fai-meta-agent/",
+      ".github/skills/tune-fai-meta-agent/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -57,10 +57,10 @@
     "speckit": "spec/"
   },
   "guardrails": {
-    "groundedness": 0.90,
-    "coherence": 0.90,
-    "relevance": 0.90,
+    "groundedness": 0.9,
+    "coherence": 0.9,
+    "relevance": 0.9,
     "safety": 0,
-    "costPerQuery": 0.20
+    "costPerQuery": 0.2
   }
 }

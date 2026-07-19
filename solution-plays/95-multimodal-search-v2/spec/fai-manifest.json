@@ -4,7 +4,7 @@
   "description": "Unified search across images, text, code, and audio with cross-modal reasoning. A user can search by uploading an image and get related code snippets, documentation, and audio explanations. Combines Azure AI Search vector indexes across modalities with GPT-4o for cross-modal synthesis.",
   "context": {
     "knowledge": [
-      "R2-RAG",
+      "R2-RAG-Architecture",
       "F1-GenAI-Foundations",
       "T3-Production-Patterns"
     ],
@@ -17,22 +17,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "95-patterns.instructions.md"
+      ".github/instructions/multimodal-search-v2-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-95/",
-      "evaluate-95/",
-      "tune-95/"
+      ".github/skills/deploy-multimodal-search-v2/",
+      ".github/skills/evaluate-multimodal-search-v2/",
+      ".github/skills/tune-multimodal-search-v2/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -54,7 +54,7 @@
   "guardrails": {
     "groundedness": 0.85,
     "coherence": 0.85,
-    "relevance": 0.90,
+    "relevance": 0.9,
     "safety": 0,
     "costPerQuery": 0.12
   }

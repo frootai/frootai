@@ -1,0 +1,2 @@
+{"id":"document-invoice","scenario":"document.process","input":{"text":"Invoice 42 Total: 125.50"},"expected":{"documentType":"invoice","fields":{"total":"125.50"}},"tags":["offline","extraction"]}
+{"id":"document-generic","scenario":"document.process","input":{"text":"Project notes with no monetary fields"},"expected":{"documentType":"document","fields":{"total":null}},"tags":["offline","abstention"]}

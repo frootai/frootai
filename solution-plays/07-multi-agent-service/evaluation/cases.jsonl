@@ -1,0 +1,2 @@
+{"id":"agents-analysis","scenario":"agents.execute","input":{"task":"Analyze sales data","maxHops":3},"expected":{"route":"analyst","hopCount":2},"tags":["offline","routing"]}
+{"id":"agents-research","scenario":"agents.execute","input":{"task":"Research identity controls","maxHops":3},"expected":{"route":"researcher","hopCount":2},"tags":["offline","routing"]}

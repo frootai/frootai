@@ -11,7 +11,7 @@ targetScope = 'resourceGroup'
 param environment string = 'dev'
 
 @description('Azure region for all resources')
-param location string = resourceGroup().location
+param location string = 'swedencentral'
 
 @description('Resource name prefix')
 param prefix string = 'document-int'
@@ -167,6 +167,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     networkAcls: {
       defaultAction: isProduction ? 'Deny' : 'Allow'
       bypass: 'AzureServices'
@@ -174,16 +175,100 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
 }
 
-// ─── RBAC ROLE ASSIGNMENTS ───────────────────────────────────────
+// ─── DOCUMENT WORKLOAD DATA ─────────────────────────────────────
 
-@description('Cognitive Services OpenAI User role for the app')
-var cognitiveServicesOpenAIUser = 'a97b65f3-24c7-4388-baec-2e87135dc908'
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
+  name: '${resourcePrefix}-cosmos-${uniqueSuffix}'
+  location: location
+  tags: tags
+  kind: 'GlobalDocumentDB'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    locations: [{ locationName: location, failoverPriority: 0 }]
+    capabilities: [{ name: 'EnableServerless' }]
+    consistencyPolicy: { defaultConsistencyLevel: 'Session' }
+    publicNetworkAccess: 'Enabled'
+    ipRules: [{ ipAddressOrRange: '0.0.0.0' }]
+  }
+}
 
-@description('Key Vault Secrets User role for the app')
-var keyVaultSecretsUser = '4633458b-17de-408a-b874-0445c86b69e6'
+resource search 'Microsoft.Search/searchServices@2024-06-01-preview' = {
+  name: '${resourcePrefix}-search-${uniqueSuffix}'
+  location: location
+  tags: tags
+  identity: { type: 'SystemAssigned' }
+  sku: { name: 'standard' }
+  properties: {
+    hostingMode: 'default'
+    replicaCount: 1
+    partitionCount: 1
+    semanticSearch: 'standard'
+    publicNetworkAccess: 'enabled'
+  }
+}
 
-@description('Storage Blob Data Reader role for the app')
-var storageBlobDataReader = '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
+resource appIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: '${resourcePrefix}-identity-${uniqueSuffix}'
+  location: location
+  tags: tags
+}
+
+resource containerEnvironment 'Microsoft.App/managedEnvironments@2024-03-01' = {
+  name: '${resourcePrefix}-env-${uniqueSuffix}'
+  location: location
+  tags: tags
+  properties: {
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: logAnalytics.properties.customerId
+        sharedKey: logAnalytics.listKeys().primarySharedKey
+      }
+    }
+  }
+}
+
+resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
+  name: '${resourcePrefix}-api-${uniqueSuffix}'
+  location: location
+  tags: tags
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: { '${appIdentity.id}': {} }
+  }
+  properties: {
+    managedEnvironmentId: containerEnvironment.id
+    configuration: {
+      ingress: {
+        external: true
+        targetPort: 8000
+        transport: 'http'
+        corsPolicy: {
+          allowedOrigins: ['https://frootai.dev']
+          allowedMethods: ['GET', 'POST']
+          allowedHeaders: ['content-type', 'authorization']
+        }
+      }
+    }
+    template: {
+      containers: [{
+        name: 'document-api'
+        image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+        resources: { cpu: json('0.5'), memory: '1Gi' }
+        env: [
+          { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
+          { name: 'AZURE_OPENAI_ENDPOINT', value: openai.properties.endpoint }
+          { name: 'AZURE_STORAGE_ACCOUNT', value: storage.name }
+          { name: 'AZURE_COSMOS_ENDPOINT', value: cosmosDb.properties.documentEndpoint }
+          { name: 'AZURE_SEARCH_ENDPOINT', value: 'https://${search.name}.search.windows.net' }
+          { name: 'AZURE_CLIENT_ID', value: appIdentity.properties.clientId }
+        ]
+      }]
+      scale: { minReplicas: isProduction ? 1 : 0, maxReplicas: isProduction ? 10 : 3 }
+    }
+  }
+}
 
 // ─── DIAGNOSTIC SETTINGS ─────────────────────────────────────────
 
@@ -230,6 +315,9 @@ output appInsightsConnectionString string = appInsights.properties.ConnectionStr
 
 @description('Storage account name')
 output storageAccountName string = storage.name
+output cosmosEndpoint string = cosmosDb.properties.documentEndpoint
+output searchEndpoint string = 'https://${search.name}.search.windows.net'
+output containerAppFqdn string = containerApp.properties.configuration.ingress.fqdn
 
 @description('Log Analytics workspace ID')
 output logAnalyticsWorkspaceId string = logAnalytics.id

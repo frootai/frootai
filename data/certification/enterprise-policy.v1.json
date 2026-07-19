@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "name": "enterprise-default-v1",
+  "description": "Default organization policy for evidence-backed Solution Play lifecycle operations.",
+  "providers": ["azure", "aws", "gcp", "open"],
+  "models": {
+    "allow": ["offline/rules-v1", "azure-openai/gpt-4o", "azure-openai/gpt-4o-mini"],
+    "deny": []
+  },
+  "regions": ["eastus2", "westus3", "swedencentral", "westeurope"],
+  "budget": {
+    "currency": "USD",
+    "max_monthly_dev": 1000,
+    "max_monthly_production": 10000,
+    "require_alerts_at_percent": [50, 80, 100]
+  },
+  "network": {
+    "production_posture": "private",
+    "managed_identity_required": true,
+    "private_endpoints_required": true
+  },
+  "lifecycle": {
+    "build": { "minimum_certification": "designed", "approvals": 0 },
+    "evaluate": { "minimum_certification": "build_verified", "approvals": 0 },
+    "what_if": { "minimum_certification": "evaluation_verified", "approvals": 0 },
+    "deploy_preview": { "minimum_certification": "evaluation_verified", "approvals": 1 },
+    "deploy_production": { "minimum_certification": "deploy_verified", "approvals": 2 },
+    "delete": { "minimum_certification": "deploy_verified", "approvals": 2 }
+  }
+}

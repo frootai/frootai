@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "15",
+    "slug": "15-multi-modal-docproc",
+    "canonical_id": "frootai__15-multi-modal-docproc",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "c53735e603e0d531caa8d7602eb1bd73ae9aea72a0a18ffc26923e050b8382d7",
+    "manifest_sha256": "121260dc1836060e0d06bd042bd79f41f93cf7abe39aff2025de0825dd584027",
+    "iac_sha256": "d45ca10f1e026e5916589c1d81c417d39c54dbf0c54842e74a2e0d9ddbfef798",
+    "evaluation_dataset_sha256": "5b54070011957f2078d23a3c2fd58b23f090128d070c38dd626497a8a61ed587"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "705d4f698f5dde73f3b602bcf9f79e85de14557b6025e12f8f2af798dfb06b02",
+          "metrics": {
+            "detail": "engine loaded 15-multi-modal-docproc"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "05e0cfa7dce53e00eed918f313aceec9552f03be852ab8a9c7f7e6ee6bd10895",
+          "metrics": {
+            "detail": "./infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/15-multi-modal-docproc/spec/fai-manifest.json",
+          "sha256": "121260dc1836060e0d06bd042bd79f41f93cf7abe39aff2025de0825dd584027",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/15-multi-modal-docproc/architecture.md",
+          "sha256": "459fdf58c7cadfd3f8b82f82234f0c789cab250e7c8c0f02f340105b9457126a",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/15-multi-modal-docproc/cost.json",
+          "sha256": "725488d8812cb5a27754e7297349f0d08d4d613d487ac4064891503af9e9e243",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

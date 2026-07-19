@@ -1,0 +1,409 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "03",
+    "slug": "03-deterministic-agent",
+    "canonical_id": "frootai__03-deterministic-agent",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "a6585b27b308537b7551b6d7f46e52ecf5028f195b682123603bb7c857fc6216",
+    "manifest_sha256": "55167a380f00d0ffe03f572e80c5d5c2149767281617ffc5227f807cd67e5a45",
+    "iac_sha256": "de3f043463f40afe3f8f3f52e8790b75154896c4ba16ce0703d1c2e8b5ec8c7d",
+    "evaluation_dataset_sha256": "cc0ee318ab3e24d18006d6043ac869b788fac436e1f1c8edd9563cc85f20e1fb"
+  },
+  "policy": {
+    "profile": "flagship-v1",
+    "profile_sha256": "ef65994d7392f423ac8952c623bc05d8c89858b7b7d6ecfb8a51771e1d64ccf4"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "9c40be19f6ab5bf3a0e363402a6f9cfecdb20e56e0acb10939ac7e2249549744",
+          "metrics": {
+            "detail": "engine loaded 03-deterministic-agent"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "05e0cfa7dce53e00eed918f313aceec9552f03be852ab8a9c7f7e6ee6bd10895",
+          "metrics": {
+            "detail": "./infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/03-deterministic-agent/spec/fai-manifest.json",
+          "sha256": "55167a380f00d0ffe03f572e80c5d5c2149767281617ffc5227f807cd67e5a45",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/03-deterministic-agent/architecture.md",
+          "sha256": "d4d64ad88b7c7a912d6d6d0ae65700cba2d7e65fa0b5cd7f1c62a16e1b16e047",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/03-deterministic-agent/cost.json",
+          "sha256": "92b3686910be76219f7b016d8420ff478d000af2d0f80903d6b42341575e63b9",
+          "media_type": "application/json"
+        }
+      ]
+    },
+    "scaffold_verified": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-07-25T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        },
+        "stage": "scaffold_verified"
+      },
+      "checks": [
+        {
+          "id": "clean-scaffold",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2ce163efce895ab05acd4ca193650491df4224058ae6c46df56828d86340a702",
+          "metrics": {
+            "detail": "runtime contract exists"
+          }
+        },
+        {
+          "id": "file-manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "813cef749a3c66fec9c76ec7f25a3c31cdd41525c063530529dc7c520c102688",
+          "metrics": {
+            "detail": "shared runtime files exist"
+          }
+        },
+        {
+          "id": "dependency-restore",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "aa548b35184f5ecde172e4b2c219b376aeafd390db0aebb6cbbcea3c7cab1b09",
+          "metrics": {
+            "detail": "offline runtime has zero external production dependencies"
+          }
+        },
+        {
+          "id": "offline-smoke",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "20026b2c67e0391e2eb930f5a90a06b5fbd5934b71dc53abffa02ed7ecf6d972",
+          "metrics": {
+            "detail": "scenario deterministic.execute is registered"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "runtime-contract",
+          "url": "solution-plays/03-deterministic-agent/spec/runtime-contract.json",
+          "sha256": "46dd8b6551f443725eb5721e6062b0f4f73dd78853347c7a5c62b234ab6105de",
+          "media_type": "application/json"
+        }
+      ]
+    },
+    "build_verified": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-07-25T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        },
+        "stage": "build_verified"
+      },
+      "checks": [
+        {
+          "id": "compile",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "634511768c2a562adc4fd299d0fcfe0902627c761a2708793fd61e7a6bede670",
+          "metrics": {
+            "detail": "native ESM modules are present"
+          }
+        },
+        {
+          "id": "unit-tests",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "f3ac519ba477d7b1a9f0a53594f3a9ef77136011b73ae93252e921ab494f2a29",
+          "metrics": {
+            "detail": "✔ all flagship datasets are valid JSONL with no placeholder ground truth (54.7039ms)\n✔ endpoint evaluation measures and passes every flagship case (151.2766ms)\n✔ all five flagship scenarios execute deterministically offline (5.9592ms)\n✔ invalid input fails closed without exposing internal errors (0.7674ms)\n✔ real HTTP listener exposes health, catalog, schema, execution, and run status (89.234ms)\n✔ Azure contracts name required adapter ports and resources for each flagship (0.2839ms)\n✔ policy endpoint allows what-if and blocks unverified production deployment (13.3979ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 465.0444"
+          }
+        },
+        {
+          "id": "endpoint-tests",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "b6e2c67b29d1869ea0f518ea46cac712c4e5eada4abbdafe2efcb5aa69e04394",
+          "metrics": {
+            "detail": "real listener endpoint tests are part of runtime suite"
+          }
+        },
+        {
+          "id": "iac-compile",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "7419cec3b8c52fee0252d0fe5f69ad284496b43332297ef226093d5953e6742b",
+          "metrics": {
+            "detail": "emitted 10 resource types"
+          }
+        },
+        {
+          "id": "architecture-iac-conformance",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "f2420dd3b959afe699ae882660d7a4ac26adad8bbdd5cd9ab82c1c18ab870e07",
+          "metrics": {
+            "detail": "all required runtime resource types are emitted"
+          }
+        },
+        {
+          "id": "artifact-hashes",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "0448452ea37182b2cc58ad4cb980eda5868985bf8793e8c86f9fa3cdcaac0a17",
+          "metrics": {
+            "detail": "runtime artifacts are content hashed"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "runtime",
+          "url": "solution-plays/runtime/core/kernel.mjs",
+          "sha256": "4ab65fd2348b4286ac8bbd72559f91b04d0e65d3d99570035070704f6fbee229",
+          "media_type": "text/javascript"
+        },
+        {
+          "type": "runtime",
+          "url": "solution-plays/runtime/core/server.mjs",
+          "sha256": "3c404b0cee26bbca82f4717b7b5d5225a97b595e1cdbc395fa5b03b6a5f4a7c3",
+          "media_type": "text/javascript"
+        },
+        {
+          "type": "runtime",
+          "url": "solution-plays/runtime/scenarios/index.mjs",
+          "sha256": "11f26cbbb0b3f411a6848d062581680c28a97da454f2c8ba02765ea40cb276ec",
+          "media_type": "text/javascript"
+        }
+      ]
+    },
+    "evaluation_verified": {
+      "status": "passed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-07-21T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        },
+        "stage": "evaluation_verified"
+      },
+      "checks": [
+        {
+          "id": "dataset",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2e4541aadfc11ca4934cc564d1a9a0013d7373bc51c4de74840034db8dc39343",
+          "metrics": {
+            "detail": "dataset contains no placeholders"
+          }
+        },
+        {
+          "id": "endpoint-evaluation",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "aa78b90a73e49e2fd629af804a3ca195bdfa19b2a26ecfdd66833878bda49db5",
+          "metrics": {
+            "detail": "2/2 endpoint cases passed"
+          }
+        },
+        {
+          "id": "quality-thresholds",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "63d1c08a70d980ad262591d34357de685648370fd9c65e2b1c0c39ec604ecf2f",
+          "metrics": {
+            "detail": "pass rate 1"
+          }
+        },
+        {
+          "id": "safety-thresholds",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "9cd683c0362d4cd5ab5d6395e75e09836ee4aa764a4207475d05a541987894bf",
+          "metrics": {
+            "detail": "all required assertions passed"
+          }
+        },
+        {
+          "id": "measured-cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "7a0125d450ce4a89f2a5c3354c2e8d8185de2c8e826de07a9b5b3795365c036b",
+          "metrics": {
+            "detail": "p95 8ms; offline cost $0"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "evaluation-dataset",
+          "url": "solution-plays/03-deterministic-agent/evaluation/cases.jsonl",
+          "sha256": "180856127e94a4e15f62f7867ab0ad6944868e2c6d4aea954609e0694c0cb1f7",
+          "media_type": "application/x-ndjson"
+        }
+      ]
+    },
+    "deploy_verified": {
+      "status": "failed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-07-19T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        },
+        "stage": "deploy_verified"
+      },
+      "checks": [
+        {
+          "id": "azure-what-if",
+          "status": "failed",
+          "blocking": true,
+          "output_sha256": "3c3bbe019ac320836d7c0a813fc2f438036f54483f7d499ee1b639b7232b8a4c",
+          "metrics": {
+            "detail": "No approved Azure what-if receipt has been supplied"
+          }
+        }
+      ],
+      "artifacts": []
+    },
+    "production_observed": {
+      "status": "failed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-07-19T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        },
+        "stage": "production_observed"
+      },
+      "checks": [
+        {
+          "id": "telemetry-window",
+          "status": "failed",
+          "blocking": true,
+          "output_sha256": "4663a982a048043bc34d2acfea6130dc810d4012094e2e694549fed912c6b6d2",
+          "metrics": {
+            "detail": "No matching production telemetry window has been supplied"
+          }
+        }
+      ],
+      "artifacts": []
+    }
+  }
+}

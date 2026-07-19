@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "profile": "design-v1",
+  "description": "Design-only certification policy for canonical Solution Plays without an executable flagship runtime.",
+  "stages": {
+    "designed": {
+      "required_checks": ["manifest", "references", "architecture", "cost", "iac-declaration", "evaluation-declaration", "observability-declaration"],
+      "ttl_hours": 720
+    }
+  }
+}

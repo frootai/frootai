@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "101",
+    "slug": "101-pester-test-development",
+    "canonical_id": "frootai__101-pester-test-development",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+    "content_sha256": "d87d94ed0a2a1b058269fb22510ab82f14d5af7709b12e958ca4f26f02e52b3f",
+    "manifest_sha256": "fcb75402f2eaf11fa8389249428822869fb0a4ca0d57a8b2cd9754461ce52b8d",
+    "iac_sha256": null,
+    "evaluation_dataset_sha256": "8349000c3dd34fa064ee4065bb3580246975f07839e89897bf80eb4f3730ce5b"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-07-18T22:54:56.591Z",
+  "stages": {
+    "designed": {
+      "status": "failed",
+      "generated_at": "2026-07-18T22:54:56.591Z",
+      "expires_at": "2026-08-17T22:54:56.591Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "d792fd477e66f82927ae6622020654d878a0a6f204f5301356536bd477757750",
+          "metrics": {
+            "detail": "engine loaded 101-pester-test-development"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "failed",
+          "blocking": true,
+          "output_sha256": "ef196c4a91f73ae75ec971599bcd1446434efbb46a4f5455ff1ad287c517824b",
+          "metrics": {
+            "detail": "missing"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "3f3e286fc5b64213c1eb925a2041fd38e6f045ec4c5cf7f7a57e5ead4a642db4",
+          "metrics": {
+            "detail": "evaluation entry point exists"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/101-pester-test-development/spec/fai-manifest.json",
+          "sha256": "fcb75402f2eaf11fa8389249428822869fb0a4ca0d57a8b2cd9754461ce52b8d",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/101-pester-test-development/architecture.md",
+          "sha256": "33567bc33aa2ccd6614d46c0878577786ff85d22ec4ab461d0a0bcfe806cb8d9",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/101-pester-test-development/cost.json",
+          "sha256": "7f34cddb5e0c4027048552fff23a686003a6c72998d2b7a9459af6f767695b39",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}

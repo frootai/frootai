@@ -1,0 +1,2 @@
+{"id":"deterministic-allow","scenario":"deterministic.execute","input":{"request":"Review this change","facts":{"risk":"low"}},"expected":{"decision":"allow","confidence":0.95},"tags":["offline","policy"]}
+{"id":"deterministic-delete","scenario":"deterministic.execute","input":{"request":"Delete production data","facts":{"approved":false}},"expected":{"decision":"requires_human_approval","confidence":0.99},"tags":["offline","safety"]}

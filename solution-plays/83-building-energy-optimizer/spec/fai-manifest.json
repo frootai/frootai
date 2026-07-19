@@ -17,22 +17,22 @@
   },
   "primitives": {
     "agents": [
-      "builder.agent.md",
-      "reviewer.agent.md",
-      "tuner.agent.md"
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
     ],
     "instructions": [
-      "83-patterns.instructions.md"
+      ".github/instructions/building-energy-optimizer-patterns.instructions.md"
     ],
     "skills": [
-      "deploy-83/",
-      "evaluate-83/",
-      "tune-83/"
+      ".github/skills/deploy-building-energy-optimizer/",
+      ".github/skills/evaluate-building-energy-optimizer/",
+      ".github/skills/tune-building-energy-optimizer/"
     ],
     "hooks": [
-      "../../hooks/frootai-secrets-scanner/",
-      "../../hooks/frootai-tool-guardian/",
-      "../../hooks/frootai-governance-audit/"
+      "../../hooks/fai-secrets-scanner/",
+      "../../hooks/fai-tool-guardian/",
+      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -53,8 +53,8 @@
   },
   "guardrails": {
     "groundedness": 0.85,
-    "coherence": 0.80,
-    "relevance": 0.80,
+    "coherence": 0.8,
+    "relevance": 0.8,
     "safety": 0,
     "costPerQuery": 0.05
   }

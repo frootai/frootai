@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "profile": "flagship-v1",
+  "description": "Fail-closed certification policy for the first five executable Solution Plays.",
+  "cohort": [
+    "01-enterprise-rag",
+    "03-deterministic-agent",
+    "06-document-intelligence",
+    "07-multi-agent-service",
+    "33-voice-ai-agent"
+  ],
+  "stages": {
+    "designed": {
+      "required_checks": ["manifest", "references", "architecture", "cost", "iac-declaration", "evaluation-declaration", "observability-declaration"],
+      "ttl_hours": 720
+    },
+    "scaffold_verified": {
+      "required_checks": ["clean-scaffold", "file-manifest", "dependency-restore", "offline-smoke"],
+      "ttl_hours": 168
+    },
+    "build_verified": {
+      "required_checks": ["compile", "unit-tests", "endpoint-tests", "iac-compile", "artifact-hashes"],
+      "ttl_hours": 168
+    },
+    "evaluation_verified": {
+      "required_checks": ["dataset", "endpoint-evaluation", "quality-thresholds", "safety-thresholds", "measured-cost"],
+      "ttl_hours": 72
+    },
+    "deploy_verified": {
+      "required_checks": ["azure-what-if", "deployment", "smoke", "secret-posture", "cleanup"],
+      "ttl_hours": 24
+    },
+    "production_observed": {
+      "required_checks": ["revision-match", "telemetry-window", "slos", "observed-cost", "incident-status"],
+      "ttl_hours": 24
+    }
+  }
+}

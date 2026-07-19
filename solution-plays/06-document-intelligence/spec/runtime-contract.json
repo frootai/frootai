@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "play": "06-document-intelligence",
+  "profile": "offline-first",
+  "scenario": {
+    "id": "document.process",
+    "version": "1.0.0",
+    "input_schema": {
+      "type": "object",
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "required": [
+        "documentType",
+        "fields",
+        "provenance"
+      ]
+    }
+  },
+  "endpoints": {
+    "liveness": "/health/live",
+    "readiness": "/health/ready",
+    "catalog": "/v1/scenarios",
+    "execute": "/v1/scenarios/document.process/runs",
+    "status": "/v1/runs/{runId}"
+  },
+  "adapters": {
+    "offline": "solution-plays/runtime/scenarios/index.mjs",
+    "azure_ports": [
+      "BlobDocumentStore",
+      "DocumentIntelligenceOcr",
+      "AzureOpenAIEnricher",
+      "CosmosJobRepository",
+      "AzureAISearchIndex"
+    ]
+  },
+  "infrastructure": {
+    "required_resource_types": [
+      "Microsoft.Storage/storageAccounts",
+      "Microsoft.CognitiveServices/accounts",
+      "Microsoft.DocumentDB/databaseAccounts",
+      "Microsoft.Search/searchServices",
+      "Microsoft.App/containerApps"
+    ],
+    "required_resource_kinds": {}
+  },
+  "evidence": {
+    "deterministic_output_hash": true,
+    "endpoint_evaluation": true,
+    "unexpected_network_blocked_in_ci": true
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "play": "01-enterprise-rag",
+  "profile": "offline-first",
+  "scenario": {
+    "id": "rag.query",
+    "version": "1.0.0",
+    "input_schema": {
+      "type": "object",
+      "required": [
+        "question"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "required": [
+        "answer",
+        "citations",
+        "grounded"
+      ]
+    }
+  },
+  "endpoints": {
+    "liveness": "/health/live",
+    "readiness": "/health/ready",
+    "catalog": "/v1/scenarios",
+    "execute": "/v1/scenarios/rag.query/runs",
+    "status": "/v1/runs/{runId}"
+  },
+  "adapters": {
+    "offline": "solution-plays/runtime/scenarios/index.mjs",
+    "azure_ports": [
+      "BlobDocumentSource",
+      "AzureAISearchRetriever",
+      "AzureOpenAIGenerator",
+      "ContentSafety"
+    ]
+  },
+  "infrastructure": {
+    "required_resource_types": [
+      "Microsoft.Storage/storageAccounts",
+      "Microsoft.Search/searchServices",
+      "Microsoft.CognitiveServices/accounts",
+      "Microsoft.App/containerApps"
+    ],
+    "required_resource_kinds": {}
+  },
+  "evidence": {
+    "deterministic_output_hash": true,
+    "endpoint_evaluation": true,
+    "unexpected_network_blocked_in_ci": true
+  }
+}
