@@ -6,6 +6,11 @@ on:
       - 'solution-plays/**'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
+      - 'scripts/solution-play-*.mjs'
+      - 'scripts/test-solution-play-*.mjs'
+      - 'scripts/validate-flagship-iac.mjs'
+      - 'data/certification/**'
+      - 'schemas/solution-play-certification-evidence.v1.schema.json'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
       - 'orchard/registry/solution-play-index.json'
@@ -14,6 +19,11 @@ on:
       - 'solution-plays/**'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
+      - 'scripts/solution-play-*.mjs'
+      - 'scripts/test-solution-play-*.mjs'
+      - 'scripts/validate-flagship-iac.mjs'
+      - 'data/certification/**'
+      - 'schemas/solution-play-certification-evidence.v1.schema.json'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
       - 'orchard/registry/solution-play-index.json'
@@ -35,146 +45,25 @@ jobs:
           npm run check:solution-play-index
           npm run test:solution-play-index
 
-  validate:
+  validate-corpus:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      matrix:
-        play:
-          - 01-enterprise-rag
-          - 02-ai-landing-zone
-          - 03-deterministic-agent
-          - 04-call-center-voice-ai
-          - 05-it-ticket-resolution
-          - 06-document-intelligence
-          - 07-multi-agent-service
-          - 08-copilot-studio-bot
-          - 09-ai-search-portal
-          - 10-content-moderation
-          - 11-ai-landing-zone-advanced
-          - 12-model-serving-aks
-          - 13-fine-tuning-workflow
-          - 14-cost-optimized-ai-gateway
-          - 15-multi-modal-docproc
-          - 16-copilot-teams-extension
-          - 17-ai-observability
-          - 18-prompt-management
-          - 19-edge-ai-phi4
-          - 20-anomaly-detection
-          - 21-agentic-rag
-          - 22-multi-agent-swarm
-          - 23-browser-automation-agent
-      fail-fast: false
-
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Validate .github Agentic OS (19 files)
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Validate all 101 manifest contracts
         run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          echo "=== Validating $PLAY ==="
-          ERRORS=0
-
-          # Layer 1: Always-On
-          for f in ".github/copilot-instructions.md" \
-                   ".github/instructions/azure-coding.instructions.md" \
-                   ".github/instructions/security.instructions.md"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-
-          # Check play-specific patterns file exists (any *-patterns.instructions.md)
-          if ! ls "$PLAY/.github/instructions/"*-patterns.instructions.md 1>/dev/null 2>&1; then
-            echo "MISSING: play-specific patterns.instructions.md"
-            ERRORS=$((ERRORS+1))
-          fi
-
-          # Layer 2: On-Demand
-          for f in ".github/prompts/deploy.prompt.md" \
-                   ".github/prompts/test.prompt.md" \
-                   ".github/prompts/review.prompt.md" \
-                   ".github/prompts/evaluate.prompt.md" \
-                   ".github/agents/builder.agent.md" \
-                   ".github/agents/reviewer.agent.md" \
-                   ".github/agents/tuner.agent.md"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-
-          # Layer 3: Auto-Invoked
-          for f in ".github/skills/deploy-azure/SKILL.md" \
-                   ".github/skills/evaluate/SKILL.md" \
-                   ".github/skills/tune/SKILL.md"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-
-          # Layer 4: Lifecycle
-          for f in ".github/hooks/guardrails.json" \
-                   ".github/workflows/ai-review.md" \
-                   ".github/workflows/ai-deploy.md"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-
-          if [ $ERRORS -gt 0 ]; then echo "FAIL: $ERRORS .github files missing"; exit 1; fi
-          echo "✅ .github Agentic OS: all files present"
-
-      - name: Validate DevKit files
+          node scripts/solution-play-manifest-contract.mjs --check
+          node --test scripts/test-solution-play-manifest-contract.mjs
+      - name: Initialize all 101 plays through the engine
+        run: node --test scripts/test-solution-play-engine-corpus.mjs
+      - name: Verify certification, policy, and runtime contracts
         run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          ERRORS=0
-          for f in "agent.md" "instructions.md" "plugin.json" "README.md" "CHANGELOG.md" \
-                   ".vscode/mcp.json" ".vscode/settings.json" \
-                   "infra/main.bicep" "infra/parameters.json" \
-                   "mcp/index.js" "plugins/README.md"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-          if [ $ERRORS -gt 0 ]; then echo "FAIL: $ERRORS DevKit files missing"; exit 1; fi
-          echo "✅ DevKit: all files present"
-
-      - name: Validate TuneKit configs
-        run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          ERRORS=0
-          for f in "config/openai.json" "config/guardrails.json" \
-                   "config/agents.json" "config/model-comparison.json" \
-                   "evaluation/test-set.jsonl" "evaluation/eval.py"; do
-            if [ ! -f "$PLAY/$f" ]; then echo "MISSING: $f"; ERRORS=$((ERRORS+1)); fi
-          done
-          if [ $ERRORS -gt 0 ]; then echo "FAIL: $ERRORS TuneKit files missing"; exit 1; fi
-          echo "✅ TuneKit: all configs present"
-
-      - name: Validate JSON configs parse correctly
-        run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          for f in $(find "$PLAY/config" -name "*.json" 2>/dev/null); do
-            echo "Parsing: $f"
-            python3 -c "import json; json.load(open('$f'))" || { echo "INVALID JSON: $f"; exit 1; }
-          done
-          # Validate plugin.json
-          python3 -c "import json; json.load(open('$PLAY/plugin.json'))" || { echo "INVALID: plugin.json"; exit 1; }
-          # Validate guardrails.json
-          python3 -c "import json; json.load(open('$PLAY/.github/hooks/guardrails.json'))" || { echo "INVALID: guardrails.json"; exit 1; }
-          echo "✅ All JSON files valid"
-
-      - name: Validate agent.md has substance (not skeleton)
-        run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          SIZE=$(wc -c < "$PLAY/agent.md")
-          if [ "$SIZE" -lt 500 ]; then
-            echo "FAIL: agent.md is only $SIZE bytes (minimum: 500). Likely skeleton."
-            exit 1
-          fi
-          echo "✅ agent.md: $SIZE bytes (substantial)"
-
-      - name: Validate Bicep syntax
-        run: |
-          PLAY="solution-plays/${{ matrix.play }}"
-          # Basic syntax check — ensure file has resource declarations
-          if ! grep -q "resource\|param\|module" "$PLAY/infra/main.bicep"; then
-            echo "WARNING: main.bicep may be a placeholder (no resource/param/module declarations)"
-          fi
-          echo "✅ Bicep file present and has content"
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## Play Validation: ${{ matrix.play }}" >> $GITHUB_STEP_SUMMARY
-          echo "✅ All Agentic OS, DevKit, and TuneKit files validated" >> $GITHUB_STEP_SUMMARY
+          node --test scripts/test-solution-play-certification.mjs \
+            scripts/test-solution-play-certification-index.mjs \
+            scripts/test-solution-play-policy.mjs \
+            solution-plays/runtime/test/*.test.mjs
