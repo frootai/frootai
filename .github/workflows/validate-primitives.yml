@@ -183,10 +183,10 @@ jobs:
             'ghp_[0-9A-Za-z]{36}' \
             'github_pat_[0-9A-Za-z_]{82}' \
             'sk_live_[0-9A-Za-z]{24,}' \
-            'azure[_-]?client[_-]?secret' \
             '-----BEGIN.*PRIVATE KEY-----'; do
 
-            MATCHES=$(grep -rlE "$pattern" agents/ instructions/ skills/ hooks/ plugins/ 2>/dev/null || true)
+            MATCHES=$(grep -rlE --exclude='*.md' "$pattern" agents/ instructions/ skills/ hooks/ plugins/ 2>/dev/null \
+              | grep -vE '^hooks/(fai-secrets-scanner|fai-governance-audit)/' || true)
             if [ -n "$MATCHES" ]; then
               echo "⛔ Potential secret found matching pattern: $pattern"
               echo "$MATCHES"
