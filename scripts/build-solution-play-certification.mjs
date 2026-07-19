@@ -222,8 +222,12 @@ async function designedEvidence(play, generatedAt) {
   const artifactResolver = (artifact) => {
     if (typeof artifact?.url !== 'string' || artifact.url.includes('..')) return null;
     const absolute = path.resolve(root, artifact.url);
-    if (!absolute.startsWith(`${root}${path.sep}`) || !fs.existsSync(absolute) || !fs.statSync(absolute).isFile()) return null;
-    return fs.readFileSync(absolute);
+    if (!absolute.startsWith(`${root}${path.sep}`)) return null;
+    try {
+      return fs.readFileSync(absolute);
+    } catch {
+      return null;
+    }
   };
   const result = certifyEvidence(evidence, { now: new Date(), expectedContentSha256: contentSha, expectedCommitSha: commitSha, policy: activePolicy, expectedPolicySha256: activePolicySha, artifactResolver });
   return { evidence, certification: result };

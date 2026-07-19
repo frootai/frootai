@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -43,7 +42,7 @@ export function validateFlagshipIac(play) {
   const output = path.join(sourceDirectory, `${path.basename(sourceName, path.extname(sourceName))}.json`);
   fs.rmSync(output, { force: true });
   const build = process.platform === 'win32'
-    ? spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', `az bicep build --file ${sourceName}`], { cwd: sourceDirectory, encoding: 'utf8' })
+    ? spawnSync('cmd.exe', ['/d', '/s', '/c', 'az.cmd', 'bicep', 'build', '--file', sourceName], { cwd: sourceDirectory, encoding: 'utf8' })
     : spawnSync('az', ['bicep', 'build', '--file', sourceName], { cwd: sourceDirectory, encoding: 'utf8' });
   if (build.status !== 0 || !fs.existsSync(output)) {
     const error = `${build.error?.message || ''}\n${build.stdout || ''}${build.stderr || ''}`.trim();

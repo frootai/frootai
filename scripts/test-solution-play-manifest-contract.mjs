@@ -6,7 +6,8 @@ import test from 'node:test';
 import { normalizeManifest } from './solution-play-manifest-contract.mjs';
 
 function fixture() {
-  const playDir = fs.mkdtempSync(path.join(os.tmpdir(), 'frootai-manifest-'));
+  const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'frootai-manifest-'));
+  const playDir = path.join(fixtureRoot, 'solution-plays', '69-carbon-footprint-tracker');
   fs.mkdirSync(path.join(playDir, '.github', 'agents'), { recursive: true });
   fs.mkdirSync(path.join(playDir, '.github', 'instructions'), { recursive: true });
   fs.mkdirSync(path.join(playDir, '.github', 'skills', 'deploy-carbon-footprint-tracker'), { recursive: true });
