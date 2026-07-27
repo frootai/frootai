@@ -6,9 +6,9 @@
     "slug": "62-federated-learning-pipeline",
     "canonical_id": "frootai__62-federated-learning-pipeline",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "079e7daff18607010f6eeaf70303a40b1ee1b98bece2a69a244a432e1ff853e3",
-    "manifest_sha256": "ecb93b474e42973453e6bc6689fd0cc4b3c0e157303abd8fb550c45077c0fb2d",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "ed3cc497cf9ec3ade7df929c0c821070f0a202cf5db48d6b55bc888d3a2c9c20",
+    "manifest_sha256": "9fd02cee7bc8abe14066987c2808e37f068aa1414bb70457f774bbcefb6e616c",
     "iac_sha256": "ffb5ee82fe841be1e9f6935c7b2e2ad8cdd2954db58be96b8a018d50f0eaa538",
     "evaluation_dataset_sha256": "ce59f6744fb25adac9f240b583a03d4599e0640ee266663e7fc1bfef1e99a946"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/62-federated-learning-pipeline/spec/fai-manifest.json",
-          "sha256": "ecb93b474e42973453e6bc6689fd0cc4b3c0e157303abd8fb550c45077c0fb2d",
+          "sha256": "9fd02cee7bc8abe14066987c2808e37f068aa1414bb70457f774bbcefb6e616c",
           "media_type": "application/json"
         },
         {

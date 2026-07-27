@@ -6,9 +6,9 @@
     "slug": "74-ai-tutoring-agent",
     "canonical_id": "frootai__74-ai-tutoring-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "c3720c9917a5b563bedba23fa2bcab8b63c626ffb2d77ee0530ed8e92ac5dd24",
-    "manifest_sha256": "d9abfdbccf17dfc8541ae09985898783bbd9d6505240006b78e078944bc2fac9",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "4b9eaf9a31e9a46f9091a56d4c89043ae4139f2965be2e2265f9b53d20ea55f4",
+    "manifest_sha256": "55f3706197380c981f492da57a60f0309174baacf93ec792f523018fd08f96d2",
     "iac_sha256": "762d9e092c4d9ccafb8ed5a15580de4cf1efe569372437eaf44ee6ddeed62355",
     "evaluation_dataset_sha256": "f700c1e37699059295030e822fe36ed7330f10035ed38f24a45684ca83f77621"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/74-ai-tutoring-agent/spec/fai-manifest.json",
-          "sha256": "d9abfdbccf17dfc8541ae09985898783bbd9d6505240006b78e078944bc2fac9",
+          "sha256": "55f3706197380c981f492da57a60f0309174baacf93ec792f523018fd08f96d2",
           "media_type": "application/json"
         },
         {

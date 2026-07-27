@@ -6,9 +6,9 @@
     "slug": "55-supply-chain-ai",
     "canonical_id": "frootai__55-supply-chain-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "ef6c4d830d982c8290e61e4c3b154743b6a7203f06a5f9de707cda3dd67b93f2",
-    "manifest_sha256": "14917e3dd13e623365e5c374db11aed530cbea69cc405a21c786f46f91606816",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "c018307d5622e0e6ad46ea6f3f50d8c1769c9970e69d5a0c34d371badb7b2972",
+    "manifest_sha256": "375d3d401487c4b7f29d1d594f8e885dfff23e3422a7b8e2e4f566177ed848a2",
     "iac_sha256": "cf6068eb46ae414551f2d80b9e2ac05776b389fec732a7affeca986bca75f45f",
     "evaluation_dataset_sha256": "8e8e7a41813dc658c608fc5dd6f5889bc28de2f79bcede54722f71823de2d8f3"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/55-supply-chain-ai/spec/fai-manifest.json",
-          "sha256": "14917e3dd13e623365e5c374db11aed530cbea69cc405a21c786f46f91606816",
+          "sha256": "375d3d401487c4b7f29d1d594f8e885dfff23e3422a7b8e2e4f566177ed848a2",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "98-agent-evaluation-platform",
     "canonical_id": "frootai__98-agent-evaluation-platform",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "e8a970d42c4042605ee8992b6df9a9f3fda747370894c49993968680382ca30c",
-    "manifest_sha256": "ae304ea4d3c94b1bf1f5afc3060efc9683e02ba2577f3c02cb2c6e22858069b5",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "437df5e62f181618938ae72b6fab9681b58b0f9d45d010b660ac8124560d2d77",
+    "manifest_sha256": "98ded6cadace6dee729725d6f9949a719665a2070a2f53040c9fae8f6e4c7ad2",
     "iac_sha256": "2d41daf13061bac6540c57e6e7d0bcbeb4e8fbf3a29c7eff2dd2f3be1ec520cb",
     "evaluation_dataset_sha256": "8ad9bb423494087a097e5090330027c4e7829dacc62ce6849a53d2375cb72eef"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/98-agent-evaluation-platform/spec/fai-manifest.json",
-          "sha256": "ae304ea4d3c94b1bf1f5afc3060efc9683e02ba2577f3c02cb2c6e22858069b5",
+          "sha256": "98ded6cadace6dee729725d6f9949a719665a2070a2f53040c9fae8f6e4c7ad2",
           "media_type": "application/json"
         },
         {

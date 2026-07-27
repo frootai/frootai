@@ -6,9 +6,9 @@
     "slug": "52-ai-api-gateway-v2",
     "canonical_id": "frootai__52-ai-api-gateway-v2",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "65ae6a0098f21b6c6a13771e33865cd406c8382a24cf5a4079c1fe71be456408",
-    "manifest_sha256": "8531fff745179ef0c21b6a7adbc6cced98a0285a59eb42661ace5bbeddc94264",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "ccce98201089a11790e4f336fc080c7d7e00bd1c0dfba499ce23e7e957db2f2c",
+    "manifest_sha256": "63e823b61399dc2304644e643d6cd9978a5d78ecf3436d88ce80535267352adb",
     "iac_sha256": "a1f3658beddbbb3a68d18ec3b5b6c9b9be0dc237c3eb07d8b44e6e27609476c5",
     "evaluation_dataset_sha256": "38fdf41907ba706da4482aee71257b362888db1d9a126eebd61fe6e25c412f13"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/52-ai-api-gateway-v2/spec/fai-manifest.json",
-          "sha256": "8531fff745179ef0c21b6a7adbc6cced98a0285a59eb42661ace5bbeddc94264",
+          "sha256": "63e823b61399dc2304644e643d6cd9978a5d78ecf3436d88ce80535267352adb",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "63-fraud-detection-agent",
     "canonical_id": "frootai__63-fraud-detection-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "5869934e26ae56d048ccf15cd44467a270822b8c62ff74828dc429da57c883dc",
-    "manifest_sha256": "557407d4c8b175569f24859655092316ec61c1187360db4f64366bf1407e981e",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "7d2b9c923f8cccfd43704efe7e48837ae9a558f7049dc54244ce636e462f1f09",
+    "manifest_sha256": "86856159cf2b02048e892ffb8466774565c40affcbda562b1af2fc2808099f85",
     "iac_sha256": "053e6ea0f5e5d3883e3e07c8e1e686bfc9a91ffc8da4cb49b7b9b6b4be0da40f",
     "evaluation_dataset_sha256": "76a4c52c68d80c610db26e8a9cffa146c285ede47291ab2249191def1ea45012"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/63-fraud-detection-agent/spec/fai-manifest.json",
-          "sha256": "557407d4c8b175569f24859655092316ec61c1187360db4f64366bf1407e981e",
+          "sha256": "86856159cf2b02048e892ffb8466774565c40affcbda562b1af2fc2808099f85",
           "media_type": "application/json"
         },
         {

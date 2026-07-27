@@ -6,9 +6,9 @@
     "slug": "89-retail-inventory-predictor",
     "canonical_id": "frootai__89-retail-inventory-predictor",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "ba91bc631ed6c86994d938b6115cd36dc0e907676f0ef5d308817e8e835a8b2a",
-    "manifest_sha256": "483e7bc458ba06c77af3df50b255c5d34007bbbffafd626e42fa84adbb7e9fe0",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "30cc6e3ef37ec347402838cf845e45eddd763a74c67f7a498fd54c30a33e4675",
+    "manifest_sha256": "bb1756a957859051189b55f340a2c71e1eb6ae3922ce6ef9fe2e3ea84af118b4",
     "iac_sha256": "5fc381c0717208cea5bbaed4d343a0f0868965291a4cd6693e02b5de2669b3f2",
     "evaluation_dataset_sha256": "7739707f9d11f62b8bb55b5fc5f0782577e7d97ebbd490c78cf5f911f52a3a67"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/89-retail-inventory-predictor/spec/fai-manifest.json",
-          "sha256": "483e7bc458ba06c77af3df50b255c5d34007bbbffafd626e42fa84adbb7e9fe0",
+          "sha256": "bb1756a957859051189b55f340a2c71e1eb6ae3922ce6ef9fe2e3ea84af118b4",
           "media_type": "application/json"
         },
         {

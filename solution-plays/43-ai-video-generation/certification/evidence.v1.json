@@ -6,9 +6,9 @@
     "slug": "43-ai-video-generation",
     "canonical_id": "frootai__43-ai-video-generation",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "f0aab7dfba2aba9e360167b59af99ae302c75a4c1ff7ae7d3b92351e09357037",
-    "manifest_sha256": "0cc6c12ebad0848334881bff0fd3c1f2bd4d52b5340d894db6631ee9d48faedd",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "1eb7492d964e21546a838101a7823b7c8482c14f6dbd325d497818f71145ce5c",
+    "manifest_sha256": "422dbce18a9b9156b40277d615528a4a69d284da3238827ec57b40ea3644d8d7",
     "iac_sha256": "6f7df7700648b14feec9f66c22b7d37f91b8092874fa3f9c161e813c5e0eed78",
     "evaluation_dataset_sha256": "8465f60b82d209c3a9af2c848e23ad0ff003686c1b6f30470a66796a885e4834"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/43-ai-video-generation/spec/fai-manifest.json",
-          "sha256": "0cc6c12ebad0848334881bff0fd3c1f2bd4d52b5340d894db6631ee9d48faedd",
+          "sha256": "422dbce18a9b9156b40277d615528a4a69d284da3238827ec57b40ea3644d8d7",
           "media_type": "application/json"
         },
         {

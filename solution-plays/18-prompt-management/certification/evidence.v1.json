@@ -6,9 +6,9 @@
     "slug": "18-prompt-management",
     "canonical_id": "frootai__18-prompt-management",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "a837c8c250a8857bc14704e3c194df9891c0027e1dc7d220782f989d009df586",
-    "manifest_sha256": "7f30bfaabab1250f2d1bedc6dd28c3ae04f006a06a3cd5550c3e7ac2c7972ed5",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "4d74310927a3a099f1e36b59ed1b650066d5b68956b8900d18f567d37e0a669b",
+    "manifest_sha256": "b2bd1ab0758bd8363df347d29efe2279c0e78bc4b27d9ef74f4d5d1fdcd73609",
     "iac_sha256": "7907ddf63354b18897cc5031f05a2d94d4e14dfa6acff0de828092053323d15d",
     "evaluation_dataset_sha256": "174814d7beaaefc66bcfe5be26a6aa2d43ad2fd9fafc41b99efde6e1d4c13363"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/18-prompt-management/spec/fai-manifest.json",
-          "sha256": "7f30bfaabab1250f2d1bedc6dd28c3ae04f006a06a3cd5550c3e7ac2c7972ed5",
+          "sha256": "b2bd1ab0758bd8363df347d29efe2279c0e78bc4b27d9ef74f4d5d1fdcd73609",
           "media_type": "application/json"
         },
         {

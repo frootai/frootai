@@ -6,9 +6,9 @@
     "slug": "46-healthcare-clinical-ai",
     "canonical_id": "frootai__46-healthcare-clinical-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "09ff10643a767b41e37102a1fabbf076c1deb998531c6e6be0ca6abae2cb4a24",
-    "manifest_sha256": "d1c15bf2f4396470d78975c6e056c79dac17468da187bbc096658e0c75cd92ed",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "d7d865ba809aa81ce8fcf34819a52268d6ff1c6f35d27af8de39fe1fc9a97e7f",
+    "manifest_sha256": "22901c7e45c774c87f57ca7138b44334ac2aaeacba4d61d6eae1c24e69c5622b",
     "iac_sha256": "2786d3003e09d8f3af12f390dd2d033d284122aef136bfe8bf211eee5e2b9e54",
     "evaluation_dataset_sha256": "2f075f464281d0503309ef41d696ea4e8f425dce8d7ffe7405511322b96eaa10"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/46-healthcare-clinical-ai/spec/fai-manifest.json",
-          "sha256": "d1c15bf2f4396470d78975c6e056c79dac17468da187bbc096658e0c75cd92ed",
+          "sha256": "22901c7e45c774c87f57ca7138b44334ac2aaeacba4d61d6eae1c24e69c5622b",
           "media_type": "application/json"
         },
         {

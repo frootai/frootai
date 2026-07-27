@@ -6,9 +6,9 @@
     "slug": "27-ai-data-pipeline",
     "canonical_id": "frootai__27-ai-data-pipeline",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "57462d226d95cf75ee0df0de8e8f99bf811cbc51b271bfc36f82733c79b72a62",
-    "manifest_sha256": "4c2d8921e706f62334a62691cea8bb46ae3b1b0f4e5f6387207b13c8293a29c4",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "232fe867530f7b972ea3f61667328259d34a771eafffc6f0585d19faf02af5bf",
+    "manifest_sha256": "f252d49b863b37b6af9016e6e00999e9a4d23a07b3d8ebf72dc0f5f2a4c5943e",
     "iac_sha256": "aad6f849ed0dca23c80c0993e209a6b3b0a69bcc197481b3cd13d1d29fe583f1",
     "evaluation_dataset_sha256": "f6acdcab32a9cb802ffd29fa5be6e3a612b5be4dabbfd3700561385c2bd5e909"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/27-ai-data-pipeline/spec/fai-manifest.json",
-          "sha256": "4c2d8921e706f62334a62691cea8bb46ae3b1b0f4e5f6387207b13c8293a29c4",
+          "sha256": "f252d49b863b37b6af9016e6e00999e9a4d23a07b3d8ebf72dc0f5f2a4c5943e",
           "media_type": "application/json"
         },
         {

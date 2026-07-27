@@ -6,9 +6,9 @@
     "slug": "25-conversation-memory-layer",
     "canonical_id": "frootai__25-conversation-memory-layer",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "29d464191e3b147126eedc4382f961034fe51a7406ba678256a277cc75ab989d",
-    "manifest_sha256": "635b343d14143afc267b04f082813038e2f9853f997b12628e923c648ddd358b",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "cb9e980f54fb14c6f8ab4a4bdcbd4c47f39f136c232c2d86afd6678e73a66d2d",
+    "manifest_sha256": "ad4faf00ed8dd533a0762584460f995313472dfee186191a28a097a0523efe52",
     "iac_sha256": "38f1eeb5c36bdddc5e092fceb38dd1892255b2ef63afd135048b02604fbe69fc",
     "evaluation_dataset_sha256": "27c41f8393ac102062a20d754a3f49a9e1742d6cb0187fe9fe7cdfca97619fb2"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/25-conversation-memory-layer/spec/fai-manifest.json",
-          "sha256": "635b343d14143afc267b04f082813038e2f9853f997b12628e923c648ddd358b",
+          "sha256": "ad4faf00ed8dd533a0762584460f995313472dfee186191a28a097a0523efe52",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "57-ai-translation-engine",
     "canonical_id": "frootai__57-ai-translation-engine",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "4e6da2d7e7228462a4048108895352a290d8e0d0f901c74e3b8a6d1d40832fda",
-    "manifest_sha256": "62c1fc72123be99bb277b36bdbd8b5e9caa0d449f061431fd8372870b28421d1",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "dc1a403cb3d3d4640262040c767b2dd31a27c82cb9a8a458135d15153ef5a982",
+    "manifest_sha256": "e5076e37b6fcabb7416d4e857be1322eff7f53c170ba5dad7b25d6a91557b11e",
     "iac_sha256": "186b5e1785461a749698b0dacab9b02d8efadf3404bba7c0df42d2b51e21c05e",
     "evaluation_dataset_sha256": "2693279af09327790de12f7f8c11fb512fbef0483c184ad61f30e1b8b6d005d7"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/57-ai-translation-engine/spec/fai-manifest.json",
-          "sha256": "62c1fc72123be99bb277b36bdbd8b5e9caa0d449f061431fd8372870b28421d1",
+          "sha256": "e5076e37b6fcabb7416d4e857be1322eff7f53c170ba5dad7b25d6a91557b11e",
           "media_type": "application/json"
         },
         {

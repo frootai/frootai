@@ -6,9 +6,9 @@
     "slug": "91-customer-churn-predictor",
     "canonical_id": "frootai__91-customer-churn-predictor",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "b90961fb095be510ce868c1a8a0c9a124fb1d17c3412657ace59b982872086ac",
-    "manifest_sha256": "3b4dc3e441a6d4e574b0990398da3063d22f04a6d1d0aef249eda1c67fd3f9ec",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "5b98d88c5984d7c7d057f7185700a67d2e55c8948f446db065094be0cda647f8",
+    "manifest_sha256": "96b9350dd200a5e9424778ddd4263150788cf88ba4d485ebb2b2dabcb998ace7",
     "iac_sha256": "59bcf5c6f57ed72438cc6ce5c8cf3a8acf2c5269845762021a04649d3d851b3c",
     "evaluation_dataset_sha256": "b9e47f82498d2bea1e732c75f779b2fcd7423409aaccc400ffb0d79305e6ab5d"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/91-customer-churn-predictor/spec/fai-manifest.json",
-          "sha256": "3b4dc3e441a6d4e574b0990398da3063d22f04a6d1d0aef249eda1c67fd3f9ec",
+          "sha256": "96b9350dd200a5e9424778ddd4263150788cf88ba4d485ebb2b2dabcb998ace7",
           "media_type": "application/json"
         },
         {

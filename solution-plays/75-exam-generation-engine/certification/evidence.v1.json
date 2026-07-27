@@ -6,9 +6,9 @@
     "slug": "75-exam-generation-engine",
     "canonical_id": "frootai__75-exam-generation-engine",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "07d03ad80829cbe7db8a86058e87e1b0803b7b1f6ce82e07a52358d342c31ecb",
-    "manifest_sha256": "e32ea00f4a787a3cf861002bef1f9cb4a9e4389014f194d06b9518e7298a8a8f",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "b1263e17fb5d99df0a288e2797d8e7c81d64bab3a6e29639750c5c120cb8af56",
+    "manifest_sha256": "ba91aeba4b2b65b188a48050f6e0f7c4839bde2663eebc9dcd806354ca998332",
     "iac_sha256": "497a78acfa0d3ec64c6e0cf4ba47f2036676ea81e9eeb0ac56caf6ace824609e",
     "evaluation_dataset_sha256": "b9a26a1ee75f61fa1027d1935c8d6bff28cdb0a1d26109ed0ee38218369056c0"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/75-exam-generation-engine/spec/fai-manifest.json",
-          "sha256": "e32ea00f4a787a3cf861002bef1f9cb4a9e4389014f194d06b9518e7298a8a8f",
+          "sha256": "ba91aeba4b2b65b188a48050f6e0f7c4839bde2663eebc9dcd806354ca998332",
           "media_type": "application/json"
         },
         {

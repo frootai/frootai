@@ -6,9 +6,9 @@
     "slug": "77-research-paper-ai",
     "canonical_id": "frootai__77-research-paper-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "b18f84dcf37c56cf3003492f6b8404685074db324bb1595c62fdc567f4dafb1b",
-    "manifest_sha256": "260bcb021d0cc45a91f6eba5fdf95ecb63cc5aea92d410260653f538e2b2aa49",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "3d4d689e08c3a3bd2ed6a89db99d7ec509d405eb583b59e7059dffcc5f0d053c",
+    "manifest_sha256": "c2df3de78f87ddf59615d13e53126224b0eefbbfe7622e496e70dd0ed5e900a1",
     "iac_sha256": "492f59be4e01afd6424a3ce0aa837827ae5016f050876bb2815e5ccb72785604",
     "evaluation_dataset_sha256": "205116ec74c81c124be4447be6a2b05f6d0dd32bc8d54e4d55a24e8448bfa59b"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/77-research-paper-ai/spec/fai-manifest.json",
-          "sha256": "260bcb021d0cc45a91f6eba5fdf95ecb63cc5aea92d410260653f538e2b2aa49",
+          "sha256": "c2df3de78f87ddf59615d13e53126224b0eefbbfe7622e496e70dd0ed5e900a1",
           "media_type": "application/json"
         },
         {

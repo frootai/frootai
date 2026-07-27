@@ -6,9 +6,9 @@
     "slug": "23-browser-automation-agent",
     "canonical_id": "frootai__23-browser-automation-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "1a529231e4a9682b57a29b75f3db3bb39232d5fd73262af0d053d4fe78b5ec5f",
-    "manifest_sha256": "8d910a5b91049bdd80254827ecca3f0e7f238bfcf287783e7f64565912fc7553",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "65d348312d09c8b8dad25a749e82bc30d3f5a86715fbf44f647357b3dc530b37",
+    "manifest_sha256": "92b84b9ab1e2b647d22f5e1f9673d584769d4c243fcaad5d1dbbcbd25009f232",
     "iac_sha256": "6bc628b4a9f161a024a1b83799c61b9bdad958aa8f42bc3fd569214b2a06a02e",
     "evaluation_dataset_sha256": "6ba0c5af92c841c5650ba6d9fe297fda9a8539cf3616177b72159af263620b34"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/23-browser-automation-agent/spec/fai-manifest.json",
-          "sha256": "8d910a5b91049bdd80254827ecca3f0e7f238bfcf287783e7f64565912fc7553",
+          "sha256": "92b84b9ab1e2b647d22f5e1f9673d584769d4c243fcaad5d1dbbcbd25009f232",
           "media_type": "application/json"
         },
         {

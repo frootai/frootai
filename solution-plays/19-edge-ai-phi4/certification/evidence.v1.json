@@ -6,9 +6,9 @@
     "slug": "19-edge-ai-phi4",
     "canonical_id": "frootai__19-edge-ai-phi4",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "b27263672404ba26b7c0625796f85bebe5db1a4ff232ea14a47aa26fe3a51334",
-    "manifest_sha256": "752bf8f7c62d18d33fe8c3cccbce6568f86824cfc6306c4af70668989269fcbe",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "baa881f15b033f1c880d3e788fcc34b8d008e542ff9cab1af90be3bca577ca30",
+    "manifest_sha256": "5c079a5eb02c0a0b3fa9feac46b0328faf7da7c7001a8a2651dddf2859c3abe7",
     "iac_sha256": "def857ec0a7cacf5af11154261fd67c9ac46f28730ef2a09e8023d139307e111",
     "evaluation_dataset_sha256": "07af01a146a8106655a1dd0d435013cca1848fce6ac7079896067e7c1bd5820b"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/19-edge-ai-phi4/spec/fai-manifest.json",
-          "sha256": "752bf8f7c62d18d33fe8c3cccbce6568f86824cfc6306c4af70668989269fcbe",
+          "sha256": "5c079a5eb02c0a0b3fa9feac46b0328faf7da7c7001a8a2651dddf2859c3abe7",
           "media_type": "application/json"
         },
         {

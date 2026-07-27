@@ -6,9 +6,9 @@
     "slug": "60-responsible-ai-dashboard",
     "canonical_id": "frootai__60-responsible-ai-dashboard",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "01a9afa90360d7c23a8fd4e0d8a78a13678a83f124256dea2a16bfc64c9475a1",
-    "manifest_sha256": "758326564cdadf0b08a08248eea154bb52579c509e05facb2f735bdb149c9c14",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "d6852ee243b12a0edde3469bedbe8c105df70f991ddb24cbd7b2e15ec407f099",
+    "manifest_sha256": "89d84c3c5bac821d71df2a22fc68664a1edb7d36c59c6d7602d6bf1336b3317f",
     "iac_sha256": "566d4cca5c32295a6945a1606d80795934e6fbbc8a69842f436a2130cec42d22",
     "evaluation_dataset_sha256": "81f50cd697b6b2aa84731c06d4f9ccfefb2ec799ee9b4dcd65a231cca18f2d98"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/60-responsible-ai-dashboard/spec/fai-manifest.json",
-          "sha256": "758326564cdadf0b08a08248eea154bb52579c509e05facb2f735bdb149c9c14",
+          "sha256": "89d84c3c5bac821d71df2a22fc68664a1edb7d36c59c6d7602d6bf1336b3317f",
           "media_type": "application/json"
         },
         {

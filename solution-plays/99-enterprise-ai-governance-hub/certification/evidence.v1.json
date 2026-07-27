@@ -6,9 +6,9 @@
     "slug": "99-enterprise-ai-governance-hub",
     "canonical_id": "frootai__99-enterprise-ai-governance-hub",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "ef3b430dd381c16f6b26d27b20df5e818fb4db468d48aff4f145b16618d4f260",
-    "manifest_sha256": "f4d33a0e188bdb1ae5ea66364f6bb0d02a68e22348e4479729554148bc7fef23",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "650d530e40313f77e9e7b86336572541cdd0757adbbc6fddbf5367ca240b516f",
+    "manifest_sha256": "b25facbef3eb714f3be6a0506b3fba98dd4c8d79a8bd89a0aaa5353e363bfb92",
     "iac_sha256": "336ac617fc943aaae25665fa01e0f4d3e5583aacaf38cc07928fb201b058325e",
     "evaluation_dataset_sha256": "5fcc7ff954e3f35e40937e4e5e2bf3521c2cec7159d4f5760707216acc5a8ffc"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/99-enterprise-ai-governance-hub/spec/fai-manifest.json",
-          "sha256": "f4d33a0e188bdb1ae5ea66364f6bb0d02a68e22348e4479729554148bc7fef23",
+          "sha256": "b25facbef3eb714f3be6a0506b3fba98dd4c8d79a8bd89a0aaa5353e363bfb92",
           "media_type": "application/json"
         },
         {

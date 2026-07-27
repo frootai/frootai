@@ -6,9 +6,9 @@
     "slug": "22-multi-agent-swarm",
     "canonical_id": "frootai__22-multi-agent-swarm",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "ea68a8bff0475ac27cbbac9c0e3acad81c82c00ab0f8163dae0e3b558ece55b0",
-    "manifest_sha256": "1ead79d50751ef3b11cbecde4b41dbff84882493a87cd1938a4704ec786d5585",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "ecad6d8897bcd9be10ad3fb9eec56080b899d64f2659eeb3f3f99e46babac111",
+    "manifest_sha256": "9d2b07145ca1d95ca837d5a42702c528faa6ba9543c6f194cc6bf0ba1ab19d90",
     "iac_sha256": "6208b90fc01154d45143889a81198a77cdfcb48e95148bac2ccc69410f4bb8af",
     "evaluation_dataset_sha256": "c6893a16b8cd8add3013466ca51989afd482bea498638c34bf6249a209fe8599"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/22-multi-agent-swarm/spec/fai-manifest.json",
-          "sha256": "1ead79d50751ef3b11cbecde4b41dbff84882493a87cd1938a4704ec786d5585",
+          "sha256": "9d2b07145ca1d95ca837d5a42702c528faa6ba9543c6f194cc6bf0ba1ab19d90",
           "media_type": "application/json"
         },
         {

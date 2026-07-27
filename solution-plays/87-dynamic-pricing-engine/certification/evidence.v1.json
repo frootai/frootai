@@ -6,9 +6,9 @@
     "slug": "87-dynamic-pricing-engine",
     "canonical_id": "frootai__87-dynamic-pricing-engine",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "99edd8073f8a44f392a9a01aebe7feb20fc0543bfbfc63e269aa3a15e59ab1e7",
-    "manifest_sha256": "fa190f5060485cfdd699fcfe5de566c7fe7736ffde70a824b5f77f716e05d24f",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "af80ae78d4431a50c02dadb214008c57d3e3fe0567ff89a4947f4c6142f61831",
+    "manifest_sha256": "67fcdeb64409939458c110de10fb49a7e169a8de8c99e422f56f94c302a2503e",
     "iac_sha256": "f6d770cc48131381443dc7cf0207fbf61b2ca05ef3771de4f0a7f48bf2d635cd",
     "evaluation_dataset_sha256": "e38a441b4205ed1927237397446dd5cf9aca67f3ebd67956680b09445300c7bb"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/87-dynamic-pricing-engine/spec/fai-manifest.json",
-          "sha256": "fa190f5060485cfdd699fcfe5de566c7fe7736ffde70a824b5f77f716e05d24f",
+          "sha256": "67fcdeb64409939458c110de10fb49a7e169a8de8c99e422f56f94c302a2503e",
           "media_type": "application/json"
         },
         {

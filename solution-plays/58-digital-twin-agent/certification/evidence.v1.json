@@ -6,9 +6,9 @@
     "slug": "58-digital-twin-agent",
     "canonical_id": "frootai__58-digital-twin-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "6ec76194c22013c84b0895e2dd92f385a169b1f0571b94e91edf06d00a97f630",
-    "manifest_sha256": "e31d2150288bd68a59a7d47d01fefe0e5d322b22fc9f8bcd2eef3635c2047447",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "a939d27fd76a6a160826b79816ed2031ca722c0e1fa3a3fb754c870aec322ae3",
+    "manifest_sha256": "4a4506eead78a49f18bf8c72656404fb87c7b4921ae9418a39d1eb067415d567",
     "iac_sha256": "f51cf8e97ef34dc46d5b40fa727b9995ef52a6fce8e708e59115e7e585b8508e",
     "evaluation_dataset_sha256": "0745b9073eea7790498419480a48a94b28f9c352ca02b3c688acd1df1dab8bef"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/58-digital-twin-agent/spec/fai-manifest.json",
-          "sha256": "e31d2150288bd68a59a7d47d01fefe0e5d322b22fc9f8bcd2eef3635c2047447",
+          "sha256": "4a4506eead78a49f18bf8c72656404fb87c7b4921ae9418a39d1eb067415d567",
           "media_type": "application/json"
         },
         {

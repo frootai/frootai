@@ -6,9 +6,9 @@
     "slug": "41-ai-red-teaming",
     "canonical_id": "frootai__41-ai-red-teaming",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "3f9d71eb7cce90be83acc4cc8ef0e28477b84c523c8cbff85b92cb98db01327e",
-    "manifest_sha256": "92b95ec69d55696f9075df4c0ad44e9971325e76b86f44dbf3e768ccbdef1be4",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "f2b373b2217eb06bcc46bba09813222558c221127616d3b97913f8499b95949f",
+    "manifest_sha256": "d9418a2b4e4a59a6ae9e592ccd2049aef1cd43f8d6a8c16915ada082f8128f45",
     "iac_sha256": "405abde33b80702b848aa580cd718fc4c2004f51f12cd996b011190501aa7192",
     "evaluation_dataset_sha256": "958214ea3029a3b3464b2b9d981d4c789c8f1cf7e320d2ce23f30bd45529b2cc"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/41-ai-red-teaming/spec/fai-manifest.json",
-          "sha256": "92b95ec69d55696f9075df4c0ad44e9971325e76b86f44dbf3e768ccbdef1be4",
+          "sha256": "d9418a2b4e4a59a6ae9e592ccd2049aef1cd43f8d6a8c16915ada082f8128f45",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "28-knowledge-graph-rag",
     "canonical_id": "frootai__28-knowledge-graph-rag",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "70d1ba29d5952b55199213f0d134a3787723d5efb25a79a923514ce9287995d3",
-    "manifest_sha256": "f2acab0cc59083ed9fb94ade3ec345610fd0b65ba4fe05bffeefa47c1c87c486",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "14f44222aa43604d175ffd13839c1675112eb69cd434dd19456fd85f0cec3e7a",
+    "manifest_sha256": "9e2dafdb2338ecc5546323a98d85d58a60ba721b3f8029a000ba8007810be9ef",
     "iac_sha256": "8d487d5f7df87e6127ae42f016e98fddf092d87774f6c452fcb497e4dae94916",
     "evaluation_dataset_sha256": "abe7a31f48586a7bf833e05c09c9b4513b3a1ce7aac2a78f4bf2a2d9f9c4611d"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/28-knowledge-graph-rag/spec/fai-manifest.json",
-          "sha256": "f2acab0cc59083ed9fb94ade3ec345610fd0b65ba4fe05bffeefa47c1c87c486",
+          "sha256": "9e2dafdb2338ecc5546323a98d85d58a60ba721b3f8029a000ba8007810be9ef",
           "media_type": "application/json"
         },
         {

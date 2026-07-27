@@ -6,9 +6,9 @@
     "slug": "21-agentic-rag",
     "canonical_id": "frootai__21-agentic-rag",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "4934886b456c1366184de17de8fc846ace3d81aa364bbbfb84ed8d2628c93ead",
-    "manifest_sha256": "a7251a1453e7905cd6d717fe8551a2e2a7542260b2b8ed1679b75da69708e341",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "ea683f4dc1419e8da698a8c91978eaf8eaece01fec34356b1905c5fc7b144875",
+    "manifest_sha256": "267ce33cf4d518f3ccce2910e462c706289628d57db389d87b9939c8d7448399",
     "iac_sha256": "79caaa2ca5d6a691f098381879f021db2984df0f10a5e175c4e360358008b650",
     "evaluation_dataset_sha256": "5de48bb83e3af1d00ef84439e6336178c7764e398aefddefdcd7ab114f61b19e"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/21-agentic-rag/spec/fai-manifest.json",
-          "sha256": "a7251a1453e7905cd6d717fe8551a2e2a7542260b2b8ed1679b75da69708e341",
+          "sha256": "267ce33cf4d518f3ccce2910e462c706289628d57db389d87b9939c8d7448399",
           "media_type": "application/json"
         },
         {

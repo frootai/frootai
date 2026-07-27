@@ -6,9 +6,9 @@
     "slug": "79-food-safety-inspector-ai",
     "canonical_id": "frootai__79-food-safety-inspector-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "0906f204d4e4c3551c6bef42aa12f2842af4367b969170747402dfb180aac0c4",
-    "manifest_sha256": "24d156d82e777126eb5d9b0532e4fd2c150aa7f30e4828811467244a18dedb1e",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "4b1eedab66189fdc5f2a0c00a4871493948c8f2592b2f98580d0bea2d261d1c8",
+    "manifest_sha256": "e6533af4e09ec4289285d669103d79703c955775fbba0e2dc5a1dc5b91fef0a4",
     "iac_sha256": "89b3a7c2c9525f325e43c95af778b03c2aee88770c8887440f67f9b530da8728",
     "evaluation_dataset_sha256": "bfe571a483462b5d8b98eaac2f8fe784c11d8835022e3c3c323d1d7b9be22aa1"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/79-food-safety-inspector-ai/spec/fai-manifest.json",
-          "sha256": "24d156d82e777126eb5d9b0532e4fd2c150aa7f30e4828811467244a18dedb1e",
+          "sha256": "e6533af4e09ec4289285d669103d79703c955775fbba0e2dc5a1dc5b91fef0a4",
           "media_type": "application/json"
         },
         {

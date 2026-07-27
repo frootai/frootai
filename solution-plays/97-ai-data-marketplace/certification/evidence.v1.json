@@ -6,9 +6,9 @@
     "slug": "97-ai-data-marketplace",
     "canonical_id": "frootai__97-ai-data-marketplace",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "d1163a95ef9b895dc30e5ea49115f59fc4198801925b57a9019a70c639b51fa3",
-    "manifest_sha256": "07afbdb369e5cce35f733603a3ef62f470d6af786dd19a5d1b90261d9062f343",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "4edb4acbdea2b7a1fd8510ca6625783d52dc0bafed9fa4a75a55a23075f19fb2",
+    "manifest_sha256": "0e01fd75162efb1c5c143625304c3a774fd3f91b63367fbe225c4b273f1dfe24",
     "iac_sha256": "a80ee8fc97c0bc39810976b71303981322b0ea2670b3e2b36f7fa0fca7f2aad2",
     "evaluation_dataset_sha256": "1bdc9ac64189c45b3eb7736b3a754e663590e22c556f005d9a0a17c3ee0a9a7e"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/97-ai-data-marketplace/spec/fai-manifest.json",
-          "sha256": "07afbdb369e5cce35f733603a3ef62f470d6af786dd19a5d1b90261d9062f343",
+          "sha256": "0e01fd75162efb1c5c143625304c3a774fd3f91b63367fbe225c4b273f1dfe24",
           "media_type": "application/json"
         },
         {

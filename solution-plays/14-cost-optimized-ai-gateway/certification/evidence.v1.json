@@ -6,9 +6,9 @@
     "slug": "14-cost-optimized-ai-gateway",
     "canonical_id": "frootai__14-cost-optimized-ai-gateway",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "a3f19f3749415ccd48d5bbf7842a08775d0039d4a20c73d7c122c35edc306208",
-    "manifest_sha256": "744e20da858bae6e6c55bc81514492b2444d776447ba1f77f25fcc533608e0de",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "3e6b3ba6e74e6311be758a6d9fc9b3a427b6e96c044b30cc3eb08114ea551dcd",
+    "manifest_sha256": "78a41d427f198d5567b35461c74cf6081d0454b31d82850b5553ffa7fd3d6c11",
     "iac_sha256": "f038e351def11e306c69a12bf85a3ac67c136d5fb023920f7e18d0288311f744",
     "evaluation_dataset_sha256": "582d32d10d5e6de00b731d2fdb31df317f1c0360552e70221a3532ef1c0a1a32"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/14-cost-optimized-ai-gateway/spec/fai-manifest.json",
-          "sha256": "744e20da858bae6e6c55bc81514492b2444d776447ba1f77f25fcc533608e0de",
+          "sha256": "78a41d427f198d5567b35461c74cf6081d0454b31d82850b5553ffa7fd3d6c11",
           "media_type": "application/json"
         },
         {

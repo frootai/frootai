@@ -6,9 +6,9 @@
     "slug": "30-ai-security-hardening",
     "canonical_id": "frootai__30-ai-security-hardening",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "a8c741591ff7ff0b72084c6b63e8622bf759e6623f27c7d8a0318c0387abf08a",
-    "manifest_sha256": "9ccd094755ed69d02ce30418a52fe2242a510f7b1242b8e60019370b1121fad3",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "6c758c590b40397fc1f1c3ae91a55ebf3a1316b334fb6446230147b7093f0220",
+    "manifest_sha256": "7e85a7e476d234724191623d9a58546f19f455c8bd8f99e2708c52ad14f854e7",
     "iac_sha256": "05917e7841e45bb6a4e60fe7f5da1540fdc5f65df9a0e58c851dbba8902bc96c",
     "evaluation_dataset_sha256": "5ebd9c6431b6481903e923e08ba91350be0fd4357143d4af8dcbc75861f5adb2"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/30-ai-security-hardening/spec/fai-manifest.json",
-          "sha256": "9ccd094755ed69d02ce30418a52fe2242a510f7b1242b8e60019370b1121fad3",
+          "sha256": "7e85a7e476d234724191623d9a58546f19f455c8bd8f99e2708c52ad14f854e7",
           "media_type": "application/json"
         },
         {

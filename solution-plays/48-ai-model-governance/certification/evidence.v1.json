@@ -6,9 +6,9 @@
     "slug": "48-ai-model-governance",
     "canonical_id": "frootai__48-ai-model-governance",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "643eda8b08aa7e629a16632521eb069d90290278cb85f1ee8beaca3d1c0f0b41",
-    "manifest_sha256": "b865b40ecaff7617829e685ae203d128c254b07dc9eb35021786f7590581b258",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "846a2c9038c7aab4c63f202b2e1ae582c569c735205f9bc881dc32d063da3254",
+    "manifest_sha256": "60b33388c572d6baa11e8ba63974ba7e97c0d0f8eefad80233f056f52bbba515",
     "iac_sha256": "140148230611ff81e3a3b158a74a9b0a318be1c15e06f761dd99ce59803b026d",
     "evaluation_dataset_sha256": "19fd24d47a296be1244f3840b6c8c3c2d4d04af017e88914bee59bef1bcde315"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/48-ai-model-governance/spec/fai-manifest.json",
-          "sha256": "b865b40ecaff7617829e685ae203d128c254b07dc9eb35021786f7590581b258",
+          "sha256": "60b33388c572d6baa11e8ba63974ba7e97c0d0f8eefad80233f056f52bbba515",
           "media_type": "application/json"
         },
         {

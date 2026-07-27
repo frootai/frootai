@@ -6,9 +6,9 @@
     "slug": "69-carbon-footprint-tracker",
     "canonical_id": "frootai__69-carbon-footprint-tracker",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "3b171015c8a709efa1ef4cd801c1a7aa2e12567fc5260f57d494c20b7b328d8d",
-    "manifest_sha256": "b0c4a1d75e4783ecd6dd9b82238b3aba23922bc20eb472b7e389496b620145c1",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "863d2349cb58e0b56051102558e75d3f7620d16292b62c1547dfcc34730b047a",
+    "manifest_sha256": "1423c05dcce6d452fbccc359db03c0e59d862accaa3e33c08d5df2d1bd5d763a",
     "iac_sha256": "5eaa9ce35d6662396881ab6439917f9e75ec33eb14b4ca0429f05b13582b857a",
     "evaluation_dataset_sha256": "99c9407cd2ab6187d91ed5119d9e1f28894a0479db8f38dd9c9e1359fa94ad05"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/69-carbon-footprint-tracker/spec/fai-manifest.json",
-          "sha256": "b0c4a1d75e4783ecd6dd9b82238b3aba23922bc20eb472b7e389496b620145c1",
+          "sha256": "1423c05dcce6d452fbccc359db03c0e59d862accaa3e33c08d5df2d1bd5d763a",
           "media_type": "application/json"
         },
         {

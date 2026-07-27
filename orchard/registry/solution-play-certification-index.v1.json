@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "count": 101,
   "summary": {
     "designed": 95,
@@ -20,11 +20,11 @@
         "deploy_verified is missing required check cleanup",
         "deploy_verified blocking check azure-what-if did not pass"
       ],
-      "content_sha256": "060526f4687cc966db221c0f228723c6d97423d26d53d543ce877c9115068f76",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "fcdde4d9e51d59e0c7b340ab2aa6cce914254ce49ad4802e06354670e1015263",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/01-enterprise-rag/certification/evidence.v1.json",
       "profile": "flagship-v1",
-      "expires_at": "2026-07-21T22:54:56.591Z"
+      "expires_at": "2026-07-30T06:26:06.692Z"
     },
     {
       "id": "02",
@@ -34,11 +34,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "817dbde6e3dd8a5f964001d99142a016a178a4a1298e84e11d1dc7b3a6560953",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "7c9abd26837d61c27514f13b5d63916a730dfcff5c286804b260962a19da2f8d",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/02-ai-landing-zone/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "03",
@@ -52,11 +52,11 @@
         "deploy_verified is missing required check cleanup",
         "deploy_verified blocking check azure-what-if did not pass"
       ],
-      "content_sha256": "a6585b27b308537b7551b6d7f46e52ecf5028f195b682123603bb7c857fc6216",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "353327032fdd520e43ceedfb650e7ea27639eec9b3c1415545081cd97ec50231",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/03-deterministic-agent/certification/evidence.v1.json",
       "profile": "flagship-v1",
-      "expires_at": "2026-07-21T22:54:56.591Z"
+      "expires_at": "2026-07-30T06:26:06.692Z"
     },
     {
       "id": "04",
@@ -66,11 +66,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "5f122dbe69b8877aa954edb360223c0433c6d38742f4ba91ffc597a4113dc981",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "5c169da3dac133694a7f15c3fa3c36c6668d5c7e94d2a26ad5afb8228d687ca0",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/04-call-center-voice-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "05",
@@ -80,11 +80,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "2b6f870f22ec8002a361b81eab47f8ef7d02863af029c9ed342a5c698a760429",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3171eacb5a085dc5cba11e9244b8ee1fef754aee3dc6f178f39181ea4fbc3e70",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/05-it-ticket-resolution/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "06",
@@ -98,11 +98,11 @@
         "deploy_verified is missing required check cleanup",
         "deploy_verified blocking check azure-what-if did not pass"
       ],
-      "content_sha256": "e2afd607ae6925b0fbb5b8cccfc873e295fc142c30cb615705242f3a836ae31f",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "618ee5e7337b8dd24c3629ec6bc12a943404132cba1e0528603574a9760b5a41",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/06-document-intelligence/certification/evidence.v1.json",
       "profile": "flagship-v1",
-      "expires_at": "2026-07-21T22:54:56.591Z"
+      "expires_at": "2026-07-30T06:26:06.692Z"
     },
     {
       "id": "07",
@@ -116,11 +116,11 @@
         "deploy_verified is missing required check cleanup",
         "deploy_verified blocking check azure-what-if did not pass"
       ],
-      "content_sha256": "358cbf6fe00b19bbbd1e33d160b5ed2f7a81c2dc220e3bf1a95c20f7259c64df",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "c356ae2994ae8cc9149216a644cf6de05a2da156a4eb360127ba36878a996b8b",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/07-multi-agent-service/certification/evidence.v1.json",
       "profile": "flagship-v1",
-      "expires_at": "2026-07-21T22:54:56.591Z"
+      "expires_at": "2026-07-30T06:26:06.692Z"
     },
     {
       "id": "08",
@@ -130,11 +130,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "b050dc9ed3961d55891319b0c8a11f991a6cf705785d730e937e4dca33ee4049",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "17b511fba2fbbec2f19388da9f63ce1514f378cd760f63613157de5c272c5b82",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/08-copilot-studio-bot/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "09",
@@ -144,11 +144,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "70811985f5cc8680e49a959fe77a46028e5bceb359c76cf0a8b974b619312a69",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "e1d2afce664bbd7110236dd5a65362c259a11150dddcb4670d122c9f38b48f86",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/09-ai-search-portal/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "10",
@@ -158,11 +158,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "e0f05b2831afa9813a972fd9d863fc5240c3a3d33fe411264f18b29907c2b6cb",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "b5fef4d4df9b4910ca5779a0f44280dbaa12842db7005f489e109327804cc380",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/10-content-moderation/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "11",
@@ -172,11 +172,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "acfb8be78e93eb1851e261360177ffcca069128e51fbb65981999e8ad5eab26d",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ad9f07da32885a3d272a965cfc752f85adedab65c5840b0e9ed75e658e4281ae",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/11-ai-landing-zone-advanced/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "12",
@@ -186,11 +186,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "2042cfb206f245295d9089438e6f8da671f0e0d8c9e0ac3976011f521f1acf48",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3a041966f0f8875aa80b4233dc690356c3790863aa928b1496e78074026c67f6",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/12-model-serving-aks/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "13",
@@ -200,11 +200,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "e5b6c05edbf0e64cc1b3ae14e3768871222b8c7f9a2bf69519052b109fe524b5",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "f387786b36a71c6bc8de6f7328e688ebfa73abb2920dd229a5a2e09ecaac4638",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/13-fine-tuning-workflow/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "14",
@@ -214,11 +214,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "a3f19f3749415ccd48d5bbf7842a08775d0039d4a20c73d7c122c35edc306208",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3e6b3ba6e74e6311be758a6d9fc9b3a427b6e96c044b30cc3eb08114ea551dcd",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/14-cost-optimized-ai-gateway/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "15",
@@ -228,11 +228,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "c53735e603e0d531caa8d7602eb1bd73ae9aea72a0a18ffc26923e050b8382d7",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "18a6e7fd8344be73723189c3af1ec9c5ff93edf9f7bd64cddc77b2a770aebfe7",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/15-multi-modal-docproc/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "16",
@@ -242,11 +242,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "11f4498cc188108c5c8f3dd157133f3bec115f39137f5c7c289e36f07a4c1cdb",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "216861c9a1398839ec82fa7b4d7c8d489c7a22c5c0b89cf5ad7b780c7e0b7ac9",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/16-copilot-teams-extension/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "17",
@@ -256,11 +256,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "2086ff0aba00e2f56ffd54fc8e07ec0bf38385dffbf86684867f980889b7b17e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "dfb868c09051b3de171df6b8d9cd48ee20b23811e79d53a5d7e73c91d9326969",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/17-ai-observability/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "18",
@@ -270,11 +270,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "a837c8c250a8857bc14704e3c194df9891c0027e1dc7d220782f989d009df586",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4d74310927a3a099f1e36b59ed1b650066d5b68956b8900d18f567d37e0a669b",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/18-prompt-management/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "19",
@@ -284,11 +284,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "b27263672404ba26b7c0625796f85bebe5db1a4ff232ea14a47aa26fe3a51334",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "baa881f15b033f1c880d3e788fcc34b8d008e542ff9cab1af90be3bca577ca30",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/19-edge-ai-phi4/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "20",
@@ -298,11 +298,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "3896e266ecf806650b5b7594ebc6f28acfcd6eb3bea55e899e67399b75228bbe",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "2912f465a13b14eb5d1103739c41e7c65820c59cb83dadff9209da236a4e5b47",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/20-anomaly-detection/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "21",
@@ -312,11 +312,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "4934886b456c1366184de17de8fc846ace3d81aa364bbbfb84ed8d2628c93ead",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ea683f4dc1419e8da698a8c91978eaf8eaece01fec34356b1905c5fc7b144875",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/21-agentic-rag/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "22",
@@ -326,11 +326,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ea68a8bff0475ac27cbbac9c0e3acad81c82c00ab0f8163dae0e3b558ece55b0",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ecad6d8897bcd9be10ad3fb9eec56080b899d64f2659eeb3f3f99e46babac111",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/22-multi-agent-swarm/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "23",
@@ -340,11 +340,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "1a529231e4a9682b57a29b75f3db3bb39232d5fd73262af0d053d4fe78b5ec5f",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "65d348312d09c8b8dad25a749e82bc30d3f5a86715fbf44f647357b3dc530b37",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/23-browser-automation-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "24",
@@ -354,11 +354,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "4907b20217ca1864ec3d56a0674eb0afdd581b59fe7f0050ede7ba96de5feb9d",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "295c63a11a4f72b57c58cde67194883e37e1fdadd368a8185618d3a12385956d",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/24-ai-code-review-pipeline/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "25",
@@ -368,11 +368,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "29d464191e3b147126eedc4382f961034fe51a7406ba678256a277cc75ab989d",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "cb9e980f54fb14c6f8ab4a4bdcbd4c47f39f136c232c2d86afd6678e73a66d2d",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/25-conversation-memory-layer/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "26",
@@ -382,11 +382,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "8facbd0244c03bd7854d61335e07dbe5f7a7610fb71579a1fbfe895309a47468",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "8503d1ffc592dd5b7cbf7da821be9d089f70c7fddd2fe7a56ef7b01e9ed6d9b3",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/26-semantic-search-engine/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "27",
@@ -396,11 +396,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "57462d226d95cf75ee0df0de8e8f99bf811cbc51b271bfc36f82733c79b72a62",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "232fe867530f7b972ea3f61667328259d34a771eafffc6f0585d19faf02af5bf",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/27-ai-data-pipeline/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "28",
@@ -410,11 +410,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "70d1ba29d5952b55199213f0d134a3787723d5efb25a79a923514ce9287995d3",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "14f44222aa43604d175ffd13839c1675112eb69cd434dd19456fd85f0cec3e7a",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/28-knowledge-graph-rag/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "29",
@@ -424,11 +424,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ad70b778a1d5de62aa80fc07b656b7de65f6ed294854af2df4af0e958ac0d066",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "c0e07efd4ade53791df722fb6b895bc85c6bf1bdcad396081a46717b70e65cfc",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/29-mcp-gateway/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "30",
@@ -438,11 +438,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "a8c741591ff7ff0b72084c6b63e8622bf759e6623f27c7d8a0318c0387abf08a",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "6c758c590b40397fc1f1c3ae91a55ebf3a1316b334fb6446230147b7093f0220",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/30-ai-security-hardening/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "31",
@@ -452,11 +452,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "c54313a548c40e9c60ea6ec22aa1e043c693e9dc2b61e15306b37b5bb5ef856e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "84a77c2109ac7bf64217443888c8cdc0ee2b32dd2659e07cab26ef605aeb1379",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/31-low-code-ai-builder/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "32",
@@ -466,11 +466,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "1fd97f51ac6157e774c81906dfaf2280731d5babb4bb7cd7d083f1c3ab8a897e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4fe7184f4f77c5f0f93f15677c2c85e2116f353d43dd9e24bdd91dfecfe05c7a",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/32-ai-powered-testing/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "33",
@@ -484,11 +484,11 @@
         "deploy_verified is missing required check cleanup",
         "deploy_verified blocking check azure-what-if did not pass"
       ],
-      "content_sha256": "419cae2d57672a7c5f2537f383119e8ff8c70ead7b4f089770a8c91f87bb23ef",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "fa08aa92c295184ec25a7a043adcd713720fa75caeb1b2dea34facd49354840c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/33-voice-ai-agent/certification/evidence.v1.json",
       "profile": "flagship-v1",
-      "expires_at": "2026-07-21T22:54:56.591Z"
+      "expires_at": "2026-07-30T06:26:06.692Z"
     },
     {
       "id": "34",
@@ -498,11 +498,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "95aab2b91232c4b55b6aa7a40ce85ba7e7040552d31d90b149050d0217fb8014",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4274dd80eba471925935717467e77aee814708ac1adfd7d2bf4a67708e0c96ef",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/34-edge-ai-deployment/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "35",
@@ -512,11 +512,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "edd995005257ccaa4e16c6c19c8b87c55f0afd5c6fc2d408694580c31ec1c99e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "139e1435b2fd30888819540aa576ebe235d1147be69f892398b5f7a983d2fbdd",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/35-ai-compliance-engine/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "36",
@@ -526,11 +526,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "40c5088eb6426122c2bea51b0cbe22302604e84fecdd49fb12f78439db2aa077",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "78cb712ba8c8cb5c7772943ad8caa1c86ea5e3113145d30a0a1641c109ec2837",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/36-multimodal-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "37",
@@ -540,11 +540,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "859bdc3c488b5c7ff0e0aac3b962d2b1fe2f7f7986c8e57814f0d01a0ae7c701",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "8c57c4600b9af186ab52ff23adbd9580c0c88fbae0421bba1b79925a8bd40781",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/37-ai-powered-devops/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "38",
@@ -554,11 +554,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "82f4f7ea3a92a98a77bece8f173fe6b62d690e99ab2de265195cc099b1640d80",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "035bcb9783af9d443317a0899fff147060145ab14ec87baaa22ff46417ae3faf",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/38-document-understanding-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "39",
@@ -568,11 +568,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "43ca9317470891ec15a6ca2109ccc782390d6ccc5357ac47d30f7685ccf278a2",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "0e72ed1d64dbf0cd6094cf209e75517f3a576ffe7d088bb548c7d058efe214bc",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/39-ai-meeting-assistant/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "40",
@@ -582,11 +582,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "88b8ebdcdf0ce179674a77624886e79e7b6c7828f4ed7bcabf01b1392c297191",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "602c7985e1fe521d8eedd0c5bb728bc3b092d7dc37fe7ac50f3a5e3e67aa6a56",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/40-copilot-studio-advanced/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "41",
@@ -596,11 +596,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "3f9d71eb7cce90be83acc4cc8ef0e28477b84c523c8cbff85b92cb98db01327e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "f2b373b2217eb06bcc46bba09813222558c221127616d3b97913f8499b95949f",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/41-ai-red-teaming/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "42",
@@ -610,11 +610,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "b866ae26d247137a24a498d9533b014c50a6da314af76c128881f7ca8fda6325",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3e2f47fce6321ecc425d333ee2d4b4796b040f722feeed1656e451bc4e415a92",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/42-computer-use-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "43",
@@ -624,11 +624,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "f0aab7dfba2aba9e360167b59af99ae302c75a4c1ff7ae7d3b92351e09357037",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "1eb7492d964e21546a838101a7823b7c8482c14f6dbd325d497818f71145ce5c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/43-ai-video-generation/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "44",
@@ -638,11 +638,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "3624228f406858268e3c5087e193f92d90b2298dc0ddfbcae5fa3babc22f0a74",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "6e3c36bd2fd0ee4d216fabae0f9e9d855d1cee8aab9cbdb6e98e2823500312cd",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/44-foundry-local-on-device/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "45",
@@ -652,11 +652,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "d32d4c7aac90b1699adf82618f02870b15217863b8eb136c3a5110d0c554581b",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "392b64574cffb38fb0b7e18ddb810f935abbc2d7528f83a8451097accac40522",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/45-realtime-event-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "46",
@@ -666,11 +666,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "09ff10643a767b41e37102a1fabbf076c1deb998531c6e6be0ca6abae2cb4a24",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "d7d865ba809aa81ce8fcf34819a52268d6ff1c6f35d27af8de39fe1fc9a97e7f",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/46-healthcare-clinical-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "47",
@@ -680,11 +680,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ba9447861a0c28bf69fdb61717ab4c14ca7840709e4d68d50feeaed171f1e928",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ea72cd37fe0d39964fa7ee134d60ab36551ad50875924e3bd34c53764b2ac22c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/47-synthetic-data-factory/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "48",
@@ -694,11 +694,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "643eda8b08aa7e629a16632521eb069d90290278cb85f1ee8beaca3d1c0f0b41",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "846a2c9038c7aab4c63f202b2e1ae582c569c735205f9bc881dc32d063da3254",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/48-ai-model-governance/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "49",
@@ -708,11 +708,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ad1bc73b8b06748597cd67ce37c24ad21fa73e9dc8ab1c8a9d6b8636a904efe6",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "13472555c0d7db86634d64a973cdc40273dd917f0f7c1c368ec4339bfb2be50c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/49-creative-ai-studio/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "50",
@@ -722,11 +722,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "f20fd5d58d65bada4a77b087886165ce79704b205e752bf3f5e83f5db4b87b0e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "dffbff57c328ac86a76ba0f1a3568df1861f3cf6598249352b030b06f46f2d63",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/50-financial-risk-intelligence/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "51",
@@ -736,11 +736,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "bd9b8e1e9b79d9af7cd9902950f7081514e983e658d4d10341fcae4ccb1d04bf",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "5811ef58a81d400256eab26dc5e104fdb1617c5c47dcab6a54079b4a43a9f955",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/51-autonomous-coding-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "52",
@@ -750,11 +750,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "65ae6a0098f21b6c6a13771e33865cd406c8382a24cf5a4079c1fe71be456408",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ccce98201089a11790e4f336fc080c7d7e00bd1c0dfba499ce23e7e957db2f2c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/52-ai-api-gateway-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "53",
@@ -764,11 +764,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "433c4bdf99949ca938f7dba643bf57e274c43279396c679147e9e795f9e6dc14",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4c299eec344eb6d93f2a480ab0f7532d6c6f98f138cbdfcb6d32e49820360547",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/53-legal-document-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "54",
@@ -778,11 +778,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "d045a16ec5305731cc512d1bd6319fd03267ac6e7dc166f140b2576681e6c9ba",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "dcc1277daa8c2a6ee2865b9a522e01177a26e007116339321aae78be9b452b15",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/54-ai-customer-support-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "55",
@@ -792,11 +792,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ef6c4d830d982c8290e61e4c3b154743b6a7203f06a5f9de707cda3dd67b93f2",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "c018307d5622e0e6ad46ea6f3f50d8c1769c9970e69d5a0c34d371badb7b2972",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/55-supply-chain-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "56",
@@ -806,11 +806,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "435aa820c5007433c8b48ea33cec8ea4a8aab915c79b077f38d0c154d063929e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3576184752a1c79f59d0d22a302c3d1697a8a39917e3a8532b831dbb21bc5a7e",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/56-semantic-code-search/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "57",
@@ -820,11 +820,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "4e6da2d7e7228462a4048108895352a290d8e0d0f901c74e3b8a6d1d40832fda",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "dc1a403cb3d3d4640262040c767b2dd31a27c82cb9a8a458135d15153ef5a982",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/57-ai-translation-engine/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "58",
@@ -834,11 +834,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "6ec76194c22013c84b0895e2dd92f385a169b1f0571b94e91edf06d00a97f630",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "a939d27fd76a6a160826b79816ed2031ca722c0e1fa3a3fb754c870aec322ae3",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/58-digital-twin-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "59",
@@ -848,11 +848,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "70dc56b1a85e1aad5942acad3c30b3bcbd13e55c9868c3ffa7378eea0bfdeebf",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3357592d0908ccfe0ab62c3ca131c64c560d1bd3b3d6d467363285c34f71ad58",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/59-ai-recruiter-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "60",
@@ -862,11 +862,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "01a9afa90360d7c23a8fd4e0d8a78a13678a83f124256dea2a16bfc64c9475a1",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "d6852ee243b12a0edde3469bedbe8c105df70f991ddb24cbd7b2e15ec407f099",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/60-responsible-ai-dashboard/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "61",
@@ -876,11 +876,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "d9b7e259911ecd7bce98d86ca29057588375c4c97f48426e54043eede6416548",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "98f77f95308545564bdccfa0b93fa1fe979af49e7ea6f82d1f3ae53f6f5007bc",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/61-content-moderation-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "62",
@@ -890,11 +890,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "079e7daff18607010f6eeaf70303a40b1ee1b98bece2a69a244a432e1ff853e3",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "ed3cc497cf9ec3ade7df929c0c821070f0a202cf5db48d6b55bc888d3a2c9c20",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/62-federated-learning-pipeline/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "63",
@@ -904,11 +904,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "5869934e26ae56d048ccf15cd44467a270822b8c62ff74828dc429da57c883dc",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "7d2b9c923f8cccfd43704efe7e48837ae9a558f7049dc54244ce636e462f1f09",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/63-fraud-detection-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "64",
@@ -918,11 +918,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "0cac730ce6181267b76ae5765861e635620893e1bc40b1950d5e0b194605398f",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "46bb6ea1e9a96cfb997c69561ba777b545e3cb9d66715e5b11868155f1cd9d73",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/64-ai-sales-assistant/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "65",
@@ -932,11 +932,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "5a9e90f43605972bc558ed2183d9de82614946aac291ec493f838b051555243e",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "652b1c81098a4875b93d6c31a14bce23b9b2db1ee357f79eda8b7bf5512a33b7",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/65-ai-training-curriculum/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "66",
@@ -946,11 +946,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "65a06db3e6626ed4aa886d5182923168ff1c4e6afd7ae6760b8a74ff5835d363",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "14ca46fcc8802f11cd482cb5f603d198655a430bfd76ed02436492d12c9d7adf",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/66-ai-infrastructure-optimizer/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "67",
@@ -960,11 +960,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "9b85db10898c00dfa1801d28f4f7b474ffd8f9f56db371efa7d3247ae7cb1b68",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "b96114f8cc01e42a9a7518019e17a8fe0f530ffdf62f869b7828eea2032ab410",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/67-ai-knowledge-management/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "68",
@@ -974,11 +974,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "abc442c06de6e04d5b61e2b4183b9e8124bc4228b345edda41eb0a73c7db82fb",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "6156ad216276ebe79344fab80ee16eebec184d49f1d4460cf8f37984dbf45164",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/68-predictive-maintenance-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "69",
@@ -988,11 +988,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "3b171015c8a709efa1ef4cd801c1a7aa2e12567fc5260f57d494c20b7b328d8d",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "863d2349cb58e0b56051102558e75d3f7620d16292b62c1547dfcc34730b047a",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/69-carbon-footprint-tracker/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "70",
@@ -1002,11 +1002,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "d122e47e1c17030b80a8a53b51aca05e031665fea107e48997ead2fb807fbd1c",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "98f0427ac3236243457d97b79c11e76791974166ff87f96cfdec21729bdb5e33",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/70-esg-compliance-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "71",
@@ -1016,11 +1016,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "32fa8a614510bb76eb45a3f3493fc0c592f3b1741c631e2c2351c234bdf96e05",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "99bb1bbb6bb21c6dd3f16b850689974e2fb59901e1b37b3cbce5cf5ad827efe8",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/71-smart-energy-grid-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "72",
@@ -1030,11 +1030,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "bd0712842c9ee4d1fb6071919f8193d80ce4080ed7e61c00c6eb17fbca25cb50",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "250cc9b482d902f68e2cc1667fca15d877beb1d5664e7484b8cf55be8fec49fa",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/72-climate-risk-assessor/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "73",
@@ -1044,11 +1044,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "56679ef2d622eb6b57536ed57222e3582a21e87b771027fcb5f0236f3e689d04",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "bcce383098fabf44887301a90efb78b39dc40d14acfdeccad3b26b65e17a5949",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/73-waste-recycling-optimizer/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "74",
@@ -1058,11 +1058,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "c3720c9917a5b563bedba23fa2bcab8b63c626ffb2d77ee0530ed8e92ac5dd24",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4b9eaf9a31e9a46f9091a56d4c89043ae4139f2965be2e2265f9b53d20ea55f4",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/74-ai-tutoring-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "75",
@@ -1072,11 +1072,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "07d03ad80829cbe7db8a86058e87e1b0803b7b1f6ce82e07a52358d342c31ecb",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "b1263e17fb5d99df0a288e2797d8e7c81d64bab3a6e29639750c5c120cb8af56",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/75-exam-generation-engine/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "76",
@@ -1086,11 +1086,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "7c96990e276029eebaad4aeb7d783ba44e0b22599174acd766c56549387ef76c",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "1ac00fc3dc35471e49bc09127ede2f05ca253d32b49fccb4e4eb359df4e47f76",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/76-accessibility-learning-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "77",
@@ -1100,11 +1100,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "b18f84dcf37c56cf3003492f6b8404685074db324bb1595c62fdc567f4dafb1b",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3d4d689e08c3a3bd2ed6a89db99d7ec509d405eb583b59e7059dffcc5f0d053c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/77-research-paper-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "78",
@@ -1114,11 +1114,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "49b969d4888038b65964150f3e98c8cabae15b0e8b99ecc8b58758cc8b6d7139",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "695e463262c5ef8190e90d7b2cae62e8c6e702e445504ce9ba67e5434679c2ab",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/78-precision-agriculture-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "79",
@@ -1128,11 +1128,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "0906f204d4e4c3551c6bef42aa12f2842af4367b969170747402dfb180aac0c4",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4b1eedab66189fdc5f2a0c00a4871493948c8f2592b2f98580d0bea2d261d1c8",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/79-food-safety-inspector-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "80",
@@ -1142,11 +1142,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "afe0fff5eccfa6627fe0e169aca8f465c6c346c909cd2b0761aa757eb36fa678",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "44382736be9231ed21baa2835d51c77ddc5b9ed2a1b29747ae71bb346073ec7b",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/80-biodiversity-monitor/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "81",
@@ -1156,11 +1156,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "fa0f5a80a8014e063a9a20d90f31edc5af236901a130a0a8a0be99603c2f0a80",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "5247deb053ab4ed63f67913bfc1fbf24d2c40b366d2b9e61d776f18b402bfa8a",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/81-property-valuation-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "82",
@@ -1170,11 +1170,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "529a619949b60cdc785756d1b8186bd9d27a7a7814eb4ce82c989fc516de68dc",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "e75f10bdfe29ee33efbaa85787f03ac431ba0692f5c4df49a51e05cda9dea8e4",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/82-construction-safety-ai/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "83",
@@ -1184,11 +1184,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ffcfd3d6d40ae487103555ed5f8a43e748a16612338216d5db8cd4e50594a761",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "0cf432d015290ddfa016c3437a314e0dc81768ebeb6e407b3235ed25cede91ac",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/83-building-energy-optimizer/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "84",
@@ -1198,11 +1198,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "7fa112c7032db54044f896fa10970085f33eac537b69758d922c52a79a809b6c",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "74e06625ff64a8f4a1ec3a0de4b8f7794a52aaa5bb1c7d8a162d6a97166a818c",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/84-citizen-services-chatbot/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "85",
@@ -1212,11 +1212,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "e77e2d9a9e029743460d755ced9da38c5cc2d4d4bcbc7f28fbe8ffdfea7e4b49",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "5bffad160b954049ee197abcea7c601e83b5ff42a80a8951cdd1c2a1c2429165",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/85-policy-impact-analyzer/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "86",
@@ -1226,11 +1226,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "9967824ffc739e435a03543145d0c4e8f0f38e363e4f9a088762d3dffa62f2d1",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "a999c0db69882a16d68d9a86c019304e7c48701c487007a01b3cd95aaff1adaf",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/86-public-safety-analytics/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "87",
@@ -1240,11 +1240,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "99edd8073f8a44f392a9a01aebe7feb20fc0543bfbfc63e269aa3a15e59ab1e7",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "af80ae78d4431a50c02dadb214008c57d3e3fe0567ff89a4947f4c6142f61831",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/87-dynamic-pricing-engine/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "88",
@@ -1254,11 +1254,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ee4be9c9f5313d777f811a40ddb1631cd376375d0767ae30e5332cf88c0f5d19",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "e0903670d27642911a5189058a4e7616dbe38105b84715b34db3becb9cb09858",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/88-visual-product-search/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "89",
@@ -1268,11 +1268,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ba91bc631ed6c86994d938b6115cd36dc0e907676f0ef5d308817e8e835a8b2a",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "30cc6e3ef37ec347402838cf845e45eddd763a74c67f7a498fd54c30a33e4675",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/89-retail-inventory-predictor/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "90",
@@ -1282,11 +1282,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "1bcf97baca7d0600c1d5a8cbac6b719319fd9bf07ab84362962012d114bc4c05",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "e35171802650399874de7b1ca322d7724c6e65acc07b3500c1d678022d623513",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/90-network-optimization-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "91",
@@ -1296,11 +1296,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "b90961fb095be510ce868c1a8a0c9a124fb1d17c3412657ace59b982872086ac",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "5b98d88c5984d7c7d057f7185700a67d2e55c8948f446db065094be0cda647f8",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/91-customer-churn-predictor/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "92",
@@ -1310,11 +1310,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "f226fc2e8422912c0e1afc5a0d58a301eb7b0cf143043342c3d53dea59a33f9d",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "eb029d9172201c09e4f4a78e48cc6a4ec62f6b77aa430eb9068e17497a491089",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/92-telecom-fraud-shield/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "93",
@@ -1324,11 +1324,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "01730fa358f1be827c3bb68309dda8e70600fa2b5eccd921b108ce0fec68aa23",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "01c963549ef787f6c03afcb7bb8354292c5922a3f4c120b62996a57db2c67f1d",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/93-continual-learning-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "94",
@@ -1338,11 +1338,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "61c58a84401de7d915e706c728cf62c2e5b1a3db6cbde48f82db326cc21e6e84",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "45717f49bcbbef5b311852b3e09b0430fcdfb9ee3c3928f7ee7ee13cf8f4a391",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/94-ai-podcast-generator/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "95",
@@ -1352,11 +1352,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "e73850a90e0bb05ec2bb48eae3f5f6060a0fb8c1e476075b80c4d184250ee307",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "acca7a34d7eec4e38bcc72655795bd85f20840b66427d52c2f1b1ff9a1ab4e30",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/95-multimodal-search-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "96",
@@ -1366,11 +1366,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "7004c7a0e8399bc7eeab8aadbba9ea04de771f716fd6a28533d3bcf7889397ec",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "b0e945feb9a122d629ac44de9074f8fe5c2b308818b73ca0fe26011de531c43f",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/96-realtime-voice-agent-v2/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "97",
@@ -1380,11 +1380,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "d1163a95ef9b895dc30e5ea49115f59fc4198801925b57a9019a70c639b51fa3",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "4edb4acbdea2b7a1fd8510ca6625783d52dc0bafed9fa4a75a55a23075f19fb2",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/97-ai-data-marketplace/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "98",
@@ -1394,11 +1394,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "e8a970d42c4042605ee8992b6df9a9f3fda747370894c49993968680382ca30c",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "437df5e62f181618938ae72b6fab9681b58b0f9d45d010b660ac8124560d2d77",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/98-agent-evaluation-platform/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "99",
@@ -1408,11 +1408,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "ef3b430dd381c16f6b26d27b20df5e818fb4db468d48aff4f145b16618d4f260",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "650d530e40313f77e9e7b86336572541cdd0757adbbc6fddbf5367ca240b516f",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/99-enterprise-ai-governance-hub/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "100",
@@ -1422,11 +1422,11 @@
       "reasons": [
         "scaffold_verified is missing"
       ],
-      "content_sha256": "c7b935ff10fb407a6ecce1b2256f6b60a093fe1450c11384a69610ac3c5f43d7",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "3a0854860bb76bb57cc7dfeeee8e11f43a85fc71264a39f726cd843efd635524",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/100-fai-meta-agent/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     },
     {
       "id": "101",
@@ -1436,11 +1436,11 @@
       "reasons": [
         "designed blocking check iac-declaration did not pass"
       ],
-      "content_sha256": "d87d94ed0a2a1b058269fb22510ab82f14d5af7709b12e958ca4f26f02e52b3f",
-      "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
+      "content_sha256": "2494a9883c57e9eb0d438d9ff9830bc8545e265bfe8db17e1d0fe0505eccdb41",
+      "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
       "evidence_path": "solution-plays/101-pester-test-development/certification/evidence.v1.json",
       "profile": "design-v1",
-      "expires_at": "2026-08-17T22:54:56.591Z"
+      "expires_at": "2026-08-26T06:26:06.692Z"
     }
   ]
 }

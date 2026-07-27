@@ -22,6 +22,14 @@ const policySha = sha256(fs.readFileSync(policyPath));
 const designPolicy = JSON.parse(fs.readFileSync(designPolicyPath, 'utf8'));
 const designPolicySha = sha256(fs.readFileSync(designPolicyPath));
 function repositoryCommitSha() {
+  if (process.argv.includes('--check') && fs.existsSync(outputPath)) {
+    const existing = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+    const persisted = new Set(existing.plays?.map((play) => play.commit_sha));
+    if (persisted.size !== 1 || ![...persisted][0]?.match(/^[a-f0-9]{40}$/)) {
+      throw new Error('Certification check requires one valid persisted source commit SHA');
+    }
+    return [...persisted][0];
+  }
   const fromEnvironment = process.env.GITHUB_SHA?.match(/^[a-f0-9]{40}$/)?.[0];
   if (fromEnvironment) return fromEnvironment;
   const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
@@ -229,7 +237,7 @@ async function designedEvidence(play, generatedAt) {
       return null;
     }
   };
-  const result = certifyEvidence(evidence, { now: new Date(), expectedContentSha256: contentSha, expectedCommitSha: commitSha, policy: activePolicy, expectedPolicySha256: activePolicySha, artifactResolver });
+  const result = certifyEvidence(evidence, { now: new Date(generatedAt), expectedContentSha256: contentSha, expectedCommitSha: commitSha, policy: activePolicy, expectedPolicySha256: activePolicySha, artifactResolver });
   return { evidence, certification: result };
 }
 

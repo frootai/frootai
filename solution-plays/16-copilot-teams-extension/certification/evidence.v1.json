@@ -6,9 +6,9 @@
     "slug": "16-copilot-teams-extension",
     "canonical_id": "frootai__16-copilot-teams-extension",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "11f4498cc188108c5c8f3dd157133f3bec115f39137f5c7c289e36f07a4c1cdb",
-    "manifest_sha256": "2fe2c4f26a55dccf73a8da972ba12848284480df7dffdea9261d45647a2ad19b",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "216861c9a1398839ec82fa7b4d7c8d489c7a22c5c0b89cf5ad7b780c7e0b7ac9",
+    "manifest_sha256": "e5933937494264dda6987254b00673a63260dd084dd8b358082aa312cb3d773c",
     "iac_sha256": "a41fcef6a0482a47f95f28c365540cc4cc7a429421296e563ccdffbc2e0b0481",
     "evaluation_dataset_sha256": "4c8c25f9c957e93a262fdb2325d2749359dc31aac470ed9ebbbc157d13e8d555"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/16-copilot-teams-extension/spec/fai-manifest.json",
-          "sha256": "2fe2c4f26a55dccf73a8da972ba12848284480df7dffdea9261d45647a2ad19b",
+          "sha256": "e5933937494264dda6987254b00673a63260dd084dd8b358082aa312cb3d773c",
           "media_type": "application/json"
         },
         {

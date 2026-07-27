@@ -6,9 +6,9 @@
     "slug": "93-continual-learning-agent",
     "canonical_id": "frootai__93-continual-learning-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "01730fa358f1be827c3bb68309dda8e70600fa2b5eccd921b108ce0fec68aa23",
-    "manifest_sha256": "b6d4fbe24e66bb74ddcf8e77ed85b413f244d453ab6142ab29b778386f0d13f3",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "01c963549ef787f6c03afcb7bb8354292c5922a3f4c120b62996a57db2c67f1d",
+    "manifest_sha256": "4cf0cec5c6ef6f74b38f008a28a8b201326a3998d371267356705672972623f4",
     "iac_sha256": "3c9f598049eaa76d97a9c8aa414b2a6963228bcba070dd9d6d5b2e01e859ecf9",
     "evaluation_dataset_sha256": "f69432202d729871b8ad153b4be36016c7ce3f4b9858b6acfb10a6541feadab7"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/93-continual-learning-agent/spec/fai-manifest.json",
-          "sha256": "b6d4fbe24e66bb74ddcf8e77ed85b413f244d453ab6142ab29b778386f0d13f3",
+          "sha256": "4cf0cec5c6ef6f74b38f008a28a8b201326a3998d371267356705672972623f4",
           "media_type": "application/json"
         },
         {

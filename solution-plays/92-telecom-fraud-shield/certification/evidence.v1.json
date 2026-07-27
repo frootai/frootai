@@ -6,9 +6,9 @@
     "slug": "92-telecom-fraud-shield",
     "canonical_id": "frootai__92-telecom-fraud-shield",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "f226fc2e8422912c0e1afc5a0d58a301eb7b0cf143043342c3d53dea59a33f9d",
-    "manifest_sha256": "ae6443979af33d6e802f412070867c12b704431e6b7bb4d4b31fd373496ea9c1",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "eb029d9172201c09e4f4a78e48cc6a4ec62f6b77aa430eb9068e17497a491089",
+    "manifest_sha256": "4ff00b500973c5136817090d5d264558c106b00d6b4231fc7b40dcca10d153d3",
     "iac_sha256": "a03f6e8675387a8d2f4cc45e191475a628c0ba573ed867e5d2f5bfa032c92efd",
     "evaluation_dataset_sha256": "2cabe759fd6ba07b812e5af427a388dcede8bd5d14db99435aa2d3db241d80e5"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/92-telecom-fraud-shield/spec/fai-manifest.json",
-          "sha256": "ae6443979af33d6e802f412070867c12b704431e6b7bb4d4b31fd373496ea9c1",
+          "sha256": "4ff00b500973c5136817090d5d264558c106b00d6b4231fc7b40dcca10d153d3",
           "media_type": "application/json"
         },
         {
