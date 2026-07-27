@@ -6,9 +6,9 @@
     "slug": "65-ai-training-curriculum",
     "canonical_id": "frootai__65-ai-training-curriculum",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "5a9e90f43605972bc558ed2183d9de82614946aac291ec493f838b051555243e",
-    "manifest_sha256": "62f597ab905db2e937162e97dcce763d99217a475f58197555244e356fd701bb",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "652b1c81098a4875b93d6c31a14bce23b9b2db1ee357f79eda8b7bf5512a33b7",
+    "manifest_sha256": "00a902094b4743a8c4c3def3e9c66296150e8f7176b566b8c5e6469a0591cfb2",
     "iac_sha256": "ffc6f2010ee60f3880cfcd47acbbf0c3eb3e75cdc176f6796a17582b76db0cc3",
     "evaluation_dataset_sha256": "2b394065fd3c20601425a7390e0ceef7e56be963298d8a8b8d0ad60638c70e86"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/65-ai-training-curriculum/spec/fai-manifest.json",
-          "sha256": "62f597ab905db2e937162e97dcce763d99217a475f58197555244e356fd701bb",
+          "sha256": "00a902094b4743a8c4c3def3e9c66296150e8f7176b566b8c5e6469a0591cfb2",
           "media_type": "application/json"
         },
         {

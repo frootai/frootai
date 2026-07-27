@@ -6,9 +6,9 @@
     "slug": "72-climate-risk-assessor",
     "canonical_id": "frootai__72-climate-risk-assessor",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "bd0712842c9ee4d1fb6071919f8193d80ce4080ed7e61c00c6eb17fbca25cb50",
-    "manifest_sha256": "04719d8578c51e8c9631d983baf403180dcd6f510e97d4347700e3f7e49d3d9e",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "250cc9b482d902f68e2cc1667fca15d877beb1d5664e7484b8cf55be8fec49fa",
+    "manifest_sha256": "56d100d37de381e695cd84198d02ca0a33956c0f9af91e302181ebdd413b105f",
     "iac_sha256": "9d387663f0644708b883c3e29afb7636a52a9894a0bcc6ff185073a5c75784f4",
     "evaluation_dataset_sha256": "13d101f07c406c237913d61fbfc1f0ccdea3ab4c982874e8696906582a6dae86"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/72-climate-risk-assessor/spec/fai-manifest.json",
-          "sha256": "04719d8578c51e8c9631d983baf403180dcd6f510e97d4347700e3f7e49d3d9e",
+          "sha256": "56d100d37de381e695cd84198d02ca0a33956c0f9af91e302181ebdd413b105f",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "53-legal-document-ai",
     "canonical_id": "frootai__53-legal-document-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "433c4bdf99949ca938f7dba643bf57e274c43279396c679147e9e795f9e6dc14",
-    "manifest_sha256": "e22b51bcc1f0efb1e7ea49367b529732a1327e24d09962fb7c7245df98fb62d0",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "4c299eec344eb6d93f2a480ab0f7532d6c6f98f138cbdfcb6d32e49820360547",
+    "manifest_sha256": "614e2bc0efcabbfcd03e712152b0bdeae2ae5f5d541795c82d326da8fcb96747",
     "iac_sha256": "9ddd382f211ddc8a6bc5cd7975a48f9d23248cf273eb2215c7e4f7999d14f9ec",
     "evaluation_dataset_sha256": "0a0eb72950785339496c860cb30f923ea3b686d8018768475fe29bc68b4cc886"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/53-legal-document-ai/spec/fai-manifest.json",
-          "sha256": "e22b51bcc1f0efb1e7ea49367b529732a1327e24d09962fb7c7245df98fb62d0",
+          "sha256": "614e2bc0efcabbfcd03e712152b0bdeae2ae5f5d541795c82d326da8fcb96747",
           "media_type": "application/json"
         },
         {

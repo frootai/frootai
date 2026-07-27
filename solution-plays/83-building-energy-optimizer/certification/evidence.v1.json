@@ -6,9 +6,9 @@
     "slug": "83-building-energy-optimizer",
     "canonical_id": "frootai__83-building-energy-optimizer",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "ffcfd3d6d40ae487103555ed5f8a43e748a16612338216d5db8cd4e50594a761",
-    "manifest_sha256": "47aa92fb07ea7eecb60dca6d67ebabba9303be7c2051914cca87308e85282f49",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "0cf432d015290ddfa016c3437a314e0dc81768ebeb6e407b3235ed25cede91ac",
+    "manifest_sha256": "cb2ce5444b5dbf79dda0711ec365143a98ffa66aa7aeb3775dff42491fa5d2e9",
     "iac_sha256": "76a53a409e42db41d3ab645ce4624b4cc6ea882b8e1de3d4d8c93d3b485708a8",
     "evaluation_dataset_sha256": "188cd2d30c2538cf89e1612304642e3a514d35021d0aa391d8ecfb1a71450394"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/83-building-energy-optimizer/spec/fai-manifest.json",
-          "sha256": "47aa92fb07ea7eecb60dca6d67ebabba9303be7c2051914cca87308e85282f49",
+          "sha256": "cb2ce5444b5dbf79dda0711ec365143a98ffa66aa7aeb3775dff42491fa5d2e9",
           "media_type": "application/json"
         },
         {

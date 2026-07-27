@@ -6,9 +6,9 @@
     "slug": "50-financial-risk-intelligence",
     "canonical_id": "frootai__50-financial-risk-intelligence",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "f20fd5d58d65bada4a77b087886165ce79704b205e752bf3f5e83f5db4b87b0e",
-    "manifest_sha256": "c84db03a4b8788bbf86611ba1258b12faa5f25aeb81cb05624d81c6ff80b03b1",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "dffbff57c328ac86a76ba0f1a3568df1861f3cf6598249352b030b06f46f2d63",
+    "manifest_sha256": "a921cc93bdd09b3d46b65c1337ea5155afccfdc1097ddf5c2ba875460bd446e5",
     "iac_sha256": "724fb6d114bf6099083fc9062439309398c302cae6ce7b3a54f6ef2dc10765a9",
     "evaluation_dataset_sha256": "9bec969dae4d4fe68e044d2ac1a0e0ba40e13de544aaa3ad985e4b175092c04d"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/50-financial-risk-intelligence/spec/fai-manifest.json",
-          "sha256": "c84db03a4b8788bbf86611ba1258b12faa5f25aeb81cb05624d81c6ff80b03b1",
+          "sha256": "a921cc93bdd09b3d46b65c1337ea5155afccfdc1097ddf5c2ba875460bd446e5",
           "media_type": "application/json"
         },
         {

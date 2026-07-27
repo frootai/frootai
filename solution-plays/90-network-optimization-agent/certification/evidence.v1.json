@@ -6,9 +6,9 @@
     "slug": "90-network-optimization-agent",
     "canonical_id": "frootai__90-network-optimization-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "1bcf97baca7d0600c1d5a8cbac6b719319fd9bf07ab84362962012d114bc4c05",
-    "manifest_sha256": "9895c042b91465a1c6d765a275b39c74ec2826a0346c70785f5244087cc47a44",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "e35171802650399874de7b1ca322d7724c6e65acc07b3500c1d678022d623513",
+    "manifest_sha256": "d8babb06c51705f43c697c81f551b6e06801059020c0d04ce2d4469ea31a11c5",
     "iac_sha256": "9b33bb4054ced183594da545533747d1c7f7fa3a9470a9b9e29045ef57e62ca8",
     "evaluation_dataset_sha256": "a9209cc4dcc1d69d6ede434e5f4b7c600d39fe84c8344462931f229de2410fbc"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/90-network-optimization-agent/spec/fai-manifest.json",
-          "sha256": "9895c042b91465a1c6d765a275b39c74ec2826a0346c70785f5244087cc47a44",
+          "sha256": "d8babb06c51705f43c697c81f551b6e06801059020c0d04ce2d4469ea31a11c5",
           "media_type": "application/json"
         },
         {

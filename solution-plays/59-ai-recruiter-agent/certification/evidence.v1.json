@@ -6,9 +6,9 @@
     "slug": "59-ai-recruiter-agent",
     "canonical_id": "frootai__59-ai-recruiter-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "70dc56b1a85e1aad5942acad3c30b3bcbd13e55c9868c3ffa7378eea0bfdeebf",
-    "manifest_sha256": "3f660786099963906388e8a4d1596ff91d06b7d7a1dde993e03eb8bacaca374a",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "3357592d0908ccfe0ab62c3ca131c64c560d1bd3b3d6d467363285c34f71ad58",
+    "manifest_sha256": "5f73000b285b31790a6f06148156cab0f023b0f55acebda36a94af5037517867",
     "iac_sha256": "a65d8a4dbe0113444c7e53c938a1f70d40a28fa1a513711c74df698e199e2f87",
     "evaluation_dataset_sha256": "baba9e7531c0d44b1cf066249ffe72db923c2d3e7af18434932cf42caec87ace"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/59-ai-recruiter-agent/spec/fai-manifest.json",
-          "sha256": "3f660786099963906388e8a4d1596ff91d06b7d7a1dde993e03eb8bacaca374a",
+          "sha256": "5f73000b285b31790a6f06148156cab0f023b0f55acebda36a94af5037517867",
           "media_type": "application/json"
         },
         {

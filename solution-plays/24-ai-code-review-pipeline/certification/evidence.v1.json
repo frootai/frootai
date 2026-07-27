@@ -6,9 +6,9 @@
     "slug": "24-ai-code-review-pipeline",
     "canonical_id": "frootai__24-ai-code-review-pipeline",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "4907b20217ca1864ec3d56a0674eb0afdd581b59fe7f0050ede7ba96de5feb9d",
-    "manifest_sha256": "dc132a43fee85e9eef914c610dd1a357514f2257b251d1fd6d9f92d410ef62fa",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "295c63a11a4f72b57c58cde67194883e37e1fdadd368a8185618d3a12385956d",
+    "manifest_sha256": "73628bec43d7fdbd7c299da21e3edd11470a458b59fdd3d8b525688f9979d16f",
     "iac_sha256": "0d1be0b5bb6bfeaa23b52b793d2938f485c9dc38bb3e53cf5784e8fcc657e770",
     "evaluation_dataset_sha256": "ec3e49b32ca9a56d853dc93df4b12c7ae3fb7cb28197da420d6f8cda963a81cd"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/24-ai-code-review-pipeline/spec/fai-manifest.json",
-          "sha256": "dc132a43fee85e9eef914c610dd1a357514f2257b251d1fd6d9f92d410ef62fa",
+          "sha256": "73628bec43d7fdbd7c299da21e3edd11470a458b59fdd3d8b525688f9979d16f",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "85-policy-impact-analyzer",
     "canonical_id": "frootai__85-policy-impact-analyzer",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "e77e2d9a9e029743460d755ced9da38c5cc2d4d4bcbc7f28fbe8ffdfea7e4b49",
-    "manifest_sha256": "c397f74cda9b33947792b58e5f99b5da9e848bae5b8c50c14f4dc05ce729a5d4",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "5bffad160b954049ee197abcea7c601e83b5ff42a80a8951cdd1c2a1c2429165",
+    "manifest_sha256": "396b46147c456a3ea44b333150680362f78999f96bdf8138e5cd7fa726cb74a2",
     "iac_sha256": "82f127f694c3bfc87e00793cf6dd6d7752055e748d442130db0462bd7ef49049",
     "evaluation_dataset_sha256": "57fde1cf0eacf927706e2d29ddcbfb076d49a9b6f3bab29c93c77d0fa913679a"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/85-policy-impact-analyzer/spec/fai-manifest.json",
-          "sha256": "c397f74cda9b33947792b58e5f99b5da9e848bae5b8c50c14f4dc05ce729a5d4",
+          "sha256": "396b46147c456a3ea44b333150680362f78999f96bdf8138e5cd7fa726cb74a2",
           "media_type": "application/json"
         },
         {

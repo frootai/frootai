@@ -6,9 +6,9 @@
     "slug": "82-construction-safety-ai",
     "canonical_id": "frootai__82-construction-safety-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "529a619949b60cdc785756d1b8186bd9d27a7a7814eb4ce82c989fc516de68dc",
-    "manifest_sha256": "beed4c28407341800f249487b9a39e76cd86a6d96ad4bc383c1c6462b329df17",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "e75f10bdfe29ee33efbaa85787f03ac431ba0692f5c4df49a51e05cda9dea8e4",
+    "manifest_sha256": "b7fd95537e4ccd3347779b6fc39c598aa5b050c11a493b8a7864d00dc04b1338",
     "iac_sha256": "f6821e0c80fdec0aebc1cdf9f184e4a7022341a82249f664244325a529d82614",
     "evaluation_dataset_sha256": "c96ba82f3a0e2754a937775ee9f098ba4ea9fb61ad78e72f8072b7caf4453fde"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/82-construction-safety-ai/spec/fai-manifest.json",
-          "sha256": "beed4c28407341800f249487b9a39e76cd86a6d96ad4bc383c1c6462b329df17",
+          "sha256": "b7fd95537e4ccd3347779b6fc39c598aa5b050c11a493b8a7864d00dc04b1338",
           "media_type": "application/json"
         },
         {

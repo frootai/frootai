@@ -6,9 +6,9 @@
     "slug": "70-esg-compliance-agent",
     "canonical_id": "frootai__70-esg-compliance-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "d122e47e1c17030b80a8a53b51aca05e031665fea107e48997ead2fb807fbd1c",
-    "manifest_sha256": "6a32e8edd13088e5f1ac97940d6b443e03fd568c48b27d53e844f6a49e67c85e",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "98f0427ac3236243457d97b79c11e76791974166ff87f96cfdec21729bdb5e33",
+    "manifest_sha256": "b529fe944adb2856a3f8f38e2bfb841b8d95f7f96108e68ed622b18d450f4887",
     "iac_sha256": "abc694516c0ec9f73f7de3016178bf9e11ab3f7daeb1f61a0e867dfb71fccd90",
     "evaluation_dataset_sha256": "da843e250843fdf9b7aef34404ce9686166c8f730a00d5c5796d89911df93e21"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/70-esg-compliance-agent/spec/fai-manifest.json",
-          "sha256": "6a32e8edd13088e5f1ac97940d6b443e03fd568c48b27d53e844f6a49e67c85e",
+          "sha256": "b529fe944adb2856a3f8f38e2bfb841b8d95f7f96108e68ed622b18d450f4887",
           "media_type": "application/json"
         },
         {

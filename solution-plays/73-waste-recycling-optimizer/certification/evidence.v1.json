@@ -6,9 +6,9 @@
     "slug": "73-waste-recycling-optimizer",
     "canonical_id": "frootai__73-waste-recycling-optimizer",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "56679ef2d622eb6b57536ed57222e3582a21e87b771027fcb5f0236f3e689d04",
-    "manifest_sha256": "f7d87fe57a3cc55ee306fa4372b2365f17555833489de5e0c3788960c6b3d5fb",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "bcce383098fabf44887301a90efb78b39dc40d14acfdeccad3b26b65e17a5949",
+    "manifest_sha256": "a19d055fb9bd50e7e5dbe6a4ed3bb185c147ee6f822b4afb3d0d8072e38b2de9",
     "iac_sha256": "d02d7660337ff64e695b46392e32c81b574fcf1192ca692233fccef28cd6152e",
     "evaluation_dataset_sha256": "f4527ad31277d80b7eb73e19d45c3eebdfaf906fafb67b13fd48246c7dfd9121"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/73-waste-recycling-optimizer/spec/fai-manifest.json",
-          "sha256": "f7d87fe57a3cc55ee306fa4372b2365f17555833489de5e0c3788960c6b3d5fb",
+          "sha256": "a19d055fb9bd50e7e5dbe6a4ed3bb185c147ee6f822b4afb3d0d8072e38b2de9",
           "media_type": "application/json"
         },
         {

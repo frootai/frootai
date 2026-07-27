@@ -6,9 +6,9 @@
     "slug": "11-ai-landing-zone-advanced",
     "canonical_id": "frootai__11-ai-landing-zone-advanced",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "acfb8be78e93eb1851e261360177ffcca069128e51fbb65981999e8ad5eab26d",
-    "manifest_sha256": "0aab5edf4d8744c337f781cca7b1018b0a2bdf7b2fbea0df386183a48242fd3b",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "ad9f07da32885a3d272a965cfc752f85adedab65c5840b0e9ed75e658e4281ae",
+    "manifest_sha256": "91c251180e147c0d0b0533f6e33da974cd1dbe1559908b6690e94928a9591280",
     "iac_sha256": "a206f8b35946a9be814456f2ba2dbe796f2c1d4caf70e4776ef0d379b98a8a26",
     "evaluation_dataset_sha256": "a0d9020f76d658556c78ff2051859b924566a9f8a7540bb657efb77540cca668"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/11-ai-landing-zone-advanced/spec/fai-manifest.json",
-          "sha256": "0aab5edf4d8744c337f781cca7b1018b0a2bdf7b2fbea0df386183a48242fd3b",
+          "sha256": "91c251180e147c0d0b0533f6e33da974cd1dbe1559908b6690e94928a9591280",
           "media_type": "application/json"
         },
         {

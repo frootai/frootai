@@ -6,9 +6,9 @@
     "slug": "01-enterprise-rag",
     "canonical_id": "frootai__01-enterprise-rag",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "060526f4687cc966db221c0f228723c6d97423d26d53d543ce877c9115068f76",
-    "manifest_sha256": "e3cd74c6f1f28d4b63c6138257611cb69918f4ee883ec41fd98e91b31aa5c3ce",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "fcdde4d9e51d59e0c7b340ab2aa6cce914254ce49ad4802e06354670e1015263",
+    "manifest_sha256": "8fd867af5feccaa5a8d36a605ea275ccb351eb7b2c6a19150af8bf81f4949deb",
     "iac_sha256": "4e893f0a86f0359ddfa3d94cdbc35cfb2ad0ccf91336d63b0fb4265a09ff6a85",
     "evaluation_dataset_sha256": "42fbdd867861184d8d17f5b5408eb0386aed9a8a14998214ac97dd78c6bc8a3e"
   },
@@ -16,12 +16,12 @@
     "profile": "flagship-v1",
     "profile_sha256": "ef65994d7392f423ac8952c623bc05d8c89858b7b7d6ecfb8a51771e1d64ccf4"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/01-enterprise-rag/spec/fai-manifest.json",
-          "sha256": "e3cd74c6f1f28d4b63c6138257611cb69918f4ee883ec41fd98e91b31aa5c3ce",
+          "sha256": "8fd867af5feccaa5a8d36a605ea275ccb351eb7b2c6a19150af8bf81f4949deb",
           "media_type": "application/json"
         },
         {
@@ -121,8 +121,8 @@
     },
     "scaffold_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-25T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-03T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -177,15 +177,15 @@
         {
           "type": "runtime-contract",
           "url": "solution-plays/01-enterprise-rag/spec/runtime-contract.json",
-          "sha256": "b1bd18aaf9a2faf02a28f5547e52b49cce01c784d4a37b438e9cdd9cf4f42798",
+          "sha256": "6bfa40ec4e966d9920457c5d3cdd06279988f8aa26b20d8eedf6bf6981866713",
           "media_type": "application/json"
         }
       ]
     },
     "build_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-25T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-03T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -212,9 +212,9 @@
           "id": "unit-tests",
           "status": "passed",
           "blocking": true,
-          "output_sha256": "f3ac519ba477d7b1a9f0a53594f3a9ef77136011b73ae93252e921ab494f2a29",
+          "output_sha256": "025d3e74bfe6d1266dab498a588000d7001a99c98e0701a5aa7af542ecbadb80",
           "metrics": {
-            "detail": "✔ all flagship datasets are valid JSONL with no placeholder ground truth (54.7039ms)\n✔ endpoint evaluation measures and passes every flagship case (151.2766ms)\n✔ all five flagship scenarios execute deterministically offline (5.9592ms)\n✔ invalid input fails closed without exposing internal errors (0.7674ms)\n✔ real HTTP listener exposes health, catalog, schema, execution, and run status (89.234ms)\n✔ Azure contracts name required adapter ports and resources for each flagship (0.2839ms)\n✔ policy endpoint allows what-if and blocks unverified production deployment (13.3979ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 465.0444"
+            "detail": "✔ all flagship datasets are valid JSONL with no placeholder ground truth (116.2841ms)\n✔ endpoint evaluation measures and passes every flagship case (196.376ms)\n✔ all five flagship scenarios execute deterministically offline (5.0113ms)\n✔ invalid input fails closed without exposing internal errors (8.8746ms)\n✔ real HTTP listener exposes health, catalog, schema, execution, and run status (103.5071ms)\n✔ Azure contracts name required adapter ports and resources for each flagship (0.2976ms)\n✔ policy endpoint allows what-if and blocks unverified production deployment (20.2769ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 618.6716"
           }
         },
         {
@@ -277,8 +277,8 @@
     },
     "evaluation_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-21T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-30T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -332,9 +332,9 @@
           "id": "measured-cost",
           "status": "passed",
           "blocking": true,
-          "output_sha256": "fdf4d3f80ab46d1ae10fab372b72ebfe9b96ee5d857075a914227d76a405f2e0",
+          "output_sha256": "14f5a65f9533e91cb6c0536b6ed7b6a703f1e2385c78e7c69c775dc73c97f463",
           "metrics": {
-            "detail": "p95 34ms; offline cost $0"
+            "detail": "p95 32ms; offline cost $0"
           }
         }
       ],
@@ -342,15 +342,15 @@
         {
           "type": "evaluation-dataset",
           "url": "solution-plays/01-enterprise-rag/evaluation/cases.jsonl",
-          "sha256": "61054c65cb8a9e429511b05eb270473fe4ad01fdbe57a5f7d544c1d394918854",
+          "sha256": "63d293593bb2e1e866da5162b15266eaac79186dbf4ed43e19aaae34b23c38d1",
           "media_type": "application/x-ndjson"
         }
       ]
     },
     "deploy_verified": {
       "status": "failed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-19T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-28T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -378,8 +378,8 @@
     },
     "production_observed": {
       "status": "failed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-19T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-28T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",

@@ -6,9 +6,9 @@
     "slug": "94-ai-podcast-generator",
     "canonical_id": "frootai__94-ai-podcast-generator",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "61c58a84401de7d915e706c728cf62c2e5b1a3db6cbde48f82db326cc21e6e84",
-    "manifest_sha256": "71e12c3c99165f03bb6880883d989bf08c0f49f635d5a2a5771525f4ca8d2334",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "45717f49bcbbef5b311852b3e09b0430fcdfb9ee3c3928f7ee7ee13cf8f4a391",
+    "manifest_sha256": "6ecef53516ad11df15ec62112940b53c2c864ff59adc7bc1fdfd47ad5bf10f24",
     "iac_sha256": "2d5b4ca8066adfb8811f87dab4de774908f73811750025abe3f07128a89438e0",
     "evaluation_dataset_sha256": "692b432ccce8fc27367c34e5bbb5aab3246b67db092d2d9e42b1ca9e145c810b"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/94-ai-podcast-generator/spec/fai-manifest.json",
-          "sha256": "71e12c3c99165f03bb6880883d989bf08c0f49f635d5a2a5771525f4ca8d2334",
+          "sha256": "6ecef53516ad11df15ec62112940b53c2c864ff59adc7bc1fdfd47ad5bf10f24",
           "media_type": "application/json"
         },
         {

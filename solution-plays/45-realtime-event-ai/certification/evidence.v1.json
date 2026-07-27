@@ -6,9 +6,9 @@
     "slug": "45-realtime-event-ai",
     "canonical_id": "frootai__45-realtime-event-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "d32d4c7aac90b1699adf82618f02870b15217863b8eb136c3a5110d0c554581b",
-    "manifest_sha256": "28aa0fd129afd214ed435fc4bb70ade333a853762c07bd7c867534c8b3997f81",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "392b64574cffb38fb0b7e18ddb810f935abbc2d7528f83a8451097accac40522",
+    "manifest_sha256": "898344f4690e71407135c71cb61803266704967a328b082633debcd0711767cc",
     "iac_sha256": "dc4418f0174940244087bcaacfc3dda819c7fe2d17792a2afea4123734727588",
     "evaluation_dataset_sha256": "46a70530874a0972414fec82fa3b7fd216e8a81e1926915feed665f3f3faabe0"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/45-realtime-event-ai/spec/fai-manifest.json",
-          "sha256": "28aa0fd129afd214ed435fc4bb70ade333a853762c07bd7c867534c8b3997f81",
+          "sha256": "898344f4690e71407135c71cb61803266704967a328b082633debcd0711767cc",
           "media_type": "application/json"
         },
         {

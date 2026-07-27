@@ -6,9 +6,9 @@
     "slug": "78-precision-agriculture-agent",
     "canonical_id": "frootai__78-precision-agriculture-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "49b969d4888038b65964150f3e98c8cabae15b0e8b99ecc8b58758cc8b6d7139",
-    "manifest_sha256": "014a5a7af984f1043cddb3ac7b4c9e1e1c05975008bf8b9cd8840ec63c2f8417",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "695e463262c5ef8190e90d7b2cae62e8c6e702e445504ce9ba67e5434679c2ab",
+    "manifest_sha256": "4567878ae944528876fc0905dd041ecb94ec0b24f16ba23f7234354a4f6df76e",
     "iac_sha256": "037d8458809c7952c2473afa77abef143ab9ebcb7955ee31a4ebf4b426d47d6f",
     "evaluation_dataset_sha256": "51e458c7c0a60740c205eccfaa740dd1ded3b6585f33d3f104d95bbed45f0360"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/78-precision-agriculture-agent/spec/fai-manifest.json",
-          "sha256": "014a5a7af984f1043cddb3ac7b4c9e1e1c05975008bf8b9cd8840ec63c2f8417",
+          "sha256": "4567878ae944528876fc0905dd041ecb94ec0b24f16ba23f7234354a4f6df76e",
           "media_type": "application/json"
         },
         {

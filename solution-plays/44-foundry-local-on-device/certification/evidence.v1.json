@@ -6,9 +6,9 @@
     "slug": "44-foundry-local-on-device",
     "canonical_id": "frootai__44-foundry-local-on-device",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "3624228f406858268e3c5087e193f92d90b2298dc0ddfbcae5fa3babc22f0a74",
-    "manifest_sha256": "6803d6802cc91f845385d20a841dfdc042b1ba72ca6def0f4e12c25474a4afc4",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "6e3c36bd2fd0ee4d216fabae0f9e9d855d1cee8aab9cbdb6e98e2823500312cd",
+    "manifest_sha256": "8bf52377b6bd6730f79c498706f807b15a5c09f7d73bcd485b060f192c263a48",
     "iac_sha256": "48eb27cfcc14c23beb39d1c55a0faa991c73f5cd4250a68b36eadf722502673d",
     "evaluation_dataset_sha256": "b50f8aa2c4b75091c3dd0c77bf79eed77a328df5c828e4782111bc96c145046e"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/44-foundry-local-on-device/spec/fai-manifest.json",
-          "sha256": "6803d6802cc91f845385d20a841dfdc042b1ba72ca6def0f4e12c25474a4afc4",
+          "sha256": "8bf52377b6bd6730f79c498706f807b15a5c09f7d73bcd485b060f192c263a48",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "80-biodiversity-monitor",
     "canonical_id": "frootai__80-biodiversity-monitor",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "afe0fff5eccfa6627fe0e169aca8f465c6c346c909cd2b0761aa757eb36fa678",
-    "manifest_sha256": "20059501bb3f7fb3953f07b9c3ab3ef457e15c80bd372840dcbb1552404878b3",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "44382736be9231ed21baa2835d51c77ddc5b9ed2a1b29747ae71bb346073ec7b",
+    "manifest_sha256": "f9a0a42d62e91b5cf7a116ecc1caa4e7caed362a6787d0649d7df6a1d64de5eb",
     "iac_sha256": "c979205116422ae4a748f45f58d08af14a1f261515db365a1f19c6f23cd4f8a0",
     "evaluation_dataset_sha256": "2c3683394aa65710d606b925ff9e5ac2b829ed3796341d1b963fde90e52fafdb"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/80-biodiversity-monitor/spec/fai-manifest.json",
-          "sha256": "20059501bb3f7fb3953f07b9c3ab3ef457e15c80bd372840dcbb1552404878b3",
+          "sha256": "f9a0a42d62e91b5cf7a116ecc1caa4e7caed362a6787d0649d7df6a1d64de5eb",
           "media_type": "application/json"
         },
         {

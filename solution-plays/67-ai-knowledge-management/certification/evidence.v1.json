@@ -6,9 +6,9 @@
     "slug": "67-ai-knowledge-management",
     "canonical_id": "frootai__67-ai-knowledge-management",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "9b85db10898c00dfa1801d28f4f7b474ffd8f9f56db371efa7d3247ae7cb1b68",
-    "manifest_sha256": "c0e3c8668a658acea2fa5244ce8d9a43cdfe2f38589f0393f34902e74d9d397a",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "b96114f8cc01e42a9a7518019e17a8fe0f530ffdf62f869b7828eea2032ab410",
+    "manifest_sha256": "bf513e70026b96378f4d7a8d3af3f6f48eef60581d8c7caed05a58ded861f27a",
     "iac_sha256": "40b31193534e9c639501dda8220aa72335181cc66f1190ed1e2b355ea619aadb",
     "evaluation_dataset_sha256": "009357be8750015b90654ddb8d5d9004d2e92bd7ebe651b3f436f05ba15ce596"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/67-ai-knowledge-management/spec/fai-manifest.json",
-          "sha256": "c0e3c8668a658acea2fa5244ce8d9a43cdfe2f38589f0393f34902e74d9d397a",
+          "sha256": "bf513e70026b96378f4d7a8d3af3f6f48eef60581d8c7caed05a58ded861f27a",
           "media_type": "application/json"
         },
         {

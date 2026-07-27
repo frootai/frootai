@@ -6,9 +6,9 @@
     "slug": "84-citizen-services-chatbot",
     "canonical_id": "frootai__84-citizen-services-chatbot",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "7fa112c7032db54044f896fa10970085f33eac537b69758d922c52a79a809b6c",
-    "manifest_sha256": "f09a5f32360695cfedb4c0259c9662c5e69ad99eceea69440d4e8d851136bc80",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "74e06625ff64a8f4a1ec3a0de4b8f7794a52aaa5bb1c7d8a162d6a97166a818c",
+    "manifest_sha256": "c94e55f01366891b962edee1493b33c26b26c1e0958b5296be60231d65599caa",
     "iac_sha256": "701ee3d9779ae0eeddb7899b25bf2eab273d55bbca01a5a4b6f993a85d0a30c3",
     "evaluation_dataset_sha256": "d5b1bd5f117ba81c9177c0a64df4045b0476fe288f37b34745350b85602f7201"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/84-citizen-services-chatbot/spec/fai-manifest.json",
-          "sha256": "f09a5f32360695cfedb4c0259c9662c5e69ad99eceea69440d4e8d851136bc80",
+          "sha256": "c94e55f01366891b962edee1493b33c26b26c1e0958b5296be60231d65599caa",
           "media_type": "application/json"
         },
         {

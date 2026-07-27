@@ -6,9 +6,9 @@
     "slug": "42-computer-use-agent",
     "canonical_id": "frootai__42-computer-use-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "b866ae26d247137a24a498d9533b014c50a6da314af76c128881f7ca8fda6325",
-    "manifest_sha256": "b1ceb2b159ec12a99efdd4513396369dc3ddfd9f94ffab5af707e90e872117ed",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "3e2f47fce6321ecc425d333ee2d4b4796b040f722feeed1656e451bc4e415a92",
+    "manifest_sha256": "2fed9fcb9a7fc14a4af10c94dc0cdbb5edbdf7523cee567314d1dc0688d04424",
     "iac_sha256": "da8c97ce0a8f5c53d0b4eff5411f1515f8bf5fb7fa429e565ba5cfd1a56b2d25",
     "evaluation_dataset_sha256": "def61e6271a3fb53ba8ab8df3fd067c1270d2321bb4786c933d6b345480ecb9f"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/42-computer-use-agent/spec/fai-manifest.json",
-          "sha256": "b1ceb2b159ec12a99efdd4513396369dc3ddfd9f94ffab5af707e90e872117ed",
+          "sha256": "2fed9fcb9a7fc14a4af10c94dc0cdbb5edbdf7523cee567314d1dc0688d04424",
           "media_type": "application/json"
         },
         {

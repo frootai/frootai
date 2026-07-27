@@ -6,9 +6,9 @@
     "slug": "101-pester-test-development",
     "canonical_id": "frootai__101-pester-test-development",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "d87d94ed0a2a1b058269fb22510ab82f14d5af7709b12e958ca4f26f02e52b3f",
-    "manifest_sha256": "fcb75402f2eaf11fa8389249428822869fb0a4ca0d57a8b2cd9754461ce52b8d",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "2494a9883c57e9eb0d438d9ff9830bc8545e265bfe8db17e1d0fe0505eccdb41",
+    "manifest_sha256": "5e897328681bf461087f962961ddec2cff261709845e2f42d4f2b0143309b217",
     "iac_sha256": null,
     "evaluation_dataset_sha256": "8349000c3dd34fa064ee4065bb3580246975f07839e89897bf80eb4f3730ce5b"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "failed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/101-pester-test-development/spec/fai-manifest.json",
-          "sha256": "fcb75402f2eaf11fa8389249428822869fb0a4ca0d57a8b2cd9754461ce52b8d",
+          "sha256": "5e897328681bf461087f962961ddec2cff261709845e2f42d4f2b0143309b217",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "06-document-intelligence",
     "canonical_id": "frootai__06-document-intelligence",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "e2afd607ae6925b0fbb5b8cccfc873e295fc142c30cb615705242f3a836ae31f",
-    "manifest_sha256": "8a187ac715407fdd4c2deb65a29956eb0e02521749a7615506d4b31c61f06b83",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "618ee5e7337b8dd24c3629ec6bc12a943404132cba1e0528603574a9760b5a41",
+    "manifest_sha256": "9fbb44d217ebfd0e4080aa1565e653772b3ddfe7e1214b2d3e9f72fca5543135",
     "iac_sha256": "7d7112b9dc634e43fd4ca8aa7f686fdd866b9ffd89d9ca1d48fe835a9ea8f99d",
     "evaluation_dataset_sha256": "22de4af713bcc96f35bd3987d1363e4aa6e41f7196615f721a1a405fb3a1c543"
   },
@@ -16,12 +16,12 @@
     "profile": "flagship-v1",
     "profile_sha256": "ef65994d7392f423ac8952c623bc05d8c89858b7b7d6ecfb8a51771e1d64ccf4"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/06-document-intelligence/spec/fai-manifest.json",
-          "sha256": "8a187ac715407fdd4c2deb65a29956eb0e02521749a7615506d4b31c61f06b83",
+          "sha256": "9fbb44d217ebfd0e4080aa1565e653772b3ddfe7e1214b2d3e9f72fca5543135",
           "media_type": "application/json"
         },
         {
@@ -121,8 +121,8 @@
     },
     "scaffold_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-25T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-03T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -177,15 +177,15 @@
         {
           "type": "runtime-contract",
           "url": "solution-plays/06-document-intelligence/spec/runtime-contract.json",
-          "sha256": "ad209efdf3318834d65bdb7063e2693d4067d5c1b7dd54ed89ca2f24895e2b8b",
+          "sha256": "c57800462ed8a1a2fd8cb529d5ea14be159cabbe9b890f723eb1970fb039fc1a",
           "media_type": "application/json"
         }
       ]
     },
     "build_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-25T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-03T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -212,9 +212,9 @@
           "id": "unit-tests",
           "status": "passed",
           "blocking": true,
-          "output_sha256": "f3ac519ba477d7b1a9f0a53594f3a9ef77136011b73ae93252e921ab494f2a29",
+          "output_sha256": "025d3e74bfe6d1266dab498a588000d7001a99c98e0701a5aa7af542ecbadb80",
           "metrics": {
-            "detail": "✔ all flagship datasets are valid JSONL with no placeholder ground truth (54.7039ms)\n✔ endpoint evaluation measures and passes every flagship case (151.2766ms)\n✔ all five flagship scenarios execute deterministically offline (5.9592ms)\n✔ invalid input fails closed without exposing internal errors (0.7674ms)\n✔ real HTTP listener exposes health, catalog, schema, execution, and run status (89.234ms)\n✔ Azure contracts name required adapter ports and resources for each flagship (0.2839ms)\n✔ policy endpoint allows what-if and blocks unverified production deployment (13.3979ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 465.0444"
+            "detail": "✔ all flagship datasets are valid JSONL with no placeholder ground truth (116.2841ms)\n✔ endpoint evaluation measures and passes every flagship case (196.376ms)\n✔ all five flagship scenarios execute deterministically offline (5.0113ms)\n✔ invalid input fails closed without exposing internal errors (8.8746ms)\n✔ real HTTP listener exposes health, catalog, schema, execution, and run status (103.5071ms)\n✔ Azure contracts name required adapter ports and resources for each flagship (0.2976ms)\n✔ policy endpoint allows what-if and blocks unverified production deployment (20.2769ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 618.6716"
           }
         },
         {
@@ -277,8 +277,8 @@
     },
     "evaluation_verified": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-21T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-30T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -332,9 +332,9 @@
           "id": "measured-cost",
           "status": "passed",
           "blocking": true,
-          "output_sha256": "c3e71b2af3ce132ed4fa42230b7911055fd3b2ad40f01b0d74d31b186e940942",
+          "output_sha256": "7a0125d450ce4a89f2a5c3354c2e8d8185de2c8e826de07a9b5b3795365c036b",
           "metrics": {
-            "detail": "p95 5ms; offline cost $0"
+            "detail": "p95 8ms; offline cost $0"
           }
         }
       ],
@@ -342,15 +342,15 @@
         {
           "type": "evaluation-dataset",
           "url": "solution-plays/06-document-intelligence/evaluation/cases.jsonl",
-          "sha256": "44093e8ae1a19a86345b5dd79874cc4f1dde05a0a17ff65db2b0745e78408cb6",
+          "sha256": "480e2fb1af7044fd32594cf252f678663d8e972a82886cfd9c7b6a5423ffe624",
           "media_type": "application/x-ndjson"
         }
       ]
     },
     "deploy_verified": {
       "status": "failed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-19T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-28T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -378,8 +378,8 @@
     },
     "production_observed": {
       "status": "failed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-07-19T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-07-28T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",

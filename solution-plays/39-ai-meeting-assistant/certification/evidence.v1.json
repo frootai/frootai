@@ -6,9 +6,9 @@
     "slug": "39-ai-meeting-assistant",
     "canonical_id": "frootai__39-ai-meeting-assistant",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "43ca9317470891ec15a6ca2109ccc782390d6ccc5357ac47d30f7685ccf278a2",
-    "manifest_sha256": "9cdd00d5ed6d7388f44acbd93b48b79d3ab96f382b7bd0d5dea5b9a21b603286",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "0e72ed1d64dbf0cd6094cf209e75517f3a576ffe7d088bb548c7d058efe214bc",
+    "manifest_sha256": "d2a0c42b86475509458018bcffda216f590afcd85ddfd1268c95e35b0b963c1b",
     "iac_sha256": "b468749be118e0ab6e08ab4496e21e5201eb818a0f2bfc150c98f4ccf9339e77",
     "evaluation_dataset_sha256": "4a4c385199aacc52fe60e61b5f441d246043355c4bd35ef2ac6f21669d3ddcf0"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/39-ai-meeting-assistant/spec/fai-manifest.json",
-          "sha256": "9cdd00d5ed6d7388f44acbd93b48b79d3ab96f382b7bd0d5dea5b9a21b603286",
+          "sha256": "d2a0c42b86475509458018bcffda216f590afcd85ddfd1268c95e35b0b963c1b",
           "media_type": "application/json"
         },
         {

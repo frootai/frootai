@@ -6,9 +6,9 @@
     "slug": "20-anomaly-detection",
     "canonical_id": "frootai__20-anomaly-detection",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "3896e266ecf806650b5b7594ebc6f28acfcd6eb3bea55e899e67399b75228bbe",
-    "manifest_sha256": "80f7bf2579e516dc6548df12085511050958f1e542c8498b9cc41c03add7c3dc",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "2912f465a13b14eb5d1103739c41e7c65820c59cb83dadff9209da236a4e5b47",
+    "manifest_sha256": "c22f43d94ee8206c3bcc07364939230790885f3d6869e97e23ce9965c7c40913",
     "iac_sha256": "c497c2d716ddd940710e90a7dd1754c0e814c05478981ae54beeacc5d34a6d4d",
     "evaluation_dataset_sha256": "34e7581ce241a7caaa57623739740f810b6e250486b42217dfa544260bee388c"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/20-anomaly-detection/spec/fai-manifest.json",
-          "sha256": "80f7bf2579e516dc6548df12085511050958f1e542c8498b9cc41c03add7c3dc",
+          "sha256": "c22f43d94ee8206c3bcc07364939230790885f3d6869e97e23ce9965c7c40913",
           "media_type": "application/json"
         },
         {

@@ -6,9 +6,9 @@
     "slug": "51-autonomous-coding-agent",
     "canonical_id": "frootai__51-autonomous-coding-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "bd9b8e1e9b79d9af7cd9902950f7081514e983e658d4d10341fcae4ccb1d04bf",
-    "manifest_sha256": "1ec3496148b59a0b39593a06ce5f94adc044cc7d0ff3479ce18df55c8260ff72",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "5811ef58a81d400256eab26dc5e104fdb1617c5c47dcab6a54079b4a43a9f955",
+    "manifest_sha256": "4d1215d51c28d21f04629fef52387e187ba97c62309f5f7d394061c44892b946",
     "iac_sha256": "8cd6d5ceeb2820efc7d2797025a450b69f7ccdf7c87742f27e6a4611156ea6d1",
     "evaluation_dataset_sha256": "ed0a0bd6da7a8ec925fa729bc35955d39b5398c02cbb7904984385faf5720d78"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/51-autonomous-coding-agent/spec/fai-manifest.json",
-          "sha256": "1ec3496148b59a0b39593a06ce5f94adc044cc7d0ff3479ce18df55c8260ff72",
+          "sha256": "4d1215d51c28d21f04629fef52387e187ba97c62309f5f7d394061c44892b946",
           "media_type": "application/json"
         },
         {

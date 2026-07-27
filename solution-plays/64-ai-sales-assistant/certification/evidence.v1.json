@@ -6,9 +6,9 @@
     "slug": "64-ai-sales-assistant",
     "canonical_id": "frootai__64-ai-sales-assistant",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "0cac730ce6181267b76ae5765861e635620893e1bc40b1950d5e0b194605398f",
-    "manifest_sha256": "115cc2696ab11d5e568e9253a699887688e7dd752f9de32a206762f01047c63c",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "46bb6ea1e9a96cfb997c69561ba777b545e3cb9d66715e5b11868155f1cd9d73",
+    "manifest_sha256": "0a4c932455ed06e7031a092f01f035db891cd5eceb51114b6c7ccb1dd2f7ba9d",
     "iac_sha256": "c8ee6dc10bca3eb870f7bad5af94346e9cf49868b471a4263184e9713bb0dc0b",
     "evaluation_dataset_sha256": "1726830adc4e412347a890f39573d7e75b99c342dea16912816f1d9006a69303"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/64-ai-sales-assistant/spec/fai-manifest.json",
-          "sha256": "115cc2696ab11d5e568e9253a699887688e7dd752f9de32a206762f01047c63c",
+          "sha256": "0a4c932455ed06e7031a092f01f035db891cd5eceb51114b6c7ccb1dd2f7ba9d",
           "media_type": "application/json"
         },
         {

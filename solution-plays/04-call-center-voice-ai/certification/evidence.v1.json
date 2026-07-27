@@ -6,9 +6,9 @@
     "slug": "04-call-center-voice-ai",
     "canonical_id": "frootai__04-call-center-voice-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "5f122dbe69b8877aa954edb360223c0433c6d38742f4ba91ffc597a4113dc981",
-    "manifest_sha256": "c8a325adf41b434e32cf46765355aabea9bf2164a27c32938fe9b72d7ae4e0f5",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "5c169da3dac133694a7f15c3fa3c36c6668d5c7e94d2a26ad5afb8228d687ca0",
+    "manifest_sha256": "e2b00db565c188ecfcae493c85580c74428b4364e90d156134a116122f3dbc8f",
     "iac_sha256": "62d37a2f6eb4d0129c65d799c0a5573578c70d67b5de3822ab49993d2943520e",
     "evaluation_dataset_sha256": "2d395d0ab6099fb9ab38efa744c85411dacc8f03413465612a36c7d5e1f96411"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/04-call-center-voice-ai/spec/fai-manifest.json",
-          "sha256": "c8a325adf41b434e32cf46765355aabea9bf2164a27c32938fe9b72d7ae4e0f5",
+          "sha256": "e2b00db565c188ecfcae493c85580c74428b4364e90d156134a116122f3dbc8f",
           "media_type": "application/json"
         },
         {

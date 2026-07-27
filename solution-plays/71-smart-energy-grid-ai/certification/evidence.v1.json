@@ -6,9 +6,9 @@
     "slug": "71-smart-energy-grid-ai",
     "canonical_id": "frootai__71-smart-energy-grid-ai",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "32fa8a614510bb76eb45a3f3493fc0c592f3b1741c631e2c2351c234bdf96e05",
-    "manifest_sha256": "aa843d1d026d7594d7ef334f42daa404cb08d69796760f82f0fdd55d14044c42",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "99bb1bbb6bb21c6dd3f16b850689974e2fb59901e1b37b3cbce5cf5ad827efe8",
+    "manifest_sha256": "546ad6f136a56a54bac2cd03de0db29f8dc7d35c650de20fcae2f440b2abe2e6",
     "iac_sha256": "9554b6769245c6eeb358251070111d40290b4f84e23177518986afabf5bd62de",
     "evaluation_dataset_sha256": "a76ed39b32f01568bd6ad414b8ca144cd69fcd2c952fab5118443b0814ba2675"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/71-smart-energy-grid-ai/spec/fai-manifest.json",
-          "sha256": "aa843d1d026d7594d7ef334f42daa404cb08d69796760f82f0fdd55d14044c42",
+          "sha256": "546ad6f136a56a54bac2cd03de0db29f8dc7d35c650de20fcae2f440b2abe2e6",
           "media_type": "application/json"
         },
         {

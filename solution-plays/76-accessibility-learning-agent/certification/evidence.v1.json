@@ -6,9 +6,9 @@
     "slug": "76-accessibility-learning-agent",
     "canonical_id": "frootai__76-accessibility-learning-agent",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "7c96990e276029eebaad4aeb7d783ba44e0b22599174acd766c56549387ef76c",
-    "manifest_sha256": "148dd21b3e8b0c2508275fd01f11b738bdc244cceb9b38ac2ef2fbaaa50f35f3",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "1ac00fc3dc35471e49bc09127ede2f05ca253d32b49fccb4e4eb359df4e47f76",
+    "manifest_sha256": "f100dece0ac422cadad797ec0df87491806ae78faadb4802ba2a3b90482f3a7b",
     "iac_sha256": "584b49d417a70a3b289a76f18da9e0909dafa4191c0c14ae27c3ffaf39a54428",
     "evaluation_dataset_sha256": "41d00b09d0aab940c927a0e9845cf64f13db87f7e23a03fe013e8576034374aa"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/76-accessibility-learning-agent/spec/fai-manifest.json",
-          "sha256": "148dd21b3e8b0c2508275fd01f11b738bdc244cceb9b38ac2ef2fbaaa50f35f3",
+          "sha256": "f100dece0ac422cadad797ec0df87491806ae78faadb4802ba2a3b90482f3a7b",
           "media_type": "application/json"
         },
         {

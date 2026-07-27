@@ -6,9 +6,9 @@
     "slug": "13-fine-tuning-workflow",
     "canonical_id": "frootai__13-fine-tuning-workflow",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "e5b6c05edbf0e64cc1b3ae14e3768871222b8c7f9a2bf69519052b109fe524b5",
-    "manifest_sha256": "072f55d4f42d7d4205837e1f82372357c028fdab32d88cc13c6446a63734f332",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "f387786b36a71c6bc8de6f7328e688ebfa73abb2920dd229a5a2e09ecaac4638",
+    "manifest_sha256": "a045c83e381ec0b4d5f1fbb4297444f3d0ba23a53574e59000f6852b209a52e1",
     "iac_sha256": "dee196b515b5c5c82bb6fda36eecd9a5175cf7281090223ec0547c6392c94550",
     "evaluation_dataset_sha256": "4698cb6930bf7b6c13112d0c6223c782bca0763fb92a1534ead8d8753d929ae4"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/13-fine-tuning-workflow/spec/fai-manifest.json",
-          "sha256": "072f55d4f42d7d4205837e1f82372357c028fdab32d88cc13c6446a63734f332",
+          "sha256": "a045c83e381ec0b4d5f1fbb4297444f3d0ba23a53574e59000f6852b209a52e1",
           "media_type": "application/json"
         },
         {

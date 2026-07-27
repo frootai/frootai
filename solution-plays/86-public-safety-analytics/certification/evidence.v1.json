@@ -6,9 +6,9 @@
     "slug": "86-public-safety-analytics",
     "canonical_id": "frootai__86-public-safety-analytics",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "9967824ffc739e435a03543145d0c4e8f0f38e363e4f9a088762d3dffa62f2d1",
-    "manifest_sha256": "1c379cc5d441f96736565e7dd0ccf8ef39cf79a542624d926530c3f4aaa33bdc",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "a999c0db69882a16d68d9a86c019304e7c48701c487007a01b3cd95aaff1adaf",
+    "manifest_sha256": "65aa4cfd67750ee41fb51f956655c3c5db95d7b6da6fd4e9fababfd7dc66d471",
     "iac_sha256": "a0e8cf0e9e489ff757b645afa5ccb31c913158531f85b6576df184bf269f3c91",
     "evaluation_dataset_sha256": "774c29065ee4d4bd931e34cbd1434dcc7bf477bfe6d04b8861e2b07907bc03f6"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/86-public-safety-analytics/spec/fai-manifest.json",
-          "sha256": "1c379cc5d441f96736565e7dd0ccf8ef39cf79a542624d926530c3f4aaa33bdc",
+          "sha256": "65aa4cfd67750ee41fb51f956655c3c5db95d7b6da6fd4e9fababfd7dc66d471",
           "media_type": "application/json"
         },
         {

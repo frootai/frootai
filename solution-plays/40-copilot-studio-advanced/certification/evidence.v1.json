@@ -6,9 +6,9 @@
     "slug": "40-copilot-studio-advanced",
     "canonical_id": "frootai__40-copilot-studio-advanced",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "88b8ebdcdf0ce179674a77624886e79e7b6c7828f4ed7bcabf01b1392c297191",
-    "manifest_sha256": "84249659e94d0bcf62b63fa514d32ee3eece862d2ef949d532bdbea1945cb7b6",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "602c7985e1fe521d8eedd0c5bb728bc3b092d7dc37fe7ac50f3a5e3e67aa6a56",
+    "manifest_sha256": "fbbe8fabe182bb462b6994a8fd70bc66bd1e7dc805d46ebd6f4e1b563cfc7188",
     "iac_sha256": "6ae49528ab90ded524208e0f41fc8309c77ae781b4ae8292befc950e725c1eec",
     "evaluation_dataset_sha256": "d5edee6ac4f4abb03f2f47f6230ce81b61a40b92379322f4f80e3e5de302dda9"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/40-copilot-studio-advanced/spec/fai-manifest.json",
-          "sha256": "84249659e94d0bcf62b63fa514d32ee3eece862d2ef949d532bdbea1945cb7b6",
+          "sha256": "fbbe8fabe182bb462b6994a8fd70bc66bd1e7dc805d46ebd6f4e1b563cfc7188",
           "media_type": "application/json"
         },
         {

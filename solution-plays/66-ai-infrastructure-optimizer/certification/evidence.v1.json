@@ -6,9 +6,9 @@
     "slug": "66-ai-infrastructure-optimizer",
     "canonical_id": "frootai__66-ai-infrastructure-optimizer",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "65a06db3e6626ed4aa886d5182923168ff1c4e6afd7ae6760b8a74ff5835d363",
-    "manifest_sha256": "a9e760f6545007a6bb8ddc63de76d8a12a5e39aad856bfd595359e89f56deffb",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "14ca46fcc8802f11cd482cb5f603d198655a430bfd76ed02436492d12c9d7adf",
+    "manifest_sha256": "53b13ecd0181cfc0dd6cb053b219c3b20fb61d0556de06d9534c8ddb9e504be6",
     "iac_sha256": "00d6e09662412277cd7f26c8c906384bab4d8cab84c71f51e9fff23f1ac19437",
     "evaluation_dataset_sha256": "9cde8a5162e9f68476378e5f92eb1b71ad12e86d6cc235acfede28f978aba8ef"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/66-ai-infrastructure-optimizer/spec/fai-manifest.json",
-          "sha256": "a9e760f6545007a6bb8ddc63de76d8a12a5e39aad856bfd595359e89f56deffb",
+          "sha256": "53b13ecd0181cfc0dd6cb053b219c3b20fb61d0556de06d9534c8ddb9e504be6",
           "media_type": "application/json"
         },
         {

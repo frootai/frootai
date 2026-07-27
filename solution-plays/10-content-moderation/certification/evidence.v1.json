@@ -6,9 +6,9 @@
     "slug": "10-content-moderation",
     "canonical_id": "frootai__10-content-moderation",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "e0f05b2831afa9813a972fd9d863fc5240c3a3d33fe411264f18b29907c2b6cb",
-    "manifest_sha256": "ec1e1f9be27eae2c32877fe6ce852a8434d1f9a55fb16ae40d705a8fd270b433",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "b5fef4d4df9b4910ca5779a0f44280dbaa12842db7005f489e109327804cc380",
+    "manifest_sha256": "ec33669eb2ff10134a0eaec0f38f62e1b5a14cd7dde52d69f7be01f55cf179e4",
     "iac_sha256": "9d3b345a7a752f8716abe3d474f3fde113f52c01ccef438479e50415f5d31f8c",
     "evaluation_dataset_sha256": "c8af4f98f551b73505c1022918f9195f69978fa5b4e3bdda509cdf8ff15d4d27"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/10-content-moderation/spec/fai-manifest.json",
-          "sha256": "ec1e1f9be27eae2c32877fe6ce852a8434d1f9a55fb16ae40d705a8fd270b433",
+          "sha256": "ec33669eb2ff10134a0eaec0f38f62e1b5a14cd7dde52d69f7be01f55cf179e4",
           "media_type": "application/json"
         },
         {

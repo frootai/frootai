@@ -6,9 +6,9 @@
     "slug": "96-realtime-voice-agent-v2",
     "canonical_id": "frootai__96-realtime-voice-agent-v2",
     "repository": "https://github.com/frootai/frootai",
-    "commit_sha": "b189ed981c457918ff3b81c4c530b3dd47d5196c",
-    "content_sha256": "7004c7a0e8399bc7eeab8aadbba9ea04de771f716fd6a28533d3bcf7889397ec",
-    "manifest_sha256": "1eaa864ce9cef45a9dce0a256f1e37e746d8a8f694dad9b76146f0e7d54294df",
+    "commit_sha": "5c2f1068f62a65a242e7460f6dc6aa85bc8e163a",
+    "content_sha256": "b0e945feb9a122d629ac44de9074f8fe5c2b308818b73ca0fe26011de531c43f",
+    "manifest_sha256": "b9a99182d0615d3a6e667036c462a5bbcdbb0d435f3e5d8a215ad8b8b379eff1",
     "iac_sha256": "c87f2215c82210cd8f9439068a6b20847b7774980edb89bd9a78265b9fe0702d",
     "evaluation_dataset_sha256": "a5fb6d315867f1d2354edb725c9fb463e874c47b73d93615bffe23c98dae246d"
   },
@@ -16,12 +16,12 @@
     "profile": "design-v1",
     "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
   },
-  "generated_at": "2026-07-18T22:54:56.591Z",
+  "generated_at": "2026-07-27T06:26:06.692Z",
   "stages": {
     "designed": {
       "status": "passed",
-      "generated_at": "2026-07-18T22:54:56.591Z",
-      "expires_at": "2026-08-17T22:54:56.591Z",
+      "generated_at": "2026-07-27T06:26:06.692Z",
+      "expires_at": "2026-08-26T06:26:06.692Z",
       "provenance": {
         "workflow": "local",
         "run_id": "local",
@@ -102,7 +102,7 @@
         {
           "type": "manifest",
           "url": "solution-plays/96-realtime-voice-agent-v2/spec/fai-manifest.json",
-          "sha256": "1eaa864ce9cef45a9dce0a256f1e37e746d8a8f694dad9b76146f0e7d54294df",
+          "sha256": "b9a99182d0615d3a6e667036c462a5bbcdbb0d435f3e5d8a215ad8b8b379eff1",
           "media_type": "application/json"
         },
         {
