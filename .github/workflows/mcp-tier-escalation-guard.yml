@@ -65,12 +65,6 @@ jobs:
           path: frootai
           fetch-depth: 0
 
-      - name: Checkout frootai-core (sibling, holds the helper)
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          repository: ${{ github.repository_owner }}/frootai-core
-          path: frootai-core
-
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -141,7 +135,7 @@ jobs:
         id: gate
         run: |
           set -euo pipefail
-          node frootai-core/scripts/marketplace/trust-escalation.mjs \
+          node frootai/scripts/marketplace/trust-escalation.mjs \
             --spec-diffs "$RUNNER_TEMP/spec-diffs.json" \
             --evidence-events "$RUNNER_TEMP/evidence-events.json" \
             --comments "$RUNNER_TEMP/comments.json" \
