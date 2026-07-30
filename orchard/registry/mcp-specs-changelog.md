@@ -11,6 +11,7 @@ Helpers that diff spec bundles into rows live in
 
 | Date | Slug | Change summary | Reviewer |
 |---|---|---|---|
+| 2026-07-30 | `markitdown` | corrected tested version to published wheel 0.0.1a4 | frootai-maintainer |
 | 2026-06-25 | `openai` | spec added (hosted) — verified-publisher (Tier-2, X4.18; openai evidence backfilled). Official OpenAI Developer Docs MCP (developers.openai.com/mcp); http-sse, read-only search/fetch. OpenAI ships no general API MCP server | frootai-maintainer |
 | 2026-06-25 | `pinecone` | spec added (tested 0.2.1) — verified-publisher (Tier-2, X4.17; pinecone-io elevated). Re-targeted from the lancedb slot (no official LanceDB server); npx stdio, index mgmt + records upsert/search/rerank | frootai-maintainer |
 | 2026-06-25 | `chromadb` | spec added (tested 0.2.6) — verified-publisher (Tier-2; chroma-core promoted community→verified, X4.16); uvx stdio, collections + semantic search; 2 destructive delete tools | frootai-maintainer |

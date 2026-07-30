@@ -20,8 +20,8 @@
 
   "version_pin": {
     "package": "markitdown-mcp",
-    "version_range": ">=0.0.1 <1.0.0",
-    "tested_version": "0.0.1"
+    "version_range": ">=0.0.1a4 <1.0.0",
+    "tested_version": "0.0.1a4"
   },
 
   "env_vars": [],
