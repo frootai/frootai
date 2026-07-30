@@ -44,6 +44,33 @@
       "added_at": "2026-05-25T00:00:00Z"
     },
     {
+      "id": "microsoft-solution-accelerators",
+      "variety": "azure",
+      "query": "org:microsoft topic:solution-accelerator",
+      "min_stars": 0,
+      "max_results": 250,
+      "reason": "Microsoft repositories explicitly published as solution accelerators. No star floor: new official accelerators must be discoverable on their first catalog cycle.",
+      "added_at": "2026-07-29T00:00:00Z"
+    },
+    {
+      "id": "microsoft-generative-ai",
+      "variety": "azure",
+      "query": "org:microsoft topic:generative-ai",
+      "min_stars": 0,
+      "max_results": 250,
+      "reason": "Microsoft generative-AI repositories that may not carry the Azure OpenAI topic. Admission remains governed by the shared discovery filter policy.",
+      "added_at": "2026-07-29T00:00:00Z"
+    },
+    {
+      "id": "microsoft-ai-agents",
+      "variety": "azure",
+      "query": "org:microsoft topic:ai-agents",
+      "min_stars": 0,
+      "max_results": 250,
+      "reason": "Microsoft agent solution repositories, including new accelerator patterns that predate catalog-specific topic tagging.",
+      "added_at": "2026-07-29T00:00:00Z"
+    },
+    {
       "id": "microsoft-semantic-kernel",
       "variety": "azure",
       "query": "org:microsoft topic:semantic-kernel",
