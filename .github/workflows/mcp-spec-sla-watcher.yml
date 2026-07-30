@@ -9,8 +9,7 @@
 #
 # Once per day:
 #   1. List every open PR carrying the `mcp-spec` label via `gh pr list`.
-#   2. Pipe the JSON into `scripts/marketplace/sla-watcher.mjs` (which lives
-#      in frootai-core and is checked out as a sibling) to compute the
+#   2. Pipe the JSON into `scripts/marketplace/sla-watcher.mjs` to compute the
 #      stale set + sticky comment bodies + Slack payload.
 #   3. Upsert a sticky "14-day SLA reminder" comment on each stale PR.
 #   4. POST the Slack digest payload to `SLACK_SLA_WEBHOOK_URL` if set.
@@ -23,6 +22,10 @@
 name: MCP Spec SLA Watcher
 
 on:
+  push:
+    paths:
+      - 'scripts/marketplace/sla-watcher.mjs'
+      - '.github/workflows/mcp-spec-sla-watcher.yml'
   schedule:
     # Daily at 09:00 UTC.
     - cron: '0 9 * * *'
@@ -53,13 +56,6 @@ jobs:
         with:
           path: frootai
 
-      - name: Checkout frootai-core (sibling, holds the watcher script)
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          repository: ${{ github.repository_owner }}/frootai-core
-          path: frootai-core
-          # ref omitted: defaults to the default branch (main)
-
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -89,7 +85,7 @@ jobs:
         run: |
           set -euo pipefail
           SLA="${{ github.event.inputs.sla-days || '14' }}"
-          node frootai-core/scripts/marketplace/sla-watcher.mjs \
+          node frootai/scripts/marketplace/sla-watcher.mjs \
             --pr-json "$RUNNER_TEMP/prs.json" \
             --sla-days "$SLA" \
             2> "$RUNNER_TEMP/watcher.json" \
