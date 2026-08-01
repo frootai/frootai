@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { buildSolutionPlayIndex } from "./build-solution-play-index.mjs";
+import { buildSolutionPlayIndex, normalizeNewlines } from "./build-solution-play-index.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexPath = path.join(repoRoot, "orchard", "registry", "solution-play-index.json");
@@ -60,6 +60,10 @@ test("generator check mode has no timestamp or machine-specific fields", () => {
   const serialized = fs.readFileSync(indexPath, "utf8");
   assert.equal(serialized.includes("generated_at"), false);
   assert.equal(serialized.includes(repoRoot), false);
+});
+
+test("generator check mode treats CRLF and LF output as equivalent", () => {
+  assert.equal(normalizeNewlines("{\r\n  \"count\": 101\r\n}\r\n"), "{\n  \"count\": 101\n}\n");
 });
 
 test("public Solution Plays README names the complete 101-play inventory", () => {
