@@ -16,7 +16,7 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "Etc/UTC"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 2
     reviewers:
       - "frootai/core"
     labels:
@@ -44,7 +44,7 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "Etc/UTC"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 1
     reviewers:
       - "frootai/core"
     labels:
@@ -68,7 +68,7 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "Etc/UTC"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 1
     reviewers:
       - "frootai/core"
     labels:
