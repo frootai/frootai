@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-spec.vNext.json",
+  "title": "Solution Play Specification vNext",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "version", "title", "description", "architecture", "contracts", "official_sources"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "2.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$" },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 20 },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime", "developer_agents"],
+      "properties": {
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pattern", "description"],
+          "properties": {
+            "pattern": { "type": "string", "minLength": 1 },
+            "description": { "type": "string", "minLength": 20 },
+            "diagram": { "type": "string", "minLength": 1 }
+          }
+        },
+        "developer_agents": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["topology", "rationale"],
+          "properties": {
+            "topology": { "enum": ["none", "deterministic-function", "workflow", "single-agent", "multi-agent"] },
+            "rationale": { "type": "string", "minLength": 20 }
+          }
+        }
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delivery_profile", "context", "handoff", "loop", "memory", "evidence"],
+      "properties": {
+        "delivery_profile": { "$ref": "#/$defs/path" },
+        "context": { "$ref": "#/$defs/path" },
+        "handoff": { "$ref": "#/$defs/path" },
+        "loop": { "$ref": "#/$defs/path" },
+        "memory": { "$ref": "#/$defs/path" },
+        "evidence": { "$ref": "#/$defs/path" }
+      }
+    },
+    "projections": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "github": { "type": "boolean" },
+        "claude": { "type": "boolean" },
+        "mcp": { "type": "boolean" },
+        "website": { "type": "boolean" }
+      }
+    },
+    "official_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "legacy": { "type": "object" }
+  },
+  "$defs": {
+    "path": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:|/|.*\\.\\.).+$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "retrieved_at", "status", "tested_version"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "retrieved_at": { "type": "string", "format": "date-time" },
+        "status": { "enum": ["ga", "preview", "deprecated"] },
+        "tested_version": { "type": "string", "minLength": 1 },
+        "claim": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

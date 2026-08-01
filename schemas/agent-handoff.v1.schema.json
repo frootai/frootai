@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/agent-handoff.v1.json",
+  "title": "Agent Handoff v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 10 },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handoff_id", "trace_id", "from", "to", "task", "context_references", "authority", "expected_result", "acceptance_checks"],
+      "properties": {
+        "handoff_id": { "type": "string", "minLength": 1 },
+        "trace_id": { "type": "string", "minLength": 1 },
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "task": { "type": "string", "minLength": 10 },
+        "context_references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["uri", "sha256"],
+            "properties": {
+              "uri": { "type": "string", "format": "uri-reference" },
+              "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            }
+          }
+        },
+        "authority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed_actions", "prohibited_actions", "approval_required"],
+          "properties": {
+            "allowed_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+            "prohibited_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+            "approval_required": { "type": "boolean" }
+          }
+        },
+        "expected_result": { "type": "object", "required": ["media_type", "schema"], "properties": { "media_type": { "type": "string", "minLength": 1 }, "schema": { "type": "string", "format": "uri-reference" } }, "additionalProperties": false },
+        "acceptance_checks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "deadline": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "applicability": { "const": "applicable" } } }, "then": { "properties": { "handoff": {} }, "required": ["handoff"] } },
+    { "if": { "properties": { "applicability": { "const": "not_applicable" } } }, "then": { "properties": { "reason": {}, "handoff": false }, "required": ["reason"] } }
+  ]
+}

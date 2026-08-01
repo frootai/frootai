@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/agent-context-envelope.v1.json",
+  "title": "Agent Context Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 10 },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_id", "trace_id", "created_at", "classification", "provenance", "freshness", "token_budget", "compaction", "injection_boundaries", "references"],
+      "properties": {
+        "context_id": { "type": "string", "minLength": 1 },
+        "trace_id": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "classification": { "enum": ["public", "internal", "confidential", "restricted"] },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source", "retrieved_at"],
+            "properties": {
+              "source": { "type": "string", "minLength": 1 },
+              "retrieved_at": { "type": "string", "format": "date-time" },
+              "sha256": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        },
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_age_seconds", "stale_behavior"],
+          "properties": {
+            "max_age_seconds": { "type": "integer", "minimum": 0 },
+            "stale_behavior": { "enum": ["reject", "refresh", "warn"] }
+          }
+        },
+        "token_budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maximum", "reserved_for_output"],
+          "properties": {
+            "maximum": { "type": "integer", "minimum": 1 },
+            "reserved_for_output": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "compaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["strategy", "preserve"],
+          "properties": {
+            "strategy": { "enum": ["none", "truncate", "summarize", "retrieve"] },
+            "preserve": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+          }
+        },
+        "injection_boundaries": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["uri", "sha256", "immutable"],
+            "properties": {
+              "uri": { "type": "string", "format": "uri-reference" },
+              "sha256": { "$ref": "#/$defs/sha256" },
+              "immutable": { "const": true }
+            }
+          }
+        },
+        "payload": { "type": "object" }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "applicability": { "const": "applicable" } } }, "then": { "properties": { "envelope": {} }, "required": ["envelope"] } },
+    { "if": { "properties": { "applicability": { "const": "not_applicable" } } }, "then": { "properties": { "reason": {}, "envelope": false }, "required": ["reason"] } }
+  ],
+  "$defs": { "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}
