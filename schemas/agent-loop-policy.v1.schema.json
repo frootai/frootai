@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/agent-loop-policy.v1.json",
+  "title": "Agent Loop Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 10 },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "budgets", "stop_conditions", "retry", "escalation", "cancellation", "receipts"],
+      "properties": {
+        "goal": { "type": "string", "minLength": 10 },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_iterations", "max_duration_ms", "max_tokens", "max_cost_usd"],
+          "properties": {
+            "max_iterations": { "type": "integer", "minimum": 1 },
+            "max_duration_ms": { "type": "integer", "minimum": 1 },
+            "max_tokens": { "type": "integer", "minimum": 1 },
+            "max_cost_usd": { "type": "number", "minimum": 0 }
+          }
+        },
+        "stop_conditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_attempts", "backoff", "retryable_errors"],
+          "properties": {
+            "max_attempts": { "type": "integer", "minimum": 0 },
+            "backoff": { "enum": ["none", "fixed", "exponential"] },
+            "retryable_errors": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "escalation": { "type": "object", "additionalProperties": false, "required": ["target", "conditions"], "properties": { "target": { "type": "string", "minLength": 1 }, "conditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } } } },
+        "cancellation": { "type": "object", "additionalProperties": false, "required": ["supported", "cleanup"], "properties": { "supported": { "type": "boolean" }, "cleanup": { "type": "string", "minLength": 1 } } },
+        "receipts": { "type": "object", "additionalProperties": false, "required": ["path", "include"], "properties": { "path": { "type": "string", "minLength": 1 }, "include": { "type": "array", "minItems": 1, "items": { "enum": ["iterations", "tool_calls", "tokens", "cost", "stop_reason", "errors"] }, "uniqueItems": true } } }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "applicability": { "const": "applicable" } } }, "then": { "properties": { "policy": {} }, "required": ["policy"] } },
+    { "if": { "properties": { "applicability": { "const": "not_applicable" } } }, "then": { "properties": { "reason": {}, "policy": false }, "required": ["reason"] } }
+  ]
+}

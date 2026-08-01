@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-certification-evidence.v2.json",
+  "title": "Solution Play Certification Evidence v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "subject", "policy", "generated_at", "stages", "integrity"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "2.0.0" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["play_id", "slug", "repository", "commit_sha", "content_sha256", "manifest_sha256", "spec_sha256"],
+      "properties": {
+        "play_id": { "type": "string", "pattern": "^[0-9]{2,3}$" },
+        "slug": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+        "canonical_id": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "format": "uri" },
+        "commit_sha": { "$ref": "#/$defs/commit" },
+        "content_sha256": { "$ref": "#/$defs/sha256" },
+        "manifest_sha256": { "$ref": "#/$defs/sha256" },
+        "spec_sha256": { "$ref": "#/$defs/sha256" },
+        "iac_sha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "evaluation_dataset_sha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "profile_version", "profile_sha256"],
+      "properties": {
+        "profile": { "type": "string", "minLength": 1 },
+        "profile_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "profile_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "migrated_from": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "source", "sha256"],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "source": { "const": "certification/evidence.v1.json" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["designed", "scaffold_verified", "build_verified", "evaluation_verified", "deploy_verified", "production_observed"],
+      "properties": {
+        "designed": { "$ref": "#/$defs/stage" },
+        "scaffold_verified": { "$ref": "#/$defs/stage" },
+        "build_verified": { "$ref": "#/$defs/stage" },
+        "evaluation_verified": { "$ref": "#/$defs/stage" },
+        "deploy_verified": { "$ref": "#/$defs/stage" },
+        "production_observed": { "$ref": "#/$defs/stage" }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "evidence_sha256"],
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "evidence_sha256": { "$ref": "#/$defs/sha256" },
+        "signature": { "type": "string", "minLength": 1 },
+        "signing_identity": { "type": "string", "minLength": 1 }
+      }
+    },
+    "cost": { "type": "object" },
+    "legacy": { "type": "object" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "generated_at", "environment", "checks", "artifacts"],
+      "properties": {
+        "status": { "enum": ["passed", "failed", "unavailable", "expired", "not_run"] },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["class", "os", "architecture", "tools"],
+          "properties": {
+            "class": { "enum": ["offline", "local", "ci", "development", "staging", "production"] },
+            "os": { "type": "string", "minLength": 1 },
+            "architecture": { "type": "string", "minLength": 1 },
+            "region": { "type": "string", "minLength": 1 },
+            "tenant_hash": { "$ref": "#/$defs/sha256" },
+            "tools": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status", "blocking", "command", "started_at", "finished_at", "exit_code", "output_sha256"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["passed", "failed", "unavailable", "not_run"] },
+              "blocking": { "type": "boolean" },
+              "command": { "type": "string", "minLength": 1 },
+              "started_at": { "type": "string", "format": "date-time" },
+              "finished_at": { "type": "string", "format": "date-time" },
+              "exit_code": { "type": ["integer", "null"] },
+              "output_sha256": { "$ref": "#/$defs/sha256" },
+              "metrics": { "type": "object" }
+            }
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "path", "sha256", "media_type"],
+            "properties": {
+              "type": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 },
+              "sha256": { "$ref": "#/$defs/sha256" },
+              "media_type": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -37,6 +37,28 @@ node scripts/validate-primitives.js plugins/
 node scripts/validate-primitives.js --verbose
 ```
 
+## Solution Play vNext Contracts
+
+The additive modernization contract is defined by:
+
+- `solution-play-spec.vNext.schema.json`
+- `solution-play-delivery-profile.v1.schema.json`
+- `agent-context-envelope.v1.schema.json`
+- `agent-handoff.v1.schema.json`
+- `agent-loop-policy.v1.schema.json`
+- `agent-memory-policy.v1.schema.json`
+- `solution-play-certification-evidence.v2.schema.json`
+
+Existing play files remain authoritative until migration write mode is explicitly enabled. Inventory and evidence migration are read-only:
+
+```bash
+npm run contracts:inventory
+npm run contracts:migration-preview
+npm run test:contract-inventory
+npm run test:solution-play-schemas
+npm run test:evidence-v2-migration
+```
+
 ## VS Code Integration
 
 All schemas are auto-mapped in `.vscode/settings.json`:
