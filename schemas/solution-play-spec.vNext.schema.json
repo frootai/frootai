@@ -73,7 +73,7 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["url", "retrieved_at", "status", "tested_version"],
+      "required": ["url", "retrieved_at", "status", "tested_version", "claim"],
       "properties": {
         "url": { "type": "string", "format": "uri" },
         "retrieved_at": { "type": "string", "format": "date-time" },

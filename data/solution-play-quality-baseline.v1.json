@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "rules_version": "1.0.0",
+  "play_count": 101,
+  "categories": {
+    "placeholder-marker": {
+      "count": 971,
+      "sha256": "8653c2f67b6cc04de18a989780e862ed7d5564f42575d67966df9010e101dc97"
+    },
+    "copied-metrics": {
+      "count": 3,
+      "sha256": "51d07dd7e49e8f1d0a00b0738d7fefa622aac9cdbce3c3559f43a88a63a97476"
+    },
+    "broken-reference": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "duplicate-id": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "unsupported-claim": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

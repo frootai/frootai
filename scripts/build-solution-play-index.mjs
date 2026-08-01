@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { assertSolutionPlayQuality } from "./solution-play-quality-gate.mjs";
 
 const EXPECTED_PLAY_COUNT = 101;
 const ID_PATTERN = /^(\d{2,3})-(.+)$/;
@@ -105,6 +106,7 @@ function readPlay(repoRoot, directory) {
 export function buildSolutionPlayIndex(repoRoot) {
   const playsRoot = path.join(repoRoot, "solution-plays");
   if (!fs.existsSync(playsRoot)) throw new Error(`Solution plays directory not found: ${playsRoot}`);
+  assertSolutionPlayQuality({ repoRoot });
 
   const directories = fs.readdirSync(playsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && ID_PATTERN.test(entry.name))
@@ -144,6 +146,10 @@ function stableJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
+export function normalizeNewlines(value) {
+  return value.replace(/\r\n/g, "\n");
+}
+
 function main() {
   const options = parseArgs(process.argv.slice(2));
   const content = stableJson(buildSolutionPlayIndex(options.repoRoot));
@@ -152,7 +158,7 @@ function main() {
     return;
   }
   if (options.check) {
-    if (!fs.existsSync(options.outputPath) || fs.readFileSync(options.outputPath, "utf8") !== content) {
+    if (!fs.existsSync(options.outputPath) || normalizeNewlines(fs.readFileSync(options.outputPath, "utf8")) !== content) {
       console.error(`Solution Play index is stale. Run: node scripts/build-solution-play-index.mjs`);
       process.exitCode = 1;
       return;

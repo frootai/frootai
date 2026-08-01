@@ -59,6 +59,16 @@ npm run test:solution-play-schemas
 npm run test:evidence-v2-migration
 ```
 
+Deterministic Solution Play generation is protected by a reviewed quality-debt fingerprint:
+
+```bash
+npm run quality:solution-plays
+npm run quality:solution-plays:strict
+npm run test:solution-play-quality
+```
+
+The normal gate fails when TODO/placeholder markers, copied metric groups, broken references, duplicate IDs, or unsupported vNext claims differ from `data/solution-play-quality-baseline.v1.json`. Strict mode rejects all remaining debt. Baseline changes must be reviewed with the source repair; they are not an error-suppression mechanism.
+
 ## VS Code Integration
 
 All schemas are auto-mapped in `.vscode/settings.json`:
