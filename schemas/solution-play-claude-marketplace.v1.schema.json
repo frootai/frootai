@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-claude-marketplace.v1.json",
+  "title": "Solution Play Claude Marketplace Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "marketplace", "channels", "plugins", "rename_history", "maximum_output_bytes"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "marketplace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_name", "description", "owner", "repository"],
+      "properties": {
+        "base_name": { "$ref": "#/$defs/id" },
+        "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "url"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+            "url": { "type": "string", "format": "uri" }
+          }
+        },
+        "repository": { "type": "string", "format": "uri" }
+      }
+    },
+    "channels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "marketplace_name", "ref", "description"],
+        "properties": {
+          "id": { "enum": ["stable", "latest"] },
+          "marketplace_name": { "$ref": "#/$defs/id" },
+          "ref": { "enum": ["stable", "latest"] },
+          "description": { "type": "string", "minLength": 20, "maxLength": 500 }
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "source_profile", "description", "display_name", "category", "tags", "default_enabled"],
+        "properties": {
+          "name": { "$ref": "#/$defs/id" },
+          "kind": { "enum": ["foundation", "play"] },
+          "source_profile": { "$ref": "#/$defs/sourceProfile" },
+          "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+          "display_name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "category": { "$ref": "#/$defs/id" },
+          "tags": { "type": "array", "minItems": 1, "maxItems": 12, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+          "default_enabled": { "const": false }
+        }
+      }
+    },
+    "rename_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "from", "to", "reason"],
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 1 },
+          "from": { "$ref": "#/$defs/id" },
+          "to": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+          "reason": { "type": "string", "minLength": 20, "maxLength": 500 }
+        }
+      }
+    },
+    "maximum_output_bytes": { "type": "integer", "minimum": 65536, "maximum": 10485760 }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "sourceProfile": { "type": "string", "pattern": "^data/claude/[a-z0-9.-]+\\.json$", "maxLength": 200 }
+  }
+}
