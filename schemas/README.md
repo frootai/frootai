@@ -87,6 +87,8 @@ Operations profile v1 defines environment promotion, region/residency/model/quot
 
 T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 must implement those resolvers against immutable evidence and real receiver/on-call configuration, calibrate budget thresholds against observed variance, and audit state-store behavior rather than trusting names. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
 
+T214 executes only fixture profiles in an isolated detached checkout. It uses non-shell executable/argument processes with closed stdin, bounded output and time, process-tree cancellation, run-bound receipts, protected-content rejection, external publication locks, strict evidence-v2 validation, and atomic directory rename. Linux and Windows harness jobs are release-blocking; canonical play write mode remains disabled.
+
 ### Delivery Profile Security Model
 
 - Commands are executable-plus-argument vectors, not shell strings. T214 must execute them with shell expansion disabled and stdin closed.

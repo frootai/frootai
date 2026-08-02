@@ -3,6 +3,9 @@ name: Validate Solution Plays
 on:
   push:
     paths:
+      - '.github/workflows/validate-plays.yml'
+      - 'package.json'
+      - 'package-lock.json'
       - 'solution-plays/**'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
@@ -15,12 +18,16 @@ on:
       - 'tests/fixtures/solution-play-evaluation-profile/**'
       - 'tests/fixtures/solution-play-identity-profile/**'
       - 'tests/fixtures/solution-play-operations-profile/**'
+      - 'tests/fixtures/solution-play-certification-harness/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
       - 'orchard/registry/solution-play-index.json'
   pull_request:
     paths:
+      - '.github/workflows/validate-plays.yml'
+      - 'package.json'
+      - 'package-lock.json'
       - 'solution-plays/**'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
@@ -33,6 +40,7 @@ on:
       - 'tests/fixtures/solution-play-evaluation-profile/**'
       - 'tests/fixtures/solution-play-identity-profile/**'
       - 'tests/fixtures/solution-play-operations-profile/**'
+      - 'tests/fixtures/solution-play-certification-harness/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
@@ -65,6 +73,23 @@ jobs:
           npm run validate:solution-play-operations
           npm run contracts:inventory
           npm run quality:solution-plays
+
+  certification-harness:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Verify atomic clean-checkout certification
+        run: npm run test:solution-play-certification-harness
 
   canonical-index:
     runs-on: ubuntu-latest

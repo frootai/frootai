@@ -7,7 +7,7 @@
   "required": ["schema_version", "play", "applicability"],
   "properties": {
     "$schema": { "type": "string", "format": "uri" },
-    "schema_version": { "const": "1.1.0" },
+    "schema_version": { "const": "1.2.0" },
     "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
     "applicability": { "enum": ["applicable", "not_applicable"] },
     "reason": { "type": "string", "minLength": 20 },
@@ -126,18 +126,22 @@
     "commands": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["setup", "start", "test", "cleanup"],
+      "required": ["setup", "start", "test", "evaluate", "security", "cleanup"],
       "properties": {
         "setup": { "$ref": "#/$defs/command" },
         "start": { "$ref": "#/$defs/command" },
         "stop": { "$ref": "#/$defs/command" },
         "test": { "$ref": "#/$defs/command" },
+        "evaluate": { "$ref": "#/$defs/command" },
+        "security": { "$ref": "#/$defs/command" },
         "deploy": { "$ref": "#/$defs/command" },
+        "smoke": { "$ref": "#/$defs/command" },
         "rollback": { "$ref": "#/$defs/command" },
         "cleanup": { "$ref": "#/$defs/cleanup" }
       },
       "dependentRequired": {
-        "deploy": ["rollback"],
+        "deploy": ["smoke", "rollback"],
+        "smoke": ["deploy"],
         "rollback": ["deploy"]
       },
       "allOf": [

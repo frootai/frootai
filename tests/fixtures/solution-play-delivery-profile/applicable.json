@@ -1,6 +1,6 @@
 {
   "$schema": "https://frootai.dev/schemas/solution-play-delivery-profile.v1.json",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "play": "01-enterprise-rag",
   "applicability": "applicable",
   "vertical_slice": {
@@ -57,6 +57,28 @@
         "mutation": "workspace",
         "receipt": "reference/evidence/test.json"
       },
+      "evaluate": {
+        "executable": "node",
+        "arguments": ["evals/evaluate.mjs"],
+        "working_directory": "reference",
+        "timeout_seconds": 300,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "none",
+        "mutation": "workspace",
+        "receipt": "reference/evidence/evaluate.json"
+      },
+      "security": {
+        "executable": "node",
+        "arguments": ["tests/security.mjs"],
+        "working_directory": "reference",
+        "timeout_seconds": 300,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "none",
+        "mutation": "none",
+        "receipt": "reference/evidence/security.json"
+      },
       "deploy": {
         "executable": "node",
         "arguments": ["ops/deploy.mjs", "--non-interactive"],
@@ -67,6 +89,17 @@
         "network": "required",
         "mutation": "external",
         "receipt": "reference/evidence/deploy.json"
+      },
+      "smoke": {
+        "executable": "node",
+        "arguments": ["tests/smoke.mjs"],
+        "working_directory": "reference",
+        "timeout_seconds": 300,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "required",
+        "mutation": "none",
+        "receipt": "reference/evidence/smoke.json"
       },
       "rollback": {
         "executable": "node",
