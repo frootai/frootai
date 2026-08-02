@@ -131,6 +131,9 @@ test('exec-form hook permits project work and fails closed on escaping or protec
   assert.equal(invoke({ tool_name: 'Edit', tool_input: { file_path: path.join(project, 'src', 'safe.js') } }), '');
   assert.equal(invoke({ tool_name: 'Bash', tool_input: { command: 'npm test' } }), '');
   assert.match(invoke({ tool_name: 'Write', tool_input: { file_path: path.join(project, '.mcp.json') } }), /protects authority path/);
+  assert.match(invoke({ tool_name: 'Write', tool_input: { file_path: path.join(project, 'CLAUDE.md') } }), /protects authority path/);
+  assert.match(invoke({ tool_name: 'Edit', tool_input: { file_path: path.join(project, '.claude', 'settings.json') } }), /protects authority path/);
+  assert.equal(invoke({ tool_name: 'Write', tool_input: { file_path: path.join(project, '.claude', 'agent-memory-local', 'play-builder', 'MEMORY.md') } }), '');
   assert.match(invoke({ tool_name: 'Edit', tool_input: { file_path: path.join(path.dirname(project), 'outside.js') } }), /outside the project root/);
   assert.match(invoke({ tool_name: 'Bash', tool_input: { command: 'git push --force origin main' } }), /git push force/);
   assert.match(invoke({ tool_name: 'PowerShell', tool_input: { command: 'npm publish' } }), /npm publish/);
