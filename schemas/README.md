@@ -45,6 +45,8 @@ The additive modernization contract is defined by:
 - `solution-play-delivery-profile.v1.schema.json`
 - `solution-play-telemetry-profile.v1.schema.json`
 - `solution-play-evaluation-profile.v1.schema.json`
+- `solution-play-identity-profile.v1.schema.json`
+- `solution-play-operations-profile.v1.schema.json`
 - `agent-context-envelope.v1.schema.json`
 - `agent-handoff.v1.schema.json`
 - `agent-loop-policy.v1.schema.json`
@@ -64,6 +66,10 @@ npm run validate:solution-play-telemetry
 npm run test:solution-play-telemetry
 npm run validate:solution-play-evaluation
 npm run test:solution-play-evaluation
+npm run validate:solution-play-identity
+npm run test:solution-play-identity
+npm run validate:solution-play-operations
+npm run test:solution-play-operations
 npm run test:evidence-v2-migration
 ```
 
@@ -74,6 +80,12 @@ Telemetry profile v1 defines OpenTelemetry initialization, stable resource ident
 Evaluation profile v1 requires actual-application execution, complete-but-redacted input/output collection, immutable dataset provenance, leakage review, owned evaluators, reasoned thresholds, minimum samples, baseline/candidate comparison, regression budgets, and explicit offline, preproduction, continuous, red-team, load, failure, recovery, and human-review suites. Foundry suite metadata is an overlay only after remote verification and cannot independently certify a play.
 
 Telemetry and evaluation profile validation is structural and policy-focused. Runtime certification in T214 must additionally verify exporter availability/authentication, execute evaluation runners against the actual application, enforce process/resource limits, and treat Foundry overlays as ineligible for primary certification evidence.
+
+Identity profile v1 separates build, deploy, runtime, evaluator, and human operator identities; permits only managed identity, workload federation, on-behalf-of, or phishing-resistant just-in-time human authentication; requires narrow scoped actions and durable approval receipts; and excludes break-glass activity from certification.
+
+Operations profile v1 defines environment promotion, region/residency/model/quota/capacity evidence, scaling and failover, cost and runaway controls, retention/deletion/backup/legal-hold behavior, deployment preview/smoke/rollback/disaster-recovery/cleanup receipts, tested alert receivers, and machine-verifiable runbook ownership. Structural readiness cannot substitute for T214 execution evidence.
+
+T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 must implement those resolvers against immutable evidence and real receiver/on-call configuration, calibrate budget thresholds against observed variance, and audit state-store behavior rather than trusting names. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
 
 ### Delivery Profile Security Model
 

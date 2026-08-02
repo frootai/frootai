@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-identity-profile.v1.json",
+  "title": "Solution Play Identity Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 20 },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principals", "assignments", "approvals", "user_authority", "break_glass", "review"],
+      "properties": {
+        "principals": {
+          "type": "array",
+          "minItems": 5,
+          "items": { "$ref": "#/$defs/principal" }
+        },
+        "assignments": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/assignment" }
+        },
+        "approvals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enforcement", "prompt_can_authorize", "policies"],
+          "properties": {
+            "enforcement": { "const": "durable-workflow-state" },
+            "prompt_can_authorize": { "const": false },
+            "policies": {
+              "type": "array",
+              "minItems": 6,
+              "items": { "$ref": "#/$defs/approval" }
+            }
+          }
+        },
+        "user_authority": { "$ref": "#/$defs/user_authority" },
+        "break_glass": { "$ref": "#/$defs/break_glass" },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["owner", "maximum_age_days", "evidence_path"],
+          "properties": {
+            "owner": { "type": "string", "minLength": 3 },
+            "maximum_age_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+            "evidence_path": { "$ref": "#/$defs/path" }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "applicability": { "const": "applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["identity"], "properties": { "reason": false, "identity": {} } }
+    },
+    {
+      "if": { "properties": { "applicability": { "const": "not_applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["reason"], "properties": { "reason": {}, "identity": false } }
+    }
+  ],
+  "$defs": {
+    "path": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:|/|.*(?:^|/)\\.\\.?(/|$)|.*\\.\\.).+$" },
+    "principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "function", "type", "authentication"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "function": { "enum": ["build", "deploy", "runtime", "evaluator", "operator"] },
+        "type": { "enum": ["workload", "human"] },
+        "authentication": { "$ref": "#/$defs/authentication" }
+      }
+    },
+    "authentication": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "identity_reference"],
+          "properties": {
+            "mode": { "const": "managed-identity" },
+            "identity_reference": { "type": "string", "pattern": "^\\$identity\\.[a-z][a-z0-9_.-]+$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "issuer", "subject", "audiences"],
+          "properties": {
+            "mode": { "const": "workload-identity-federation" },
+            "issuer": { "type": "string", "format": "uri" },
+            "subject": { "type": "string", "minLength": 3 },
+            "audiences": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "audience", "user_authority_propagated"],
+          "properties": {
+            "mode": { "const": "on-behalf-of" },
+            "audience": { "type": "string", "minLength": 3 },
+            "user_authority_propagated": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "phishing_resistant", "privileged_access_just_in_time"],
+          "properties": {
+            "mode": { "const": "human-interactive" },
+            "phishing_resistant": { "const": true },
+            "privileged_access_just_in_time": { "const": true }
+          }
+        }
+      ]
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principal_id", "resource", "scope", "actions", "audience", "grant_owner", "review_at", "expires_at", "post_deploy"],
+      "properties": {
+        "principal_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "resource": { "type": "string", "minLength": 3 },
+        "scope": { "type": "string", "minLength": 3 },
+        "actions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-zA-Z0-9./:_-]+$" } },
+        "audience": { "type": "string", "minLength": 3 },
+        "grant_owner": { "type": "string", "minLength": 3 },
+        "review_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "post_deploy": { "type": "boolean" },
+        "adapter_role": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "approver_principal_ids", "quorum", "expires_after_seconds", "state_store", "receipt_path"],
+      "properties": {
+        "operation": { "enum": ["production-deploy", "production-data-write", "permission-grant", "delete", "rollback", "break-glass"] },
+        "approver_principal_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } },
+        "quorum": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "expires_after_seconds": { "type": "integer", "minimum": 60, "maximum": 86400 },
+        "state_store": { "type": "string", "minLength": 3 },
+        "receipt_path": { "$ref": "#/$defs/path" }
+      }
+    },
+    "user_authority": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "mode", "audience"],
+          "properties": {
+            "applicability": { "const": "applicable" },
+            "mode": { "const": "on-behalf-of" },
+            "audience": { "type": "string", "minLength": 3 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "reason"],
+          "properties": {
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    },
+    "break_glass": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "principal_id", "maximum_duration_seconds", "approval_operation", "audit_receipt_path", "excluded_from_certification"],
+          "properties": {
+            "applicability": { "const": "applicable" },
+            "principal_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+            "maximum_duration_seconds": { "type": "integer", "minimum": 60, "maximum": 14400 },
+            "approval_operation": { "const": "break-glass" },
+            "audit_receipt_path": { "$ref": "#/$defs/path" },
+            "excluded_from_certification": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "reason"],
+          "properties": {
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    }
+  }
+}

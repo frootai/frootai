@@ -1,0 +1,37 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-identity-profile.v1.json",
+  "schema_version": "1.0.0",
+  "play": "01-enterprise-rag",
+  "applicability": "applicable",
+  "identity": {
+    "principals": [
+      { "id": "build-workload", "function": "build", "type": "workload", "authentication": { "mode": "workload-identity-federation", "issuer": "https://token.actions.githubusercontent.com", "subject": "repo:frootai/example:environment:build", "audiences": ["api://TokenExchange"] } },
+      { "id": "deploy-workload", "function": "deploy", "type": "workload", "authentication": { "mode": "workload-identity-federation", "issuer": "https://token.actions.githubusercontent.com", "subject": "repo:frootai/example:environment:production", "audiences": ["api://TokenExchange"] } },
+      { "id": "runtime-workload", "function": "runtime", "type": "workload", "authentication": { "mode": "managed-identity", "identity_reference": "$identity.runtime" } },
+      { "id": "evaluator-workload", "function": "evaluator", "type": "workload", "authentication": { "mode": "workload-identity-federation", "issuer": "https://token.actions.githubusercontent.com", "subject": "repo:frootai/example:environment:evaluation", "audiences": ["api://TokenExchange"] } },
+      { "id": "operator-human", "function": "operator", "type": "human", "authentication": { "mode": "human-interactive", "phishing_resistant": true, "privileged_access_just_in_time": true } },
+      { "id": "security-human", "function": "operator", "type": "human", "authentication": { "mode": "human-interactive", "phishing_resistant": true, "privileged_access_just_in_time": true } }
+    ],
+    "assignments": [
+      { "principal_id": "build-workload", "resource": "artifact-registry", "scope": "repository/solution-play", "actions": ["artifact/read", "artifact/write"], "audience": "artifact-registry", "grant_owner": "platform-security", "review_at": "2026-09-01T00:00:00Z", "expires_at": null, "post_deploy": false, "adapter_role": "Artifact Publisher" },
+      { "principal_id": "deploy-workload", "resource": "deployment-control-plane", "scope": "application/solution-play", "actions": ["deployment/read", "deployment/write"], "audience": "deployment-api", "grant_owner": "platform-security", "review_at": "2026-09-01T00:00:00Z", "expires_at": null, "post_deploy": false, "adapter_role": "Application Deployer" },
+      { "principal_id": "runtime-workload", "resource": "model-endpoint", "scope": "deployment/approved-model", "actions": ["inference/invoke"], "audience": "model-api", "grant_owner": "platform-security", "review_at": "2026-09-01T00:00:00Z", "expires_at": null, "post_deploy": true, "adapter_role": "Inference Invoker" },
+      { "principal_id": "evaluator-workload", "resource": "evaluation-store", "scope": "dataset/approved-suite", "actions": ["evaluation/read", "evaluation/write"], "audience": "evaluation-api", "grant_owner": "evaluation-owner", "review_at": "2026-09-01T00:00:00Z", "expires_at": "2026-12-01T00:00:00Z", "post_deploy": true, "adapter_role": "Evaluation Runner" }
+    ],
+    "approvals": {
+      "enforcement": "durable-workflow-state",
+      "prompt_can_authorize": false,
+      "policies": [
+        { "operation": "production-deploy", "approver_principal_ids": ["operator-human"], "quorum": 1, "expires_after_seconds": 3600, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/production-deploy.json" },
+        { "operation": "production-data-write", "approver_principal_ids": ["operator-human"], "quorum": 1, "expires_after_seconds": 1800, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/production-data-write.json" },
+        { "operation": "permission-grant", "approver_principal_ids": ["operator-human", "security-human"], "quorum": 2, "expires_after_seconds": 1800, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/permission-grant.json" },
+        { "operation": "delete", "approver_principal_ids": ["operator-human", "security-human"], "quorum": 2, "expires_after_seconds": 900, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/delete.json" },
+        { "operation": "rollback", "approver_principal_ids": ["operator-human"], "quorum": 1, "expires_after_seconds": 3600, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/rollback.json" },
+        { "operation": "break-glass", "approver_principal_ids": ["operator-human", "security-human"], "quorum": 2, "expires_after_seconds": 600, "state_store": "approval-ledger", "receipt_path": "reference/evidence/approvals/break-glass.json" }
+      ]
+    },
+    "user_authority": { "applicability": "not_applicable", "reason": "This fixture does not execute actions under end-user delegated authority." },
+    "break_glass": { "applicability": "applicable", "principal_id": "operator-human", "maximum_duration_seconds": 1800, "approval_operation": "break-glass", "audit_receipt_path": "reference/evidence/break-glass.json", "excluded_from_certification": true },
+    "review": { "owner": "platform-security", "maximum_age_days": 30, "evidence_path": "reference/evidence/identity-review.json" }
+  }
+}

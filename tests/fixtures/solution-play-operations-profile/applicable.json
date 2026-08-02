@@ -1,0 +1,67 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-operations-profile.v1.json",
+  "schema_version": "1.0.0",
+  "play": "01-enterprise-rag",
+  "applicability": "applicable",
+  "operations": {
+    "evidence_root": "reference/evidence",
+    "environments": [
+      { "name": "development", "classification": "nonproduction", "promotion_from": null, "isolation": "account", "public_access": "restricted", "approval_operation": null },
+      { "name": "staging", "classification": "preproduction", "promotion_from": "development", "isolation": "account", "public_access": "restricted", "approval_operation": null },
+      { "name": "production", "classification": "production", "promotion_from": "staging", "isolation": "account", "public_access": "disabled", "approval_operation": "production-deploy" }
+    ],
+    "platform": {
+      "regions": ["primary-region", "secondary-region"],
+      "residency": { "status": "evidenced", "value": "All regulated data remains in approved deployment regions.", "evidence_path": "reference/evidence/platform/residency.json" },
+      "models": [
+        { "name": "approved-model", "version": "2026-01-01", "region": "primary-region", "availability": { "status": "evidenced", "value": "Model capacity is available for the production workload.", "evidence_path": "reference/evidence/platform/model-availability.json" }, "fallback": "approved-fallback-model" },
+        { "name": "approved-fallback-model", "version": "2026-01-01", "region": "secondary-region", "availability": { "status": "evidenced", "value": "Fallback model capacity is available in the reviewed secondary region.", "evidence_path": "reference/evidence/platform/fallback-model-availability.json" }, "fallback": null }
+      ],
+      "quotas": [
+        { "status": "evidenced", "service": "model-service", "metric": "requests-per-minute", "required": 100, "available": 200, "unit": "rpm", "evidence_path": "reference/evidence/platform/quota.json" }
+      ],
+      "capacity": { "status": "evidenced", "value": "Reviewed capacity supports peak load plus failover headroom.", "evidence_path": "reference/evidence/platform/capacity.json" },
+      "scaling": { "minimum": 2, "maximum": 20, "signals": ["request-rate", "latency-p95"], "resource_limits_evidence": "reference/evidence/platform/resource-limits.json" },
+      "failover": { "mode": "active-passive", "rto_minutes": 30, "rpo_minutes": 5, "test_receipt_path": "reference/evidence/platform/failover-test.json" }
+    },
+    "cost": {
+      "currency": "USD",
+      "monthly_estimate": 1000,
+      "estimate_evidence": "reference/evidence/cost/estimate.json",
+      "unit_economics": { "unit": "validated-request", "estimated_cost": 0.01, "monthly_volume": 100000, "basis": "Estimate includes model, compute, storage, telemetry, and network usage." },
+      "budget": { "amount": 1500, "warning_percent": 80, "hard_stop_percent": 100, "owner": "finops-owner", "alert_id": "budget-threshold" },
+      "runaway_controls": { "maximum_cost_per_operation": 1, "maximum_operations_per_window": 1000, "window_seconds": 3600, "enforcement": "reject" }
+    },
+    "data_governance": {
+      "classification": "confidential",
+      "retention_days": 30,
+      "deletion": { "command_ref": "commands.cleanup", "verification_receipt_path": "reference/evidence/data/deletion.json", "maximum_completion_hours": 24 },
+      "backup": { "applicability": "applicable", "frequency_hours": 24, "retention_days": 30, "restore_test_receipt_path": "reference/evidence/data/restore-test.json" },
+      "legal_hold": { "applicability": "not_applicable", "reason": "The fixture contains no records subject to a legal hold requirement." }
+    },
+    "deployment": {
+      "preview": { "command_ref": "commands.deploy", "receipt_path": "reference/evidence/deployment/preview.json" },
+      "smoke": { "command_ref": "commands.test", "receipt_path": "reference/evidence/deployment/smoke.json" },
+      "rollback": { "command_ref": "commands.rollback", "success_test_receipt_path": "reference/evidence/deployment/rollback-success.json", "partial_failure_test_receipt_path": "reference/evidence/deployment/rollback-partial-failure.json", "expected_postcondition": "The previous healthy immutable revision serves all production traffic." },
+      "disaster_recovery": { "command_ref": "commands.rollback", "success_test_receipt_path": "reference/evidence/deployment/dr-success.json", "partial_failure_test_receipt_path": "reference/evidence/deployment/dr-partial-failure.json", "expected_postcondition": "The secondary region meets the declared recovery objectives without data overreach." },
+      "cleanup": { "command_ref": "commands.cleanup", "success_test_receipt_path": "reference/evidence/deployment/cleanup-success.json", "partial_failure_test_receipt_path": "reference/evidence/deployment/cleanup-partial-failure.json", "expected_postcondition": "All scoped temporary resources are absent and unrelated resources remain unchanged." }
+    },
+    "alerts": [
+      { "id": "availability-probe", "category": "availability", "severity": 1, "signal": "readiness", "condition": "readiness is not successful", "window_seconds": 300, "receivers": [{ "type": "oncall", "destination_reference": "$notification.ONCALL_PRIMARY" }], "test_receipt_path": "reference/evidence/alerts/availability.json" },
+      { "id": "server-errors", "category": "errors", "severity": 1, "signal": "server-error-rate", "condition": "server errors exceed the reviewed threshold", "window_seconds": 300, "receivers": [{ "type": "pager", "destination_reference": "$notification.PAGER_PRIMARY" }], "test_receipt_path": "reference/evidence/alerts/server-errors.json" },
+      { "id": "budget-threshold", "category": "cost", "severity": 2, "signal": "budget-consumption", "condition": "budget consumption reaches the warning threshold", "window_seconds": 3600, "receivers": [{ "type": "email", "destination_reference": "$notification.FINOPS_EMAIL" }], "test_receipt_path": "reference/evidence/alerts/budget.json" }
+    ],
+    "runbook": {
+      "path": "reference/ops/runbook.md",
+      "owner": "service-owner",
+      "escalation": ["oncall-primary", "service-owner"],
+      "alert_ids": ["availability-probe", "server-errors", "budget-threshold"],
+      "slos": [{ "indicator": "successful-request-ratio", "objective": 0.999, "window_days": 30 }],
+      "symptoms": ["Readiness probe fails or semantic requests return elevated errors."],
+      "diagnostics": ["Correlate readiness, error, trace, quota, and deployment receipts."],
+      "mitigations": ["Stop promotion and activate the reviewed rollback path."],
+      "recovery": ["Verify immutable revision health, smoke checks, and alert recovery."],
+      "post_incident_evidence_path": "reference/evidence/incidents/post-incident.json"
+    }
+  }
+}
