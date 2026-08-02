@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-mcp-conformance.v1.json",
+  "title": "Solution Play MCP Conformance Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "task", "specification", "sources", "matrix", "adapters", "boundaries"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri-reference" },
+    "schema_version": { "const": "1.0.0" },
+    "task": { "const": "T224" },
+    "specification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "status", "request_model", "discovery_method", "required_request_meta", "recommended_request_meta", "core_transports", "server_primitives", "client_features", "deprecated_features", "extension_features"],
+      "properties": {
+        "version": { "const": "2026-07-28" },
+        "status": { "const": "current" },
+        "request_model": { "const": "stateless" },
+        "discovery_method": { "const": "server/discover" },
+        "required_request_meta": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } },
+        "recommended_request_meta": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } },
+        "core_transports": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "enum": ["stdio", "streamable-http"] } },
+        "server_primitives": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "enum": ["tools", "resources", "prompts"] } },
+        "client_features": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "const": "elicitation" } },
+        "deprecated_features": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "enum": ["roots", "sampling", "logging"] } },
+        "extension_features": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "const": "tasks" } }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "url", "retrieved_at", "status", "tested_version", "claim"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "retrieved_at": { "type": "string", "format": "date-time" },
+          "status": { "enum": ["ga", "extension"] },
+          "tested_version": { "type": "string", "minLength": 1 },
+          "claim": { "type": "string", "minLength": 40, "maxLength": 1000 }
+        }
+      }
+    },
+    "matrix": {
+      "type": "array",
+      "minItems": 19,
+      "maxItems": 19,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "layer", "status", "methods", "requirement"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "layer": { "enum": ["base", "transport", "server", "client", "utility", "extension"] },
+          "status": { "enum": ["required", "optional", "deprecated", "extension"] },
+          "methods": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "requirement": { "type": "string", "minLength": 40, "maxLength": 1000 }
+        }
+      }
+    },
+    "adapters": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "language", "generation", "sdk_tier", "status", "availability", "packages", "protocol_versions", "allowed_for_new_implementation", "discovery_strategy", "request_model", "server_identity_location", "client_info_requirement", "optional_features", "tasks_support", "source_id"],
+        "properties": {
+          "id": { "enum": ["typescript-v2", "python-v2", "typescript-v1-maintenance", "python-v1-maintenance"] },
+          "language": { "enum": ["typescript", "python"] },
+          "generation": { "enum": ["v2", "v1-maintenance"] },
+          "sdk_tier": { "const": 1 },
+          "status": { "enum": ["current", "maintenance", "blocked"] },
+          "availability": { "enum": ["registry", "release-tag-only"] },
+          "packages": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "version"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+              }
+            }
+          },
+          "protocol_versions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["2026-07-28", "2025-11-25"] } },
+          "allowed_for_new_implementation": { "type": "boolean" },
+          "discovery_strategy": { "enum": ["discover-then-initialize-fallback", "initialize-only"] },
+          "request_model": { "enum": ["stateless-per-request", "stateful-session"] },
+          "server_identity_location": { "enum": ["result-meta", "initialize-result"] },
+          "client_info_requirement": { "enum": ["recommended", "initialize-required"] },
+          "optional_features": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["completion", "caching", "subscriptions", "authorization", "elicitation"],
+            "properties": {
+              "completion": { "enum": ["supported", "legacy-session"] },
+              "caching": { "enum": ["supported", "host-owned"] },
+              "subscriptions": { "enum": ["supported", "legacy-session"] },
+              "authorization": { "enum": ["supported", "legacy-session"] },
+              "elicitation": { "enum": ["supported", "legacy-session"] }
+            }
+          },
+          "tasks_support": { "enum": ["extension-adapter-required", "deprecated-experimental-removed"] },
+          "source_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["new_implementation_adapters", "blocked_adapters", "legacy_fallback_adapters", "tasks_owner", "sdk_imports_outside_adapter", "canonical_writes_allowed", "publication_allowed"],
+      "properties": {
+        "new_implementation_adapters": { "const": ["python-v2"] },
+        "blocked_adapters": { "const": ["typescript-v2"] },
+        "legacy_fallback_adapters": { "const": ["python-v1-maintenance", "typescript-v1-maintenance"] },
+        "tasks_owner": { "const": "project-extension-adapter" },
+        "sdk_imports_outside_adapter": { "const": false },
+        "canonical_writes_allowed": { "const": false },
+        "publication_allowed": { "const": false }
+      }
+    }
+  }
+}

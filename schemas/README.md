@@ -49,6 +49,7 @@ The additive modernization contract is defined by:
 - `solution-play-evaluation-profile.v1.schema.json`
 - `solution-play-identity-profile.v1.schema.json`
 - `solution-play-operations-profile.v1.schema.json`
+- `solution-play-mcp-conformance.v1.schema.json`
 - `agent-context-envelope.v1.schema.json`
 - `agent-handoff.v1.schema.json`
 - `agent-loop-policy.v1.schema.json`
@@ -75,6 +76,8 @@ npm run test:solution-play-operations
 npm run test:solution-play-github-adapter
 npm run test:solution-play-github-conformance
 npm run test:solution-play-claude-foundation
+npm run test:solution-play-mcp-conformance
+npm run validate:solution-play-mcp-conformance
 npm run test:evidence-v2-migration
 ```
 
@@ -95,6 +98,8 @@ Identity profile v1 separates build, deploy, runtime, evaluator, and human opera
 Operations profile v1 defines environment promotion, region/residency/model/quota/capacity evidence, scaling and failover, cost and runaway controls, retention/deletion/backup/legal-hold behavior, deployment preview/smoke/rollback/disaster-recovery/cleanup receipts, tested alert receivers, and machine-verifiable runbook ownership. Structural readiness cannot substitute for T214 execution evidence.
 
 T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 implements fixture resolvers against retained evidence and explicit receiver/on-call references; production resolvers, observed budget calibration, and state-store audits remain blocked. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
+
+MCP conformance profile v1 pins the current `2026-07-28` stateless protocol, 19 core/deprecated/extension rows, and exact TypeScript/Python v2 plus maintenance-v1 behavior descriptors. New implementations may currently select only registry-verified Python `mcp`/`mcp-types` 2.0.0. TypeScript v2 remains blocked because its 2.0.0 release tags were not registry-resolvable on 2026-08-03; TypeScript and Python v1.29.0 adapters require explicit legacy usage. Tasks is not treated as core SDK support and is pinned to a reviewed extension commit behind a project-owned adapter. T225 owns utilities; T226 owns wire-level Inspector, conformance, and security execution.
 
 T214 executes only fixture profiles in an isolated detached checkout. It uses non-shell executable/argument processes with closed stdin, bounded output and time, process-tree cancellation, run-bound receipts, protected-content rejection, external publication locks, strict evidence-v2 validation, and atomic directory rename. Linux and Windows harness jobs are release-blocking; canonical play write mode remains disabled.
 
