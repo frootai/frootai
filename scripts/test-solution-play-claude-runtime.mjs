@@ -44,7 +44,8 @@ test('rejects non-string arguments and oversized command evidence', () => {
 });
 
 test('removes credential-bearing environment variables and preserves explicit executables', (t) => {
-  const configRoot = path.join(temporaryDirectory(t), 'config');
+  const parent = temporaryDirectory(t);
+  const configRoot = path.join(parent, 'config');
   const env = runtimeEnvironment(configRoot, {
     PATH: 'safe-path',
     ANTHROPIC_API_KEY: 'secret',
@@ -59,6 +60,13 @@ test('removes credential-bearing environment variables and preserves explicit ex
   assert.equal('SESSION_PASSWORD' in env, false);
   assert.equal(env.CLAUDE_CONFIG_DIR, configRoot);
   assert.equal(resolveClaudeExecutable('/trusted/claude'), '/trusted/claude');
+
+  const packageRoot = path.join(parent, 'npm-prefix', 'node_modules', '@anthropic-ai', 'claude-code');
+  const executable = path.join(packageRoot, 'bin', process.platform === 'win32' ? 'claude.exe' : 'claude');
+  fs.mkdirSync(path.dirname(executable), { recursive: true });
+  fs.writeFileSync(path.join(packageRoot, 'package.json'), JSON.stringify({ name: '@anthropic-ai/claude-code', bin: { claude: `bin/${path.basename(executable)}` } }), 'utf8');
+  fs.writeFileSync(executable, 'fixture', 'utf8');
+  assert.equal(resolveClaudeExecutable(undefined, { PATH: `${path.join(parent, 'npm-prefix')}${path.delimiter}/missing` }), executable);
 });
 
 test('serves only bounded loopback smart Git repositories for shallow clones', async (t) => {

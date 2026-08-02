@@ -96,17 +96,22 @@ export function runtimeEnvironment(configRoot, source = process.env) {
   };
 }
 
-export function resolveClaudeExecutable(requested) {
+export function resolveClaudeExecutable(requested, source = process.env) {
   if (requested) return requested;
   const require = createRequire(import.meta.url);
   const packageCandidates = [];
   try { packageCandidates.push(path.dirname(require.resolve('@anthropic-ai/claude-code/package.json'))); }
   catch {}
+  for (const entry of (source.PATH ?? '').split(path.delimiter).filter(Boolean)) {
+    packageCandidates.push(path.join(entry, 'node_modules', '@anthropic-ai', 'claude-code'));
+    packageCandidates.push(path.join(path.dirname(entry), 'lib', 'node_modules', '@anthropic-ai', 'claude-code'));
+  }
   packageCandidates.push(path.join(path.dirname(process.execPath), 'node_modules', '@anthropic-ai', 'claude-code'));
   for (const packageRoot of packageCandidates) {
     const manifestPath = path.join(packageRoot, 'package.json');
     if (!fs.existsSync(manifestPath)) continue;
     const manifest = readJson(manifestPath);
+    if (manifest.name !== '@anthropic-ai/claude-code') continue;
     const relativeBin = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.claude;
     if (typeof relativeBin !== 'string') continue;
     const executable = path.resolve(packageRoot, relativeBin);
