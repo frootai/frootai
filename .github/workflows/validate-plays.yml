@@ -11,6 +11,8 @@ on:
       - 'scripts/validate-flagship-iac.mjs'
       - 'schemas/solution-play-*.schema.json'
       - 'tests/fixtures/solution-play-delivery-profile/**'
+      - 'tests/fixtures/solution-play-telemetry-profile/**'
+      - 'tests/fixtures/solution-play-evaluation-profile/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
@@ -25,6 +27,8 @@ on:
       - 'scripts/validate-flagship-iac.mjs'
       - 'schemas/solution-play-*.schema.json'
       - 'tests/fixtures/solution-play-delivery-profile/**'
+      - 'tests/fixtures/solution-play-telemetry-profile/**'
+      - 'tests/fixtures/solution-play-evaluation-profile/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
@@ -47,6 +51,10 @@ jobs:
           npm run test:solution-play-schemas
           npm run test:solution-play-delivery-profile
           npm run validate:solution-play-delivery-profile
+          npm run test:solution-play-telemetry
+          npm run validate:solution-play-telemetry
+          npm run test:solution-play-evaluation
+          npm run validate:solution-play-evaluation
           npm run contracts:inventory
           npm run quality:solution-plays
 

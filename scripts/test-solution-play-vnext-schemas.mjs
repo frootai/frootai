@@ -10,6 +10,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const schemaNames = [
   'solution-play-spec.vNext.schema.json',
   'solution-play-delivery-profile.v1.schema.json',
+  'solution-play-telemetry-profile.v1.schema.json',
+  'solution-play-evaluation-profile.v1.schema.json',
   'agent-context-envelope.v1.schema.json',
   'agent-handoff.v1.schema.json',
   'agent-loop-policy.v1.schema.json',
@@ -46,4 +48,33 @@ test('delivery profile rejects architecture-only applicable plays', () => {
   const validate = validatorMap().get('Solution Play Delivery Profile v1');
   assert.equal(validate({ schema_version: '1.1.0', play: '01-enterprise-rag', applicability: 'applicable' }), false);
   assert.equal(validate({ schema_version: '1.1.0', play: '01-enterprise-rag', applicability: 'not_applicable', reason: 'Delivery is intentionally outside this package.' }), true);
+});
+
+test('vNext specification requires telemetry and evaluation contract references', () => {
+  const validate = validatorMap().get('Solution Play Specification vNext');
+  const spec = {
+    schema_version: '2.1.0',
+    play: '01-enterprise-rag',
+    version: '1.0.0',
+    title: 'Enterprise RAG',
+    description: 'A secure enterprise retrieval augmented generation reference implementation.',
+    architecture: {
+      runtime: { pattern: 'workflow', description: 'A typed retrieval and generation workflow with explicit security boundaries.' },
+      developer_agents: { topology: 'none', rationale: 'Developer agents are intentionally outside this runtime fixture.' },
+    },
+    contracts: {
+      delivery_profile: 'contracts/delivery-profile.v1.json',
+      telemetry: 'contracts/telemetry-profile.v1.json',
+      evaluation: 'contracts/evaluation-profile.v1.json',
+      context: 'contracts/context.v1.json',
+      handoff: 'contracts/handoff.v1.json',
+      loop: 'contracts/loop.v1.json',
+      memory: 'contracts/memory.v1.json',
+      evidence: 'contracts/evidence.v2.json'
+    },
+    official_sources: [{ url: 'https://example.com/reference', retrieved_at: '2026-08-02T00:00:00Z', status: 'ga', tested_version: '1.0.0', claim: 'Fixture source' }]
+  };
+  assert.equal(validate(spec), true, JSON.stringify(validate.errors));
+  delete spec.contracts.telemetry;
+  assert.equal(validate(spec), false);
 });

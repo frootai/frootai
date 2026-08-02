@@ -1,0 +1,62 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-telemetry-profile.v1.json",
+  "schema_version": "1.0.0",
+  "play": "01-enterprise-rag",
+  "applicability": "applicable",
+  "telemetry": {
+    "initialization": {
+      "before_runtime": true,
+      "instrumentation": "sdk-instrumentation"
+    },
+    "resource_attributes": {
+      "frootai.play.id": "$play",
+      "frootai.source.commit_sha": "$source.commit_sha",
+      "frootai.contract.version": "$contract.version",
+      "frootai.adapter.version": "$adapter.version",
+      "deployment.environment.name": "$environment.class",
+      "frootai.artifact.sha256": "$artifact.sha256"
+    },
+    "correlation": {
+      "propagation": "w3c-trace-context",
+      "identifiers": ["trace_id", "span_id", "parent_span_id", "request_id", "conversation_id", "handoff_id", "evaluation_id", "approval_id", "deployment_id"]
+    },
+    "span_boundaries": [
+      { "name": "request", "applicability": "instrumented" },
+      { "name": "workflow", "applicability": "instrumented" },
+      { "name": "agent", "applicability": "instrumented" },
+      { "name": "tool", "applicability": "instrumented" },
+      { "name": "handoff", "applicability": "instrumented" },
+      { "name": "evaluation", "applicability": "instrumented" },
+      { "name": "approval", "applicability": "instrumented" },
+      { "name": "deployment", "applicability": "instrumented" },
+      { "name": "rollback", "applicability": "instrumented" },
+      { "name": "cleanup", "applicability": "instrumented" }
+    ],
+    "attributes": {
+      "default_action": "drop",
+      "content_recording": "disabled",
+      "rules": [
+        { "name": "frootai.play.id", "classification": "public", "action": "retain" },
+        { "name": "gen_ai.operation.name", "classification": "internal", "action": "retain" },
+        { "name": "gen_ai.request.model", "classification": "internal", "action": "retain" },
+        { "name": "gen_ai.usage.input_tokens", "classification": "internal", "action": "retain" },
+        { "name": "gen_ai.usage.output_tokens", "classification": "internal", "action": "retain" },
+        { "name": "enduser.id", "classification": "confidential", "action": "hmac-sha256", "key_reference": "TELEMETRY_HASH_KEY" },
+        { "name": "error.type", "classification": "internal", "action": "retain" }
+      ],
+      "prohibited_categories": ["raw-prompt", "raw-completion", "message-content", "file-content", "pii", "credential", "authorization-header", "tool-payload"]
+    },
+    "export": {
+      "protocol": "otlp-http",
+      "endpoint_source": "environment",
+      "sampling": { "strategy": "parent-based", "ratio": 0.1 },
+      "failure_mode": "buffer-bounded",
+      "buffer": { "maximum_items": 1000, "maximum_age_seconds": 300 }
+    },
+    "retention": {
+      "days": 30,
+      "owner": "platform-observability",
+      "deletion_verification": "Verify expiry and deletion through an immutable operations receipt."
+    }
+  }
+}
