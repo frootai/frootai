@@ -84,8 +84,10 @@ export function validateClaudePlayProfile(document) {
     if (!validTools(skill.authority, skill.allowed_tools)) errors.push(`skill ${skill.id} exceeds ${skill.authority} authority`);
   }
   let readOnlyAgentCount = 0;
+  const agents = new Map();
   for (const agent of document.agents) {
     register('agent', agent.name);
+    agents.set(agent.name, agent);
     if (agent.authority === 'read-only') readOnlyAgentCount += 1;
     if (!validTools(agent.authority, agent.tools)) errors.push(`agent ${agent.name} exceeds ${agent.authority} authority`);
     for (const skillId of agent.skills) {
@@ -101,6 +103,37 @@ export function validateClaudePlayProfile(document) {
     assetNames.add(asset.name);
     if (Buffer.byteLength(stableJson(asset.content)) > document.mcp.tool.maximum_result_chars) errors.push(`asset exceeds MCP result limit: ${asset.name}`);
   }
+  const guidance = document.project_guidance;
+  const ruleIds = new Set();
+  for (const rule of guidance.rules) {
+    if (ruleIds.has(rule.id)) errors.push(`duplicate project rule id: ${rule.id}`);
+    ruleIds.add(rule.id);
+  }
+  const projectAgentNames = new Set();
+  for (const projectAgent of guidance.subagents) {
+    if (projectAgentNames.has(projectAgent.name)) errors.push(`duplicate project subagent name: ${projectAgent.name}`);
+    projectAgentNames.add(projectAgent.name);
+    const sourceAgent = agents.get(projectAgent.source_agent);
+    if (!sourceAgent) errors.push(`project subagent references unknown source agent: ${projectAgent.source_agent}`);
+    else {
+      if (sourceAgent.authority === 'project-write' && projectAgent.isolation !== 'worktree') errors.push(`write-capable project subagent requires worktree isolation: ${projectAgent.name}`);
+      if (sourceAgent.authority === 'read-only' && projectAgent.permission_mode !== 'plan' && projectAgent.permission_mode !== 'dontAsk') errors.push(`read-only project subagent requires plan or dontAsk permission mode: ${projectAgent.name}`);
+      if (sourceAgent.authority === 'read-only' && projectAgent.memory.enabled) errors.push(`read-only project subagent cannot enable persistent memory: ${projectAgent.name}`);
+    }
+  }
+  const allowedCommands = new Set(document.hook_policy.allowed_commands);
+  for (const command of guidance.claude_md.commands) if (!allowedCommands.has(command)) errors.push(`project guidance command is not hook-allowlisted: ${command}`);
+  const requiredGuidanceProtection = ['.claude/CLAUDE.md', '.claude/agents', '.claude/frootai-guidance-manifest.json', '.claude/rules', '.claude/settings.json', '.claude/settings.local.json', '.claude/skills', '.claude/worktrees', '.worktreeinclude', 'CLAUDE.md'];
+  const protectedPaths = new Set(document.hook_policy.protected_paths);
+  for (const protectedPath of requiredGuidanceProtection) if (!protectedPaths.has(protectedPath)) errors.push(`project guidance authority path is not hook-protected: ${protectedPath}`);
+  if (guidance.worktree.sparse_paths.length > 0 && !guidance.worktree.sparse_paths.includes('.claude')) errors.push('sparse worktree guidance must include .claude');
+  const protectedSegments = ['.claude', '.env', '.git', 'credential', 'secret', 'token'];
+  for (const directory of guidance.worktree.symlink_directories) {
+    const normalized = directory.toLowerCase();
+    if (protectedSegments.some((segment) => normalized === segment || normalized.includes(`/${segment}`) || normalized.includes(segment))) errors.push(`unsafe worktree symlink directory: ${directory}`);
+  }
+  const guidanceText = [guidance.claude_md.purpose, ...guidance.claude_md.invariants, ...guidance.claude_md.workflow, ...guidance.worktree.instructions, ...guidance.rules.flatMap((rule) => rule.instructions)].join('\n');
+  if (/(?:^|\s)@[~./\\]|!`|```!|bypassPermissions|dangerously-skip-permissions/.test(guidanceText)) errors.push('project guidance contains an external import, dynamic shell, or bypass instruction');
   return { valid: errors.length === 0, errors };
 }
 
