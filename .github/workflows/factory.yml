@@ -25,6 +25,7 @@ on:
       - 'workflows/**'
       - 'cookbook/**'
       - 'solution-plays/**'
+      - 'marketplace.json'
       - 'scripts/factory/**'
 
 permissions:
@@ -326,3 +327,27 @@ jobs:
             } catch (err) {
               core.warning('Cross-repo dispatch failed (set CROSS_REPO_TOKEN secret): ' + err.message);
             }
+
+  verify-core-contract:
+    name: 🔐 Verify Core Split Contract
+    needs: factory
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+    steps:
+      - name: Dispatch read-only contract verification
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.CORE_REPO_PAT }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: 'frootai',
+              repo: 'frootai-core',
+              event_type: 'public-repo-updated',
+              client_payload: {
+                sha: context.sha,
+                contract: 'factory-split-repo-v1',
+              },
+            });
+            core.info(`Dispatched core split-contract verification for ${context.sha}`);
