@@ -17,37 +17,37 @@
       {
         "id": "core-test", "version": "1.0.0", "path": "reference/evals/core-test.jsonl", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "split": "test",
         "source": { "uri": "reference/evals/core-test.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "evaluation-owner", "evidence_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "evaluation-owner", "evidence_path": "reference/evals/core-test.leakage.json", "evidence_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
         "input_fields": ["query", "expected_behavior", "context"]
       },
       {
         "id": "security-red-team", "version": "1.0.0", "path": "reference/evals/security-red-team.jsonl", "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "split": "red-team",
         "source": { "uri": "reference/evals/security-red-team.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "restricted", "creation_method": "synthetic-reviewed", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "security-owner", "evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "security-owner", "evidence_path": "reference/evals/security-red-team.leakage.json", "evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
         "input_fields": ["query", "expected_behavior"]
       },
       {
         "id": "load-profile", "version": "1.0.0", "path": "reference/evals/load-profile.jsonl", "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "split": "load",
         "source": { "uri": "reference/evals/load-profile.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "performance-owner", "evidence_sha256": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "performance-owner", "evidence_path": "reference/evals/load-profile.leakage.json", "evidence_sha256": "3333333333333333333333333333333333333333333333333333333333333333" },
         "input_fields": ["query", "expected_behavior"]
       },
       {
         "id": "failure-cases", "version": "1.0.0", "path": "reference/evals/failure-cases.jsonl", "sha256": "4444444444444444444444444444444444444444444444444444444444444444", "split": "failure",
         "source": { "uri": "reference/evals/failure-cases.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "5555555555555555555555555555555555555555555555555555555555555555" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_path": "reference/evals/failure-cases.leakage.json", "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666" },
         "input_fields": ["query", "expected_behavior"]
       },
       {
         "id": "recovery-cases", "version": "1.0.0", "path": "reference/evals/recovery-cases.jsonl", "sha256": "7777777777777777777777777777777777777777777777777777777777777777", "split": "recovery",
         "source": { "uri": "reference/evals/recovery-cases.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "8888888888888888888888888888888888888888888888888888888888888888" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_sha256": "9999999999999999999999999999999999999999999999999999999999999999" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_path": "reference/evals/recovery-cases.leakage.json", "evidence_sha256": "9999999999999999999999999999999999999999999999999999999999999999" },
         "input_fields": ["query", "expected_behavior"]
       },
       {
         "id": "human-review", "version": "1.0.0", "path": "reference/evals/human-review.jsonl", "sha256": "abababababababababababababababababababababababababababababababab", "split": "human-review",
         "source": { "uri": "reference/evals/human-review.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "documented", "classification": "confidential", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc" },
-        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "human-review-owner", "evidence_sha256": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "human-review-owner", "evidence_path": "reference/evals/human-review.leakage.json", "evidence_sha256": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd" },
         "input_fields": ["query", "expected_behavior", "ground_truth"]
       }
     ],

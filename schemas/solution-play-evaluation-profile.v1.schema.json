@@ -141,11 +141,12 @@
         "leakage_review": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["status", "reviewed_at", "reviewer", "evidence_sha256"],
+          "required": ["status", "reviewed_at", "reviewer", "evidence_path", "evidence_sha256"],
           "properties": {
             "status": { "enum": ["passed", "failed", "unavailable"] },
             "reviewed_at": { "type": "string", "format": "date-time" },
             "reviewer": { "type": "string", "minLength": 3 },
+            "evidence_path": { "$ref": "#/$defs/path" },
             "evidence_sha256": { "$ref": "#/$defs/sha256" }
           }
         },

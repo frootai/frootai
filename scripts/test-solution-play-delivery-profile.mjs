@@ -37,7 +37,7 @@ test('validates deterministic, workflow, single-agent, and multi-agent profiles'
 });
 
 test('rejects architecture-only applicable profiles and unsafe paths', () => {
-  const architectureOnly = { schema_version: '1.1.0', play: '01-enterprise-rag', applicability: 'applicable' };
+  const architectureOnly = { schema_version: '1.2.0', play: '01-enterprise-rag', applicability: 'applicable' };
   assert.equal(validateDeliveryProfile(architectureOnly).valid, false);
 
   const unsafe = clone(applicable);

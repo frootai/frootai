@@ -48,8 +48,8 @@ test('optional agent contracts require an explicit not-applicable reason', () =>
 
 test('delivery profile rejects architecture-only applicable plays', () => {
   const validate = validatorMap().get('Solution Play Delivery Profile v1');
-  assert.equal(validate({ schema_version: '1.1.0', play: '01-enterprise-rag', applicability: 'applicable' }), false);
-  assert.equal(validate({ schema_version: '1.1.0', play: '01-enterprise-rag', applicability: 'not_applicable', reason: 'Delivery is intentionally outside this package.' }), true);
+  assert.equal(validate({ schema_version: '1.2.0', play: '01-enterprise-rag', applicability: 'applicable' }), false);
+  assert.equal(validate({ schema_version: '1.2.0', play: '01-enterprise-rag', applicability: 'not_applicable', reason: 'Delivery is intentionally outside this package.' }), true);
 });
 
 test('vNext specification requires telemetry and evaluation contract references', () => {
