@@ -1,0 +1,196 @@
+{
+  "$schema": "../../schemas/solution-play-mcp-conformance.v1.schema.json",
+  "schema_version": "1.0.0",
+  "task": "T224",
+  "specification": {
+    "version": "2026-07-28",
+    "status": "current",
+    "request_model": "stateless",
+    "discovery_method": "server/discover",
+    "required_request_meta": ["io.modelcontextprotocol/clientCapabilities", "io.modelcontextprotocol/protocolVersion"],
+    "recommended_request_meta": ["io.modelcontextprotocol/clientInfo"],
+    "core_transports": ["stdio", "streamable-http"],
+    "server_primitives": ["prompts", "resources", "tools"],
+    "client_features": ["elicitation"],
+    "deprecated_features": ["logging", "roots", "sampling"],
+    "extension_features": ["tasks"]
+  },
+  "sources": [
+    {
+      "id": "mcp-specification",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "2026-07-28",
+      "claim": "Defines the current stateless JSON-RPC protocol, per-request metadata, core primitives, transports, and extension boundary."
+    },
+    {
+      "id": "mcp-architecture",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "2026-07-28",
+      "claim": "Documents server discovery, stateless request metadata, stdio and Streamable HTTP, subscriptions, and deprecated client features."
+    },
+    {
+      "id": "mcp-sdk-tiers",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/sdk",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "2026-07-28",
+      "claim": "Lists TypeScript and Python as Tier 1 SDKs and separates protocol conformance from optional extension support."
+    },
+    {
+      "id": "typescript-sdk-v2",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/%40modelcontextprotocol%2Fcore%402.0.0",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "2.0.0",
+      "claim": "Records the split TypeScript v2 release tag and final wire shape; registry checks on 2026-08-03 did not resolve the 2.0.0 packages."
+    },
+    {
+      "id": "python-sdk-v2",
+      "url": "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.0.0",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "2.0.0",
+      "claim": "Pins the Python v2 SDK with current and earlier protocol support and records that Tasks is not included in the release."
+    },
+    {
+      "id": "typescript-sdk-v1",
+      "url": "https://www.npmjs.com/package/@modelcontextprotocol/sdk/v/1.29.0",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "1.29.0",
+      "claim": "Pins the registry-resolvable TypeScript v1 maintenance package used only for explicit legacy protocol compatibility."
+    },
+    {
+      "id": "python-sdk-v1",
+      "url": "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.29.0",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "ga",
+      "tested_version": "1.29.0",
+      "claim": "Pins the Python v1 maintenance release used only for explicit legacy protocol compatibility and critical fixes."
+    },
+    {
+      "id": "mcp-tasks-extension",
+      "url": "https://github.com/modelcontextprotocol/ext-tasks/tree/2c1425d9a288b9b1f489430fe1e00bb392b47e48",
+      "retrieved_at": "2026-08-03T00:00:00Z",
+      "status": "extension",
+      "tested_version": "2c1425d9a288b9b1f489430fe1e00bb392b47e48",
+      "claim": "Pins the reviewed Tasks extension revision defining explicit negotiation, durable handles, polling, input requests, cancellation, and terminal states."
+    }
+  ],
+  "matrix": [
+    { "id": "request-metadata", "layer": "base", "status": "required", "methods": ["*"], "requirement": "Every request carries the current protocol version and client capabilities in params._meta; client identity remains recommended." },
+    { "id": "server-discovery", "layer": "base", "status": "required", "methods": ["server/discover"], "requirement": "Servers expose supported versions and capabilities through server/discover; modern clients may probe and cache the response." },
+    { "id": "stdio", "layer": "transport", "status": "required", "methods": ["stdio"], "requirement": "Local process integrations use newline-delimited JSON-RPC over stdin and stdout while diagnostics stay off the protocol stream." },
+    { "id": "streamable-http", "layer": "transport", "status": "required", "methods": ["POST", "GET"], "requirement": "Remote integrations use Streamable HTTP with JSON POST and optional SSE response streams, authorization, origin, and media-type validation." },
+    { "id": "tools", "layer": "server", "status": "required", "methods": ["tools/list", "tools/call"], "requirement": "Tool discovery is paginated and every invocation validates arguments against JSON Schema before bounded execution." },
+    { "id": "resources", "layer": "server", "status": "optional", "methods": ["resources/list", "resources/read"], "requirement": "Resource providers declare capability support and expose only authorized, bounded, provenance-bearing context." },
+    { "id": "prompts", "layer": "server", "status": "optional", "methods": ["prompts/list", "prompts/get"], "requirement": "Prompt providers declare capability support and treat returned templates as context rather than executable authority." },
+    { "id": "elicitation", "layer": "client", "status": "optional", "methods": ["elicitation/create"], "requirement": "Servers request user input through multi-round-trip elicitation only when clients advertise the capability on that request." },
+    { "id": "pagination", "layer": "utility", "status": "required", "methods": ["cursor", "nextCursor"], "requirement": "List operations accept opaque cursors and return nextCursor without clients interpreting or constructing cursor values." },
+    { "id": "completion", "layer": "utility", "status": "optional", "methods": ["completion/complete"], "requirement": "Completion is capability-gated and returns bounded suggestions without granting execution or data-access authority." },
+    { "id": "caching", "layer": "utility", "status": "optional", "methods": ["ttlMs", "cacheScope"], "requirement": "Clients honor server freshness and cache-scope hints while partitioning unverified server identities and invalidating stale discovery." },
+    { "id": "progress", "layer": "utility", "status": "optional", "methods": ["notifications/progress"], "requirement": "Bounded operations may report correlated progress, but progress notifications never replace durable Tasks for long-running work." },
+    { "id": "cancellation", "layer": "utility", "status": "required", "methods": ["notifications/cancelled"], "requirement": "Clients can cancel in-flight requests and servers contain cancellation to the originating request and release owned resources." },
+    { "id": "subscriptions", "layer": "utility", "status": "optional", "methods": ["subscriptions/listen", "notifications/subscriptions/acknowledged"], "requirement": "Change notifications require explicit subscription, acknowledgement, capability support, correlation, reconnection, and polling fallback." },
+    { "id": "authorization", "layer": "transport", "status": "optional", "methods": ["OAuth 2.1", "RFC 9728"], "requirement": "Remote protected resources use standards-based authorization with resource binding, audience validation, least privilege, and user consent." },
+    { "id": "roots", "layer": "client", "status": "deprecated", "methods": ["roots/list"], "requirement": "New current-protocol implementations do not depend on roots; legacy adapters may expose it only for negotiated 2025 sessions." },
+    { "id": "sampling", "layer": "client", "status": "deprecated", "methods": ["sampling/createMessage"], "requirement": "New implementations call model providers directly and do not use sampling as a production dependency on the current protocol." },
+    { "id": "logging", "layer": "utility", "status": "deprecated", "methods": ["logging/setLevel", "notifications/message"], "requirement": "New implementations log to stderr for stdio or emit OpenTelemetry instead of depending on protocol logging messages." },
+    { "id": "tasks", "layer": "extension", "status": "extension", "methods": ["tasks/get", "tasks/update", "tasks/cancel", "notifications/tasks"], "requirement": "Long-running work uses Tasks only through explicit client/server extension negotiation and a project-owned adapter with durable state." }
+  ],
+  "adapters": [
+    {
+      "id": "typescript-v2",
+      "language": "typescript",
+      "generation": "v2",
+      "sdk_tier": 1,
+      "status": "blocked",
+      "availability": "release-tag-only",
+      "packages": [
+        { "name": "@modelcontextprotocol/client", "version": "2.0.0" },
+        { "name": "@modelcontextprotocol/core", "version": "2.0.0" },
+        { "name": "@modelcontextprotocol/node", "version": "2.0.0" },
+        { "name": "@modelcontextprotocol/server", "version": "2.0.0" }
+      ],
+      "protocol_versions": ["2026-07-28", "2025-11-25"],
+      "allowed_for_new_implementation": false,
+      "discovery_strategy": "discover-then-initialize-fallback",
+      "request_model": "stateless-per-request",
+      "server_identity_location": "result-meta",
+      "client_info_requirement": "recommended",
+      "optional_features": { "completion": "supported", "caching": "supported", "subscriptions": "supported", "authorization": "supported", "elicitation": "supported" },
+      "tasks_support": "extension-adapter-required",
+      "source_id": "typescript-sdk-v2"
+    },
+    {
+      "id": "python-v2",
+      "language": "python",
+      "generation": "v2",
+      "sdk_tier": 1,
+      "status": "current",
+      "availability": "registry",
+      "packages": [
+        { "name": "mcp", "version": "2.0.0" },
+        { "name": "mcp-types", "version": "2.0.0" }
+      ],
+      "protocol_versions": ["2026-07-28", "2025-11-25"],
+      "allowed_for_new_implementation": true,
+      "discovery_strategy": "discover-then-initialize-fallback",
+      "request_model": "stateless-per-request",
+      "server_identity_location": "result-meta",
+      "client_info_requirement": "recommended",
+      "optional_features": { "completion": "supported", "caching": "supported", "subscriptions": "supported", "authorization": "supported", "elicitation": "supported" },
+      "tasks_support": "extension-adapter-required",
+      "source_id": "python-sdk-v2"
+    },
+    {
+      "id": "typescript-v1-maintenance",
+      "language": "typescript",
+      "generation": "v1-maintenance",
+      "sdk_tier": 1,
+      "status": "maintenance",
+      "availability": "registry",
+      "packages": [{ "name": "@modelcontextprotocol/sdk", "version": "1.29.0" }],
+      "protocol_versions": ["2025-11-25"],
+      "allowed_for_new_implementation": false,
+      "discovery_strategy": "initialize-only",
+      "request_model": "stateful-session",
+      "server_identity_location": "initialize-result",
+      "client_info_requirement": "initialize-required",
+      "optional_features": { "completion": "legacy-session", "caching": "host-owned", "subscriptions": "legacy-session", "authorization": "legacy-session", "elicitation": "legacy-session" },
+      "tasks_support": "deprecated-experimental-removed",
+      "source_id": "typescript-sdk-v1"
+    },
+    {
+      "id": "python-v1-maintenance",
+      "language": "python",
+      "generation": "v1-maintenance",
+      "sdk_tier": 1,
+      "status": "maintenance",
+      "availability": "registry",
+      "packages": [{ "name": "mcp", "version": "1.29.0" }],
+      "protocol_versions": ["2025-11-25"],
+      "allowed_for_new_implementation": false,
+      "discovery_strategy": "initialize-only",
+      "request_model": "stateful-session",
+      "server_identity_location": "initialize-result",
+      "client_info_requirement": "initialize-required",
+      "optional_features": { "completion": "legacy-session", "caching": "host-owned", "subscriptions": "legacy-session", "authorization": "legacy-session", "elicitation": "legacy-session" },
+      "tasks_support": "deprecated-experimental-removed",
+      "source_id": "python-sdk-v1"
+    }
+  ],
+  "boundaries": {
+    "new_implementation_adapters": ["python-v2"],
+    "blocked_adapters": ["typescript-v2"],
+    "legacy_fallback_adapters": ["python-v1-maintenance", "typescript-v1-maintenance"],
+    "tasks_owner": "project-extension-adapter",
+    "sdk_imports_outside_adapter": false,
+    "canonical_writes_allowed": false,
+    "publication_allowed": false
+  }
+}

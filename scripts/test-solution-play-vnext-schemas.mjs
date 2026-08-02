@@ -18,6 +18,7 @@ const schemaNames = [
   'solution-play-evaluation-profile.v1.schema.json',
   'solution-play-identity-profile.v1.schema.json',
   'solution-play-operations-profile.v1.schema.json',
+  'solution-play-mcp-conformance.v1.schema.json',
   'agent-context-envelope.v1.schema.json',
   'agent-handoff.v1.schema.json',
   'agent-loop-policy.v1.schema.json',
