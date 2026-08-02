@@ -72,12 +72,13 @@ npm run test:solution-play-identity
 npm run validate:solution-play-operations
 npm run test:solution-play-operations
 npm run test:solution-play-github-adapter
+npm run test:solution-play-github-conformance
 npm run test:evidence-v2-migration
 ```
 
 Delivery profile v1.2 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
 
-Developer profile v1.1 is the neutral source for developer roles, capabilities, handoffs, instructions, prompts, setup steps, session context, guardrails, least-privilege tool aliases, and immutable cloud limits. T215 deterministically projects applicable fixture profiles into GitHub Copilot artifacts. T216 binds each agent and prompt to its role tools and generates a self-contained SessionStart/PreToolUse guard for one repository, one named branch, one pull request, and a 59-minute session. The guard fails closed on malformed or oversized input, unsupported tools, policy changes, expiry, repository/branch drift, external paths, protected-artifact edits, session reset attempts, destructive commands, and repeat PR creation. T217 owns full customization syntax, deprecation, unresolved-reference, and drift conformance. Canonical play writes remain disabled.
+Developer profile v1.1 is the neutral source for developer roles, capabilities, handoffs, instructions, prompts, setup steps, session context, guardrails, least-privilege tool aliases, and immutable cloud limits. T215 deterministically projects applicable fixture profiles into GitHub Copilot artifacts. T216 binds each agent and prompt to its role tools and generates a self-contained SessionStart/PreToolUse guard for one repository, one named branch, one pull request, and a 59-minute session. T217 parses current YAML frontmatter, rejects deprecated chat modes and tool aliases, validates skills and bounded hooks, resolves agents/handoffs/prompts/links, enforces exact role tools, verifies the manifest and all artifact digests, rejects symlinks and stale files, and compares every byte against deterministic regeneration. Canonical play writes remain disabled.
 
 Telemetry profile v1 defines OpenTelemetry initialization, stable resource identity sources, W3C correlation, lifecycle span applicability, default-deny attributes, prohibited content categories, exporter failure behavior, and retention ownership. Its sanitizer retains only explicit rules, fails closed when HMAC material is unavailable, and never records raw prompts, completions, files, credentials, PII, authorization headers, or tool payloads by default.
 

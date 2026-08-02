@@ -108,7 +108,9 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Verify deterministic GitHub Copilot projection
-        run: npm run test:solution-play-github-adapter
+        run: |
+          npm run test:solution-play-github-adapter
+          npm run test:solution-play-github-conformance
 
   canonical-index:
     runs-on: ubuntu-latest

@@ -46,7 +46,9 @@
     "test:solution-play-operations": "node --test scripts/test-solution-play-operations.mjs",
     "test:solution-play-certification-harness": "node --test scripts/test-solution-play-certification-harness.mjs",
     "generate:solution-play-github-adapter": "node scripts/solution-play-github-adapter.mjs",
+    "validate:solution-play-github-adapter": "node scripts/validate-solution-play-github-adapter.mjs",
     "test:solution-play-github-adapter": "node --test scripts/test-solution-play-github-adapter.mjs",
+    "test:solution-play-github-conformance": "node --test scripts/test-solution-play-github-conformance.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",
@@ -103,7 +105,8 @@
     "@commitlint/config-conventional": "^19.8.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "yaml": "2.9.0"
   },
   "repository": {
     "type": "git",
