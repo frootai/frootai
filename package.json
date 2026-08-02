@@ -45,6 +45,8 @@
     "validate:solution-play-operations": "node scripts/solution-play-operations.mjs",
     "test:solution-play-operations": "node --test scripts/test-solution-play-operations.mjs",
     "test:solution-play-certification-harness": "node --test scripts/test-solution-play-certification-harness.mjs",
+    "generate:solution-play-github-adapter": "node scripts/solution-play-github-adapter.mjs",
+    "test:solution-play-github-adapter": "node --test scripts/test-solution-play-github-adapter.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",

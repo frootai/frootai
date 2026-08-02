@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-developer-profile.v1.json",
+  "title": "Solution Play Developer Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 10 },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "description", "roles", "capabilities", "handoffs", "instructions", "prompts", "setup", "session_context", "guardrails"],
+      "properties": {
+        "display_name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 20 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/role" }
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/capability" }
+        },
+        "handoffs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/handoff" }
+        },
+        "instructions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/instruction" }
+        },
+        "prompts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/prompt" }
+        },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prerequisites", "steps"],
+          "properties": {
+            "prerequisites": { "$ref": "#/$defs/nonEmptyStrings" },
+            "steps": { "$ref": "#/$defs/nonEmptyStrings" }
+          }
+        },
+        "session_context": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "guardrails": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "applicability": { "const": "applicable" } } },
+      "then": { "required": ["profile"], "properties": { "profile": {}, "reason": false } }
+    },
+    {
+      "if": { "properties": { "applicability": { "const": "not_applicable" } } },
+      "then": { "required": ["reason"], "properties": { "reason": {}, "profile": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "responsibility", "capabilities"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "responsibility": { "type": "string", "minLength": 20 },
+        "capabilities": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "procedure"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "procedure": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "from_role", "to_role", "label", "prompt"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "from_role": { "$ref": "#/$defs/id" },
+        "to_role": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "prompt": { "type": "string", "minLength": 10, "maxLength": 500 }
+      }
+    },
+    "instruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "apply_to", "rules"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "apply_to": { "$ref": "#/$defs/nonEmptyStrings" },
+        "rules": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "prompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "role", "argument_hint", "task"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "role": { "$ref": "#/$defs/id" },
+        "argument_hint": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "task": { "type": "string", "minLength": 20 }
+      }
+    }
+  }
+}

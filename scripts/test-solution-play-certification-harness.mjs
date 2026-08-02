@@ -93,6 +93,7 @@ function fixtureRepository(t, { mutateProfiles, mutateFiles } = {}) {
 
   const contracts = path.join(playRoot, 'contracts');
   writeJson(path.join(contracts, 'delivery-profile.v1.json'), profiles.delivery);
+  writeJson(path.join(contracts, 'developer-profile.v1.json'), { schema_version: '1.0.0', play, applicability: 'not_applicable', reason: 'The certification fixture exercises runtime evidence without developer adapters.' });
   writeJson(path.join(contracts, 'telemetry-profile.v1.json'), profiles.telemetry);
   writeJson(path.join(contracts, 'evaluation-profile.v1.json'), profiles.evaluation);
   writeJson(path.join(contracts, 'identity-profile.v1.json'), profiles.identity);
@@ -100,9 +101,9 @@ function fixtureRepository(t, { mutateProfiles, mutateFiles } = {}) {
   writeJson(path.join(contracts, 'certification-policy.json'), { profile: 'fixture-v1', version: '1.0.0', certification_scope: 'fixture-only', ttl_hours: 24, repository: 'https://github.com/frootai/certification-fixture' });
   writeJson(path.join(playRoot, 'spec', 'fai-manifest.json'), { schema_version: '2.0.0', play });
   writeJson(path.join(playRoot, 'spec', 'play-spec.json'), {
-    schema_version: '2.2.0', play, version: '1.0.0', title: 'Certification Fixture', description: 'A fixture-only clean-checkout certification workload for harness validation.',
+    schema_version: '2.3.0', play, version: '1.0.0', title: 'Certification Fixture', description: 'A fixture-only clean-checkout certification workload for harness validation.',
     architecture: { runtime: { pattern: 'deterministic-function', description: 'A deterministic fixture process exercises bounded certification lifecycle commands.' }, developer_agents: { topology: 'none', rationale: 'Developer agents are intentionally not applicable to this harness fixture.' } },
-    contracts: { delivery_profile: 'contracts/delivery-profile.v1.json', telemetry: 'contracts/telemetry-profile.v1.json', evaluation: 'contracts/evaluation-profile.v1.json', identity: 'contracts/identity-profile.v1.json', operations: 'contracts/operations-profile.v1.json', context: 'contracts/context.v1.json', handoff: 'contracts/handoff.v1.json', loop: 'contracts/loop.v1.json', memory: 'contracts/memory.v1.json', evidence: 'contracts/evidence.v2.json' },
+    contracts: { delivery_profile: 'contracts/delivery-profile.v1.json', developer_profile: 'contracts/developer-profile.v1.json', telemetry: 'contracts/telemetry-profile.v1.json', evaluation: 'contracts/evaluation-profile.v1.json', identity: 'contracts/identity-profile.v1.json', operations: 'contracts/operations-profile.v1.json', context: 'contracts/context.v1.json', handoff: 'contracts/handoff.v1.json', loop: 'contracts/loop.v1.json', memory: 'contracts/memory.v1.json', evidence: 'contracts/evidence.v2.json' },
     official_sources: [{ url: 'https://example.com/fixture', retrieved_at: generatedAt, status: 'ga', tested_version: '1.0.0', claim: 'Fixture-only harness validation source' }]
   });
   if (mutateFiles) mutateFiles({ repository, playRoot, profiles });

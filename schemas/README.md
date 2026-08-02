@@ -42,6 +42,7 @@ node scripts/validate-primitives.js --verbose
 The additive modernization contract is defined by:
 
 - `solution-play-spec.vNext.schema.json`
+- `solution-play-developer-profile.v1.schema.json`
 - `solution-play-delivery-profile.v1.schema.json`
 - `solution-play-telemetry-profile.v1.schema.json`
 - `solution-play-evaluation-profile.v1.schema.json`
@@ -70,22 +71,25 @@ npm run validate:solution-play-identity
 npm run test:solution-play-identity
 npm run validate:solution-play-operations
 npm run test:solution-play-operations
+npm run test:solution-play-github-adapter
 npm run test:evidence-v2-migration
 ```
 
-Delivery profile v1.1 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
+Delivery profile v1.2 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
+
+Developer profile v1 is the neutral source for developer roles, capabilities, handoffs, instructions, prompts, setup steps, session context, and guardrails. T215 deterministically projects applicable fixture profiles into GitHub Copilot agents, skills, inline handoffs, instructions, prompts, a bounded SessionStart hook, setup guidance, and a complete digest manifest. Generated agents and prompts have no tools in T215; T216 owns least-privilege tool assignment and hook security. T217 owns full customization conformance and drift validation. Canonical play writes remain disabled.
 
 Telemetry profile v1 defines OpenTelemetry initialization, stable resource identity sources, W3C correlation, lifecycle span applicability, default-deny attributes, prohibited content categories, exporter failure behavior, and retention ownership. Its sanitizer retains only explicit rules, fails closed when HMAC material is unavailable, and never records raw prompts, completions, files, credentials, PII, authorization headers, or tool payloads by default.
 
 Evaluation profile v1 requires actual-application execution, complete-but-redacted input/output collection, immutable dataset provenance, leakage review, owned evaluators, reasoned thresholds, minimum samples, baseline/candidate comparison, regression budgets, and explicit offline, preproduction, continuous, red-team, load, failure, recovery, and human-review suites. Foundry suite metadata is an overlay only after remote verification and cannot independently certify a play.
 
-Telemetry and evaluation profile validation is structural and policy-focused. Runtime certification in T214 must additionally verify exporter availability/authentication, execute evaluation runners against the actual application, enforce process/resource limits, and treat Foundry overlays as ineligible for primary certification evidence.
+Telemetry and evaluation profile validation is structural and policy-focused. The T214 runtime harness additionally verifies immutable fixture artifacts, executes evaluation runners against the actual application, enforces process/resource limits, and treats Foundry overlays as ineligible for primary certification evidence.
 
 Identity profile v1 separates build, deploy, runtime, evaluator, and human operator identities; permits only managed identity, workload federation, on-behalf-of, or phishing-resistant just-in-time human authentication; requires narrow scoped actions and durable approval receipts; and excludes break-glass activity from certification.
 
 Operations profile v1 defines environment promotion, region/residency/model/quota/capacity evidence, scaling and failover, cost and runaway controls, retention/deletion/backup/legal-hold behavior, deployment preview/smoke/rollback/disaster-recovery/cleanup receipts, tested alert receivers, and machine-verifiable runbook ownership. Structural readiness cannot substitute for T214 execution evidence.
 
-T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 must implement those resolvers against immutable evidence and real receiver/on-call configuration, calibrate budget thresholds against observed variance, and audit state-store behavior rather than trusting names. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
+T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 implements fixture resolvers against retained evidence and explicit receiver/on-call references; production resolvers, observed budget calibration, and state-store audits remain blocked. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
 
 T214 executes only fixture profiles in an isolated detached checkout. It uses non-shell executable/argument processes with closed stdin, bounded output and time, process-tree cancellation, run-bound receipts, protected-content rejection, external publication locks, strict evidence-v2 validation, and atomic directory rename. Linux and Windows harness jobs are release-blocking; canonical play write mode remains disabled.
 

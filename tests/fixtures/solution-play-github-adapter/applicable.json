@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0.0",
+  "play": "00-github-adapter-fixture",
+  "applicability": "applicable",
+  "profile": {
+    "display_name": "GitHub Adapter Fixture",
+    "description": "A neutral developer profile used to prove deterministic GitHub Copilot projection behavior.",
+    "roles": [
+      {
+        "id": "builder",
+        "name": "Reference Builder",
+        "description": "Use when implementing the fixture reference application from its canonical contract.",
+        "responsibility": "Implement the bounded reference application and provide testable evidence to the reviewer.",
+        "capabilities": ["build-reference"]
+      },
+      {
+        "id": "reviewer",
+        "name": "Reference Reviewer",
+        "description": "Use when reviewing the fixture implementation and its evidence against acceptance criteria.",
+        "responsibility": "Review implementation evidence independently and report concrete blockers without editing code.",
+        "capabilities": ["review-reference"]
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "build-reference",
+        "name": "Build Reference",
+        "description": "Build the fixture reference application with deterministic tests and explicit receipts.",
+        "procedure": [
+          "Read the canonical specification and acceptance checks.",
+          "Implement the smallest bounded change that satisfies the specification.",
+          "Run the focused tests and retain their non-secret result."
+        ]
+      },
+      {
+        "id": "review-reference",
+        "name": "Review Reference",
+        "description": "Review the fixture implementation for contract fidelity, regressions, and missing evidence.",
+        "procedure": [
+          "Read the canonical specification and changed files.",
+          "Run the focused validation without modifying the implementation.",
+          "Report blocking findings before summaries."
+        ]
+      }
+    ],
+    "handoffs": [
+      {
+        "id": "builder-to-reviewer",
+        "from_role": "builder",
+        "to_role": "reviewer",
+        "label": "Review implementation",
+        "prompt": "Review the completed implementation and its focused test evidence against the canonical contract."
+      }
+    ],
+    "instructions": [
+      {
+        "id": "reference-implementation",
+        "description": "Use when modifying fixture application or test files generated from the developer profile.",
+        "apply_to": ["reference/app/**", "reference/tests/**"],
+        "rules": [
+          "Keep behavior deterministic and bounded.",
+          "Do not add credentials, deployment commands, or production claims.",
+          "Run focused tests after every substantive edit."
+        ]
+      }
+    ],
+    "prompts": [
+      {
+        "id": "build-reference",
+        "name": "Build Reference",
+        "description": "Implement a bounded fixture change from the canonical specification and acceptance checks.",
+        "role": "builder",
+        "argument_hint": "Describe the fixture behavior to implement",
+        "task": "Implement the requested fixture behavior from the canonical specification, run focused tests, and report the changed files and evidence."
+      },
+      {
+        "id": "review-reference",
+        "name": "Review Reference",
+        "description": "Review a fixture implementation for contract fidelity, regressions, and evidence gaps.",
+        "role": "reviewer",
+        "argument_hint": "Describe the implementation to review",
+        "task": "Review the requested fixture implementation without editing it. Report blocking findings first and identify any missing focused evidence."
+      }
+    ],
+    "setup": {
+      "prerequisites": ["Node.js 22 or later", "A clean Git checkout"],
+      "steps": [
+        "Open the generated workspace in VS Code.",
+        "Confirm the generated adapter manifest matches the source profile digest.",
+        "Select the appropriate generated role or prompt for the task."
+      ]
+    },
+    "session_context": "This workspace is a fixture-only GitHub adapter projection. It cannot deploy, promote certification, or write canonical plays.",
+    "guardrails": [
+      "Do not deploy or mutate cloud resources.",
+      "Do not claim readiness beyond fixture evidence.",
+      "Do not write canonical solution-play content."
+    ]
+  }
+}
