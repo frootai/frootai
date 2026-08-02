@@ -1,0 +1,58 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-claude-marketplace.v1.json",
+  "schema_version": "1.0.0",
+  "marketplace": {
+    "base_name": "frootai-solution-plays",
+    "description": "Fixture-only Claude Code marketplaces for FrootAI foundation and independently packaged Solution Play plugins.",
+    "owner": {
+      "name": "FrootAI Contributors",
+      "url": "https://github.com/frootai"
+    },
+    "repository": "https://github.com/frootai/frootai-claude-marketplace"
+  },
+  "channels": [
+    {
+      "id": "stable",
+      "marketplace_name": "frootai-solution-plays-stable",
+      "ref": "stable",
+      "description": "Conservative FrootAI Solution Play channel promoted only after the latest channel passes its release gates."
+    },
+    {
+      "id": "latest",
+      "marketplace_name": "frootai-solution-plays-latest",
+      "ref": "latest",
+      "description": "Candidate FrootAI Solution Play channel for validation before promotion to the stable branch."
+    }
+  ],
+  "plugins": [
+    {
+      "name": "frootai-foundation",
+      "kind": "foundation",
+      "source_profile": "data/claude/frootai-foundation.v1.json",
+      "description": "Shared read-only FrootAI contracts, evidence review skills, auditor, and fail-closed authority protection.",
+      "display_name": "FrootAI Foundation",
+      "category": "development",
+      "tags": ["contracts", "evidence", "frootai", "security"],
+      "default_enabled": false
+    },
+    {
+      "name": "frootai-00-claude-plugin-fixture",
+      "kind": "play",
+      "source_profile": "data/claude/per-play-plugin-fixture.v1.json",
+      "description": "Fixture-only independently packaged Solution Play plugin for generation, security, and compatibility evidence.",
+      "display_name": "FrootAI Claude Plugin Fixture",
+      "category": "solution-plays",
+      "tags": ["fixture", "frootai", "solution-play"],
+      "default_enabled": false
+    }
+  ],
+  "rename_history": [
+    {
+      "sequence": 1,
+      "from": "frootai-00-plugin-fixture",
+      "to": "frootai-00-claude-plugin-fixture",
+      "reason": "Adopt the canonical per-play Claude plugin identity without breaking existing fixture registrations."
+    }
+  ],
+  "maximum_output_bytes": 1048576
+}
