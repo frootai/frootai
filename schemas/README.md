@@ -56,8 +56,21 @@ npm run contracts:inventory
 npm run contracts:migration-preview
 npm run test:contract-inventory
 npm run test:solution-play-schemas
+npm run validate:solution-play-delivery-profile
+npm run test:solution-play-delivery-profile
 npm run test:evidence-v2-migration
 ```
+
+Delivery profile v1.1 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
+
+### Delivery Profile Security Model
+
+- Commands are executable-plus-argument vectors, not shell strings. T214 must execute them with shell expansion disabled and stdin closed.
+- Executables that change privilege context are rejected. Common inline-secret, credential-URL, interactive, and unbounded-watch arguments are rejected.
+- Paths use repository-relative POSIX form. Runtime, infrastructure, working-directory, and receipt paths cannot escape the declared slice boundaries.
+- Every command is bounded to 3600 seconds. Longer operations must be decomposed into bounded commands with separate receipts.
+- Cleanup may require network access to remove external resources, but must be explicitly classified, bounded, and idempotent.
+- Validation reduces accidental and supply-chain risk; it does not make an untrusted executable safe. T214 remains responsible for process isolation, resource limits, cancellation, redaction, and atomic evidence.
 
 Deterministic Solution Play generation is protected by a reviewed quality-debt fingerprint:
 

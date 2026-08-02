@@ -34,6 +34,8 @@
     "quality:solution-plays:baseline": "node scripts/solution-play-quality-gate.mjs --write-baseline",
     "test:contract-inventory": "node --test scripts/test-solution-play-contract-inventory.mjs",
     "test:solution-play-schemas": "node --test scripts/test-solution-play-vnext-schemas.mjs",
+    "validate:solution-play-delivery-profile": "node scripts/validate-solution-play-delivery-profile.mjs",
+    "test:solution-play-delivery-profile": "node --test scripts/test-solution-play-delivery-profile.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",
