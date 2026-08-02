@@ -93,7 +93,7 @@ function fixtureRepository(t, { mutateProfiles, mutateFiles } = {}) {
 
   const contracts = path.join(playRoot, 'contracts');
   writeJson(path.join(contracts, 'delivery-profile.v1.json'), profiles.delivery);
-  writeJson(path.join(contracts, 'developer-profile.v1.json'), { schema_version: '1.0.0', play, applicability: 'not_applicable', reason: 'The certification fixture exercises runtime evidence without developer adapters.' });
+  writeJson(path.join(contracts, 'developer-profile.v1.json'), { schema_version: '1.1.0', play, applicability: 'not_applicable', reason: 'The certification fixture exercises runtime evidence without developer adapters.' });
   writeJson(path.join(contracts, 'telemetry-profile.v1.json'), profiles.telemetry);
   writeJson(path.join(contracts, 'evaluation-profile.v1.json'), profiles.evaluation);
   writeJson(path.join(contracts, 'identity-profile.v1.json'), profiles.identity);

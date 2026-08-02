@@ -41,10 +41,12 @@ test('optional developer and agent contracts require an explicit not-applicable 
   const titles = ['Solution Play Developer Profile v1', 'Agent Context Envelope v1', 'Agent Handoff v1', 'Agent Loop Policy v1', 'Agent Memory Policy v1'];
   for (const title of titles) {
     const validate = validators.get(title);
-    const play = title === 'Solution Play Developer Profile v1' ? { play: '01-enterprise-rag' } : {};
-    assert.equal(validate({ schema_version: '1.0.0', ...play, applicability: 'not_applicable', reason: 'This play uses deterministic code only.' }), true, title);
-    assert.equal(validate({ schema_version: '1.0.0', applicability: 'not_applicable' }), false, title);
-    assert.equal(validate({ schema_version: '1.0.0', applicability: 'applicable' }), false, title);
+    const developerProfile = title === 'Solution Play Developer Profile v1';
+    const play = developerProfile ? { play: '01-enterprise-rag' } : {};
+    const schemaVersion = developerProfile ? '1.1.0' : '1.0.0';
+    assert.equal(validate({ schema_version: schemaVersion, ...play, applicability: 'not_applicable', reason: 'This play uses deterministic code only.' }), true, title);
+    assert.equal(validate({ schema_version: schemaVersion, applicability: 'not_applicable' }), false, title);
+    assert.equal(validate({ schema_version: schemaVersion, applicability: 'applicable' }), false, title);
   }
 });
 

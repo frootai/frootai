@@ -8,6 +8,7 @@ import addFormats from 'ajv-formats';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const canonicalPlaysRoot = path.join(repositoryRoot, 'solution-plays');
+const cloudGuardSource = fs.readFileSync(path.join(repositoryRoot, 'scripts', 'solution-play-github-cloud-guard.mjs'), 'utf8');
 let profileValidator;
 
 export function sha256(value) {
@@ -93,7 +94,7 @@ function renderAgent(role, profile) {
     '---',
     `description: ${quoted(role.description)}`,
     `name: ${quoted(role.name)}`,
-    'tools: []',
+    `tools: ${JSON.stringify([...role.tools].sort(compareText))}`,
     'user-invocable: true',
   ];
   if (handoffs.length > 0) {
@@ -104,7 +105,7 @@ function renderAgent(role, profile) {
   }
   frontmatter.push('---');
   const capabilities = [...role.capabilities].sort().map((id) => `- [${id}](../skills/${id}/SKILL.md)`).join('\n');
-  return `${frontmatter.join('\n')}\n\n# ${role.name}\n\n${role.description}\n\n## Responsibility\n\n${role.responsibility}\n\n## Capabilities\n\n${capabilities}\n\n## Guardrails\n\n${bullets(profile.guardrails)}\n`;
+  return `${frontmatter.join('\n')}\n\n# ${role.name}\n\n${role.description}\n\n## Responsibility\n\n${role.responsibility}\n\n## Capabilities\n\n${capabilities}\n\n## Cloud Boundary\n\n- One repository and one named branch per task.\n- At most one pull request.\n- Hard session limit: ${profile.cloud.session_limit_minutes} minutes.\n\n## Guardrails\n\n${bullets(profile.guardrails)}\n`;
 }
 
 function renderSkill(capability, roles) {
@@ -116,8 +117,9 @@ function renderInstruction(instruction) {
   return `---\ndescription: ${quoted(instruction.description)}\napplyTo: ${JSON.stringify([...instruction.apply_to].sort())}\n---\n\n# ${instruction.id}\n\n${bullets(instruction.rules)}\n`;
 }
 
-function renderPrompt(prompt) {
-  return `---\ndescription: ${quoted(prompt.description)}\nname: ${quoted(prompt.name)}\nargument-hint: ${quoted(prompt.argument_hint)}\nagent: ${quoted(prompt.role)}\ntools: []\n---\n\n${prompt.task}\n`;
+function renderPrompt(prompt, roles) {
+  const role = roles.find((candidate) => candidate.id === prompt.role);
+  return `---\ndescription: ${quoted(prompt.description)}\nname: ${quoted(prompt.name)}\nargument-hint: ${quoted(prompt.argument_hint)}\nagent: ${quoted(prompt.role)}\ntools: ${JSON.stringify([...role.tools].sort(compareText))}\n---\n\n${prompt.task}\n`;
 }
 
 function renderCopilotInstructions(document) {
@@ -126,12 +128,21 @@ function renderCopilotInstructions(document) {
 }
 
 function renderSetup(profile) {
-  return `# GitHub Copilot Setup\n\n## Prerequisites\n\n${bullets(profile.setup.prerequisites)}\n\n## Setup\n\n${numbered(profile.setup.steps)}\n`;
+  return `# GitHub Copilot Setup\n\n## Prerequisites\n\n${bullets(profile.setup.prerequisites)}\n\n## Cloud Boundary\n\n- Repository scope: one repository\n- Branch scope: one branch\n- Pull request limit: ${profile.cloud.pull_request_limit}\n- Session limit: ${profile.cloud.session_limit_minutes} minutes\n\n## Setup\n\n${numbered(profile.setup.steps)}\n`;
 }
 
-function renderSessionHook(profile) {
-  const payload = { systemMessage: profile.session_context };
-  return `const payload = ${JSON.stringify(payload)};\nprocess.stdout.write(\`${'${JSON.stringify(payload)}'}\\n\`);\n`;
+function cloudPolicy(profile) {
+  const roleTools = Object.fromEntries([...profile.roles].sort((left, right) => compareText(left.id, right.id)).map((role) => [role.id, [...role.tools].sort(compareText)]));
+  return {
+    schema_version: '1.0.0',
+    repository_scope: profile.cloud.repository_scope,
+    branch_scope: profile.cloud.branch_scope,
+    pull_request_limit: profile.cloud.pull_request_limit,
+    session_limit_minutes: profile.cloud.session_limit_minutes,
+    role_tools: roleTools,
+    allowed_tools: [...new Set(Object.values(roleTools).flat())].sort(compareText),
+    session_context: profile.session_context,
+  };
 }
 
 export function planGithubAdapter(document) {
@@ -146,9 +157,13 @@ export function planGithubAdapter(document) {
     for (const role of [...profile.roles].sort((left, right) => compareText(left.id, right.id))) files[`.github/agents/${role.id}.agent.md`] = renderAgent(role, profile);
     for (const capability of [...profile.capabilities].sort((left, right) => compareText(left.id, right.id))) files[`.github/skills/${capability.id}/SKILL.md`] = renderSkill(capability, profile.roles);
     for (const instruction of [...profile.instructions].sort((left, right) => compareText(left.id, right.id))) files[`.github/instructions/${instruction.id}.instructions.md`] = renderInstruction(instruction);
-    for (const prompt of [...profile.prompts].sort((left, right) => compareText(left.id, right.id))) files[`.github/prompts/${prompt.id}.prompt.md`] = renderPrompt(prompt);
-    files['.github/hooks/frootai-session-start.json'] = stableJson({ hooks: { SessionStart: [{ type: 'command', command: 'node .github/hooks/frootai-session-start.mjs', timeout: 5 }] } });
-    files['.github/hooks/frootai-session-start.mjs'] = renderSessionHook(profile);
+    for (const prompt of [...profile.prompts].sort((left, right) => compareText(left.id, right.id))) files[`.github/prompts/${prompt.id}.prompt.md`] = renderPrompt(prompt, profile.roles);
+    files['.github/frootai-cloud-policy.json'] = stableJson(cloudPolicy(profile));
+    files['.github/hooks/frootai-cloud-guard.mjs'] = cloudGuardSource;
+    files['.github/hooks/frootai-hooks.json'] = stableJson({ hooks: {
+      PreToolUse: [{ type: 'command', command: 'node .github/hooks/frootai-cloud-guard.mjs guard', timeout: 5 }],
+      SessionStart: [{ type: 'command', command: 'node .github/hooks/frootai-cloud-guard.mjs init', timeout: 5 }],
+    } });
   }
 
   const sortedFiles = Object.fromEntries(Object.entries(files).sort(([left], [right]) => compareText(left, right)));
