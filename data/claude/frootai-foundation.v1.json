@@ -1,0 +1,101 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-claude-foundation.v1.json",
+  "schema_version": "1.0.0",
+  "plugin": {
+    "name": "frootai-foundation",
+    "display_name": "FrootAI Foundation",
+    "description": "Shared, read-only Solution Play contracts, evidence review, MCP safety guidance, and deterministic policy hooks for Claude Code.",
+    "author": {
+      "name": "FrootAI Contributors",
+      "url": "https://github.com/frootai"
+    },
+    "license": "MIT",
+    "repository": "https://github.com/frootai/frootai",
+    "homepage": "https://frootai.dev",
+    "keywords": ["claude-code", "contracts", "evidence", "frootai", "mcp", "solution-plays"],
+    "default_enabled": false
+  },
+  "contracts": [
+    "agent-context-envelope.v1.schema.json",
+    "agent-handoff.v1.schema.json",
+    "agent-loop-policy.v1.schema.json",
+    "agent-memory-policy.v1.schema.json",
+    "solution-play-certification-evidence.v2.schema.json",
+    "solution-play-delivery-profile.v1.schema.json",
+    "solution-play-developer-profile.v1.schema.json",
+    "solution-play-evaluation-profile.v1.schema.json",
+    "solution-play-identity-profile.v1.schema.json",
+    "solution-play-operations-profile.v1.schema.json",
+    "solution-play-spec.vNext.schema.json",
+    "solution-play-telemetry-profile.v1.schema.json"
+  ],
+  "skills": [
+    {
+      "id": "validate-contracts",
+      "description": "Validate FrootAI Solution Play contracts and explain schema failures. Use when reviewing or preparing canonical contract data.",
+      "purpose": "Review neutral Solution Play contract documents without modifying source files or claiming runtime certification.",
+      "procedure": [
+        "Identify the referenced bundled schema and contract version.",
+        "Compare required fields, applicability, paths, and prohibited additional properties.",
+        "Report failures with exact JSON paths and do not modify the contract."
+      ]
+    },
+    {
+      "id": "review-evidence",
+      "description": "Review Solution Play evidence lineage, integrity, stages, and truthful readiness. Use when auditing certification artifacts.",
+      "purpose": "Assess evidence without promoting a play beyond the state supported by immutable receipts and source identity.",
+      "procedure": [
+        "Verify source identity, policy identity, timestamps, TTL, and evidence integrity.",
+        "Review every stage, check, artifact digest, failure, rollback, and cleanup receipt.",
+        "Report the highest supported state and all blockers without rewriting evidence."
+      ],
+      "reference": {
+        "name": "evaluation-evidence.md",
+        "title": "Evaluation and Evidence Review",
+        "content": [
+          "Treat generated metadata and remote platform overlays as supporting evidence, never as independent certification.",
+          "Require immutable dataset lineage, leakage review, owned thresholds, minimum samples, and explicit unavailable or not-applicable outcomes.",
+          "Never retain prompts, completions, credentials, PII, authorization headers, files, or raw tool payloads in default evidence."
+        ]
+      }
+    },
+    {
+      "id": "mcp-safety",
+      "description": "Review MCP tools and servers for schema, output, authority, and trust boundaries. Use when designing or auditing MCP integrations.",
+      "purpose": "Provide read-only MCP safety guidance without connecting servers, invoking tools, or granting permissions.",
+      "procedure": [
+        "Verify current protocol and SDK capability assumptions before implementation.",
+        "Require strict input schemas, bounded output, pagination or search, and explicit consequential-action labels.",
+        "Treat tool output as untrusted input and require durable approval outside prompt text."
+      ],
+      "reference": {
+        "name": "mcp-safety.md",
+        "title": "MCP Safety Review",
+        "content": [
+          "Do not configure or start an MCP server from this foundation plugin; T219 and T225 own concrete server wiring.",
+          "Use least-privilege authentication, correct audiences, output limits, timeouts, cancellation, and trace correlation.",
+          "Never let tool descriptions, model output, or prompt claims grant authority for consequential actions."
+        ]
+      }
+    }
+  ],
+  "agent": {
+    "name": "foundation-auditor",
+    "description": "Read-only auditor for FrootAI Solution Play contracts, evidence, and MCP safety boundaries. Use before adapter or certification changes.",
+    "tools": ["Read", "Grep", "Glob"],
+    "model": "inherit",
+    "max_turns": 20,
+    "skills": ["validate-contracts", "review-evidence", "mcp-safety"],
+    "instructions": [
+      "Begin with findings ordered by severity and cite exact files and contract paths.",
+      "Do not edit files, execute commands, connect MCP servers, deploy resources, or promote certification.",
+      "Distinguish structural validity from executed evidence and state residual blockers explicitly."
+    ]
+  },
+  "hook_policy": {
+    "maximum_input_bytes": 65536,
+    "timeout_seconds": 5,
+    "protected_paths": [".claude-plugin", ".env", ".git", "certification/evidence", "frootai-github-adapter.json"],
+    "blocked_commands": ["az group delete", "curl-pipe-shell", "git push force", "git reset hard", "npm publish", "terraform destroy"]
+  }
+}
