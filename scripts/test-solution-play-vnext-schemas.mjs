@@ -9,6 +9,7 @@ import addFormats from 'ajv-formats';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const schemaNames = [
   'solution-play-spec.vNext.schema.json',
+  'solution-play-developer-profile.v1.schema.json',
   'solution-play-delivery-profile.v1.schema.json',
   'solution-play-telemetry-profile.v1.schema.json',
   'solution-play-evaluation-profile.v1.schema.json',
@@ -35,12 +36,13 @@ test('all vNext schemas compile in strict mode', () => {
   for (const validate of validators.values()) assert.equal(typeof validate, 'function');
 });
 
-test('optional agent contracts require an explicit not-applicable reason', () => {
+test('optional developer and agent contracts require an explicit not-applicable reason', () => {
   const validators = validatorMap();
-  const titles = ['Agent Context Envelope v1', 'Agent Handoff v1', 'Agent Loop Policy v1', 'Agent Memory Policy v1'];
+  const titles = ['Solution Play Developer Profile v1', 'Agent Context Envelope v1', 'Agent Handoff v1', 'Agent Loop Policy v1', 'Agent Memory Policy v1'];
   for (const title of titles) {
     const validate = validators.get(title);
-    assert.equal(validate({ schema_version: '1.0.0', applicability: 'not_applicable', reason: 'This play uses deterministic code only.' }), true, title);
+    const play = title === 'Solution Play Developer Profile v1' ? { play: '01-enterprise-rag' } : {};
+    assert.equal(validate({ schema_version: '1.0.0', ...play, applicability: 'not_applicable', reason: 'This play uses deterministic code only.' }), true, title);
     assert.equal(validate({ schema_version: '1.0.0', applicability: 'not_applicable' }), false, title);
     assert.equal(validate({ schema_version: '1.0.0', applicability: 'applicable' }), false, title);
   }
@@ -55,7 +57,7 @@ test('delivery profile rejects architecture-only applicable plays', () => {
 test('vNext specification requires telemetry and evaluation contract references', () => {
   const validate = validatorMap().get('Solution Play Specification vNext');
   const spec = {
-    schema_version: '2.2.0',
+    schema_version: '2.3.0',
     play: '01-enterprise-rag',
     version: '1.0.0',
     title: 'Enterprise RAG',
@@ -66,6 +68,7 @@ test('vNext specification requires telemetry and evaluation contract references'
     },
     contracts: {
       delivery_profile: 'contracts/delivery-profile.v1.json',
+      developer_profile: 'contracts/developer-profile.v1.json',
       telemetry: 'contracts/telemetry-profile.v1.json',
       evaluation: 'contracts/evaluation-profile.v1.json',
       identity: 'contracts/identity-profile.v1.json',
@@ -83,16 +86,19 @@ test('vNext specification requires telemetry and evaluation contract references'
   assert.equal(validate(spec), false);
 });
 
-test('vNext specification requires identity and operations contract references', () => {
+test('vNext specification requires developer, identity, and operations contract references', () => {
   const validate = validatorMap().get('Solution Play Specification vNext');
   const spec = {
-    schema_version: '2.2.0', play: '01-enterprise-rag', version: '1.0.0', title: 'Enterprise RAG',
+    schema_version: '2.3.0', play: '01-enterprise-rag', version: '1.0.0', title: 'Enterprise RAG',
     description: 'A secure enterprise retrieval augmented generation reference implementation.',
     architecture: { runtime: { pattern: 'workflow', description: 'A typed runtime workflow with explicit operational controls.' }, developer_agents: { topology: 'none', rationale: 'Developer agents are intentionally outside this runtime fixture.' } },
-    contracts: { delivery_profile: 'contracts/delivery-profile.v1.json', telemetry: 'contracts/telemetry-profile.v1.json', evaluation: 'contracts/evaluation-profile.v1.json', identity: 'contracts/identity-profile.v1.json', operations: 'contracts/operations-profile.v1.json', context: 'contracts/context.v1.json', handoff: 'contracts/handoff.v1.json', loop: 'contracts/loop.v1.json', memory: 'contracts/memory.v1.json', evidence: 'contracts/evidence.v2.json' },
+    contracts: { delivery_profile: 'contracts/delivery-profile.v1.json', developer_profile: 'contracts/developer-profile.v1.json', telemetry: 'contracts/telemetry-profile.v1.json', evaluation: 'contracts/evaluation-profile.v1.json', identity: 'contracts/identity-profile.v1.json', operations: 'contracts/operations-profile.v1.json', context: 'contracts/context.v1.json', handoff: 'contracts/handoff.v1.json', loop: 'contracts/loop.v1.json', memory: 'contracts/memory.v1.json', evidence: 'contracts/evidence.v2.json' },
     official_sources: [{ url: 'https://example.com/reference', retrieved_at: '2026-08-02T00:00:00Z', status: 'ga', tested_version: '1.0.0', claim: 'Fixture source' }]
   };
   assert.equal(validate(spec), true, JSON.stringify(validate.errors));
+  delete spec.contracts.developer_profile;
+  assert.equal(validate(spec), false);
+  spec.contracts.developer_profile = 'contracts/developer-profile.v1.json';
   delete spec.contracts.identity;
   assert.equal(validate(spec), false);
   spec.contracts.identity = 'contracts/identity-profile.v1.json';

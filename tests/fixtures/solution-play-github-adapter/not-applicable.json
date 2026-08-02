@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "play": "00-github-adapter-fixture",
+  "applicability": "not_applicable",
+  "reason": "This fixture intentionally has no developer-agent projection."
+}
