@@ -13,6 +13,8 @@ on:
       - 'tests/fixtures/solution-play-delivery-profile/**'
       - 'tests/fixtures/solution-play-telemetry-profile/**'
       - 'tests/fixtures/solution-play-evaluation-profile/**'
+      - 'tests/fixtures/solution-play-identity-profile/**'
+      - 'tests/fixtures/solution-play-operations-profile/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
@@ -29,6 +31,8 @@ on:
       - 'tests/fixtures/solution-play-delivery-profile/**'
       - 'tests/fixtures/solution-play-telemetry-profile/**'
       - 'tests/fixtures/solution-play-evaluation-profile/**'
+      - 'tests/fixtures/solution-play-identity-profile/**'
+      - 'tests/fixtures/solution-play-operations-profile/**'
       - 'data/certification/**'
       - 'orchard/schema/solution-play-index.schema.json'
       - 'orchard/examples/solution-play-index.example.json'
@@ -55,6 +59,10 @@ jobs:
           npm run validate:solution-play-telemetry
           npm run test:solution-play-evaluation
           npm run validate:solution-play-evaluation
+          npm run test:solution-play-identity
+          npm run validate:solution-play-identity
+          npm run test:solution-play-operations
+          npm run validate:solution-play-operations
           npm run contracts:inventory
           npm run quality:solution-plays
 

@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-operations-profile.v1.json",
+  "title": "Solution Play Operations Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 20 },
+    "operations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_root", "environments", "platform", "cost", "data_governance", "deployment", "alerts", "runbook"],
+      "properties": {
+        "evidence_root": { "$ref": "#/$defs/path" },
+        "environments": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/environment" }
+        },
+        "platform": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["regions", "residency", "models", "quotas", "capacity", "scaling", "failover"],
+          "properties": {
+            "regions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 2 } },
+            "residency": { "$ref": "#/$defs/assumption" },
+            "models": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/model" } },
+            "quotas": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/quota" } },
+            "capacity": { "$ref": "#/$defs/assumption" },
+            "scaling": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["minimum", "maximum", "signals", "resource_limits_evidence"],
+              "properties": {
+                "minimum": { "type": "integer", "minimum": 0 },
+                "maximum": { "type": "integer", "minimum": 1 },
+                "signals": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 2 } },
+                "resource_limits_evidence": { "$ref": "#/$defs/path" }
+              }
+            },
+            "failover": { "$ref": "#/$defs/failover" }
+          }
+        },
+        "cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["currency", "monthly_estimate", "estimate_evidence", "unit_economics", "budget", "runaway_controls"],
+          "properties": {
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+            "monthly_estimate": { "type": "number", "minimum": 0 },
+            "estimate_evidence": { "$ref": "#/$defs/path" },
+            "unit_economics": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["unit", "estimated_cost", "monthly_volume", "basis"],
+              "properties": {
+                "unit": { "type": "string", "minLength": 2 },
+                "estimated_cost": { "type": "number", "minimum": 0 },
+                "monthly_volume": { "type": "integer", "minimum": 0 },
+                "basis": { "type": "string", "minLength": 20 }
+              }
+            },
+            "budget": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["amount", "warning_percent", "hard_stop_percent", "owner", "alert_id"],
+              "properties": {
+                "amount": { "type": "number", "exclusiveMinimum": 0 },
+                "warning_percent": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+                "hard_stop_percent": { "type": "number", "minimum": 100, "maximum": 200 },
+                "owner": { "type": "string", "minLength": 3 },
+                "alert_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" }
+              }
+            },
+            "runaway_controls": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["maximum_cost_per_operation", "maximum_operations_per_window", "window_seconds", "enforcement"],
+              "properties": {
+                "maximum_cost_per_operation": { "type": "number", "exclusiveMinimum": 0 },
+                "maximum_operations_per_window": { "type": "integer", "minimum": 1 },
+                "window_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+                "enforcement": { "enum": ["reject", "degrade", "require-approval"] }
+              }
+            }
+          }
+        },
+        "data_governance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["classification", "retention_days", "deletion", "backup", "legal_hold"],
+          "properties": {
+            "classification": { "enum": ["public", "internal", "confidential", "restricted"] },
+            "retention_days": { "type": "integer", "minimum": 0, "maximum": 3650 },
+            "deletion": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["command_ref", "verification_receipt_path", "maximum_completion_hours"],
+              "properties": {
+                "command_ref": { "type": "string", "minLength": 3 },
+                "verification_receipt_path": { "$ref": "#/$defs/path" },
+                "maximum_completion_hours": { "type": "integer", "minimum": 1, "maximum": 720 }
+              }
+            },
+            "backup": { "$ref": "#/$defs/backup" },
+            "legal_hold": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["applicability", "policy_reference", "release_authority"],
+                  "properties": {
+                    "applicability": { "const": "applicable" },
+                    "policy_reference": { "type": "string", "minLength": 3 },
+                    "release_authority": { "type": "string", "minLength": 3 }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["applicability", "reason"],
+                  "properties": {
+                    "applicability": { "const": "not_applicable" },
+                    "reason": { "type": "string", "minLength": 20 }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "deployment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["preview", "smoke", "rollback", "disaster_recovery", "cleanup"],
+          "properties": {
+            "preview": { "$ref": "#/$defs/control" },
+            "smoke": { "$ref": "#/$defs/control" },
+            "rollback": { "$ref": "#/$defs/tested_control" },
+            "disaster_recovery": { "$ref": "#/$defs/tested_control" },
+            "cleanup": { "$ref": "#/$defs/tested_control" }
+          }
+        },
+        "alerts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/alert" }
+        },
+        "runbook": { "$ref": "#/$defs/runbook" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "applicability": { "const": "applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["operations"], "properties": { "reason": false, "operations": {} } }
+    },
+    {
+      "if": { "properties": { "applicability": { "const": "not_applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["reason"], "properties": { "reason": {}, "operations": false } }
+    }
+  ],
+  "$defs": {
+    "path": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:|/|.*(?:^|/)\\.\\.?(/|$)|.*\\.\\.).+$" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "classification", "promotion_from", "isolation", "public_access", "approval_operation"],
+      "properties": {
+        "name": { "enum": ["local", "ci", "development", "staging", "production"] },
+        "classification": { "enum": ["nonproduction", "preproduction", "production"] },
+        "promotion_from": { "type": ["string", "null"], "enum": [null, "local", "ci", "development", "staging"] },
+        "isolation": { "enum": ["process", "workspace", "account", "subscription", "tenant"] },
+        "public_access": { "enum": ["disabled", "restricted", "enabled-approved"] },
+        "approval_operation": { "type": ["string", "null"], "enum": [null, "production-deploy"] }
+      }
+    },
+    "assumption": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "value", "evidence_path"],
+          "properties": {
+            "status": { "const": "evidenced" },
+            "value": { "type": "string", "minLength": 3 },
+            "evidence_path": { "$ref": "#/$defs/path" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "blocker", "owner"],
+          "properties": {
+            "status": { "const": "unavailable" },
+            "blocker": { "type": "string", "minLength": 20 },
+            "owner": { "type": "string", "minLength": 3 }
+          }
+        }
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "region", "availability", "fallback"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "region": { "type": "string", "minLength": 2 },
+        "availability": { "$ref": "#/$defs/assumption" },
+        "fallback": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "quota": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "service", "metric", "required", "available", "unit", "evidence_path"],
+          "properties": {
+            "status": { "const": "evidenced" },
+            "service": { "type": "string", "minLength": 2 },
+            "metric": { "type": "string", "minLength": 2 },
+            "required": { "type": "number", "minimum": 0 },
+            "available": { "type": "number", "minimum": 0 },
+            "unit": { "type": "string", "minLength": 1 },
+            "evidence_path": { "$ref": "#/$defs/path" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "service", "metric", "blocker", "owner"],
+          "properties": {
+            "status": { "const": "unavailable" },
+            "service": { "type": "string", "minLength": 2 },
+            "metric": { "type": "string", "minLength": 2 },
+            "blocker": { "type": "string", "minLength": 20 },
+            "owner": { "type": "string", "minLength": 3 }
+          }
+        }
+      ]
+    },
+    "backup": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "frequency_hours", "retention_days", "restore_test_receipt_path"],
+          "properties": {
+            "applicability": { "const": "applicable" },
+            "frequency_hours": { "type": "integer", "minimum": 1, "maximum": 168 },
+            "retention_days": { "type": "integer", "minimum": 1, "maximum": 3650 },
+            "restore_test_receipt_path": { "$ref": "#/$defs/path" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "reason"],
+          "properties": {
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    },
+    "failover": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "rto_minutes", "rpo_minutes", "test_receipt_path"],
+          "properties": {
+            "mode": { "enum": ["active-active", "active-passive", "restore"] },
+            "rto_minutes": { "type": "integer", "minimum": 0, "maximum": 10080 },
+            "rpo_minutes": { "type": "integer", "minimum": 0, "maximum": 10080 },
+            "test_receipt_path": { "$ref": "#/$defs/path" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "reason"],
+          "properties": {
+            "mode": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_ref", "receipt_path"],
+      "properties": {
+        "command_ref": { "type": "string", "minLength": 3 },
+        "receipt_path": { "$ref": "#/$defs/path" }
+      }
+    },
+    "tested_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_ref", "success_test_receipt_path", "partial_failure_test_receipt_path", "expected_postcondition"],
+      "properties": {
+        "command_ref": { "type": "string", "minLength": 3 },
+        "success_test_receipt_path": { "$ref": "#/$defs/path" },
+        "partial_failure_test_receipt_path": { "$ref": "#/$defs/path" },
+        "expected_postcondition": { "type": "string", "minLength": 20 }
+      }
+    },
+    "alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "category", "severity", "signal", "condition", "window_seconds", "receivers", "test_receipt_path"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" },
+        "category": { "enum": ["availability", "errors", "latency", "cost", "quality", "quota", "security"] },
+        "severity": { "enum": [0, 1, 2, 3, 4] },
+        "signal": { "type": "string", "minLength": 3 },
+        "condition": { "type": "string", "minLength": 3 },
+        "window_seconds": { "type": "integer", "minimum": 60, "maximum": 86400 },
+        "receivers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "destination_reference"],
+            "properties": {
+              "type": { "enum": ["email", "webhook", "sms", "pager", "oncall"] },
+              "destination_reference": { "type": "string", "pattern": "^\\$notification\\.[A-Z][A-Z0-9_]{2,127}$" }
+            }
+          }
+        },
+        "test_receipt_path": { "$ref": "#/$defs/path" }
+      }
+    },
+    "runbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "owner", "escalation", "alert_ids", "slos", "symptoms", "diagnostics", "mitigations", "recovery", "post_incident_evidence_path"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "owner": { "type": "string", "minLength": 3 },
+        "escalation": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } },
+        "alert_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,63}$" } },
+        "slos": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["indicator", "objective", "window_days"],
+            "properties": {
+              "indicator": { "type": "string", "minLength": 3 },
+              "objective": { "type": "number", "minimum": 0, "maximum": 1 },
+              "window_days": { "type": "integer", "minimum": 1, "maximum": 365 }
+            }
+          }
+        },
+        "symptoms": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+        "diagnostics": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+        "mitigations": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+        "recovery": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+        "post_incident_evidence_path": { "$ref": "#/$defs/path" }
+      }
+    }
+  }
+}
