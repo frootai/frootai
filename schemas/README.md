@@ -42,6 +42,7 @@ node scripts/validate-primitives.js --verbose
 The additive modernization contract is defined by:
 
 - `solution-play-spec.vNext.schema.json`
+- `solution-play-claude-foundation.v1.schema.json`
 - `solution-play-developer-profile.v1.schema.json`
 - `solution-play-delivery-profile.v1.schema.json`
 - `solution-play-telemetry-profile.v1.schema.json`
@@ -73,12 +74,15 @@ npm run validate:solution-play-operations
 npm run test:solution-play-operations
 npm run test:solution-play-github-adapter
 npm run test:solution-play-github-conformance
+npm run test:solution-play-claude-foundation
 npm run test:evidence-v2-migration
 ```
 
 Delivery profile v1.2 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
 
 Developer profile v1.1 is the neutral source for developer roles, capabilities, handoffs, instructions, prompts, setup steps, session context, guardrails, least-privilege tool aliases, and immutable cloud limits. T215 deterministically projects applicable fixture profiles into GitHub Copilot artifacts. T216 binds each agent and prompt to its role tools and generates a self-contained SessionStart/PreToolUse guard for one repository, one named branch, one pull request, and a 59-minute session. T217 parses current YAML frontmatter, rejects deprecated chat modes and tool aliases, validates skills and bounded hooks, resolves agents/handoffs/prompts/links, enforces exact role tools, verifies the manifest and all artifact digests, rejects symlinks and stale files, and compares every byte against deterministic regeneration. Canonical play writes remain disabled.
+
+Claude foundation profile v1 defines the shared `frootai-foundation` plugin without per-play content. T218 generates a cache-safe plugin with 12 neutral contract schemas, three read-only skills, one read-only auditor, an exec-form fail-closed hook, MIT license, and complete artifact digests. Validation rejects external component paths, missing cache files, schema/license drift, widened tools, unsupported plugin-agent fields, shell-form hooks, reserved T219-T221 components, symlinks, stale files, and rehashed byte drift. The plugin is disabled by default and omits an explicit version so git SHA owns active-development cache identity. Claude CLI install/reload/cache execution remains T222; no public marketplace is created in T218.
 
 Telemetry profile v1 defines OpenTelemetry initialization, stable resource identity sources, W3C correlation, lifecycle span applicability, default-deny attributes, prohibited content categories, exporter failure behavior, and retention ownership. Its sanitizer retains only explicit rules, fails closed when HMAC material is unavailable, and never records raw prompts, completions, files, credentials, PII, authorization headers, or tool payloads by default.
 
