@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "play": "00-github-adapter-fixture",
   "applicability": "applicable",
   "profile": {
@@ -11,14 +11,16 @@
         "name": "Reference Builder",
         "description": "Use when implementing the fixture reference application from its canonical contract.",
         "responsibility": "Implement the bounded reference application and provide testable evidence to the reviewer.",
-        "capabilities": ["build-reference"]
+        "capabilities": ["build-reference"],
+        "tools": ["read", "search", "edit", "execute"]
       },
       {
         "id": "reviewer",
         "name": "Reference Reviewer",
         "description": "Use when reviewing the fixture implementation and its evidence against acceptance criteria.",
         "responsibility": "Review implementation evidence independently and report concrete blockers without editing code.",
-        "capabilities": ["review-reference"]
+        "capabilities": ["review-reference"],
+        "tools": ["read", "search", "execute"]
       }
     ],
     "capabilities": [
@@ -89,6 +91,12 @@
         "Confirm the generated adapter manifest matches the source profile digest.",
         "Select the appropriate generated role or prompt for the task."
       ]
+    },
+    "cloud": {
+      "repository_scope": "single",
+      "branch_scope": "single",
+      "pull_request_limit": 1,
+      "session_limit_minutes": 59
     },
     "session_context": "This workspace is a fixture-only GitHub adapter projection. It cannot deploy, promote certification, or write canonical plays.",
     "guardrails": [

@@ -7,14 +7,14 @@
   "required": ["schema_version", "play", "applicability"],
   "properties": {
     "$schema": { "type": "string", "format": "uri" },
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "1.1.0" },
     "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
     "applicability": { "enum": ["applicable", "not_applicable"] },
     "reason": { "type": "string", "minLength": 10 },
     "profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["display_name", "description", "roles", "capabilities", "handoffs", "instructions", "prompts", "setup", "session_context", "guardrails"],
+      "required": ["display_name", "description", "roles", "capabilities", "handoffs", "instructions", "prompts", "setup", "cloud", "session_context", "guardrails"],
       "properties": {
         "display_name": { "type": "string", "minLength": 1 },
         "description": { "type": "string", "minLength": 20 },
@@ -51,6 +51,17 @@
             "steps": { "$ref": "#/$defs/nonEmptyStrings" }
           }
         },
+        "cloud": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository_scope", "branch_scope", "pull_request_limit", "session_limit_minutes"],
+          "properties": {
+            "repository_scope": { "const": "single" },
+            "branch_scope": { "const": "single" },
+            "pull_request_limit": { "const": 1 },
+            "session_limit_minutes": { "const": 59 }
+          }
+        },
         "session_context": { "type": "string", "minLength": 20, "maxLength": 500 },
         "guardrails": { "$ref": "#/$defs/nonEmptyStrings" }
       }
@@ -77,13 +88,19 @@
     "role": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "description", "responsibility", "capabilities"],
+      "required": ["id", "name", "description", "responsibility", "capabilities", "tools"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "name": { "type": "string", "minLength": 1, "maxLength": 100 },
         "description": { "type": "string", "minLength": 20, "maxLength": 500 },
         "responsibility": { "type": "string", "minLength": 20 },
-        "capabilities": { "$ref": "#/$defs/nonEmptyStrings" }
+        "capabilities": { "$ref": "#/$defs/nonEmptyStrings" },
+        "tools": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["read", "search", "edit", "execute", "agent", "web", "todo"] },
+          "uniqueItems": true
+        }
       }
     },
     "capability": {
