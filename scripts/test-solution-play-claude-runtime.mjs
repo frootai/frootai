@@ -24,7 +24,7 @@ test('requires isolated temporary Claude state and a separate non-repository out
   const relative = validateRuntimeRoots({ configRoot: 'config', outputRoot: 'output' });
   assert.match(relative.errors.join('; '), /absolute path/);
   const userState = validateRuntimeRoots({ configRoot: os.homedir(), outputRoot: path.join(parent, 'output') });
-  assert.match(userState.errors.join('; '), /isolated child/);
+  assert.match(userState.errors.join('; '), /approved temporary directory/);
 });
 
 test('runs commands without a shell and returns bounded evidence', () => {

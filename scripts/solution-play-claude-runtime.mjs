@@ -49,8 +49,10 @@ export function validateRuntimeRoots({ configRoot, outputRoot }) {
   const config = physicalParent(configRoot);
   const output = physicalParent(outputRoot);
   const home = fs.realpathSync.native(os.homedir());
-  const temporaryRoot = fs.realpathSync.native(os.tmpdir());
-  if (config === home || !isInside(temporaryRoot, config)) errors.push('configRoot must be an isolated child of the operating-system temporary directory');
+  const temporaryRoots = [os.tmpdir(), process.env.RUNNER_TEMP]
+    .filter((value) => typeof value === 'string' && path.isAbsolute(value) && fs.existsSync(value))
+    .map((value) => fs.realpathSync.native(value));
+  if (config === home || !temporaryRoots.some((root) => isInside(root, config))) errors.push('configRoot must be an isolated child of an approved temporary directory');
   if (output === repositoryRoot || isInside(repositoryRoot, output)) errors.push('outputRoot must not write into the repository');
   if (output === config || isInside(output, config) || isInside(config, output)) errors.push('configRoot and outputRoot must be separate trees');
   return { valid: errors.length === 0, errors };
