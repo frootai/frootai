@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-claude-plugin.v1.json",
+  "title": "Solution Play Claude Plugin Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "title", "description", "plugin", "agents", "skills", "hook_policy", "mcp", "assets"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+    "plugin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "display_name", "author", "license", "repository", "homepage", "keywords", "default_enabled", "dependency"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^frootai-[0-9]{2,3}-[a-z0-9-]+$", "maxLength": 64 },
+        "display_name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "author": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "url"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "url": { "type": "string", "format": "uri" }
+          }
+        },
+        "license": { "const": "MIT" },
+        "repository": { "type": "string", "format": "uri" },
+        "homepage": { "type": "string", "format": "uri" },
+        "keywords": { "type": "array", "minItems": 3, "maxItems": 12, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "default_enabled": { "const": false },
+        "dependency": { "const": "frootai-foundation" }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "authority", "tools", "model", "max_turns", "skills", "instructions"],
+        "properties": {
+          "name": { "$ref": "#/$defs/id" },
+          "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+          "authority": { "enum": ["read-only", "project-write"] },
+          "tools": { "type": "array", "minItems": 1, "items": { "enum": ["Read", "Grep", "Glob", "Edit", "Bash"] }, "uniqueItems": true },
+          "model": { "const": "inherit" },
+          "max_turns": { "type": "integer", "minimum": 1, "maximum": 30 },
+          "skills": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+          "instructions": { "$ref": "#/$defs/nonEmptyStrings" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "authority": { "const": "read-only" } }, "required": ["authority"] },
+            "then": { "properties": { "tools": { "type": "array", "items": { "enum": ["Read", "Grep", "Glob"] } } } }
+          }
+        ]
+      }
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "authority", "purpose", "procedure", "allowed_tools"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+          "authority": { "enum": ["read-only", "project-write"] },
+          "purpose": { "type": "string", "minLength": 20 },
+          "procedure": { "$ref": "#/$defs/nonEmptyStrings" },
+          "allowed_tools": { "type": "array", "minItems": 1, "items": { "enum": ["Read", "Grep", "Glob", "Edit", "Bash"] }, "uniqueItems": true }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "authority": { "const": "read-only" } }, "required": ["authority"] },
+            "then": { "properties": { "allowed_tools": { "type": "array", "items": { "enum": ["Read", "Grep", "Glob"] } } } }
+          }
+        ]
+      }
+    },
+    "hook_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximum_input_bytes", "timeout_seconds", "protected_paths", "blocked_commands", "allowed_commands"],
+      "properties": {
+        "maximum_input_bytes": { "type": "integer", "minimum": 1024, "maximum": 65536 },
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 15 },
+        "protected_paths": { "$ref": "#/$defs/nonEmptyStrings" },
+        "blocked_commands": { "$ref": "#/$defs/nonEmptyStrings" },
+        "allowed_commands": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["server_id", "protocol_version", "instructions", "tool"],
+      "properties": {
+        "server_id": { "const": "play-context" },
+        "protocol_version": { "const": "2025-11-25" },
+        "instructions": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "tool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "description", "maximum_result_chars"],
+          "properties": {
+            "name": { "const": "get_play_context" },
+            "description": { "type": "string", "minLength": 20, "maxLength": 500 },
+            "maximum_result_chars": { "type": "integer", "minimum": 256, "maximum": 8192 }
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "content"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9-]+\\.json$" },
+          "content": { "type": "object" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+    "nonEmptyStrings": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+  }
+}

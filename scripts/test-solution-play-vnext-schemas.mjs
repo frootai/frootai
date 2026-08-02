@@ -10,6 +10,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const schemaNames = [
   'solution-play-spec.vNext.schema.json',
   'solution-play-claude-foundation.v1.schema.json',
+  'solution-play-claude-plugin.v1.schema.json',
   'solution-play-developer-profile.v1.schema.json',
   'solution-play-delivery-profile.v1.schema.json',
   'solution-play-telemetry-profile.v1.schema.json',
