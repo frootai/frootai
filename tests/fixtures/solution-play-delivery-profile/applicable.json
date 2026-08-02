@@ -1,0 +1,97 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-delivery-profile.v1.json",
+  "schema_version": "1.1.0",
+  "play": "01-enterprise-rag",
+  "applicability": "applicable",
+  "vertical_slice": {
+    "root": "reference",
+    "topology": {
+      "kind": "deterministic-function",
+      "rationale": "A deterministic function is sufficient for this fixture behavior."
+    },
+    "entrypoint": "reference/app/main.mjs",
+    "layout": {
+      "app": "reference/app",
+      "tests": "reference/tests",
+      "evals": "reference/evals",
+      "ops": "reference/ops",
+      "observability": "reference/observability",
+      "evidence": "reference/evidence",
+      "developer_agents": "reference/developer-agents"
+    },
+    "infrastructure": {
+      "applicability": "applicable",
+      "path": "reference/infra"
+    },
+    "commands": {
+      "setup": {
+        "executable": "npm",
+        "arguments": ["ci"],
+        "working_directory": "reference",
+        "timeout_seconds": 300,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "restricted",
+        "mutation": "workspace",
+        "receipt": "reference/evidence/setup.json"
+      },
+      "start": {
+        "executable": "node",
+        "arguments": ["app/main.mjs", "--once"],
+        "working_directory": "reference",
+        "timeout_seconds": 60,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "none",
+        "mutation": "none",
+        "receipt": "reference/evidence/start.json"
+      },
+      "test": {
+        "executable": "node",
+        "arguments": ["--test", "tests/*.test.mjs"],
+        "working_directory": "reference",
+        "timeout_seconds": 300,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "none",
+        "mutation": "workspace",
+        "receipt": "reference/evidence/test.json"
+      },
+      "deploy": {
+        "executable": "node",
+        "arguments": ["ops/deploy.mjs", "--non-interactive"],
+        "working_directory": "reference",
+        "timeout_seconds": 900,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "required",
+        "mutation": "external",
+        "receipt": "reference/evidence/deploy.json"
+      },
+      "rollback": {
+        "executable": "node",
+        "arguments": ["ops/rollback.mjs", "--non-interactive"],
+        "working_directory": "reference",
+        "timeout_seconds": 900,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "required",
+        "mutation": "external",
+        "receipt": "reference/evidence/rollback.json"
+      },
+      "cleanup": {
+        "executable": "node",
+        "arguments": ["ops/cleanup.mjs", "--non-interactive"],
+        "working_directory": "reference",
+        "timeout_seconds": 900,
+        "mode": "finite",
+        "stdin": "closed",
+        "network": "required",
+        "mutation": "external",
+        "receipt": "reference/evidence/cleanup.json",
+        "idempotent": true
+      }
+    },
+    "environments": ["local", "ci", "development"]
+  }
+}
