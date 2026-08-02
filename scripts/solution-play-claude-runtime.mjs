@@ -109,13 +109,14 @@ export function resolveClaudeExecutable(requested, source = process.env) {
   packageCandidates.push(path.join(path.dirname(process.execPath), 'node_modules', '@anthropic-ai', 'claude-code'));
   for (const packageRoot of packageCandidates) {
     const manifestPath = path.join(packageRoot, 'package.json');
-    if (!fs.existsSync(manifestPath)) continue;
-    const manifest = readJson(manifestPath);
+    let manifest;
+    try { manifest = readJson(manifestPath); }
+    catch { continue; }
     if (manifest.name !== '@anthropic-ai/claude-code') continue;
     const relativeBin = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.claude;
     if (typeof relativeBin !== 'string') continue;
     const executable = path.resolve(packageRoot, relativeBin);
-    if (fs.existsSync(executable) && fs.lstatSync(executable).isFile()) return executable;
+    if (isInside(packageRoot, executable)) return executable;
   }
   return 'claude';
 }
@@ -129,9 +130,13 @@ function parseJson(result, label) {
 }
 
 function readJson(filePath) {
-  const stat = fs.lstatSync(filePath);
-  if (!stat.isFile() || stat.isSymbolicLink()) throw new Error(`runtime metadata must be a regular file: ${path.basename(filePath)}`);
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const descriptor = fs.openSync(filePath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+  try {
+    if (!fs.fstatSync(descriptor).isFile()) throw new Error(`runtime metadata must be a regular file: ${path.basename(filePath)}`);
+    return JSON.parse(fs.readFileSync(descriptor, 'utf8'));
+  } finally {
+    fs.closeSync(descriptor);
+  }
 }
 
 function marketplaceName(channel) {
