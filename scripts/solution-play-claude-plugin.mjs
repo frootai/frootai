@@ -150,7 +150,6 @@ function renderPluginManifest(document) {
     defaultEnabled: document.plugin.default_enabled,
     dependencies: [document.plugin.dependency],
     skills: './skills/',
-    agents: [...document.agents].sort((left, right) => compareText(left.name, right.name)).map((agent) => `./agents/${agent.name}.md`),
     hooks: './hooks/hooks.json',
     mcpServers: './.mcp.json',
   });

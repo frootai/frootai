@@ -61,6 +61,8 @@
     "generate:solution-play-claude-marketplace": "node scripts/solution-play-claude-marketplace.mjs",
     "validate:solution-play-claude-marketplace": "node scripts/validate-solution-play-claude-marketplace.mjs",
     "test:solution-play-claude-marketplace": "node --test scripts/test-solution-play-claude-marketplace.mjs",
+    "test:solution-play-claude-runtime": "node --test scripts/test-solution-play-claude-runtime.mjs",
+    "validate:solution-play-claude-runtime": "node scripts/solution-play-claude-runtime.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",

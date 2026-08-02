@@ -55,7 +55,7 @@ test('strict source profile produces a deterministic 15-file independently packa
   assert.equal('version' in manifest, false);
   assert.deepEqual(manifest.dependencies, ['frootai-foundation']);
   assert.equal(manifest.mcpServers, './.mcp.json');
-  assert.deepEqual(manifest.agents, ['./agents/play-builder.md', './agents/play-reviewer.md']);
+  assert.equal('agents' in manifest, false);
   assert.match(first.files['agents/play-reviewer.md'], /mcp__plugin_frootai-00-claude-plugin-fixture_play-context__get_play_context/);
 });
 
@@ -188,7 +188,7 @@ test('rejects manifest dependency, component path, and release ownership drift',
   assert.match(errors, /version must be omitted/);
   assert.match(errors, /disabled by default/);
   assert.match(errors, /frootai-foundation dependency/);
-  assert.match(errors, /component path/);
+  assert.match(errors, /unrecognized manifest field: agents/);
 });
 
 test('rejects agent, skill, hook, and MCP authority drift', (t) => {

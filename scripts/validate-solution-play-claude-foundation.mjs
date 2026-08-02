@@ -8,7 +8,7 @@ import { planClaudeFoundation, sha256, validateClaudeFoundationProfile } from '.
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const defaultProfilePath = path.join(repositoryRoot, 'data', 'claude', 'frootai-foundation.v1.json');
-const pluginManifestKeys = new Set(['name', 'displayName', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'defaultEnabled', 'skills', 'agents', 'hooks']);
+const pluginManifestKeys = new Set(['name', 'displayName', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'defaultEnabled', 'skills', 'hooks']);
 const skillKeys = new Set(['name', 'description', 'disallowed-tools']);
 const agentKeys = new Set(['name', 'description', 'tools', 'model', 'maxTurns', 'skills']);
 
@@ -103,7 +103,6 @@ function validatePluginManifest(document, root, files, errors) {
   if (manifest.license !== 'MIT') errors.push(`${relativePath}: license must match the repository license`);
   if (typeof manifest.description !== 'string' || manifest.description.length < 20) errors.push(`${relativePath}: description is invalid`);
   resolveComponent(root, manifest.skills, `${relativePath}: skills`, files, errors);
-  resolveComponent(root, manifest.agents, `${relativePath}: agents`, files, errors);
   resolveComponent(root, manifest.hooks, `${relativePath}: hooks`, files, errors);
 }
 

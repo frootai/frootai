@@ -8,7 +8,7 @@ import { planClaudePlayPlugin, sha256, stableJson, validateClaudePlayProfile } f
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const defaultProfilePath = path.join(repositoryRoot, 'data', 'claude', 'per-play-plugin-fixture.v1.json');
-const pluginManifestKeys = new Set(['name', 'displayName', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'defaultEnabled', 'dependencies', 'skills', 'agents', 'hooks', 'mcpServers']);
+const pluginManifestKeys = new Set(['name', 'displayName', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'defaultEnabled', 'dependencies', 'skills', 'hooks', 'mcpServers']);
 const skillKeys = new Set(['name', 'description', 'allowed-tools', 'disallowed-tools']);
 const agentKeys = new Set(['name', 'description', 'tools', 'disallowedTools', 'model', 'maxTurns', 'skills']);
 const readOnlyDenied = ['Write', 'Edit', 'Bash', 'PowerShell', 'NotebookEdit', 'Agent'].sort(compareText);
@@ -88,7 +88,6 @@ function validatePluginManifest(document, root, files, errors) {
   if (manifest.license !== 'MIT') errors.push(`${relativePath}: license must match the repository license`);
   if (JSON.stringify(manifest.dependencies) !== JSON.stringify(['frootai-foundation'])) errors.push(`${relativePath}: exactly one same-marketplace frootai-foundation dependency is required`);
   resolveComponent(root, manifest.skills, `${relativePath}: skills`, files, errors);
-  resolveComponent(root, manifest.agents, `${relativePath}: agents`, files, errors);
   resolveComponent(root, manifest.hooks, `${relativePath}: hooks`, files, errors);
   resolveComponent(root, manifest.mcpServers, `${relativePath}: mcpServers`, files, errors);
 }

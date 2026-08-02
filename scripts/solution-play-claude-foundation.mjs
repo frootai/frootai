@@ -85,7 +85,6 @@ function renderPluginManifest(profile) {
     keywords: [...profile.plugin.keywords].sort(compareText),
     defaultEnabled: profile.plugin.default_enabled,
     skills: './skills/',
-    agents: ['./agents/foundation-auditor.md'],
     hooks: './hooks/hooks.json',
   });
 }
