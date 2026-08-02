@@ -1,22 +1,22 @@
 {
   "version": "0.0.0",
-  "generated": "2026-08-02T17:43:57.356Z",
-  "commit": "4b5d9bec",
+  "generated": "2026-05-02T19:18:48.754Z",
+  "commit": "0bb28d3e",
   "stats": {
     "agents": 238,
-    "skills": 334,
-    "instructions": 185,
+    "skills": 333,
+    "instructions": 176,
     "hooks": 11,
     "plugins": 77,
-    "workflows": 24,
-    "cookbook": 71,
+    "workflows": 12,
+    "cookbook": 16,
     "plays": 101,
     "modules": 25,
     "mcpTools": 0,
-    "totalPrimitives": 940
+    "totalPrimitives": 863
   },
   "embeddedStats": {
-    "agents": 308,
+    "agents": 306,
     "skills": 304,
     "instructions": 304,
     "hooks": 101
@@ -881,7 +881,7 @@
       "plays": [
         "23-browser-automation-agent"
       ],
-      "lines": 126
+      "lines": 123
     },
     {
       "id": "fai-bun-expert",
@@ -1336,7 +1336,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 178
+      "lines": 176
     },
     {
       "id": "fai-dapr-expert",
@@ -1800,7 +1800,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 156
+      "lines": 154
     },
     {
       "id": "fai-graphql-expert",
@@ -2004,7 +2004,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 182
+      "lines": 180
     },
     {
       "id": "fai-jira-expert",
@@ -2070,7 +2070,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 151
+      "lines": 149
     },
     {
       "id": "fai-kubernetes-expert",
@@ -2230,7 +2230,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 151
+      "lines": 148
     },
     {
       "id": "fai-mentoring-agent",
@@ -2546,7 +2546,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 130
+      "lines": 128
     },
     {
       "id": "fai-play-01-builder",
@@ -4385,7 +4385,7 @@
         "29-mcp-server",
         "01-enterprise-rag"
       ],
-      "lines": 174
+      "lines": 172
     },
     {
       "id": "fai-qwik-expert",
@@ -4663,7 +4663,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 118
+      "lines": 116
     },
     {
       "id": "fai-rust-expert",
@@ -4709,7 +4709,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 143
+      "lines": 141
     },
     {
       "id": "fai-salesforce-expert",
@@ -5097,7 +5097,7 @@
       "plays": [
         "29-mcp-server"
       ],
-      "lines": 109
+      "lines": 107
     },
     {
       "id": "fai-tdd-green",
@@ -5403,7 +5403,7 @@
         "29-mcp-server",
         "01-enterprise-rag"
       ],
-      "lines": 152
+      "lines": 150
     },
     {
       "id": "fai-ux-designer",
@@ -5755,10 +5755,10 @@
       "id": "fai-az-cost-optimize",
       "folder": "skills/fai-az-cost-optimize",
       "name": "fai-az-cost-optimize",
-      "description": "|",
+      "description": "Analyze Azure AI workload spend with Cost Management API queries, flag overprovisioned PTU, identify semantic cache gaps, right-size model SKUs, and produce actionable FinOps recommendations with ROI estimates.",
       "waf": [],
       "plays": [],
-      "lines": 200
+      "lines": 196
     },
     {
       "id": "fai-azure-ai-foundry-setup",
@@ -5773,10 +5773,10 @@
       "id": "fai-azure-ai-search-index",
       "folder": "skills/fai-azure-ai-search-index",
       "name": "fai-azure-ai-search-index",
-      "description": "|",
+      "description": "Create Azure AI Search vector indexes with HNSW profiles, semantic ranker configuration, hybrid BM25+vector search, field mappings for chunked RAG documents, and batch indexing pipelines — resolving recall failures and irrelevant chunk retrieval.",
       "waf": [],
       "plays": [],
-      "lines": 220
+      "lines": 215
     },
     {
       "id": "fai-azure-app-config",
@@ -5827,10 +5827,10 @@
       "id": "fai-azure-cosmos-modeling",
       "folder": "skills/fai-azure-cosmos-modeling",
       "name": "fai-azure-cosmos-modeling",
-      "description": "|",
+      "description": "Design Cosmos DB data models with optimal partition keys, Request Unit (RU) estimation, vector search embedding storage, and analytical workload isolation — exceeding relational DB performance on RAG and time-series queries.",
       "waf": [],
       "plays": [],
-      "lines": 225
+      "lines": 220
     },
     {
       "id": "fai-azure-data-explorer",
@@ -6214,7 +6214,7 @@
       "id": "fai-cloud-design-patterns",
       "folder": "skills/fai-cloud-design-patterns",
       "name": "fai-cloud-design-patterns",
-      "description": "Apply cloud design patterns to AI workloads — bulkhead, retry with backoff, circuit breaker, CQRS, and the saga pattern. Use this skill when hardening resilience, designing distributed services, or fixing cascading failures — even if the user only says \"make this more reliable\".",
+      "description": "Apply cloud design patterns (bulkhead, retry, circuit breaker, CQRS) for AI workloads.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6241,7 +6241,7 @@
       "id": "fai-comment-tutorial",
       "folder": "skills/fai-comment-tutorial",
       "name": "fai-comment-tutorial",
-      "description": "Auto-generate code tutorials from comments and docstrings — narrative walkthroughs with runnable examples. Use this skill when turning code into a learning guide, building onboarding docs, or producing example-driven documentation — even if the user only says \"explain how this works\".",
+      "description": "Auto-generate code tutorials from comments and docstrings with executable examples.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6268,7 +6268,7 @@
       "id": "fai-containerize-aspnet",
       "folder": "skills/fai-containerize-aspnet",
       "name": "fai-containerize-aspnet",
-      "description": "Containerize ASP.NET Core AI APIs — multi-stage Dockerfiles, health checks, non-root runtime, and small images. Use this skill when dockerizing a .NET service, preparing for AKS/Container Apps, or shrinking image size — even if the user only says \"put this in a container\".",
+      "description": "Containerize ASP.NET Core AI APIs with Dockerfile multi-stage builds and health checks.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6277,7 +6277,7 @@
       "id": "fai-containerize-aspnet-framework",
       "folder": "skills/fai-containerize-aspnet-framework",
       "name": "fai-containerize-aspnet-framework",
-      "description": "Containerize legacy ASP.NET Framework (.NET Framework 4.x) apps for cloud deployment — Windows base images, IIS config, and lift-and-shift patterns. Use this skill when modernizing a legacy app, moving on-prem .NET to Azure, or dockerizing Windows workloads — even if the user only says \"move this ol",
+      "description": "Containerize legacy ASP.NET Framework apps for cloud deployment.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6304,7 +6304,7 @@
       "id": "fai-context-map",
       "folder": "skills/fai-context-map",
       "name": "fai-context-map",
-      "description": "Visualize DDD context maps — bounded contexts, relationships (partnership, anti-corruption layer, conformist), and integration points. Use this skill when mapping a complex system's domains, planning service boundaries, or aligning teams — even if the user only says \"map out how these services relat",
+      "description": "Visualize architecture context maps showing bounded domains and integration points.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6367,7 +6367,7 @@
       "id": "fai-copilot-usage-metrics",
       "folder": "skills/fai-copilot-usage-metrics",
       "name": "fai-copilot-usage-metrics",
-      "description": "Track GitHub Copilot usage metrics — seat utilization, acceptance rate, cost attribution, and adoption trends. Use this skill when measuring Copilot ROI, reporting adoption to leadership, or attributing cost by team — even if the user only says \"how is Copilot being used\".",
+      "description": "Track Copilot usage metrics for cost attribution, productivity analysis, and adoption monitoring.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6403,7 +6403,7 @@
       "id": "fai-daily-prep",
       "folder": "skills/fai-daily-prep",
       "name": "fai-daily-prep",
-      "description": "Automate daily developer prep — code audits, test-coverage checks, dependency updates, and a prioritized to-do. Use this skill when starting your day, setting up a morning automation, or keeping a repo healthy — even if the user only says \"what should I work on today\".",
+      "description": "Automate daily prep workflows: code audits, test coverage checks, dependency updates.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6439,19 +6439,10 @@
       "id": "fai-dead-code-removal",
       "folder": "skills/fai-dead-code-removal",
       "name": "fai-dead-code-removal",
-      "description": "Identify and remove dead code in Python/TypeScript — unused exports, unreachable branches, and orphaned files, verified by tooling. Use this skill when cleaning up a codebase, reducing bundle size, or before a refactor — even if the user only says \"remove unused code\".",
+      "description": "Identify and remove dead code paths in Python/TypeScript applications with automated tooling.",
       "waf": [],
       "plays": [],
       "lines": 162
-    },
-    {
-      "id": "fai-deep-wiki-generator",
-      "folder": "skills/fai-deep-wiki-generator",
-      "name": "fai-deep-wiki-generator",
-      "description": "|",
-      "waf": [],
-      "plays": [],
-      "lines": 67
     },
     {
       "id": "fai-deploy-01-enterprise-rag",
@@ -6763,7 +6754,7 @@
       "id": "fai-design-responsive",
       "folder": "skills/fai-design-responsive",
       "name": "fai-design-responsive",
-      "description": "Design responsive layouts for AI tools and dashboards — breakpoints, fluid grids, container queries, and mobile-first patterns. Use this skill when a UI breaks on mobile, building a dashboard, or supporting multiple screen sizes — even if the user only says \"make it work on phones\".",
+      "description": "Ensure responsive design across devices for AI tools and dashboards.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6772,7 +6763,7 @@
       "id": "fai-design-state-management",
       "folder": "skills/fai-design-state-management",
       "name": "fai-design-state-management",
-      "description": "Design UI state management for multi-turn AI interactions — conversation state, streaming updates, optimistic UI, and error recovery. Use this skill when building a chat/agent frontend, handling in-flight responses, or managing complex interaction state — even if the user only says \"manage the chat ",
+      "description": "Manage UI state transitions during multi-turn AI interactions.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6781,7 +6772,7 @@
       "id": "fai-design-system-tokens",
       "folder": "skills/fai-design-system-tokens",
       "name": "fai-design-system-tokens",
-      "description": "Define design tokens for AI UIs — color, spacing, typography, radius, and theming primitives with light/dark support. Use this skill when starting a design system, ensuring visual consistency, or theming an app — even if the user only says \"set up our colors and styles\".",
+      "description": "Define design tokens for colors, spacing, typography in AI UIs.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6817,7 +6808,7 @@
       "id": "fai-docker-containerize",
       "folder": "skills/fai-docker-containerize",
       "name": "fai-docker-containerize",
-      "description": "Containerize AI applications — multi-stage images, health probes, non-root users, and secure runtime settings for smaller, safer deployments. Use this skill when dockerizing any app, preparing for Kubernetes/Container Apps, or hardening an image — even if the user only says \"containerize this\".",
+      "description": "Containerize AI applications with multi-stage images, health probes, and secure runtime settings - ship smaller containers and safer deployments",
       "waf": [],
       "plays": [],
       "lines": 276
@@ -6826,7 +6817,7 @@
       "id": "fai-documentation-writer",
       "folder": "skills/fai-documentation-writer",
       "name": "fai-documentation-writer",
-      "description": "Auto-generate API and architecture documentation from code annotations — endpoint references, schemas, and diagrams. Use this skill when documenting a service, producing API reference docs, or keeping docs in sync with code — even if the user only says \"document this\".",
+      "description": "Auto-generate API and architecture documentation from code annotations.",
       "waf": [],
       "plays": [],
       "lines": 298
@@ -6835,7 +6826,7 @@
       "id": "fai-domain-driven-design",
       "folder": "skills/fai-domain-driven-design",
       "name": "fai-domain-driven-design",
-      "description": "Apply Domain-Driven Design to AI system architecture — bounded contexts, aggregates, ubiquitous language, and context maps. Use this skill when modeling a complex domain, untangling a tangled codebase, or aligning teams on boundaries — even if the user only says \"how should we structure this domain\"",
+      "description": "Apply Domain-Driven Design principles to AI system architecture.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6862,7 +6853,7 @@
       "id": "fai-edge-case-generator",
       "folder": "skills/fai-edge-case-generator",
       "name": "fai-edge-case-generator",
-      "description": "Generate edge-case test inputs for AI workflows — boundary values, adversarial prompts, malformed data, and rare paths. Use this skill when hardening a feature before launch, writing test suites, or probing failure modes — even if the user only says \"what could break this\" or \"write tests\".",
+      "description": "Generate test cases for edge cases in AI workflows.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -6907,7 +6898,7 @@
       "id": "fai-eval-driven-dev",
       "folder": "skills/fai-eval-driven-dev",
       "name": "fai-eval-driven-dev",
-      "description": "Adopt evaluation-driven development for AI — define eval sets, gate changes on metrics, and iterate on prompts/models with measured feedback. Use this skill when quality regresses unpredictably, before shipping prompt changes, or to set up CI evals — even if the user only says \"how do we know it's g",
+      "description": "Adopt evaluation-driven development for continuous AI quality assessment.",
       "waf": [],
       "plays": [],
       "lines": 168
@@ -7213,7 +7204,7 @@
       "id": "fai-first-ask",
       "folder": "skills/fai-first-ask",
       "name": "fai-first-ask",
-      "description": "Craft effective discovery prompts that gather requirements before building an AI system — goals, constraints, data, and success criteria. Use this skill when starting a new project, scoping an ambiguous request, or running requirements discovery — even if the user only says \"help me figure out what ",
+      "description": "Craft opening prompts to gather requirements for AI systems.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7222,7 +7213,7 @@
       "id": "fai-flowstudio-design",
       "folder": "skills/fai-flowstudio-design",
       "name": "fai-flowstudio-design",
-      "description": "Design automation workflows in Azure Flow Studio, Power Automate, or Zapier — triggers, actions, branching, and error handling. Use this skill when wiring no-code/low-code automations, connecting SaaS apps, or orchestrating event-driven flows — even if the user only says \"automate this process\".",
+      "description": "Design workflows in Azure Flow Studio or Zapier.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7231,7 +7222,7 @@
       "id": "fai-folder-structure",
       "folder": "skills/fai-folder-structure",
       "name": "fai-folder-structure",
-      "description": "Scaffold a convention-aligned project folder structure for AI solution plays, separating agents, skills, infrastructure, and tests. Use this skill when starting a new project, reorganizing a messy repo, or aligning a codebase to FAI Protocol conventions — even if the user only says \"set up the proje",
+      "description": "Establish project folder structure for AI solution plays.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7240,7 +7231,7 @@
       "id": "fai-gdpr-compliance",
       "folder": "skills/fai-gdpr-compliance",
       "name": "fai-gdpr-compliance",
-      "description": "Review and harden AI data processing and storage for GDPR — data minimization, consent, right-to-erasure, retention, and cross-border transfer controls. Use this skill when handling EU personal data, building data pipelines, or when the user mentions privacy, PII, consent, or retention — even if the",
+      "description": "Ensure GDPR compliance in AI data processing and storage.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7249,7 +7240,7 @@
       "id": "fai-gh-cli",
       "folder": "skills/fai-gh-cli",
       "name": "fai-gh-cli",
-      "description": "Automate GitHub workflows with the gh CLI — repos, issues, PRs, releases, and Actions. Use this skill when scripting GitHub tasks, batch-managing issues/PRs, or wiring CI automation — even if the user only says \"do this on GitHub\" or names gh commands.",
+      "description": "Use GitHub CLI for repository and issue automation.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7258,7 +7249,7 @@
       "id": "fai-git-commit-best-practices",
       "folder": "skills/fai-git-commit-best-practices",
       "name": "fai-git-commit-best-practices",
-      "description": "Write conventional-commit messages with meaningful scope, body, and footer for clean, automatable git history. Use this skill when committing changes, preparing a PR, or configuring commitlint/semantic-release — even if the user just says \"commit this\" or asks how to phrase a commit.",
+      "description": "Apply conventional commits and meaningful commit messages.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7303,16 +7294,16 @@
       "id": "fai-github-pr-review",
       "folder": "skills/fai-github-pr-review",
       "name": "fai-github-pr-review",
-      "description": "Conduct thorough GitHub pull-request reviews using structured checklists, CI gates, and security/quality criteria. Use this skill when reviewing a PR, responding to review comments, or setting up review standards — even if the user only says \"check this PR\" or \"is this ready to merge\".",
+      "description": "Execute effective PR reviews with checklists and CI gates.",
       "waf": [],
       "plays": [],
-      "lines": 158
+      "lines": 157
     },
     {
       "id": "fai-gtm-ai-strategy",
       "folder": "skills/fai-gtm-ai-strategy",
       "name": "fai-gtm-ai-strategy",
-      "description": "Define a go-to-market strategy for AI products — ICP, positioning, pricing, channels, and launch sequencing. Use this skill when planning a launch, entering a new market, or shaping AI commercial strategy — even if the user only says \"how do we sell this\" or \"GTM plan\".",
+      "description": "Define go-to-market strategy for AI products.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7321,7 +7312,7 @@
       "id": "fai-gtm-developer-ecosystem",
       "folder": "skills/fai-gtm-developer-ecosystem",
       "name": "fai-gtm-developer-ecosystem",
-      "description": "Build a developer ecosystem and community-engagement program — docs, samples, DevRel, and contribution paths. Use this skill when growing adoption of an API/SDK/platform, planning DevRel, or improving developer experience — even if the user only says \"how do we get developers to use this\".",
+      "description": "Build developer ecosystem and community engagement.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7330,7 +7321,7 @@
       "id": "fai-gtm-enterprise-onboarding",
       "folder": "skills/fai-gtm-enterprise-onboarding",
       "name": "fai-gtm-enterprise-onboarding",
-      "description": "Design enterprise onboarding for AI solutions — provisioning, security review, training, and success milestones. Use this skill when standing up a new enterprise customer, reducing time-to-value, or formalizing onboarding — even if the user only says \"onboard this customer\".",
+      "description": "Design enterprise onboarding workflows for AI solutions.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7339,7 +7330,7 @@
       "id": "fai-gtm-enterprise-planning",
       "folder": "skills/fai-gtm-enterprise-planning",
       "name": "fai-gtm-enterprise-planning",
-      "description": "Plan enterprise AI deployments and craft RFP/RFI responses — security questionnaires, rollout phases, and stakeholder maps. Use this skill when pursuing an enterprise deal, answering procurement/security reviews, or scoping a large rollout — even if the user only mentions \"RFP\", \"enterprise customer",
+      "description": "Plan enterprise deployments with RFP responses.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7348,7 +7339,7 @@
       "id": "fai-gtm-investor-comms",
       "folder": "skills/fai-gtm-investor-comms",
       "name": "fai-gtm-investor-comms",
-      "description": "Craft investor communications for AI products — narrative, traction metrics, defensibility, and roadmap framing for decks and updates. Use this skill when preparing a pitch, board update, or fundraising materials — even if the user only says \"investor update\" or \"pitch deck\".",
+      "description": "Communicate AI value propositions to investors.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7357,7 +7348,7 @@
       "id": "fai-gtm-launch",
       "folder": "skills/fai-gtm-launch",
       "name": "fai-gtm-launch",
-      "description": "Execute a go-to-market launch plan for an AI product — messaging, channel sequencing, launch-day checklist, and post-launch metrics. Use this skill when shipping a launch, coordinating announcements, or planning launch timing — even if the user only says \"we're launching\" or \"launch plan\".",
+      "description": "Execute go-to-market launch plan for AI product.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7366,7 +7357,7 @@
       "id": "fai-gtm-operating-cadence",
       "folder": "skills/fai-gtm-operating-cadence",
       "name": "fai-gtm-operating-cadence",
-      "description": "Establish an operating cadence for an AI product team — planning rituals, metrics reviews, and decision forums on weekly/monthly/quarterly rhythms. Use this skill when setting up team operations, fixing meeting overload, or instituting OKRs/reviews — even if the user only says \"how should we run the",
+      "description": "Establish operating cadence for AI product team.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7375,7 +7366,7 @@
       "id": "fai-gtm-partnerships",
       "folder": "skills/fai-gtm-partnerships",
       "name": "fai-gtm-partnerships",
-      "description": "Build a partnership strategy for an AI platform ecosystem — partner tiers, co-sell motions, integration programs, and incentives. Use this skill when planning alliances, recruiting integration partners, or structuring a partner program — even if the user only says \"who should we partner with\".",
+      "description": "Build partnership strategy for AI platform ecosystem.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7384,7 +7375,7 @@
       "id": "fai-gtm-positioning",
       "folder": "skills/fai-gtm-positioning",
       "name": "fai-gtm-positioning",
-      "description": "Define product positioning and competitive differentiation for AI products — category, alternatives, unique value, and proof points. Use this skill when sharpening messaging, responding to competitors, or writing a positioning statement — even if the user only says \"how do we stand out\" or \"position",
+      "description": "Define product positioning and competitive differentiation.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7393,7 +7384,7 @@
       "id": "fai-gtm-product-led-growth",
       "folder": "skills/fai-gtm-product-led-growth",
       "name": "fai-gtm-product-led-growth",
-      "description": "Implement a product-led growth strategy for AI tools — free tier, activation, in-product conversion, and usage-based expansion. Use this skill when designing a self-serve funnel, improving activation/retention, or shifting to PLG — even if the user only says \"how do we grow without sales\".",
+      "description": "Implement product-led growth strategy for AI tools.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7402,7 +7393,7 @@
       "id": "fai-guardrails-policy",
       "folder": "skills/fai-guardrails-policy",
       "name": "fai-guardrails-policy",
-      "description": "Define AI safety guardrails and acceptable-use policies — input/output filters, blocked categories, escalation rules, and enforcement points. Use this skill when setting content policy, hardening an agent against misuse, or documenting an AUP — even if the user only says \"add guardrails\" or \"what sh",
+      "description": "Define safety guardrails and acceptable use policies.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7420,7 +7411,7 @@
       "id": "fai-human-in-the-loop",
       "folder": "skills/fai-human-in-the-loop",
       "name": "fai-human-in-the-loop",
-      "description": "Implement human-in-the-loop workflows for AI decisions — approval gates, confidence thresholds, escalation, and audit trails. Use this skill when adding oversight to autonomous actions, meeting compliance review needs, or handling low-confidence outputs — even if the user only says \"add a human appr",
+      "description": "Implement human-in-the-loop workflows for AI decisions.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7429,7 +7420,7 @@
       "id": "fai-implementation-plan-generator",
       "folder": "skills/fai-implementation-plan-generator",
       "name": "fai-implementation-plan-generator",
-      "description": "Generate step-by-step implementation plans from an architecture or design — work breakdown, sequencing, dependencies, and acceptance criteria. Use this skill when turning a design into actionable tasks, planning a sprint, or scoping a build — even if the user only says \"how do we build this\" or \"bre",
+      "description": "Generate implementation plans from architecture.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7438,7 +7429,7 @@
       "id": "fai-import-iac",
       "folder": "skills/fai-import-iac",
       "name": "fai-import-iac",
-      "description": "Import existing cloud infrastructure into Bicep or Terraform for modernization — discover resources, generate templates, and reconcile drift. Use this skill when adopting IaC for unmanaged resources, migrating click-ops infrastructure, or onboarding a brownfield environment — even if the user only s",
+      "description": "Import existing infrastructure as code for modernization.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7456,7 +7447,7 @@
       "id": "fai-inference-optimization",
       "folder": "skills/fai-inference-optimization",
       "name": "fai-inference-optimization",
-      "description": "Optimize model inference latency and throughput — batching, quantization, caching, KV-cache reuse, and hardware/SKU selection. Use this skill when responses are too slow, cost per token is too high, or scaling under load — even if the user only says \"make the model faster\" or \"reduce latency\".",
+      "description": "Optimize model inference latency and throughput.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7465,7 +7456,7 @@
       "id": "fai-java-extract-method",
       "folder": "skills/fai-java-extract-method",
       "name": "fai-java-extract-method",
-      "description": "Refactor Java code using extract-method and related patterns to cut complexity and improve testability. Use this skill when a method is too long, logic is duplicated, or a class is hard to test — even if the user only says \"clean up this Java code\" or \"this function is doing too much\".",
+      "description": "Refactor Java code via extract method patterns.",
       "waf": [],
       "plays": [],
       "lines": 157
@@ -7474,7 +7465,7 @@
       "id": "fai-jest-test",
       "folder": "skills/fai-jest-test",
       "name": "fai-jest-test",
-      "description": "Write Jest tests for JavaScript/TypeScript — unit and integration specs, mocking, async assertions, and coverage. Use this skill when adding test coverage to a JS/TS codebase, testing a React/Node module, or fixing flaky specs — even if the user only says \"write tests for this\".",
+      "description": "Write Jest tests for JavaScript/TypeScript applications.",
       "waf": [],
       "plays": [],
       "lines": 161
@@ -7602,7 +7593,7 @@
       "description": "|",
       "waf": [],
       "plays": [],
-      "lines": 117
+      "lines": 116
     },
     {
       "id": "fai-mcp-go-scaffold",
@@ -7644,7 +7635,7 @@
       "id": "fai-mcp-python-generator",
       "folder": "skills/fai-mcp-python-generator",
       "name": "fai-mcp-python-generator",
-      "description": "|",
+      "description": "Scaffold a production-ready Python MCP server with FastMCP decorators, async tools, structured outputs, and Azure integration.",
       "waf": [
         "Security",
         "Reliability",
@@ -7656,7 +7647,7 @@
         "01-enterprise-rag",
         "21-agentic-rag"
       ],
-      "lines": 166
+      "lines": 162
     },
     {
       "id": "fai-mcp-python-scaffold",
@@ -7673,7 +7664,7 @@
         "29-mcp-platform-integration",
         "37-devops-automation"
       ],
-      "lines": 163
+      "lines": 162
     },
     {
       "id": "fai-mcp-ruby-scaffold",
@@ -9076,62 +9067,6 @@
       "lines": 265
     },
     {
-      "id": "caf-billing",
-      "file": "instructions/caf-billing.instructions.md",
-      "description": "Cloud Adoption Framework — Billing domain. Budget alerts, chargeback tags, AHUB, auto-shutdown, cost-anomaly detection, Cost Management exports. Enforced by CAF-B-002..010.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 48
-    },
-    {
-      "id": "caf-governance",
-      "file": "instructions/caf-governance.instructions.md",
-      "description": "Cloud Adoption Framework — Governance domain. Tagging standards, allowed-regions, allowed-SKUs, resource locks, deployIfNotExists guardrails. Enforced by CAF-G-003..008.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 41
-    },
-    {
-      "id": "caf-identity",
-      "file": "instructions/caf-identity.instructions.md",
-      "description": "Cloud Adoption Framework — Identity domain. Entra ID, managed identities, custom RBAC, PIM, Conditional Access, and Entra log centralization patterns enforced by CAF-I-001..011.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 49
-    },
-    {
-      "id": "caf-methodology",
-      "file": "instructions/caf-methodology.instructions.md",
-      "description": "Cloud Adoption Framework — Methodology umbrella. Cross-cuts Strategy, Plan, Ready, Adopt (Migrate/Innovate), Govern, Manage, Secure. Use this pack alongside the per-domain CAF instruction files.",
-      "applyTo": "**/*.md, **/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 77
-    },
-    {
-      "id": "caf-network",
-      "file": "instructions/caf-network.instructions.md",
-      "description": "Cloud Adoption Framework — Network domain. Hub-spoke, Azure Firewall, ExpressRoute, Private DNS Resolver, NSGs, Private Endpoints, DDoS Std, Bastion. Enforced by CAF-N-003..011.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 56
-    },
-    {
-      "id": "caf-operations",
-      "file": "instructions/caf-operations.instructions.md",
-      "description": "Cloud Adoption Framework — Operations domain. Log Analytics, AMA + Container Insights, alert rules, patch lifecycle, Azure Backup, Service Health alerts, Activity Log retention. Enforced by CAF-O-001..011.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 50
-    },
-    {
-      "id": "caf-security",
-      "file": "instructions/caf-security.instructions.md",
-      "description": "Cloud Adoption Framework — Security domain. Defender for Cloud, Sentinel, CMK, Key Vault rotation, Azure Policy initiatives, Defender for Endpoint, data-classification tags. Enforced by CAF-S-001..010.",
-      "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json, **/*.tf, **/*.tfvars, **/azure.yaml",
-      "waf": [],
-      "lines": 62
-    },
-    {
       "id": "call-center-voice-ai-patterns",
       "file": "instructions/call-center-voice-ai-patterns.instructions.md",
       "description": "Play 04 patterns — Voice AI patterns — Azure Speech SDK, real-time transcription, sentiment detection, turn-taking, noise handling.",
@@ -9506,18 +9441,6 @@
         "security"
       ],
       "lines": 237
-    },
-    {
-      "id": "fai-mcp-federation-authoring",
-      "file": "instructions/fai-mcp-federation-authoring.instructions.md",
-      "description": "MCP federation authoring — how to fill mcpAttachments, requiresMcp, providesMcp, and mcp_scope schema fields correctly across agents, skills, plays, and plugins.",
-      "applyTo": "frootai/agents/**/*.md, frootai/skills/**/*.md, frootai/solution-plays/**/agent.md, frootai/plugins/**/plugin.json",
-      "waf": [
-        "reliability",
-        "security",
-        "operational-excellence"
-      ],
-      "lines": 213
     },
     {
       "id": "fastapi-waf",
@@ -9988,14 +9911,6 @@
         "performance-efficiency"
       ],
       "lines": 200
-    },
-    {
-      "id": "pester-test-development-patterns",
-      "file": "instructions/pester-test-development-patterns.instructions.md",
-      "description": "Domain-specific coding patterns for Pester Test Development (Play 101)",
-      "applyTo": "**/*.{py,ts,js}",
-      "waf": [],
-      "lines": 236
     },
     {
       "id": "pester-waf",
@@ -12293,25 +12208,11 @@
   ],
   "workflows": [
     {
-      "id": "fai-contributors-report.lean",
-      "file": "workflows/fai-contributors-report.lean.md",
-      "name": "fai-contributors-report",
-      "description": "Include FAI.dev repo stats",
-      "lines": 288
-    },
-    {
       "id": "fai-contributors-report",
       "file": "workflows/fai-contributors-report.md",
       "name": "fai-contributors-report",
       "description": "Include FAI.dev repo stats",
       "lines": 287
-    },
-    {
-      "id": "fai-daily-ecosystem-report.lean",
-      "file": "workflows/fai-daily-ecosystem-report.lean.md",
-      "name": "fai-daily-ecosystem-report",
-      "description": "Daily ecosystem health summary — primitive counts, marketplace stats, validation status, and recent changes across agents, instructions, skills, hooks, and plugins. The morning briefing for the FAI team.",
-      "lines": 282
     },
     {
       "id": "fai-daily-ecosystem-report",
@@ -12321,25 +12222,11 @@
       "lines": 283
     },
     {
-      "id": "fai-evaluation-regression.lean",
-      "file": "workflows/fai-evaluation-regression.lean.md",
-      "name": "fai-evaluation-regression",
-      "description": "Number of previous evaluations for moving average",
-      "lines": 293
-    },
-    {
       "id": "fai-evaluation-regression",
       "file": "workflows/fai-evaluation-regression.md",
       "name": "fai-evaluation-regression",
       "description": "Number of previous evaluations for moving average",
       "lines": 292
-    },
-    {
-      "id": "fai-knowledge-staleness.lean",
-      "file": "workflows/fai-knowledge-staleness.lean.md",
-      "name": "fai-knowledge-staleness",
-      "description": "Monthly check for stale FROOT knowledge modules — scores staleness across docs, plays, primitives, and schemas using a weighted multi-signal algorithm. Generates a freshness dashboard with automated update suggestions.",
-      "lines": 351
     },
     {
       "id": "fai-knowledge-staleness",
@@ -12349,25 +12236,11 @@
       "lines": 351
     },
     {
-      "id": "fai-marketplace-health.lean",
-      "file": "workflows/fai-marketplace-health.lean.md",
-      "name": "fai-marketplace-health",
-      "description": "Weekly marketplace integrity check — validates all plugin.json files, verifies referenced primitives exist, detects orphaned plugins, and regenerates marketplace.json if needed.",
-      "lines": 335
-    },
-    {
       "id": "fai-marketplace-health",
       "file": "workflows/fai-marketplace-health.md",
       "name": "fai-marketplace-health",
       "description": "Weekly marketplace integrity check — validates all plugin.json files, verifies referenced primitives exist, detects orphaned plugins, and regenerates marketplace.json if needed.",
       "lines": 335
-    },
-    {
-      "id": "fai-play-portfolio-summary.lean",
-      "file": "workflows/fai-play-portfolio-summary.lean.md",
-      "name": "fai-play-portfolio-summary",
-      "description": "Aggregated portfolio assessment across all solution plays — dashboard of play health, WAF coverage, technology stack analysis, cost estimation, and ecosystem maturity. Auto-closes previous summary.",
-      "lines": 349
     },
     {
       "id": "fai-play-portfolio-summary",
@@ -12377,25 +12250,11 @@
       "lines": 349
     },
     {
-      "id": "fai-play-quality-report.lean",
-      "file": "workflows/fai-play-quality-report.lean.md",
-      "name": "fai-play-quality-report",
-      "description": "Minimum passing grade (A-F)",
-      "lines": 285
-    },
-    {
       "id": "fai-play-quality-report",
       "file": "workflows/fai-play-quality-report.md",
       "name": "fai-play-quality-report",
       "description": "Minimum passing grade (A-F)",
       "lines": 284
-    },
-    {
-      "id": "fai-play-relevance-check.lean",
-      "file": "workflows/fai-play-relevance-check.lean.md",
-      "name": "play-relevance",
-      "description": "Interactive slash command to assess whether a solution play is still relevant — checks Azure service availability, pricing changes, SDK deprecations, and alternative patterns.",
-      "lines": 304
     },
     {
       "id": "fai-play-relevance-check",
@@ -12405,25 +12264,11 @@
       "lines": 304
     },
     {
-      "id": "fai-primitive-pr-review.lean",
-      "file": "workflows/fai-primitive-pr-review.lean.md",
-      "name": "fai-primitive-pr-review",
-      "description": "Automated review of PRs that add or modify primitives — validates naming, frontmatter, schema, WAF alignment, duplicate detection, and file size. Posts structured review comment with verdict.",
-      "lines": 282
-    },
-    {
       "id": "fai-primitive-pr-review",
       "file": "workflows/fai-primitive-pr-review.md",
       "name": "fai-primitive-pr-review",
       "description": "Automated review of PRs that add or modify primitives — validates naming, frontmatter, schema, WAF alignment, duplicate detection, and file size. Posts structured review comment with verdict.",
       "lines": 281
-    },
-    {
-      "id": "fai-release-readiness.lean",
-      "file": "workflows/fai-release-readiness.lean.md",
-      "name": "fai-release-readiness",
-      "description": "Preview only — do not create issue",
-      "lines": 282
     },
     {
       "id": "fai-release-readiness",
@@ -12433,25 +12278,11 @@
       "lines": 281
     },
     {
-      "id": "fai-stale-plays-detector.lean",
-      "file": "workflows/fai-stale-plays-detector.lean.md",
-      "name": "fai-stale-plays-detector",
-      "description": "Comma-separated play numbers to exempt (e.g., 01,02)",
-      "lines": 341
-    },
-    {
       "id": "fai-stale-plays-detector",
       "file": "workflows/fai-stale-plays-detector.md",
       "name": "fai-stale-plays-detector",
       "description": "Comma-separated play numbers to exempt (e.g., 01,02)",
       "lines": 341
-    },
-    {
-      "id": "fai-waf-compliance-check.lean",
-      "file": "workflows/fai-waf-compliance-check.lean.md",
-      "name": "fai-waf-compliance-check",
-      "description": "Per-PR WAF pillar validation — scans changed files for security anti-patterns, reliability gaps, cost waste, operational issues, performance bottlenecks, and responsible AI violations. Produces per-pillar scores (0-100) and compliance matrix.",
-      "lines": 297
     },
     {
       "id": "fai-waf-compliance-check",
@@ -12463,25 +12294,11 @@
   ],
   "cookbook": [
     {
-      "id": "01-init-play.lean",
-      "file": "cookbook/01-init-play.lean.md",
-      "name": "01-init-play.lean",
-      "description": "",
-      "lines": 357
-    },
-    {
       "id": "01-init-play",
       "file": "cookbook/01-init-play.md",
       "name": "01-init-play",
       "description": "",
       "lines": 357
-    },
-    {
-      "id": "02-deploy-play.lean",
-      "file": "cookbook/02-deploy-play.lean.md",
-      "name": "02-deploy-play.lean",
-      "description": "",
-      "lines": 354
     },
     {
       "id": "02-deploy-play",
@@ -12491,25 +12308,11 @@
       "lines": 354
     },
     {
-      "id": "03-evaluate-play.lean",
-      "file": "cookbook/03-evaluate-play.lean.md",
-      "name": "03-evaluate-play.lean",
-      "description": "",
-      "lines": 417
-    },
-    {
       "id": "03-evaluate-play",
       "file": "cookbook/03-evaluate-play.md",
       "name": "03-evaluate-play",
       "description": "",
       "lines": 417
-    },
-    {
-      "id": "04-create-agent.lean",
-      "file": "cookbook/04-create-agent.lean.md",
-      "name": "04-create-agent.lean",
-      "description": "",
-      "lines": 363
     },
     {
       "id": "04-create-agent",
@@ -12519,25 +12322,11 @@
       "lines": 363
     },
     {
-      "id": "05-build-mcp-server.lean",
-      "file": "cookbook/05-build-mcp-server.lean.md",
-      "name": "05-build-mcp-server.lean",
-      "description": "",
-      "lines": 358
-    },
-    {
       "id": "05-build-mcp-server",
       "file": "cookbook/05-build-mcp-server.md",
       "name": "05-build-mcp-server",
       "description": "",
       "lines": 358
-    },
-    {
-      "id": "06-package-plugin.lean",
-      "file": "cookbook/06-package-plugin.lean.md",
-      "name": "06-package-plugin.lean",
-      "description": "",
-      "lines": 356
     },
     {
       "id": "06-package-plugin",
@@ -12547,25 +12336,11 @@
       "lines": 356
     },
     {
-      "id": "07-fai-engine.lean",
-      "file": "cookbook/07-fai-engine.lean.md",
-      "name": "07-fai-engine.lean",
-      "description": "",
-      "lines": 439
-    },
-    {
       "id": "07-fai-engine",
       "file": "cookbook/07-fai-engine.md",
       "name": "07-fai-engine",
       "description": "",
       "lines": 461
-    },
-    {
-      "id": "08-security-hooks.lean",
-      "file": "cookbook/08-security-hooks.lean.md",
-      "name": "08-security-hooks.lean",
-      "description": "",
-      "lines": 600
     },
     {
       "id": "08-security-hooks",
@@ -12575,25 +12350,11 @@
       "lines": 600
     },
     {
-      "id": "09-create-instruction.lean",
-      "file": "cookbook/09-create-instruction.lean.md",
-      "name": "09-create-instruction.lean",
-      "description": "",
-      "lines": 292
-    },
-    {
       "id": "09-create-instruction",
       "file": "cookbook/09-create-instruction.md",
       "name": "09-create-instruction",
       "description": "",
       "lines": 292
-    },
-    {
-      "id": "10-create-skill.lean",
-      "file": "cookbook/10-create-skill.lean.md",
-      "name": "10-create-skill.lean",
-      "description": "",
-      "lines": 336
     },
     {
       "id": "10-create-skill",
@@ -12603,25 +12364,11 @@
       "lines": 336
     },
     {
-      "id": "11-build-agentic-workflow.lean",
-      "file": "cookbook/11-build-agentic-workflow.lean.md",
-      "name": "11-build-agentic-workflow.lean",
-      "description": "",
-      "lines": 353
-    },
-    {
       "id": "11-build-agentic-workflow",
       "file": "cookbook/11-build-agentic-workflow.md",
       "name": "11-build-agentic-workflow",
       "description": "",
       "lines": 353
-    },
-    {
-      "id": "12-wire-fai-context.lean",
-      "file": "cookbook/12-wire-fai-context.lean.md",
-      "name": "12-wire-fai-context.lean",
-      "description": "",
-      "lines": 332
     },
     {
       "id": "12-wire-fai-context",
@@ -12631,25 +12378,11 @@
       "lines": 332
     },
     {
-      "id": "13-agentic-loop.lean",
-      "file": "cookbook/13-agentic-loop.lean.md",
-      "name": "13-agentic-loop.lean",
-      "description": "",
-      "lines": 226
-    },
-    {
       "id": "13-agentic-loop",
       "file": "cookbook/13-agentic-loop.md",
       "name": "13-agentic-loop",
       "description": "",
       "lines": 232
-    },
-    {
-      "id": "14-configure-vscode.lean",
-      "file": "cookbook/14-configure-vscode.lean.md",
-      "name": "14-configure-vscode.lean",
-      "description": "",
-      "lines": 224
     },
     {
       "id": "14-configure-vscode",
@@ -12659,13 +12392,6 @@
       "lines": 224
     },
     {
-      "id": "15-error-handling.lean",
-      "file": "cookbook/15-error-handling.lean.md",
-      "name": "15-error-handling.lean",
-      "description": "",
-      "lines": 249
-    },
-    {
       "id": "15-error-handling",
       "file": "cookbook/15-error-handling.md",
       "name": "15-error-handling",
@@ -12673,291 +12399,11 @@
       "lines": 249
     },
     {
-      "id": "16-create-hook.lean",
-      "file": "cookbook/16-create-hook.lean.md",
-      "name": "16-create-hook.lean",
-      "description": "",
-      "lines": 242
-    },
-    {
       "id": "16-create-hook",
       "file": "cookbook/16-create-hook.md",
       "name": "16-create-hook",
       "description": "",
       "lines": 242
-    },
-    {
-      "id": "19-attach-mcp-to-agent.lean",
-      "file": "cookbook/19-attach-mcp-to-agent.lean.md",
-      "name": "19-attach-mcp-to-agent.lean",
-      "description": "",
-      "lines": 193
-    },
-    {
-      "id": "19-attach-mcp-to-agent",
-      "file": "cookbook/19-attach-mcp-to-agent.md",
-      "name": "19-attach-mcp-to-agent",
-      "description": "",
-      "lines": 193
-    },
-    {
-      "id": "20-author-play-with-mcp-scope.lean",
-      "file": "cookbook/20-author-play-with-mcp-scope.lean.md",
-      "name": "20-author-play-with-mcp-scope.lean",
-      "description": "",
-      "lines": 211
-    },
-    {
-      "id": "20-author-play-with-mcp-scope",
-      "file": "cookbook/20-author-play-with-mcp-scope.md",
-      "name": "20-author-play-with-mcp-scope",
-      "description": "",
-      "lines": 211
-    },
-    {
-      "id": "21-publish-plugin-with-providesmcp.lean",
-      "file": "cookbook/21-publish-plugin-with-providesmcp.lean.md",
-      "name": "21-publish-plugin-with-providesmcp.lean",
-      "description": "",
-      "lines": 228
-    },
-    {
-      "id": "21-publish-plugin-with-providesmcp",
-      "file": "cookbook/21-publish-plugin-with-providesmcp.md",
-      "name": "21-publish-plugin-with-providesmcp",
-      "description": "",
-      "lines": 228
-    },
-    {
-      "id": "22-trust-override-walkthrough.lean",
-      "file": "cookbook/22-trust-override-walkthrough.lean.md",
-      "name": "22-trust-override-walkthrough.lean",
-      "description": "",
-      "lines": 217
-    },
-    {
-      "id": "22-trust-override-walkthrough",
-      "file": "cookbook/22-trust-override-walkthrough.md",
-      "name": "22-trust-override-walkthrough",
-      "description": "",
-      "lines": 217
-    },
-    {
-      "id": "23-troubleshoot-mcp-attach-failures.lean",
-      "file": "cookbook/23-troubleshoot-mcp-attach-failures.lean.md",
-      "name": "23-troubleshoot-mcp-attach-failures.lean",
-      "description": "",
-      "lines": 271
-    },
-    {
-      "id": "23-troubleshoot-mcp-attach-failures",
-      "file": "cookbook/23-troubleshoot-mcp-attach-failures.md",
-      "name": "23-troubleshoot-mcp-attach-failures",
-      "description": "",
-      "lines": 271
-    },
-    {
-      "id": "24-research-to-notion.lean",
-      "file": "cookbook/24-research-to-notion.lean.md",
-      "name": "24-research-to-notion.lean",
-      "description": "",
-      "lines": 106
-    },
-    {
-      "id": "24-research-to-notion",
-      "file": "cookbook/24-research-to-notion.md",
-      "name": "24-research-to-notion",
-      "description": "",
-      "lines": 106
-    },
-    {
-      "id": "25-web-to-vector-rag.lean",
-      "file": "cookbook/25-web-to-vector-rag.lean.md",
-      "name": "25-web-to-vector-rag.lean",
-      "description": "",
-      "lines": 94
-    },
-    {
-      "id": "25-web-to-vector-rag",
-      "file": "cookbook/25-web-to-vector-rag.md",
-      "name": "25-web-to-vector-rag",
-      "description": "",
-      "lines": 94
-    },
-    {
-      "id": "26-vector-memory-bakeoff.lean",
-      "file": "cookbook/26-vector-memory-bakeoff.lean.md",
-      "name": "26-vector-memory-bakeoff.lean",
-      "description": "",
-      "lines": 90
-    },
-    {
-      "id": "26-vector-memory-bakeoff",
-      "file": "cookbook/26-vector-memory-bakeoff.md",
-      "name": "26-vector-memory-bakeoff",
-      "description": "",
-      "lines": 90
-    },
-    {
-      "id": "27-submit-mcp-spec",
-      "file": "cookbook/27-submit-mcp-spec.md",
-      "name": "27-submit-mcp-spec",
-      "description": "",
-      "lines": 183
-    },
-    {
-      "id": "28-browser-screenshot-to-bug-report.lean",
-      "file": "cookbook/28-browser-screenshot-to-bug-report.lean.md",
-      "name": "28-browser-screenshot-to-bug-report.lean",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "28-browser-screenshot-to-bug-report",
-      "file": "cookbook/28-browser-screenshot-to-bug-report.md",
-      "name": "28-browser-screenshot-to-bug-report",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "29-azure-resource-audit.lean",
-      "file": "cookbook/29-azure-resource-audit.lean.md",
-      "name": "29-azure-resource-audit.lean",
-      "description": "",
-      "lines": 179
-    },
-    {
-      "id": "29-azure-resource-audit",
-      "file": "cookbook/29-azure-resource-audit.md",
-      "name": "29-azure-resource-audit",
-      "description": "",
-      "lines": 179
-    },
-    {
-      "id": "30-notion-doc-update-on-pr.lean",
-      "file": "cookbook/30-notion-doc-update-on-pr.lean.md",
-      "name": "30-notion-doc-update-on-pr.lean",
-      "description": "",
-      "lines": 152
-    },
-    {
-      "id": "30-notion-doc-update-on-pr",
-      "file": "cookbook/30-notion-doc-update-on-pr.md",
-      "name": "30-notion-doc-update-on-pr",
-      "description": "",
-      "lines": 180
-    },
-    {
-      "id": "31-multi-cloud-cost-report.lean",
-      "file": "cookbook/31-multi-cloud-cost-report.lean.md",
-      "name": "31-multi-cloud-cost-report.lean",
-      "description": "",
-      "lines": 183
-    },
-    {
-      "id": "31-multi-cloud-cost-report",
-      "file": "cookbook/31-multi-cloud-cost-report.md",
-      "name": "31-multi-cloud-cost-report",
-      "description": "",
-      "lines": 183
-    },
-    {
-      "id": "32-firecrawl-research-pipeline.lean",
-      "file": "cookbook/32-firecrawl-research-pipeline.lean.md",
-      "name": "32-firecrawl-research-pipeline.lean",
-      "description": "",
-      "lines": 155
-    },
-    {
-      "id": "32-firecrawl-research-pipeline",
-      "file": "cookbook/32-firecrawl-research-pipeline.md",
-      "name": "32-firecrawl-research-pipeline",
-      "description": "",
-      "lines": 181
-    },
-    {
-      "id": "33-elastic-log-analysis.lean",
-      "file": "cookbook/33-elastic-log-analysis.lean.md",
-      "name": "33-elastic-log-analysis.lean",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "33-elastic-log-analysis",
-      "file": "cookbook/33-elastic-log-analysis.md",
-      "name": "33-elastic-log-analysis",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "34-vector-db-comparison.lean",
-      "file": "cookbook/34-vector-db-comparison.lean.md",
-      "name": "34-vector-db-comparison.lean",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "34-vector-db-comparison",
-      "file": "cookbook/34-vector-db-comparison.md",
-      "name": "34-vector-db-comparison",
-      "description": "",
-      "lines": 185
-    },
-    {
-      "id": "35-pgedge-replication-monitor.lean",
-      "file": "cookbook/35-pgedge-replication-monitor.lean.md",
-      "name": "35-pgedge-replication-monitor.lean",
-      "description": "",
-      "lines": 183
-    },
-    {
-      "id": "35-pgedge-replication-monitor",
-      "file": "cookbook/35-pgedge-replication-monitor.md",
-      "name": "35-pgedge-replication-monitor",
-      "description": "",
-      "lines": 183
-    },
-    {
-      "id": "36-pdf-to-research-deck.lean",
-      "file": "cookbook/36-pdf-to-research-deck.lean.md",
-      "name": "36-pdf-to-research-deck.lean",
-      "description": "",
-      "lines": 189
-    },
-    {
-      "id": "36-pdf-to-research-deck",
-      "file": "cookbook/36-pdf-to-research-deck.md",
-      "name": "36-pdf-to-research-deck",
-      "description": "",
-      "lines": 189
-    },
-    {
-      "id": "37-rag-from-github-repo.lean",
-      "file": "cookbook/37-rag-from-github-repo.lean.md",
-      "name": "37-rag-from-github-repo.lean",
-      "description": "",
-      "lines": 192
-    },
-    {
-      "id": "37-rag-from-github-repo",
-      "file": "cookbook/37-rag-from-github-repo.md",
-      "name": "37-rag-from-github-repo",
-      "description": "",
-      "lines": 192
-    },
-    {
-      "id": "38-competitor-pricing-tracker.lean",
-      "file": "cookbook/38-competitor-pricing-tracker.lean.md",
-      "name": "38-competitor-pricing-tracker.lean",
-      "description": "",
-      "lines": 175
-    },
-    {
-      "id": "38-competitor-pricing-tracker",
-      "file": "cookbook/38-competitor-pricing-tracker.md",
-      "name": "38-competitor-pricing-tracker",
-      "description": "",
-      "lines": 175
     }
   ],
   "plays": [
@@ -13042,7 +12488,7 @@
         },
         "scope": "ai-landing-zone-solution",
         "knowledge": [
-          "O5-AI-Infrastructure",
+          "O5-GPU-Infra",
           "T3-Production-Patterns"
         ]
       },
@@ -13086,7 +12532,7 @@
         "scope": "deterministic-agent-solution",
         "knowledge": [
           "R3-Deterministic-AI",
-          "O2-AI-Agents"
+          "O2-Agent-Coding"
         ]
       },
       "infrastructure": {
@@ -13259,7 +12705,7 @@
         },
         "scope": "multi-agent-service-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "O1-Semantic-Kernel"
         ]
       },
@@ -13303,7 +12749,7 @@
         "scope": "copilot-studio-bot-solution",
         "knowledge": [
           "F4-GitHub-Agentic-OS",
-          "O6-Copilot-Ecosystem"
+          "O6-Copilot-Extend"
         ]
       },
       "infrastructure": {
@@ -13434,7 +12880,7 @@
         },
         "scope": "ai-landing-zone-advanced-solution",
         "knowledge": [
-          "O5-AI-Infrastructure",
+          "O5-GPU-Infra",
           "T3-Production-Patterns"
         ]
       },
@@ -13478,7 +12924,7 @@
         },
         "scope": "model-serving-aks-solution",
         "knowledge": [
-          "O5-AI-Infrastructure",
+          "O5-GPU-Infra",
           "T1-Fine-Tuning-MLOps",
           "T3-Production-Patterns"
         ]
@@ -13567,7 +13013,7 @@
         "scope": "cost-optimized-ai-gateway-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "F2-LLM-Landscape"
+          "F2-LLM-Selection"
         ]
       },
       "infrastructure": {
@@ -13653,7 +13099,7 @@
         "scope": "copilot-teams-extension-solution",
         "knowledge": [
           "F4-GitHub-Agentic-OS",
-          "O6-Copilot-Ecosystem",
+          "O6-Copilot-Extend",
           "O3-MCP-Tools-Functions"
         ]
       },
@@ -13697,7 +13143,7 @@
         "scope": "ai-observability-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "O5-AI-Infrastructure"
+          "O5-GPU-Infra"
         ]
       },
       "infrastructure": {
@@ -13739,7 +13185,7 @@
         },
         "scope": "prompt-management-solution",
         "knowledge": [
-          "R1-Prompt-Engineering",
+          "R1-Prompt-Patterns",
           "O1-Semantic-Kernel"
         ]
       },
@@ -13782,7 +13228,7 @@
         },
         "scope": "edge-ai-phi4-solution",
         "knowledge": [
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T1-Fine-Tuning-MLOps"
         ]
       },
@@ -13890,7 +13336,7 @@
       "hasManifest": true,
       "hasRootAgent": true,
       "devkit": {
-        "agents": 6,
+        "agents": 4,
         "skills": 3,
         "instructions": 3,
         "hooks": 1
@@ -14008,7 +13454,7 @@
         },
         "scope": "ai-code-review-pipeline-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "F4-GitHub-Agentic-OS"
         ]
@@ -14055,7 +13501,7 @@
         "scope": "conversation-memory-layer-solution",
         "knowledge": [
           "R2-RAG-Architecture",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "O1-Semantic-Kernel",
           "F1-GenAI-Foundations"
         ]
@@ -14194,7 +13640,7 @@
         "knowledge": [
           "R2-RAG-Architecture",
           "F1-GenAI-Foundations",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "R3-Deterministic-AI"
         ]
       },
@@ -14330,7 +13776,7 @@
         },
         "scope": "low-code-ai-builder-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "F1-GenAI-Foundations",
           "T3-Production-Patterns"
         ]
@@ -14375,7 +13821,7 @@
         },
         "scope": "ai-powered-testing-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "F4-GitHub-Agentic-OS"
         ]
@@ -14465,7 +13911,7 @@
         },
         "scope": "edge-ai-deployment-solution",
         "knowledge": [
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T1-Fine-Tuning-MLOps",
           "T3-Production-Patterns"
         ]
@@ -14556,7 +14002,7 @@
         "scope": "multimodal-agent-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "R2-RAG-Architecture"
         ]
       },
@@ -14601,7 +14047,7 @@
         "scope": "ai-powered-devops-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "F4-GitHub-Agentic-OS"
         ]
       },
@@ -14691,7 +14137,7 @@
         "scope": "ai-meeting-assistant-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T2-Responsible-AI"
         ]
       },
@@ -14736,7 +14182,7 @@
         "scope": "copilot-studio-advanced-solution",
         "knowledge": [
           "F4-GitHub-Agentic-OS",
-          "O6-Copilot-Ecosystem",
+          "O6-Copilot-Extend",
           "O3-MCP-Tools-Functions"
         ]
       },
@@ -14781,8 +14227,8 @@
         "knowledge": [
           "T2-Responsible-AI",
           "T3-Production-Patterns",
-          "R1-Prompt-Engineering",
-          "O2-AI-Agents"
+          "R1-Prompt-Patterns",
+          "O2-Agent-Coding"
         ]
       },
       "infrastructure": {
@@ -14825,9 +14271,9 @@
         },
         "scope": "computer-use-agent-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "O3-MCP-Tools-Functions",
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T3-Production-Patterns",
           "R3-Deterministic-AI"
         ]
@@ -14873,10 +14319,10 @@
         "scope": "ai-video-generation-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T2-Responsible-AI",
           "T3-Production-Patterns",
-          "R1-Prompt-Engineering"
+          "R1-Prompt-Patterns"
         ]
       },
       "infrastructure": {
@@ -14919,8 +14365,8 @@
         },
         "scope": "foundry-local-on-device-solution",
         "knowledge": [
-          "O5-AI-Infrastructure",
-          "F2-LLM-Landscape",
+          "O5-GPU-Infra",
+          "F2-LLM-Selection",
           "T3-Production-Patterns",
           "R3-Deterministic-AI",
           "F1-GenAI-Foundations"
@@ -15015,7 +14461,7 @@
         "knowledge": [
           "R2-RAG-Architecture",
           "T2-Responsible-AI",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "R3-Deterministic-AI"
         ]
@@ -15061,7 +14507,7 @@
         "scope": "synthetic-data-factory-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T1-Fine-Tuning-MLOps",
           "T2-Responsible-AI",
           "T3-Production-Patterns"
@@ -15111,7 +14557,7 @@
           "T3-Production-Patterns",
           "T2-Responsible-AI",
           "T1-Fine-Tuning-MLOps",
-          "O5-AI-Infrastructure"
+          "O5-GPU-Infra"
         ]
       },
       "infrastructure": {
@@ -15156,8 +14602,8 @@
         "scope": "creative-ai-studio-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "F2-LLM-Landscape",
-          "R1-Prompt-Engineering",
+          "F2-LLM-Selection",
+          "R1-Prompt-Patterns",
           "T2-Responsible-AI",
           "T3-Production-Patterns"
         ]
@@ -15205,11 +14651,11 @@
         "scope": "financial-risk-intelligence-solution",
         "knowledge": [
           "R2-RAG-Architecture",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "R3-Deterministic-AI",
           "T2-Responsible-AI",
           "T3-Production-Patterns",
-          "F2-LLM-Landscape"
+          "F2-LLM-Selection"
         ]
       },
       "infrastructure": {
@@ -15252,7 +14698,7 @@
         },
         "scope": "autonomous-coding-agent-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "F4-GitHub-Agentic-OS",
           "T3-Production-Patterns",
           "O3-MCP-Tools-Functions"
@@ -15299,7 +14745,7 @@
         "scope": "ai-api-gateway-v2-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "R3-Deterministic-AI"
         ]
       },
@@ -15345,7 +14791,7 @@
         "knowledge": [
           "R2-RAG-Architecture",
           "T2-Responsible-AI",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "R3-Deterministic-AI"
         ]
       },
@@ -15391,7 +14837,7 @@
         "scope": "ai-customer-support-v2-solution",
         "knowledge": [
           "R2-RAG-Architecture",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T2-Responsible-AI",
           "T3-Production-Patterns"
         ]
@@ -15437,7 +14883,7 @@
         "scope": "supply-chain-ai-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "F1-GenAI-Foundations"
         ]
       },
@@ -15527,7 +14973,7 @@
         "scope": "ai-translation-engine-solution",
         "knowledge": [
           "F1-GenAI-Foundations",
-          "F2-LLM-Landscape",
+          "F2-LLM-Selection",
           "T2-Responsible-AI",
           "T3-Production-Patterns"
         ]
@@ -15573,7 +15019,7 @@
         "scope": "digital-twin-agent-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "F1-GenAI-Foundations"
         ]
       },
@@ -15617,7 +15063,7 @@
         },
         "scope": "ai-recruiter-agent-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T2-Responsible-AI",
           "R2-RAG-Architecture"
         ]
@@ -15710,7 +15156,7 @@
         "knowledge": [
           "T2-Responsible-AI",
           "F1-GenAI-Foundations",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "R3-Deterministic-AI"
         ]
@@ -15760,7 +15206,7 @@
           "T2-Responsible-AI",
           "T3-Production-Patterns",
           "F1-GenAI-Foundations",
-          "O5-AI-Infrastructure"
+          "O5-GPU-Infra"
         ]
       },
       "infrastructure": {
@@ -15805,7 +15251,7 @@
         "scope": "fraud-detection-agent-solution",
         "knowledge": [
           "R3-Deterministic-AI",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "F1-GenAI-Foundations"
         ]
@@ -15850,7 +15296,7 @@
         },
         "scope": "ai-sales-assistant-solution",
         "knowledge": [
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "R2-RAG-Architecture",
           "T3-Production-Patterns",
           "F1-GenAI-Foundations"
@@ -15898,8 +15344,8 @@
         "knowledge": [
           "F1-GenAI-Foundations",
           "T2-Responsible-AI",
-          "O2-AI-Agents",
-          "R1-Prompt-Engineering"
+          "O2-Agent-Coding",
+          "R1-Prompt-Patterns"
         ]
       },
       "infrastructure": {
@@ -15944,8 +15390,8 @@
         "scope": "ai-infrastructure-optimizer-solution",
         "knowledge": [
           "T3-Production-Patterns",
-          "O5-AI-Infrastructure",
-          "F2-LLM-Landscape"
+          "O5-GPU-Infra",
+          "F2-LLM-Selection"
         ]
       },
       "infrastructure": {
@@ -15990,7 +15436,7 @@
         "scope": "ai-knowledge-management-solution",
         "knowledge": [
           "R2-RAG-Architecture",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T3-Production-Patterns",
           "F1-GenAI-Foundations",
           "O1-Semantic-Kernel"
@@ -16039,7 +15485,7 @@
         "knowledge": [
           "T3-Production-Patterns",
           "F1-GenAI-Foundations",
-          "O2-AI-Agents",
+          "O2-Agent-Coding",
           "T1-Fine-Tuning-MLOps"
         ]
       },
@@ -17822,7 +17268,7 @@
         "knowledge": [
           "O2-AI-Agents",
           "T3-Production-Patterns",
-          "R2-RAG-Architecture"
+          "R2-RAG"
         ]
       },
       "infrastructure": {
@@ -17960,7 +17406,7 @@
         },
         "scope": null,
         "knowledge": [
-          "R2-RAG-Architecture",
+          "R2-RAG",
           "F1-GenAI-Foundations",
           "T3-Production-Patterns"
         ]
@@ -18032,7 +17478,7 @@
         "knowledge": [
           "O2-AI-Agents",
           "T3-Production-Patterns",
-          "O3-MCP-Tools-Functions"
+          "O3-MCP-Tools"
         ]
       },
       "infrastructure": {
@@ -18102,7 +17548,7 @@
         "knowledge": [
           "T3-Production-Patterns",
           "T2-Responsible-AI",
-          "O4-Azure-AI-Foundry"
+          "O4-Azure-AI"
         ]
       },
       "infrastructure": {
@@ -18243,8 +17689,8 @@
         "knowledge": [
           "T3-Production-Patterns",
           "T2-Responsible-AI",
-          "O4-Azure-AI-Foundry",
-          "O5-AI-Infrastructure"
+          "O4-Azure-AI",
+          "O5-Infrastructure"
         ]
       },
       "infrastructure": {
@@ -18315,10 +17761,10 @@
         "scope": null,
         "knowledge": [
           "O2-AI-Agents",
-          "O3-MCP-Tools-Functions",
+          "O3-MCP-Tools",
           "T3-Production-Patterns",
-          "O4-Azure-AI-Foundry",
-          "R2-RAG-Architecture"
+          "O4-Azure-AI",
+          "R2-RAG"
         ]
       },
       "infrastructure": {
@@ -18398,7 +17844,7 @@
         "scope": null,
         "knowledge": [
           "T3-Production-Patterns",
-          "O3-MCP-Tools-Functions"
+          "O3-MCP-Tools"
         ]
       },
       "infrastructure": {
@@ -18498,7 +17944,7 @@
       "file": "docs/O3-MCP-Tools-Functions.md",
       "name": "O3-MCP-Tools-Functions",
       "lines": 702,
-      "wordCount": 3492
+      "wordCount": 3490
     },
     {
       "id": "partner-onboarding",
@@ -18599,7 +18045,7 @@
         "01"
       ]
     },
-    "hooks/fai-secrets-scanner": {
+    "hooks/frootai-secrets-scanner": {
       "usedBy": [
         "01",
         "02",
@@ -18703,7 +18149,7 @@
         "100"
       ]
     },
-    "hooks/fai-tool-guardian": {
+    "hooks/frootai-tool-guardian": {
       "usedBy": [
         "01",
         "02",
@@ -18807,7 +18253,7 @@
         "100"
       ]
     },
-    "hooks/fai-governance-audit": {
+    "hooks/frootai-governance-audit": {
       "usedBy": [
         "01",
         "02",
