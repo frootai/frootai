@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-evaluation-profile.v1.json",
+  "title": "Solution Play Evaluation Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 20 },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution", "collection", "datasets", "evaluators", "suites", "comparison", "outcomes", "foundry_overlay"],
+      "properties": {
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "runner", "mock_results_certifiable"],
+          "properties": {
+            "source": { "const": "actual-application" },
+            "runner": { "enum": ["process", "http", "agent", "workflow", "custom"] },
+            "mock_results_certifiable": { "const": false }
+          }
+        },
+        "collection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input_context", "final_response", "workspace_changes", "generated_files", "conversation_history", "prohibited_capture"],
+          "properties": {
+            "input_context": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": { "enum": ["query", "input-files", "workspace-state", "configuration", "environment-context"] }
+            },
+            "final_response": { "const": true },
+            "workspace_changes": { "const": true },
+            "generated_files": { "const": true },
+            "conversation_history": { "enum": ["required", "optional", "not_applicable"] },
+            "prohibited_capture": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["secret-values", "authorization-headers", "raw-environment-values", "unredacted-pii", "unlicensed-content", "chain-of-thought"] }
+            }
+          }
+        },
+        "datasets": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/dataset" }
+        },
+        "evaluators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evaluator" }
+        },
+        "suites": {
+          "type": "array",
+          "minItems": 8,
+          "items": { "$ref": "#/$defs/suite" }
+        },
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseline_ref", "candidate_ref", "confidence_method", "regression_budget"],
+          "properties": {
+            "baseline_ref": { "type": "string", "minLength": 1 },
+            "candidate_ref": { "type": "string", "minLength": 1 },
+            "confidence_method": { "enum": ["none", "bootstrap", "wilson", "t-test", "mann-whitney", "custom"] },
+            "confidence_level": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+            "regression_budget": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["metric", "maximum_regression", "failure_action"],
+                "properties": {
+                  "metric": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{1,127}$" },
+                  "maximum_regression": { "type": "number", "minimum": 0 },
+                  "failure_action": { "enum": ["block", "human-review"] }
+                }
+              }
+            }
+          }
+        },
+        "outcomes": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "enum": ["passed", "failed", "unavailable", "skipped", "not_applicable"] }
+        },
+        "foundry_overlay": { "$ref": "#/$defs/foundry_overlay" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "applicability": { "const": "applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["evaluation"], "properties": { "reason": false, "evaluation": {} } }
+    },
+    {
+      "if": { "properties": { "applicability": { "const": "not_applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["reason"], "properties": { "reason": {}, "evaluation": false } }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "path": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:|/|.*(?:^|/)\\.\\.?(/|$)|.*\\.\\.).+$" },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "path", "sha256", "split", "source", "leakage_review", "input_fields"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{1,127}$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "path": { "$ref": "#/$defs/path" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "split": { "enum": ["train", "validation", "test", "red-team", "load", "failure", "recovery", "human-review"] },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["uri", "retrieved_at", "license", "consent", "classification", "creation_method", "commit_sha", "source_sha256"],
+          "properties": {
+            "uri": { "type": "string", "format": "uri-reference" },
+            "retrieved_at": { "type": "string", "format": "date-time" },
+            "license": { "type": "string", "minLength": 1 },
+            "consent": { "enum": ["documented", "not_required", "unavailable"] },
+            "classification": { "enum": ["public", "internal", "confidential", "restricted"] },
+            "creation_method": { "enum": ["human-authored", "production-trace-curated", "synthetic-reviewed", "external-licensed"] },
+            "commit_sha": { "$ref": "#/$defs/commit" },
+            "source_sha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "leakage_review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reviewed_at", "reviewer", "evidence_sha256"],
+          "properties": {
+            "status": { "enum": ["passed", "failed", "unavailable"] },
+            "reviewed_at": { "type": "string", "format": "date-time" },
+            "reviewer": { "type": "string", "minLength": 3 },
+            "evidence_sha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "input_fields": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["query", "expected_behavior", "context", "ground_truth", "files", "workspace_state", "configuration", "environment_context"] }
+        }
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "owner", "dimension", "dataset_ids", "minimum_samples", "minimum_samples_by_split", "threshold"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{1,127}$" },
+        "kind": { "enum": ["deterministic", "heuristic", "llm-judge", "human"] },
+        "owner": { "type": "string", "minLength": 3 },
+        "dimension": { "enum": ["quality", "safety", "groundedness", "task-completion", "latency", "cost", "deterministic", "privacy", "reliability", "human-review"] },
+        "dataset_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{1,127}$" } },
+        "minimum_samples": { "type": "integer", "minimum": 1 },
+        "minimum_samples_by_split": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "train": { "type": "integer", "minimum": 1 },
+            "validation": { "type": "integer", "minimum": 1 },
+            "test": { "type": "integer", "minimum": 1 },
+            "red-team": { "type": "integer", "minimum": 1 },
+            "load": { "type": "integer", "minimum": 1 },
+            "failure": { "type": "integer", "minimum": 1 },
+            "recovery": { "type": "integer", "minimum": 1 },
+            "human-review": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "threshold": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operator", "value", "rationale", "failure_action"],
+          "properties": {
+            "operator": { "enum": ["gte", "lte", "eq", "zero"] },
+            "value": { "type": "number" },
+            "rationale": { "type": "string", "minLength": 20 },
+            "failure_action": { "enum": ["block", "warn", "human-review"] }
+          }
+        }
+      }
+    },
+    "suite": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "applicability", "dataset_ids", "evaluator_ids"],
+          "properties": {
+            "name": { "enum": ["offline", "preproduction", "continuous", "red-team", "load", "failure", "recovery", "human-review"] },
+            "applicability": { "const": "applicable" },
+            "dataset_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+            "evaluator_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "applicability", "reason"],
+          "properties": {
+            "name": { "enum": ["offline", "preproduction", "continuous", "red-team", "load", "failure", "recovery", "human-review"] },
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    },
+    "foundry_overlay": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "suite_name", "suite_version", "remote_verified_at", "verification_evidence_sha256", "generation_source", "evidence_eligibility"],
+          "properties": {
+            "applicability": { "const": "applicable" },
+            "suite_name": { "type": "string", "minLength": 1 },
+            "suite_version": { "type": "string", "minLength": 1 },
+            "remote_verified_at": { "type": "string", "format": "date-time" },
+            "verification_evidence_sha256": { "$ref": "#/$defs/sha256" },
+            "generation_source": { "enum": ["generated", "verified-eval-yaml", "manual-fallback"] },
+            "evidence_eligibility": { "const": "overlay-only" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability", "reason"],
+          "properties": {
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    }
+  }
+}

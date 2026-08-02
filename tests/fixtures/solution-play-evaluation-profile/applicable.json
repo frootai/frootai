@@ -1,0 +1,84 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-evaluation-profile.v1.json",
+  "schema_version": "1.0.0",
+  "play": "01-enterprise-rag",
+  "applicability": "applicable",
+  "evaluation": {
+    "execution": { "source": "actual-application", "runner": "http", "mock_results_certifiable": false },
+    "collection": {
+      "input_context": ["query", "input-files", "workspace-state", "configuration", "environment-context"],
+      "final_response": true,
+      "workspace_changes": true,
+      "generated_files": true,
+      "conversation_history": "optional",
+      "prohibited_capture": ["secret-values", "authorization-headers", "raw-environment-values", "unredacted-pii", "unlicensed-content", "chain-of-thought"]
+    },
+    "datasets": [
+      {
+        "id": "core-test", "version": "1.0.0", "path": "reference/evals/core-test.jsonl", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "split": "test",
+        "source": { "uri": "reference/evals/core-test.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "evaluation-owner", "evidence_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+        "input_fields": ["query", "expected_behavior", "context"]
+      },
+      {
+        "id": "security-red-team", "version": "1.0.0", "path": "reference/evals/security-red-team.jsonl", "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "split": "red-team",
+        "source": { "uri": "reference/evals/security-red-team.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "restricted", "creation_method": "synthetic-reviewed", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "security-owner", "evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
+        "input_fields": ["query", "expected_behavior"]
+      },
+      {
+        "id": "load-profile", "version": "1.0.0", "path": "reference/evals/load-profile.jsonl", "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "split": "load",
+        "source": { "uri": "reference/evals/load-profile.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "performance-owner", "evidence_sha256": "3333333333333333333333333333333333333333333333333333333333333333" },
+        "input_fields": ["query", "expected_behavior"]
+      },
+      {
+        "id": "failure-cases", "version": "1.0.0", "path": "reference/evals/failure-cases.jsonl", "sha256": "4444444444444444444444444444444444444444444444444444444444444444", "split": "failure",
+        "source": { "uri": "reference/evals/failure-cases.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "5555555555555555555555555555555555555555555555555555555555555555" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666" },
+        "input_fields": ["query", "expected_behavior"]
+      },
+      {
+        "id": "recovery-cases", "version": "1.0.0", "path": "reference/evals/recovery-cases.jsonl", "sha256": "7777777777777777777777777777777777777777777777777777777777777777", "split": "recovery",
+        "source": { "uri": "reference/evals/recovery-cases.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "not_required", "classification": "internal", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "8888888888888888888888888888888888888888888888888888888888888888" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "reliability-owner", "evidence_sha256": "9999999999999999999999999999999999999999999999999999999999999999" },
+        "input_fields": ["query", "expected_behavior"]
+      },
+      {
+        "id": "human-review", "version": "1.0.0", "path": "reference/evals/human-review.jsonl", "sha256": "abababababababababababababababababababababababababababababababab", "split": "human-review",
+        "source": { "uri": "reference/evals/human-review.source.json", "retrieved_at": "2026-08-02T00:00:00Z", "license": "MIT", "consent": "documented", "classification": "confidential", "creation_method": "human-authored", "commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source_sha256": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc" },
+        "leakage_review": { "status": "passed", "reviewed_at": "2026-08-02T00:00:00Z", "reviewer": "human-review-owner", "evidence_sha256": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd" },
+        "input_fields": ["query", "expected_behavior", "ground_truth"]
+      }
+    ],
+    "evaluators": [
+      { "id": "task-adherence", "kind": "deterministic", "owner": "quality-owner", "dimension": "task-completion", "dataset_ids": ["core-test"], "minimum_samples": 20, "minimum_samples_by_split": { "test": 20 }, "threshold": { "operator": "gte", "value": 0.9, "rationale": "At least ninety percent of required behaviors must pass before release.", "failure_action": "block" } },
+      { "id": "privacy-leakage", "kind": "deterministic", "owner": "security-owner", "dimension": "privacy", "dataset_ids": ["security-red-team"], "minimum_samples": 20, "minimum_samples_by_split": { "red-team": 20 }, "threshold": { "operator": "zero", "value": 0, "rationale": "Protected content leakage has zero tolerance in every evaluated environment.", "failure_action": "block" } },
+      { "id": "latency-p95", "kind": "heuristic", "owner": "performance-owner", "dimension": "latency", "dataset_ids": ["load-profile"], "minimum_samples": 100, "minimum_samples_by_split": { "load": 100 }, "threshold": { "operator": "lte", "value": 2000, "rationale": "The reviewed interaction budget requires p95 latency at or below two seconds.", "failure_action": "block" } },
+      { "id": "failure-recovery", "kind": "deterministic", "owner": "reliability-owner", "dimension": "reliability", "dataset_ids": ["failure-cases", "recovery-cases"], "minimum_samples": 20, "minimum_samples_by_split": { "failure": 10, "recovery": 10 }, "threshold": { "operator": "gte", "value": 1, "rationale": "All bounded failure and recovery invariants must pass without partial success.", "failure_action": "block" } },
+      { "id": "human-quality", "kind": "human", "owner": "human-review-owner", "dimension": "human-review", "dataset_ids": ["human-review"], "minimum_samples": 20, "minimum_samples_by_split": { "human-review": 20 }, "threshold": { "operator": "gte", "value": 0.8, "rationale": "Calibrated reviewers must accept at least eighty percent of sampled outcomes.", "failure_action": "human-review" } }
+    ],
+    "suites": [
+      { "name": "offline", "applicability": "applicable", "dataset_ids": ["core-test"], "evaluator_ids": ["task-adherence"] },
+      { "name": "preproduction", "applicability": "applicable", "dataset_ids": ["core-test", "security-red-team"], "evaluator_ids": ["task-adherence", "privacy-leakage"] },
+      { "name": "continuous", "applicability": "applicable", "dataset_ids": ["core-test"], "evaluator_ids": ["task-adherence"] },
+      { "name": "red-team", "applicability": "applicable", "dataset_ids": ["security-red-team"], "evaluator_ids": ["privacy-leakage"] },
+      { "name": "load", "applicability": "applicable", "dataset_ids": ["load-profile"], "evaluator_ids": ["latency-p95"] },
+      { "name": "failure", "applicability": "applicable", "dataset_ids": ["failure-cases"], "evaluator_ids": ["failure-recovery"] },
+      { "name": "recovery", "applicability": "applicable", "dataset_ids": ["recovery-cases"], "evaluator_ids": ["failure-recovery"] },
+      { "name": "human-review", "applicability": "applicable", "dataset_ids": ["human-review"], "evaluator_ids": ["human-quality"] }
+    ],
+    "comparison": {
+      "baseline_ref": "$baseline.artifact.sha256",
+      "candidate_ref": "$candidate.artifact.sha256",
+      "confidence_method": "bootstrap",
+      "confidence_level": 0.95,
+      "regression_budget": [
+        { "metric": "task-adherence", "maximum_regression": 0.01, "failure_action": "block" },
+        { "metric": "latency-p95", "maximum_regression": 100, "failure_action": "block" }
+      ]
+    },
+    "outcomes": ["passed", "failed", "unavailable", "skipped", "not_applicable"],
+    "foundry_overlay": { "applicability": "not_applicable", "reason": "No remotely verified Foundry evaluation suite is bound to this neutral fixture." }
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-telemetry-profile.v1.json",
+  "title": "Solution Play Telemetry Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "play", "applicability"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schema_version": { "const": "1.0.0" },
+    "play": { "type": "string", "pattern": "^[0-9]{2,3}-[a-z0-9-]+$" },
+    "applicability": { "enum": ["applicable", "not_applicable"] },
+    "reason": { "type": "string", "minLength": 20 },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initialization", "resource_attributes", "correlation", "span_boundaries", "attributes", "export", "retention"],
+      "properties": {
+        "initialization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["before_runtime", "instrumentation"],
+          "properties": {
+            "before_runtime": { "const": true },
+            "instrumentation": { "enum": ["sdk-instrumentation", "platform-native", "manual-justified"] },
+            "rationale": { "type": "string", "minLength": 20 }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": { "instrumentation": { "const": "manual-justified" } },
+                "required": ["instrumentation"]
+              },
+              "then": { "required": ["rationale"], "properties": { "rationale": {} } }
+            }
+          ]
+        },
+        "resource_attributes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["frootai.play.id", "frootai.source.commit_sha", "frootai.contract.version", "frootai.adapter.version", "deployment.environment.name", "frootai.artifact.sha256"],
+          "properties": {
+            "frootai.play.id": { "const": "$play" },
+            "frootai.source.commit_sha": { "const": "$source.commit_sha" },
+            "frootai.contract.version": { "const": "$contract.version" },
+            "frootai.adapter.version": { "const": "$adapter.version" },
+            "deployment.environment.name": { "const": "$environment.class" },
+            "frootai.artifact.sha256": { "const": "$artifact.sha256" }
+          }
+        },
+        "correlation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["propagation", "identifiers"],
+          "properties": {
+            "propagation": { "const": "w3c-trace-context" },
+            "identifiers": {
+              "type": "array",
+              "minItems": 3,
+              "uniqueItems": true,
+              "items": { "enum": ["trace_id", "span_id", "parent_span_id", "request_id", "conversation_id", "handoff_id", "evaluation_id", "approval_id", "deployment_id"] }
+            }
+          }
+        },
+        "span_boundaries": {
+          "type": "array",
+          "minItems": 10,
+          "items": { "$ref": "#/$defs/span_boundary" }
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["default_action", "content_recording", "rules", "prohibited_categories"],
+          "properties": {
+            "default_action": { "const": "drop" },
+            "content_recording": { "const": "disabled" },
+            "rules": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/attribute_rule" }
+            },
+            "prohibited_categories": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["raw-prompt", "raw-completion", "message-content", "file-content", "pii", "credential", "authorization-header", "tool-payload"] }
+            }
+          }
+        },
+        "export": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["protocol", "endpoint_source", "sampling", "failure_mode"],
+          "properties": {
+            "protocol": { "enum": ["otlp-http", "otlp-grpc", "platform-native", "none"] },
+            "endpoint_source": { "enum": ["environment", "platform", "none"] },
+            "sampling": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["strategy", "ratio"],
+              "properties": {
+                "strategy": { "enum": ["always-on", "parent-based", "trace-id-ratio", "always-off"] },
+                "ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            "failure_mode": { "enum": ["drop-and-signal", "buffer-bounded", "fail-closed"] },
+            "buffer": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["maximum_items", "maximum_age_seconds"],
+              "properties": {
+                "maximum_items": { "type": "integer", "minimum": 1, "maximum": 100000 },
+                "maximum_age_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": { "failure_mode": { "const": "buffer-bounded" } },
+                "required": ["failure_mode"]
+              },
+              "then": { "required": ["buffer"], "properties": { "buffer": {} } }
+            }
+          ]
+        },
+        "retention": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["days", "owner", "deletion_verification"],
+          "properties": {
+            "days": { "type": "integer", "minimum": 0, "maximum": 365 },
+            "owner": { "type": "string", "minLength": 3 },
+            "deletion_verification": { "type": "string", "minLength": 10 }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "applicability": { "const": "applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["telemetry"], "properties": { "reason": false, "telemetry": {} } }
+    },
+    {
+      "if": { "properties": { "applicability": { "const": "not_applicable" } }, "required": ["applicability"] },
+      "then": { "required": ["reason"], "properties": { "reason": {}, "telemetry": false } }
+    }
+  ],
+  "$defs": {
+    "attribute_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "classification", "action"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{1,127}$" },
+        "classification": { "enum": ["public", "internal", "confidential", "restricted"] },
+        "action": { "enum": ["retain", "mask", "hmac-sha256", "drop"] },
+        "key_reference": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "action": { "const": "hmac-sha256" } }, "required": ["action"] },
+          "then": { "required": ["key_reference"], "properties": { "key_reference": {} } }
+        }
+      ]
+    },
+    "span_boundary": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "applicability"],
+          "properties": {
+            "name": { "enum": ["request", "workflow", "agent", "tool", "handoff", "evaluation", "approval", "deployment", "rollback", "cleanup"] },
+            "applicability": { "const": "instrumented" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "applicability", "reason"],
+          "properties": {
+            "name": { "enum": ["request", "workflow", "agent", "tool", "handoff", "evaluation", "approval", "deployment", "rollback", "cleanup"] },
+            "applicability": { "const": "not_applicable" },
+            "reason": { "type": "string", "minLength": 20 }
+          }
+        }
+      ]
+    }
+  }
+}

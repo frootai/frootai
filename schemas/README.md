@@ -43,6 +43,8 @@ The additive modernization contract is defined by:
 
 - `solution-play-spec.vNext.schema.json`
 - `solution-play-delivery-profile.v1.schema.json`
+- `solution-play-telemetry-profile.v1.schema.json`
+- `solution-play-evaluation-profile.v1.schema.json`
 - `agent-context-envelope.v1.schema.json`
 - `agent-handoff.v1.schema.json`
 - `agent-loop-policy.v1.schema.json`
@@ -58,10 +60,20 @@ npm run test:contract-inventory
 npm run test:solution-play-schemas
 npm run validate:solution-play-delivery-profile
 npm run test:solution-play-delivery-profile
+npm run validate:solution-play-telemetry
+npm run test:solution-play-telemetry
+npm run validate:solution-play-evaluation
+npm run test:solution-play-evaluation
 npm run test:evidence-v2-migration
 ```
 
 Delivery profile v1.1 defines technology-neutral folder roles and bounded command descriptors for a clean-checkout vertical slice. The validator is read-only: it reports profiles named `delivery-profile.v1.json` but never creates or updates canonical play files.
+
+Telemetry profile v1 defines OpenTelemetry initialization, stable resource identity sources, W3C correlation, lifecycle span applicability, default-deny attributes, prohibited content categories, exporter failure behavior, and retention ownership. Its sanitizer retains only explicit rules, fails closed when HMAC material is unavailable, and never records raw prompts, completions, files, credentials, PII, authorization headers, or tool payloads by default.
+
+Evaluation profile v1 requires actual-application execution, complete-but-redacted input/output collection, immutable dataset provenance, leakage review, owned evaluators, reasoned thresholds, minimum samples, baseline/candidate comparison, regression budgets, and explicit offline, preproduction, continuous, red-team, load, failure, recovery, and human-review suites. Foundry suite metadata is an overlay only after remote verification and cannot independently certify a play.
+
+Telemetry and evaluation profile validation is structural and policy-focused. Runtime certification in T214 must additionally verify exporter availability/authentication, execute evaluation runners against the actual application, enforce process/resource limits, and treat Foundry overlays as ineligible for primary certification evidence.
 
 ### Delivery Profile Security Model
 
