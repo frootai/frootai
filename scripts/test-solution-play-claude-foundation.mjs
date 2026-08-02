@@ -55,7 +55,7 @@ test('strict source profile produces a deterministic 24-file self-contained plug
   assert.equal(manifest.defaultEnabled, false);
   assert.equal('version' in manifest, false);
   assert.equal(manifest.skills, './skills/');
-  assert.deepEqual(manifest.agents, ['./agents/foundation-auditor.md']);
+  assert.equal('agents' in manifest, false);
   assert.equal(manifest.hooks, './hooks/hooks.json');
 });
 
@@ -136,7 +136,7 @@ test('rejects manifest, skill, agent, and hook authority drift', (t) => {
   let errors = validationErrors(plugin.document, plugin.output);
   assert.match(errors, /version must be omitted/);
   assert.match(errors, /disabled by default/);
-  assert.match(errors, /component path/);
+  assert.match(errors, /unrecognized manifest field: agents/);
 
   const skill = generated(t);
   const skillPath = path.join(skill.output, 'skills', 'validate-contracts', 'SKILL.md');
