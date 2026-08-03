@@ -141,7 +141,7 @@ Use config/*.json for all AI parameters.
 
 ### Modular Files (Modern)
 
-```
+```text
 .github/instructions/
 ├── azure-coding.instructions.md    # Azure SDK patterns, managed identity
 ├── rag-patterns.instructions.md    # Chunking, retrieval, anti-hallucination
@@ -190,7 +190,7 @@ Prompt files are **slash commands** — manually invoked by the user or another 
 
 Custom agents are **specialist personas** with their own identity, tools, and MCP server bindings. Agents can be **chained via handoffs**:
 
-```
+```text
 planning agent → implementation agent → review agent
 ```
 
@@ -221,7 +221,7 @@ You are the implementation agent for this solution.
 
 Skills are **self-contained folders** with instructions + scripts + references. They're **progressively loaded** — Copilot reads the description first, loads the full instructions only when relevant.
 
-```
+```text
 .github/skills/
 ├── deploy-azure/
 │   ├── SKILL.md        # Description + prerequisites + references
@@ -333,7 +333,7 @@ Plugins **bundle** agents + skills + commands into a distributable package. Two 
 
 FrootAI projects a consistent `.github` agentic structure into solution plays. The following is the target structure; use the individual play manifest to determine which assets a specific play currently ships:
 
-```
+```text
 solution-plays/01-enterprise-rag/
 ├── .github/
 │   ├── copilot-instructions.md          # Layer 1
@@ -396,7 +396,7 @@ flowchart LR
 
 ### Layering Strategy
 
-```
+```text
 Start here → Layer 1 (Instructions)
 ↓ Need slash commands? → Layer 2 (Prompts)
 ↓ Need specialist agents? → Layer 2 (Agents + Skills)

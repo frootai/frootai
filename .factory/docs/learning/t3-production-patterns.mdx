@@ -279,7 +279,7 @@ graph TB
 
 Instead of waiting for the full response, stream tokens to the user as they're generated:
 
-```
+```text
 Without streaming:  [---- 3 seconds of nothing ----] Full response appears
 With streaming:     H-e-l-l-o-,- -h-e-r-e-'-s- -y-o-u-r- -a-n-s-w-e-r-... (progressive)
 ```
@@ -301,7 +301,7 @@ TTFT (Time To First Token) drops from 3s to ~200ms. The user sees progress immed
 
 ### Token Economics
 
-```
+```text
 Cost per request = (input_tokens × input_rate) + (output_tokens × output_rate)
 
 Provider-neutral example:
@@ -397,7 +397,7 @@ graph LR
 
 ### Hosting Multi-Agent: The Microservices Approach
 
-```
+```text
 Agent 1 (Supervisor)   → Container App (scale 2-10)
 Agent 2 (Billing)      → Container App (scale 0-5)
 Agent 3 (Tech Support) → Container App (scale 0-5)
@@ -463,7 +463,7 @@ stateDiagram-v2
 
 ### Fallback Chain
 
-```
+```text
 Primary:    Azure OpenAI (East US) GPT-4o
   ↓ (429 or 500)
 Fallback 1: Azure OpenAI (West US) GPT-4o

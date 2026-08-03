@@ -92,7 +92,7 @@ print(response.output_text)
 
 ### Token Estimation Formulas
 
-```
+```text
 English text:   tokens ≈ word_count × 1.33
 Code:           tokens ≈ character_count ÷ 3
 Mixed content:  tokens ≈ character_count ÷ 4
@@ -206,7 +206,7 @@ Use this table to pick the right model for your workload. Start from the need.
 
 ### Decision Flowchart (Text)
 
-```
+```text
 START
   |
   ├─ Need reasoning/math/logic?
@@ -266,7 +266,7 @@ START
 
 ### Document Pre-Processing Pipeline
 
-```
+```text
 Source Documents
   │
   ├─ PDF → Extract text (PyMuPDF, Azure Document Intelligence)
@@ -407,7 +407,7 @@ Ready for Retrieval
 
 ### Prompt Structure Best Practice
 
-```
+```text
 [SYSTEM]
 You are {role}. {behavioral constraints}. {output format}.
 
@@ -503,7 +503,7 @@ Input: ... → Output: ...
 
 ### PTU vs. PAYG Break-Even Reference
 
-```
+```text
 Monthly PAYG cost       = (input_tokens × input_price) + (output_tokens × output_price)
 Monthly PTU cost        = PTU_count × PTU_hourly_rate × 730 hours
 Break-even utilization  ≈ 60–70% sustained
@@ -528,7 +528,7 @@ Quick check:
 ### Monthly Cost Estimation Formulas
 
 **Azure OpenAI (PAYG):**
-```
+```text
 Monthly cost = (avg_input_tokens_per_request × requests_per_day × 30 × input_price_per_token)
              + (avg_output_tokens_per_request × requests_per_day × 30 × output_price_per_token)
 
@@ -539,7 +539,7 @@ Example: GPT-4.1 mini, 10K requests/day, 1,500 input + 500 output tokens each:
 ```
 
 **Azure AI Search:**
-```
+```text
 Monthly cost = service_tier_base_price × partitions × replicas
              + semantic_ranker_queries × $0.01 per 1,000 queries (if S1+)
 
@@ -548,7 +548,7 @@ Example: S1 with 2 replicas, 1 partition:
 ```
 
 **Embedding indexing (one-time):**
-```
+```text
 Embedding cost = total_chunks × avg_tokens_per_chunk × price_per_token
 
 Example: 100K chunks, 400 tokens avg, text-embedding-3-small:

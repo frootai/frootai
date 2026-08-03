@@ -38,7 +38,7 @@ Even if an LLM had perfect knowledge of the entire public internet, it still wou
 
 **Retrieval-Augmented Generation (RAG)** solves all three problems with one architectural pattern: instead of relying on what the model already knows, you **retrieve relevant information from your own data sources** and inject it into the prompt at query time. The model then generates a response grounded in your actual data.
 
-```
+```text
 Without RAG:  User Question → LLM (uses training data only) → Response (may hallucinate)
 With RAG:     User Question → Retrieve from YOUR data → LLM (uses retrieved context) → Grounded Response
 ```
@@ -76,31 +76,33 @@ Every RAG system has two distinct pipelines that operate independently.
 
 ### The Two Pipelines
 
+#### Offline — Ingestion Pipeline
+
 ```mermaid
-graph LR
-    subgraph OFFLINE["OFFLINE — Ingestion Pipeline"]
-        direction LR
-        D[/"Documents<br/>PDF, Word, HTML,<br/>Databases"/] --> P["Processing<br/>Extract, Clean,<br/>Normalize"]
-        P --> C["Chunking<br/>Split into<br/>Segments"]
-        C --> E["Embedding<br/>Text → Vectors<br/>(1536-dim)"]
-        E --> I[("Vector Index<br/>Azure AI Search<br/>Cosmos DB")]
-    end
+flowchart LR
+    D[/"Documents<br/>PDF, Word, HTML,<br/>Databases"/] --> P["Processing<br/>Extract, Clean,<br/>Normalize"]
+    P --> C["Chunking<br/>Split into<br/>Segments"]
+    C --> E["Embedding<br/>Text → Vectors<br/>(1536-dim)"]
+    E --> I[("Vector Index<br/>Azure AI Search<br/>Cosmos DB")]
+    classDef offline fill:#1a1a2e,stroke:#e94560,color:#eee
+    class D,P,C,E,I offline
+```
 
-    subgraph ONLINE["ONLINE — Query Pipeline"]
-        direction LR
-        Q["User<br/>Question"] --> QP["Query<br/>Processing<br/>Rewrite, Expand"]
-        QP --> QE["Query<br/>Embedding"]
-        QE --> S["Search<br/>Vector + Keyword<br/>Hybrid"]
-        S --> RR["Reranking<br/>Semantic<br/>Ranker"]
-        RR --> CA["Context<br/>Assembly<br/>Prompt Build"]
-        CA --> LLM["LLM<br/>Generation"]
-        LLM --> R["Response<br/>with Citations"]
-    end
+**Pipeline handoff:** The offline Vector Index becomes the online Search corpus. The two pipelines deploy and scale independently even though they share the same indexed data.
 
-    I -.->|"indexed data"| S
+#### Online — Query Pipeline
 
-    style OFFLINE fill:#1a1a2e,stroke:#e94560,color:#eee
-    style ONLINE fill:#1a1a2e,stroke:#0f3460,color:#eee
+```mermaid
+flowchart LR
+    Q["User<br/>Question"] --> QP["Query<br/>Processing<br/>Rewrite, Expand"]
+    QP --> QE["Query<br/>Embedding"]
+    QE --> S["Search<br/>Reads Vector Index<br/>Hybrid"]
+    S --> RR["Reranking<br/>Semantic<br/>Ranker"]
+    RR --> CA["Context<br/>Assembly<br/>Prompt Build"]
+    CA --> LLM["LLM<br/>Generation"]
+    LLM --> R["Response<br/>with Citations"]
+    classDef online fill:#1a1a2e,stroke:#0f3460,color:#eee
+    class Q,QP,QE,S,RR,CA,LLM,R online
 ```
 
 ### Ingestion Pipeline (Offline)
@@ -393,7 +395,7 @@ Chunk size is the second most impactful parameter after chunking strategy. The o
 
 ### The Tradeoff
 
-```
+```text
 Too Small (< 128 tokens)          Just Right (256-1024 tokens)         Too Large (> 2048 tokens)
 ├── Loses context                  ├── Contains enough context           ├── Dilutes relevance
 ├── Many chunks needed             ├── Manageable number of chunks       ├── Wastes LLM tokens
@@ -451,7 +453,7 @@ Embeddings are the mathematical bridge between human language and machine-search
 
 An embedding is a list of numbers (a vector) that represents the semantic meaning of a piece of text. Texts with similar meanings produce vectors that are close together in high-dimensional space.
 
-```
+```text
 "How do I reset my password?"  →  [0.023, -0.041, 0.118, ..., 0.067]  (1536 dimensions)
 "I forgot my login credentials" → [0.025, -0.039, 0.121, ..., 0.064]  (very similar vector)
 "Azure VM pricing in East US"  →  [0.891, 0.234, -0.567, ..., 0.445]  (very different vector)
@@ -631,7 +633,7 @@ graph TD
 
 Azure AI Search can handle the entire ingestion pipeline without custom code. You define a **data source**, a **skillset**, and an **indexer** — the service handles the rest.
 
-```
+```text
 Blob Storage → Indexer → [Document Cracking → Chunking → Embedding → Enrichment] → Index
                              ↑ built into Azure AI Search — no custom code needed ↑
 ```
@@ -677,7 +679,7 @@ Neither keyword search nor vector search alone is sufficient. Each has blind spo
 
 Hybrid search in Azure AI Search combines BM25 (keyword) and vector scores using **Reciprocal Rank Fusion (RRF)**:
 
-```
+```text
 RRF_score(doc) = sum( 1 / (k + rank_in_list) ) for each result list containing the doc
 ```
 
@@ -687,7 +689,7 @@ Where `k` is a constant (default 60). This elegantly merges ranked lists without
 
 After hybrid retrieval returns the top candidates, the **Semantic Ranker** applies a transformer-based cross-encoder model to reorder results by deep semantic relevance.
 
-```
+```text
 Step 1: Hybrid search returns top 50 candidates
 Step 2: Semantic Ranker reranks all 50 using a cross-encoder
 Step 3: Return top 5 to the LLM as context
@@ -1033,7 +1035,7 @@ After retrieval and reranking, you have a ranked list of relevant chunks. The ne
 
 ### The Prompt Structure
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │ SYSTEM MESSAGE                                      │
 │ - Role definition                                   │
@@ -1477,7 +1479,7 @@ Estimate your vector index size to choose the right Azure AI Search tier.
 
 ### Cost Estimation Formula
 
-```
+```text
 Monthly RAG Cost = Search Cost + Embedding Cost + LLM Cost + Storage Cost + Compute Cost
 
 Where:

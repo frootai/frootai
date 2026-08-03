@@ -44,7 +44,7 @@ The single biggest mistake architects make is treating AI workloads like traditi
 
 At its core, every neural network — from a simple classifier to GPT-4o — performs the same fundamental operation billions of times: **matrix multiplication**.
 
-```
+```text
 Output = Input × Weights + Bias
 ```
 

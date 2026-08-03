@@ -206,7 +206,7 @@ Before LoRA (2023): fine-tuning a 7B model required 4x A100 GPUs ($30K+ in hardw
 
 After LoRA: fine-tune 7B on a single consumer GPU. Fine-tune 70B on a single A100. Adapters are 10-100MB (instead of the full model at 14-140GB).
 
-```
+```text
 Full Fine-Tuning:  70B × 2 bytes (FP16) = 140 GB VRAM  → Need 32x A100
 LoRA:              70B frozen + 0.1B trained = ~140 GB + ~200 MB → Need 4x A100
 QLoRA:             70B in 4-bit + 0.1B trained = ~35 GB + ~200 MB → Need 1x A100
@@ -355,7 +355,7 @@ flowchart TB
 
 ### A/B Evaluation Pattern
 
-```
+```text
 1. Prepare 100 test prompts (not in training data)
 2. Generate responses from BOTH base model and fine-tuned model
 3. Randomize order (evaluator doesn't know which is which)

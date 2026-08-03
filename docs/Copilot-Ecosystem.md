@@ -389,7 +389,7 @@ GitHub Copilot supports the **Model Context Protocol (MCP)**, an open standard f
 
 ### Example Prompts for Architects
 
-```
+```text
 "List all storage accounts with public blob access enabled"
 "Show me NSGs with inbound rules allowing 0.0.0.0/0 on port 22"
 "What is causing high CPU on my App Service Plan?"

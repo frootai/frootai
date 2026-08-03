@@ -833,7 +833,7 @@ Always cite Azure documentation. If unsure, say "I don't know."
 
 Treat prompts as code — version control, review, and test them.
 
-```
+```text
 prompts/
   v1.0-baseline.txt
   v1.1-added-format.txt

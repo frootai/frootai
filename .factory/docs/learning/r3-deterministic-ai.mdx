@@ -197,7 +197,7 @@ These three parameters are your **first line of defense** for output consistency
 
 Temperature modifies the probability distribution before sampling:
 
-```
+```text
 At temperature T:
   adjusted_probability(token_i) = exp(logit_i / T) / Σ exp(logit_j / T)
 ```
@@ -225,7 +225,7 @@ After temperature adjustment, top-k limits how many tokens are considered:
 
 Instead of a fixed count, top-p considers tokens until their cumulative probability exceeds the threshold:
 
-```
+```text
 If probabilities are: [0.40, 0.25, 0.15, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01]
   top_p=0.65 → considers: [0.40, 0.25]        (2 tokens)
   top_p=0.80 → considers: [0.40, 0.25, 0.15]  (3 tokens)  
@@ -323,7 +323,7 @@ flowchart LR
 
 Embed facts, constraints, and rules directly in the system message:
 
-```
+```text
 You are an Azure pricing assistant. Use ONLY the following pricing data to answer questions.
 
 PRICING DATA (example fixture, not live rates):
@@ -342,7 +342,7 @@ RULES:
 
 Teach the model to say "I don't know" instead of guessing:
 
-```
+```text
 CRITICAL INSTRUCTION: You must REFUSE to answer if:
 - The question is outside your documented knowledge base
 - The retrieved documents have a relevance score below 0.75
@@ -358,7 +358,7 @@ Please consult [relevant resource] for the most current information."
 
 Force the model to show its work:
 
-```
+```text
 Every factual claim in your response MUST include a citation in this format:
 [Source: document_name, section_name]
 
@@ -512,7 +512,7 @@ flowchart TB
 
 For high-stakes Q&A where accuracy is non-negotiable:
 
-```
+```text
 1. Retrieve documents (top-5, reranked)
 2. Generate answer with citations (temp=0, structured output)
 3. Verify: send answer + sources to a SECOND LLM call:
@@ -527,7 +527,7 @@ Cost: ~2x token usage. Worth it for regulated, customer-facing, or financial sce
 
 For agent workflows where tool selection must be deterministic:
 
-```
+```text
 1. Define tools with precise schemas (no ambiguity)
 2. Use function calling (not free-text tool selection)
 3. Set temperature=0
@@ -543,7 +543,7 @@ For agent workflows where tool selection must be deterministic:
 
 For content generation where some creativity is OK but boundaries exist:
 
-```
+```text
 1. Generate content (temp=0.5, top_p=0.9)
 2. Check against business rules (blocklist, topic boundaries)
 3. Run content safety filter

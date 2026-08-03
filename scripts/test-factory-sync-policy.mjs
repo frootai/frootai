@@ -27,6 +27,7 @@ test("Factory Sync full audit honors split-repository ownership", () => {
   assert.match(workflow, /github\.event_name == 'workflow_dispatch' && inputs\.full_audit == true/);
   assert.match(workflow, /node scripts\/build-solution-play-index\.mjs --check/);
   assert.match(workflow, /node scripts\/audit-froot-docs\.js/);
+  assert.match(workflow, /node scripts\/audit-froot-docs-quality\.mjs/);
   assert.match(workflow, /node scripts\/validate-consistency\.js/);
   assert.doesNotMatch(workflow, /cd npm-mcp|cd vscode-extension|npm pack --dry-run/);
 });

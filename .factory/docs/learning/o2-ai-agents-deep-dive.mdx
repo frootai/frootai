@@ -26,7 +26,7 @@ An AI agent is a system that goes beyond responding to prompts. It **plans**, **
 
 At its core, every AI agent is composed of four building blocks:
 
-```
+```text
 Agent = LLM + Memory + Tools + Planning
 ```
 
@@ -117,7 +117,7 @@ graph TD
 
 The **ReAct** (Reasoning and Acting) pattern is the most widely adopted agent architecture. It interleaves chain-of-thought reasoning with tool use in an explicit, inspectable loop.
 
-```
+```text
 Thought: I need to find the current price of Azure SQL Database S3 tier.
 Action: search_azure_pricing(service="Azure SQL Database", tier="S3")
 Observation: The S3 tier costs approximately $200/month for 100 DTUs.

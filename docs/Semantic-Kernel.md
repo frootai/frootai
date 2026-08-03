@@ -430,7 +430,7 @@ Semantic Kernel has undergone a fundamental architectural shift in how it handle
 
 In the early SK releases, "Planners" were a core concept. The AI would receive a goal and generate an explicit multi-step plan (as XML or JSON) that the framework would then execute step by step.
 
-```
+```text
 User: "Find customer CUST-123 and email them their invoice"
 
 Old Planner Output:
