@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Validate Factory Sync action policy
+        run: node --test scripts/test-factory-sync-policy.mjs
+
       - name: Run content sync (auto-fix)
         run: node scripts/sync-content.js
 

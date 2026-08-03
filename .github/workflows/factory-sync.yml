@@ -550,16 +550,19 @@ jobs:
 
     steps:
       - name: 📡 Dispatch to frootai-core
-        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
-          token: ${{ secrets.CORE_REPO_PAT }}
-          repository: frootai/frootai-core
-          event-type: public-repo-updated
-          client-payload: >-
-            {
-              "sha": "${{ github.sha }}",
-              "ref": "${{ github.ref }}",
-              "actor": "${{ github.actor }}",
-              "primitives": "${{ needs.catalog-validation.outputs.total_primitives }}",
-              "run_id": "${{ github.run_id }}"
-            }
+          github-token: ${{ secrets.CORE_REPO_PAT }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: 'frootai',
+              repo: 'frootai-core',
+              event_type: 'public-repo-updated',
+              client_payload: {
+                sha: context.sha,
+                ref: context.ref,
+                actor: context.actor,
+                primitives: '${{ needs.catalog-validation.outputs.total_primitives }}',
+                run_id: String(context.runId),
+              },
+            });
