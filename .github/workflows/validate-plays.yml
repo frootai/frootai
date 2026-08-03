@@ -245,7 +245,9 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Verify generated typed Solution Play website projection
-        run: npm run test:solution-play-website-projection
+        run: |
+          npm run test:solution-play-website-projection
+          npm run test:solution-play-website-search
 
   canonical-index:
     runs-on: ubuntu-latest
