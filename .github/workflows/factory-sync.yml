@@ -378,7 +378,8 @@ jobs:
     needs: catalog-validation
     if: >-
       needs.catalog-validation.outputs.catalog_valid == 'true' &&
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
+      (github.event_name == 'schedule' ||
+       (github.event_name == 'workflow_dispatch' && inputs.full_audit == true))
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -387,30 +388,18 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # ── MCP Server: verify it loads ──
-      - name: 📦 Verify MCP server loads
+      # ── Public catalog: verify canonical projection ──
+      - name: 🧩 Verify public catalog
         run: |
           echo "## Build Verification" >> $GITHUB_STEP_SUMMARY
-          cd npm-mcp
-          npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
-          node -e "
-            try {
-              require('./config.js');
-              console.log('✅ config.js loads');
-            } catch (e) {
-              console.error('❌ config.js:', e.message);
-              process.exit(1);
-            }
-          "
-          echo "✅ MCP server dependencies OK" >> $GITHUB_STEP_SUMMARY
+          node scripts/build-solution-play-index.mjs --check
+          echo "✅ Public catalog projection OK" >> $GITHUB_STEP_SUMMARY
 
-      # ── VS Code Extension: TypeScript compile check ──
-      - name: 🔧 Verify VS Code extension compiles
+      # ── Documentation: verify source/projection freshness ──
+      - name: 📚 Verify FROOT documentation
         run: |
-          cd vscode-extension
-          npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
-          npx tsc --noEmit 2>&1 | tail -5
-          echo "✅ TypeScript compilation OK" >> $GITHUB_STEP_SUMMARY
+          node scripts/audit-froot-docs.js
+          echo "✅ FROOT documentation audit OK" >> $GITHUB_STEP_SUMMARY
 
       # ── Engine: verify moonshot tests ──
       - name: 🧪 Verify engine tests
@@ -418,12 +407,10 @@ jobs:
           node engine/moonshot/test.js 2>&1 | tail -5
           echo "✅ Engine moonshot tests OK" >> $GITHUB_STEP_SUMMARY
 
-      # ── npm pack dry-run: verify package is valid ──
-      - name: 📦 Verify npm pack
+      - name: 🔗 Verify repository consistency
         run: |
-          cd npm-mcp
-          npm pack --dry-run 2>&1 | tail -10
-          echo "✅ npm pack verification OK" >> $GITHUB_STEP_SUMMARY
+          node scripts/validate-consistency.js
+          echo "✅ Repository consistency OK" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════
   # Job 4: Change Summary — cache baseline for next run
