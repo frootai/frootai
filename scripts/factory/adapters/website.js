@@ -75,13 +75,27 @@ function buildSolutionPlayArtifactManifest(sourceCommitSha, artifacts) {
   };
 }
 
+function readSolutionPlayArtifact(absolutePath, relativePath) {
+  const descriptor = fs.openSync(absolutePath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+  try {
+    const openedMetadata = fs.fstatSync(descriptor);
+    const pathMetadata = fs.lstatSync(absolutePath);
+    if (!openedMetadata.isFile() || !pathMetadata.isFile() || pathMetadata.isSymbolicLink() || openedMetadata.dev !== pathMetadata.dev || openedMetadata.ino !== pathMetadata.ino) {
+      throw new Error(`Solution Play artifact must be an unchanged non-symlink regular file: ${relativePath}`);
+    }
+    const content = fs.readFileSync(descriptor);
+    if (content.length === 0 || content.length !== openedMetadata.size) throw new Error(`Solution Play artifact changed while reading: ${relativePath}`);
+    return content;
+  } finally {
+    fs.closeSync(descriptor);
+  }
+}
+
 function writeSolutionPlayArtifactManifest(sourceCommitSha = repositoryCommitSha()) {
   const artifacts = {};
   for (const relativePath of solutionPlayArtifactPaths) {
     const absolutePath = path.join(WEBSITE_ROOT, ...relativePath.split("/"));
-    const metadata = fs.lstatSync(absolutePath);
-    if (!metadata.isFile() || metadata.isSymbolicLink()) throw new Error(`Solution Play artifact must be a non-symlink regular file: ${relativePath}`);
-    artifacts[relativePath] = fs.readFileSync(absolutePath);
+    artifacts[relativePath] = readSolutionPlayArtifact(absolutePath, relativePath);
   }
   const manifest = buildSolutionPlayArtifactManifest(sourceCommitSha, artifacts);
   writeJson(path.join(WEBSITE_ROOT, "public", "solution-play-projection-manifest.json"), manifest);
@@ -1049,4 +1063,4 @@ if (require.main === module) {
   console.log(`\n  Done.`);
 }
 
-module.exports = { adapt, buildSearchIndex, buildSolutionPlayArtifactManifest, buildSolutionPlayDetails, buildSolutionPlayProjection, classifySolutionPlay, finalizeSearchIndex, renderSolutionPlayDetails, renderSolutionPlayProjection, repositoryCommitSha, validateSearchIndex, validateSolutionPlayDetail, writeSearchIndex, writeSolutionPlayArtifactManifest, writeSolutionPlayDetails, writeSolutionPlayProjection };
+module.exports = { adapt, buildSearchIndex, buildSolutionPlayArtifactManifest, buildSolutionPlayDetails, buildSolutionPlayProjection, classifySolutionPlay, finalizeSearchIndex, readSolutionPlayArtifact, renderSolutionPlayDetails, renderSolutionPlayProjection, repositoryCommitSha, validateSearchIndex, validateSolutionPlayDetail, writeSearchIndex, writeSolutionPlayArtifactManifest, writeSolutionPlayDetails, writeSolutionPlayProjection };

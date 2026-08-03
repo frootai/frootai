@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
+const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, readSolutionPlayArtifact, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
 const index = JSON.parse(fs.readFileSync(path.join(root, "orchard", "registry", "solution-play-index.json"), "utf8"));
 
 test("generates a deterministic typed projection for all 101 canonical identities", () => {
@@ -96,4 +96,21 @@ test("source provenance matches HEAD and rejects dirty canonical inputs", (t) =>
 test("factory transform CLI fails closed when an adapter reports an error", () => {
   const transformSource = fs.readFileSync(path.join(root, "scripts", "factory", "transform.js"), "utf8");
   assert.match(transformSource, /const result = transform\(channel\);\s*if \(result\.errors > 0\) process\.exitCode = 1;/);
+});
+
+test("artifact producer reads an unchanged descriptor and rejects symlinks", (t) => {
+  const artifactRoot = fs.mkdtempSync(path.join(os.tmpdir(), "frootai-play-artifact-"));
+  t.after(() => fs.rmSync(artifactRoot, { recursive: true, force: true }));
+  const artifactPath = path.join(artifactRoot, "artifact.json");
+  fs.writeFileSync(artifactPath, "{}\n");
+  assert.equal(readSolutionPlayArtifact(artifactPath, "artifact.json").toString("utf8"), "{}\n");
+  const targetPath = path.join(artifactRoot, "target.json");
+  fs.renameSync(artifactPath, targetPath);
+  try {
+    fs.symlinkSync(targetPath, artifactPath, "file");
+  } catch (error) {
+    if (error.code === "EPERM") return t.skip("symlink creation requires an elevated Windows token");
+    throw error;
+  }
+  assert.throws(() => readSolutionPlayArtifact(artifactPath, "artifact.json"), /unchanged non-symlink regular file/);
 });
