@@ -1,9 +1,11 @@
 ---
 name: tune-copilot-studio-bot
-description: "Tune measured topic behavior without widening authority. Use when: tune, improve triggers, reduce fallback."
+description: "Tune evidenced Copilot Studio topics and fallback behavior. Use when: tune, improve triggers, reduce fallback."
 ---
 
-# Tuning Gate
+# Tune Play 08
 
-Require a versioned baseline, one scoped change, the same rerun, and explicit
-regressions. Never bypass policy, identity, or approval controls.
+Select one measured behavior, preserve the baseline dataset and result, change
+only exported topic or knowledge configuration, rerun the same cases, and report
+gains and regressions. Do not alter connector authority, DLP, roles, approvals,
+or environment bindings as a tuning shortcut.
