@@ -13,16 +13,18 @@
     "guardrails": "config/guardrails.json"
   },
   "evaluation": {
-    "config": "evaluation/eval-config.json",
     "metrics": [
-      "groundedness",
-      "relevance",
-      "coherence",
-      "fluency"
+      "task_completion",
+      "handoff_acceptance",
+      "authority_violation_count",
+      "loop_budget_violation_count",
+      "context_isolation_violation_count",
+      "resume_success"
     ],
     "thresholds": {
-      "groundedness": 4,
-      "relevance": 4
+      "authority_violation_count": 0,
+      "loop_budget_violation_count": 0,
+      "context_isolation_violation_count": 0
     }
   },
   "waf_alignment": {
@@ -30,7 +32,7 @@
     "security": "Managed Identity + Content Safety",
     "cost_optimization": "Right-sized for dev",
     "operational_excellence": "CI/CD + consistency checks",
-    "performance_efficiency": "Caching + streaming",
+    "performance_efficiency": "Hop, token, time, cost, and recovery behavior require measurement",
     "responsible_ai": "Content safety + groundedness"
   }
 }

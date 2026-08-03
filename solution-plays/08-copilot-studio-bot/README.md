@@ -1,8 +1,8 @@
 # Play 08 — Copilot Studio Bot 💬
 
-> Low-code enterprise bot with Copilot Studio, knowledge grounding, and Dataverse.
+> Target Power Platform solution for Copilot Studio topics, actions, Dataverse, DLP, approvals, and ALM.
 
-Build an enterprise chatbot without writing code. Copilot Studio provides the canvas, SharePoint and Dataverse supply the knowledge, AI Search grounds the answers. Deploys to Teams, web, and mobile.
+The diagrams describe a target SaaS solution. This repository does not currently contain exported Copilot Studio solution source, Dataverse schema, connector policy, environment variables, promotion pipeline, clean import evidence, or publication receipts. Generic OpenAI config and Bicep files are legacy non-authoritative inputs for T233 replacement.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ code .  # Use @builder for topics/flows, @reviewer for conversation audit, @tune
 # Navigate to copilotstudio.microsoft.com to create and publish
 ```
 
-## Key Metrics
-- Topic trigger accuracy: ≥90% · Resolution rate: ≥65% · CSAT: ≥4.0/5.0
+## Evidence Required
+- Measure topic triggers, task completion, fallback, safety, escalation, CSAT, DLP, approval, import, and rollback before setting release thresholds.
 
 ## DevKit
 | Primitive | What It Does |
@@ -79,7 +79,7 @@ graph TB
 | Dataverse | $0 (Included) | $40 (Additional) | $120 (Enterprise) |
 | SharePoint Online | $0 (M365 Included) | $0 (M365 Included) | $30 (Advanced Mgmt) |
 | Power Automate | $0 (Included) | $100 (Per-flow) | $300 (Per-user) |
-| Azure OpenAI (via CS) | $0 (Included) | $0 (Included) | $200 (BYOA) |
+| External AI capability | Not assumed | Validate licensing and connector ownership | Validate only if justified |
 | Application Insights | $0 (Free) | $15 (Pay-per-GB) | $50 (Pay-per-GB) |
 | Key Vault | $1 (Standard) | $2 (Standard) | $10 (Premium HSM) |
 | **Total** | **$1/mo** | **$357/mo** | **$1,510/mo** |

@@ -25,7 +25,7 @@
     },
     "query_logging": {
       "enabled": true,
-      "anonymize_user": false,
+      "anonymize_user": true,
       "log_zero_results": true,
       "retention_days": 90
     },
@@ -35,5 +35,13 @@
     "enabled": true,
     "topics": ["competitor_analysis", "unreleased_products"],
     "response": "This information is restricted. Please contact your manager for access."
+  },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "acl_trimming_evidenced": false,
+    "ranking_benchmark_evidenced": false,
+    "deletion_propagation_evidenced": false,
+    "analytics_retention_evidenced": false,
+    "deployment_evidenced": false
   }
 }

@@ -27,5 +27,18 @@
     "enabled": true,
     "topics": ["medical_advice", "legal_advice", "salary_details", "performance_reviews"],
     "response": "I can't help with that topic. Please contact HR directly at hr@company.com."
+  },
+  "ownership": {
+    "authoritative_platform": "copilot_studio_power_platform",
+    "openai_config_authoritative": false,
+    "current_bicep_authoritative_for_bot": false,
+    "legacy_artifact_replacement_task": "T233"
+  },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "solution_import_evidenced": false,
+    "dlp_enforcement_evidenced": false,
+    "durable_approval_evidenced": false,
+    "deployment_evidenced": false
   }
 }

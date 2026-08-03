@@ -1,6 +1,8 @@
 // Copilot Studio Bot (Play 08) — Azure Infrastructure
 // FrootAI Solution Play — Bicep IaC Template
 // Deploy with: az deployment group create -g rg-frootai-{env} -f infra/main.bicep -p infra/parameters.json
+// Legacy non-authoritative infrastructure: this template does not own or deploy
+// the Copilot Studio/Power Platform solution. T233 owns replacement or removal.
 
 targetScope = 'resourceGroup'
 

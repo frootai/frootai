@@ -78,7 +78,7 @@ graph TB
 | SharePoint Online | Knowledge | Document libraries as grounding source for generative answers |
 | Dataverse | Data | Structured records, KB articles, conversation logs, entity storage |
 | Power Automate | Integration | Workflow automation, external system actions, approval flows |
-| Azure OpenAI (via Studio) | AI | Generative answer fallback for unmatched topics |
+| Generative fallback | Platform | Copilot Studio capability or approved external connector; ownership must be explicit |
 | Application Insights | Monitoring | Custom telemetry, error tracking, usage metrics |
 | Key Vault | Security | External connector credentials, API keys |
 

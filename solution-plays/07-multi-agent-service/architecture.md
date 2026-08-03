@@ -2,7 +2,7 @@
 
 ## Overview
 
-Supervisor-based multi-agent orchestration platform. A central supervisor agent receives user requests, decomposes complex tasks, delegates to specialist agents (research, code, data analysis), aggregates results, and returns a unified response. Built on Container Apps with Dapr for inter-agent communication and Cosmos DB for state persistence.
+This is the target supervisor workflow. The current Bicep declares Container Apps, Cosmos DB, Service Bus, and model resources; the runtime contract names Dapr as an adapter port. Current evidence does not establish Dapr policy, typed handoffs, specialist authority, checkpoints, recovery, context isolation, or distributed trace continuity.
 
 ## Architecture Diagram
 
@@ -14,7 +14,7 @@ graph TB
 
     subgraph Orchestration Layer
         Supervisor[Container Apps<br/>Supervisor Agent — Task Decomposition]
-        Dapr[Dapr Sidecar<br/>Service Invocation + Pub/Sub]
+        Dapr[Planned Dapr Adapter<br/>Policy not evidenced]
     end
 
     subgraph Specialist Agents
@@ -75,10 +75,10 @@ graph TB
 ## Data Flow
 
 1. **Request**: User sends a complex task → Supervisor agent receives and analyzes intent → GPT-4o-mini classifies task type and generates execution plan
-2. **Decomposition**: Supervisor breaks task into sub-tasks → Creates execution DAG with dependencies → Publishes sub-tasks via Dapr service invocation or Service Bus
+2. **Decomposition target**: A typed workflow creates bounded tasks and dependencies before invoking an approved adapter
 3. **Execution**: Specialist agents receive sub-tasks → Each agent calls GPT-4o with domain-specific system prompts → Results persisted to Cosmos DB with correlation IDs
 4. **Aggregation**: Supervisor polls for completed sub-tasks → Merges results using GPT-4o → Resolves conflicts, deduplicates, formats unified response
-5. **Monitoring**: Every agent call traced via Application Insights with distributed correlation → Token usage, latency, error rates tracked per agent
+5. **Monitoring target**: Deployment evidence must prove trace continuity, budgets, latency, and failure events across supervisor and specialists
 
 ## Service Roles
 
@@ -86,7 +86,7 @@ graph TB
 |---------|-------|------|
 | Container Apps (Supervisor) | Compute | Task decomposition, agent routing, result aggregation |
 | Container Apps (Specialists) | Compute | Domain-specific task execution — research, code, data |
-| Dapr | Platform | Service-to-service invocation, pub/sub, state management |
+| Dapr | Platform | Optional adapter port; service invocation policy and runtime behavior are not currently evidenced |
 | Azure OpenAI (GPT-4o) | AI | Complex reasoning, code generation, data analysis |
 | Azure OpenAI (GPT-4o-mini) | AI | Fast routing decisions, task classification, summaries |
 | Cosmos DB | Data | Agent state persistence, conversation history, task tracking |
@@ -98,7 +98,7 @@ graph TB
 ## Security Architecture
 
 - **Managed Identity**: All inter-agent calls authenticated via workload identity — no shared secrets
-- **Dapr ACLs**: Service invocation policies restrict which agents can call each other
+- **Adapter authority target**: Dapr or another invoker must enforce the typed handoff authority contract
 - **Key Vault**: OpenAI keys and external service credentials stored securely
 - **Network Isolation**: Container Apps environment with VNet integration (production)
 - **Content Safety**: Supervisor validates all outbound responses before returning to user
