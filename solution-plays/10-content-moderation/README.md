@@ -1,8 +1,8 @@
 # Play 10 — Content Moderation 🛡️
 
-> Filter harmful content with Azure Content Safety, custom blocklists, and severity scoring.
+> Target versioned moderation policy using Content Safety, blocklists, calibrated actions, and human appeal.
 
-Every AI response passes through Azure Content Safety for severity scoring across hate, violence, self-harm, and sexual categories. Custom blocklists catch domain-specific terms. Dual moderation on both input and output.
+The diagrams describe a target moderation control plane. The current Bicep does not provision Content Safety, API Management, Functions, Service Bus, Cosmos DB, or blocklists. The copied OpenAI config and GPT classifier stage are legacy non-authoritative artifacts for T234 replacement.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for pipeline, @reviewer for threshold audit, @tuner for false positives
 ```
 
-## Key Metrics
-- True positive rate: ≥95% · False positive rate: <5% · Moderation latency: <200ms
+## Evidence Required
+- Measure TPR, FPR, FNR, calibration, latency, subgroup behavior, evasion, multimodal policy, appeals, overrides, and rollback before setting release thresholds.
 
 ## DevKit
 | Primitive | What It Does |
