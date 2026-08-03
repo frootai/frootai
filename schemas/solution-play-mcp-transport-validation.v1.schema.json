@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-mcp-transport-validation.v1.json",
+  "title": "Solution Play MCP Transport Validation Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "task", "protocol_version", "utilities_policy_sha256", "tooling", "execution", "security", "boundaries"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri-reference" },
+    "schema_version": { "const": "1.0.0" },
+    "task": { "const": "T226" },
+    "protocol_version": { "const": "2026-07-28" },
+    "utilities_policy_sha256": { "const": "8c0f7146cbe47743081f25f6be4d7dc85908149027c941c67970a79e1a554c92" },
+    "tooling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inspector", "conformance", "embedded_sdk", "patched_dependency"],
+      "properties": {
+        "inspector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version", "protocol_ceiling", "mode"],
+          "properties": {
+            "package": { "const": "@modelcontextprotocol/inspector-cli" },
+            "version": { "const": "1.0.0" },
+            "protocol_ceiling": { "const": "2025-11-25" },
+            "mode": { "const": "compatibility-only" }
+          }
+        },
+        "conformance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version", "protocol_ceiling", "mode"],
+          "properties": {
+            "package": { "const": "@modelcontextprotocol/conformance" },
+            "version": { "const": "0.1.16" },
+            "protocol_ceiling": { "const": "2025-11-25" },
+            "mode": { "const": "compatibility-only" }
+          }
+        },
+        "embedded_sdk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version", "usage"],
+          "properties": {
+            "package": { "const": "@modelcontextprotocol/sdk" },
+            "version": { "const": "1.29.0" },
+            "usage": { "const": "official-tool-compatibility-only" }
+          }
+        },
+        "patched_dependency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version", "reason"],
+          "properties": {
+            "package": { "const": "@hono/node-server" },
+            "version": { "const": "2.0.12" },
+            "reason": { "const": "security-override" }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_version_range", "transports", "current_protocol_methods", "compatibility_protocol_version", "official_conformance_scenarios", "timeout_ms", "maximum_output_bytes"],
+      "properties": {
+        "node_version_range": { "const": ">=22.7.5 <23" },
+        "transports": { "type": "array", "const": ["stdio", "streamable-http"] },
+        "current_protocol_methods": { "type": "array", "const": ["server/discover", "tools/list", "tools/call"] },
+        "compatibility_protocol_version": { "const": "2025-11-25" },
+        "official_conformance_scenarios": { "type": "array", "const": ["server-initialize", "tools-list", "tools-call-simple-text"] },
+        "timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 30000 },
+        "maximum_output_bytes": { "type": "integer", "minimum": 4096, "maximum": 1048576 }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loopback_only", "authorization_required_for_protected_http", "origin_validation_required", "host_validation_required", "content_type_validation_required", "query_tokens_allowed", "maximum_request_bytes", "stdio_diagnostics_stream"],
+      "properties": {
+        "loopback_only": { "const": true },
+        "authorization_required_for_protected_http": { "const": true },
+        "origin_validation_required": { "const": true },
+        "host_validation_required": { "const": true },
+        "content_type_validation_required": { "const": true },
+        "query_tokens_allowed": { "const": false },
+        "maximum_request_bytes": { "type": "integer", "minimum": 1024, "maximum": 1048576 },
+        "stdio_diagnostics_stream": { "const": "stderr" }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fixture_only", "current_protocol_claim", "official_tool_claim", "full_conformance_claimed", "production_server_claimed", "canonical_writes_allowed", "publication_allowed"],
+      "properties": {
+        "fixture_only": { "const": true },
+        "current_protocol_claim": { "const": "direct-wire-tests" },
+        "official_tool_claim": { "const": "2025-11-25-compatibility-subset" },
+        "full_conformance_claimed": { "const": false },
+        "production_server_claimed": { "const": false },
+        "canonical_writes_allowed": { "const": false },
+        "publication_allowed": { "const": false }
+      }
+    }
+  }
+}
