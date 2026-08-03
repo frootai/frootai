@@ -1,0 +1,59 @@
+{
+  "$schema": "../../schemas/solution-play-mcp-transport-validation.v1.schema.json",
+  "schema_version": "1.0.0",
+  "task": "T226",
+  "protocol_version": "2026-07-28",
+  "utilities_policy_sha256": "8c0f7146cbe47743081f25f6be4d7dc85908149027c941c67970a79e1a554c92",
+  "tooling": {
+    "inspector": {
+      "package": "@modelcontextprotocol/inspector-cli",
+      "version": "1.0.0",
+      "protocol_ceiling": "2025-11-25",
+      "mode": "compatibility-only"
+    },
+    "conformance": {
+      "package": "@modelcontextprotocol/conformance",
+      "version": "0.1.16",
+      "protocol_ceiling": "2025-11-25",
+      "mode": "compatibility-only"
+    },
+    "embedded_sdk": {
+      "package": "@modelcontextprotocol/sdk",
+      "version": "1.29.0",
+      "usage": "official-tool-compatibility-only"
+    },
+    "patched_dependency": {
+      "package": "@hono/node-server",
+      "version": "2.0.12",
+      "reason": "security-override"
+    }
+  },
+  "execution": {
+    "node_version_range": ">=22.7.5 <23",
+    "transports": ["stdio", "streamable-http"],
+    "current_protocol_methods": ["server/discover", "tools/list", "tools/call"],
+    "compatibility_protocol_version": "2025-11-25",
+    "official_conformance_scenarios": ["server-initialize", "tools-list", "tools-call-simple-text"],
+    "timeout_ms": 30000,
+    "maximum_output_bytes": 262144
+  },
+  "security": {
+    "loopback_only": true,
+    "authorization_required_for_protected_http": true,
+    "origin_validation_required": true,
+    "host_validation_required": true,
+    "content_type_validation_required": true,
+    "query_tokens_allowed": false,
+    "maximum_request_bytes": 65536,
+    "stdio_diagnostics_stream": "stderr"
+  },
+  "boundaries": {
+    "fixture_only": true,
+    "current_protocol_claim": "direct-wire-tests",
+    "official_tool_claim": "2025-11-25-compatibility-subset",
+    "full_conformance_claimed": false,
+    "production_server_claimed": false,
+    "canonical_writes_allowed": false,
+    "publication_allowed": false
+  }
+}
