@@ -1,10 +1,16 @@
 ---
 name: deploy-copilot-studio-bot
-description: "Verify managed-solution promotion evidence. Use when: export, import, promote, publish, rollback."
+description: "Prepare and verify evidence-gated Copilot Studio managed-solution promotion. Use when: export, import, promote, publish, rollback."
 ---
 
-# Promotion Gate
+# Promote a Copilot Studio Solution
 
-Require owned environments, exported source, symbolic bindings, DLP compatibility,
-least-privilege roles, one digested managed artifact, isolated import tests, human
-approval, production smoke, and rollback evidence. Missing evidence blocks release.
+1. Confirm tenant, environment, solution, connector, and human owners.
+2. Export unmanaged source from development and unpack it under `solution/`.
+3. Inventory connection references, environment variables, roles, and DLP classes.
+4. Run solution checks and build one managed artifact with an immutable digest.
+5. Import into isolated test, then test topics, actions, identity, approvals, and audit.
+6. Obtain human approval for the exact artifact and production bindings.
+7. Import, publish, smoke, and retain a tested rollback artifact.
+
+Stop when source, authority, policy, approval, test, or rollback evidence is absent.

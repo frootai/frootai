@@ -1,10 +1,12 @@
 ---
 name: evaluate-copilot-studio-bot
-description: "Validate ownership facts and measured platform behavior. Use when: evaluate, test, audit."
+description: "Evaluate Play 08 ownership contracts and measured bot behavior. Use when: evaluate, test, audit."
 ---
 
-# Evaluation Gate
+# Evaluate Play 08
 
-Validate the offline contract, then use only authorized environment observations.
-Bind results to the dataset and managed artifact. No simulated values or automatic
-promotion are allowed.
+First run the offline contract validator. For runtime evaluation, require an
+authorized isolated environment and a versioned dataset covering topics, fallback,
+actions, identity, DLP, approvals, audit, and failures. Record raw observations,
+sample counts, environment, artifact digest, timestamps, and reviewer. Do not
+simulate scores or convert a contract check into release evidence.
