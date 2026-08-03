@@ -121,7 +121,7 @@
     "moonshot:test": "node engine/moonshot/index.js"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
+    "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@modelcontextprotocol/conformance": "0.1.16",
     "@modelcontextprotocol/inspector-cli": "1.0.0",
