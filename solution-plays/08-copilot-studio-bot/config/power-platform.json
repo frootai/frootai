@@ -1,0 +1,58 @@
+{
+  "authority": {
+    "platform": "copilot_studio_power_platform",
+    "tenant_owner_required": true,
+    "environment_owner_required": true,
+    "solution_owner_required": true,
+    "connector_owner_required": true
+  },
+  "solution": {
+    "unique_name": "frootai_copilot_studio_bot",
+    "publisher_prefix": "frootai",
+    "source_environment": "development",
+    "exported_source_path": "solution/",
+    "source_available": false
+  },
+  "alm": {
+    "production_artifact": "managed_solution",
+    "promotion_order": ["development", "test", "production"],
+    "connection_references_required": true,
+    "environment_variables_required": true,
+    "solution_checker_required": true,
+    "clean_import_required": true,
+    "rollback_artifact_required": true
+  },
+  "controls": {
+    "dlp": {
+      "required": true,
+      "policy_owner_required": true,
+      "connector_classification_required": true
+    },
+    "identity": {
+      "entra_authentication_required": true,
+      "least_privilege_roles_required": true,
+      "shared_credentials_allowed": false
+    },
+    "consequential_actions": {
+      "durable_approval_required": true,
+      "approval_audit_required": true,
+      "prompt_authorization_allowed": false
+    },
+    "telemetry": {
+      "content_logging_allowed": false,
+      "correlation_required": true,
+      "retention_owner_required": true
+    }
+  },
+  "evidence_boundary": {
+    "solution_export_available": false,
+    "solution_checker_evidenced": false,
+    "test_import_evidenced": false,
+    "production_import_evidenced": false,
+    "dlp_enforcement_evidenced": false,
+    "role_assignment_evidenced": false,
+    "approval_audit_evidenced": false,
+    "rollback_evidenced": false,
+    "publication_evidenced": false
+  }
+}

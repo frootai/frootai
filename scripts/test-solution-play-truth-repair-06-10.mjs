@@ -81,19 +81,19 @@ test("plays 06-10 guardrails expose current evidence and ownership boundaries", 
   }
   assert.equal(guardrails["06-document-intelligence"].evidence_boundary.field_provenance_evidenced, false);
   assert.equal(guardrails["07-multi-agent-service"].evidence_boundary.typed_handoffs_evidenced, false);
-  assert.equal(guardrails["08-copilot-studio-bot"].ownership.openai_config_authoritative, false);
+  assert.equal(guardrails["08-copilot-studio-bot"].ownership.authoritative_platform, "copilot_studio_power_platform");
+  assert.equal(guardrails["08-copilot-studio-bot"].ownership.platform_contract, "config/power-platform.json");
   assert.equal(guardrails["09-ai-search-portal"].evidence_boundary.acl_trimming_evidenced, false);
   assert.equal(guardrails["10-content-moderation"].ownership.openai_config_authoritative, false);
 });
 
 test("T232 infrastructure boundaries match actual declarations", () => {
   const play06 = read("solution-plays/06-document-intelligence/infra/main.bicep");
-  const play08 = read("solution-plays/08-copilot-studio-bot/infra/main.bicep");
   const play09 = read("solution-plays/09-ai-search-portal/infra/main.bicep");
   const play10 = read("solution-plays/10-content-moderation/infra/main.bicep");
   assert.doesNotMatch(play06, /kind:\s*['"](?:FormRecognizer|DocumentIntelligence)['"]/i);
   assert.doesNotMatch(play09, /Microsoft\.Search\/searchServices/);
-  assert.match(play08, /Legacy non-authoritative infrastructure[\s\S]*T233 owns replacement or removal/);
+  assert.equal(fs.existsSync(path.join(root, "solution-plays/08-copilot-studio-bot/infra/main.bicep")), false);
   assert.match(play10, /Legacy non-authoritative infrastructure[\s\S]*T234 owns replacement/);
 });
 

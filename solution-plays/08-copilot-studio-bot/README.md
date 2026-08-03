@@ -1,89 +1,46 @@
-# Play 08 — Copilot Studio Bot 💬
+# Play 08 - Copilot Studio Bot
 
-> Target Power Platform solution for Copilot Studio topics, actions, Dataverse, DLP, approvals, and ALM.
+> Target Power Platform solution for Copilot Studio topics, actions, Dataverse,
+> DLP, approvals, and managed-solution ALM.
 
-The diagrams describe a target SaaS solution. This repository does not currently contain exported Copilot Studio solution source, Dataverse schema, connector policy, environment variables, promotion pipeline, clean import evidence, or publication receipts. Generic OpenAI config and Bicep files are legacy non-authoritative inputs for T233 replacement.
+## Current State
 
-## Quick Start
-```bash
-cd solution-plays/08-copilot-studio-bot
-code .  # Use @builder for topics/flows, @reviewer for conversation audit, @tuner for triggers
-# Navigate to copilotstudio.microsoft.com to create and publish
-```
+This repository defines the target ownership and release contract. It does not
+contain exported Copilot Studio solution source, Dataverse schema, connection
+references, environment variables, tenant DLP policy, role assignments, a
+promotion pipeline, clean import receipts, publication receipts, or rollback
+evidence. The play remains Designed.
 
-## Evidence Required
-- Measure topic triggers, task completion, fallback, safety, escalation, CSAT, DLP, approval, import, and rollback before setting release thresholds.
+## Authoritative Surface
 
-## DevKit
-| Primitive | What It Does |
-|-----------|-------------|
-| 3 agents | Builder (topics/auth), Reviewer (flow/security audit), Tuner (triggers/knowledge) |
-| 3 skills | Deploy (100 lines), Evaluate (106 lines), Tune (101 lines) |
+- Copilot Studio owns topics, generative answers, knowledge configuration, and channels.
+- Dataverse owns solution state, structured records, roles, and audit data.
+- Power Automate owns connector-backed actions and durable approvals.
+- Power Platform environments and managed solutions own promotion and rollback.
+- `config/power-platform.json` is the repository contract for ownership and ALM.
 
-## Architecture
+No standalone model configuration or generic cloud infrastructure template is
+part of this play. An external service may be added only through a separately
+owned connector contract with licensing, identity, DLP, data-flow, and evidence
+review.
 
-```mermaid
-graph TB
-    subgraph User Channels
-        Teams[Microsoft Teams]
-        Web[Web Chat Widget]
-        M365[Microsoft 365 Copilot]
-    end
+## Required Release Evidence
 
-    subgraph Bot Platform
-        CS[Copilot Studio<br/>Topic management]
-        GEN[Generative AI<br/>Fallback answers]
-    end
+1. Unmanaged development export and source-control unpack receipt.
+2. Solution Checker output for the exact solution artifact.
+3. Connection-reference and environment-variable inventory with owners.
+4. Tenant DLP policy and least-privilege role-assignment evidence.
+5. Managed import into an isolated test environment and functional test results.
+6. Durable approval and audit receipts for consequential actions.
+7. Production import, publication smoke, and tested rollback receipts.
 
-    subgraph Knowledge
-        SP[SharePoint Online<br/>Document libraries]
-        DV[Dataverse<br/>Structured data]
-    end
+## Developer Roles
 
-    subgraph Automation
-        PA[Power Automate<br/>Workflow actions]
-    end
+| Role | Scope |
+|---|---|
+| Builder | Exported solution source, connection references, environment variables |
+| Reviewer | Topics, connectors, DLP, roles, approvals, audit, promotion evidence |
+| Tuner | Measured trigger, fallback, completion, and escalation behavior |
 
-    subgraph Monitoring
-        AI_INS[Application Insights<br/>Bot analytics]
-    end
-
-    Teams -->|message| CS
-    Web -->|message| CS
-    M365 -->|message| CS
-    CS -->|search| SP
-    CS -->|query| DV
-    CS -->|unmatched| GEN
-    GEN -->|grounded answer| CS
-    CS -->|trigger| PA
-    CS -->|telemetry| AI_INS
-
-    style Teams fill:#3b82f6,color:#fff
-    style Web fill:#3b82f6,color:#fff
-    style M365 fill:#3b82f6,color:#fff
-    style CS fill:#10b981,color:#fff
-    style GEN fill:#10b981,color:#fff
-    style SP fill:#f59e0b,color:#fff
-    style DV fill:#f59e0b,color:#fff
-    style PA fill:#3b82f6,color:#fff
-    style AI_INS fill:#0ea5e9,color:#fff
-```
-
-> 📐 [Full architecture details](architecture.md) — data flow, security architecture, scaling guide
-
-## Cost Estimate
-
-| Service | Dev/PoC | Production | Enterprise |
-|---------|---------|-----------|------------|
-| Copilot Studio | $0 (Trial) | $200 (Standard) | $800 (Standard + Packs) |
-| Dataverse | $0 (Included) | $40 (Additional) | $120 (Enterprise) |
-| SharePoint Online | $0 (M365 Included) | $0 (M365 Included) | $30 (Advanced Mgmt) |
-| Power Automate | $0 (Included) | $100 (Per-flow) | $300 (Per-user) |
-| External AI capability | Not assumed | Validate licensing and connector ownership | Validate only if justified |
-| Application Insights | $0 (Free) | $15 (Pay-per-GB) | $50 (Pay-per-GB) |
-| Key Vault | $1 (Standard) | $2 (Standard) | $10 (Premium HSM) |
-| **Total** | **$1/mo** | **$357/mo** | **$1,510/mo** |
-
-> 💰 [Full cost breakdown](cost.json) — per-service SKUs, usage assumptions, optimization tips
-
-📖 [Full docs](spec/README.md) · 🌐 [frootai.dev/solution-plays/08-copilot-studio-bot](https://frootai.dev/solution-plays/08-copilot-studio-bot)
+See [architecture.md](architecture.md), [spec/README.md](spec/README.md), and
+[config/power-platform.json](config/power-platform.json).
