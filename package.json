@@ -65,6 +65,8 @@
     "validate:solution-play-claude-runtime": "node scripts/solution-play-claude-runtime.mjs",
     "validate:solution-play-mcp-conformance": "node scripts/solution-play-mcp-conformance.mjs",
     "test:solution-play-mcp-conformance": "node --test scripts/test-solution-play-mcp-conformance.mjs",
+    "validate:solution-play-mcp-utilities": "node scripts/solution-play-mcp-utilities.mjs",
+    "test:solution-play-mcp-utilities": "node --test scripts/test-solution-play-mcp-utilities.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",

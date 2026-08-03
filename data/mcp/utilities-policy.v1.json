@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schemas/solution-play-mcp-utilities.v1.schema.json",
+  "schema_version": "1.0.0",
+  "task": "T225",
+  "protocol_version": "2026-07-28",
+  "conformance_profile_sha256": "9662c1d857035c596cd4b4acfc01f9c0bdaa4428f2a31bbe37adbf489d666ccc",
+  "limits": {
+    "maximum_schema_bytes": 32768,
+    "maximum_schema_depth": 64,
+    "maximum_discovery_ttl_ms": 300000,
+    "maximum_page_size": 100,
+    "cursor_ttl_ms": 300000,
+    "maximum_result_bytes": 65536,
+    "maximum_content_items": 100,
+    "maximum_subscriptions": 16,
+    "maximum_elicitation_schema_bytes": 8192
+  },
+  "security": {
+    "external_schema_references_allowed": false,
+    "cursor_algorithm": "hmac-sha256",
+    "minimum_cursor_secret_bytes": 32,
+    "authorization_verifier_required": true,
+    "approval_verifier_required": true,
+    "external_operation_timeout_ms": 5000,
+    "trace_context": "w3c-trace-context",
+    "clock_skew_seconds": 60
+  },
+  "tasks": {
+    "extension_commit": "2c1425d9a288b9b1f489430fe1e00bb392b47e48",
+    "durable_store_required": true,
+    "atomic_store_required": true,
+    "default_ttl_ms": 3600000,
+    "maximum_ttl_ms": 86400000,
+    "minimum_poll_interval_ms": 1000,
+    "maximum_input_requests": 8
+  },
+  "boundaries": {
+    "sdk_adapter": "python-v2",
+    "transport_adapter": "T226",
+    "network_calls_performed": false,
+    "credential_storage_performed": false,
+    "external_verifiers_allowed": true,
+    "canonical_writes_allowed": false,
+    "publication_allowed": false
+  }
+}
