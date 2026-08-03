@@ -1,13 +1,16 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const { buildSolutionPlayProjection, renderSolutionPlayProjection } = require("./factory/adapters/website.js");
+const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
 const index = JSON.parse(fs.readFileSync(path.join(root, "orchard", "registry", "solution-play-index.json"), "utf8"));
 
 test("generates a deterministic typed projection for all 101 canonical identities", () => {
@@ -57,4 +60,40 @@ test("rendered TypeScript is stable and excludes unsupported readiness claims", 
   assert.equal(source.includes('status: "Ready"'), false);
   assert.doesNotMatch(source, /production[- ](?:ready|grade)/i);
   assert.match(source, /export const solutionPlays = solutionPlayProjection\.plays/);
+});
+
+test("artifact manifest binds the three projections to one full source commit", () => {
+  const artifacts = {
+    "public/search-index.json": Buffer.from("search\n"),
+    "src/data/generated/solution-play-details.ts": Buffer.from("details\n"),
+    "src/data/generated/solution-plays.ts": Buffer.from("listing\n"),
+  };
+  const manifest = buildSolutionPlayArtifactManifest("a".repeat(40), artifacts);
+  assert.deepEqual(Object.keys(manifest.artifacts), Object.keys(artifacts));
+  assert.equal(manifest.source.commitSha, "a".repeat(40));
+  assert.equal(manifest.artifacts["public/search-index.json"].sha256, crypto.createHash("sha256").update(artifacts["public/search-index.json"]).digest("hex"));
+  assert.equal(manifest.artifacts["public/search-index.json"].bytes, artifacts["public/search-index.json"].length);
+  assert.throws(() => buildSolutionPlayArtifactManifest("a".repeat(8), artifacts), /full lowercase source commit SHA/);
+  assert.throws(() => buildSolutionPlayArtifactManifest("a".repeat(40), { ...artifacts, "public/unknown.json": Buffer.from("unknown") }), /unknown artifact/);
+});
+
+test("source provenance matches HEAD and rejects dirty canonical inputs", (t) => {
+  const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "frootai-play-source-"));
+  t.after(() => fs.rmSync(repoRoot, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(repoRoot, "solution-plays", "01-enterprise-rag"), { recursive: true });
+  fs.writeFileSync(path.join(repoRoot, "solution-plays", "01-enterprise-rag", "README.md"), "canonical\n");
+  for (const args of [["init"], ["config", "user.email", "test@example.invalid"], ["config", "user.name", "Test"], ["add", "."], ["commit", "-m", "fixture"]]) {
+    const result = spawnSync("git", args, { cwd: repoRoot, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+  }
+  const commitSha = spawnSync("git", ["rev-parse", "HEAD"], { cwd: repoRoot, encoding: "utf8" }).stdout.trim();
+  assert.equal(repositoryCommitSha({ repoRoot, expectedCommitSha: commitSha }), commitSha);
+  assert.throws(() => repositoryCommitSha({ repoRoot, expectedCommitSha: "a".repeat(40) }), /does not match the canonical checkout HEAD/);
+  fs.appendFileSync(path.join(repoRoot, "solution-plays", "01-enterprise-rag", "README.md"), "dirty\n");
+  assert.throws(() => repositoryCommitSha({ repoRoot, expectedCommitSha: commitSha }), /requires clean canonical source inputs/);
+});
+
+test("factory transform CLI fails closed when an adapter reports an error", () => {
+  const transformSource = fs.readFileSync(path.join(root, "scripts", "factory", "transform.js"), "utf8");
+  assert.match(transformSource, /const result = transform\(channel\);\s*if \(result\.errors > 0\) process\.exitCode = 1;/);
 });
