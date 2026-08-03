@@ -1,5 +1,5 @@
 ---
-title: "O4: Azure AI Foundry"
+title: "O4: Microsoft Foundry"
 description: "---"
 icon: "☁️"
 order: 11
@@ -9,61 +9,68 @@ next: "/learning/o5-ai-infrastructure"
 tags: ["operations", "o4"]
 category: "Operations"
 ---
-# Module 3: Azure AI Foundry — Microsoft's AI Platform Deep Dive
+# Module O4: Microsoft Foundry — Platform Deep Dive
 
 > **Duration:** 60-90 minutes | **Level:** Platform
 > **Audience:** Cloud Architects, Platform Engineers, CSAs
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Platform facts verified:** 2026-08-03 against [Microsoft Foundry architecture](https://learn.microsoft.com/azure/foundry/concepts/architecture) and the [classic migration guide](https://learn.microsoft.com/azure/foundry/how-to/navigate-from-classic)
 
 ---
 
-## 3.1 What is Azure AI Foundry?
+## 3.1 What is Microsoft Foundry?
 
-Azure AI Foundry is Microsoft's **unified platform for building, evaluating, and deploying generative AI applications** at enterprise scale. If you are an infrastructure or platform architect, think of it as the control plane for everything AI inside Azure -- model catalog, deployments, evaluation pipelines, prompt orchestration, fine-tuning, and integrated AI services all accessible through a single portal, SDK, and CLI.
+Microsoft Foundry is Microsoft's **unified platform for building, evaluating, governing, and operating AI applications and agents** on Azure. The current platform brings models, agents, evaluations, and Foundry Tools under a Foundry resource with child projects.
 
 ### The Evolution
 
-The branding journey matters because customers encounter all three names in documentation, blog posts, and portal URLs.
+The naming journey matters because customers still encounter every generation in repositories and deployed resources.
 
 | Era | Name | What It Was | Key Limitation |
 |-----|------|-------------|----------------|
 | 2016-2022 | **Azure Machine Learning Studio** | Drag-and-drop ML training and deployment | Focused on classical ML; poor LLM support |
 | 2023-2024 | **Azure AI Studio** | Preview portal for generative AI projects | Separate from Azure ML; fragmented experience |
-| Late 2024+ | **Azure AI Foundry** | Unified platform merging Azure ML + AI Studio | Current GA platform -- this module's focus |
+| Late 2024-2025 | **Azure AI Foundry / Foundry (classic)** | Hub-based generative AI platform | Classic SDK and resource architecture |
+| 2026+ | **Microsoft Foundry** | Foundry resource, child projects, models, agents, evaluations, and Foundry Tools | Current platform -- this module's focus |
 
-Azure AI Foundry is not a separate resource type that replaces Azure ML. Under the hood, the Azure ML workspace resource (`Microsoft.MachineLearningServices/workspaces`) is still the ARM building block. Foundry is a **unified experience layer** that consolidates model catalog, prompt flow, evaluation, deployments, and AI services into a single portal and SDK.
+The current Foundry resource is an Azure resource: `Microsoft.CognitiveServices/accounts` with `kind: AIServices`. A Foundry project is its `Microsoft.CognitiveServices/accounts/projects` child resource. This differs from the classic Hub/Project architecture based on `Microsoft.MachineLearningServices/workspaces`.
 
 ### Three Interfaces, One Platform
 
 | Interface | Best For | Example Use Case |
 |-----------|----------|-----------------|
-| **Azure AI Foundry portal** (`ai.azure.com`) | Exploration, visual prompt flow building, model comparison | A CSA demonstrating RAG to a customer |
-| **Azure AI Foundry SDK** (Python) | Programmatic model deployment, evaluation pipelines, CI/CD | A platform team automating model rollouts |
-| **Azure CLI (`az ml`)** | Infrastructure provisioning, DevOps integration | An IaC pipeline deploying Hubs and Projects |
+| **Foundry portal** | Models, agents, evaluations, project operations | A team developing and operating an agent |
+| **Foundry SDKs** | Project automation, agents, evaluations, connections | A platform team automating application delivery |
+| **OpenAI v1 endpoint and SDK** | Model inference through a stable OpenAI-compatible route | An application using Responses or chat-completions APIs |
+| **ARM, Bicep, CLI, and `azd`** | Repeatable resource and application delivery | A platform pipeline provisioning governed environments |
 
 :::tip Architect's Mental Model
-Think of Azure AI Foundry as **"Azure Resource Manager for AI workloads."** Just as ARM gives you a control plane for VMs, networking, and storage, Foundry gives you a control plane for models, endpoints, evaluations, and AI services -- with the same RBAC, networking, and compliance story you already know.
+Think of Microsoft Foundry as an **AI application and agent platform that participates in Azure's control plane**. ARM still provisions resources, while Foundry supplies project, model, agent, evaluation, and operational experiences.
+:::
+
+:::warning Migration Boundary
+The classic Hub architecture, `azure-ai-projects` 1.x, Assistants API, and monthly `api-version` examples are not the default for new development. Use `azure-ai-projects` 2.x and OpenAI v1 guidance for the current portal. The Assistants API sunsets on **2026-08-26**; migrate agent workloads to Foundry Agents and Responses APIs. See the [official migration guide](https://learn.microsoft.com/azure/foundry/how-to/navigate-from-classic).
 :::
 
 ---
 
 ## 3.2 Architecture & Resource Model
 
-This is the section that matters most to platform architects. Azure AI Foundry introduces a **two-tier workspace hierarchy**: Hubs and Projects.
+The current architecture uses a **Foundry resource** as the governance and capability boundary and **child projects** as application isolation boundaries.
 
-### Hub and Project Model
+### Foundry Resource and Project Model
 
 ```mermaid
 graph TD
     subgraph "Azure Subscription"
         subgraph "Resource Group"
-            HUB["AI Foundry Hub<br/>(Parent Resource)<br/>────────────<br/>Shared connections<br/>Shared compute<br/>Shared policies<br/>Networking config"]
+            HUB["Foundry Resource<br/>Microsoft.CognitiveServices/accounts<br/>kind: AIServices<br/>────────────<br/>Models · agents · evaluations<br/>Governance · networking"]
 
             HUB --> P1["Project A<br/>(RAG App)"]
             HUB --> P2["Project B<br/>(Customer Agent)"]
             HUB --> P3["Project C<br/>(Internal Copilot)"]
 
-            HUB --- AOAI["Azure OpenAI<br/>Resource"]
+            HUB --- AOAI["Foundry Models<br/>OpenAI-compatible endpoint"]
             HUB --- SEARCH["Azure AI<br/>Search"]
             HUB --- STORAGE["Storage<br/>Account"]
             HUB --- KV["Key Vault"]
@@ -81,72 +88,68 @@ graph TD
     style P3 fill:#50E6FF,color:#000
 ```
 
-### Hub (Parent Resource)
+### Foundry Resource (Parent)
 
-The **AI Foundry Hub** is the shared administrative boundary. It owns:
+The **Foundry resource** is the shared administrative boundary. It provides:
 
-- **Connections** -- credentials and endpoints for Azure OpenAI, Azure AI Search, Storage, Key Vault, and external services (e.g., a Snowflake database, a custom API)
-- **Compute resources** -- shared compute instances and clusters that Projects can use
+- **Model deployments** -- Microsoft and partner models exposed through supported endpoints
+- **Agent and evaluation capabilities** -- shared platform services consumed by projects
 - **Networking configuration** -- public access, private endpoints, managed VNet
 - **Security policies** -- RBAC role assignments, managed identity, customer-managed keys
-- **Container Registry** -- shared ACR for custom model images
+- **Foundry Tools** -- Speech, Vision, Language, Content Safety, and related prebuilt capabilities
 
-A Hub maps to the ARM resource type `Microsoft.MachineLearningServices/workspaces` with `kind: hub`.
+A Foundry resource maps to `Microsoft.CognitiveServices/accounts` with `kind: AIServices`.
 
 ### Project (Child Resource)
 
-A **Project** is an isolated workspace scoped to a single AI application or workload. It inherits connections and compute from the parent Hub but maintains its own:
+A **Project** is an isolated development and operations boundary scoped to an AI application or workload. It maintains its own:
 
 - Model deployments and endpoints
-- Prompt flow definitions
+- Agent versions and application assets
 - Evaluation runs and datasets
 - Fine-tuning jobs
 - Artifacts and logs
 
-A Project maps to the ARM resource type `Microsoft.MachineLearningServices/workspaces` with `kind: project` and a `hubResourceId` pointing to its parent Hub.
+A Project maps to `Microsoft.CognitiveServices/accounts/projects` beneath its parent Foundry resource.
 
 ### Resource Relationship Summary
 
 | Resource | Scope | Cardinality | Key Responsibility |
 |----------|-------|-------------|-------------------|
-| **Hub** | Organization/Team level | 1 per team or business unit | Shared config, connections, networking, policies |
-| **Project** | Application level | Many per Hub | Isolated workspace for a specific AI app |
-| **Azure OpenAI** | Connected resource | 1 or more per Hub | LLM API access (GPT-4o, GPT-4.1, o-series) |
-| **Azure AI Search** | Connected resource | 0 or more per Hub | Vector search for RAG workloads |
-| **Storage Account** | Connected resource | 1 per Hub | Data, artifacts, prompt flow files, logs |
-| **Key Vault** | Connected resource | 1 per Hub | Secrets, connection strings, API keys |
-| **Container Registry** | Connected resource | 0 or 1 per Hub | Custom model images, prompt flow images |
+| **Foundry resource** | Organization or platform boundary | One or more per landing zone | Models, agents, evaluations, Tools, governance, networking |
+| **Project** | Application boundary | Many per Foundry resource | Isolated application development and operations |
+| **Azure AI Search** | Connected Azure resource | As required | Retrieval and grounding |
+| **Storage / Cosmos DB / Key Vault** | Connected Azure resources | Architecture-dependent | Data, state, artifacts, and secrets |
+| **Application Insights** | Connected Azure resource | Recommended per operational boundary | Traces, metrics, and evaluation correlation |
 
 ### RBAC Model
 
-Azure AI Foundry uses Azure RBAC with purpose-built roles.
+Microsoft Foundry uses Azure RBAC with purpose-built roles.
 
 | Role | Scope | Permissions |
 |------|-------|-------------|
-| **Azure AI Developer** | Project | Deploy models, run evaluations, create prompt flows, manage endpoints |
-| **Azure AI Inference Deployment Operator** | Project | Deploy and manage inference endpoints only |
-| **Azure ML Data Scientist** | Project | Full access to experiments, compute, data assets |
-| **Contributor** | Hub or Project | Full resource management (create/delete projects, manage connections) |
-| **Reader** | Hub or Project | View resources and configurations, no modifications |
-| **Owner** | Hub | Full control including RBAC assignment |
+| **Foundry User** | Project | Build and use project capabilities without broad resource administration |
+| **Foundry Project Manager** | Project | Manage project-level assets and access |
+| **Foundry Owner** | Foundry resource | Govern the resource and its projects |
+| **Contributor / Reader** | Azure resource scope | General Azure control-plane access; combine carefully with data-plane roles |
 
 :::tip RBAC Best Practice
-Assign roles at the **Project level**, not the Hub level. This follows the principle of least privilege -- a developer working on the RAG application should not have access to the internal Copilot project's data and deployments. Use the Hub-level Contributor role only for platform administrators who manage shared infrastructure.
+Assign developer access at the **Project level** and reserve Foundry-resource roles for platform administrators. Control-plane roles alone do not necessarily grant the required data-plane permissions.
 :::
 
 ### Networking Options
 
 | Mode | Description | Use Case |
 |------|-------------|----------|
-| **Public** | Hub and Projects are accessible over public internet with AAD authentication | Development, PoCs, non-sensitive workloads |
-| **Private Endpoints** | Hub, connected resources (AOAI, Search, Storage, KV) exposed only via private endpoints in your VNet | Production enterprise workloads |
+| **Public** | Foundry endpoints use public networking with Microsoft Entra authentication | Development and approved low-risk workloads |
+| **Private Endpoints** | Foundry and connected Azure resources are reachable through private endpoints | Production enterprise workloads |
 | **Managed VNet** | Foundry manages a VNet on your behalf; you control outbound rules. Compute runs inside this managed VNet | Simplified private networking without BYO VNet complexity |
 | **Managed VNet + Data Exfiltration Protection** | Managed VNet with outbound restricted to approved destinations only | Highly regulated industries (financial services, healthcare) |
 
 ```mermaid
 graph LR
     subgraph "Customer VNet"
-        PE_HUB["Private Endpoint<br/>Hub"]
+        PE_HUB["Private Endpoint<br/>Foundry Resource"]
         PE_AOAI["Private Endpoint<br/>Azure OpenAI"]
         PE_SEARCH["Private Endpoint<br/>AI Search"]
         PE_STORAGE["Private Endpoint<br/>Storage"]
@@ -173,7 +176,7 @@ graph LR
 
 ## 3.3 Model Catalog
 
-The Model Catalog is the front door of Azure AI Foundry. It is a curated marketplace of **1,800+ models** from Microsoft and the open-source ecosystem, ready to deploy with a few clicks or a single SDK call.
+The model catalog is the front door of Microsoft Foundry. Its contents, deployment types, licenses, regions, and lifecycle states change continuously; query the [current Foundry model catalog](https://ai.azure.com/explore/models) before selecting a model. Do not use a fixed catalog count for architecture or procurement decisions.
 
 ### Model Providers
 

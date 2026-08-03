@@ -3,7 +3,8 @@
 > **Duration:** 45–60 minutes | **Level:** Deep-Dive
 > **Part of:** 🌱 FROOT Foundations Layer
 > **Prerequisites:** O2 (AI Agents), O3 (MCP, Tools & Function Calling)
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **GitHub platform facts verified:** 2026-08-03 against [GitHub Copilot customization](https://docs.github.com/copilot/customizing-copilot) and [GitHub Actions documentation](https://docs.github.com/actions)
 
 ---
 
@@ -313,13 +314,13 @@ Plugins **bundle** agents + skills + commands into a distributable package. Two 
 
 **plugin.json** declares what's inside. Consumers install the plugin → get all agents, skills, prompts, and hooks preconfigured.
 
-> **FrootAI ships plugin.json in every solution play.** Each of the 20 plays has a full manifest declaring all agentic OS files, DevKit, TuneKit, MCP server bindings, tags, complexity, and status. Browse them at [github.com/frootai/frootai/tree/main/solution-plays](https://github.com/frootai/frootai/tree/main/solution-plays).
+> **FrootAI solution plays can ship a plugin manifest with their agentic assets.** The repository currently contains 101 numbered solution-play catalog directories. Treat each play's checked-in manifest and specification as authoritative because maturity and packaged assets vary by play. Browse them at [github.com/frootai/frootai/tree/main/solution-plays](https://github.com/frootai/frootai/tree/main/solution-plays).
 
 ---
 
-## F4.7 FrootAI's Implementation — 19 Files per Solution Play
+## F4.7 FrootAI's Solution-Play Implementation
 
-FrootAI is the **first ecosystem to ship production-ready .github agentic OS folders** for 20 AI solution plays. Here's the complete structure:
+FrootAI projects a consistent `.github` agentic structure into solution plays. The following is the target structure; use the individual play manifest to determine which assets a specific play currently ships:
 
 ```
 solution-plays/01-enterprise-rag/
@@ -349,7 +350,7 @@ solution-plays/01-enterprise-rag/
 │       └── ai-deploy.md                  # Deployment automation
 ```
 
-**19 files × 20 plays = 380 agentic OS files.**
+Do not infer an ecosystem-wide file count from this example. Generated projections and play maturity change independently; validate a play from its manifest and quality-gate evidence.
 
 ### Agent Chain (per play)
 

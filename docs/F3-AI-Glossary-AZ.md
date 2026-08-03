@@ -2,7 +2,8 @@
 
 > **Type:** Reference | **Terms:** 200+ | **Use:** Keep this open in another tab
 > **Part of:** 🌱 FROOT Foundations Layer
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Terminology verified:** 2026-08-03 against the [MCP specification](https://modelcontextprotocol.io/specification/latest), [A2A specification](https://a2a-protocol.org/latest/specification/), and current provider model catalogs linked from F2
 
 ---
 
@@ -97,7 +98,7 @@ Microsoft's brand for AI assistants embedded in products. **M365 Copilot** (Offi
 Microsoft's low-code platform for building custom copilots. Connects to enterprise data (SharePoint, Dataverse), supports topics, actions, and plugins. No code required for basic scenarios, extensible with code for advanced ones.
 
 ### Cosine Similarity 🪵
-A measure of similarity between two vectors (0 = unrelated, 1 = identical). Used in RAG to compare query embeddings against document embeddings. Typical relevance threshold: 0.75–0.85. See Module R2.
+A measure of similarity between two vectors. For normalized embeddings, cosine similarity ranges from -1 to 1, with larger values indicating greater directional similarity. RAG thresholds are model- and corpus-specific; calibrate them from labeled queries rather than adopting a universal cutoff. See Module R2.
 
 ### Cross-Attention 🌱
 Attention where queries come from one sequence (e.g., decoder) and keys/values come from another (e.g., encoder). Used in encoder-decoder models like T5 and in multi-modal models where text attends to image patches.
@@ -216,6 +217,8 @@ A model configuration that constrains output to valid JSON. Essential for functi
 During autoregressive generation, the model caches the key and value tensors from previous tokens so they don't need to be recomputed. This is what makes generation fast but **eats VRAM**. A 128K context window with a 70B model can consume 40+ GB of KV cache.
 
 ### Knowledge Cutoff 🌱
+
+The date through which a model's learned knowledge is considered reliable. It is not the same as a release date, and some providers distinguish reliable-knowledge and training-data cutoffs. Verify the exact deployed model ID in its current model card; do not infer a cutoff from the family name.
 The date after which a model has no training data. GPT-4o: Oct 2023. Claude Opus 4: early 2025. Any question about events after the cutoff requires RAG or tool access to answer correctly.
 
 ---

@@ -2,11 +2,16 @@
 
 > **Duration:** 45-60 minutes | **Level:** Foundation
 > **Audience:** Cloud Architects, Platform Engineers, CSAs
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Provider catalogs verified:** 2026-08-03; see [OpenAI](https://developers.openai.com/api/docs/models), [Anthropic](https://platform.claude.com/docs/en/docs/about-claude/models/overview), [Google](https://ai.google.dev/gemini-api/docs/models), [Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html), and [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models)
 
 ---
 
 You do not need to train models. You do not need to understand backpropagation. But you **absolutely** need to know which models exist, what they are good at, how they are licensed, and how to deploy them on Azure. This module gives you the full map.
+
+:::warning Catalogs Are Live Data
+Model names, aliases, limits, prices, regions, licenses, and retirement dates change faster than this curriculum. Tables in this module are dated teaching snapshots. Before architecture approval, query the target provider catalog and record the exact model ID, region, deployment type, terms, and verification date in your decision record.
+:::
 
 By the end of this module you will be able to:
 
@@ -78,9 +83,9 @@ For architects who need to advise procurement and legal:
 
 ### OpenAI / Azure OpenAI
 
-The largest and most widely deployed model family in enterprise. Azure OpenAI Service provides the same models as OpenAI's API, but running on Microsoft's Azure infrastructure with enterprise security, compliance, and network integration.
+OpenAI's direct catalog and Microsoft Foundry's deployable catalog are related but not identical. As of the verification date, OpenAI documents GPT-5.6 Sol, Terra, and Luna as its frontier family, while Foundry availability remains region, quota, and deployment-type dependent. Never infer Azure availability from an OpenAI announcement.
 
-#### GPT-4 Class Models
+#### Widely Deployed Azure Families (March 2026 Snapshot)
 
 | Model | Context Window | Key Capabilities | Best For | Azure Deployment |
 |---|---|---|---|---|
@@ -126,13 +131,14 @@ Azure OpenAI is not just "OpenAI on Azure" -- it adds enterprise-grade features:
 
 ### Anthropic Claude
 
-Claude is Anthropic's model family, built with a focus on safety, helpfulness, and long-context understanding. Available via Anthropic's API and also accessible through Azure AI Foundry's model catalog (as a third-party model).
+Claude is Anthropic's model family, available through Anthropic and supported cloud platforms. Verify the cloud-specific model ID and endpoint because Anthropic, Amazon Bedrock, Google Cloud, and Microsoft Foundry identifiers can differ.
 
 | Model | Context Window | Key Capabilities | Best For |
 |---|---|---|---|
-| **Claude Opus 4** | 200K tokens | Most capable Claude. Deep analysis, complex reasoning, extended thinking, tool use. | Complex research, long-document analysis, agentic workflows |
-| **Claude Sonnet 4** | 200K tokens | Balanced performance and speed. Strong coding. Extended thinking available. | Production workloads needing quality + speed balance |
-| **Claude Haiku 3.5** | 200K tokens | Fastest, cheapest Claude. Surprisingly capable. | High-volume, cost-sensitive, real-time applications |
+| **Claude Fable 5** | 1M tokens | Highest-capability, long-running agent work; generally available on supported platforms | Complex agentic and research workloads |
+| **Claude Opus 5** | 1M tokens | Complex agentic coding and enterprise work | High-complexity production workloads |
+| **Claude Sonnet 5** | 1M tokens | Balance of speed and intelligence | General production agents and coding |
+| **Claude Haiku 4.5** | 200K tokens | Lowest-latency current family member | High-volume, latency-sensitive tasks |
 
 #### Key Differentiators vs GPT
 
@@ -194,16 +200,18 @@ Google's Gemini models are natively multimodal -- trained from the ground up on 
 
 | Model | Context Window | Key Capabilities | Best For |
 |---|---|---|---|
-| **Gemini 2.0 Flash** | 1M tokens | Fast, multimodal, tool use, agentic | Low-latency multimodal tasks |
-| **Gemini 2.5 Pro** | 1M tokens | Most capable Gemini. Thinking mode built-in. | Complex reasoning, long-context, multimodal analysis |
-| **Gemini 2.5 Flash** | 1M tokens | Fast + thinking. Balanced cost/quality. | Production multimodal at scale |
+| **Gemini 3.6 Flash** | See current model card | Current stable speed/intelligence balance | Agentic and multimodal production tasks |
+| **Gemini 3.5 Flash** | See current model card | Sustained frontier performance for agentic and coding tasks | Complex production workflows |
+| **Gemini 3.5 Flash-Lite** | See current model card | Cost- and throughput-optimized stable model | High-volume execution |
+| **Gemini 3.1 Pro** | Preview; see current model card | Advanced reasoning and coding | Evaluation and approved preview workloads |
+| **Gemini 2.5 Pro / Flash** | See current model card | Prior stable family still represented in the catalog | Existing workloads and migration baselines |
 
 #### Azure Availability
 
-Gemini models are **not natively available on Azure AI Foundry** as of March 2026. They are accessed via Google's Vertex AI or Google AI Studio. However, Azure AI Foundry's Model Catalog does include some Google models:
+Do not infer Microsoft Foundry availability from Google's Gemini API catalog. Check the target Foundry catalog and region at deployment time. Direct Gemini access is available through Google's APIs, while open-weight Gemma models can also appear in third-party cloud catalogs.
 
-- **Gemma** (Google's open-weight small models) -- available on Azure AI Foundry
-- **Gemma 2 (2B, 9B, 27B)** -- Apache 2.0 licensed, deployable on Azure
+- **Gemma** is Google's open-weight family; verify the license and exact cloud catalog entry for each version.
+- **Gemini** is Google's hosted family; model IDs and lifecycle states are defined by the Gemini API or the selected cloud platform.
 
 For multi-cloud architectures, teams sometimes use Gemini via Google's API alongside Azure OpenAI, but this adds complexity around data residency, networking, and billing management.
 

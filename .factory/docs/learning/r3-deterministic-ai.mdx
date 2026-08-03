@@ -14,7 +14,8 @@ category: "Reasoning"
 > **Duration:** 60–90 minutes | **Level:** Deep-Dive
 > **Part of:** 🪵 FROOT Reasoning Layer
 > **Prerequisites:** F1 (GenAI Foundations), R1 (Prompt Engineering)
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Reliability guidance verified:** 2026-08-03 against [Microsoft Foundry evaluation guidance](https://learn.microsoft.com/azure/foundry/concepts/evaluation-evaluators/), [OpenAI reproducibility guidance](https://developers.openai.com/api/docs/guides/evals), and the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework)
 
 ---
 
@@ -325,16 +326,16 @@ Embed facts, constraints, and rules directly in the system message:
 ```
 You are an Azure pricing assistant. Use ONLY the following pricing data to answer questions.
 
-PRICING DATA (as of March 2026):
-- Azure OpenAI GPT-4o: $2.50/1M input tokens, $10.00/1M output tokens
-- Azure OpenAI GPT-4o-mini: $0.15/1M input tokens, $0.60/1M output tokens
-- Azure AI Search: Basic $75.14/month, Standard $250.46/month
+PRICING DATA (example fixture, not live rates):
+- Model A: 2.50 units/1M input tokens, 10.00 units/1M output tokens
+- Model B: 0.15 units/1M input tokens, 0.60 units/1M output tokens
+- Search Basic: 75 units/month, Search Standard: 250 units/month
 
 RULES:
 1. If a pricing question is about a service NOT listed above, say "I don't have current pricing for that service."
 2. Always cite the data source: "Based on Azure pricing as of March 2026."
 3. Never extrapolate or estimate prices that are not in the data.
-4. If the user asks about historical pricing, say "I only have current pricing data."
+4. If the user asks about live or historical pricing, say "This fixture is not live pricing" and request a dated authoritative source.
 ```
 
 ### Strategy 3: Abstention Training

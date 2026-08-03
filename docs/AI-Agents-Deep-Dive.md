@@ -2,7 +2,8 @@
 
 > **Duration:** 90-120 minutes | **Level:** Deep-Dive
 > **Audience:** Cloud Architects, Platform Engineers, AI Engineers
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Agent platform facts verified:** 2026-08-03 against [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/overview/) and [Microsoft Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/overview)
 
 ---
 
@@ -67,7 +68,7 @@ These terms are used interchangeably in industry marketing, but they have distin
 |---|---|---|---|
 | **Assistant** | An LLM that answers questions and follows instructions within a single conversation | Low — responds to direct requests | Azure OpenAI Chat, ChatGPT |
 | **Copilot** | An AI embedded in a workflow that suggests actions but requires human approval | Medium — suggests, human decides | GitHub Copilot, M365 Copilot |
-| **Agent** | An AI system that autonomously plans and executes multi-step tasks using tools | High — plans and acts independently | AutoGen agents, Azure AI Agent Service |
+| **Agent** | An AI system that autonomously plans and executes multi-step tasks using tools | High — plans and acts independently | Agent Framework, Foundry Agent Service |
 
 :::tip Architect's Heuristic
 If the AI **only talks**, it is an assistant. If it **suggests actions in your workflow**, it is a copilot. If it **takes actions on its own**, it is an agent. The boundaries are fluid — many production systems blend all three.
@@ -346,10 +347,10 @@ Grounding connects agents to **real, current data** rather than relying solely o
 | Grounding Method | How It Works | Azure Service |
 |---|---|---|
 | **RAG (Vector Search)** | Embed documents, retrieve relevant chunks, inject into prompt | Azure AI Search with vector indexing |
-| **Web Search** | Query Bing or another search engine in real-time | Bing Grounding in Azure AI Agent Service |
+| **Web Search** | Query a supported search provider in real time | Foundry web search or an approved MCP/search tool |
 | **Database Query** | Execute SQL/KQL queries against structured data | Azure SQL, Cosmos DB, Kusto |
 | **API Call** | Call a REST API to get current data | Any REST endpoint via tool/function calling |
-| **File Upload** | User uploads files that the agent can read and analyze | Azure AI Agent Service File Search, Code Interpreter |
+| **File Upload** | User uploads files that the agent can read and analyze | Foundry file search and code interpreter tools |
 
 :::tip Architect's Note
 RAG is the most common grounding technique for enterprise agents. In Module 5 (RAG Architecture), we covered the full pipeline: chunking, embedding, indexing, retrieval, and reranking. In agent systems, RAG becomes just another **tool** that the agent can invoke when it needs factual data.
@@ -444,7 +445,7 @@ class DiagnosticResult(BaseModel):
 client = AzureOpenAI(
     azure_endpoint="https://my-aoai.openai.azure.com/",
     api_key=os.getenv("AZURE_OPENAI_KEY"),
-    api_version="2025-12-01-preview"
+    api_version=os.environ["AZURE_OPENAI_API_VERSION"]  # Required only for this legacy Azure-specific client
 )
 
 response = client.beta.chat.completions.parse(
@@ -577,33 +578,35 @@ Production agent systems require the same testing rigor as any production softwa
 
 ---
 
-## 6.5 Microsoft Agent Frameworks
+## 6.5 Current Microsoft Agent Stack
 
-Microsoft offers three distinct approaches to building agents, each optimized for different scenarios and skill levels.
+Microsoft separates the application framework from the managed platform. **Microsoft Agent Framework** is the open-source SDK for agents, harnesses, and graph workflows. **Microsoft Foundry Agent Service** is the managed platform for Prompt agents and Hosted agents, with the Responses API as the common models-and-tools endpoint.
 
 ### Framework Comparison
 
-| Dimension | Azure AI Agent Service | AutoGen | Semantic Kernel Agents |
+| Dimension | Microsoft Agent Framework | Foundry Agent Service | Predecessor SDKs |
 |---|---|---|---|
-| **Type** | Managed cloud service | Open-source framework | Open-source SDK |
-| **Deployment** | Azure-hosted (PaaS) | Self-hosted | Self-hosted (integrates with Azure) |
-| **Language** | Python, C#, JavaScript (REST API) | Python, .NET | Python, C#, Java |
-| **Agent pattern** | Single agent with tools | Multi-agent conversations | Single or multi-agent with plugins |
-| **State management** | Managed threads (server-side) | In-memory or custom | In-memory or custom |
-| **Built-in tools** | Code Interpreter, File Search, Bing Grounding, Azure AI Search, Azure Functions | Code execution, tool use | Plugin ecosystem, OpenAI tools |
-| **Best for** | Production agents with managed infrastructure | Research, complex multi-agent workflows | Enterprise apps already using Semantic Kernel |
-| **Learning curve** | Low-Medium | Medium-High | Medium |
+| **Type** | Open-source application framework | Managed Azure platform | Semantic Kernel and AutoGen |
+| **Deployment** | Your process or a Foundry Hosted agent | Prompt agent, Hosted agent, or direct Responses API | Existing self-hosted applications |
+| **Language** | C#, Python; Go capabilities vary by preview status | Framework-neutral hosted runtime and APIs | Language and feature set varies |
+| **Agent pattern** | Agents, harnesses, graph workflows | Managed Prompt and Hosted agents | Kernel plugins or AutoGen conversations |
+| **State management** | Sessions, context providers, workflow checkpoints | Managed conversations, identity, scaling, observability | In-memory or custom stores |
+| **Best for** | New Microsoft agent applications | Managed production hosting and platform tools | Maintaining and migrating existing systems |
 
-### Azure AI Agent Service
+### Microsoft Foundry Agent Service
 
-Azure AI Agent Service is Microsoft's **managed agent platform** within Azure AI Foundry. It provides a server-side, stateful agent runtime with built-in tools and managed conversation threads.
+Microsoft Foundry Agent Service is the managed platform for building, deploying, and scaling agents. Prompt agents are configuration-defined and fully managed. Hosted agents run your framework code in Foundry-managed compute. Both use the Responses API for Foundry models and platform tools.
+
+:::warning Classic API Boundary
+The following thread/run sample documents the classic Azure AI Agent Service and Assistants-compatible workflow. Retain it only for migration work. For new applications, use Prompt or Hosted agents and the [Responses API](https://learn.microsoft.com/azure/foundry/agents/quickstarts/responses-api). The Assistants API sunsets on **2026-08-26**.
+:::
 
 #### Architecture
 
 ```mermaid
 graph TD
-    subgraph "Azure AI Foundry"
-        AS["Azure AI Agent Service"]
+    subgraph "Microsoft Foundry (classic flow shown)"
+        AS["Classic Agent Service"]
         AS --> T["Managed Threads<br/><i>Conversation state</i>"]
         AS --> CI["Code Interpreter<br/><i>Sandboxed Python</i>"]
         AS --> FS["File Search<br/><i>RAG over uploaded files</i>"]
@@ -628,7 +631,7 @@ graph TD
 | **File Search** | Upload documents (PDF, DOCX, TXT, etc.) and the service automatically chunks, embeds, and indexes them. The agent can then search across uploaded files. |
 | **Bing Grounding** | Real-time web search grounding. The agent can search the web to answer questions about current events, pricing, or any public information. |
 | **Azure AI Search Integration** | Connect to an existing Azure AI Search index for enterprise RAG. The agent uses your corporate knowledge base. |
-| **OpenAI Assistants API Compatibility** | The API is compatible with the OpenAI Assistants API, making migration straightforward. |
+| **Classic Assistants compatibility** | Migration-only surface; move to Foundry Agent Service and Responses APIs before the 2026-08-26 sunset. |
 
 #### Code Example — Creating an Agent
 
@@ -698,9 +701,9 @@ if run.status == "completed":
                     print(block.text.value)
 ```
 
-### AutoGen
+### AutoGen (Predecessor and Migration Reference)
 
-AutoGen is Microsoft Research's open-source framework for building **multi-agent conversation systems**. Its core innovation is the concept of agents that converse with each other to solve problems collectively.
+AutoGen pioneered Microsoft multi-agent conversation patterns. Microsoft Agent Framework is its direct successor for new development; use the [AutoGen migration guide](https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/) when moving existing systems.
 
 #### AutoGen 0.4 Architecture
 
@@ -752,7 +755,7 @@ model_client = AzureOpenAIChatCompletionClient(
     azure_deployment="gpt-4o",
     azure_endpoint="https://my-aoai.openai.azure.com/",
     model="gpt-4o",
-    api_version="2025-12-01-preview",
+    api_version=os.environ["AZURE_OPENAI_API_VERSION"],  # Legacy AutoGen migration sample
 )
 
 # Create specialized agents
@@ -811,9 +814,9 @@ result = await team.run(
 | **Research & analysis** | Researcher + Critic + Summarizer agents | Iterative refinement produces higher quality output |
 | **Incident response** | Diagnostician + Remediator + Communicator agents | Parallel specialization speeds resolution |
 
-### Semantic Kernel Agent Framework
+### Semantic Kernel Agents (Predecessor and Migration Reference)
 
-Semantic Kernel provides an agent framework built on top of its plugin and orchestration ecosystem. Agents in Semantic Kernel leverage the existing plugin model, making it straightforward to add agent capabilities to applications already using SK.
+Semantic Kernel's agent APIs build on its plugin ecosystem. Existing applications can continue using them, but Microsoft Agent Framework is the successor for new agent orchestration. See the [Semantic Kernel migration guide](https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/).
 
 #### Agent Types
 
@@ -1116,7 +1119,7 @@ A2A is an **open protocol** led by Google that defines how independent agents **
 
 | Concept | Description |
 |---|---|
-| **Agent Card** | A JSON metadata document that describes an agent's capabilities, endpoint, and authentication requirements. Published at `/.well-known/agent.json`. |
+| **Agent Card** | A JSON metadata document that describes an agent's capabilities, interfaces, skills, and security requirements. Published at `/.well-known/agent-card.json`. |
 | **Task** | A unit of work that one agent requests from another. Tasks have lifecycle states: submitted, working, input-needed, completed, failed. |
 | **Message** | A communication unit between agents within a task. Contains parts (text, files, structured data). |
 | **Artifact** | Output produced by the receiving agent — files, data, or structured results. |
@@ -1129,7 +1132,7 @@ sequenceDiagram
     participant D as Agent B Discovery
     participant B as Agent B (Server)
 
-    A->>D: GET /.well-known/agent.json
+    A->>D: GET /.well-known/agent-card.json
     D-->>A: Agent Card (capabilities, auth, endpoint)
 
     A->>B: POST /tasks (create task with instructions)
@@ -1185,7 +1188,7 @@ sequenceDiagram
 | **Analogy** | USB-C (device to peripheral) | HTTP (service to service) |
 | **Communication** | Agent calls a tool on an MCP server | Agent delegates a task to another agent |
 | **State** | Stateless tool invocations | Stateful task lifecycle |
-| **Discovery** | Server lists available tools | Agent Card at `/.well-known/agent.json` |
+| **Discovery** | Server lists available tools | Agent Card at `/.well-known/agent-card.json` |
 | **Ecosystem** | Thousands of MCP servers emerging | Early adoption, growing support |
 
 ---
@@ -1213,7 +1216,7 @@ For architects and developers who need full control over agent behavior, tool in
 
 | Approach | SDK/Framework | Key Advantage |
 |---|---|---|
-| **Azure AI Agent Service** | `azure-ai-projects` Python/C# SDK | Managed infrastructure, built-in tools, server-side threads |
+| **Microsoft Foundry Agent Service** | Responses API and current Foundry SDKs | Prompt/Hosted agents, managed tools, identity, scaling, and observability |
 | **Semantic Kernel** | `semantic-kernel` Python/C#/Java SDK | Plugin ecosystem, enterprise integrations, .NET-first |
 | **AutoGen** | `autogen-agentchat` Python SDK | Multi-agent patterns, research flexibility |
 | **Custom Agent Loop** | Direct Azure OpenAI SDK + your own code | Maximum control, minimal abstractions |
@@ -1229,7 +1232,7 @@ from openai import AzureOpenAI
 client = AzureOpenAI(
     azure_endpoint="https://my-aoai.openai.azure.com/",
     api_key=os.getenv("AZURE_OPENAI_KEY"),
-    api_version="2025-12-01-preview"
+    api_version=os.environ["AZURE_OPENAI_API_VERSION"]  # Legacy client only
 )
 
 # Tool definitions
@@ -1305,7 +1308,7 @@ Deploying agents in production introduces infrastructure challenges that do not 
 
 | Concern | Challenge | Recommendation |
 |---|---|---|
-| **Stateful compute** | Agent threads require state persistence across API calls | Externalize state to Azure Cosmos DB or Redis. Use Azure AI Agent Service managed threads for simplicity. |
+| **Stateful compute** | Agent sessions and workflows require durable state | Use Agent Framework sessions or external stores; use Foundry-managed conversations where the platform owns state. |
 | **Tool API latency** | Each tool call adds network latency. An agent calling 5 tools sequentially accumulates latency. | Set latency budgets per tool (<2s). Implement timeouts. Use async tool execution where possible. Cache frequently accessed tool results. |
 | **Concurrent execution** | Multiple users running agents simultaneously strain LLM endpoints. | Use provisioned throughput (PTU) on Azure OpenAI for predictable capacity. Implement queuing for burst traffic. |
 | **Cost management** | Agent loops can make many LLM calls. A 10-step agent task may consume 10x the tokens of a single Q&A. | Implement per-session token budgets. Monitor cost per agent session. Use circuit breakers to prevent runaway loops. Choose smaller models for intermediate reasoning steps. |
@@ -1406,7 +1409,7 @@ graph TD
 
 3. **Determinism is the hard problem** — achieving reliable, predictable agent behavior requires layering strong system instructions, structured output, guardrails, tool constraints, and rigorous evaluation. No single technique is sufficient.
 
-4. **Microsoft offers three agent frameworks** — Azure AI Agent Service (managed PaaS), AutoGen (multi-agent research framework), and Semantic Kernel agents (enterprise SDK). Choose based on your team's skills and deployment requirements.
+4. **Microsoft's current stack has two layers** — Agent Framework for application code and Foundry Agent Service for managed Prompt/Hosted agents and Responses-based platform tools. Semantic Kernel and AutoGen are predecessor paths with migration guides.
 
 5. **Multi-agent patterns unlock complex workflows** — handoff, supervisor, and debate patterns let specialized agents collaborate, but they multiply cost and complexity.
 

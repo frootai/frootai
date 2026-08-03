@@ -13,7 +13,8 @@ category: "Reasoning"
 
 > **Duration:** 90-120 minutes | **Level:** Deep-Dive
 > **Audience:** Cloud Architects, Platform Engineers, AI Engineers
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Retrieval guidance verified:** 2026-08-03 against [Azure AI Search documentation](https://learn.microsoft.com/azure/search/), [Microsoft Foundry evaluation guidance](https://learn.microsoft.com/azure/foundry/concepts/evaluation-evaluators/rag-evaluators), and the [OpenAI embeddings guide](https://developers.openai.com/api/docs/guides/embeddings)
 
 ---
 
@@ -409,6 +410,8 @@ Too Small (< 128 tokens)          Just Right (256-1024 tokens)         Too Large
 | **FAQ / Q&A pairs** | 128-256 | 0% | Each Q&A is a natural chunk |
 | **Legal contracts** | 512-768 | 20% | Clauses reference each other, need higher overlap |
 | **Knowledge base articles** | 512-1024 | 10% | Articles have clear topic boundaries |
+
+These ranges are experiment starting points, not defaults. Measure retrieval hit rate or NDCG and end-to-end answer quality on representative queries, then tune chunk boundaries, overlap, and metadata together.
 | **Chat transcripts** | 256-512 | 15% | Conversations shift topics frequently |
 | **Source code** | Function-level | 0% | Each function is a natural unit |
 | **Research papers** | 768-1024 | 15% | Dense content needs larger context windows |
@@ -488,12 +491,16 @@ For Azure AI Search and most text retrieval scenarios, **cosine similarity** is 
 ### Generating Embeddings with Azure OpenAI
 
 ```python
-from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import OpenAI
 
-client = AzureOpenAI(
-    azure_endpoint="https://my-aoai.openai.azure.com/",
-    api_key=os.getenv("AZURE_OPENAI_KEY"),
-    api_version="2025-12-01-preview"
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default",
+)
+client = OpenAI(
+    base_url="https://<resource>.services.ai.azure.com/openai/v1/",
+    api_key=token_provider,
 )
 
 def get_embedding(text: str, model: str = "text-embedding-3-large", dimensions: int = 1536):
@@ -694,12 +701,14 @@ The Semantic Ranker also provides:
 
 | Tier | Replicas | Partitions | Vector Index Size | Semantic Ranker | Price (approx/month) |
 |---|---|---|---|---|---|
-| **Free** | 1 | 1 | 8 MB | No | $0 |
+| **Free** | 1 | 1 | 8 MB | No | See current pricing |
 | **Basic** | 3 | 1 | 2 GB | No | ~$75 |
 | **Standard S1** | 12 | 12 | 25 GB per partition | Yes | ~$250/SU |
 | **Standard S2** | 12 | 12 | 100 GB per partition | Yes | ~$1,000/SU |
 | **Standard S3** | 12 | 12 | 200 GB per partition | Yes | ~$2,000/SU |
-| **S3 HD** | 12 | 3 | 200 GB per partition | Yes | ~$2,000/SU |
+| **S3 HD** | 12 | 3 | 200 GB per partition | Yes | See current pricing |
+
+> Service limits and prices vary by region and can change. Verify the target tier in [Azure AI Search service limits](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity) and [Azure AI Search pricing](https://azure.microsoft.com/pricing/details/search/) before sizing.
 
 :::tip Architect's Guidance
 For most production RAG workloads serving up to a few million documents, **Standard S1 with 2 replicas** provides sufficient capacity with high availability. Start there, monitor query latency, and scale up only when needed.

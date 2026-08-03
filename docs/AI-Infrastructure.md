@@ -2,7 +2,8 @@
 
 > **Duration:** 60-90 minutes | **Level:** Strategic
 > **Audience:** Cloud Architects, Platform Engineers, Infrastructure Engineers
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Infrastructure facts verified:** 2026-08-03 against [Azure GPU VM documentation](https://learn.microsoft.com/azure/virtual-machines/sizes-gpu), [Microsoft Foundry architecture](https://learn.microsoft.com/azure/foundry/concepts/architecture), and the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)
 
 ---
 
@@ -54,7 +55,7 @@ A single transformer layer in a large language model performs multiple matrix mu
 3. **Attention-weighted sum** — scores times V
 4. **Feed-forward network** — two more large matrix multiplications
 
-A model like GPT-4o with ~200 billion parameters (estimated) performs these operations across hundreds of layers, for every token generated. A CPU processes these sequentially. A GPU like the NVIDIA H100 has **16,896 CUDA cores** that execute these matrix operations **in parallel**, delivering 100-1000x speedup over CPUs for this type of workload.
+Large transformer models perform these operations across many layers for every generated token. Proprietary parameter counts are often undisclosed, so do not use third-party estimates for capacity planning. A GPU executes matrix operations in parallel; realized speedup depends on model architecture, precision, batching, kernels, memory bandwidth, and serving software.
 
 ```mermaid
 flowchart LR
@@ -103,6 +104,8 @@ These are standard Azure VMs with attached GPUs. You manage the OS, drivers, CUD
 
 #### NC-Series — Training and Inference
 
+> The SKU and hourly-price tables below are an **illustrative March 2026 snapshot**. Availability, hardware configuration, and price vary by region and agreement. Validate the target subscription with Azure SKU discovery and the pricing calculator before design approval.
+
 | VM SKU | GPU | GPU Count | VRAM per GPU | Total VRAM | vCPUs | RAM | Use Case | Est. Price/hr (Pay-As-You-Go) |
 |---|---|---|---|---|---|---|---|---|
 | NC6s_v3 | NVIDIA V100 | 1 | 16 GB | 16 GB | 6 | 112 GB | Dev/test inference | ~$3.06 |
@@ -137,7 +140,7 @@ GPU VMs are NOT available in every Azure region. NC A100 and ND H100 SKUs are co
 | Service | GPU Management | Scaling | Best For |
 |---|---|---|---|
 | **Azure OpenAI Service** | Fully managed (no GPU visibility) | PTU or PAYG rate limits | GPT-4o, GPT-4.1, o3, o4-mini inference |
-| **Azure AI Foundry Serverless** | Fully managed | Auto-scaled | Llama, Mistral, Phi, Cohere models |
+| **Microsoft Foundry Direct Models** | Fully managed | Auto-scaled | Supported Microsoft and partner models; verify the current catalog |
 | **Azure ML Managed Endpoints** | Semi-managed (pick VM SKU) | Manual or auto-scale | Custom models, BYOM |
 | **Azure ML Compute Clusters** | Semi-managed (pick VM SKU) | Auto-scale 0 to N nodes | Training jobs, batch inference |
 
@@ -403,7 +406,7 @@ Every AI service on Azure supports private endpoints. For enterprise workloads, 
 |---|---|---|
 | Azure OpenAI | Yes | `privatelink.openai.azure.com` |
 | Azure AI Search | Yes | `privatelink.search.windows.net` |
-| Azure AI Foundry | Yes | `privatelink.api.azureml.ms` |
+| Microsoft Foundry | Yes | Resource-specific Private Link and DNS; verify the current Foundry networking guide |
 | Azure ML Workspace | Yes | `privatelink.api.azureml.ms` |
 | Azure Cosmos DB | Yes | `privatelink.documents.azure.com` |
 | Azure Blob Storage | Yes | `privatelink.blob.core.windows.net` |
@@ -691,7 +694,7 @@ You cannot manage what you cannot measure. AI workloads introduce new metrics th
 | **GPU utilization** | Compute efficiency (self-hosted) | 60-85% sustained | NVIDIA DCGM / Azure Monitor |
 | **VRAM utilization** | Memory pressure (self-hosted) | <90% | NVIDIA DCGM |
 | **Queue depth** | Backlog of pending requests | Near zero for real-time | Custom metric |
-| **Groundedness score** | Factual accuracy of responses | >4.0/5.0 | Azure AI Foundry evaluation |
+| **Groundedness score** | Factual support from supplied context | Calibrate per evaluator and risk tier | Microsoft Foundry evaluation |
 
 ### Azure Monitor for Azure OpenAI
 

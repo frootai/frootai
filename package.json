@@ -111,6 +111,7 @@
     "factory:adapt:langchain": "node scripts/factory/adapters/langchain.js",
     "factory:adapt:all": "node scripts/factory/adapters/semantic-kernel.js && node scripts/factory/adapters/langchain.js",
     "factory:docs": "node scripts/factory/adapters/docs.js",
+    "docs:audit": "node scripts/audit-froot-docs.js",
     "lean:api": "node engine/lean-compiler-plus/server.mjs",
     "lean:api:test": "node --test engine/lean-compiler-plus/server.test.mjs",
     "factory:docs:learning": "node scripts/factory/adapters/docs.js --section=learning",

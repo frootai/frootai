@@ -115,6 +115,7 @@ graph TB
 | F1 | [GenAI Foundations](./GenAI-Foundations.md) | 60–90 min | Transformers, attention, tokenization, inference, parameters (temperature, top-k, top-p), context windows, embeddings |
 | F2 | [LLM Landscape & Model Selection](./LLM-Landscape.md) | 45–60 min | GPT, Claude, Llama, Gemini, Phi — benchmarks, open vs proprietary, when to use what |
 | F3 | [AI Glossary A–Z](./F3-AI-Glossary-AZ.md) | Reference | Comprehensive glossary defined — from "ablation" to "zero-shot". The dictionary you keep open in another tab |
+| F4 | [GitHub Agentic OS](./F4-GitHub-Agentic-OS.md) | 45–60 min | Repository-level instructions, prompts, agents, skills, hooks, workflows, and plugins |
 
 ---
 
@@ -172,6 +173,16 @@ graph TB
 |---|--------|----------|---------|
 | REF | [Quick Reference Cards](./Quick-Reference-Cards.md) | Reference | One-page cheat sheets for every concept — pin them to your wall |
 | QUIZ | [Quiz & Assessment](./Quiz-Assessment.md) | 20 min | 25 questions covering the full FrootAI curriculum |
+
+---
+
+### 🎙️ Specialty Deep Dives
+
+Specialties extend the core 18-module curriculum without adding another FROOT layer.
+
+| Specialty | Guide | Focus |
+|---|---|---|
+| S-10 FAI Voice | [Voice & Speech AI](./V1-Voice-Speech-AI.md) | Real-time speech, telephony, streaming, latency, and voice-agent production patterns |
 
 ---
 
@@ -429,9 +440,9 @@ Standalone engine — works from any workspace, no clone needed:
 Ctrl+Shift+X → Search "FrootAI" → Install
 ```
 
-**17 commands:** Init DevKit (.github Agentic OS), Init TuneKit, Init SpecKit, Auto-Chain Agents, MCP Install/Start/Configure, Search Knowledge, Look Up AI Term, and more.
+Commands include DevKit, TuneKit, and SpecKit initialization; agent chaining; MCP configuration; and knowledge search. The Marketplace listing is the authority for the currently shipped command surface.
 
-**4 sidebar panels:** Solution Plays (20) · MCP Tools (22) · Knowledge Hub (knowledge modules) · AI Glossary (comprehensive glossary)
+**4 sidebar panels:** Solution Plays · MCP Tools · Knowledge Hub · AI Glossary
 
 See [VS Code Extension →](https://marketplace.visualstudio.com/items?itemName=frootai.frootai-vscode)
 
