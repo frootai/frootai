@@ -80,7 +80,8 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const channelIdx = args.indexOf("--channel");
   const channel = channelIdx >= 0 ? args[channelIdx + 1] : null;
-  transform(channel);
+  const result = transform(channel);
+  if (result.errors > 0) process.exitCode = 1;
 }
 
 module.exports = { transform };
