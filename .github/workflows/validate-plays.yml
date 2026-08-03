@@ -248,6 +248,7 @@ jobs:
         run: |
           npm run test:solution-play-website-projection
           npm run test:solution-play-website-search
+          npm run test:solution-play-website-details
 
   canonical-index:
     runs-on: ubuntu-latest

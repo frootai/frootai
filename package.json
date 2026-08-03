@@ -71,6 +71,7 @@
     "test:solution-play-mcp-transports": "node --test scripts/test-solution-play-mcp-transport-validation.mjs",
     "test:solution-play-website-projection": "node --test scripts/test-solution-play-website-projection.mjs",
     "test:solution-play-website-search": "node --test scripts/test-solution-play-website-search.mjs",
+    "test:solution-play-website-details": "node --test scripts/test-solution-play-website-details.mjs",
     "test:evidence-v2-migration": "node --test scripts/test-solution-play-evidence-v2-migration.mjs",
     "test:solution-play-quality": "node --test scripts/test-solution-play-quality-gate.mjs",
     "test:engine-corpus": "node --test scripts/test-solution-play-engine-corpus.mjs",

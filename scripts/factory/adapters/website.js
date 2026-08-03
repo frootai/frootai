@@ -134,6 +134,7 @@ function buildSolutionPlayProjection(index) {
     if (!play || typeof play !== "object") throw new Error(`Solution Play record ${offset + 1} must be an object`);
     const expectedId = String(offset + 1).padStart(2, "0");
     if (play.id !== expectedId || play.numeric_id !== offset + 1) throw new Error(`Solution Play identity is not contiguous at record ${offset + 1}`);
+    if (!/^(?:0[1-9]|[1-9]\d|10[01])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play ${play.id} slug is invalid`);
     if (ids.has(play.id) || slugs.has(play.slug)) throw new Error(`Duplicate Solution Play identity: ${play.id}`);
     ids.add(play.id);
     slugs.add(play.slug);
@@ -183,6 +184,115 @@ function writeSolutionPlayProjection() {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, renderSolutionPlayProjection(projection), "utf8");
   return projection;
+}
+
+function buildSolutionPlayDetails(index, catalog) {
+  const projection = buildSolutionPlayProjection(index);
+  const catalogBySlug = new Map(catalog.plays.map((play) => [play.slug, play]));
+  const playsRoot = path.resolve(REPO_ROOT, "solution-plays");
+  const expectedRuntimeScenarios = new Map([
+    ["01-enterprise-rag", "rag.query"],
+    ["03-deterministic-agent", "deterministic.execute"],
+    ["06-document-intelligence", "document.process"],
+    ["07-multi-agent-service", "agents.execute"],
+    ["33-voice-ai-agent", "voice.simulate-turn"],
+  ]);
+  const details = projection.plays.map((play) => {
+    if (!/^(?:0[1-9]|[1-9]\d|10[01])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play detail slug is invalid: ${play.slug}`);
+    const catalogPlay = catalogBySlug.get(play.slug);
+    if (!catalogPlay) throw new Error(`Solution Play detail catalog record is missing: ${play.slug}`);
+    const playRoot = path.resolve(playsRoot, play.slug);
+    if (!playRoot.startsWith(`${playsRoot}${path.sep}`)) throw new Error(`Solution Play detail path escapes the canonical root: ${play.slug}`);
+    const specPath = path.join(playRoot, "spec", "play-spec.json");
+    const spec = readJsonSafe(specPath);
+    if (!spec || spec.name !== play.slug || spec.version !== play.specVersion) throw new Error(`Solution Play detail spec drifted: ${play.slug}`);
+    const runtimePath = path.join(playRoot, "spec", "runtime-contract.json");
+    const runtime = readJsonSafe(runtimePath);
+    if (runtime && (runtime.play !== play.slug || runtime.schema_version !== "1.0.0")) throw new Error(`Solution Play runtime contract drifted: ${play.slug}`);
+    const expectedScenario = expectedRuntimeScenarios.get(play.slug);
+    if (expectedScenario && (!runtime || runtime.scenario?.id !== expectedScenario)) throw new Error(`Required Solution Play runtime contract is missing or drifted: ${play.slug}`);
+    if (!expectedScenario && runtime) throw new Error(`Unexpected Solution Play runtime contract: ${play.slug}`);
+    const wafPillars = Object.keys(spec.waf_alignment || {}).map((key) => key.replace(/_/g, "-")).sort(compareText);
+    const evidenceFlags = runtime ? Object.entries(runtime.evidence || {}).filter(([, enabled]) => enabled === true).map(([key]) => key.replace(/_/g, "-")).sort(compareText) : [];
+    const detail = {
+      ...play,
+      architecturePattern: typeof spec.architecture?.pattern === "string" && spec.architecture.pattern.trim() ? spec.architecture.pattern.trim() : "documented-solution",
+      wafPillars,
+      sourceInventory: {
+        manifest: catalogPlay.hasManifest === true,
+        rootAgent: catalogPlay.hasRootAgent === true,
+        configuration: catalogPlay.infrastructure?.config === true,
+        infrastructure: catalogPlay.infrastructure?.bicep === true,
+        evaluation: catalogPlay.infrastructure?.evaluation === true,
+        agents: Number(catalogPlay.devkit?.agents || 0),
+        skills: Number(catalogPlay.devkit?.skills || 0),
+        instructions: Number(catalogPlay.devkit?.instructions || 0),
+        hooks: Number(catalogPlay.devkit?.hooks || 0),
+      },
+      guardrails: catalogPlay.speckit?.guardrails || {},
+      runtime: runtime ? {
+        schemaVersion: runtime.schema_version,
+        profile: runtime.profile,
+        scenarioId: runtime.scenario?.id,
+        scenarioVersion: runtime.scenario?.version,
+        inputSchema: runtime.scenario?.input_schema,
+        outputSchema: runtime.scenario?.output_schema,
+        endpoints: runtime.endpoints,
+        offlineAdapter: runtime.adapters?.offline,
+        azurePorts: [...(runtime.adapters?.azure_ports || [])].sort(compareText),
+        requiredResourceTypes: [...(runtime.infrastructure?.required_resource_types || [])].sort(compareText),
+        requiredResourceKinds: runtime.infrastructure?.required_resource_kinds || {},
+        evidenceFlags,
+      } : null,
+    };
+    validateSolutionPlayDetail(detail);
+    return detail;
+  });
+  if (details.length !== 101 || details.filter((detail) => detail.runtime !== null).length !== expectedRuntimeScenarios.size) throw new Error("Solution Play details require exactly 101 records and the five canonical runtime contracts");
+  return { schemaVersion: "1.0.0", source: index.source, count: details.length, runtimeContractCount: 5, details };
+}
+
+function validateSolutionPlayDetail(detail) {
+  if (!detail || typeof detail !== "object" || Array.isArray(detail)) throw new Error("Solution Play detail must be an object");
+  for (const field of ["status", "complexity", "services", "devkit", "tunekit", "tuningParams", "costDev", "costProd"]) if (Object.hasOwn(detail, field)) throw new Error(`Solution Play detail contains prohibited field ${field}: ${detail.slug || "unknown"}`);
+  if (!/^(?:0[1-9]|[1-9]\d|10[01])$/.test(detail.id) || !new RegExp(`^${detail.id}-[a-z0-9]+(?:-[a-z0-9]+)*$`).test(detail.slug) || typeof detail.name !== "string" || !detail.name || typeof detail.description !== "string" || !detail.description) throw new Error(`Solution Play detail identity is invalid: ${detail.slug || "unknown"}`);
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(detail.architecturePattern) || !Array.isArray(detail.wafPillars) || !detail.wafPillars.every((pillar) => /^[a-z0-9][a-z0-9-]*$/.test(pillar))) throw new Error(`Solution Play detail architecture metadata is invalid: ${detail.slug}`);
+  const inventory = detail.sourceInventory;
+  if (!inventory || !["manifest", "rootAgent", "configuration", "infrastructure", "evaluation"].every((key) => typeof inventory[key] === "boolean") || !["agents", "skills", "instructions", "hooks"].every((key) => Number.isSafeInteger(inventory[key]) && inventory[key] >= 0 && inventory[key] <= 1000)) throw new Error(`Solution Play detail inventory is invalid: ${detail.slug}`);
+  if (!detail.guardrails || typeof detail.guardrails !== "object" || Array.isArray(detail.guardrails) || JSON.stringify(detail.guardrails).length > 2000) throw new Error(`Solution Play detail guardrails are invalid: ${detail.slug}`);
+  if (detail.runtime !== null) {
+    const runtime = detail.runtime;
+    if (runtime.schemaVersion !== "1.0.0" || typeof runtime.profile !== "string" || typeof runtime.scenarioId !== "string" || typeof runtime.scenarioVersion !== "string" || !runtime.inputSchema || typeof runtime.inputSchema !== "object" || !runtime.outputSchema || typeof runtime.outputSchema !== "object" || !runtime.endpoints || typeof runtime.offlineAdapter !== "string" || !runtime.requiredResourceKinds || typeof runtime.requiredResourceKinds !== "object" || Array.isArray(runtime.requiredResourceKinds)) throw new Error(`Solution Play detail runtime is invalid: ${detail.slug}`);
+    for (const values of [runtime.azurePorts, runtime.requiredResourceTypes, runtime.evidenceFlags]) if (!Array.isArray(values) || !values.every((value) => typeof value === "string" && value.length > 0)) throw new Error(`Solution Play detail runtime arrays are invalid: ${detail.slug}`);
+    if (JSON.stringify(runtime.inputSchema).length > 4000 || JSON.stringify(runtime.outputSchema).length > 4000 || JSON.stringify(runtime.requiredResourceKinds).length > 4000) throw new Error(`Solution Play detail runtime payload is oversized: ${detail.slug}`);
+  }
+  const serialized = JSON.stringify(detail);
+  if (serialized.length > 12000 || /production[- ](?:ready|grade)|(?:^|\s)#{1,6}\s|```/i.test(serialized)) throw new Error(`Solution Play detail contains prohibited or oversized content: ${detail.slug}`);
+  return true;
+}
+
+function renderSolutionPlayDetails(data) {
+  const metadata = data.details.map(({ slug, architecturePattern, wafPillars, sourceInventory, guardrails, runtime }) => ({ slug, architecturePattern, wafPillars, sourceInventory, guardrails, runtime }));
+  return `// Generated by frootai/scripts/factory/adapters/website.js. Do not edit.\n` +
+    `import { solutionPlays, type GeneratedSolutionPlay } from "./solution-plays.ts";\n\n` +
+    `export type GeneratedJsonValue = string | number | boolean | null | readonly GeneratedJsonValue[] | { readonly [key: string]: GeneratedJsonValue };\n\n` +
+    `export interface GeneratedSolutionPlaySourceInventory {\n  readonly manifest: boolean;\n  readonly rootAgent: boolean;\n  readonly configuration: boolean;\n  readonly infrastructure: boolean;\n  readonly evaluation: boolean;\n  readonly agents: number;\n  readonly skills: number;\n  readonly instructions: number;\n  readonly hooks: number;\n}\n\n` +
+    `export interface GeneratedSolutionPlayRuntime {\n  readonly schemaVersion: "1.0.0";\n  readonly profile: string;\n  readonly scenarioId: string;\n  readonly scenarioVersion: string;\n  readonly inputSchema: Readonly<Record<string, GeneratedJsonValue>>;\n  readonly outputSchema: Readonly<Record<string, GeneratedJsonValue>>;\n  readonly endpoints: Readonly<Record<string, string>>;\n  readonly offlineAdapter: string;\n  readonly azurePorts: readonly string[];\n  readonly requiredResourceTypes: readonly string[];\n  readonly requiredResourceKinds: Readonly<Record<string, readonly string[]>>;\n  readonly evidenceFlags: readonly string[];\n}\n\n` +
+    `interface GeneratedSolutionPlayDetailMetadata {\n  readonly slug: string;\n  readonly architecturePattern: string;\n  readonly wafPillars: readonly string[];\n  readonly sourceInventory: GeneratedSolutionPlaySourceInventory;\n  readonly guardrails: Readonly<Record<string, GeneratedJsonValue>>;\n  readonly runtime: GeneratedSolutionPlayRuntime | null;\n}\n\n` +
+    `export interface GeneratedSolutionPlayDetail extends GeneratedSolutionPlay, Omit<GeneratedSolutionPlayDetailMetadata, "slug"> {}\n\n` +
+    `const solutionPlayDetailMetadata = ${JSON.stringify(metadata, null, 2)} as const satisfies readonly GeneratedSolutionPlayDetailMetadata[];\n\n` +
+    `const metadataBySlug = new Map(solutionPlayDetailMetadata.map((detail) => [detail.slug, detail]));\n` +
+    `export const solutionPlayDetails: readonly GeneratedSolutionPlayDetail[] = solutionPlays.map((play) => {\n  const metadata = metadataBySlug.get(play.slug);\n  if (!metadata) throw new Error(\`Generated Solution Play detail is missing: \${play.slug}\`);\n  return { ...play, ...metadata };\n});\n\n` +
+    `export const solutionPlayDetailProjection = { schemaVersion: "1.0.0", source: ${JSON.stringify(data.source)}, count: 101, runtimeContractCount: 5, details: solutionPlayDetails } as const;\n`;
+}
+
+function writeSolutionPlayDetails(catalog) {
+  const index = readJsonSafe(path.join(REPO_ROOT, "orchard", "registry", "solution-play-index.json"));
+  const data = buildSolutionPlayDetails(index, catalog);
+  const outputPath = path.join(WEBSITE_ROOT, "src", "data", "generated", "solution-play-details.ts");
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  fs.writeFileSync(outputPath, renderSolutionPlayDetails(data), "utf8");
+  return data;
 }
 
 function writeSearchIndex(catalog) {
@@ -805,6 +915,8 @@ function adapt(catalog) {
 
   const solutionPlays = writeSolutionPlayProjection();
   results.updates.push(`src/data/generated/solution-plays.ts — ${solutionPlays.count} plays`);
+  const solutionPlayDetails = writeSolutionPlayDetails(catalog);
+  results.updates.push(`src/data/generated/solution-play-details.ts — ${solutionPlayDetails.count} details, ${solutionPlayDetails.runtimeContractCount} runtime contracts`);
 
   // 1. agents.json
   const agents = transformAgents(catalog);
@@ -873,4 +985,4 @@ if (require.main === module) {
   console.log(`\n  Done.`);
 }
 
-module.exports = { adapt, buildSearchIndex, buildSolutionPlayProjection, classifySolutionPlay, finalizeSearchIndex, renderSolutionPlayProjection, validateSearchIndex, writeSearchIndex, writeSolutionPlayProjection };
+module.exports = { adapt, buildSearchIndex, buildSolutionPlayDetails, buildSolutionPlayProjection, classifySolutionPlay, finalizeSearchIndex, renderSolutionPlayDetails, renderSolutionPlayProjection, validateSearchIndex, validateSolutionPlayDetail, writeSearchIndex, writeSolutionPlayDetails, writeSolutionPlayProjection };
