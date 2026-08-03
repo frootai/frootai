@@ -2,7 +2,7 @@
 
 > Foundational Azure infrastructure for AI workloads — networking, identity, governance.
 
-Deploy the foundational infrastructure every AI workload needs. VNet with private endpoints keeps traffic off the public internet, Managed Identity eliminates secrets, RBAC locks down access, and Key Vault stores what must be stored.
+This resource-group-scoped reference currently declares an NSG, one VNet, private DNS zones, Key Vault, Log Analytics, and a user-assigned identity. The broader hub-spoke, private endpoint, Firewall, Bastion, Policy, Defender, and workload-onboarding design remains target architecture until its resources and evidence are added.
 
 ## Quick Start
 ```bash
@@ -28,11 +28,11 @@ graph TB
         DNS[Private DNS Zones<br/>Name resolution]
     end
 
-    subgraph Spoke["Spoke VNet — AI Workloads"]
-        PE_AOI[Private Endpoint<br/>Azure OpenAI]
-        PE_SEARCH[Private Endpoint<br/>AI Search]
-        PE_STOR[Private Endpoint<br/>Storage]
-        PE_KV[Private Endpoint<br/>Key Vault]
+    subgraph Spoke["Target Spoke VNet — Not Provisioned"]
+        PE_AOI[Planned Private Endpoint<br/>Azure OpenAI]
+        PE_SEARCH[Planned Private Endpoint<br/>AI Search]
+        PE_STOR[Planned Private Endpoint<br/>Storage]
+        PE_KV[Planned Private Endpoint<br/>Key Vault]
     end
 
     subgraph Identity["Identity & Governance"]

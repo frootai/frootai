@@ -4,8 +4,8 @@
   "determinism": {
     "temperature": 0.0,
     "seed": 42,
+    "model_output_deterministic": false,
     "require_json_schema": true,
-    "require_citations": true,
     "min_confidence": 0.7,
     "anti_sycophancy": true
   },
@@ -14,5 +14,11 @@
     "citation_check": true,
     "confidence_check": true,
     "dual_llm_verification": false
+  },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "repeated_model_variance_evidenced": false,
+    "external_side_effect_idempotency_evidenced": false,
+    "durable_replay_evidenced": false
   }
 }

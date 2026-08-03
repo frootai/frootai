@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Deterministic Agent architecture delivers reliable, reproducible AI outputs by combining GPT-4o at temperature=0 with seed pinning, structured JSON output schemas, and multi-layer guardrails. The agent runtime validates every response against a defined schema before returning results, with Content Safety providing input/output filtering and circuit breakers handling upstream failures.
+This target architecture combines typed workflow state, validation, bounded retries, caching, and model settings intended to reduce variation. Model output remains probabilistic. The current package does not yet prove repeated Azure model variance, idempotent external effects, durable replay, or every service interaction shown below.
 
 ## Architecture Diagram
 
@@ -73,20 +73,20 @@ graph TB
 
 1. **Request intake** — API consumer sends a structured request to the Container Apps endpoint
 2. **Input guardrails** — Content Safety validates the prompt for injection attacks and unsafe content
-3. **Cache check** — orchestrator checks if an identical input has a cached deterministic response
+3. **Cache target** — a future orchestrator may reuse a response only when the full input, policy, model, and tool-decision fingerprint matches
 4. **LLM invocation** — Azure OpenAI called with `temperature=0`, `seed=42`, `response_format=json_object`
 5. **Schema validation** — JSON response validated against the expected output schema
 6. **Retry loop** — if validation fails, retry with adjusted prompt (max 3 attempts with backoff)
 7. **Output guardrails** — Content Safety filters the final response before returning to client
 8. **Response delivery** — validated, filtered response returned; cached for future identical inputs
-9. **Audit logging** — all invocations, validations, and guardrail triggers logged to Log Analytics
+9. **Audit target** — deployment evidence must show which invocation, validation, and guardrail events reach the owned audit store
 
 ## Service Roles
 
 | Service | Layer | Role |
 |---------|-------|------|
 | Container Apps | Compute | Agent runtime — orchestration, validation, retry logic |
-| Azure OpenAI | AI | GPT-4o with deterministic config (temp=0, seed, JSON mode) |
+| Azure OpenAI | AI | Model inference with low-variance settings; output remains probabilistic |
 | Content Safety | AI | Input/output filtering — prompt injection, content moderation |
 | Key Vault | Security | API keys and connection string management |
 | Managed Identity | Security | Zero-credential authentication to all Azure services |
@@ -97,7 +97,7 @@ graph TB
 
 - **Managed Identity** — Container Apps authenticates to OpenAI and Key Vault without credentials
 - **Content Safety pre-filter** — every prompt scanned for injection attacks before LLM invocation
-- **Content Safety post-filter** — every response scanned for harmful content before delivery
+- **Content Safety post-filter target** — deployment tests must prove responses are scanned before delivery
 - **Structured output** — `response_format: json_object` prevents free-form text leakage
 - **Schema validation** — responses must conform to a strict JSON schema; rejects hallucinated fields
 - **Rate limiting** — per-client token budgets enforced at the orchestrator layer

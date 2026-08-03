@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Call Center Voice AI architecture delivers a real-time voice customer service pipeline by chaining Azure Communication Services (telephony), Azure AI Speech (STT/TTS), and Azure OpenAI (conversational AI) into a low-latency streaming pipeline. Callers interact naturally via phone, with speech recognized in real-time, processed by GPT-4o for intent and response, then synthesized back to speech — all within a target of under 2 seconds round-trip.
+This is the target voice-session architecture. The current Bicep does not provision Communication Services, Speech, Container Apps, managed identity, duplex WebSocket hosting, or private endpoints. No current evidence establishes end-to-end latency, interruption, reconnect, voice quality, or operated call handling.
 
 ## Architecture Diagram
 
@@ -28,7 +28,7 @@ graph TB
     end
 
     subgraph Pipeline["Orchestration"]
-        ORCH[Container Apps<br/>Streaming pipeline]
+        ORCH[Container Apps<br/>Target sequential orchestration]
         QUEUE[Event Queue<br/>Async processing]
     end
 
@@ -83,12 +83,12 @@ graph TB
 ## Data Flow
 
 1. **Call intake** — caller dials in via PSTN; Communication Services routes to available agent pipeline
-2. **Audio streaming** — real-time audio stream sent to Azure AI Speech STT for continuous recognition
+2. **Audio transport target** — a future session transport sends bounded audio frames to speech recognition
 3. **Transcript delivery** — recognized text pushed to the orchestrator with conversation history context
 4. **Intent processing** — GPT-4o analyzes transcript, extracts intent, generates natural language response
 5. **Voice synthesis** — response text sent to Azure AI Speech TTS for neural voice generation
 6. **Audio playback** — synthesized audio streamed back to caller through Communication Services
-7. **Conversation loop** — steps 2-6 repeat for each caller utterance (streaming, not batch)
+7. **Conversation target** — typed session state repeats recognition, response, and synthesis while enforcing budgets and cancellation
 8. **Call recording** — full audio recording stored in Blob Storage for compliance and QA
 9. **Post-call analytics** — async batch transcription and sentiment analysis queued for processing
 
@@ -100,21 +100,21 @@ graph TB
 | Azure AI Speech (STT) | Speech | Real-time speech-to-text recognition |
 | Azure AI Speech (TTS) | Speech | Neural text-to-speech voice synthesis |
 | Azure OpenAI | AI | Conversational understanding and response generation |
-| Container Apps | Compute | Streaming pipeline orchestration |
+| Container Apps | Compute | Target sequential STT-model-TTS orchestration; duplex behavior is not evidenced |
 | Blob Storage | Storage | Call recordings and transcription archive |
 | Key Vault | Security | Telephony credentials and API key management |
 | Application Insights | Monitoring | Call quality, latency tracing, accuracy metrics |
 
 ## Security Architecture
 
-- **Managed Identity** — all service-to-service auth without credentials in code
-- **Private endpoints** — Speech, OpenAI, and Storage accessible only via private network
-- **Call recording encryption** — recordings encrypted at rest with customer-managed keys
+- **Identity target** — service-to-service authentication must use managed identity where supported; the current Bicep declares no identity
+- **Private connectivity target** — Speech, OpenAI, and Storage access requires private endpoint resources and verification not present today
+- **Recording encryption target** — selected key ownership and encryption settings require deployment evidence
 - **PII redaction** — post-call transcripts processed through PII detection before storage
 - **RBAC** — operators have read-only access to recordings; AI services have no access
 - **Key Vault** — SIP credentials, API keys rotated on 90-day schedule
 - **Content filtering** — Azure OpenAI content filters active for all voice interactions
-- **Compliance** — call recording retention policies aligned to regulatory requirements
+- **Retention boundary** — an owner must configure, test, and evidence recording retention and deletion for the applicable policy
 
 ## Scaling
 

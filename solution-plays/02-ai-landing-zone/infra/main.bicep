@@ -1,5 +1,10 @@
 targetScope = 'resourceGroup'
 
+// Ownership boundary: this resource-group deployment does not configure tenant
+// Conditional Access, subscription policy assignments, or public-access denial
+// for services it does not provision. Tenant and subscription administrators
+// must own, preview, and evidence those controls separately.
+
 // 
 // AI Landing Zone  Network & Security Infrastructure
 // Deploy: az deployment group create -f main.bicep -p parameters.json

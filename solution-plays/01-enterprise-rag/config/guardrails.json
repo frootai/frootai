@@ -20,6 +20,12 @@
     "min_confidence_to_answer": 0.7,
     "abstention_message": "I don't have enough verified information to answer this accurately."
   },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "acl_enforcement_evidenced": false,
+    "injection_corpus_evidenced": false,
+    "deployment_evidenced": false
+  },
   "_comments": {
     "severity_threshold": "0-6 scale. 2 = moderate. Lower = stricter filtering.",
     "min_confidence_to_answer": "0.7 = refuse if ALL retrieved chunks score below this. Lower for recall, higher for precision."

@@ -14,9 +14,9 @@
     "action": "block_and_log"
   },
   "ticket_specific": {
-    "auto_resolve_confidence_threshold": 0.85,
-    "auto_resolve_max_per_day": 200,
-    "auto_resolve_excluded_priorities": ["P1-Critical", "P2-High"],
+    "automatic_actions_enabled": false,
+    "suggestion_confidence_target": 0.85,
+    "automatic_action_excluded_priorities": ["P1-Critical", "P2-High"],
     "require_human_review_for_security_tickets": true,
     "max_resolution_steps": 5,
     "credential_patterns_block": ["password", "pwd", "secret", "token", "apikey", "connectionstring"]
@@ -25,5 +25,12 @@
     "enabled": true,
     "topics": ["salary_data", "hr_issues", "employee_performance"],
     "response": "This ticket requires human review. Routing to your manager."
+  },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "pii_minimization_evidenced": false,
+    "durable_approval_evidenced": false,
+    "connector_idempotency_evidenced": false,
+    "deployment_evidenced": false
   }
 }

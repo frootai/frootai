@@ -1,8 +1,8 @@
 # Play 01 — Enterprise RAG Q&A 🔍
 
-> Production RAG with hybrid search, semantic reranking, and pre-tuned guardrails.
+> Reference RAG design with hybrid retrieval, citation, and guardrail configuration.
 
-Build a production-grade Retrieval-Augmented Generation system. AI Search indexes your documents, GPT-4o generates grounded answers with citations, and Container Apps hosts the API.
+This package declares a target Azure RAG architecture and an offline-first `rag.query` fixture. The Bicep declares Search, OpenAI, Storage, and Container Apps resources; deployment, ACL isolation, ingestion operations, and live answer quality require separate evidence.
 
 ## Quick Start
 ```bash
@@ -26,7 +26,7 @@ graph TB
     end
 
     subgraph Application Layer
-        API[Container Apps<br/>REST API + Streaming]
+        API[Container Apps<br/>Target REST API]
         Auth[Managed Identity<br/>Zero-secret auth]
     end
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Production-grade Retrieval-Augmented Generation pipeline. Users ask questions, the system retrieves relevant documents via hybrid search (keyword + vector + semantic reranking), then generates grounded answers with citations using GPT-4o.
+Target Retrieval-Augmented Generation pipeline. The current package declares hybrid retrieval, citation, and Azure resource configuration plus an offline fixture; it does not prove a deployed service, ACL trimming, ingestion freshness, or live groundedness.
 
 ## Architecture Diagram
 
@@ -13,7 +13,7 @@ graph TB
     end
 
     subgraph Application Layer
-        API[Container Apps<br/>REST API + Streaming]
+        API[Container Apps<br/>Target REST API]
         Auth[Managed Identity<br/>Zero-secret auth]
     end
 

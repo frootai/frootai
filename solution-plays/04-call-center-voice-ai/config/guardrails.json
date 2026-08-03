@@ -33,5 +33,12 @@
     "enabled": true,
     "topics": ["medical_advice", "legal_advice", "financial_advice"],
     "response": "I'm not qualified to advise on that. Let me connect you with a specialist."
+  },
+  "evidence_boundary": {
+    "configuration_status": "designed",
+    "recording_consent_enforcement_evidenced": false,
+    "duplex_streaming_evidenced": false,
+    "durable_escalation_evidenced": false,
+    "deployment_evidenced": false
   }
 }
