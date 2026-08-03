@@ -66,6 +66,16 @@ test("generator check mode treats CRLF and LF output as equivalent", () => {
   assert.equal(normalizeNewlines("{\r\n  \"count\": 101\r\n}\r\n"), "{\n  \"count\": 101\n}\n");
 });
 
+test("public descriptions use safe spec text or neutral canonical fallbacks", () => {
+  const index = buildSolutionPlayIndex(repoRoot);
+  for (const play of index.plays) {
+    assert.doesNotMatch(play.description, /actual costs vary|^\s*>|production[- ](?:ready|grade)|enterprise[- ]grade|compliance[- ]ready|\bcompliant\b|guarantees?|satisfying|sub-?\d+\s*ms|\d+\s*%/i, play.slug);
+  }
+  assert.match(index.plays.find((play) => play.id === "46").description, /^Reference architecture for Healthcare Clinical AI\./);
+  assert.match(index.plays.find((play) => play.id === "101").description, /^Reference architecture for Pester Test Development\./);
+  assert.notEqual(index.plays.find((play) => play.id === "100").description, index.plays.find((play) => play.id === "101").description);
+});
+
 test("public Solution Plays README names the complete 101-play inventory", () => {
   const readme = fs.readFileSync(playsReadmePath, "utf8");
   assert.match(readme, /\*\*101 solution plays\./);

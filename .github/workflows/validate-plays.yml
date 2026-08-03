@@ -11,6 +11,7 @@ on:
       - 'scripts/test-solution-play-index.mjs'
       - 'scripts/solution-play-*.mjs'
       - 'scripts/test-solution-play-*.mjs'
+      - 'scripts/factory/adapters/website.js'
       - 'scripts/validate-flagship-iac.mjs'
       - 'schemas/solution-play-*.schema.json'
       - 'tests/fixtures/solution-play-delivery-profile/**'
@@ -36,6 +37,7 @@ on:
       - 'scripts/test-solution-play-index.mjs'
       - 'scripts/solution-play-*.mjs'
       - 'scripts/test-solution-play-*.mjs'
+      - 'scripts/factory/adapters/website.js'
       - 'scripts/validate-flagship-iac.mjs'
       - 'schemas/solution-play-*.schema.json'
       - 'tests/fixtures/solution-play-delivery-profile/**'
@@ -227,6 +229,23 @@ jobs:
           npm run validate:solution-play-mcp-utilities
           npm run test:solution-play-mcp-transports
           npm run validate:solution-play-mcp-transports
+
+  website-projection-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Verify generated typed Solution Play website projection
+        run: npm run test:solution-play-website-projection
 
   canonical-index:
     runs-on: ubuntu-latest

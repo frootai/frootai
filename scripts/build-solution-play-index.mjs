@@ -19,18 +19,9 @@ function cleanDisplayName(value) {
 
 function paragraphFromReadme(lines, headingIndex) {
   const body = lines.slice(headingIndex + 1);
-  const quoteStart = body.findIndex((line) => line.trim().startsWith(">"));
-  if (quoteStart >= 0) {
-    const quote = [];
-    for (const line of body.slice(quoteStart)) {
-      if (!line.trim().startsWith(">")) break;
-      quote.push(line.trim().replace(/^>\s?/, ""));
-    }
-    if (quote.length) return quote.join(" ").replace(/\s+/g, " ").trim();
-  }
-
   const paragraph = [];
   let started = false;
+  let quote = false;
   for (const line of body) {
     const trimmed = line.trim();
     if (!started && !trimmed) continue;
@@ -42,10 +33,23 @@ function paragraphFromReadme(lines, headingIndex) {
       if (started) break;
       continue;
     }
+    if (!started) quote = trimmed.startsWith(">");
+    if (started && trimmed.startsWith(">") !== quote) break;
     started = true;
-    paragraph.push(trimmed);
+    paragraph.push(quote ? trimmed.replace(/^>\s?/, "") : trimmed);
   }
   return paragraph.join(" ").replace(/\s+/g, " ").trim();
+}
+
+const unsafePublicDescriptionPattern = /(?:^\s*>|\b(?:production[- ](?:ready|grade)|enterprise[- ]grade|operated|deployed|compliance[- ]ready|compliant|guarantees?|satisfying)\b|\b(?:sub-?\d+\s*ms|\d+\s*%))/i;
+
+function publicDescription(spec, displayName) {
+  const candidate = typeof spec.description === "string" ? spec.description.replace(/\s+/g, " ").trim() : "";
+  if (candidate && !unsafePublicDescriptionPattern.test(candidate)) return candidate;
+  const pattern = typeof spec.architecture?.pattern === "string" && spec.architecture.pattern.trim()
+    ? spec.architecture.pattern.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim()
+    : "documented solution";
+  return `Reference architecture for ${displayName}. The canonical specification identifies the implementation pattern as ${pattern}.`;
 }
 
 function readJson(filePath) {
@@ -85,14 +89,16 @@ function readPlay(repoRoot, directory) {
     throw new Error(`Invalid spec.version for ${directory}`);
   }
 
-  const description = paragraphFromReadme(lines, headingIndex);
+  const displayName = cleanDisplayName(heading[2]);
+  const description = publicDescription(spec, displayName) || paragraphFromReadme(lines, headingIndex);
   if (!description) throw new Error(`Missing README description for ${directory}`);
+  if (unsafePublicDescriptionPattern.test(description)) throw new Error(`Unsupported public language in description for ${directory}`);
 
   return {
     id,
     numeric_id: numericId,
     slug: directory,
-    name: cleanDisplayName(heading[2]),
+    name: displayName,
     description: description.slice(0, 500),
     relative_path: `solution-plays/${directory}`,
     readme_path: `solution-plays/${directory}/README.md`,
