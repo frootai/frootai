@@ -50,6 +50,7 @@ The additive modernization contract is defined by:
 - `solution-play-identity-profile.v1.schema.json`
 - `solution-play-operations-profile.v1.schema.json`
 - `solution-play-mcp-conformance.v1.schema.json`
+- `solution-play-mcp-utilities.v1.schema.json`
 - `agent-context-envelope.v1.schema.json`
 - `agent-handoff.v1.schema.json`
 - `agent-loop-policy.v1.schema.json`
@@ -78,6 +79,8 @@ npm run test:solution-play-github-conformance
 npm run test:solution-play-claude-foundation
 npm run test:solution-play-mcp-conformance
 npm run validate:solution-play-mcp-conformance
+npm run test:solution-play-mcp-utilities
+npm run validate:solution-play-mcp-utilities
 npm run test:evidence-v2-migration
 ```
 
@@ -100,6 +103,8 @@ Operations profile v1 defines environment promotion, region/residency/model/quot
 T213 runtime assessments fail closed without approval-receipt, notification-reference, and runbook-escalation resolution. T214 implements fixture resolvers against retained evidence and explicit receiver/on-call references; production resolvers, observed budget calibration, and state-store audits remain blocked. Production isolation is enforced at account, subscription, or tenant scope; nonproduction isolation remains platform-specific but must still be declared and reviewed.
 
 MCP conformance profile v1 pins the current `2026-07-28` stateless protocol, 19 core/deprecated/extension rows, and exact TypeScript/Python v2 plus maintenance-v1 behavior descriptors. New implementations may currently select only registry-verified Python `mcp`/`mcp-types` 2.0.0. TypeScript v2 remains blocked because its 2.0.0 release tags were not registry-resolvable on 2026-08-03; TypeScript and Python v1.29.0 adapters require explicit legacy usage. Tasks is not treated as core SDK support and is pinned to a reviewed extension commit behind a project-owned adapter. T225 owns utilities; T226 owns wire-level Inspector, conformance, and security execution.
+
+MCP utilities policy v1 binds T225 to the exact T224 profile and registry-verified Python v2 adapter without importing an SDK. Shared contracts cover current request metadata/discovery, bounded JSON Schema compilation, principal-bound HMAC cursors, deterministic output limits, W3C trace context, externally verified authorization, one-time approvals, elicitation, subscription acknowledgement, and Tasks coordination. Credential verification and durable state remain external interfaces: callbacks are timeout-bounded and AbortSignal-aware, approvals require atomic consumption, and Tasks require exclusive create plus atomic transactions. Transport adaptation, network execution, persistent-store implementation, Inspector, and wire conformance remain T226 or deployment-owner responsibilities.
 
 T214 executes only fixture profiles in an isolated detached checkout. It uses non-shell executable/argument processes with closed stdin, bounded output and time, process-tree cancellation, run-bound receipts, protected-content rejection, external publication locks, strict evidence-v2 validation, and atomic directory rename. Linux and Windows harness jobs are release-blocking; canonical play write mode remains disabled.
 

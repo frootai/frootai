@@ -219,10 +219,12 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - name: Verify current MCP protocol and SDK isolation contract
+      - name: Verify current MCP protocol, SDK isolation, and shared utilities
         run: |
           npm run test:solution-play-mcp-conformance
           npm run validate:solution-play-mcp-conformance
+          npm run test:solution-play-mcp-utilities
+          npm run validate:solution-play-mcp-utilities
 
   canonical-index:
     runs-on: ubuntu-latest

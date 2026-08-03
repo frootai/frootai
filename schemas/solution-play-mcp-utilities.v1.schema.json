@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frootai.dev/schemas/solution-play-mcp-utilities.v1.json",
+  "title": "Solution Play MCP Utilities Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "task", "protocol_version", "conformance_profile_sha256", "limits", "security", "tasks", "boundaries"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri-reference" },
+    "schema_version": { "const": "1.0.0" },
+    "task": { "const": "T225" },
+    "protocol_version": { "const": "2026-07-28" },
+    "conformance_profile_sha256": { "const": "9662c1d857035c596cd4b4acfc01f9c0bdaa4428f2a31bbe37adbf489d666ccc" },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximum_schema_bytes", "maximum_schema_depth", "maximum_discovery_ttl_ms", "maximum_page_size", "cursor_ttl_ms", "maximum_result_bytes", "maximum_content_items", "maximum_subscriptions", "maximum_elicitation_schema_bytes"],
+      "properties": {
+        "maximum_schema_bytes": { "type": "integer", "minimum": 1024, "maximum": 1048576 },
+        "maximum_schema_depth": { "type": "integer", "minimum": 8, "maximum": 128 },
+        "maximum_discovery_ttl_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
+        "maximum_page_size": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "cursor_ttl_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
+        "maximum_result_bytes": { "type": "integer", "minimum": 1024, "maximum": 1048576 },
+        "maximum_content_items": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "maximum_subscriptions": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maximum_elicitation_schema_bytes": { "type": "integer", "minimum": 256, "maximum": 65536 }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_schema_references_allowed", "cursor_algorithm", "minimum_cursor_secret_bytes", "authorization_verifier_required", "approval_verifier_required", "external_operation_timeout_ms", "trace_context", "clock_skew_seconds"],
+      "properties": {
+        "external_schema_references_allowed": { "const": false },
+        "cursor_algorithm": { "const": "hmac-sha256" },
+        "minimum_cursor_secret_bytes": { "type": "integer", "minimum": 32, "maximum": 128 },
+        "authorization_verifier_required": { "const": true },
+        "approval_verifier_required": { "const": true },
+        "external_operation_timeout_ms": { "type": "integer", "minimum": 100, "maximum": 30000 },
+        "trace_context": { "const": "w3c-trace-context" },
+        "clock_skew_seconds": { "type": "integer", "minimum": 0, "maximum": 300 }
+      }
+    },
+    "tasks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["extension_commit", "durable_store_required", "atomic_store_required", "default_ttl_ms", "maximum_ttl_ms", "minimum_poll_interval_ms", "maximum_input_requests"],
+      "properties": {
+        "extension_commit": { "const": "2c1425d9a288b9b1f489430fe1e00bb392b47e48" },
+        "durable_store_required": { "const": true },
+        "atomic_store_required": { "const": true },
+        "default_ttl_ms": { "type": "integer", "minimum": 1000, "maximum": 86400000 },
+        "maximum_ttl_ms": { "type": "integer", "minimum": 1000, "maximum": 604800000 },
+        "minimum_poll_interval_ms": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "maximum_input_requests": { "type": "integer", "minimum": 1, "maximum": 20 }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sdk_adapter", "transport_adapter", "network_calls_performed", "credential_storage_performed", "external_verifiers_allowed", "canonical_writes_allowed", "publication_allowed"],
+      "properties": {
+        "sdk_adapter": { "const": "python-v2" },
+        "transport_adapter": { "const": "T226" },
+        "network_calls_performed": { "const": false },
+        "credential_storage_performed": { "const": false },
+        "external_verifiers_allowed": { "const": true },
+        "canonical_writes_allowed": { "const": false },
+        "publication_allowed": { "const": false }
+      }
+    }
+  }
+}
