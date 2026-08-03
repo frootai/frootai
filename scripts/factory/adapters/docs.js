@@ -67,13 +67,20 @@ const FROOT_MODULES = [
   { id: 'O1', file: 'Semantic-Kernel.md',          title: 'Semantic Kernel',     layer: 'Orchestration', icon: '🔧', order: 8 },
   { id: 'O2', file: 'AI-Agents-Deep-Dive.md',     title: 'AI Agents Deep Dive', layer: 'Orchestration', icon: '🤖', order: 9 },
   { id: 'O3', file: 'O3-MCP-Tools-Functions.md',   title: 'MCP & Tools',         layer: 'Orchestration', icon: '🔌', order: 10 },
-  { id: 'O4', file: 'Azure-AI-Foundry.md',        title: 'Azure AI Foundry',    layer: 'Operations',  icon: '☁️', order: 11 },
+  { id: 'O4', file: 'Azure-AI-Foundry.md',        title: 'Microsoft Foundry',   slug: 'o4-azure-ai-foundry', layer: 'Operations', icon: '☁️', order: 11 },
   { id: 'O5', file: 'AI-Infrastructure.md',        title: 'AI Infrastructure',   layer: 'Operations',  icon: '🏗️', order: 12 },
   { id: 'O6', file: 'Copilot-Ecosystem.md',        title: 'Copilot Ecosystem',   layer: 'Operations',  icon: '✈️', order: 13 },
   { id: 'T1', file: 'T1-Fine-Tuning-MLOps.md',     title: 'Fine-Tuning & MLOps', layer: 'Transformation', icon: '🔬', order: 14 },
   { id: 'T2', file: 'Responsible-AI-Safety.md',    title: 'Responsible AI',      layer: 'Transformation', icon: '🛡️', order: 15 },
   { id: 'T3', file: 'T3-Production-Patterns.md',   title: 'Production Patterns', layer: 'Transformation', icon: '🚀', order: 16 }
 ];
+
+const REFERENCE_MODULES = [
+  { id: 'REF', file: 'Quick-Reference-Cards.md', title: 'Quick Reference Cards', layer: 'Reference', icon: '📋', order: 17 },
+  { id: 'QUIZ', file: 'Quiz-Assessment.md',      title: 'Quiz & Assessment',     layer: 'Reference', icon: '✅', order: 18 }
+];
+
+const LEARNING_MODULES = [...FROOT_MODULES, ...REFERENCE_MODULES];
 
 const SPECIALTY_META = [
   { id: 'S-1',  key: 'memory',     title: 'FAI Memory',            icon: '🧠' },
@@ -85,7 +92,7 @@ const SPECIALTY_META = [
   { id: 'S-7',  key: 'replay',     title: 'FAI Replay',            icon: '🔁' },
   { id: 'S-8',  key: 'graphs',     title: 'FAI Knowledge Graphs',  icon: '📊' },
   { id: 'S-9',  key: 'coding',     title: 'FAI Agentic Coding',    icon: '💻' },
-  { id: 'S-10', key: 'voice',      title: 'FAI Voice',             icon: '🎤' },
+  { id: 'S-10', key: 'voice',      title: 'FAI Voice',             icon: '🎤', guide: 'V1-Voice-Speech-AI.md' },
   { id: 'S-11', key: 'trust',      title: 'FAI Trust',             icon: '🔐' },
   { id: 'S-12', key: 'federation', title: 'FAI Federation',        icon: '🌐' }
 ];
@@ -108,6 +115,10 @@ function readFile(filePath) {
 
 function slugify(str) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function moduleSlug(module) {
+  return module.slug || slugify(`${module.id}-${module.title}`);
 }
 
 /** Add MDX frontmatter to a markdown document. */
@@ -521,17 +532,17 @@ FrootAI enforces the Azure Well-Architected Framework across all primitives and 
   console.log(`    ✅ Getting Started: 1 page | Concepts: 3 pages`);
 }
 
-// ─── D-2: Learning Hub (18 FROOT Modules) ─────────────
+// ─── D-2: Learning Hub ────────────────────────────────
 
 function generateLearningHub() {
-  console.log('  📁 D-2: Generating Learning Hub (18 FROOT modules)...');
+  console.log(`  📁 D-2: Generating Learning Hub (${LEARNING_MODULES.length} modules)...`);
   const learningDir = path.join(OUTPUT, 'learning');
   let count = 0;
 
   // Learning index
   const indexContent = addFrontmatter(`# Learning Hub
 
-Master AI engineering through 18 comprehensive modules organized in the FROOT framework.
+Master AI engineering through ${FROOT_MODULES.length} curriculum modules and ${REFERENCE_MODULES.length} reference modules organized in the FROOT framework.
 
 ## The FROOT Framework
 
@@ -540,8 +551,9 @@ Master AI engineering through 18 comprehensive modules organized in the FROOT fr
 | **F** — Foundations | F1, F2, F3, F4 | GenAI fundamentals, LLM landscape, glossary, agentic OS |
 | **R** — Reasoning | R1, R2, R3 | Prompt engineering, RAG architecture, deterministic AI |
 | **O** — Orchestration | O1, O2, O3 | Semantic Kernel, AI agents, MCP & tools |
-| **O** — Operations | O4, O5, O6 | Azure AI Foundry, infrastructure, Copilot ecosystem |
+| **O** — Operations | O4, O5, O6 | Microsoft Foundry, infrastructure, Copilot ecosystem |
 | **T** — Transformation | T1, T2, T3 | Fine-tuning, responsible AI, production patterns |
+| **Reference** | REF, QUIZ | Quick-reference cards and knowledge assessment |
 
 ## Recommended Learning Path
 
@@ -551,14 +563,14 @@ Master AI engineering through 18 comprehensive modules organized in the FROOT fr
 
 Start with [F1: GenAI Foundations →](/learning/f1-genai-foundations) to begin your journey.
 `,
-    { title: 'Learning Hub', description: 'Master AI engineering through 18 FROOT modules', icon: '📚', order: 3 }
+    { title: 'Learning Hub', description: `Master AI engineering through ${LEARNING_MODULES.length} learning modules`, icon: '📚', order: 3 }
   );
   writeDoc(path.join(learningDir, 'index.mdx'), indexContent);
   recordPage('learning', 'index.mdx', wordCount(indexContent), indexContent.length);
 
   // Generate each module page
-  for (let i = 0; i < FROOT_MODULES.length; i++) {
-    const mod = FROOT_MODULES[i];
+  for (let i = 0; i < LEARNING_MODULES.length; i++) {
+    const mod = LEARNING_MODULES[i];
     const srcPath = path.join(DOCS_SRC, mod.file);
     const content = readFile(srcPath);
 
@@ -568,10 +580,10 @@ Start with [F1: GenAI Foundations →](/learning/f1-genai-foundations) to begin 
     }
 
     const stripped = stripFrontmatter(content);
-    const slug = slugify(`${mod.id}-${mod.title}`);
+    const slug = moduleSlug(mod);
 
-    const prev = i > 0 ? `/learning/${slugify(`${FROOT_MODULES[i-1].id}-${FROOT_MODULES[i-1].title}`)}` : null;
-    const next = i < FROOT_MODULES.length - 1 ? `/learning/${slugify(`${FROOT_MODULES[i+1].id}-${FROOT_MODULES[i+1].title}`)}` : null;
+    const prev = i > 0 ? `/learning/${moduleSlug(LEARNING_MODULES[i-1])}` : null;
+    const next = i < LEARNING_MODULES.length - 1 ? `/learning/${moduleSlug(LEARNING_MODULES[i+1])}` : null;
 
     const doc = addFrontmatter(stripped, {
       title: `${mod.id}: ${mod.title}`,
@@ -1416,10 +1428,14 @@ Specialties extend \`fai-manifest.json\` with new top-level sections. Each is op
       }
     }
 
+    const guideLink = spec.guide
+      ? `\n## Deep-Dive Guide\n\n[Read ${extractTitle(readFile(path.join(DOCS_SRC, spec.guide)))} →](/specialties/${spec.key}-deep-dive)\n`
+      : '';
+
     const doc = addFrontmatter(`# ${spec.title}
 
 ${spec.icon} ${spec.id} — Protocol-level ${spec.title.replace('FAI ', '').toLowerCase()}.
-${schemaBlock}
+${schemaBlock}${guideLink}
 ## Usage in Manifest
 
 Add the \`${spec.key}\` section to your \`fai-manifest.json\`:
@@ -1450,6 +1466,24 @@ const specs = createSpecialties(manifest);
     );
     writeDoc(path.join(specDir, `${spec.key}.mdx`), doc);
     recordPage('specialties', `${spec.key}.mdx`, wordCount(doc), doc.length);
+
+    if (spec.guide) {
+      const guideSource = readFile(path.join(DOCS_SRC, spec.guide));
+      if (!guideSource) {
+        stats.errors.push(`Specialty guide: ${spec.guide} not found`);
+      } else {
+        const guideDoc = addFrontmatter(stripFrontmatter(guideSource), {
+          title: extractTitle(guideSource),
+          description: extractDescription(guideSource),
+          icon: spec.icon,
+          order: SPECIALTY_META.indexOf(spec) + 1,
+          category: 'specialties',
+          editUrl: `docs/${spec.guide}`
+        });
+        writeDoc(path.join(specDir, `${spec.key}-deep-dive.mdx`), guideDoc);
+        recordPage('specialties', `${spec.key}-deep-dive.mdx`, wordCount(guideDoc), guideDoc.length);
+      }
+    }
   }
 
   console.log(`    ✅ Specialties: ${SPECIALTY_META.length} pages + index`);
@@ -1471,7 +1505,7 @@ function generateNavigation() {
         { title: 'Well-Architected Framework', path: '/concepts/well-architected' }
       ]},
       { title: 'Learning', path: '/learning', icon: '📚', children:
-        FROOT_MODULES.map(m => ({ title: `${m.id}: ${m.title}`, path: `/learning/${slugify(`${m.id}-${m.title}`)}`, layer: m.layer }))
+        LEARNING_MODULES.map(m => ({ title: `${m.id}: ${m.title}`, path: `/learning/${moduleSlug(m)}`, layer: m.layer }))
       },
       { title: 'Guides', path: '/guides', icon: '🗺️', children: [
         { title: 'Deploy Your First Play', path: '/guides/deploy-first-play' },
@@ -1566,7 +1600,18 @@ function main() {
     errors: stats.errors,
     duration
   };
-  writeDoc(path.join(OUTPUT, 'generation-manifest.json'), JSON.stringify(genManifest, null, 2));
+  if (!section) {
+    writeDoc(path.join(OUTPUT, 'generation-manifest.json'), JSON.stringify(genManifest, null, 2));
+  }
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = {
+  FROOT_MODULES,
+  REFERENCE_MODULES,
+  LEARNING_MODULES,
+  SPECIALTY_META,
+  moduleSlug,
+  slugify
+};

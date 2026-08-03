@@ -14,7 +14,8 @@ category: "Transformation"
 > **Duration:** 60–90 minutes | **Level:** Deep-Dive
 > **Part of:** 🍎 FROOT Transformation Layer
 > **Prerequisites:** F1 (GenAI Foundations), F2 (LLM Landscape)
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Fine-tuning facts verified:** 2026-08-03 against the [Microsoft Foundry fine-tuning guide](https://learn.microsoft.com/azure/foundry/how-to/fine-tune-models) and [Foundry model catalog](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models)
 
 ---
 
@@ -28,7 +29,7 @@ category: "Transformation"
 - [T1.6 Data Preparation](#t16-data-preparation)
 - [T1.7 The Fine-Tuning Pipeline](#t17-the-fine-tuning-pipeline)
 - [T1.8 Evaluation — Did It Work?](#t18-evaluation--did-it-work)
-- [T1.9 Azure AI Foundry Fine-Tuning](#t19-azure-ai-foundry-fine-tuning)
+- [T1.9 Microsoft Foundry Fine-Tuning](#t19-microsoft-foundry-fine-tuning)
 - [T1.10 MLOps for LLMs](#t110-mlops-for-llms)
 - [Key Takeaways](#key-takeaways)
 
@@ -370,17 +371,17 @@ flowchart TB
 
 ---
 
-## T1.9 Azure AI Foundry Fine-Tuning
+## T1.9 Microsoft Foundry Fine-Tuning
 
-Azure AI Foundry supports fine-tuning several model families:
+Microsoft Foundry supports multiple customization methods, but eligibility changes by model version, region, deployment type, and subscription. Treat the portal and current model documentation as the support contract.
 
-| Model | Fine-Tuning Support | Method | Min Data |
-|-------|-------------------|--------|----------|
-| **GPT-4o** | ✅ Managed | Full FT | 10 examples (50+ recommended) |
-| **GPT-4o-mini** | ✅ Managed | Full FT | 10 examples |
-| **Phi-4** | ✅ Managed | LoRA | 100 examples |
-| **Llama 3.1** | ✅ Managed | LoRA | 100 examples |
-| **Mistral** | ✅ Managed | LoRA | 100 examples |
+| Decision | Verify Before Training |
+|----------|------------------------|
+| **Model eligibility** | Exact model ID and version support fine-tuning in the target region |
+| **Method** | SFT, DPO, RFT, LoRA, or another supported path matches the model and objective |
+| **Dataset contract** | Required format, size, validation split, and content policy |
+| **Capacity and cost** | Training quota, job pricing, deployment pricing, and regional capacity |
+| **Evaluation** | Baseline, holdout set, safety checks, and acceptance thresholds are defined before training |
 
 ### Azure Fine-Tuning Flow
 
@@ -400,11 +401,7 @@ flowchart LR
 
 ### Cost Estimation
 
-| Model | Training Cost | Hosting Cost |
-|-------|--------------|-------------|
-| **GPT-4o-mini** | ~$3.00/1M training tokens | Standard PAYG pricing |
-| **GPT-4o** | ~$25.00/1M training tokens | Standard PAYG pricing |
-| **Phi-4 (14B)** | Compute hours (GPU reservation) | Managed compute pricing |
+Training cost is a function of method, model, training tokens or compute time, checkpoints, retries, evaluation, and the deployed endpoint. Use the target model's live pricing and quota data; do not estimate a production business case from a curriculum snapshot.
 
 ---
 
@@ -452,9 +449,9 @@ graph TB
 
 | Tool | Purpose | Integration |
 |------|---------|-------------|
-| **Azure AI Foundry** | Model management, fine-tuning, evaluation | Native Azure |
+| **Microsoft Foundry** | Model management, fine-tuning, evaluation | Native Azure |
 | **MLflow** | Experiment tracking, model registry | Open source, Azure-integrated |
-| **Prompt Flow** | Prompt development and evaluation | Azure AI Foundry, VS Code |
+| **Prompt Flow** | Existing prompt development and evaluation workflows | Verify support in the current Foundry experience and VS Code tooling |
 | **GitHub Actions** | CI/CD for model pipelines | Azure-integrated |
 | **Azure Monitor** | Production observability | Native Azure |
 | **LangSmith / LangFuse** | LLM-specific tracing and evaluation | Open source alternatives |

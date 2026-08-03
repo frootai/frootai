@@ -2,7 +2,10 @@
 
 > **Duration:** 45-60 minutes | **Level:** Platform
 > **Audience:** Cloud Architects, Platform Engineers, CSAs
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Product facts verified:** 2026-08-03 against [Microsoft Copilot documentation](https://learn.microsoft.com/copilot/), [Copilot Studio documentation](https://learn.microsoft.com/microsoft-copilot-studio/), and [GitHub Copilot plans](https://github.com/features/copilot/plans)
+
+> Licensing and entitlements change frequently and may vary by agreement and geography. Prices and quotas in this module are retained as a March 2026 comparison snapshot; use the linked product pages for purchase decisions.
 
 ---
 
@@ -643,7 +646,7 @@ graph TB
         L1["Microsoft Graph Connectors<br/>Bring external data INTO M365 Copilot"]
         L2["Copilot Agents<br/>Custom agents built in Copilot Studio"]
         L3["Plugins & Actions<br/>Extend Copilot with custom capabilities"]
-        L4["Azure AI Foundry Custom Build<br/>Full custom AI applications"]
+        L4["Microsoft Foundry Custom Build<br/>Full custom AI applications"]
     end
 
     L1 -->|"Increasing customization"| L2
@@ -676,11 +679,11 @@ Graph connectors bring **external data into the Microsoft 365 ecosystem**, makin
 | **Permissions** | Map external ACLs to Entra ID identities for proper access control |
 | **Use case** | "Hey Copilot, what is the status of JIRA ticket PROJ-1234?" (data pulled from Jira via Graph connector) |
 
-### Copilot Studio vs Azure AI Foundry — When to Use Which
+### Copilot Studio vs Microsoft Foundry — When to Use Which
 
 This is one of the most common questions architects face. The answer depends on the degree of customization, control, and integration required.
 
-| Dimension | Copilot Studio | Azure AI Foundry |
+| Dimension | Copilot Studio | Microsoft Foundry |
 |---|---|---|
 | **Best for** | Business-process copilots within the Microsoft ecosystem | Custom AI applications with full architectural control |
 | **Builder persona** | Citizen developers, business analysts, power users | Professional developers, ML engineers, platform teams |
@@ -698,9 +701,9 @@ This is one of the most common questions architects face. The answer depends on 
 :::tip Decision Framework
 **Start with Copilot Studio** when: the use case is within the Microsoft ecosystem, the target users are non-technical, and time-to-value is critical.
 
-**Go to Azure AI Foundry** when: you need custom models, complex orchestration, multi-modal inputs, non-Microsoft channels, or full infrastructure control.
+**Go to Microsoft Foundry** when: you need custom models, complex orchestration, multi-modal inputs, non-Microsoft channels, or full infrastructure control.
 
-**Combine both** when: you use Copilot Studio for the conversational UX and call Azure AI Foundry endpoints as custom actions for heavy processing.
+**Combine both** when: you use Copilot Studio for the conversational UX and call Microsoft Foundry endpoints as custom actions for heavy processing.
 :::
 
 ### Plugins and Actions
@@ -746,7 +749,7 @@ graph TD
     Q2 -->|Yes| Q3{"Do you need<br/>full architectural<br/>control?"}
 
     Q3 -->|No| STUDIO["Copilot Studio<br/>Low-code custom copilots"]
-    Q3 -->|Yes| FOUNDRY["Azure AI Foundry<br/>Full custom build"]
+    Q3 -->|Yes| FOUNDRY["Microsoft Foundry<br/>Full custom build"]
 
     Q2 -->|No| Q4{"Is it for<br/>software development?"}
 
@@ -777,7 +780,7 @@ graph TD
 
 3. **Permissions are the foundation.** M365 Copilot inherits existing access controls. Before deploying, audit SharePoint permissions, sensitivity labels, and sharing policies. Overshared data becomes overshared AI responses.
 
-4. **Start with Copilot Studio for custom scenarios.** For most business-process copilot needs, Copilot Studio delivers faster time-to-value than a full Azure AI Foundry build. Reserve Foundry for cases that require custom models, complex orchestration, or non-Microsoft channels.
+4. **Start with Copilot Studio for custom scenarios.** For many business-process copilot needs, Copilot Studio provides a managed low-code path. Use Microsoft Foundry when requirements call for custom models, code-based agents, complex orchestration, or broader channels.
 
 5. **Extensibility is the long game.** Graph connectors, plugins, and actions allow organizations to bring external data and custom capabilities into the Copilot experience. Plan your extensibility strategy early.
 

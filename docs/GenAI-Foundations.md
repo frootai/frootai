@@ -2,7 +2,8 @@
 
 > **Duration:** 60--90 minutes | **Level:** Foundation
 > **Audience:** Cloud Architects, Platform Engineers, Infrastructure Engineers
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Foundation facts verified:** 2026-08-03 against the [OpenAI token guide](https://developers.openai.com/api/docs/guides/text#tokens), [OpenAI model catalog](https://developers.openai.com/api/docs/models), and [Anthropic model overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview)
 
 ---
 
@@ -189,7 +190,7 @@ A token is a **subword unit** — not a whole word, not a single character, but 
 | `192.168.1.1` | `192` `.` `168` `.` `1` `.` `1` | 7 |
 | A blank space before a word | Included in the token | (spaces are part of tokens) |
 
-**Key insight:** A rough rule of thumb for English text is **1 token ≈ 0.75 words**, or equivalently, **1 word ≈ 1.33 tokens**. Code is typically more token-dense than natural language.
+**Key insight:** OpenAI's rough English-language heuristic is **1 token ≈ 0.75 words**, or equivalently, **1 word ≈ 1.33 tokens**. Actual counts vary by tokenizer, language, and content; use the target model's tokenizer for capacity and cost calculations.
 
 ### Token Limits and Context Windows
 
@@ -217,11 +218,11 @@ This distinction matters for both cost and infrastructure planning:
 
 | Model | Input Cost (per 1M tokens) | Output Cost (per 1M tokens) |
 |-------|---------------------------|----------------------------|
-| GPT-4o | $2.50 | $10.00 |
-| GPT-4o mini | $0.15 | $0.60 |
-| Claude 3.5 Sonnet | $3.00 | $15.00 |
-| Claude Opus 4 | $15.00 | $75.00 |
-| Llama 3.1 70B (Azure) | $0.268 | $0.354 |
+| Managed frontier model | Provider and deployment dependent | Provider and deployment dependent |
+| Managed efficiency model | Provider and deployment dependent | Provider and deployment dependent |
+| Self-hosted open-weight model | Compute, storage, and operations | Compute, storage, and operations |
+
+> Prices change independently by provider, region, deployment type, and commitment. Use the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/), [OpenAI pricing](https://developers.openai.com/api/docs/pricing), or the selected provider's current pricing page when building a business case.
 
 *Prices are illustrative and change frequently. Always check current pricing.*
 
@@ -857,7 +858,7 @@ The most common similarity metric is **cosine similarity** — the cosine of the
 | **Size** | Small (100M -- 1B parameters) | Large (7B -- 1T+ parameters) |
 | **VRAM** | 1 -- 4 GB | 16 -- 800+ GB |
 | **Speed** | Very fast (single forward pass) | Slower (sequential token generation) |
-| **Cost** | Very cheap ($0.02 -- $0.13 per 1M tokens) | Expensive ($0.15 -- $75 per 1M tokens) |
+| **Cost** | Usually lower per input unit; verify current rates | Usually higher and strongly output-dependent; verify current rates |
 | **Use case** | Search, retrieval, clustering, classification | Conversation, generation, reasoning |
 
 ### Why Embeddings Are the Backbone of RAG

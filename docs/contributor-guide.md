@@ -171,6 +171,16 @@ The `validate-plays.yml` workflow automatically checks:
 - Include practical examples, not just theory
 - Target 800–3000 lines per module
 
+#### Freshness and provenance
+
+- Prefer first-party specifications, vendor documentation, standards bodies, and regulators.
+- Date volatile claims about models, pricing, quotas, availability, APIs, product names, and regulation with `Verified: YYYY-MM-DD` and link the source next to the claim or table.
+- Do not use “latest,” “current,” or a fixed catalog count without a verification date and source.
+- Keep durable concepts separate from vendor snapshots. A snapshot is an example, not a promise of availability in every cloud or region.
+- Update `Last Updated` only after reviewing the complete module. A narrow correction should use a dated verification note near the changed section.
+- Edit source Markdown under `docs/`; regenerate `.factory/docs/learning/` with `npm run factory:docs:learning`. Do not hand-edit generated MDX.
+- Run `npm run docs:audit` before publishing learning-content changes.
+
 ### 4.2 Agent Rules (`agent.md`)
 
 When improving a play's agent.md:

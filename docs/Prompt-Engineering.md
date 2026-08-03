@@ -2,7 +2,8 @@
 
 > **Duration:** 60-90 minutes | **Level:** Tactical
 > **Audience:** Cloud Architects, Platform Engineers, CSAs
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **API patterns verified:** 2026-08-03 against the [Microsoft Foundry SDK and endpoint guide](https://learn.microsoft.com/azure/foundry/how-to/develop/sdk-overview) and [OpenAI prompting guidance](https://developers.openai.com/api/docs/guides/prompting)
 
 ---
 
@@ -79,12 +80,16 @@ sequenceDiagram
 ### A Complete API Call (Python)
 
 ```python
-from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import OpenAI
 
-client = AzureOpenAI(
-    azure_endpoint="https://my-aoai.openai.azure.com/",
-    api_key=os.getenv("AZURE_OPENAI_KEY"),
-    api_version="2025-12-01-preview"
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default",
+)
+client = OpenAI(
+    base_url="https://<resource>.services.ai.azure.com/openai/v1/",
+    api_key=token_provider,
 )
 
 response = client.chat.completions.create(
@@ -102,7 +107,7 @@ response = client.chat.completions.create(
         }
     ],
     temperature=0.3,
-    max_tokens=1500,
+    max_completion_tokens=1500,
     top_p=0.95
 )
 
@@ -113,6 +118,7 @@ print(response.choices[0].message.content)
 
 | Parameter | Range | Effect | Recommendation |
 |---|---|---|---|
+| **Provider defaults** | Model-specific | Defaults and supported controls differ by model and endpoint | Set important controls explicitly and verify them against the deployed model card |
 | `temperature` | 0.0 - 2.0 | Controls randomness. Lower = deterministic. | 0.0-0.3 for factual/code; 0.7-1.0 for creative |
 | `top_p` | 0.0 - 1.0 | Nucleus sampling. Limits token pool. | 0.95 default; lower for constrained output |
 | `max_tokens` | 1 - model max | Maximum response length. | Set based on expected output size |

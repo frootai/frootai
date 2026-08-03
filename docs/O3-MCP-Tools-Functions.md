@@ -3,7 +3,8 @@
 > **Duration:** 60–90 minutes | **Level:** Deep-Dive
 > **Part of:** 🌿 FROOT Orchestration Layer
 > **Prerequisites:** F1 (GenAI Foundations), R1 (Prompt Engineering)
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Protocol facts verified:** 2026-08-03 against the [MCP 2026-07-28 specification](https://modelcontextprotocol.io/specification/latest) and [A2A 1.0 specification](https://a2a-protocol.org/latest/specification/)
 
 ---
 
@@ -219,7 +220,7 @@ graph TB
         C4["Copilot Studio"]
     end
     
-    subgraph PROTOCOL["MCP Protocol (JSON-RPC over stdio/SSE)"]
+    subgraph PROTOCOL["MCP Protocol (JSON-RPC over stdio or Streamable HTTP)"]
         P1["initialize → capabilities"]
         P2["tools/list → tool definitions"]
         P3["tools/call → execute tool"]
@@ -251,9 +252,9 @@ graph TB
 | **Tool** | An action the model can invoke | `query_database`, `create_ticket`, `send_email` |
 | **Resource** | Data the server can provide (read-only) | Database schemas, file contents, API docs |
 | **Prompt** | Reusable prompt templates | "Analyze this dataset: {data}" |
-| **Transport** | How client and server communicate | `stdio` (local), `SSE` (remote/HTTP) |
+| **Transport** | How client and server communicate | `stdio` (local), Streamable HTTP (remote); legacy SSE may remain in older implementations |
 
-### The MCP Ecosystem (March 2026)
+### The MCP Ecosystem (Verified August 2026)
 
 Major MCP servers available today:
 
@@ -272,7 +273,7 @@ Major MCP servers available today:
 
 ## O3.4 Agent-to-Agent Protocol (A2A)
 
-While MCP connects agents to **tools**, A2A (by Google, now multi-vendor) connects **agents to other agents**. Together they form the complete connectivity fabric.
+While MCP connects agents to **tools and context**, A2A is a Linux Foundation open standard for communication between independent agents. Together they form a complementary connectivity fabric.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1a2e', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#6366f1', 'lineColor': '#818cf8', 'background': 'transparent'}}}%%
@@ -308,12 +309,14 @@ graph LR
 
 | Concept | Description |
 |---------|-------------|
-| **Agent Card** | JSON metadata describing an agent's capabilities, published at `/.well-known/agent.json` |
+| **Agent Card** | JSON metadata describing interfaces, skills, and security, published at `/.well-known/agent-card.json` |
 | **Task** | A unit of work sent from one agent to another |
 | **Message** | Communication within a task (text, files, structured data) |
-| **Part** | A segment of a message (TextPart, FilePart, DataPart) |
+| **Part** | A segment containing text, raw bytes or URL-referenced files, or structured data |
 | **Artifact** | Output produced by an agent during task execution |
 | **Push Notifications** | Webhook-based updates for long-running tasks |
+
+A2A 1.0 supports JSON-RPC, gRPC, and HTTP+JSON bindings. Clients and servers negotiate protocol versions and declared interfaces through the Agent Card.
 
 ---
 

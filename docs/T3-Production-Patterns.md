@@ -2,8 +2,9 @@
 
 > **Duration:** 60–90 minutes | **Level:** Strategic
 > **Part of:** 🍎 FROOT Transformation Layer
-> **Prerequisites:** O4 (Azure AI Platform), O5 (AI Infrastructure)
-> **Last Updated:** March 2026
+> **Prerequisites:** O4 (Microsoft Foundry), O5 (AI Infrastructure)
+> **Last Updated:** August 2026
+> **Production guidance verified:** 2026-08-03 against [Microsoft Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/overview), the [Azure Well-Architected Framework](https://learn.microsoft.com/azure/well-architected/), and [Azure API Management AI gateway guidance](https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities)
 
 ---
 
@@ -140,7 +141,7 @@ graph LR
     
     subgraph PAAS["PaaS"]
         P1["App Service"]
-        P2["Azure AI Foundry<br/>Managed Endpoints"]
+        P2["Microsoft Foundry<br/>Managed model APIs"]
     end
     
     subgraph LOW_CODE["Low-Code"]
@@ -292,16 +293,17 @@ TTFT (Time To First Token) drops from 3s to ~200ms. The user sees progress immed
 ```
 Cost per request = (input_tokens × input_rate) + (output_tokens × output_rate)
 
-Example (GPT-4o, March 2026):
-  System message:      800 tokens  × $2.50/1M = $0.002
-  User message:        200 tokens  × $2.50/1M = $0.0005
-  RAG context:       2,000 tokens  × $2.50/1M = $0.005
-  Output:              500 tokens  × $10.00/1M = $0.005
-  ─────────────────────────────────────────────────────
-  Total per request:                              $0.0125
+Provider-neutral example:
+    Input tokens:  system + user + retrieved context
+    Output tokens: generated response + billed reasoning tokens, when applicable
+    Request cost:  (input tokens × current input rate)
+                             + (output tokens × current output rate)
+                             + tool, retrieval, cache, and hosting charges
 
-  At 100K requests/day = $1,250/day = $37,500/month
+    Monthly cost: request cost × requests/day × active days
 ```
+
+Use current target-region pricing and measured token distributions from representative traffic. Model routing, caching, batching, and prompt reduction should be justified by evaluation data, not generic savings percentages.
 
 ### Cost Optimization Decision Tree
 

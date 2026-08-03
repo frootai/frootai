@@ -2,7 +2,8 @@
 
 > **Duration:** 60 minutes | **Level:** Deep-Dive
 > **Audience:** Cloud Architects, Platform Engineers, CSAs
-> **Last Updated:** March 2026
+> **Last Updated:** August 2026
+> **Framework facts verified:** 2026-08-03 against the [Microsoft Agent Framework overview](https://learn.microsoft.com/agent-framework/overview/) and [Semantic Kernel migration guide](https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/)
 
 ---
 
@@ -93,10 +94,15 @@ graph TB
 | **LlamaIndex** | Python | LlamaIndex Inc. | Data and retrieval first | RAG-heavy applications |
 | **Prompt Flow** | Python (visual) | Microsoft | Evaluation and flow design | Prompt testing, CI/CD for prompts |
 | **AutoGen** | Python | Microsoft Research | Multi-agent conversation | Research, complex multi-agent systems |
+| **Microsoft Agent Framework** | C#, Python, Go | Microsoft | Agents, harnesses, graph workflows | New Microsoft agent and multi-agent development |
 | **Haystack** | Python | deepset | Search and NLP pipelines | Document search, question answering |
 
 :::tip Architect's Perspective
 You do not need to pick one framework forever. Many production systems use Semantic Kernel for orchestration and LlamaIndex for data ingestion, or Prompt Flow for evaluation alongside Semantic Kernel for runtime. These are complementary tools, not competing religions.
+:::
+
+:::warning Current Microsoft Direction
+Microsoft Agent Framework is the direct successor to both Semantic Kernel's agent APIs and AutoGen. Keep Semantic Kernel for existing kernel/plugin integrations and migrate agent orchestration when the new framework meets your requirements. For new Microsoft agent applications, start with [Agent Framework](https://learn.microsoft.com/agent-framework/overview/).
 :::
 
 ---
@@ -896,9 +902,9 @@ Kernel kernel = builder.Build();
 
 ---
 
-## 7.7 Agent Framework in Semantic Kernel
+## 7.7 Semantic Kernel Agent APIs (Migration Reference)
 
-Semantic Kernel includes a full agent framework that builds on top of the core Kernel primitives. If Module 6 covered agents conceptually, this section covers how SK implements them.
+Semantic Kernel includes agent APIs built on its core Kernel primitives. These examples remain useful for existing applications, but Microsoft Agent Framework is the successor for new agent and workflow development. The OpenAI Assistants API sunsets on 2026-08-26; do not begin new Assistants-based implementations.
 
 ### Agent Types
 
