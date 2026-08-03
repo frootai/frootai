@@ -35,6 +35,7 @@
     "test:contract-inventory": "node --test scripts/test-solution-play-contract-inventory.mjs",
     "test:solution-play-truth-repair": "node --test scripts/test-solution-play-truth-repair.mjs",
     "test:solution-play-truth-repair-06-10": "node --test scripts/test-solution-play-truth-repair-06-10.mjs",
+    "test:solution-play-power-platform-ownership": "node --test scripts/test-solution-play-power-platform-ownership.mjs",
     "test:solution-play-schemas": "node --test scripts/test-solution-play-vnext-schemas.mjs",
     "validate:solution-play-delivery-profile": "node scripts/validate-solution-play-delivery-profile.mjs",
     "test:solution-play-delivery-profile": "node --test scripts/test-solution-play-delivery-profile.mjs",

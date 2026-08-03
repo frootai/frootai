@@ -83,6 +83,7 @@ jobs:
           npm run quality:solution-plays
           npm run test:solution-play-truth-repair
           npm run test:solution-play-truth-repair-06-10
+          npm run test:solution-play-power-platform-ownership
 
   certification-harness:
     strategy:

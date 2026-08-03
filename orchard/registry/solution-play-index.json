@@ -99,7 +99,7 @@
       "numeric_id": 8,
       "slug": "08-copilot-studio-bot",
       "name": "Copilot Studio Bot",
-      "description": "FrootAI Solution Play: copilot studio bot",
+      "description": "FrootAI Solution Play: Copilot Studio and Power Platform bot",
       "relative_path": "solution-plays/08-copilot-studio-bot",
       "readme_path": "solution-plays/08-copilot-studio-bot/README.md",
       "spec_path": "solution-plays/08-copilot-studio-bot/spec/play-spec.json",

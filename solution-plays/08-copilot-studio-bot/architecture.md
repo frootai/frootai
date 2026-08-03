@@ -1,101 +1,53 @@
-# Architecture — Play 08: Copilot Studio Bot
+# Architecture - Play 08: Copilot Studio Bot
 
-## Overview
-
-Low-code enterprise conversational bot built with Microsoft Copilot Studio. The bot answers employee questions using SharePoint knowledge bases, triggers business workflows via Power Automate, and stores structured data in Dataverse. Publishes to Teams, web, and other Microsoft channels with built-in generative AI fallback for unmatched topics.
-
-## Architecture Diagram
+## Target Architecture
 
 ```mermaid
-graph TB
-    subgraph User Channels
-        Teams[Microsoft Teams]
-        Web[Web Chat Widget]
-        M365[Microsoft 365 Copilot]
-    end
-
-    subgraph Bot Platform
-        CopilotStudio[Copilot Studio<br/>Topic Routing + Generative Answers]
-        Topics[Custom Topics<br/>Guided Conversations + Entities]
-        GenAI[Generative AI<br/>Fallback for Unmatched Queries]
-    end
-
-    subgraph Knowledge Sources
-        SharePoint[SharePoint Online<br/>Document Libraries + Site Pages]
-        Dataverse[Dataverse<br/>Structured Records + KB Articles]
-    end
-
-    subgraph Integration Layer
-        PowerAutomate[Power Automate<br/>Ticket Creation + Approvals]
-        Connectors[Premium Connectors<br/>ServiceNow · SAP · Salesforce]
-    end
-
-    subgraph Monitoring
-        Analytics[Copilot Studio Analytics<br/>Sessions + CSAT + Topic Rates]
-        AppInsights[Application Insights<br/>Custom Telemetry]
-    end
-
-    Teams -->|Bot Framework| CopilotStudio
-    Web -->|Embed Script| CopilotStudio
-    M365 -->|Plugin| CopilotStudio
-    CopilotStudio -->|Match| Topics
-    CopilotStudio -->|No Match| GenAI
-    GenAI -->|Search| SharePoint
-    GenAI -->|Query| Dataverse
-    Topics -->|Trigger Flow| PowerAutomate
-    PowerAutomate -->|External Systems| Connectors
-    Topics -->|Read/Write| Dataverse
-    CopilotStudio -->|Metrics| Analytics
-    CopilotStudio -->|Telemetry| AppInsights
-
-    style Teams fill:#3b82f6,color:#fff,stroke:#2563eb
-    style Web fill:#3b82f6,color:#fff,stroke:#2563eb
-    style M365 fill:#3b82f6,color:#fff,stroke:#2563eb
-    style CopilotStudio fill:#06b6d4,color:#fff,stroke:#0891b2
-    style Topics fill:#06b6d4,color:#fff,stroke:#0891b2
-    style GenAI fill:#10b981,color:#fff,stroke:#059669
-    style SharePoint fill:#f59e0b,color:#fff,stroke:#d97706
-    style Dataverse fill:#f59e0b,color:#fff,stroke:#d97706
-    style PowerAutomate fill:#06b6d4,color:#fff,stroke:#0891b2
-    style Connectors fill:#06b6d4,color:#fff,stroke:#0891b2
-    style Analytics fill:#0ea5e9,color:#fff,stroke:#0284c7
-    style AppInsights fill:#0ea5e9,color:#fff,stroke:#0284c7
+flowchart LR
+  User[Authenticated user] --> Channel[Teams or web channel]
+  Channel --> Bot[Copilot Studio]
+  Bot --> Topics[Topics and generative answers]
+  Topics --> Knowledge[Approved knowledge sources]
+  Topics --> Flow[Power Automate actions]
+  Flow --> Approval[Durable approval when consequential]
+  Flow --> Connector[DLP-approved connectors]
+  Topics --> Data[Dataverse state and audit]
+  Bot --> Analytics[Platform analytics]
+  Dev[Development environment] --> Export[Unmanaged export and source unpack]
+  Export --> Check[Solution Checker and tests]
+  Check --> Managed[Managed solution artifact]
+  Managed --> Test[Test environment import]
+  Test --> Production[Approved production import]
+  Production --> Rollback[Prior managed solution]
 ```
 
-## Data Flow
+The diagram is a target design, not deployment evidence. The repository does not
+currently contain the solution export represented by `Export`.
 
-1. **User Input**: Employee asks question in Teams or web widget → Bot Framework routes to Copilot Studio → Topic matching engine evaluates against defined topics
-2. **Topic Match**: If topic matches → Guided conversation flow executes → Entities extracted → Dataverse queried for structured answers → Power Automate triggered for actions
-3. **Generative Fallback**: If no topic matches → Generative AI searches SharePoint document libraries and Dataverse articles → GPT-4o generates grounded answer with source citations
-4. **Actions**: Bot triggers Power Automate flows for side-effects — create IT tickets, submit approvals, update CRM records, send notifications
-5. **Analytics**: Every session tracked — topic completion rates, user satisfaction, escalation rates, generative AI usage percentage
+## Authority Boundaries
 
-## Service Roles
+| Surface | Authority | Required evidence |
+|---|---|---|
+| Topics, answers, channels | Copilot Studio solution | Exported source and publication receipt |
+| Structured state and roles | Dataverse | Schema, role assignments, audit configuration |
+| Actions and approvals | Power Automate | Flow definitions, connection references, approval receipts |
+| Connector use | Tenant DLP policy | Policy export and connector classification |
+| Promotion and rollback | Power Platform ALM | Managed imports, stage approvals, rollback test |
+| Measurements | Platform analytics and test runs | Versioned dataset, query, timestamp, sample count |
 
-| Service | Layer | Role |
-|---------|-------|------|
-| Copilot Studio | Platform | Bot builder, topic management, channel publishing, generative AI |
-| SharePoint Online | Knowledge | Document libraries as grounding source for generative answers |
-| Dataverse | Data | Structured records, KB articles, conversation logs, entity storage |
-| Power Automate | Integration | Workflow automation, external system actions, approval flows |
-| Generative fallback | Platform | Copilot Studio capability or approved external connector; ownership must be explicit |
-| Application Insights | Monitoring | Custom telemetry, error tracking, usage metrics |
-| Key Vault | Security | External connector credentials, API keys |
+## Release Flow
 
-## Security Architecture
+1. Makers work only in the owned development environment.
+2. Export the unmanaged solution and unpack it into `solution/`.
+3. Validate solution structure, connection references, environment variables,
+   tenant DLP compatibility, roles, and consequential-action approvals.
+4. Build a managed solution and import it into an isolated test environment.
+5. Run topic, action, identity, DLP, approval, audit, and rollback tests.
+6. Promote the exact managed artifact after human approval.
+7. Publish channels, run smoke tests, and retain the prior managed artifact.
 
-- **Entra ID SSO**: Users authenticated via Microsoft Entra ID — seamless Teams integration
-- **DLP Policies**: Power Platform DLP prevents data leakage between connectors
-- **Environment Isolation**: Separate dev/prod environments in Power Platform admin center
-- **Row-Level Security**: Dataverse RBAC controls data access per business unit
-- **Content Moderation**: Built-in Copilot Studio content safety filters on all AI responses
+## Current Evidence Boundary
 
-## Scaling
-
-| Metric | Dev | Production | Enterprise |
-|--------|-----|-----------|------------|
-| Monthly sessions | 100 | 25,000 | 100,000+ |
-| Custom topics | 10 | 50-100 | 200+ |
-| Power Automate flows | 2 | 10-20 | 50+ |
-| SharePoint sites | 1 | 5-10 | 20+ |
-| Concurrent users | 5 | 200 | 1,000+ |
+All release-flow receipts are unavailable. No trigger, completion, fallback,
+safety, latency, cost, satisfaction, DLP, approval, import, publication, or
+rollback outcome is claimed.

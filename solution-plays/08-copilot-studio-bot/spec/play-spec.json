@@ -2,14 +2,14 @@
   "name": "08-copilot-studio-bot",
   "version": "0.1.0",
   "play": "08-copilot-studio-bot",
-  "description": "FrootAI Solution Play: copilot studio bot",
+  "description": "FrootAI Solution Play: Copilot Studio and Power Platform bot",
   "scale": "dev",
   "architecture": {
     "pattern": "custom",
-    "data_flow": "See README.md for architecture diagram"
+    "data_flow": "See README.md for the target architecture and evidence boundary"
   },
   "config": {
-    "openai": "config/openai.json",
+    "power_platform": "config/power-platform.json",
     "guardrails": "config/guardrails.json"
   },
   "evaluation": {
@@ -27,11 +27,11 @@
     }
   },
   "waf_alignment": {
-    "reliability": "Retry + health checks",
-    "security": "Managed Identity + Content Safety",
-    "cost_optimization": "Right-sized for dev",
-    "operational_excellence": "CI/CD + consistency checks",
-    "performance_efficiency": "Topic, connector, and environment behavior require measurement",
-    "responsible_ai": "Content safety + groundedness"
+    "reliability": "Managed promotion and rollback require evidence",
+    "security": "Entra identity, DLP, least privilege, and durable approvals",
+    "cost_optimization": "Licensing and capacity require tenant-specific verification",
+    "operational_excellence": "Solution Checker, import tests, smoke, audit, and rollback",
+    "performance_efficiency": "Topic and connector behavior require measurement",
+    "responsible_ai": "Safety, grounding, escalation, and review require evidence"
   }
 }

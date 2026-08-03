@@ -1,50 +1,23 @@
 {
-  "_description": "Agent behavior tuning — customize how AI agents act in this solution",
-  
-  "builder_agent": {
-    "persona": "Solution builder — implements features following architecture patterns",
-    "temperature": 0.2,
-    "model": "gpt-4o",
-    "max_tokens": 4000,
-    "tools_enabled": true,
-    "mcp_servers": ["frootai"],
-    "handoff_to": "reviewer",
-    "rules": [
-      "Always use config/*.json for parameters",
-      "Always use Managed Identity for Azure auth",
-      "Include error handling with App Insights logging",
-      "Follow .github/instructions/*.instructions.md"
-    ]
+  "builder": {
+    "role": "Edit exported Copilot Studio solution source and deployment settings within an approved change.",
+    "authority": ["solution_source", "connection_references", "environment_variables"],
+    "handoff_to": "reviewer"
   },
-  
-  "reviewer_agent": {
-    "persona": "Code reviewer — checks security, quality, Azure best practices",
-    "temperature": 0.1,
-    "model": "gpt-4o",
-    "max_tokens": 3000,
-    "severity_levels": ["critical", "warning", "suggestion"],
-    "handoff_to": "tuner",
-    "checks": [
-      "No hardcoded secrets",
-      "Managed Identity for auth",
-      "Error handling with retry",
-      "Config from files not hardcoded",
-      "Temperature <= 0.3 for factual",
-      "Private endpoints on data services"
-    ]
+  "reviewer": {
+    "role": "Review topics, connectors, DLP, identity, approvals, audit, and promotion evidence.",
+    "authority": ["read_only_review"],
+    "handoff_to": "tuner"
   },
-  
-  "tuner_agent": {
-    "persona": "Production validator — checks TuneKit configs for readiness",
-    "temperature": 0.0,
-    "model": "gpt-4o",
-    "max_tokens": 2000,
-    "handoff_to": null,
-    "validation_rules": {
-      "temperature_max": 0.3,
-      "guardrails_required": true,
-      "evaluation_required": true,
-      "bicep_tags_required": ["environment", "project", "owner"]
-    }
-  }
+  "tuner": {
+    "role": "Tune topic triggers and fallback behavior only from measured test and analytics evidence.",
+    "authority": ["measured_topic_configuration"],
+    "handoff_to": null
+  },
+  "shared_rules": [
+    "Do not create platform resources outside the owned Power Platform environments.",
+    "Do not invent solution source, tenant settings, licenses, measurements, or release evidence.",
+    "Do not authorize consequential actions through conversation text.",
+    "Do not promote without a managed solution, clean import, and rollback receipt."
+  ]
 }

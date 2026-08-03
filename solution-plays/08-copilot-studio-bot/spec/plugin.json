@@ -2,17 +2,16 @@
   "plugin": "frootai-08-copilot-studio-bot",
   "version": "1.0.0",
   "name": "Copilot Studio Bot",
-  "description": "Low-code enterprise bot  Copilot Studio + Dataverse",
+  "description": "Designed Copilot Studio and Power Platform solution contract",
   "author": "FrootAI Contributors",
   "license": "MIT",
   "repository": "https://github.com/frootai/frootai/tree/main/solution-plays/08-copilot-studio-bot",
-  "tags": ["copilot-studio", "low-code", "dataverse"],
-  "complexity": "Low",
+  "tags": ["copilot-studio", "power-platform", "dataverse", "alm"],
   "status": "Skeleton",
   "agentic_os": {
     "layer_1_instructions": [
       ".github/copilot-instructions.md",
-      ".github/instructions/azure-coding.instructions.md",
+      ".github/instructions/power-platform-alm.instructions.md",
       ".github/instructions/security.instructions.md"
     ],
     "layer_2_prompts": [
@@ -27,34 +26,23 @@
       ".github/agents/tuner.agent.md"
     ],
     "layer_2_skills": [
-      ".github/skills/deploy-azure",
-      ".github/skills/evaluate",
-      ".github/skills/tune"
+      ".github/skills/deploy-copilot-studio-bot",
+      ".github/skills/evaluate-copilot-studio-bot",
+      ".github/skills/tune-copilot-studio-bot"
     ],
-    "layer_3_hooks": [
-      ".github/hooks/guardrails.json"
-    ],
-    "layer_3_workflows": [
-      ".github/workflows/ai-review.md",
-      ".github/workflows/ai-deploy.md"
-    ]
+    "layer_3_hooks": [".github/hooks/guardrails.json"],
+    "layer_3_workflows": [".github/workflows/copilot-studio-bot-review.yml"]
   },
   "devkit": {
     "agent": "agent.md",
-    "instructions": "instructions.md",
-    "mcp": "mcp/index.js",
-    "plugins": "plugins/",
-    "vscode": ".vscode/mcp.json"
+    "instructions": ".github/copilot-instructions.md",
+    "mcp": ".vscode/mcp.json"
   },
   "tunekit": {
     "config": "config/",
-    "evaluation": "evaluation/",
-    "infra": "infra/main.bicep"
+    "evaluation": "evaluation/"
   },
   "mcp_servers": {
-    "frootai": {
-      "command": "npx",
-      "args": ["frootai-mcp"]
-    }
+    "frootai": { "command": "npx", "args": ["frootai-mcp"] }
   }
 }
