@@ -4,7 +4,9 @@ node scripts/validate-consistency.js --fix
 # FAI Factory — incremental catalog update
 node scripts/factory/harvest.js
 node scripts/factory/catalog.js
-node scripts/factory/transform.js
+for channel in npm-mcp vscode python-mcp npm-sdk python-sdk; do
+	node scripts/factory/transform.js --channel "$channel"
+done
 
 git add -A
 node scripts/validate-consistency.js

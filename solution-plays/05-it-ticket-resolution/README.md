@@ -1,8 +1,8 @@
 # Play 05 — IT Ticket Resolution 🎫
 
-> Auto-classify, route, and resolve IT tickets with event-driven AI.
+> Target governed workflow for ticket classification, routing, approval, connector action, and rollback.
 
-Incoming tickets hit classification via GPT-4o-mini, the agent routes to the right team or auto-resolves known issues from knowledge base. ServiceNow integration syncs state bidirectionally.
+The diagrams describe target ITSM integration. The current Bicep declares OpenAI, Storage, Key Vault, Application Insights, Log Analytics, and diagnostics; it does not provision ITSM connectors, Logic Apps, Container Apps, Cosmos DB, Service Bus, private endpoints, or a knowledge base.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for classification, @reviewer for SLA audit, @tuner for routing
 ```
 
-## Key Metrics
-- Classification accuracy: ≥92% · Auto-resolution: ≥60% · SLA compliance: ≥95%
+## Evidence Required
+- Define category and priority policy, then measure classification, false resolution, approval bypass, duplicate actions, SLA by category, knowledge hits, recurrence, and rollback before setting release thresholds.
 
 ## DevKit
 | Primitive | What It Does |

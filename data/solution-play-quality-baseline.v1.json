@@ -4,12 +4,12 @@
   "play_count": 101,
   "categories": {
     "placeholder-marker": {
-      "count": 971,
-      "sha256": "8653c2f67b6cc04de18a989780e862ed7d5564f42575d67966df9010e101dc97"
+      "count": 953,
+      "sha256": "4bf03fb31b9a10c59e1ca1c88763502c3a19e86b14fb275ba6c2ed58b74ac9a4"
     },
     "copied-metrics": {
       "count": 3,
-      "sha256": "51d07dd7e49e8f1d0a00b0738d7fefa622aac9cdbce3c3559f43a88a63a97476"
+      "sha256": "eeb5d25d14f29dde24ef09de4b898f3983a1dd82250b2f74c4f48ceff7e09760"
     },
     "broken-reference": {
       "count": 0,

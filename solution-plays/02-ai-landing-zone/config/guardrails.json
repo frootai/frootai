@@ -1,1 +1,21 @@
-{"network_security":{"private_endpoints":true,"nsg_enabled":true},"identity":{"managed_identity":true,"rbac_least_privilege":true}}
+{
+	"network_security": {
+		"private_endpoints_required": true,
+		"private_endpoints_provisioned_by_current_bicep": false,
+		"nsg_declared_by_current_bicep": true
+	},
+	"identity": {
+		"user_assigned_identity_declared": true,
+		"rbac_assignments_provisioned_by_current_bicep": false
+	},
+	"governance": {
+		"policy_assignments_provisioned_by_current_bicep": false,
+		"tenant_conditional_access_owned_by_deployment": false
+	},
+	"evidence_boundary": {
+		"configuration_status": "designed",
+		"private_access_evidenced": false,
+		"drift_evidenced": false,
+		"deployment_evidenced": false
+	}
+}

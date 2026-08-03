@@ -81,6 +81,7 @@ jobs:
           npm run validate:solution-play-operations
           npm run contracts:inventory
           npm run quality:solution-plays
+          npm run test:solution-play-truth-repair
 
   certification-harness:
     strategy:
