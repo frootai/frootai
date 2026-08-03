@@ -76,7 +76,13 @@ function buildSolutionPlayArtifactManifest(sourceCommitSha, artifacts) {
 }
 
 function readSolutionPlayArtifact(absolutePath, relativePath) {
-  const descriptor = fs.openSync(absolutePath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+  let descriptor;
+  try {
+    descriptor = fs.openSync(absolutePath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+  } catch (error) {
+    if (error.code === "ELOOP") throw new Error(`Solution Play artifact must be an unchanged non-symlink regular file: ${relativePath}`);
+    throw error;
+  }
   try {
     const openedMetadata = fs.fstatSync(descriptor);
     const pathMetadata = fs.lstatSync(absolutePath);
