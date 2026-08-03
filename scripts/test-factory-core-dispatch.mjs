@@ -14,3 +14,10 @@ test("public factory dispatches read-only core contract verification", async () 
   const pushBlock = source.slice(source.indexOf("  push:"), source.indexOf("permissions:"));
   assert.match(pushBlock, /- 'marketplace\.json'/);
 });
+
+test("website dispatch falls back without failing action initialization", async () => {
+  const source = await readFile(new URL("../.github/workflows/factory.yml", import.meta.url), "utf8");
+  assert.match(source, /notify-website:/);
+  assert.match(source, /github-token: \$\{\{ secrets\.CROSS_REPO_TOKEN \|\| github\.token \}\}/);
+  assert.match(source, /core\.warning\('Cross-repo dispatch failed \(set CROSS_REPO_TOKEN secret\): '/);
+});
