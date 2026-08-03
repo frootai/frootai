@@ -132,7 +132,8 @@ function buildSolutionPlayProjection(index) {
   const slugs = new Set();
   const plays = index.plays.map((play, offset) => {
     if (!play || typeof play !== "object") throw new Error(`Solution Play record ${offset + 1} must be an object`);
-    if (!/^\d{2,3}$/.test(play.id) || play.numeric_id !== offset + 1 || Number(play.id) !== play.numeric_id) throw new Error(`Solution Play identity is not contiguous at record ${offset + 1}`);
+    const expectedId = String(offset + 1).padStart(2, "0");
+    if (play.id !== expectedId || play.numeric_id !== offset + 1) throw new Error(`Solution Play identity is not contiguous at record ${offset + 1}`);
     if (ids.has(play.id) || slugs.has(play.slug)) throw new Error(`Duplicate Solution Play identity: ${play.id}`);
     ids.add(play.id);
     slugs.add(play.slug);
@@ -182,6 +183,12 @@ function writeSolutionPlayProjection() {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, renderSolutionPlayProjection(projection), "utf8");
   return projection;
+}
+
+function writeSearchIndex(catalog) {
+  const searchIndex = buildSearchIndex(catalog);
+  writeJsonCompact(path.join(WEBSITE_ROOT, "public", "search-index.json"), searchIndex);
+  return searchIndex;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -433,6 +440,61 @@ function truncate(str, max) {
   return str && str.length > max ? str.substring(0, max) : str || "";
 }
 
+function compareText(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function sorted(items, selector) {
+  return [...items].sort((left, right) => compareText(selector(left), selector(right)));
+}
+
+const searchEntryTypes = new Set([
+  "agent", "doc", "heading", "hook", "instruction", "learning", "mcp-tool", "page", "play",
+  "play-category", "plugin", "recipe", "skill", "user-guide", "waf-pillar", "workflow",
+]);
+
+function validateSearchIndex(entries) {
+  if (!Array.isArray(entries) || entries.length < 1) throw new Error("Search index must contain entries");
+  const identities = new Set();
+  for (const [offset, entry] of entries.entries()) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) throw new Error(`Search entry ${offset} must be an object`);
+    const allowed = new Set(["t", "u", "b", "type", "parent"]);
+    for (const key of Object.keys(entry)) if (!allowed.has(key)) throw new Error(`Search entry ${offset} contains unknown field: ${key}`);
+    if (typeof entry.t !== "string" || !entry.t.trim() || entry.t.length > 256) throw new Error(`Search entry ${offset} title is invalid`);
+    if (typeof entry.u !== "string" || !entry.u.startsWith("/") || entry.u.startsWith("//") || entry.u.includes("..") || /\\|%(?:2f|5c)/i.test(entry.u) || entry.u.length > 512) throw new Error(`Search entry ${offset} URL is invalid`);
+    if (new URL(entry.u, "https://frootai.dev").origin !== "https://frootai.dev") throw new Error(`Search entry ${offset} URL escapes the website origin`);
+    if (typeof entry.b !== "string" || entry.b.length > 400) throw new Error(`Search entry ${offset} body is invalid`);
+    if (typeof entry.type !== "string" || !searchEntryTypes.has(entry.type)) throw new Error(`Search entry ${offset} type is invalid`);
+    if (entry.parent !== undefined && (typeof entry.parent !== "string" || !entry.parent.trim() || entry.parent.length > 256)) throw new Error(`Search entry ${offset} parent is invalid`);
+    if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(`${entry.t}${entry.u}${entry.b}${entry.parent || ""}`)) throw new Error(`Search entry ${offset} contains control characters`);
+    const identity = `${entry.type}\u0000${entry.t}\u0000${entry.u}`;
+    if (identities.has(identity)) throw new Error(`Duplicate search entry: ${entry.type} ${entry.t} ${entry.u}`);
+    identities.add(identity);
+  }
+  return { valid: true, count: entries.length };
+}
+
+function finalizeSearchIndex(entries) {
+  const byIdentity = new Map();
+  for (const entry of entries) {
+    const normalized = {
+      t: clean(entry.t),
+      u: entry.u.trim(),
+      b: truncate(clean(entry.b), 400),
+      type: entry.type,
+      ...(entry.parent ? { parent: clean(entry.parent) } : {}),
+    };
+    const identity = `${normalized.type}\u0000${normalized.t}\u0000${normalized.u}`;
+    const existing = byIdentity.get(identity);
+    if (!existing) byIdentity.set(identity, normalized);
+    else if (JSON.stringify(existing) === JSON.stringify(normalized)) continue;
+    else throw new Error(`Conflicting duplicate search entry: ${normalized.type} ${normalized.t} ${normalized.u}`);
+  }
+  const result = sorted([...byIdentity.values()], (entry) => `${entry.type}\u0000${entry.u}\u0000${entry.t}\u0000${entry.parent || ""}\u0000${entry.b}`);
+  validateSearchIndex(result);
+  return result;
+}
+
 /**
  * Build comprehensive search index from catalog + docs + learning pages.
  */
@@ -447,7 +509,7 @@ function buildSearchIndex(catalog) {
     { t: "FROOT Packages", u: "/packages", b: "packages modules download foundations reasoning orchestration operations transformation MCP tools knowledge", type: "page" },
     { t: "Ecosystem Overview", u: "/ecosystem", b: "ecosystem overview primitives agents instructions skills hooks plugins workflows cookbook MCP VS Code Docker CLI solution plays packages FAI Protocol engine", type: "page" },
     { t: "FAI VS Code Extension", u: "/vscode-extension", b: "VS Code extension sidebar plays primitives protocol MCP views open solution play browse agents skills hooks instructions", type: "page" },
-    { t: `FAI MCP Server (${catalog.stats.mcpTools} tools)`, u: "/mcp-tooling", b: `MCP model context protocol server ${catalog.stats.mcpTools} tools agent knowledge search lookup architecture Claude Copilot Cursor Windsurf Foundry`, type: "page" },
+    { t: "FAI MCP Server", u: "/mcp-tooling", b: "MCP model context protocol server tools agent knowledge search lookup architecture Claude Copilot Cursor Windsurf Foundry", type: "page" },
     { t: "FAI CLI (npx frootai)", u: "/cli", b: "CLI command line terminal scaffold search cost deploy doctor validate init primitives protocol npx frootai", type: "page" },
     { t: "FAI Docker Image", u: "/docker", b: "Docker container multi-arch arm64 amd64 kubernetes sidecar zero install ghcr.io/frootai/mcp-server", type: "page" },
     { t: "Setup Guide", u: "/setup-guide", b: "setup install configure MCP VS Code CLI Docker Claude Cursor Foundry getting started quick start", type: "page" },
@@ -474,40 +536,40 @@ function buildSearchIndex(catalog) {
   ];
   pages.forEach((p) => index.push(p));
 
-  // 2. Solution Plays — deep per-play entries
-  for (const play of catalog.plays) {
-    const num = play.id.padStart(2, "0");
-    const name = play.name || play.slug.replace(/^\d+-/, "").replace(/-/g, " ");
-    const desc = play.description || "";
-    const dk = play.devkit || {};
-    const slug = play.slug;
+  // 2. Solution Plays — safe canonical listing projection from T227
+  const canonicalIndex = readJsonSafe(path.join(REPO_ROOT, "orchard", "registry", "solution-play-index.json"));
+  const projection = buildSolutionPlayProjection(canonicalIndex);
+  for (const play of projection.plays) {
 
     // Play overview entry
     index.push({
-      t: `Play ${num}: ${name}`,
-      u: `/solution-plays/${slug}`,
-      b: truncate(
-        clean(
-          `${name} ${desc} solution play DevKit TuneKit SpecKit ` +
-            `${dk.agents || 0} agents ${dk.skills || 0} skills ` +
-            `${dk.instructions || 0} instructions ${dk.hooks || 0} hooks`
-        ),
-        400
-      ),
+      t: `Play ${play.id}: ${play.name}`,
+      u: `/solution-plays/${play.slug}`,
+      b: `${play.name} ${play.description} ${play.category} solution play ${play.slug}`,
       type: "play",
     });
 
     // User guide entry
     index.push({
-      t: `${name} — User Guide`,
-      u: `/solution-plays/${slug}/user-guide`,
-      b: truncate(clean(`${name} user guide walkthrough deploy evaluate tune ${desc}`), 300),
+      t: `${play.name} — User Guide`,
+      u: `/solution-plays/${play.slug}#user-guide`,
+      b: `${play.name} user guide reference architecture ${play.description}`,
       type: "user-guide",
     });
   }
 
+  for (const category of sorted([...new Set(projection.plays.map((play) => play.category))], (value) => value)) {
+    const categoryPlays = projection.plays.filter((play) => play.category === category);
+    index.push({
+      t: `${formatName(category)} Solution Plays`,
+      u: `/solution-plays?cat=${category}`,
+      b: `${category} solution plays ${categoryPlays.map((play) => `${play.id} ${play.name}`).join(" ")}`,
+      type: "play-category",
+    });
+  }
+
   // 3. Agents — each agent as search entry
-  for (const agent of catalog.agents) {
+  for (const agent of sorted(catalog.agents, (item) => item.id)) {
     index.push({
       t: agent.name || formatName(agent.id),
       u: `/primitives/agents${toHash(agent.id)}`,
@@ -517,7 +579,7 @@ function buildSearchIndex(catalog) {
   }
 
   // 4. Instructions
-  for (const instr of catalog.instructions) {
+  for (const instr of sorted(catalog.instructions, (item) => item.id)) {
     index.push({
       t: formatName(instr.id),
       u: `/primitives/instructions${toHash(instr.id)}`,
@@ -527,7 +589,7 @@ function buildSearchIndex(catalog) {
   }
 
   // 5. Skills
-  for (const skill of catalog.skills) {
+  for (const skill of sorted(catalog.skills, (item) => item.id)) {
     index.push({
       t: skill.name || formatName(skill.id),
       u: `/primitives/skills${toHash(skill.id)}`,
@@ -537,7 +599,7 @@ function buildSearchIndex(catalog) {
   }
 
   // 6. Hooks
-  for (const hook of catalog.hooks) {
+  for (const hook of sorted(catalog.hooks, (item) => item.id)) {
     index.push({
       t: formatName(hook.id),
       u: `/primitives/hooks${toHash(hook.id)}`,
@@ -547,7 +609,7 @@ function buildSearchIndex(catalog) {
   }
 
   // 7. Plugins
-  for (const plugin of catalog.plugins) {
+  for (const plugin of sorted(catalog.plugins, (item) => item.id)) {
     index.push({
       t: formatName(plugin.id),
       u: `/marketplace${toHash(plugin.id)}`,
@@ -557,22 +619,24 @@ function buildSearchIndex(catalog) {
   }
 
   // 8. Workflows
-  for (const wf of catalog.workflows) {
+  for (const wf of sorted(catalog.workflows, (item) => item.id)) {
     index.push({
       t: formatName(wf.id),
-      u: `/workflows${toHash(wf.id)}`,
+      u: "/workflows",
       b: truncate(clean(`${wf.id} ${wf.description || ""} workflow automation CI/CD`), 300),
       type: "workflow",
     });
   }
 
   // 9. Cookbook
-  for (const recipe of catalog.cookbook) {
+  const cookbookIds = new Set(catalog.cookbook.map((item) => item.id));
+  const searchableCookbook = catalog.cookbook.filter((item) => !item.id.endsWith(".lean") || !cookbookIds.has(item.id.slice(0, -5)));
+  for (const recipe of sorted(searchableCookbook, (item) => item.id)) {
     const content = readFileSafe(path.join(REPO_ROOT, recipe.file));
     const meta = extractMarkdownMeta(content);
     index.push({
       t: meta.title || formatName(recipe.id),
-      u: `/cookbook${toHash(recipe.id)}`,
+      u: "/cookbook",
       b: truncate(clean(`${meta.title || ""} ${meta.description || ""} recipe tutorial cookbook`), 300),
       type: "recipe",
     });
@@ -581,7 +645,7 @@ function buildSearchIndex(catalog) {
   // 10. Docs pages — index from docs/ markdown files
   const DOCS_DIR = path.join(REPO_ROOT, "docs");
   if (fs.existsSync(DOCS_DIR)) {
-    const docFiles = fs.readdirSync(DOCS_DIR).filter((f) => f.endsWith(".md"));
+    const docFiles = fs.readdirSync(DOCS_DIR).filter((f) => f.endsWith(".md")).sort(compareText);
     for (const file of docFiles) {
       const content = readFileSafe(path.join(DOCS_DIR, file));
       const meta = extractMarkdownMeta(content);
@@ -610,7 +674,7 @@ function buildSearchIndex(catalog) {
   // 11. Learning pages
   const learningDir = path.join(WEBSITE_ROOT, "src", "app", "learning-hub");
   if (fs.existsSync(learningDir)) {
-    const learningPages = fs.readdirSync(learningDir, { withFileTypes: true });
+    const learningPages = fs.readdirSync(learningDir, { withFileTypes: true }).sort((left, right) => compareText(left.name, right.name));
     for (const entry of learningPages) {
       if (entry.isDirectory() && !entry.name.startsWith("[")) {
         const pageTsx = path.join(learningDir, entry.name, "page.tsx");
@@ -641,7 +705,7 @@ function buildSearchIndex(catalog) {
   for (const pillar of wafPillars) {
     index.push({
       t: `WAF: ${pillar.name}`,
-      u: `/primitives${toHash(pillar.name)}`,
+      u: "/primitives",
       b: `Well-Architected Framework ${pillar.name} ${pillar.desc}`,
       type: "waf-pillar",
     });
@@ -649,7 +713,7 @@ function buildSearchIndex(catalog) {
 
   // 13. MCP tools from catalog (if available as array)
   if (Array.isArray(catalog.mcpTools)) {
-    for (const tool of catalog.mcpTools) {
+    for (const tool of sorted(catalog.mcpTools, (item) => item.name || item.id)) {
       index.push({
         t: tool.name || tool.id,
         u: `/mcp-tooling${toHash(tool.name || tool.id)}`,
@@ -659,7 +723,7 @@ function buildSearchIndex(catalog) {
     }
   }
 
-  return index;
+  return finalizeSearchIndex(index);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -783,8 +847,7 @@ function adapt(catalog) {
   results.updates.push(`stats.json — ${stats.counts.agents} agents, ${stats.counts.skills} skills, ${stats.counts.solutionPlays} plays`);
 
   // 9. search-index.json
-  const searchIndex = buildSearchIndex(catalog);
-  writeJsonCompact(path.join(WEBSITE_ROOT, "public", "search-index.json"), searchIndex);
+  const searchIndex = writeSearchIndex(catalog);
   results.updates.push(`search-index.json — ${searchIndex.length} entries`);
 
   // 10. Preserve versions.json (fetched from live registries, not from catalog)
@@ -810,4 +873,4 @@ if (require.main === module) {
   console.log(`\n  Done.`);
 }
 
-module.exports = { adapt, buildSolutionPlayProjection, classifySolutionPlay, renderSolutionPlayProjection, writeSolutionPlayProjection };
+module.exports = { adapt, buildSearchIndex, buildSolutionPlayProjection, classifySolutionPlay, finalizeSearchIndex, renderSolutionPlayProjection, validateSearchIndex, writeSearchIndex, writeSolutionPlayProjection };
