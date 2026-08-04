@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated": "2026-05-02T19:18:24.946Z",
+  "generated": "2026-08-04T06:59:32.874Z",
   "tree": [
     {
       "title": "Getting Started",
@@ -82,7 +82,7 @@
           "layer": "Orchestration"
         },
         {
-          "title": "O4: Azure AI Foundry",
+          "title": "O4: Microsoft Foundry",
           "path": "/learning/o4-azure-ai-foundry",
           "layer": "Operations"
         },
@@ -110,6 +110,16 @@
           "title": "T3: Production Patterns",
           "path": "/learning/t3-production-patterns",
           "layer": "Transformation"
+        },
+        {
+          "title": "REF: Quick Reference Cards",
+          "path": "/learning/ref-quick-reference-cards",
+          "layer": "Reference"
+        },
+        {
+          "title": "QUIZ: Quiz & Assessment",
+          "path": "/learning/quiz-quiz-assessment",
+          "layer": "Reference"
         }
       ]
     },

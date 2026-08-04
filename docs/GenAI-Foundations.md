@@ -20,9 +20,27 @@
 - [1.9 Model Quantization](#19-model-quantization)
 - [1.10 Embeddings — The Meaning of Text](#110-embeddings--the-meaning-of-text)
 - [1.11 The Infra Architect's Mental Model](#111-the-infra-architects-mental-model)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Capacity-Plan an Internal LLM Endpoint](#applied-scenario-capacity-plan-an-internal-llm-endpoint)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:F1:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Explain tokenization, attention, context windows, embeddings, and inference without relying on product marketing.
+- Estimate the memory, latency, and cost consequences of model size, precision, and context length.
+- Choose an appropriate quantization and serving approach for a stated workload.
+- Communicate an LLM architecture decision to application and infrastructure teams.
+
+## Prerequisites
+
+**Prerequisites:** No prior AI coursework. Familiarity with cloud compute, APIs, and basic probability is helpful.
 
 ## 1.1 The AI Revolution in 30 Seconds
 
@@ -156,7 +174,7 @@ Think of parameters like this: if the model is a building, parameters are every 
 
 **The infrastructure relationship is direct:**
 
-```
+```text
 VRAM required (GB) ≈ Parameters (B) × Bytes per parameter
 ```
 
@@ -196,7 +214,7 @@ A token is a **subword unit** — not a whole word, not a single character, but 
 
 Every model has a **context window** — the maximum number of tokens it can process in a single request (input + output combined).
 
-```
+```text
 Context Window = Input Tokens + Output Tokens
 ```
 
@@ -387,7 +405,7 @@ Understanding these parameters is critical because they directly affect **output
 
 **Example:** If `top_p = 0.9`, the model sorts tokens by probability and includes tokens until the cumulative probability reaches 90%. All other tokens are excluded before sampling.
 
-```
+```text
 Token probabilities (sorted):
   "Paris"  = 0.70
   "Lyon"   = 0.10  → cumulative = 0.80
@@ -661,13 +679,13 @@ The KV (Key-Value) cache stores the attention keys and values for all processed 
 
 **The tradeoff:** The KV cache lives in GPU VRAM and grows linearly with context length. This is often the bottleneck that limits how many concurrent requests a GPU can serve.
 
-```
+```text
 KV Cache Size ≈ 2 × num_layers × num_heads × head_dim × context_length × bytes_per_element
 ```
 
 For a 70B parameter model with 80 layers, 64 attention heads, head dimension of 128, and FP16 precision:
 
-```
+```text
 KV Cache per token ≈ 2 × 80 × 64 × 128 × 2 bytes = 2.62 MB per token
 For 4K context: ~10.5 GB
 For 32K context: ~84 GB
@@ -818,7 +836,7 @@ Embeddings are numerical representations of text (or images, audio, etc.) in a h
 
 An embedding model converts text into a fixed-length array of floating-point numbers (a vector). Texts with similar meanings produce vectors that are close together in this high-dimensional space.
 
-```
+```text
 "Deploy a Kubernetes cluster" → [0.023, -0.041, 0.089, ..., 0.012]  (1536 dimensions)
 "Set up a K8s cluster"       → [0.021, -0.039, 0.091, ..., 0.014]  (very similar vector!)
 "Bake a chocolate cake"      → [-0.087, 0.063, -0.012, ..., 0.098] (very different vector)
@@ -1042,6 +1060,17 @@ graph TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:F1:SCENARIO -->
+## Applied Scenario: Capacity-Plan an Internal LLM Endpoint
+
+**Situation:** A platform team must host a latency-sensitive internal assistant for 400 concurrent employees while keeping sensitive prompts inside an approved boundary.
+
+**Decisions to make:** Estimate prompt and output token budgets, select model size and precision, calculate VRAM headroom, and choose between managed inference and self-hosting.
+
+**Deliverable:** Produce a one-page architecture decision record containing assumptions, peak concurrency, failure fallback, and the measurements that would change the decision.
+
+**Validation:** Load-test representative prompts, measure time-to-first-token and tokens per second, and reject the design if memory saturation or queue time breaches the stated SLO.
 ## Key Takeaways
 
 1. **LLMs are next-token predictors** — every response is generated one token at a time through probability distributions shaped by generation parameters.
@@ -1067,3 +1096,35 @@ graph TB
 ---
 
 > **Next:** [Module 2: LLM Landscape](./LLM-Landscape.md) — Understand the major model families (GPT, Claude, Llama, Gemini, Phi), how to compare them with benchmarks, and how to choose the right model for your workload.
+
+---
+
+<!-- FROOT-PEDAGOGY:F1:CHECK -->
+## Knowledge Check
+
+### 1. Why does a longer context window increase both latency and memory pressure?
+
+<details>
+<summary>Expected evidence</summary>
+
+The model must process more input tokens during prefill, while the KV cache grows with retained context.
+
+</details>
+
+### 2. When is quantization preferable to selecting a smaller model?
+
+<details>
+<summary>Expected evidence</summary>
+
+When the larger model provides required capability and measured quality remains acceptable after reducing precision.
+
+</details>
+
+### 3. What must a capacity estimate include beyond parameter count?
+
+<details>
+<summary>Expected evidence</summary>
+
+Precision, KV-cache growth, batching, concurrency, framework overhead, and operational headroom.
+
+</details>

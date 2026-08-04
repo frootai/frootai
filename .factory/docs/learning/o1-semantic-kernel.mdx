@@ -18,6 +18,20 @@ category: "Orchestration"
 
 ---
 
+<!-- FROOT-PEDAGOGY:O1:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Explain the current role of Semantic Kernel relative to Microsoft Agent Framework.
+- Compose prompts, native functions, filters, and telemetry through a kernel boundary.
+- Design plugin contracts that are narrow, authorized, and testable.
+- Choose a migration path without discarding stable Semantic Kernel investments.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md) and [R1](./Prompt-Engineering.md); Python or C# familiarity is recommended.
+
 ## 7.1 What is AI Orchestration?
 
 When you call an LLM API directly, you get a single capability: send a prompt, receive a completion. That works for a demo. It does not work for production. The moment you need memory, tool use, prompt management, error handling, tracing, or multi-model routing, you need something between your application and the raw API. That something is the **orchestration layer**.
@@ -441,7 +455,7 @@ Semantic Kernel has undergone a fundamental architectural shift in how it handle
 
 In the early SK releases, "Planners" were a core concept. The AI would receive a goal and generate an explicit multi-step plan (as XML or JSON) that the framework would then execute step by step.
 
-```
+```text
 User: "Find customer CUST-123 and email them their invoice"
 
 Old Planner Output:
@@ -1465,6 +1479,17 @@ Semantic Kernel itself adds zero cost. The orchestration framework is free. All 
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O1:SCENARIO -->
+## Applied Scenario: Expose a Governed Customer Plugin
+
+**Situation:** An assistant may look up a customer and draft an invoice email, but sending requires policy checks and approval.
+
+**Design:** Separate read and write functions, define typed parameters, resolve identity server-side, add invocation filters, and emit traces that exclude secrets and unnecessary personal data.
+
+**Migration decision:** Keep stable kernel plugins behind interfaces; introduce Agent Framework orchestration only where the workload needs agent lifecycle or multi-agent coordination.
+
+**Validation:** Test invalid identifiers, denied identities, duplicate requests, downstream timeouts, user cancellation, and approval rejection.
 ## Key Takeaways
 
 1. **Orchestration is mandatory for production AI.** Raw LLM API calls lack the prompt management, tool routing, memory, safety, and observability that production systems require. Semantic Kernel is the orchestration layer that fills this gap.
@@ -1492,3 +1517,35 @@ Continue to **[Module 8: Prompt Engineering Mastery](./Prompt-Engineering.md)** 
 ---
 
 > **Module 7 of 12** | [Back to AI Nexus Index](./README.md) | [Previous: AI Agents Deep Dive](./AI-Agents-Deep-Dive.md) | [Next: Prompt Engineering Mastery](./Prompt-Engineering.md)
+
+---
+
+<!-- FROOT-PEDAGOGY:O1:CHECK -->
+## Knowledge Check
+
+### 1. What makes a useful plugin function?
+
+<details>
+<summary>Expected evidence</summary>
+
+A narrow purpose, typed contract, explicit authorization, bounded side effects, and observable failures.
+
+</details>
+
+### 2. Why should read and write tools be separate?
+
+<details>
+<summary>Expected evidence</summary>
+
+They carry different risk, consent, idempotency, and approval requirements.
+
+</details>
+
+### 3. When is migration to Agent Framework justified?
+
+<details>
+<summary>Expected evidence</summary>
+
+When the application needs capabilities owned by the newer agent lifecycle, not merely because a newer SDK exists.
+
+</details>

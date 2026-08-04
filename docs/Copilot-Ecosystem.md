@@ -5,9 +5,23 @@
 > **Last Updated:** August 2026
 > **Product facts verified:** 2026-08-03 against [Microsoft Copilot documentation](https://learn.microsoft.com/copilot/), [Copilot Studio documentation](https://learn.microsoft.com/microsoft-copilot-studio/), and [GitHub Copilot plans](https://github.com/features/copilot/plans)
 
-> Licensing and entitlements change frequently and may vary by agreement and geography. Prices and quotas in this module are retained as a March 2026 comparison snapshot; use the linked product pages for purchase decisions.
+> Licensing, entitlements, prices, quotas, and plan names change frequently and may vary by agreement and geography. This module deliberately links to live plan pages instead of treating commercial terms as architecture constants.
 
 ---
+
+<!-- FROOT-PEDAGOGY:O6:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Distinguish Microsoft 365 Copilot, Copilot Studio, GitHub Copilot, and custom extension boundaries.
+- Choose grounding, actions, MCP, instructions, and agent customization appropriately.
+- Evaluate licensing and quota information as dated commercial data, not architecture constants.
+- Design a Copilot integration with identity, consent, data protection, and observable actions.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md) and [O2](./AI-Agents-Deep-Dive.md); understand Microsoft Entra identity and GitHub repositories.
 
 ## 4.1 What is Copilot?
 
@@ -159,11 +173,7 @@ M365 Copilot respects existing access controls. If your organization has oversha
 
 ### Licensing
 
-| License | Price | Includes |
-|---|---|---|
-| **Microsoft 365 Copilot** | $30/user/month | Copilot in all M365 apps, Microsoft Graph grounding, Semantic Index |
-| **Prerequisite** | M365 E3/E5 or Business Standard/Premium | Base M365 license required |
-| **Copilot Studio (included)** | Included (limited) | Basic custom copilot creation within M365 Copilot license |
+Microsoft 365 Copilot eligibility and included capabilities depend on the current tenant plan, geography, and agreement. Confirm prerequisites and commercial terms through the [Microsoft Copilot documentation](https://learn.microsoft.com/copilot/) and your tenant's licensing portal before planning rollout or capacity.
 
 ### Infrastructure Considerations for Architects
 
@@ -279,11 +289,7 @@ Copilot Studio is deeply integrated with the broader Power Platform:
 
 ### Licensing
 
-| Plan | Price | Key Features |
-|---|---|---|
-| **Copilot Studio (included with M365 Copilot)** | Included | Basic copilot creation, limited message capacity |
-| **Copilot Studio standalone** | $200/tenant/month | 25,000 messages/month, full authoring capabilities |
-| **Message pack add-on** | Varies | Additional message capacity beyond base allocation |
+Copilot Studio capacity and entitlements vary by tenant agreement and evolve independently of the authoring architecture. Use the current [Copilot Studio licensing documentation](https://learn.microsoft.com/microsoft-copilot-studio/requirements-licensing-subscriptions) and tenant administration surfaces for purchase and capacity decisions.
 
 ---
 
@@ -333,12 +339,7 @@ GitHub Copilot is the **AI coding assistant** that has fundamentally changed how
 
 ### Licensing Tiers
 
-| Tier | Price | Key Differences |
-|---|---|---|
-| **Copilot Free** | $0 | 2,000 completions/month, 50 chat messages/month, limited model access |
-| **Copilot Pro** | $10/user/month | Unlimited completions, full chat, multiple model choices, Copilot in CLI |
-| **Copilot Business** | $19/user/month | Organization-level management, policy controls, IP indemnity, audit logs |
-| **Copilot Enterprise** | $39/user/month | Everything in Business + codebase-aware chat (indexes your repos), fine-tuned models, knowledge bases |
+GitHub Copilot offers individual and organizational plans whose credits, quotas, model access, and features change over time. Compare the current options on the official [GitHub Copilot plans](https://github.com/features/copilot/plans) page and validate organization policy requirements before rollout.
 
 ### MCP (Model Context Protocol) Integration
 
@@ -389,7 +390,7 @@ GitHub Copilot supports the **Model Context Protocol (MCP)**, an open standard f
 
 ### Example Prompts for Architects
 
-```
+```text
 "List all storage accounts with public blob access enabled"
 "Show me NSGs with inbound rules allowing 0.0.0.0/0 on port 22"
 "What is causing high CPU on my App Service Plan?"
@@ -725,12 +726,12 @@ The following table provides a consolidated view of every Copilot in the Microso
 
 | Copilot | Target Audience | Core Function | Pricing Model | Key Data Source | Deployment |
 |---|---|---|---|---|---|
-| **M365 Copilot** | Knowledge workers | AI in Word, Excel, PPT, Outlook, Teams | $30/user/month | Microsoft Graph + Semantic Index | SaaS (M365 tenant) |
-| **Copilot Studio** | Business process owners | Build custom AI assistants | $200/tenant/month (standalone) | SharePoint, Dataverse, AI Search | SaaS (Power Platform) |
-| **Copilot Actions** | End users | Automated personal workflows | Included with M365 Copilot | Microsoft Graph | SaaS (M365 tenant) |
-| **GitHub Copilot** | Developers | AI code completion and chat | $0-$39/user/month (tiered) | Code repos, documentation | IDE extension + cloud |
-| **Copilot for Azure** | Cloud engineers | Azure portal AI assistant | Free (with Azure subscription) | Azure Resource Graph, metrics | Azure portal |
-| **Copilot for Security** | Security analysts | Incident investigation, threat hunting | $4/SCU/hour | Defender, Sentinel, Entra | Security portal + embedded |
+| **M365 Copilot** | Knowledge workers | AI in Word, Excel, PPT, Outlook, Teams | Per current tenant plan and agreement | Microsoft Graph + Semantic Index | SaaS (M365 tenant) |
+| **Copilot Studio** | Business process owners | Build custom AI assistants | Capacity and entitlements vary by agreement | SharePoint, Dataverse, AI Search | SaaS (Power Platform) |
+| **Copilot Actions** | End users | Automated personal workflows | Verify current M365 Copilot entitlement | Microsoft Graph | SaaS (M365 tenant) |
+| **GitHub Copilot** | Developers | AI code completion, chat, agents, and review | See live GitHub Copilot plans | Code repos, documentation | IDE extension + cloud |
+| **Copilot for Azure** | Cloud engineers | Azure portal AI assistant | Verify current Azure offer and region | Azure Resource Graph, metrics | Azure portal |
+| **Copilot for Security** | Security analysts | Incident investigation, threat hunting | Capacity-based; verify current Microsoft terms | Defender, Sentinel, Entra | Security portal + embedded |
 | **Copilot in Power Platform** | Citizen developers | AI-assisted app/flow/report creation | Included with Power Platform licenses | Dataverse, connected sources | Power Platform |
 | **Copilot in Dynamics 365** | Business users | CRM/ERP AI assistance | Included with Dynamics 365 licenses | Dynamics 365 data | Dynamics 365 |
 | **Copilot in Windows** | Desktop users | System-level AI assistant | Free (with Windows 11) | Local files, system settings | Windows OS |
@@ -742,7 +743,7 @@ The following table provides a consolidated view of every Copilot in the Microso
 graph TD
     START["What do you need<br/>Copilot to do?"] --> Q1{"Is it for<br/>productivity apps?<br/>(Word, Excel, Teams)"}
 
-    Q1 -->|Yes| M365["M365 Copilot<br/>$30/user/month"]
+    Q1 -->|Yes| M365["M365 Copilot<br/>Verify tenant plan"]
 
     Q1 -->|No| Q2{"Is it for<br/>custom business<br/>processes?"}
 
@@ -753,7 +754,7 @@ graph TD
 
     Q2 -->|No| Q4{"Is it for<br/>software development?"}
 
-    Q4 -->|Yes| GITHUB["GitHub Copilot<br/>$19-39/user/month"]
+    Q4 -->|Yes| GITHUB["GitHub Copilot<br/>Compare live plans"]
 
     Q4 -->|No| Q5{"Is it for<br/>security operations?"}
 
@@ -772,6 +773,37 @@ graph TD
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O6:SCENARIO -->
+## Applied Scenario: Connect GitHub Copilot to Approved Architecture Knowledge
+
+**Situation:** Developers need repository guidance and read-only access to a governed architecture knowledge service.
+
+**Repository instruction:** Keep durable policy concise and link to canonical project documentation rather than copying entire standards.
+
+```markdown
+---
+applyTo: "infra/**/*.{bicep,tf}"
+---
+Use managed identity, private connectivity, and repository-approved modules.
+Before recommending a SKU or model, request live region and quota evidence.
+```
+
+**MCP client configuration:** Keep credentials outside source control and use the client's supported environment or secret mechanism.
+
+```json
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "frootai-mcp@latest"]
+    }
+  }
+}
+```
+
+**Validation:** Confirm instruction scope, denied write operations, identity propagation, source citations, tool timeout behavior, and removal of sensitive values from logs.
 ## Key Takeaways
 
 1. **Copilot is an ecosystem, not a product.** Microsoft has embedded AI assistants across its entire portfolio. Each Copilot is optimized for its domain but shares a common architecture built on Azure OpenAI.
@@ -795,3 +827,35 @@ graph TD
 :::info Next Module
 Continue to **[Module 5: RAG Architecture Deep Dive](./RAG-Architecture.md)** — learn how Retrieval-Augmented Generation works, from chunking strategies and embedding models to Azure AI Search integration and reranking pipelines. RAG is the pattern that makes Copilots (and custom AI applications) factually grounded.
 :::
+
+---
+
+<!-- FROOT-PEDAGOGY:O6:CHECK -->
+## Knowledge Check
+
+### 1. Why should Copilot pricing not drive a durable architecture rule?
+
+<details>
+<summary>Expected evidence</summary>
+
+Plans, quotas, currencies, and commercial terms change independently of technical boundaries.
+
+</details>
+
+### 2. What belongs in repository instructions?
+
+<details>
+<summary>Expected evidence</summary>
+
+Concise, durable, scoped guidance that should influence work on matching files.
+
+</details>
+
+### 3. What must remain outside an MCP configuration committed to source?
+
+<details>
+<summary>Expected evidence</summary>
+
+Tokens, API keys, personal credentials, and environment-specific secrets.
+
+</details>

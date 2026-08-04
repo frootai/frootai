@@ -7,6 +7,20 @@
 
 ---
 
+<!-- FROOT-PEDAGOGY:R2:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Design independent ingestion and query pipelines with an explicit indexed-data handoff.
+- Choose chunking, retrieval, filtering, and reranking strategies from workload evidence.
+- Evaluate retrieval and generation separately before optimizing end-to-end quality.
+- Operate a RAG system with citations, access controls, freshness, and cost telemetry.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md) and [R1: Prompt Engineering](./Prompt-Engineering.md).
+
 ## 5.1 Why RAG Exists
 
 Large Language Models are powerful, but they have three fundamental limitations that make them unreliable for enterprise use without additional architecture.
@@ -27,7 +41,7 @@ Even if an LLM had perfect knowledge of the entire public internet, it still wou
 
 **Retrieval-Augmented Generation (RAG)** solves all three problems with one architectural pattern: instead of relying on what the model already knows, you **retrieve relevant information from your own data sources** and inject it into the prompt at query time. The model then generates a response grounded in your actual data.
 
-```
+```text
 Without RAG:  User Question → LLM (uses training data only) → Response (may hallucinate)
 With RAG:     User Question → Retrieve from YOUR data → LLM (uses retrieved context) → Grounded Response
 ```
@@ -65,31 +79,33 @@ Every RAG system has two distinct pipelines that operate independently.
 
 ### The Two Pipelines
 
+#### Offline — Ingestion Pipeline
+
 ```mermaid
-graph LR
-    subgraph OFFLINE["OFFLINE — Ingestion Pipeline"]
-        direction LR
-        D[/"Documents<br/>PDF, Word, HTML,<br/>Databases"/] --> P["Processing<br/>Extract, Clean,<br/>Normalize"]
-        P --> C["Chunking<br/>Split into<br/>Segments"]
-        C --> E["Embedding<br/>Text → Vectors<br/>(1536-dim)"]
-        E --> I[("Vector Index<br/>Azure AI Search<br/>Cosmos DB")]
-    end
+flowchart LR
+    D[/"Documents<br/>PDF, Word, HTML,<br/>Databases"/] --> P["Processing<br/>Extract, Clean,<br/>Normalize"]
+    P --> C["Chunking<br/>Split into<br/>Segments"]
+    C --> E["Embedding<br/>Text → Vectors<br/>(1536-dim)"]
+    E --> I[("Vector Index<br/>Azure AI Search<br/>Cosmos DB")]
+    classDef offline fill:#1a1a2e,stroke:#e94560,color:#eee
+    class D,P,C,E,I offline
+```
 
-    subgraph ONLINE["ONLINE — Query Pipeline"]
-        direction LR
-        Q["User<br/>Question"] --> QP["Query<br/>Processing<br/>Rewrite, Expand"]
-        QP --> QE["Query<br/>Embedding"]
-        QE --> S["Search<br/>Vector + Keyword<br/>Hybrid"]
-        S --> RR["Reranking<br/>Semantic<br/>Ranker"]
-        RR --> CA["Context<br/>Assembly<br/>Prompt Build"]
-        CA --> LLM["LLM<br/>Generation"]
-        LLM --> R["Response<br/>with Citations"]
-    end
+**Pipeline handoff:** The offline Vector Index becomes the online Search corpus. The two pipelines deploy and scale independently even though they share the same indexed data.
 
-    I -.->|"indexed data"| S
+#### Online — Query Pipeline
 
-    style OFFLINE fill:#1a1a2e,stroke:#e94560,color:#eee
-    style ONLINE fill:#1a1a2e,stroke:#0f3460,color:#eee
+```mermaid
+flowchart LR
+    Q["User<br/>Question"] --> QP["Query<br/>Processing<br/>Rewrite, Expand"]
+    QP --> QE["Query<br/>Embedding"]
+    QE --> S["Search<br/>Reads Vector Index<br/>Hybrid"]
+    S --> RR["Reranking<br/>Semantic<br/>Ranker"]
+    RR --> CA["Context<br/>Assembly<br/>Prompt Build"]
+    CA --> LLM["LLM<br/>Generation"]
+    LLM --> R["Response<br/>with Citations"]
+    classDef online fill:#1a1a2e,stroke:#0f3460,color:#eee
+    class Q,QP,QE,S,RR,CA,LLM,R online
 ```
 
 ### Ingestion Pipeline (Offline)
@@ -382,7 +398,7 @@ Chunk size is the second most impactful parameter after chunking strategy. The o
 
 ### The Tradeoff
 
-```
+```text
 Too Small (< 128 tokens)          Just Right (256-1024 tokens)         Too Large (> 2048 tokens)
 ├── Loses context                  ├── Contains enough context           ├── Dilutes relevance
 ├── Many chunks needed             ├── Manageable number of chunks       ├── Wastes LLM tokens
@@ -440,7 +456,7 @@ Embeddings are the mathematical bridge between human language and machine-search
 
 An embedding is a list of numbers (a vector) that represents the semantic meaning of a piece of text. Texts with similar meanings produce vectors that are close together in high-dimensional space.
 
-```
+```text
 "How do I reset my password?"  →  [0.023, -0.041, 0.118, ..., 0.067]  (1536 dimensions)
 "I forgot my login credentials" → [0.025, -0.039, 0.121, ..., 0.064]  (very similar vector)
 "Azure VM pricing in East US"  →  [0.891, 0.234, -0.567, ..., 0.445]  (very different vector)
@@ -620,7 +636,7 @@ graph TD
 
 Azure AI Search can handle the entire ingestion pipeline without custom code. You define a **data source**, a **skillset**, and an **indexer** — the service handles the rest.
 
-```
+```text
 Blob Storage → Indexer → [Document Cracking → Chunking → Embedding → Enrichment] → Index
                              ↑ built into Azure AI Search — no custom code needed ↑
 ```
@@ -666,7 +682,7 @@ Neither keyword search nor vector search alone is sufficient. Each has blind spo
 
 Hybrid search in Azure AI Search combines BM25 (keyword) and vector scores using **Reciprocal Rank Fusion (RRF)**:
 
-```
+```text
 RRF_score(doc) = sum( 1 / (k + rank_in_list) ) for each result list containing the doc
 ```
 
@@ -676,7 +692,7 @@ Where `k` is a constant (default 60). This elegantly merges ranked lists without
 
 After hybrid retrieval returns the top candidates, the **Semantic Ranker** applies a transformer-based cross-encoder model to reorder results by deep semantic relevance.
 
-```
+```text
 Step 1: Hybrid search returns top 50 candidates
 Step 2: Semantic Ranker reranks all 50 using a cross-encoder
 Step 3: Return top 5 to the LLM as context
@@ -1022,7 +1038,7 @@ After retrieval and reranking, you have a ranked list of relevant chunks. The ne
 
 ### The Prompt Structure
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │ SYSTEM MESSAGE                                      │
 │ - Role definition                                   │
@@ -1466,7 +1482,7 @@ Estimate your vector index size to choose the right Azure AI Search tier.
 
 ### Cost Estimation Formula
 
-```
+```text
 Monthly RAG Cost = Search Cost + Embedding Cost + LLM Cost + Storage Cost + Compute Cost
 
 Where:
@@ -1523,6 +1539,17 @@ Where:
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:R2:SCENARIO -->
+## Applied Scenario: Ship a Policy Knowledge Assistant
+
+**Situation:** Employees need cited answers from policy documents with document-level permissions and a four-hour freshness target.
+
+**Offline path:** Extract and normalize source documents, preserve ACL metadata, create versioned chunks and embeddings, then publish an index only after quality checks pass.
+
+**Online path:** Rewrite the query only when necessary, apply identity filters before retrieval, combine lexical and vector candidates, rerank, assemble bounded context, and require citations.
+
+**Validation:** Measure retrieval recall and precision first, then groundedness and citation correctness. Test revoked access, deleted documents, stale indexes, and empty retrieval results.
 ## Key Takeaways
 
 1. **RAG solves the three fundamental LLM limitations** — knowledge cutoff, hallucination, and lack of private data access — by retrieving your data and injecting it into the prompt at query time.
@@ -1544,3 +1571,35 @@ Where:
 ---
 
 > **Next Module:** [Module 6: AI Agents Deep Dive](./AI-Agents-Deep-Dive.md) — understand how AI agents use tools, plan multi-step tasks, maintain memory, and integrate with the Microsoft Agent Framework and AutoGen.
+
+---
+
+<!-- FROOT-PEDAGOGY:R2:CHECK -->
+## Knowledge Check
+
+### 1. Why should retrieval be evaluated independently from generation?
+
+<details>
+<summary>Expected evidence</summary>
+
+A fluent answer can hide poor retrieval; separate metrics identify whether the defect is search or generation.
+
+</details>
+
+### 2. Where must authorization filters be applied?
+
+<details>
+<summary>Expected evidence</summary>
+
+Before or during retrieval, so unauthorized content never enters model context.
+
+</details>
+
+### 3. When does reranking add the most value?
+
+<details>
+<summary>Expected evidence</summary>
+
+When broad first-stage retrieval has reasonable recall but ordering lacks semantic precision.
+
+</details>

@@ -18,6 +18,20 @@ category: "Operations"
 
 ---
 
+<!-- FROOT-PEDAGOGY:O4:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Model Microsoft Foundry resources and projects as governance and application boundaries.
+- Choose deployment, networking, identity, quota, and evaluation patterns from workload requirements.
+- Separate current Foundry guidance from classic migration references.
+- Create an evidence-backed production readiness decision for a Foundry workload.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [O2](./AI-Agents-Deep-Dive.md), and have basic Azure CLI and RBAC experience.
+
 ## 3.1 What is Microsoft Foundry?
 
 Microsoft Foundry is Microsoft's **unified platform for building, evaluating, governing, and operating AI applications and agents** on Azure. The current platform brings models, agents, evaluations, and Foundry Tools under a Foundry resource with child projects.
@@ -695,74 +709,82 @@ graph TD
 
 ---
 
-## 3.10 Azure AI Foundry vs AWS Bedrock vs Google Vertex AI
+## 3.10 Microsoft Foundry vs AWS Bedrock vs Google Vertex AI
 
-Platform architects in multi-cloud environments need to understand how Azure AI Foundry compares to its counterparts on AWS and Google Cloud.
+Platform architects in multi-cloud environments should compare ownership boundaries and live workload evidence, not frozen model counts or benchmark headlines. Provider catalogs, regions, quotas, and feature support change independently.
 
 ### Feature Comparison
 
-| Capability | Azure AI Foundry | AWS Bedrock | Google Vertex AI |
+| Capability | Microsoft Foundry | AWS Bedrock | Google Vertex AI |
 |-----------|-----------------|-------------|-----------------|
-| **Unified AI platform** | Yes (portal, SDK, CLI) | Partial (Bedrock + SageMaker) | Yes (Vertex AI console, SDK, CLI) |
-| **Model catalog size** | 1,800+ models | ~30 models (fewer providers) | 200+ models (Model Garden) |
-| **Proprietary frontier models** | GPT-4.1, o3, o4-mini (Azure OpenAI exclusive) | Claude (Anthropic), Nova (Amazon) | Gemini 2.5 (Google-exclusive) |
-| **Open-weight models** | Llama, Mistral, Phi, Cohere, AI21 | Llama, Mistral, Cohere | Llama, Mistral, Gemma |
-| **Serverless API (MaaS)** | Yes (Azure OpenAI + partner models) | Yes (all Bedrock models) | Yes (Vertex AI endpoint) |
-| **Dedicated compute deployment** | Managed Online Endpoints | SageMaker Endpoints | Vertex AI Endpoints |
-| **Fine-tuning** | GPT-4o, Phi, Llama, Mistral (in-platform) | Claude, Llama, Titan (limited) | Gemini, Llama (in-platform) |
-| **Prompt orchestration** | Prompt Flow (visual + YAML) | Bedrock Agents + Step Functions | Vertex AI Reasoning Engine |
-| **RAG built-in** | Yes (AI Search integration) | Yes (Knowledge Bases) | Yes (Vertex AI Search) |
-| **Evaluation framework** | Built-in (groundedness, relevance, etc.) | Limited (Bedrock Evaluation - preview) | Built-in (AutoSxS, Gen AI Evaluation) |
-| **Content safety** | Azure AI Content Safety (integrated) | Bedrock Guardrails | Vertex AI Safety Filters |
-| **Enterprise networking** | Private Endpoints, Managed VNet, data exfiltration protection | VPC endpoints, PrivateLink | VPC-SC, Private Service Connect |
-| **RBAC granularity** | Hub + Project level RBAC | IAM policies (resource-level) | IAM + Vertex AI roles |
-| **Compliance portfolio** | 100+ certifications | 90+ certifications | 100+ certifications |
-| **Agent framework** | Azure AI Agent Service, Semantic Kernel, AutoGen | Bedrock Agents | Vertex AI Agent Builder |
-| **Workspace hierarchy** | Hub/Project (two-tier) | Flat (per-account) | Flat (per-project) |
+| Decision boundary | Microsoft Foundry | AWS | Google Cloud |
+| **Application boundary** | Foundry resource with child projects | AWS account/resource boundaries across Bedrock and related services | Google Cloud project with Vertex AI resources |
+| **Identity** | Microsoft Entra ID, Azure RBAC, managed identities | AWS IAM roles and resource policies | Google Cloud IAM and service accounts |
+| **Private connectivity** | Azure private endpoints and supported managed-network patterns | VPC endpoints and PrivateLink-supported services | Private Service Connect and VPC Service Controls |
+| **Agent platform** | Foundry Agent Service and supported SDKs | Amazon Bedrock Agents and related orchestration services | Vertex AI Agent Builder and Agent Engine |
+| **Grounding services** | Azure AI Search and supported data connections | Bedrock Knowledge Bases and AWS data services | Vertex AI Search and Google Cloud data services |
+| **Current model availability** | Verify the [Foundry model documentation](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models) and target subscription | Verify the current Bedrock model catalog and target region | Verify the current Vertex AI Model Garden and target region |
 
-### Where Azure AI Foundry Shines
+### Durable Decision Signals
 
-1. **Azure OpenAI exclusivity** -- GPT-4.1, o3, and o4-mini are available on Azure with enterprise SLAs, private networking, and content filtering. No other cloud offers these models as managed services.
-2. **Enterprise security posture** -- The Hub/Project model, Managed VNet with data exfiltration protection, customer-managed keys, and deep Entra ID integration provide a security story that is hard to match.
-3. **Microsoft ecosystem integration** -- Seamless connection to Microsoft 365 Copilot, Copilot Studio, Dynamics 365, Power Platform, and GitHub Copilot. If the customer is a Microsoft shop, the integration advantage is substantial.
-4. **Model catalog breadth** -- 1,800+ models (catalog + Hugging Face) give architects maximum flexibility without leaving the platform.
-5. **Prompt Flow** -- A mature, visual orchestration tool with YAML-based CI/CD support that neither Bedrock nor Vertex AI match in capability.
-
-### Where Competitors Have Edges
-
-| Area | Competitor Edge | Detail |
-|------|----------------|--------|
-| **Anthropic Claude models** | AWS Bedrock | Claude is available on Bedrock as a first-party integration with fine-tuning support. On Azure, Claude is available via the model catalog but with fewer features. |
-| **Google Gemini models** | Google Vertex AI | Gemini 2.5 Pro/Flash are Vertex AI exclusives with massive context windows (up to 1M tokens) and native multi-modal capabilities. |
-| **SageMaker maturity** | AWS SageMaker | For classical ML training and MLOps, SageMaker has a longer track record and deeper feature set than Azure ML components within Foundry. |
-| **Grounding with search** | Google Vertex AI | Google Search grounding in Vertex AI provides real-time web search context natively in API calls -- a unique capability. |
-| **Simplicity** | AWS Bedrock | Bedrock's flat model (no Hub/Project hierarchy) is simpler for teams that do not need multi-project isolation. |
+1. **Existing platform ownership** -- Prefer the cloud where identity, networking, data governance, incident response, and platform expertise are already mature unless workload evidence justifies another boundary.
+2. **Required live capability** -- Verify the exact model, region, deployment type, quota, fine-tuning support, safety controls, and endpoint behavior in the target account or subscription.
+3. **Data and regulatory boundary** -- Compare where prompts, outputs, logs, embeddings, and training data are processed and retained.
+4. **Operational evidence** -- Benchmark the real workload for quality, p95 latency, throughput, failure behavior, and total cost instead of comparing catalog counts.
+5. **Exit strategy** -- Keep business contracts, evaluation datasets, and tool interfaces separable from provider-specific deployment code where portability has measurable value.
 
 ### Multi-Cloud Considerations
 
 For organizations running multi-cloud AI strategies:
 
-- **Standardize on OpenAI-compatible API format** -- Azure OpenAI, many Serverless API models, and several third-party providers all support the OpenAI chat completions API shape. Building your application against this API makes cloud portability easier.
-- **Abstract the orchestration layer** -- Use Semantic Kernel or LangChain as your orchestration framework rather than cloud-specific tools (Prompt Flow, Bedrock Agents). These frameworks support multiple model providers.
-- **Separate model selection from infrastructure** -- Design your architecture so that swapping a model provider (Azure OpenAI to Bedrock Claude) requires a configuration change, not a code rewrite.
-- **Evaluate per workload** -- Some workloads may be best served by Azure (GPT-4.1 for enterprise chat), others by AWS (Claude for long-context analysis), and others by Google (Gemini for multi-modal). Let the use case drive the platform decision.
+- **Own an application-level contract** -- Define the messages, tool schemas, structured outputs, streaming events, errors, and telemetry your application requires. Provider adapters must pass contract tests; a similar API shape alone does not guarantee portability.
+- **Abstract only proven differences** -- Keep orchestration and business policy independent of provider SDKs where the workload exercises multiple providers. Do not add a framework solely to claim theoretical portability.
+- **Separate model selection from infrastructure** -- Resolve deployment identifiers and routing policy from configuration while retaining explicit adapters for provider-specific identity, safety, quota, and lifecycle behavior.
+- **Evaluate per workload** -- Compare qualified deployments with the same versioned dataset, SLOs, failure cases, residency requirements, and cost model. Record the verification date and exact deployment identifiers.
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O4:SCENARIO -->
+## Applied Scenario: Approve a Foundry Project for Production
+
+**Situation:** A platform team must onboard a RAG agent with private data, separate application ownership, managed identity, and regional recovery requirements.
+
+**Discovery commands:** Inspect the target subscription instead of copying resource IDs, regions, or quotas from documentation.
+
+```bash
+az account show --query "{subscription:id, tenant:tenantId}" -o json
+az cognitiveservices account list --query "[].{name:name, kind:kind, location:location, id:id}" -o table
+az role assignment list --assignee "<managed-identity-object-id>" --all -o table
+```
+
+**Decision record:** Capture the parent Foundry resource, child project, identity assignments, private connectivity, model deployment name, quota evidence, evaluation baseline, telemetry destination, and rollback model.
+
+```json
+{
+  "projectBoundary": "one workload and owning team",
+  "identity": "managed identity; no embedded API keys",
+  "network": "private ingress and approved egress",
+  "releaseGates": ["evaluation baseline", "quota evidence", "rollback test"],
+  "liveChecks": ["model catalog", "target-region availability", "RBAC assignments"]
+}
+```
+
+**Validation:** Deny public access where required, prove least-privilege access, exercise quota exhaustion and regional fallback, and retain dated catalog evidence.
 ## Key Takeaways
 
 | # | Takeaway |
 |---|---------|
-| 1 | Azure AI Foundry is the **unified platform** for building, evaluating, and deploying AI applications on Azure -- it consolidates what was previously Azure ML Studio and Azure AI Studio. |
-| 2 | The **Hub/Project model** is your workspace hierarchy: Hub = shared infrastructure and connections, Project = isolated workspace per application. Design your Hub/Project topology like you design your subscription topology. |
-| 3 | The Model Catalog offers **1,800+ models** via two paths: **Serverless API (pay-per-token, zero compute management)** and **Managed Online Endpoints (dedicated compute, full control)**. |
-| 4 | Azure OpenAI deployments come in **Standard (pay-per-token)** and **Provisioned (PTU, reserved throughput)** variants. PTU planning is a first-class infrastructure concern for high-volume workloads. |
-| 5 | **Prompt Flow** is a visual DAG-based orchestration tool for building LLM pipelines (RAG, agents, chatbots) that can be deployed as managed endpoints and version-controlled in Git. |
+| 1 | Microsoft Foundry is Azure's current platform for building, evaluating, governing, and operating AI applications and agents. |
+| 2 | The current hierarchy is a parent **Foundry resource** (`Microsoft.CognitiveServices/accounts`, `kind: AIServices`) with child **projects** (`accounts/projects`) for application boundaries. Classic Azure ML Hub/Project workspaces are migration context, not the default for new designs. |
+| 3 | Model and deployment availability is live commercial data. Verify the current Foundry catalog, target region, subscription quota, and deployment type before design approval. |
+| 4 | Use the OpenAI v1 endpoint where supported for model inference, and use current Foundry SDKs and ARM/Bicep/CLI surfaces for their owned control-plane or project operations. |
+| 5 | Treat visual orchestration and prompt tooling as implementation options, not substitutes for versioned code, evaluation evidence, identity, and deployment controls. |
 | 6 | **Evaluation is not optional** -- use built-in metrics (groundedness, relevance, coherence) and red-teaming evaluations as CI/CD gates before every production deployment. |
 | 7 | **Fine-tune only when prompt engineering and RAG are insufficient** -- fine-tuning is for style, tone, and specialized vocabulary, not for injecting knowledge (use RAG for that). |
 | 8 | Azure AI Services (Speech, Vision, Language, Document Intelligence, Content Safety) integrate natively with Foundry projects as pre/post-processing capabilities. |
 | 9 | **Networking, RBAC, and cost management** are the same disciplines you apply to any Azure workload -- private endpoints, managed identity, least-privilege RBAC, right-sized compute, and autoscaling. |
-| 10 | In a multi-cloud comparison, Azure AI Foundry's advantages are **OpenAI model exclusivity, enterprise security depth, and Microsoft ecosystem integration**. Competitors have edges in specific models (Claude on Bedrock, Gemini on Vertex AI) and simplicity. |
+| 10 | In a multi-cloud comparison, choose from live workload evidence and the organization's identity, data, networking, operations, and regulatory boundaries -- not frozen provider rankings. |
 
 ---
 
@@ -773,3 +795,35 @@ You now understand the platform where AI applications are built and deployed. In
 **Next:** [Module 4: Microsoft Copilot Ecosystem](./Copilot-Ecosystem.md) -- M365 Copilot, Copilot Studio, Copilot Actions, GitHub Copilot, Copilot for Azure, and the extensibility model that connects them all.
 
 **Previous:** [Module 2: LLM Landscape](./LLM-Landscape.md)
+
+---
+
+<!-- FROOT-PEDAGOGY:O4:CHECK -->
+## Knowledge Check
+
+### 1. What boundary does a Foundry project represent?
+
+<details>
+<summary>Expected evidence</summary>
+
+An application/workload boundary under a parent Foundry resource, with ownership and isolation appropriate to the project.
+
+</details>
+
+### 2. Why can documentation not guarantee model availability?
+
+<details>
+<summary>Expected evidence</summary>
+
+Availability depends on current region, subscription, quota, deployment type, and provider lifecycle.
+
+</details>
+
+### 3. What makes a Foundry deployment production-ready?
+
+<details>
+<summary>Expected evidence</summary>
+
+Proven identity, network, quota, evaluation, observability, rollback, and operational ownership controls.
+
+</details>

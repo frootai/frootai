@@ -30,9 +30,27 @@ category: "Foundations"
 - [F4.7 FrootAI's Implementation — 19 Files per Solution Play](#f47-frootais-implementation--19-files-per-solution-play)
 - [F4.8 Decision Guide — When to Use What](#f48-decision-guide--when-to-use-what)
 - [F4.9 Building Your Own .github Agentic OS](#f49-building-your-own-github-agentic-os)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Compose a Governed Repository Assistant](#applied-scenario-compose-a-governed-repository-assistant)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:F4:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Distinguish instructions, prompts, agents, skills, hooks, workflows, and plugins by ownership and lifecycle.
+- Select the smallest GitHub customization primitive that satisfies a requirement.
+- Wire reusable primitives through a manifest without duplicating source guidance.
+- Review an agentic repository for scope, trust, and maintenance risks.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md) and understand GitHub repositories, Markdown, and Actions workflows.
 
 ## F4.1 Why .github Is No Longer Just a Folder
 
@@ -141,7 +159,7 @@ Use config/*.json for all AI parameters.
 
 ### Modular Files (Modern)
 
-```
+```text
 .github/instructions/
 ├── azure-coding.instructions.md    # Azure SDK patterns, managed identity
 ├── rag-patterns.instructions.md    # Chunking, retrieval, anti-hallucination
@@ -190,7 +208,7 @@ Prompt files are **slash commands** — manually invoked by the user or another 
 
 Custom agents are **specialist personas** with their own identity, tools, and MCP server bindings. Agents can be **chained via handoffs**:
 
-```
+```text
 planning agent → implementation agent → review agent
 ```
 
@@ -221,7 +239,7 @@ You are the implementation agent for this solution.
 
 Skills are **self-contained folders** with instructions + scripts + references. They're **progressively loaded** — Copilot reads the description first, loads the full instructions only when relevant.
 
-```
+```text
 .github/skills/
 ├── deploy-azure/
 │   ├── SKILL.md        # Description + prerequisites + references
@@ -333,7 +351,7 @@ Plugins **bundle** agents + skills + commands into a distributable package. Two 
 
 FrootAI projects a consistent `.github` agentic structure into solution plays. The following is the target structure; use the individual play manifest to determine which assets a specific play currently ships:
 
-```
+```text
 solution-plays/01-enterprise-rag/
 ├── .github/
 │   ├── copilot-instructions.md          # Layer 1
@@ -396,7 +414,7 @@ flowchart LR
 
 ### Layering Strategy
 
-```
+```text
 Start here → Layer 1 (Instructions)
 ↓ Need slash commands? → Layer 2 (Prompts)
 ↓ Need specialist agents? → Layer 2 (Agents + Skills)
@@ -450,6 +468,17 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:F4:SCENARIO -->
+## Applied Scenario: Compose a Governed Repository Assistant
+
+**Situation:** A team wants Copilot to apply architecture rules, invoke a repeatable review capability, and run deterministic checks before merge.
+
+**Composition:** Put durable rules in scoped instructions, package the review method as a skill, use an agent only when tool choice or orchestration is required, and keep deterministic enforcement in hooks or workflows.
+
+**Review gate:** Every primitive must declare a narrow purpose, source owner, applicable paths, required tools, and a failure mode that does not silently bypass governance.
+
+**Validation:** Test one matching file, one non-matching file, one denied tool call, and one workflow failure before distributing the package.
 ## Key Takeaways
 
 1. **The `.github` folder is now an operating system** — 7 primitives, 4 layers, one repo.
@@ -464,3 +493,35 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 ---
 
 > **Next:** [O2: AI Agents & Agent Framework](./AI-Agents-Deep-Dive) for deep agent architecture | [O3: MCP, Tools & Function Calling](./O3-MCP-Tools-Functions) for MCP server patterns
+
+---
+
+<!-- FROOT-PEDAGOGY:F4:CHECK -->
+## Knowledge Check
+
+### 1. When should guidance be an instruction instead of an agent?
+
+<details>
+<summary>Expected evidence</summary>
+
+When it is durable contextual policy and does not require autonomous tool choice or orchestration.
+
+</details>
+
+### 2. What belongs in a deterministic workflow rather than a prompt?
+
+<details>
+<summary>Expected evidence</summary>
+
+Checks whose pass/fail result must be reproducible, auditable, and independent of model variability.
+
+</details>
+
+### 3. Why should primitives reference canonical knowledge instead of copying it?
+
+<details>
+<summary>Expected evidence</summary>
+
+References preserve one source of truth and prevent duplicated guidance from drifting.
+
+</details>

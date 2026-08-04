@@ -20,9 +20,27 @@
 - [R3.8 Multi-Layer Defense Architecture](#r38-multi-layer-defense-architecture)
 - [R3.9 Real-World Patterns](#r39-real-world-patterns)
 - [R3.10 Measurement: How Reliable Is Your AI?](#r310-measurement-how-reliable-is-your-ai)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Extract Auditable Invoice Decisions](#applied-scenario-extract-auditable-invoice-decisions)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:R3:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Identify where probabilistic behavior is acceptable and where deterministic controls are mandatory.
+- Use schemas, validators, grounding, and abstention to constrain model outputs.
+- Design layered reliability controls instead of relying on temperature alone.
+- Define measurable failure handling for AI-assisted business processes.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [R1](./Prompt-Engineering.md), and [R2](./RAG-Architecture.md).
 
 ## R3.1 The Determinism Problem
 
@@ -186,7 +204,7 @@ These three parameters are your **first line of defense** for output consistency
 
 Temperature modifies the probability distribution before sampling:
 
-```
+```text
 At temperature T:
   adjusted_probability(token_i) = exp(logit_i / T) / Σ exp(logit_j / T)
 ```
@@ -214,7 +232,7 @@ After temperature adjustment, top-k limits how many tokens are considered:
 
 Instead of a fixed count, top-p considers tokens until their cumulative probability exceeds the threshold:
 
-```
+```text
 If probabilities are: [0.40, 0.25, 0.15, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01]
   top_p=0.65 → considers: [0.40, 0.25]        (2 tokens)
   top_p=0.80 → considers: [0.40, 0.25, 0.15]  (3 tokens)  
@@ -312,7 +330,7 @@ flowchart LR
 
 Embed facts, constraints, and rules directly in the system message:
 
-```
+```text
 You are an Azure pricing assistant. Use ONLY the following pricing data to answer questions.
 
 PRICING DATA (example fixture, not live rates):
@@ -331,7 +349,7 @@ RULES:
 
 Teach the model to say "I don't know" instead of guessing:
 
-```
+```text
 CRITICAL INSTRUCTION: You must REFUSE to answer if:
 - The question is outside your documented knowledge base
 - The retrieved documents have a relevance score below 0.75
@@ -347,7 +365,7 @@ Please consult [relevant resource] for the most current information."
 
 Force the model to show its work:
 
-```
+```text
 Every factual claim in your response MUST include a citation in this format:
 [Source: document_name, section_name]
 
@@ -501,7 +519,7 @@ flowchart TB
 
 For high-stakes Q&A where accuracy is non-negotiable:
 
-```
+```text
 1. Retrieve documents (top-5, reranked)
 2. Generate answer with citations (temp=0, structured output)
 3. Verify: send answer + sources to a SECOND LLM call:
@@ -516,7 +534,7 @@ Cost: ~2x token usage. Worth it for regulated, customer-facing, or financial sce
 
 For agent workflows where tool selection must be deterministic:
 
-```
+```text
 1. Define tools with precise schemas (no ambiguity)
 2. Use function calling (not free-text tool selection)
 3. Set temperature=0
@@ -532,7 +550,7 @@ For agent workflows where tool selection must be deterministic:
 
 For content generation where some creativity is OK but boundaries exist:
 
-```
+```text
 1. Generate content (temp=0.5, top_p=0.9)
 2. Check against business rules (blocklist, topic boundaries)
 3. Run content safety filter
@@ -593,6 +611,17 @@ flowchart TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:R3:SCENARIO -->
+## Applied Scenario: Extract Auditable Invoice Decisions
+
+**Situation:** An intake service extracts invoice fields and recommends routing, but payment release must remain deterministic and auditable.
+
+**Boundary:** Use the model for extraction and classification; validate fields against a schema and source evidence; use deterministic policy code for approval thresholds and payment actions.
+
+**Failure handling:** Reject malformed outputs, abstain when confidence or evidence is insufficient, preserve the source span for every field, and route exceptions to human review.
+
+**Validation:** Replay a fixed corpus containing missing fields, conflicting totals, prompt injection, duplicate invoices, and unsupported currencies.
 ## Key Takeaways
 
 :::tip The Five Rules of Deterministic AI
@@ -607,3 +636,35 @@ flowchart TB
 
 > **FrootAI R3** — *Making AI reliable is engineering, not wishful thinking.*
 > The telescope shows you the big picture. The microscope shows you where determinism breaks. Use both.
+
+---
+
+<!-- FROOT-PEDAGOGY:R3:CHECK -->
+## Knowledge Check
+
+### 1. Why is temperature zero not a complete determinism guarantee?
+
+<details>
+<summary>Expected evidence</summary>
+
+Infrastructure, model versions, tokenization, and service implementations can still change outputs.
+
+</details>
+
+### 2. Which actions should remain outside model control?
+
+<details>
+<summary>Expected evidence</summary>
+
+Irreversible or regulated decisions that require reproducible policy, authorization, and auditability.
+
+</details>
+
+### 3. What is the role of abstention?
+
+<details>
+<summary>Expected evidence</summary>
+
+It converts unsupported certainty into an explicit, testable failure path.
+
+</details>

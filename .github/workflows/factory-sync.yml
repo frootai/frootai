@@ -399,7 +399,8 @@ jobs:
       - name: 📚 Verify FROOT documentation
         run: |
           node scripts/audit-froot-docs.js
-          echo "✅ FROOT documentation audit OK" >> $GITHUB_STEP_SUMMARY
+          node scripts/audit-froot-docs-quality.mjs
+          echo "✅ FROOT freshness and quality audits OK" >> $GITHUB_STEP_SUMMARY
 
       # ── Engine: verify moonshot tests ──
       - name: 🧪 Verify engine tests

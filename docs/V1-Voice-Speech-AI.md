@@ -20,9 +20,27 @@
 - [V1.8 Telephony Integration](#v18-telephony-integration)
 - [V1.9 WAF Alignment for Voice AI](#v19-waf-alignment-for-voice-ai)
 - [V1.10 Production Patterns & Anti-Patterns](#v110-production-patterns--anti-patterns)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Launch a Real-Time Call-Center Agent](#applied-scenario-launch-a-real-time-call-center-agent)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:S-10:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Budget end-to-end conversational latency across turn detection, STT, model, and TTS stages.
+- Design streaming, barge-in, silence, retry, and human-handoff behavior.
+- Protect voice biometrics, recordings, transcripts, identity, and telephony actions.
+- Operate voice quality with measurable latency, recognition, containment, and escalation outcomes.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [R1](./Prompt-Engineering.md), [O2](./AI-Agents-Deep-Dive.md), and [O5](./AI-Infrastructure.md).
 
 ## V1.1 The Voice AI Problem
 
@@ -157,16 +175,18 @@ synthesizer.start_speaking_ssml_async(ssml)
 
 **Voice selection guide:**
 
-| Voice | Best For | Notes |
-|-------|----------|-------|
-| `en-US-AvaMultilingualNeural` | Customer service, multilingual | Newest, most expressive |
-| `en-US-AndrewMultilingualNeural` | Authoritative, professional | Pairs with Ava |
-| `en-US-EmmaNeural` | Friendly, casual | Lower latency than Ava |
-| `en-US-JennyMultilingualNeural` | Stable production workhorse | Battle-tested in M365 |
+| Voice | Starting Scenario | Validate Before Selection |
+|-------|-------------------|---------------------------|
+| `en-US-AvaMultilingualNeural` | Engaging multilingual conversation | Target languages, style support, and measured naturalness |
+| `en-US-AndrewMultilingualNeural` | Confident conversational delivery | Supported styles and target-locale pronunciation |
+| `en-US-EmmaNeural` | Friendly explanatory content | Locale, voice persona, and end-to-end latency |
+| `en-US-JennyMultilingualNeural` | Expressive multilingual customer service | Current language coverage and scenario-specific listening tests |
+
+Voice generations, styles, preview states, and regional availability change. Use the [Azure Speech language and voice table](https://learn.microsoft.com/azure/ai-services/speech-service/language-support?tabs=tts) and [Voice Gallery](https://speech.microsoft.com/portal/voicegallery), then test representative scripts with target users.
 
 ### Capability 3: Batch Transcription
 
-For post-call analytics (NOT real-time), batch transcription gives 50% cost savings, speaker diarization, sentiment, and PII redaction.
+For asynchronous post-call analytics, batch transcription processes audio without a live stream and can add features such as diarization or language identification when supported and configured. Verify feature and pricing support for the target locale and region.
 
 ```python
 # Submit a batch job
@@ -674,6 +694,17 @@ Most production deployments today are at Stage 2-3. Stage 4 requires custom voic
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:S-10:SCENARIO -->
+## Applied Scenario: Launch a Real-Time Call-Center Agent
+
+**Situation:** A voice agent handles tier-one support, can read account status, and must transfer sensitive or unsupported cases to a human.
+
+**Latency budget:** Allocate measurable budgets to end-of-utterance detection, streaming STT, retrieval/tool calls, first model token, and first synthesized audio. Treat 800 ms as a design target, not a provider SLA.
+
+**Safety:** Announce automation, capture consent where required, minimize recordings, protect transcripts, authenticate before account actions, and preserve immediate human escalation.
+
+**Validation:** Test accents, noise, silence, interruption, packet loss, repeated transfers, denied identity, tool timeout, sensitive-topic escalation, and regional service failure.
 ## Key Takeaways
 
 1. **Latency is the master constraint.** Every architectural decision flows from the 800ms end-to-end budget.
@@ -705,3 +736,35 @@ Most production deployments today are at Stage 2-3. Stage 4 requires custom voic
 - **Play 14** — Cost-Optimized AI Gateway (voice routing patterns)
 - **Play 17** — AI Observability (voice latency dashboards)
 - **Play 22** — Swarm Orchestration (voice agents calling specialist agents)
+
+---
+
+<!-- FROOT-PEDAGOGY:S-10:CHECK -->
+## Knowledge Check
+
+### 1. Why is streaming architectural rather than cosmetic for voice?
+
+<details>
+<summary>Expected evidence</summary>
+
+Recognition, generation, and synthesis must overlap to keep turn latency conversational.
+
+</details>
+
+### 2. What should happen when the user interrupts?
+
+<details>
+<summary>Expected evidence</summary>
+
+Stop or duck synthesis, preserve confirmed context, and prioritize the new utterance without duplicating actions.
+
+</details>
+
+### 3. Why is an 800 ms target not an SLA?
+
+<details>
+<summary>Expected evidence</summary>
+
+End-to-end latency depends on application logic, networks, models, tools, and turn detection beyond any one service guarantee.
+
+</details>

@@ -18,6 +18,20 @@ category: "Operations"
 
 ---
 
+<!-- FROOT-PEDAGOGY:O5:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Estimate GPU memory and throughput requirements from model and traffic characteristics.
+- Choose managed endpoints, containers, VMs, or Kubernetes from operational constraints.
+- Design scaling, availability, networking, storage, observability, and cost controls together.
+- Verify SKU and regional assumptions against the target subscription before approval.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md) and [O4](./Azure-AI-Foundry.md); Kubernetes, networking, and Azure monitoring familiarity is recommended.
+
 ## 9.1 The AI Compute Stack
 
 Everything you have learned in Modules 1 through 8 — embeddings, vector search, RAG pipelines, fine-tuning, prompt engineering — eventually runs on infrastructure. This module connects the dots between **what AI does** and **what AI needs** from a platform perspective.
@@ -55,7 +69,7 @@ The single biggest mistake architects make is treating AI workloads like traditi
 
 At its core, every neural network — from a simple classifier to GPT-4o — performs the same fundamental operation billions of times: **matrix multiplication**.
 
-```
+```text
 Output = Input × Weights + Bias
 ```
 
@@ -961,6 +975,22 @@ All services communicate over private endpoints within a hub-and-spoke VNET topo
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O5:SCENARIO -->
+## Applied Scenario: Right-Size a GPU Serving Platform
+
+**Situation:** A team must serve a quantized open-weight model with bursty traffic, a p95 latency SLO, and no tolerance for silent request loss.
+
+**Method:** Benchmark one replica, separate prefill and decode behavior, measure VRAM including KV cache, then size replicas from measured concurrency rather than theoretical FLOPS.
+
+```kusto
+customMetrics
+| where name in ("gpu_memory_utilization", "tokens_per_second", "queue_depth")
+| summarize p95=value_percentile(value, 95) by name, bin(timestamp, 5m)
+| order by timestamp asc
+```
+
+**Validation:** Test cold start, sustained load, burst load, replica loss, quota exhaustion, model reload, and regional failover. Recheck current SKU availability with `az vm list-skus` before design approval.
 ## Key Takeaways
 
 1. **AI workloads are memory-bound, not CPU-bound.** VRAM is the primary constraint for model inference. Always size infrastructure based on model VRAM requirements first, then consider compute throughput.
@@ -988,3 +1018,35 @@ In **[Module 10: Responsible AI — Ethics, Safety & Governance](./Responsible-A
 ---
 
 > **Module 9 Complete.** You now understand the full AI infrastructure stack — from GPU silicon to production reference architectures. Combined with the knowledge from Modules 1-8, you can design, deploy, and operate enterprise AI systems on Azure with confidence.
+
+---
+
+<!-- FROOT-PEDAGOGY:O5:CHECK -->
+## Knowledge Check
+
+### 1. Why is parameter memory not the complete VRAM estimate?
+
+<details>
+<summary>Expected evidence</summary>
+
+KV cache, activations, runtime buffers, batching, and framework overhead also consume memory.
+
+</details>
+
+### 2. What metric reveals insufficient serving capacity before outright failure?
+
+<details>
+<summary>Expected evidence</summary>
+
+Queue depth and queue delay rising under a stable arrival rate.
+
+</details>
+
+### 3. Why must region and SKU claims be discovered live?
+
+<details>
+<summary>Expected evidence</summary>
+
+Capacity, quotas, and available VM families vary by subscription and change over time.
+
+</details>

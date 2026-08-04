@@ -7,6 +7,20 @@
 
 ---
 
+<!-- FROOT-PEDAGOGY:F2:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Classify models by capability, licensing, deployment boundary, and operational profile.
+- Interpret benchmark and model-card evidence without treating one score as a universal ranking.
+- Build a repeatable shortlist from quality, latency, cost, residency, and support constraints.
+- Separate direct-provider availability from Microsoft Foundry catalog availability.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md), especially tokens, inference, and context windows.
+
 You do not need to train models. You do not need to understand backpropagation. But you **absolutely** need to know which models exist, what they are good at, how they are licensed, and how to deploy them on Azure. This module gives you the full map.
 
 :::warning Catalogs Are Live Data
@@ -359,7 +373,7 @@ graph LR
 
 This is critical for architects planning capacity:
 
-```
+```text
 Standard model:  Input tokens + Output tokens = Total billed tokens
 Reasoning model: Input tokens + Thinking tokens + Output tokens = Total billed tokens
 ```
@@ -785,6 +799,33 @@ An often-overlooked factor: models generate tokens sequentially, so the bottlene
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:F2:SCENARIO -->
+## Applied Scenario: Create a Model Shortlist with Explicit Gates
+
+**Situation:** A regulated support workload needs multilingual classification, grounded answer generation, EU data residency, and a predictable monthly budget.
+
+**Method:** Apply hard gates before comparative scoring. Model names and availability remain inputs supplied by the current provider catalogs, not constants embedded in the decision logic.
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Candidate:
+    name: str
+    quality: float
+    p95_latency_ms: int
+    cost_per_case: float
+    approved_regions: set[str]
+
+def shortlist(models: list[Candidate], *, region: str, latency_slo_ms: int, budget: float):
+    eligible = [m for m in models if region in m.approved_regions]
+    eligible = [m for m in eligible if m.p95_latency_ms <= latency_slo_ms]
+    eligible = [m for m in eligible if m.cost_per_case <= budget]
+    return sorted(eligible, key=lambda m: (-m.quality, m.cost_per_case))
+```
+
+**Validation:** Evaluate the shortlist on a versioned workload dataset and record the provider model ID, deployment region, evaluation date, and rollback candidate.
 ## Key Takeaways
 
 1. **Know the taxonomy.** Proprietary, open-weight, and open-source models have fundamentally different infrastructure, cost, and compliance implications. Choose based on your constraints, not hype.
@@ -812,3 +853,35 @@ You now have the map of the model landscape. In **[Module 3: Azure AI Foundry](.
 :::tip Quick Navigation
 **Previous:** [Module 1: GenAI Foundations](./GenAI-Foundations.md) | **Next:** [Module 3: Azure AI Foundry](./Azure-AI-Foundry.md) | **Home:** [AI Nexus Index](./README.md)
 :::
+
+---
+
+<!-- FROOT-PEDAGOGY:F2:CHECK -->
+## Knowledge Check
+
+### 1. Why should a benchmark not be used as the only model-selection signal?
+
+<details>
+<summary>Expected evidence</summary>
+
+Benchmark tasks may not represent the workload, deployment constraints, safety profile, latency, or total cost.
+
+</details>
+
+### 2. What is the first distinction to make for an open-weight model?
+
+<details>
+<summary>Expected evidence</summary>
+
+Whether its license, weights, deployment tooling, and support model satisfy the intended commercial and operational use.
+
+</details>
+
+### 3. Why must Foundry availability be checked independently?
+
+<details>
+<summary>Expected evidence</summary>
+
+A model announced by a provider may not be available in the required Foundry region, quota, or deployment type.
+
+</details>

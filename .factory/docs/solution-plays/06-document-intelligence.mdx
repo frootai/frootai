@@ -1,6 +1,6 @@
 ---
 title: "Play 06: Play 06 — Document Intelligence 📄"
-description: "Feed PDFs, invoices, receipts, and forms into Azure Document Intelligence for OCR, then GPT-4o extracts structured fields into typed JSON. Handles multi-page documents, handwriting, tables, and stamps"
+description: "The package declares an offline `document.process` fixture and Azure resources for a target extraction workflow. Live file validation, hostile-document handling, field provenance, confidence review, P"
 icon: "🎯"
 order: 6
 editUrl: "solution-plays/06-document-intelligence/README.md"
@@ -8,9 +8,9 @@ tags: ["solution-play", "play-06"]
 ---
 # Play 06 — Document Intelligence 📄
 
-> Extract, classify, and structure document data with OCR + LLM.
+> Target schema-first document workflow with OCR, provenance, confidence review, and bounded enrichment.
 
-Feed PDFs, invoices, receipts, and forms into Azure Document Intelligence for OCR, then GPT-4o extracts structured fields into typed JSON. Handles multi-page documents, handwriting, tables, and stamps.
+The package declares an offline `document.process` fixture and Azure resources for a target extraction workflow. Live file validation, hostile-document handling, field provenance, confidence review, PII deletion, and extraction quality require separate evidence.
 
 ## Quick Start
 ```bash
@@ -19,8 +19,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for extraction, @reviewer for accuracy audit, @tuner for throughput
 ```
 
-## Key Metrics
-- Field extraction: ≥95% (prebuilt), ≥90% (custom) · Processing: <10s/page · PII recall: ≥99%
+## Evidence Required
+- Measure field accuracy, table fidelity, confidence calibration, PII handling, hostile-document behavior, review outcomes, and processing latency before setting release thresholds.
 
 ## DevKit
 | Primitive | What It Does |
@@ -40,7 +40,7 @@ graph TB
 
     subgraph Processing["Document Processing"]
         CA[Container Apps<br/>Pipeline orchestrator]
-        DI[Document Intelligence<br/>OCR + layout analysis]
+        DI[Planned Document Intelligence<br/>Not in current Bicep]
     end
 
     subgraph AI["AI Enrichment"]

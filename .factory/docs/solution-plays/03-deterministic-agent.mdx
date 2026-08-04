@@ -1,6 +1,6 @@
 ---
 title: "Play 03: Play 03 — Deterministic Agent 🎯"
-description: "When you need AI that gives the same answer every time. Temperature=0, seed pinning, structured JSON output, confidence scoring, anti-sycophancy prompts, and a multi-layer guardrail pipeline."
+description: "Temperature zero, a seed, structured JSON, confidence rules, and validation can reduce variation but do not guarantee identical model output. The current evidence covers the offline `deterministic.exe"
 icon: "🎯"
 order: 3
 editUrl: "solution-plays/03-deterministic-agent/README.md"
@@ -8,9 +8,9 @@ tags: ["solution-play", "play-03"]
 ---
 # Play 03 — Deterministic Agent 🎯
 
-> Reliable, reproducible AI agent with zero temperature and multi-layer guardrails.
+> Typed workflow reference with validation, replay-oriented fingerprints, and bounded model settings.
 
-When you need AI that gives the same answer every time. Temperature=0, seed pinning, structured JSON output, confidence scoring, anti-sycophancy prompts, and a multi-layer guardrail pipeline.
+Temperature zero, a seed, structured JSON, confidence rules, and validation can reduce variation but do not guarantee identical model output. The current evidence covers the offline `deterministic.execute` fixture; repeated Azure model variance and idempotent external side effects remain to be measured.
 
 ## Quick Start
 ```bash
@@ -120,7 +120,7 @@ graph TB
 |-------|-------|
 | Play | `03-deterministic-agent` |
 | Version | `1.0.0` |
-| Knowledge | R3-Deterministic-AI, O2-Agent-Coding |
+| Knowledge | R3-Deterministic-AI, O2-AI-Agents |
 | WAF Pillars | security, reliability, responsible-ai |
 | Groundedness | ≥ 85% |
 | Safety | 0 violations max |

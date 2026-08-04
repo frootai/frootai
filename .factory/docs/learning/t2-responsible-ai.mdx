@@ -17,6 +17,20 @@ category: "Transformation"
 
 ---
 
+<!-- FROOT-PEDAGOGY:T2:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Translate responsible-AI principles into technical controls and accountable owners.
+- Threat-model data, model, prompt, tool, identity, and human interaction boundaries.
+- Design evaluations for harmful content, bias, robustness, privacy, and excessive agency.
+- Operate incident response, evidence retention, and regulatory review throughout the lifecycle.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md) and [O2](./AI-Agents-Deep-Dive.md); domain risk and privacy expertise should participate in the review.
+
 ## 10.1 Why Responsible AI Matters for Infrastructure Architects
 
 You do not just host AI. You are part of the **trust chain**.
@@ -753,34 +767,33 @@ One of the most common questions from customers and compliance teams: **"What ha
 |---|---|
 | **Is my data used to train models?** | **No.** Your prompts, completions, embeddings, and training data are NOT used to train, retrain, or improve Azure OpenAI foundation models. |
 | **Is my data shared with OpenAI?** | **No.** Your data is not shared with OpenAI. Azure OpenAI is a separate Microsoft-managed service. |
-| **Is my data stored?** | Temporarily for abuse monitoring (up to 30 days by default). Approved customers can opt out of abuse monitoring storage. |
-| **Who can access my data?** | Only authorized Microsoft employees under strict access controls, and only for abuse investigation (unless opted out). |
-| **Can I opt out of abuse monitoring?** | Yes, for approved use cases. Submit a request through the Azure OpenAI limited access form. |
+| **Is my data stored?** | Base-model inferencing is stateless, but optional stateful features store configured data. Content flagged for potential abuse can be stored for human review unless the subscription is approved for modified abuse monitoring. |
+| **Who can access my data?** | Other customers and model providers cannot access it. Authorized Microsoft reviewers can access only content selected by the abuse-monitoring process, subject to documented controls. |
+| **Can I modify abuse monitoring?** | Eligible managed customers can apply for modified abuse monitoring and verify the resulting `ContentLogging` setting on the resource. |
+
+Validate these controls against the current [Microsoft Foundry data, privacy, and security documentation](https://learn.microsoft.com/azure/ai-foundry/responsible-ai/openai/data-privacy), especially when using preview or stateful features.
 
 ### Data Residency
 
-Not all models are available in all regions. Data residency requirements must inform your region selection.
+Not all models, deployment types, or platform features are available in all regions. Data residency requirements must inform both region and deployment-type selection.
 
-| Region | Available Models (Representative) | EU Data Boundary | Notes |
-|---|---|---|---|
-| **East US / East US 2** | GPT-4o, GPT-4, GPT-3.5, DALL-E, Whisper | No | Largest model selection |
-| **West US / West US 3** | GPT-4o, GPT-4, GPT-3.5 | No | Secondary US region |
-| **Sweden Central** | GPT-4o, GPT-4, GPT-3.5 | Yes | Primary EU region |
-| **France Central** | GPT-4o, GPT-4, GPT-3.5 | Yes | EU data boundary |
-| **UK South** | GPT-4o, GPT-4, GPT-3.5 | No (UK) | Post-Brexit, not EU boundary |
-| **Japan East** | GPT-4o, GPT-4, GPT-3.5 | No | Asia-Pacific |
-| **Australia East** | GPT-4o, GPT-4 | No | Australia/NZ |
+| Deployment Type | Processing Boundary | Design Implication |
+|---|---|---|
+| **Global** | Any geography where the selected model is deployed | Do not use when processing must remain in a specific geography or data zone. |
+| **DataZone** | Within the selected US or EU data zone | Use when zone-level processing is acceptable; verify that the model and feature support this deployment type. |
+| **Standard / Regional** | Within the customer-specified geography, with operational processing possible between regions in that geography | Confirm the exact model, feature, quota, and geography before approval. |
 
 :::tip Check Model Availability
-Model availability changes frequently. Always check the [Azure OpenAI model availability matrix](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) for current region-model mapping before committing to a region in your architecture.
+Model availability changes frequently. Check the [Foundry model availability matrix](https://learn.microsoft.com/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability) and [deployment-type guidance](https://learn.microsoft.com/azure/ai-foundry/foundry-models/concepts/deployment-types) before committing to a region or processing boundary.
 :::
 
 ### EU Data Boundary
 
 For organizations subject to EU data residency requirements:
 
-- Deploy Azure OpenAI in **Sweden Central** or **France Central**
-- All data processing (prompts, completions, abuse monitoring) stays within the EU
+- Select an EU region and a deployment type whose documented processing boundary satisfies the requirement
+- Do not assume a resource region constrains processing when using a Global deployment
+- Verify where stateful feature data and abuse-monitoring data are stored
 - Combine with Azure Policy to enforce region restrictions at the subscription level
 
 ### Encryption and Key Management
@@ -1016,6 +1029,17 @@ Every AI model deployment should pass through a structured gate process:
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:T2:SCENARIO -->
+## Applied Scenario: Red-Team a Benefits Eligibility Assistant
+
+**Situation:** An assistant explains benefits policy and gathers information but must not make final eligibility decisions.
+
+**Threats:** Test protected-class proxies, inaccessible language, prompt injection, policy conflicts, privacy leakage, unsafe tool calls, fabricated citations, and automation bias.
+
+**Controls:** Ground explanations in approved policy, separate advice from deterministic eligibility rules, require human review, log evidence and decisions, and provide contestability.
+
+**Validation:** Use representative and adversarial cohorts, publish residual risk, assign incident owners, and repeat evaluation after model, prompt, data, or tool changes.
 ## Key Takeaways
 
 | # | Takeaway |
@@ -1036,3 +1060,35 @@ After completing this module, audit your current AI deployments against the guar
 ---
 
 > **Next Module:** [Module 11: Quick Reference Cards](./Quick-Reference-Cards.md) — one-page cheat sheets for every key concept covered in AI Nexus, from tokens to guardrails to model selection.
+
+---
+
+<!-- FROOT-PEDAGOGY:T2:CHECK -->
+## Knowledge Check
+
+### 1. Why can a content filter not provide complete AI safety?
+
+<details>
+<summary>Expected evidence</summary>
+
+It addresses only some harmful content, not bias, privacy, grounding, authorization, agency, or process accountability.
+
+</details>
+
+### 2. What is automation bias?
+
+<details>
+<summary>Expected evidence</summary>
+
+The tendency for people to over-trust automated recommendations even when evidence is weak or conflicting.
+
+</details>
+
+### 3. When must risk evaluation repeat?
+
+<details>
+<summary>Expected evidence</summary>
+
+Whenever models, prompts, data, tools, policies, deployment context, or affected populations materially change.
+
+</details>
