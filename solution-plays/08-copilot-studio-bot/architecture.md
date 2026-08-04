@@ -1,6 +1,10 @@
 # Architecture - Play 08: Copilot Studio Bot
 
-## Target Architecture
+## Overview
+
+This target architecture separates Copilot Studio conversation design, approved knowledge, governed Power Automate actions, Dataverse state, and managed-solution promotion. The repository does not currently contain the tenant export or operational evidence needed to claim a deployed system.
+
+## Architecture Diagram
 
 ```mermaid
 flowchart LR
@@ -24,9 +28,9 @@ flowchart LR
 The diagram is a target design, not deployment evidence. The repository does not
 currently contain the solution export represented by `Export`.
 
-## Authority Boundaries
+## Service Roles
 
-| Surface | Authority | Required evidence |
+| Service | Layer | Role |
 |---|---|---|
 | Topics, answers, channels | Copilot Studio solution | Exported source and publication receipt |
 | Structured state and roles | Dataverse | Schema, role assignments, audit configuration |
@@ -35,7 +39,7 @@ currently contain the solution export represented by `Export`.
 | Promotion and rollback | Power Platform ALM | Managed imports, stage approvals, rollback test |
 | Measurements | Platform analytics and test runs | Versioned dataset, query, timestamp, sample count |
 
-## Release Flow
+## Data Flow
 
 1. Makers work only in the owned development environment.
 2. Export the unmanaged solution and unpack it into `solution/`.
@@ -45,6 +49,14 @@ currently contain the solution export represented by `Export`.
 5. Run topic, action, identity, DLP, approval, audit, and rollback tests.
 6. Promote the exact managed artifact after human approval.
 7. Publish channels, run smoke tests, and retain the prior managed artifact.
+
+## Security Architecture
+
+- Enforce tenant DLP policy for every standard, premium, and custom connector.
+- Use environment-scoped connection references and least-privilege service identities.
+- Require durable human approval before consequential actions.
+- Separate development, test, and production environments with managed-solution promotion.
+- Retain Dataverse audit records, import receipts, publication evidence, and rollback artifacts.
 
 ## Current Evidence Boundary
 
