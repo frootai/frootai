@@ -18,6 +18,20 @@ category: "Orchestration"
 
 ---
 
+<!-- FROOT-PEDAGOGY:O2:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Design an agent loop with bounded planning, memory, tools, and termination.
+- Select single-agent, handoff, supervisor, and multi-agent patterns from workload needs.
+- Apply identity, consent, policy, and observability at every tool boundary.
+- Evaluate task completion without confusing autonomy with reliability.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [R1](./Prompt-Engineering.md), and [O3](./O3-MCP-Tools-Functions.md).
+
 ## 6.1 What Is an AI Agent?
 
 An AI agent is a system that goes beyond responding to prompts. It **plans**, **reasons**, **uses tools**, and **takes autonomous actions** to accomplish goals on behalf of a user. Where a chatbot answers questions, an agent **gets things done**.
@@ -1412,6 +1426,17 @@ graph TD
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O2:SCENARIO -->
+## Applied Scenario: Orchestrate a Bounded Incident-Response Agent
+
+**Situation:** An operations agent may inspect telemetry, propose remediation, and open a change request, but cannot execute production changes directly.
+
+**Pattern:** Use one supervisor with specialist read-only tools, a bounded step budget, durable incident state, explicit handoffs, and human approval before any write action.
+
+**Safety:** Treat tool output as untrusted, enforce identity outside prompts, redact traces, and require idempotency keys for ticket or change creation.
+
+**Validation:** Exercise incomplete telemetry, conflicting specialists, tool timeout, approval denial, repeated messages, and maximum-step termination.
 ## Key Takeaways
 
 1. **An agent is an LLM with memory, tools, and planning** — it can reason about goals and take multi-step actions, not just respond to prompts.
@@ -1433,3 +1458,35 @@ graph TD
 ---
 
 > **Next Module:** [Module 7: Semantic Kernel & Orchestration](./Semantic-Kernel.md) — dive into the SDK that powers Microsoft's agent and AI orchestration ecosystem, including plugins, planners, memory connectors, and how Semantic Kernel compares to LangChain.
+
+---
+
+<!-- FROOT-PEDAGOGY:O2:CHECK -->
+## Knowledge Check
+
+### 1. What distinguishes an agent from a chatbot?
+
+<details>
+<summary>Expected evidence</summary>
+
+An agent selects and performs actions in a loop toward a goal, rather than only producing conversational text.
+
+</details>
+
+### 2. When is a multi-agent design unjustified?
+
+<details>
+<summary>Expected evidence</summary>
+
+When one bounded agent with tools can complete the task with less coordination, latency, and failure surface.
+
+</details>
+
+### 3. What must terminate every agent loop?
+
+<details>
+<summary>Expected evidence</summary>
+
+A success condition, explicit failure/abstention path, cancellation, and a maximum step or cost budget.
+
+</details>

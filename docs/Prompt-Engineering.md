@@ -7,6 +7,20 @@
 
 ---
 
+<!-- FROOT-PEDAGOGY:R1:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Design prompts with explicit role, context, constraints, task, and output contract.
+- Choose prompting techniques based on measured task difficulty rather than fashion.
+- Defend prompts against injection, ambiguous tool use, and uncontrolled context growth.
+- Version and evaluate prompts as production artifacts.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md). Basic experience calling a model API is recommended.
+
 ## 8.1 Why Prompt Engineering Matters
 
 Every traditional application encodes its logic in compiled code — `if` statements, loops, validation rules, business workflows. In the world of generative AI, **the prompt IS the application logic**. A well-crafted prompt is the difference between a hallucinating chatbot and a reliable enterprise assistant.
@@ -956,6 +970,17 @@ log_experiment(variant, response, user_rating)
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:R1:SCENARIO -->
+## Applied Scenario: Release-Gate a Support Prompt
+
+**Situation:** A support prompt must answer from approved policy documents, abstain when evidence is missing, and return a stable JSON contract for downstream automation.
+
+**Design:** Separate system policy from retrieved evidence, delimit untrusted content, define an abstention path, and validate output with a schema rather than prose instructions alone.
+
+**Evaluation:** Use a versioned set containing answerable, unanswerable, adversarial, multilingual, and long-context cases. Compare groundedness, schema validity, refusal correctness, latency, and cost.
+
+**Release decision:** Promote only when the candidate improves the target metrics without regressing safety or contract validity; retain the prior prompt for rollback.
 ## Key Takeaways
 
 1. **The prompt is your application logic** — invest in it like you invest in code quality. Version it, test it, review it.
@@ -983,3 +1008,35 @@ log_experiment(variant, response, user_rating)
 > **Previous Module:** [Module 7 — Semantic Kernel & AI Orchestration](./Semantic-Kernel.md)
 
 > **Next Module:** [Module 9 — AI Infrastructure for Architects](./AI-Infrastructure.md)
+
+---
+
+<!-- FROOT-PEDAGOGY:R1:CHECK -->
+## Knowledge Check
+
+### 1. Why should retrieved text be treated as untrusted input?
+
+<details>
+<summary>Expected evidence</summary>
+
+Documents can contain prompt injection or instructions that conflict with system policy.
+
+</details>
+
+### 2. When is few-shot prompting useful?
+
+<details>
+<summary>Expected evidence</summary>
+
+When representative examples clarify a format, boundary, or decision rule that prose alone does not reliably convey.
+
+</details>
+
+### 3. What makes a prompt production-ready?
+
+<details>
+<summary>Expected evidence</summary>
+
+Versioning, representative evaluation, observable metrics, explicit contracts, and a rollback path.
+
+</details>

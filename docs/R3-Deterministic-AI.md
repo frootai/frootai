@@ -20,9 +20,27 @@
 - [R3.8 Multi-Layer Defense Architecture](#r38-multi-layer-defense-architecture)
 - [R3.9 Real-World Patterns](#r39-real-world-patterns)
 - [R3.10 Measurement: How Reliable Is Your AI?](#r310-measurement-how-reliable-is-your-ai)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Extract Auditable Invoice Decisions](#applied-scenario-extract-auditable-invoice-decisions)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:R3:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Identify where probabilistic behavior is acceptable and where deterministic controls are mandatory.
+- Use schemas, validators, grounding, and abstention to constrain model outputs.
+- Design layered reliability controls instead of relying on temperature alone.
+- Define measurable failure handling for AI-assisted business processes.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [R1](./Prompt-Engineering.md), and [R2](./RAG-Architecture.md).
 
 ## R3.1 The Determinism Problem
 
@@ -593,6 +611,17 @@ flowchart TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:R3:SCENARIO -->
+## Applied Scenario: Extract Auditable Invoice Decisions
+
+**Situation:** An intake service extracts invoice fields and recommends routing, but payment release must remain deterministic and auditable.
+
+**Boundary:** Use the model for extraction and classification; validate fields against a schema and source evidence; use deterministic policy code for approval thresholds and payment actions.
+
+**Failure handling:** Reject malformed outputs, abstain when confidence or evidence is insufficient, preserve the source span for every field, and route exceptions to human review.
+
+**Validation:** Replay a fixed corpus containing missing fields, conflicting totals, prompt injection, duplicate invoices, and unsupported currencies.
 ## Key Takeaways
 
 :::tip The Five Rules of Deterministic AI
@@ -607,3 +636,35 @@ flowchart TB
 
 > **FrootAI R3** — *Making AI reliable is engineering, not wishful thinking.*
 > The telescope shows you the big picture. The microscope shows you where determinism breaks. Use both.
+
+---
+
+<!-- FROOT-PEDAGOGY:R3:CHECK -->
+## Knowledge Check
+
+### 1. Why is temperature zero not a complete determinism guarantee?
+
+<details>
+<summary>Expected evidence</summary>
+
+Infrastructure, model versions, tokenization, and service implementations can still change outputs.
+
+</details>
+
+### 2. Which actions should remain outside model control?
+
+<details>
+<summary>Expected evidence</summary>
+
+Irreversible or regulated decisions that require reproducible policy, authorization, and auditability.
+
+</details>
+
+### 3. What is the role of abstention?
+
+<details>
+<summary>Expected evidence</summary>
+
+It converts unsupported certainty into an explicit, testable failure path.
+
+</details>

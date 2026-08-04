@@ -25,14 +25,14 @@
     "description": "FAI Protocol schemas that validate manifest files, context references, and plugin packages.",
     "route": "/api-reference/schemas",
     "section": "api-reference",
-    "words": 3172
+    "words": 23609
   },
   {
-    "title": "FAI Protocol — v0.1 Specification",
+    "title": "FAI Protocol — v0.9-rc1 Specification",
     "description": "The FAI Protocol defines a JSON-based manifest format (`fai-manifest.json`) for declaring how AI primitives — agents, instructions, skills, hooks, workflows, plugins, tools, prompts, and guardrails — ",
     "route": "/concepts/fai-protocol",
     "section": "concepts",
-    "words": 3503
+    "words": 3819
   },
   {
     "title": "FAI Primitives",
@@ -109,119 +109,133 @@
     "description": "'",
     "route": "/learning/f1-genai-foundations",
     "section": "learning",
-    "words": 8434
+    "words": 8786
   },
   {
     "title": "Module 2: The LLM Landscape — Models, Families & Selection Guide",
     "description": "'",
     "route": "/learning/f2-llm-landscape",
     "section": "learning",
-    "words": 7236
+    "words": 7725
   },
   {
     "title": "F3: The AI Glossary A–Z",
     "description": "'",
     "route": "/learning/f3-ai-glossary-a-z",
     "section": "learning",
-    "words": 4564
+    "words": 4644
   },
   {
     "title": "F4: The .github Agentic OS — GitHub Copilot's 7 Primitives",
     "description": "'",
     "route": "/learning/f4-github-agentic-os",
     "section": "learning",
-    "words": 2157
+    "words": 2493
   },
   {
     "title": "Learning Hub",
-    "description": "Master AI engineering through 18 comprehensive modules organized in the FROOT framework.",
+    "description": "Master AI engineering through 16 curriculum modules and 2 reference modules organized in the FROOT framework.",
     "route": "/learning",
     "section": "learning",
-    "words": 170
+    "words": 185
   },
   {
     "title": "Module 7: Semantic Kernel & AI Orchestration Frameworks",
     "description": "'",
     "route": "/learning/o1-semantic-kernel",
     "section": "learning",
-    "words": 7372
+    "words": 7724
   },
   {
     "title": "Module 6: AI Agents Deep Dive — From Concept to Production",
     "description": "'",
     "route": "/learning/o2-ai-agents-deep-dive",
     "section": "learning",
-    "words": 8571
+    "words": 8938
   },
   {
     "title": "O3: MCP, Tools & Function Calling",
     "description": "'",
     "route": "/learning/o3-mcp-tools",
     "section": "learning",
-    "words": 3513
+    "words": 3833
   },
   {
-    "title": "Module 3: Azure AI Foundry — Microsoft's AI Platform Deep Dive",
+    "title": "Module O4: Microsoft Foundry — Platform Deep Dive",
     "description": "'",
     "route": "/learning/o4-azure-ai-foundry",
     "section": "learning",
-    "words": 6825
+    "words": 6733
   },
   {
     "title": "Module 9: AI Infrastructure for Architects — GPU, Scaling & Production",
     "description": "'",
     "route": "/learning/o5-ai-infrastructure",
     "section": "learning",
-    "words": 7691
+    "words": 8032
   },
   {
     "title": "Module 4: The Microsoft Copilot Ecosystem — Complete Guide",
     "description": "'",
     "route": "/learning/o6-copilot-ecosystem",
     "section": "learning",
-    "words": 5470
+    "words": 5733
+  },
+  {
+    "title": "Module 12: AI Nexus — Quiz & Assessment",
+    "description": "'",
+    "route": "/learning/quiz-quiz-assessment",
+    "section": "learning",
+    "words": 7156
   },
   {
     "title": "Module 8: Prompt Engineering Mastery — The Art of Talking to AI",
     "description": "'",
     "route": "/learning/r1-prompt-engineering",
     "section": "learning",
-    "words": 4590
+    "words": 4905
   },
   {
     "title": "Module 5: RAG Architecture — Retrieval-Augmented Generation Deep Dive",
     "description": "'",
     "route": "/learning/r2-rag-architecture",
     "section": "learning",
-    "words": 9388
+    "words": 9758
   },
   {
     "title": "R3: Making AI Deterministic & Reliable",
     "description": "'",
     "route": "/learning/r3-deterministic-ai",
     "section": "learning",
-    "words": 2978
+    "words": 3262
+  },
+  {
+    "title": "Module 11: Quick Reference Cards — AI Essentials at a Glance",
+    "description": "'",
+    "route": "/learning/ref-quick-reference-cards",
+    "section": "learning",
+    "words": 8811
   },
   {
     "title": "T1: Fine-Tuning & Model Customization",
     "description": "'",
     "route": "/learning/t1-fine-tuning-mlops",
     "section": "learning",
-    "words": 2607
+    "words": 2924
   },
   {
     "title": "Module 10: Responsible AI & Safety — Building Trust in AI Systems",
     "description": "'",
     "route": "/learning/t2-responsible-ai",
     "section": "learning",
-    "words": 6739
+    "words": 7096
   },
   {
     "title": "T3: Production Architecture Patterns",
     "description": "'",
     "route": "/learning/t3-production-patterns",
     "section": "learning",
-    "words": 2428
+    "words": 2806
   },
   {
     "title": "Agents",
@@ -246,101 +260,101 @@
   },
   {
     "title": "Instructions",
-    "description": "176 instructions available in the FrootAI ecosystem.",
+    "description": "185 instructions available in the FrootAI ecosystem.",
     "route": "/primitives/instructions",
     "section": "primitives",
-    "words": 391
+    "words": 409
   },
   {
     "title": "Plugins",
-    "description": "8 plugins available in the FrootAI ecosystem.",
+    "description": "11 plugins available in the FrootAI ecosystem.",
     "route": "/primitives/plugins",
     "section": "primitives",
-    "words": 55
+    "words": 61
   },
   {
     "title": "Skills",
-    "description": "333 skills available in the FrootAI ecosystem.",
+    "description": "334 skills available in the FrootAI ecosystem.",
     "route": "/primitives/skills",
     "section": "primitives",
-    "words": 705
+    "words": 707
   },
   {
     "title": "Workflows",
-    "description": "13 workflows available in the FrootAI ecosystem.",
+    "description": "25 workflows available in the FrootAI ecosystem.",
     "route": "/primitives/workflows",
     "section": "primitives",
-    "words": 65
+    "words": 89
   },
   {
     "title": "Play 01 — Enterprise RAG Q&A 🔍",
-    "description": "Build a production-grade Retrieval-Augmented Generation system. AI Search indexes your documents, GPT-4o generates grounded answers with citations, and Container Apps hosts the API.",
+    "description": "This package declares a target Azure RAG architecture and an offline-first `rag.query` fixture. The Bicep declares Search, OpenAI, Storage, and Container Apps resources; deployment, ACL isolation, ing",
     "route": "/solution-plays/01-enterprise-rag",
     "section": "solution-plays",
-    "words": 728
+    "words": 743
   },
   {
     "title": "Play 02 — AI Landing Zone ⛰️",
-    "description": "Deploy the foundational infrastructure every AI workload needs. VNet with private endpoints keeps traffic off the public internet, Managed Identity eliminates secrets, RBAC locks down access, and Key ",
+    "description": "This resource-group-scoped reference currently declares an NSG, one VNet, private DNS zones, Key Vault, Log Analytics, and a user-assigned identity. The broader hub-spoke, private endpoint, Firewall, ",
     "route": "/solution-plays/02-ai-landing-zone",
     "section": "solution-plays",
-    "words": 562
+    "words": 573
   },
   {
     "title": "Play 03 — Deterministic Agent 🎯",
-    "description": "When you need AI that gives the same answer every time. Temperature=0, seed pinning, structured JSON output, confidence scoring, anti-sycophancy prompts, and a multi-layer guardrail pipeline.",
+    "description": "Temperature zero, a seed, structured JSON, confidence rules, and validation can reduce variation but do not guarantee identical model output. The current evidence covers the offline `deterministic.exe",
     "route": "/solution-plays/03-deterministic-agent",
     "section": "solution-plays",
-    "words": 528
+    "words": 545
   },
   {
     "title": "Play 04 — Call Center Voice AI 📞",
-    "description": "Build a phone-answering AI agent. Azure Communication Services handles the call, Speech Service converts audio to text, GPT-4o processes intent and generates a response, then TTS speaks it back — all ",
+    "description": "The diagrams describe a target call flow. The current Bicep declares OpenAI, Storage, Key Vault, Application Insights, Log Analytics, and diagnostics; it does not yet provision Communication Services,",
     "route": "/solution-plays/04-call-center-voice-ai",
     "section": "solution-plays",
-    "words": 581
+    "words": 589
   },
   {
     "title": "Play 05 — IT Ticket Resolution 🎫",
-    "description": "Incoming tickets hit classification via GPT-4o-mini, the agent routes to the right team or auto-resolves known issues from knowledge base. ServiceNow integration syncs state bidirectionally.",
+    "description": "The diagrams describe target ITSM integration. The current Bicep declares OpenAI, Storage, Key Vault, Application Insights, Log Analytics, and diagnostics; it does not provision ITSM connectors, Logic",
     "route": "/solution-plays/05-it-ticket-resolution",
     "section": "solution-plays",
-    "words": 496
+    "words": 532
   },
   {
     "title": "Play 06 — Document Intelligence 📄",
-    "description": "Feed PDFs, invoices, receipts, and forms into Azure Document Intelligence for OCR, then GPT-4o extracts structured fields into typed JSON. Handles multi-page documents, handwriting, tables, and stamps",
+    "description": "The package declares an offline `document.process` fixture and Azure resources for a target extraction workflow. Live file validation, hostile-document handling, field provenance, confidence review, P",
     "route": "/solution-plays/06-document-intelligence",
     "section": "solution-plays",
-    "words": 525
+    "words": 538
   },
   {
     "title": "Play 07 — Multi-Agent Service 🤖",
-    "description": "A supervisor agent receives requests, classifies intent, and delegates to specialist agents. Each agent has its own model config, tools, and memory. Loop prevention and max-iteration guards keep costs",
+    "description": "The offline `agents.execute` fixture demonstrates bounded routing output. The broader specialist workflow, typed handoffs, authority, context isolation, checkpoints, recovery, Dapr policy, and distrib",
     "route": "/solution-plays/07-multi-agent-service",
     "section": "solution-plays",
-    "words": 529
+    "words": 533
   },
   {
-    "title": "Play 08 — Copilot Studio Bot 💬",
-    "description": "Build an enterprise chatbot without writing code. Copilot Studio provides the canvas, SharePoint and Dataverse supply the knowledge, AI Search grounds the answers. Deploys to Teams, web, and mobile.",
+    "title": "Play 08 - Copilot Studio Bot",
+    "description": "This repository defines the target ownership and release contract. It does not",
     "route": "/solution-plays/08-copilot-studio-bot",
     "section": "solution-plays",
-    "words": 478
+    "words": 354
   },
   {
     "title": "Play 09 — AI Search Portal 🔎",
-    "description": "A search experience combining keyword matching with semantic understanding. AI Search handles retrieval with custom scoring profiles, GPT-4o synthesizes results into readable summaries with citations.",
+    "description": "The diagrams describe a target portal. The current Bicep does not declare AI Search, App Service, Front Door, managed identity, or private endpoints; ACL trimming, ranking quality, ingestion lifecycle",
     "route": "/solution-plays/09-ai-search-portal",
     "section": "solution-plays",
-    "words": 516
+    "words": 542
   },
   {
     "title": "Play 10 — Content Moderation 🛡️",
-    "description": "Every AI response passes through Azure Content Safety for severity scoring across hate, violence, self-harm, and sexual categories. Custom blocklists catch domain-specific terms. Dual moderation on bo",
+    "description": "The diagrams describe a target moderation control plane. The current Bicep does not provision Content Safety, API Management, Functions, Service Bus, Cosmos DB, or blocklists. The copied OpenAI config",
     "route": "/solution-plays/10-content-moderation",
     "section": "solution-plays",
-    "words": 525
+    "words": 544
   },
   {
     "title": "Play 100 — FAI Meta-Agent 🎯",
@@ -1092,10 +1106,17 @@
     "words": 377
   },
   {
+    "title": "V1: Voice & Speech AI — Real-Time Conversational Systems",
+    "description": "'",
+    "route": "/specialties/voice-deep-dive",
+    "section": "specialties",
+    "words": 3887
+  },
+  {
     "title": "FAI Voice",
     "description": "🎤 S-10 — Protocol-level voice.",
     "route": "/specialties/voice",
     "section": "specialties",
-    "words": 411
+    "words": 425
   }
 ]

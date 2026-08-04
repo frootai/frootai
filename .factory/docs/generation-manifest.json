@@ -1,10 +1,10 @@
 {
-  "generated": "2026-05-02T19:18:24.998Z",
+  "generated": "2026-08-04T06:59:32.946Z",
   "version": "1.0.0",
   "stats": {
-    "totalPages": 155,
-    "totalWords": 185001,
-    "totalBytes": 1490482,
+    "totalPages": 158,
+    "totalWords": 230605,
+    "totalBytes": 1901774,
     "sections": {
       "scaffold": {
         "pages": 1,
@@ -16,23 +16,23 @@
       },
       "concepts": {
         "pages": 3,
-        "words": 4145
+        "words": 4461
       },
       "learning": {
-        "pages": 17,
-        "words": 90733
+        "pages": 19,
+        "words": 111544
       },
       "api-reference": {
         "pages": 4,
-        "words": 3828
+        "words": 24265
       },
       "solution-plays": {
         "pages": 102,
-        "words": 78444
+        "words": 78469
       },
       "primitives": {
         "pages": 7,
-        "words": 1886
+        "words": 1936
       },
       "search": {
         "pages": 1,
@@ -43,11 +43,11 @@
         "words": 1171
       },
       "specialties": {
-        "pages": 13,
-        "words": 4291
+        "pages": 14,
+        "words": 8256
       }
     }
   },
   "errors": [],
-  "duration": 193
+  "duration": 8153
 }

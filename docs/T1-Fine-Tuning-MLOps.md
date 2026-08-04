@@ -20,9 +20,27 @@
 - [T1.8 Evaluation — Did It Work?](#t18-evaluation--did-it-work)
 - [T1.9 Microsoft Foundry Fine-Tuning](#t19-microsoft-foundry-fine-tuning)
 - [T1.10 MLOps for LLMs](#t110-mlops-for-llms)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Approve a Domain Adaptation Experiment](#applied-scenario-approve-a-domain-adaptation-experiment)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:T1:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Decide when prompting, RAG, fine-tuning, or a combination is justified.
+- Prepare and govern training data with contamination, privacy, and representativeness controls.
+- Compare full fine-tuning, LoRA, QLoRA, SFT, and preference optimization tradeoffs.
+- Operate a reproducible evaluation, registration, deployment, and rollback lifecycle.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [F2](./LLM-Landscape.md), and understand Python ML workflows and evaluation datasets.
 
 ## T1.1 The Customization Spectrum
 
@@ -447,6 +465,17 @@ graph TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:T1:SCENARIO -->
+## Applied Scenario: Approve a Domain Adaptation Experiment
+
+**Situation:** A legal drafting assistant has stable domain language requirements but must retain general reasoning and citation behavior.
+
+**Gate:** Establish a prompt-plus-RAG baseline first. Fine-tune only if a measured, persistent behavior gap remains and the training data can be governed.
+
+**Experiment:** Version the base model, dataset, adapter configuration, seed, evaluator, and environment. Compare the candidate with both the baseline and a stronger off-the-shelf model.
+
+**Validation:** Measure target behavior, general capability regression, memorization, privacy leakage, safety, latency, and cost. Register only artifacts that reproduce from recorded inputs.
 ## Key Takeaways
 
 :::tip The Five Rules of Model Customization
@@ -460,3 +489,35 @@ graph TB
 ---
 
 > **FrootAI T1** — *Fine-tuning is the art of teaching a model your language. LoRA made it accessible. QLoRA made it affordable. Good data makes it work.*
+
+---
+
+<!-- FROOT-PEDAGOGY:T1:CHECK -->
+## Knowledge Check
+
+### 1. What question should precede every fine-tuning project?
+
+<details>
+<summary>Expected evidence</summary>
+
+Whether prompting, retrieval, tooling, or a better base model can close the measured gap more simply.
+
+</details>
+
+### 2. Why is a held-out dataset insufficient by itself?
+
+<details>
+<summary>Expected evidence</summary>
+
+Evaluation must also cover regressions, safety, privacy, memorization, and real operational constraints.
+
+</details>
+
+### 3. What makes an adapter deployable?
+
+<details>
+<summary>Expected evidence</summary>
+
+Traceable base model and data, reproducible training, evaluation evidence, compatible serving, and rollback.
+
+</details>

@@ -30,9 +30,27 @@ category: "Foundations"
 - [1.9 Model Quantization](#19-model-quantization)
 - [1.10 Embeddings — The Meaning of Text](#110-embeddings--the-meaning-of-text)
 - [1.11 The Infra Architect's Mental Model](#111-the-infra-architects-mental-model)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Capacity-Plan an Internal LLM Endpoint](#applied-scenario-capacity-plan-an-internal-llm-endpoint)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:F1:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Explain tokenization, attention, context windows, embeddings, and inference without relying on product marketing.
+- Estimate the memory, latency, and cost consequences of model size, precision, and context length.
+- Choose an appropriate quantization and serving approach for a stated workload.
+- Communicate an LLM architecture decision to application and infrastructure teams.
+
+## Prerequisites
+
+**Prerequisites:** No prior AI coursework. Familiarity with cloud compute, APIs, and basic probability is helpful.
 
 ## 1.1 The AI Revolution in 30 Seconds
 
@@ -1052,6 +1070,17 @@ graph TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:F1:SCENARIO -->
+## Applied Scenario: Capacity-Plan an Internal LLM Endpoint
+
+**Situation:** A platform team must host a latency-sensitive internal assistant for 400 concurrent employees while keeping sensitive prompts inside an approved boundary.
+
+**Decisions to make:** Estimate prompt and output token budgets, select model size and precision, calculate VRAM headroom, and choose between managed inference and self-hosting.
+
+**Deliverable:** Produce a one-page architecture decision record containing assumptions, peak concurrency, failure fallback, and the measurements that would change the decision.
+
+**Validation:** Load-test representative prompts, measure time-to-first-token and tokens per second, and reject the design if memory saturation or queue time breaches the stated SLO.
 ## Key Takeaways
 
 1. **LLMs are next-token predictors** — every response is generated one token at a time through probability distributions shaped by generation parameters.
@@ -1077,3 +1106,35 @@ graph TB
 ---
 
 > **Next:** [Module 2: LLM Landscape](./LLM-Landscape.md) — Understand the major model families (GPT, Claude, Llama, Gemini, Phi), how to compare them with benchmarks, and how to choose the right model for your workload.
+
+---
+
+<!-- FROOT-PEDAGOGY:F1:CHECK -->
+## Knowledge Check
+
+### 1. Why does a longer context window increase both latency and memory pressure?
+
+<details>
+<summary>Expected evidence</summary>
+
+The model must process more input tokens during prefill, while the KV cache grows with retained context.
+
+</details>
+
+### 2. When is quantization preferable to selecting a smaller model?
+
+<details>
+<summary>Expected evidence</summary>
+
+When the larger model provides required capability and measured quality remains acceptable after reducing precision.
+
+</details>
+
+### 3. What must a capacity estimate include beyond parameter count?
+
+<details>
+<summary>Expected evidence</summary>
+
+Precision, KV-cache growth, batching, concurrency, framework overhead, and operational headroom.
+
+</details>

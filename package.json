@@ -117,6 +117,7 @@
     "docs:audit": "node scripts/audit-froot-docs.js",
     "docs:quality": "node scripts/audit-froot-docs-quality.mjs",
     "docs:quality:fix": "node scripts/audit-froot-docs-quality.mjs --fix-code-fences",
+    "docs:pedagogy": "node scripts/modernize-froot-pedagogy.mjs",
     "test:docs:quality": "node --test scripts/test-froot-docs-quality.mjs",
     "lean:api": "node engine/lean-compiler-plus/server.mjs",
     "lean:api:test": "node --test engine/lean-compiler-plus/server.test.mjs",

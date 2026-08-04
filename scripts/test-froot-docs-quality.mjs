@@ -23,11 +23,11 @@ test('current hard quality guarantees remain regression-free', () => {
   }
 });
 
-test('quality report exposes the measurable modernization queue', () => {
+test('quality report confirms the modernization queue is closed', () => {
   for (const field of ['learningOutcomes', 'prerequisites', 'diagrams', 'codeBlocks', 'scenarios', 'knowledgeChecks']) {
     assert.equal(typeof report.summary.coverage[field], 'number');
   }
-  assert.ok(report.summary.warnings > 0, 'baseline should retain non-blocking modernization findings');
+  assert.equal(report.summary.warnings, 0);
 });
 
 test('code-fence formatter labels only unlabeled opening fences', () => {

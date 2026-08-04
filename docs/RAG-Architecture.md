@@ -7,6 +7,20 @@
 
 ---
 
+<!-- FROOT-PEDAGOGY:R2:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Design independent ingestion and query pipelines with an explicit indexed-data handoff.
+- Choose chunking, retrieval, filtering, and reranking strategies from workload evidence.
+- Evaluate retrieval and generation separately before optimizing end-to-end quality.
+- Operate a RAG system with citations, access controls, freshness, and cost telemetry.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md) and [R1: Prompt Engineering](./Prompt-Engineering.md).
+
 ## 5.1 Why RAG Exists
 
 Large Language Models are powerful, but they have three fundamental limitations that make them unreliable for enterprise use without additional architecture.
@@ -1525,6 +1539,17 @@ Where:
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:R2:SCENARIO -->
+## Applied Scenario: Ship a Policy Knowledge Assistant
+
+**Situation:** Employees need cited answers from policy documents with document-level permissions and a four-hour freshness target.
+
+**Offline path:** Extract and normalize source documents, preserve ACL metadata, create versioned chunks and embeddings, then publish an index only after quality checks pass.
+
+**Online path:** Rewrite the query only when necessary, apply identity filters before retrieval, combine lexical and vector candidates, rerank, assemble bounded context, and require citations.
+
+**Validation:** Measure retrieval recall and precision first, then groundedness and citation correctness. Test revoked access, deleted documents, stale indexes, and empty retrieval results.
 ## Key Takeaways
 
 1. **RAG solves the three fundamental LLM limitations** — knowledge cutoff, hallucination, and lack of private data access — by retrieving your data and injecting it into the prompt at query time.
@@ -1546,3 +1571,35 @@ Where:
 ---
 
 > **Next Module:** [Module 6: AI Agents Deep Dive](./AI-Agents-Deep-Dive.md) — understand how AI agents use tools, plan multi-step tasks, maintain memory, and integrate with the Microsoft Agent Framework and AutoGen.
+
+---
+
+<!-- FROOT-PEDAGOGY:R2:CHECK -->
+## Knowledge Check
+
+### 1. Why should retrieval be evaluated independently from generation?
+
+<details>
+<summary>Expected evidence</summary>
+
+A fluent answer can hide poor retrieval; separate metrics identify whether the defect is search or generation.
+
+</details>
+
+### 2. Where must authorization filters be applied?
+
+<details>
+<summary>Expected evidence</summary>
+
+Before or during retrieval, so unauthorized content never enters model context.
+
+</details>
+
+### 3. When does reranking add the most value?
+
+<details>
+<summary>Expected evidence</summary>
+
+When broad first-stage retrieval has reasonable recall but ordering lacks semantic precision.
+
+</details>

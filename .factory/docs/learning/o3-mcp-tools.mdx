@@ -29,9 +29,27 @@ category: "Orchestration"
 - [O3.6 MCP in Practice — Building Servers](#o36-mcp-in-practice--building-servers)
 - [O3.7 Security & Governance](#o37-security--governance)
 - [O3.8 Choosing Your Integration Strategy](#o38-choosing-your-integration-strategy)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Publish a Read-Only Architecture Evidence Tool](#applied-scenario-publish-a-read-only-architecture-evidence-tool)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:O3:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Distinguish local function calling, MCP, and A2A by ownership and interoperability boundary.
+- Design MCP tools with narrow schemas, meaningful errors, and least privilege.
+- Protect tool execution from injection, confused-deputy, and excessive-agency risks.
+- Validate protocol discovery, transport, authorization, and lifecycle behavior.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1](./GenAI-Foundations.md), [R1](./Prompt-Engineering.md), and understand JSON Schema and HTTP security.
 
 ## O3.1 Why Tools Matter
 
@@ -603,6 +621,17 @@ flowchart TB
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:O3:SCENARIO -->
+## Applied Scenario: Publish a Read-Only Architecture Evidence Tool
+
+**Situation:** Agents need to retrieve approved architecture evidence from a repository without receiving arbitrary filesystem access.
+
+**Contract:** Accept a repository-relative evidence identifier, validate it against an allowlist, return content plus provenance, and emit structured not-found, denied, and stale errors.
+
+**Security:** Authorize at execution time, separate discovery from permission, bound response size, and never allow model-provided paths to bypass canonical resolution.
+
+**Validation:** Run protocol initialization, schema validation, traversal attacks, denied resources, cancellation, timeout, and concurrent request tests.
 ## Key Takeaways
 
 :::tip The Five Rules of Tool Integration
@@ -713,3 +742,35 @@ The FAI Marketplace contains 77+ AI primitive plugins across 8 categories.
 - **MCP Sampling**: Server requests LLM completions from the connected client
 - **MCP Elicitation**: Server requests structured user input via JSON Schema forms
 - **TypeScript**: Fully typed source in `src/`, compiled to `dist/`, 38 vitest tests
+
+---
+
+<!-- FROOT-PEDAGOGY:O3:CHECK -->
+## Knowledge Check
+
+### 1. When is MCP preferable to an application-local function?
+
+<details>
+<summary>Expected evidence</summary>
+
+When a capability needs a standard discovery and invocation contract across compatible clients.
+
+</details>
+
+### 2. Does tool discovery grant permission?
+
+<details>
+<summary>Expected evidence</summary>
+
+No. Authorization must be enforced for the user, resource, and operation at execution time.
+
+</details>
+
+### 3. Why are precise errors part of tool design?
+
+<details>
+<summary>Expected evidence</summary>
+
+They let the model and operator distinguish retryable failures, invalid input, denial, and unavailable evidence.
+
+</details>

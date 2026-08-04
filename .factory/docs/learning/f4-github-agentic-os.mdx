@@ -30,9 +30,27 @@ category: "Foundations"
 - [F4.7 FrootAI's Implementation — 19 Files per Solution Play](#f47-frootais-implementation--19-files-per-solution-play)
 - [F4.8 Decision Guide — When to Use What](#f48-decision-guide--when-to-use-what)
 - [F4.9 Building Your Own .github Agentic OS](#f49-building-your-own-github-agentic-os)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Compose a Governed Repository Assistant](#applied-scenario-compose-a-governed-repository-assistant)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:F4:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Distinguish instructions, prompts, agents, skills, hooks, workflows, and plugins by ownership and lifecycle.
+- Select the smallest GitHub customization primitive that satisfies a requirement.
+- Wire reusable primitives through a manifest without duplicating source guidance.
+- Review an agentic repository for scope, trust, and maintenance risks.
+
+## Prerequisites
+
+**Prerequisites:** Complete [F1: GenAI Foundations](./GenAI-Foundations.md) and understand GitHub repositories, Markdown, and Actions workflows.
 
 ## F4.1 Why .github Is No Longer Just a Folder
 
@@ -450,6 +468,17 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:F4:SCENARIO -->
+## Applied Scenario: Compose a Governed Repository Assistant
+
+**Situation:** A team wants Copilot to apply architecture rules, invoke a repeatable review capability, and run deterministic checks before merge.
+
+**Composition:** Put durable rules in scoped instructions, package the review method as a skill, use an agent only when tool choice or orchestration is required, and keep deterministic enforcement in hooks or workflows.
+
+**Review gate:** Every primitive must declare a narrow purpose, source owner, applicable paths, required tools, and a failure mode that does not silently bypass governance.
+
+**Validation:** Test one matching file, one non-matching file, one denied tool call, and one workflow failure before distributing the package.
 ## Key Takeaways
 
 1. **The `.github` folder is now an operating system** — 7 primitives, 4 layers, one repo.
@@ -464,3 +493,35 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 ---
 
 > **Next:** [O2: AI Agents & Agent Framework](./AI-Agents-Deep-Dive) for deep agent architecture | [O3: MCP, Tools & Function Calling](./O3-MCP-Tools-Functions) for MCP server patterns
+
+---
+
+<!-- FROOT-PEDAGOGY:F4:CHECK -->
+## Knowledge Check
+
+### 1. When should guidance be an instruction instead of an agent?
+
+<details>
+<summary>Expected evidence</summary>
+
+When it is durable contextual policy and does not require autonomous tool choice or orchestration.
+
+</details>
+
+### 2. What belongs in a deterministic workflow rather than a prompt?
+
+<details>
+<summary>Expected evidence</summary>
+
+Checks whose pass/fail result must be reproducible, auditable, and independent of model variability.
+
+</details>
+
+### 3. Why should primitives reference canonical knowledge instead of copying it?
+
+<details>
+<summary>Expected evidence</summary>
+
+References preserve one source of truth and prevent duplicated guidance from drifting.
+
+</details>

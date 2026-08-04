@@ -31,9 +31,27 @@ category: "Transformation"
 - [T3.8 Monitoring & Observability for AI](#t38-monitoring--observability-for-ai)
 - [T3.9 Resilience Patterns](#t39-resilience-patterns)
 - [T3.10 The Production Readiness Checklist](#t310-the-production-readiness-checklist)
+- [Learning Outcomes](#learning-outcomes)
+- [Prerequisites](#prerequisites)
+- [Applied Scenario: Operate a Cost-Aware Model Router](#applied-scenario-operate-a-cost-aware-model-router)
+- [Knowledge Check](#knowledge-check)
 - [Key Takeaways](#key-takeaways)
 
 ---
+
+<!-- FROOT-PEDAGOGY:T3:INTRO -->
+## Learning Outcomes
+
+After completing this module, you can:
+
+- Choose production hosting, gateway, routing, caching, and resilience patterns from explicit SLOs.
+- Instrument model, retrieval, tool, safety, cost, and business outcome telemetry.
+- Design graceful degradation and rollback for provider, region, quota, and model failures.
+- Complete a production readiness review with accountable operational ownership.
+
+## Prerequisites
+
+**Prerequisites:** Complete [O2](./AI-Agents-Deep-Dive.md), [O4](./Azure-AI-Foundry.md), and [O5](./AI-Infrastructure.md).
 
 ## T3.1 Production AI is Different
 
@@ -172,12 +190,14 @@ graph LR
 |-----------|---------------|-----|-------------|-----------|----------------|
 | **Complexity** | Low-Medium | High | Low | Low | Very Low |
 | **Scaling** | Auto (0→N) | Auto (custom) | Manual/Auto | Auto (0→N) | Managed |
-| **GPU Support** | ✅ Preview | ✅ Full | ❌ | ❌ | N/A |
-| **Long-running** | ✅ | ✅ | ✅ | ⚠️ (max 10 min) | ✅ |
+| **GPU Support** | Serverless A100/T4; quota and region dependent | Node-pool SKU dependent | No native GPU workers | Available when hosted on Container Apps | N/A |
+| **Long-running** | Yes, subject to app and ingress limits | Yes | Yes | Plan and trigger dependent | Managed |
 | **WebSocket/SSE** | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Dapr sidecar** | ✅ Built-in | ✅ Add-on | ❌ | ❌ | N/A |
 | **Cost at scale** | 💰💰 | 💰💰💰 | 💰💰 | 💰 | 💰💰 |
 | **Best for** | AI APIs, agents | ML serving, multi-model | Simple APIs | Event-driven AI | Business users |
+
+Recheck the [Container Apps serverless GPU regions and constraints](https://learn.microsoft.com/azure/container-apps/gpu-serverless-overview) and [Functions hosting-plan timeouts](https://learn.microsoft.com/azure/azure-functions/functions-scale#function-app-timeout-duration) during design. Deploying Foundry catalog models directly to Container Apps serverless GPUs is a separate preview capability from running your own GPU container.
 
 ### Container Apps — The Sweet Spot for Most AI Workloads
 
@@ -526,6 +546,26 @@ Before going live, verify every item:
 
 ---
 
+
+<!-- FROOT-PEDAGOGY:T3:SCENARIO -->
+## Applied Scenario: Operate a Cost-Aware Model Router
+
+**Situation:** A shared API serves extraction, chat, and complex reasoning with different latency and quality requirements.
+
+**Routing policy:** Use deterministic task metadata and measured evaluation bands. Never route solely from a model-generated self-assessment.
+
+```python
+def route(request):
+    if request.contract == "strict-json" and request.complexity == "low":
+        return "economy-deployment"
+    if request.deadline_ms < 1500:
+        return "low-latency-deployment"
+    if request.requires_deep_reasoning:
+        return "reasoning-deployment"
+    return "standard-deployment"
+```
+
+**Validation:** Shadow traffic before promotion, compare quality by task class, enforce spend and latency budgets, test every fallback, and record the deployment IDs used for each decision.
 ## Key Takeaways
 
 :::tip The Five Rules of Production AI Architecture
@@ -539,3 +579,35 @@ Before going live, verify every item:
 ---
 
 > **FrootAI T3** — *Production AI is where engineering meets intelligence. Build it like infrastructure. Monitor it like a service. Budget it like a business.*
+
+---
+
+<!-- FROOT-PEDAGOGY:T3:CHECK -->
+## Knowledge Check
+
+### 1. Why should routing use task classes rather than a universal best model?
+
+<details>
+<summary>Expected evidence</summary>
+
+Different tasks have different quality, latency, contract, safety, and cost requirements.
+
+</details>
+
+### 2. What must happen when the preferred deployment is unavailable?
+
+<details>
+<summary>Expected evidence</summary>
+
+A tested fallback, explicit degradation, or fail-closed response must preserve the workload contract.
+
+</details>
+
+### 3. Which telemetry is required to tune a router?
+
+<details>
+<summary>Expected evidence</summary>
+
+Per-route quality, latency, errors, fallbacks, token use, cost, and business outcome.
+
+</details>
