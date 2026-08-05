@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O1:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -1469,7 +1468,6 @@ Semantic Kernel itself adds zero cost. The orchestration framework is free. All 
 ---
 
 
-<!-- FROOT-PEDAGOGY:O1:SCENARIO -->
 ## Applied Scenario: Expose a Governed Customer Plugin
 
 **Situation:** An assistant may look up a customer and draft an invoice email, but sending requires policy checks and approval.
@@ -1509,7 +1507,6 @@ Continue to **[Module 8: Prompt Engineering Mastery](./Prompt-Engineering.md)** 
 
 ---
 
-<!-- FROOT-PEDAGOGY:O1:CHECK -->
 ## Knowledge Check
 
 ### 1. What makes a useful plugin function?

@@ -6,7 +6,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:T2:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -660,7 +659,7 @@ Guardrails are the **defensive layers** that wrap your AI system. A production-g
 
 ```mermaid
 flowchart TD
-    U["User Input"] --> IG
+    U["User Input"] --> IG1
 
     subgraph IG["INPUT GUARDRAILS"]
         direction TB
@@ -672,9 +671,9 @@ flowchart TD
         IG1 --> IG2 --> IG3 --> IG4 --> IG5
     end
 
-    IG --> LLM["LLM Processing<br/>(Azure OpenAI)"]
+    IG5 --> LLM["LLM Processing<br/>(Azure OpenAI)"]
 
-    LLM --> OG
+    LLM --> OG1
 
     subgraph OG["OUTPUT GUARDRAILS"]
         direction TB
@@ -686,7 +685,7 @@ flowchart TD
         OG1 --> OG2 --> OG3 --> OG4 --> OG5
     end
 
-    OG --> R["Response to User"]
+    OG5 --> R["Response to User"]
 
     subgraph SG["SYSTEM GUARDRAILS (Infrastructure Level)"]
         SG1["Rate Limiting<br/>(per user, per IP)"]
@@ -696,9 +695,10 @@ flowchart TD
         SG5["Audit Logging<br/>(all interactions)"]
     end
 
-    SG -. "Applied across<br/>all requests" .-> IG
-    SG -. "Applied across<br/>all requests" .-> LLM
-    SG -. "Applied across<br/>all requests" .-> OG
+    SG1 ~~~ SG2 ~~~ SG3 ~~~ SG4 ~~~ SG5
+    SG1 -. "Applied across<br/>all requests" .-> IG1
+    SG3 -. "Applied across<br/>all requests" .-> LLM
+    SG5 -. "Applied across<br/>all requests" .-> OG5
 
     style IG fill:#e74c3c,stroke:#c0392b,color:#fff
     style OG fill:#e67e22,stroke:#d35400,color:#fff
@@ -1019,7 +1019,6 @@ Every AI model deployment should pass through a structured gate process:
 ---
 
 
-<!-- FROOT-PEDAGOGY:T2:SCENARIO -->
 ## Applied Scenario: Red-Team a Benefits Eligibility Assistant
 
 **Situation:** An assistant explains benefits policy and gathers information but must not make final eligibility decisions.
@@ -1052,7 +1051,6 @@ After completing this module, audit your current AI deployments against the guar
 
 ---
 
-<!-- FROOT-PEDAGOGY:T2:CHECK -->
 ## Knowledge Check
 
 ### 1. Why can a content filter not provide complete AI safety?

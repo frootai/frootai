@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O2:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -1416,7 +1415,6 @@ graph TD
 ---
 
 
-<!-- FROOT-PEDAGOGY:O2:SCENARIO -->
 ## Applied Scenario: Orchestrate a Bounded Incident-Response Agent
 
 **Situation:** An operations agent may inspect telemetry, propose remediation, and open a change request, but cannot execute production changes directly.
@@ -1450,7 +1448,6 @@ graph TD
 
 ---
 
-<!-- FROOT-PEDAGOGY:O2:CHECK -->
 ## Knowledge Check
 
 ### 1. What distinguishes an agent from a chatbot?

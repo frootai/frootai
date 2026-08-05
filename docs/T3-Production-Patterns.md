@@ -28,7 +28,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:T3:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -125,10 +124,17 @@ graph TB
         P4["Monitor / App Insights"]
     end
     
-    CLIENT --> GATEWAY --> ORCHESTRATOR --> AI
-    ORCHESTRATOR --> DATA
-    AI --> PLATFORM
-    DATA --> PLATFORM
+    C1 ~~~ C2
+    G1 ~~~ G2 ~~~ G3
+    O1 ~~~ O2 ~~~ O3
+    A1 ~~~ A2 ~~~ A3 ~~~ A4
+    D1 ~~~ D2 ~~~ D3
+    P1 ~~~ P2 ~~~ P3 ~~~ P4
+
+    C1 --> G1 --> O1 --> A1
+    O2 --> D1
+    A1 --> P1
+    D1 --> P1
     
     style CLIENT fill:#06b6d422,stroke:#06b6d4,stroke-width:2px
     style GATEWAY fill:#f59e0b22,stroke:#f59e0b,stroke-width:2px
@@ -166,6 +172,12 @@ graph LR
         L1["Copilot Studio"]
         L2["Power Automate<br/>+ AI Builder"]
     end
+
+    S1 ~~~ S2
+    C1 ~~~ C2
+    P1 ~~~ P2
+    L1 ~~~ L2
+    S1 ~~~ C1 ~~~ P1 ~~~ L1
     
     style SERVERLESS fill:#10b98122,stroke:#10b981,stroke-width:2px
     style CONTAINER fill:#6366f122,stroke:#6366f1,stroke-width:2px
@@ -214,9 +226,9 @@ graph TB
         DAPR["Dapr Sidecar<br/>State · PubSub · Bindings"]
     end
     
-    AGENT_APP --> DAPR
-    RAG_APP --> DAPR
-    MCP_APP --> DAPR
+    AG3 --> DAPR
+    RG3 --> DAPR
+    MS2 --> DAPR
     
     style CA_ENV fill:#6366f111,stroke:#6366f1,stroke-width:2px
     style AGENT_APP fill:#7c3aed22,stroke:#7c3aed
@@ -367,11 +379,11 @@ graph TB
     SUPERVISOR -->|"Technical issue"| TECH["Tech Support Agent<br/>Tools: KB search, ticket system"]
     SUPERVISOR -->|"Product question"| PRODUCT["Product Agent<br/>Tools: catalog API, specs DB"]
     
-    BILLING --> SUPERVISOR
-    TECH --> SUPERVISOR
-    PRODUCT --> SUPERVISOR
-    
-    SUPERVISOR --> RESPONSE["Unified Response<br/>to User"]
+    BILLING --> SYNTHESIS["Supervisor Synthesis"]
+    TECH --> SYNTHESIS
+    PRODUCT --> SYNTHESIS
+
+    SYNTHESIS --> RESPONSE["Unified Response<br/>to User"]
     
     style SUPERVISOR fill:#7c3aed22,stroke:#7c3aed,stroke-width:2px
     style BILLING fill:#f59e0b22,stroke:#f59e0b
@@ -536,7 +548,6 @@ Before going live, verify every item:
 ---
 
 
-<!-- FROOT-PEDAGOGY:T3:SCENARIO -->
 ## Applied Scenario: Operate a Cost-Aware Model Router
 
 **Situation:** A shared API serves extraction, chat, and complex reasoning with different latency and quality requirements.
@@ -571,7 +582,6 @@ def route(request):
 
 ---
 
-<!-- FROOT-PEDAGOGY:T3:CHECK -->
 ## Knowledge Check
 
 ### 1. Why should routing use task classes rather than a universal best model?

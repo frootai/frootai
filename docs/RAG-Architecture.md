@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:R2:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -1297,6 +1296,9 @@ graph TB
         E4["User Satisfaction"]
     end
 
+    R1 ~~~ G1
+    G1 ~~~ E1
+
     style RETRIEVAL fill:#1a1a2e,stroke:#e94560,color:#eee
     style GENERATION fill:#1a1a2e,stroke:#0f3460,color:#eee
     style ENDTOEND fill:#1a1a2e,stroke:#16a085,color:#eee
@@ -1441,15 +1443,16 @@ graph TB
         DOC["Azure AI<br/>Document Intelligence"]
     end
 
-    CLIENTS --> APIM
+    WEB --> APIM
+    API --> APIM
+    TEAMS --> APIM
     APIM --> ORCH
     ORCH --> AOAI
     ORCH --> AIS
     ORCH --> COSMOS
     BLOB --> FUNC
-    FUNC --> DOC
-    DOC --> FUNC
-    FUNC --> AIS
+    FUNC -->|Extract content| DOC
+    DOC -->|Index structured content| AIS
 
     style APIM fill:#0078d4,stroke:#005a9e,color:#fff
     style AOAI fill:#6c5ce7,stroke:#5f3dc4,color:#fff
@@ -1540,7 +1543,6 @@ Where:
 ---
 
 
-<!-- FROOT-PEDAGOGY:R2:SCENARIO -->
 ## Applied Scenario: Ship a Policy Knowledge Assistant
 
 **Situation:** Employees need cited answers from policy documents with document-level permissions and a four-hour freshness target.
@@ -1574,7 +1576,6 @@ Where:
 
 ---
 
-<!-- FROOT-PEDAGOGY:R2:CHECK -->
 ## Knowledge Check
 
 ### 1. Why should retrieval be evaluated independently from generation?

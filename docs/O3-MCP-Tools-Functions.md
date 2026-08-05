@@ -26,7 +26,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O3:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -236,6 +235,7 @@ graph TB
         C2["VS Code Copilot"]
         C3["Custom Agent App"]
         C4["Copilot Studio"]
+      C1 ~~~ C2 ~~~ C3 ~~~ C4
     end
     
     subgraph PROTOCOL["MCP Protocol (JSON-RPC over stdio or Streamable HTTP)"]
@@ -244,6 +244,7 @@ graph TB
         P3["tools/call → execute tool"]
         P4["resources/list → data sources"]
         P5["prompts/list → prompt templates"]
+        P1 ~~~ P2 ~~~ P3 ~~~ P4 ~~~ P5
     end
     
     subgraph SERVERS["MCP Servers"]
@@ -252,9 +253,11 @@ graph TB
         S3["Filesystem MCP Server<br/>(read, write, search files)"]
         S4["Database MCP Server<br/>(query, schema, data)"]
         S5["Custom MCP Server<br/>(your APIs & tools)"]
+        S1 ~~~ S2 ~~~ S3 ~~~ S4 ~~~ S5
     end
     
-    CLIENTS --> PROTOCOL --> SERVERS
+      C2 -->|"JSON-RPC"| P1
+      P3 -->|"tools/call"| S2
     
     style CLIENTS fill:#6366f122,stroke:#6366f1,stroke-width:2px
     style PROTOCOL fill:#10b98122,stroke:#10b981,stroke-width:2px
@@ -306,7 +309,7 @@ graph LR
         AGENT2 <-->|"A2A"| AGENT4["Notification<br/>Agent"]
     end
     
-    MCP_WORLD ~~~ A2A_WORLD
+    AGENT1 ~~~ AGENT2
     
     style MCP_WORLD fill:#06b6d422,stroke:#06b6d4,stroke-width:2px
     style A2A_WORLD fill:#7c3aed22,stroke:#7c3aed,stroke-width:2px
@@ -611,7 +614,6 @@ flowchart TB
 ---
 
 
-<!-- FROOT-PEDAGOGY:O3:SCENARIO -->
 ## Applied Scenario: Publish a Read-Only Architecture Evidence Tool
 
 **Situation:** Agents need to retrieve approved architecture evidence from a repository without receiving arbitrary filesystem access.
@@ -734,7 +736,6 @@ The FAI Marketplace contains 77+ AI primitive plugins across 8 categories.
 
 ---
 
-<!-- FROOT-PEDAGOGY:O3:CHECK -->
 ## Knowledge Check
 
 ### 1. When is MCP preferable to an application-local function?

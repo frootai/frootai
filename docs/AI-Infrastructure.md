@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O5:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -83,10 +82,11 @@ flowchart LR
         B3["Op 3"]
         B4["Op 4"]
         B5["Op N"]
+        B1 ~~~ B2 ~~~ B3 ~~~ B4 ~~~ B5
     end
 
-    CPU --> R1["Result in N cycles"]
-    GPU --> R2["Result in 1 cycle"]
+    A5 --> R1["Result in N cycles"]
+    B3 --> R2["Result in 1 cycle"]
 ```
 
 ### GPU Programming Frameworks
@@ -276,7 +276,7 @@ flowchart LR
             G7["GPU 6\nLayers 20-39\nSlice C"]
             G8["GPU 7\nLayers 20-39\nSlice D"]
         end
-        TP1 -->|"Pipeline"| TP2
+        G4 -->|"Pipeline"| G5
     end
 ```
 
@@ -889,7 +889,9 @@ flowchart TB
         Entra["Microsoft Entra ID"]
     end
 
-    Users --> FD
+    WebApp --> FD
+    MobileApp --> FD
+    InternalTool --> FD
     FD --> AppSvc
     AppSvc --> APIM
     AppSvc --> Redis
@@ -965,7 +967,6 @@ All services communicate over private endpoints within a hub-and-spoke VNET topo
 ---
 
 
-<!-- FROOT-PEDAGOGY:O5:SCENARIO -->
 ## Applied Scenario: Right-Size a GPU Serving Platform
 
 **Situation:** A team must serve a quantized open-weight model with bursty traffic, a p95 latency SLO, and no tolerance for silent request loss.
@@ -1010,7 +1011,6 @@ In **[Module 10: Responsible AI — Ethics, Safety & Governance](./Responsible-A
 
 ---
 
-<!-- FROOT-PEDAGOGY:O5:CHECK -->
 ## Knowledge Check
 
 ### 1. Why is parameter memory not the complete VRAM estimate?
