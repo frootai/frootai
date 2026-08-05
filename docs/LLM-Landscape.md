@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:F2:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -800,7 +799,6 @@ An often-overlooked factor: models generate tokens sequentially, so the bottlene
 ---
 
 
-<!-- FROOT-PEDAGOGY:F2:SCENARIO -->
 ## Applied Scenario: Create a Model Shortlist with Explicit Gates
 
 **Situation:** A regulated support workload needs multilingual classification, grounded answer generation, EU data residency, and a predictable monthly budget.
@@ -856,7 +854,6 @@ You now have the map of the model landscape. In **[Module 3: Azure AI Foundry](.
 
 ---
 
-<!-- FROOT-PEDAGOGY:F2:CHECK -->
 ## Knowledge Check
 
 ### 1. Why should a benchmark not be used as the only model-selection signal?

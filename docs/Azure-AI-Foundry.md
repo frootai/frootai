@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O4:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -734,7 +733,6 @@ For organizations running multi-cloud AI strategies:
 ---
 
 
-<!-- FROOT-PEDAGOGY:O4:SCENARIO -->
 ## Applied Scenario: Approve a Foundry Project for Production
 
 **Situation:** A platform team must onboard a RAG agent with private data, separate application ownership, managed identity, and regional recovery requirements.
@@ -787,7 +785,6 @@ You now understand the platform where AI applications are built and deployed. In
 
 ---
 
-<!-- FROOT-PEDAGOGY:O4:CHECK -->
 ## Knowledge Check
 
 ### 1. What boundary does a Foundry project represent?

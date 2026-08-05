@@ -28,7 +28,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:R3:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -155,6 +154,7 @@ graph TB
         A2["seed parameter"]
         A3["max_tokens cap"]
         A4["stop sequences"]
+        A1 ~~~ A2 ~~~ A3 ~~~ A4
     end
     
     subgraph L2["Layer 2: Output Constraints"]
@@ -162,6 +162,7 @@ graph TB
         B2["Function calling<br/>with schema"]
         B3["Constrained<br/>decoding"]
         B4["Enum fields<br/>(fixed options)"]
+        B1 ~~~ B2 ~~~ B3 ~~~ B4
     end
     
     subgraph L3["Layer 3: Prompt Engineering"]
@@ -169,6 +170,7 @@ graph TB
         C2["Few-shot<br/>examples"]
         C3["Chain-of-thought<br/>with verification"]
         C4["Output format<br/>specification"]
+        C1 ~~~ C2 ~~~ C3 ~~~ C4
     end
     
     subgraph L4["Layer 4: Grounding"]
@@ -176,6 +178,7 @@ graph TB
         D2["Cite sources<br/>requirement"]
         D3["Knowledge cutoff<br/>awareness"]
         D4["Data freshness<br/>timestamps"]
+        D1 ~~~ D2 ~~~ D3 ~~~ D4
     end
     
     subgraph L5["Layer 5: Post-Processing"]
@@ -183,9 +186,13 @@ graph TB
         E2["Fact-checking<br/>(LLM-as-judge)"]
         E3["Confidence<br/>scoring"]
         E4["Human-in-the-loop<br/>for edge cases"]
+        E1 ~~~ E2 ~~~ E3 ~~~ E4
     end
     
-    L1 --> L2 --> L3 --> L4 --> L5
+    A4 --> B1
+    B4 --> C1
+    C4 --> D1
+    D4 --> E1
     
     style L1 fill:#f59e0b22,stroke:#f59e0b,stroke-width:2px
     style L2 fill:#10b98122,stroke:#10b981,stroke-width:2px
@@ -456,9 +463,11 @@ graph TB
         G2["Relevance Score<br/>Does it answer the question?"]
         G3["Groundedness Score<br/>Is every claim cited?"]
         G4["Abstention Rate<br/>How often does it say 'I don't know'?"]
+        G1 ~~~ G2 ~~~ G3 ~~~ G4
     end
     
-    OFFLINE --> ONLINE --> METRICS
+    E4 --> F1
+    F4 --> G1
     
     style OFFLINE fill:#6366f122,stroke:#6366f1,stroke-width:2px
     style ONLINE fill:#10b98122,stroke:#10b981,stroke-width:2px
@@ -612,7 +621,6 @@ flowchart TB
 ---
 
 
-<!-- FROOT-PEDAGOGY:R3:SCENARIO -->
 ## Applied Scenario: Extract Auditable Invoice Decisions
 
 **Situation:** An intake service extracts invoice fields and recommends routing, but payment release must remain deterministic and auditable.
@@ -639,7 +647,6 @@ flowchart TB
 
 ---
 
-<!-- FROOT-PEDAGOGY:R3:CHECK -->
 ## Knowledge Check
 
 ### 1. Why is temperature zero not a complete determinism guarantee?

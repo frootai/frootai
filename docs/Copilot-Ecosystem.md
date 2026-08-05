@@ -9,7 +9,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:O6:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -241,14 +240,12 @@ graph LR
         CRM["Dynamics 365"]
     end
 
-    Sources --> Studio
     SP --> GEN
     WEB --> GEN
     DS --> GEN
     AIS --> GEN
     CUS --> ACT
 
-    Studio --> Channels
     BOT --> TEAMS
     BOT --> WEB2
     BOT --> MOB
@@ -774,7 +771,6 @@ graph TD
 ---
 
 
-<!-- FROOT-PEDAGOGY:O6:SCENARIO -->
 ## Applied Scenario: Connect GitHub Copilot to Approved Architecture Knowledge
 
 **Situation:** Developers need repository guidance and read-only access to a governed architecture knowledge service.
@@ -830,7 +826,6 @@ Continue to **[Module 5: RAG Architecture Deep Dive](./RAG-Architecture.md)** â€
 
 ---
 
-<!-- FROOT-PEDAGOGY:O6:CHECK -->
 ## Knowledge Check
 
 ### 1. Why should Copilot pricing not drive a durable architecture rule?

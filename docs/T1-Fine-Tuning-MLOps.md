@@ -28,7 +28,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:T1:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -257,7 +256,8 @@ flowchart LR
         S4 --> S5
     end
     
-    STEP1 --> STEP2 --> STEP3
+    S1 --> S2
+    S3 --> S4
     
     style STEP1 fill:#6366f122,stroke:#6366f1,stroke-width:2px
     style STEP2 fill:#f59e0b22,stroke:#f59e0b,stroke-width:2px
@@ -443,8 +443,13 @@ graph TB
         O3["Drift Detection"]
     end
     
-    DEVELOP --> EVALUATE --> DEPLOY_P --> OPERATE
-    OPERATE -->|"Retrain trigger"| DEVELOP
+    D1 ~~~ D2 ~~~ D3
+    E1 ~~~ E2 ~~~ E3
+    P1 ~~~ P2 ~~~ P3
+    O1 ~~~ O2 ~~~ O3
+
+    D1 --> E1 --> P1 --> O1
+    O3 -->|"Retrain trigger"| NEXT["Develop next iteration"]
     
     style DEVELOP fill:#6366f122,stroke:#6366f1,stroke-width:2px
     style EVALUATE fill:#f59e0b22,stroke:#f59e0b,stroke-width:2px
@@ -466,7 +471,6 @@ graph TB
 ---
 
 
-<!-- FROOT-PEDAGOGY:T1:SCENARIO -->
 ## Applied Scenario: Approve a Domain Adaptation Experiment
 
 **Situation:** A legal drafting assistant has stable domain language requirements but must retain general reasoning and citation behavior.
@@ -492,7 +496,6 @@ graph TB
 
 ---
 
-<!-- FROOT-PEDAGOGY:T1:CHECK -->
 ## Knowledge Check
 
 ### 1. What question should precede every fine-tuning project?

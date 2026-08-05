@@ -28,7 +28,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:S-10:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -695,7 +694,6 @@ Most production deployments today are at Stage 2-3. Stage 4 requires custom voic
 ---
 
 
-<!-- FROOT-PEDAGOGY:S-10:SCENARIO -->
 ## Applied Scenario: Launch a Real-Time Call-Center Agent
 
 **Situation:** A voice agent handles tier-one support, can read account status, and must transfer sensitive or unsupported cases to a human.
@@ -739,7 +737,6 @@ Most production deployments today are at Stage 2-3. Stage 4 requires custom voic
 
 ---
 
-<!-- FROOT-PEDAGOGY:S-10:CHECK -->
 ## Knowledge Check
 
 ### 1. Why is streaming architectural rather than cosmetic for voice?

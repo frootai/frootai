@@ -28,7 +28,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:F1:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -144,7 +143,7 @@ graph LR
         I1 --> I2 --> I3
     end
 
-    Training ---|"Produces trained<br/>model weights"| Inference
+    T3 -->|"Produces trained<br/>model weights"| I1
 ```
 
 | Dimension | Training | Inference |
@@ -334,6 +333,8 @@ graph TB
         ED3["Examples: T5, BART,<br/>original Transformer"]
         ED1 --> ED2 --> ED3
     end
+
+    E1 ~~~ D1 ~~~ ED1
 ```
 
 **For infrastructure architects, the key takeaway:** Almost every LLM you will serve in production is **decoder-only**. GPT-4, Claude, Llama, Phi, Mistral — all decoder-only. This matters because decoder-only models generate output **one token at a time**, which creates the sequential bottleneck that drives inference latency.
@@ -356,7 +357,8 @@ graph LR
         F --> G --> H --> I
     end
 
-    E --> J["Output Projection<br/>Vector → Vocabulary"]
+    E --> F
+    I --> J["Output Projection<br/>Vector → Vocabulary"]
     J --> K["Softmax<br/>Probability Distribution"]
     K --> L["Sample Token<br/>Based on Parameters"]
     L --> M["Detokenizer<br/>Token IDs → Text"]
@@ -1061,7 +1063,6 @@ graph TB
 ---
 
 
-<!-- FROOT-PEDAGOGY:F1:SCENARIO -->
 ## Applied Scenario: Capacity-Plan an Internal LLM Endpoint
 
 **Situation:** A platform team must host a latency-sensitive internal assistant for 400 concurrent employees while keeping sensitive prompts inside an approved boundary.
@@ -1099,7 +1100,6 @@ graph TB
 
 ---
 
-<!-- FROOT-PEDAGOGY:F1:CHECK -->
 ## Knowledge Check
 
 ### 1. Why does a longer context window increase both latency and memory pressure?

@@ -7,7 +7,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:R1:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -971,7 +970,6 @@ log_experiment(variant, response, user_rating)
 ---
 
 
-<!-- FROOT-PEDAGOGY:R1:SCENARIO -->
 ## Applied Scenario: Release-Gate a Support Prompt
 
 **Situation:** A support prompt must answer from approved policy documents, abstain when evidence is missing, and return a stable JSON contract for downstream automation.
@@ -1011,7 +1009,6 @@ log_experiment(variant, response, user_rating)
 
 ---
 
-<!-- FROOT-PEDAGOGY:R1:CHECK -->
 ## Knowledge Check
 
 ### 1. Why should retrieved text be treated as untrusted input?

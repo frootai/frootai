@@ -27,7 +27,6 @@
 
 ---
 
-<!-- FROOT-PEDAGOGY:F4:INTRO -->
 ## Learning Outcomes
 
 After completing this module, you can:
@@ -98,19 +97,23 @@ graph TB
     subgraph L3["Layer 3 — Enforcement"]
         P5["5. Hooks<br/>preToolUse gates"]
         P6["6. Workflows<br/>AI-driven CI"]
+      P5 ~~~ P6
     end
     
     subgraph L2["Layer 2 — On-Demand"]
         P2["2. Prompts<br/>Slash commands"]
         P3["3. Agents<br/>Specialist personas"]
         P4["4. Skills<br/>Folded logic"]
+        P2 ~~~ P3 ~~~ P4
     end
     
     subgraph L1["Layer 1 — Always-On"]
         P1["1. Instructions<br/>Passive memory"]
     end
     
-    L1 --> L2 --> L3 --> L4
+    P1 --> P2
+    P4 --> P5
+    P6 --> P7
     
     style L1 fill:#10b98122,stroke:#10b981
     style L2 fill:#06b6d422,stroke:#06b6d4
@@ -458,7 +461,6 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 ---
 
 
-<!-- FROOT-PEDAGOGY:F4:SCENARIO -->
 ## Applied Scenario: Compose a Governed Repository Assistant
 
 **Situation:** A team wants Copilot to apply architecture rules, invoke a repeatable review capability, and run deterministic checks before merge.
@@ -485,7 +487,6 @@ Or use FrootAI: run `FrootAI: Initialize DevKit` → get all 19 files instantly.
 
 ---
 
-<!-- FROOT-PEDAGOGY:F4:CHECK -->
 ## Knowledge Check
 
 ### 1. When should guidance be an instruction instead of an agent?
