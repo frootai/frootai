@@ -1,8 +1,8 @@
 # Play 03 — Deterministic Agent 🎯
 
-> Typed workflow reference with validation, replay-oriented fingerprints, and bounded model settings.
+> Reliable, reproducible AI agent with zero temperature and multi-layer guardrails.
 
-Temperature zero, a seed, structured JSON, confidence rules, and validation can reduce variation but do not guarantee identical model output. The current evidence covers the offline `deterministic.execute` fixture; repeated Azure model variance and idempotent external side effects remain to be measured.
+When you need AI that gives the same answer every time. Temperature=0, seed pinning, structured JSON output, confidence scoring, anti-sycophancy prompts, and a multi-layer guardrail pipeline.
 
 ## Quick Start
 ```bash

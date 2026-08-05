@@ -11,23 +11,23 @@
       "reliability",
       "operational-excellence"
     ],
-    "scope": "copilot-studio-power-platform-solution"
+    "scope": "copilot-studio-bot-solution"
   },
   "primitives": {
     "agents": [
-      ".github/agents/builder.agent.md",
-      ".github/agents/reviewer.agent.md",
-      ".github/agents/tuner.agent.md"
+      "./.github/agents/builder.agent.md",
+      "./.github/agents/reviewer.agent.md",
+      "./.github/agents/tuner.agent.md"
     ],
     "instructions": [
-      ".github/instructions/power-platform-alm.instructions.md",
-      ".github/instructions/copilot-studio-bot-patterns.instructions.md",
-      ".github/instructions/security.instructions.md"
+      "./.github/instructions/azure-coding.instructions.md",
+      "./.github/instructions/copilot-studio-bot-patterns.instructions.md",
+      "./.github/instructions/security.instructions.md"
     ],
     "skills": [
-      ".github/skills/deploy-copilot-studio-bot/",
-      ".github/skills/evaluate-copilot-studio-bot/",
-      ".github/skills/tune-copilot-studio-bot/"
+      "./.github/skills/deploy-copilot-studio-bot/",
+      "./.github/skills/evaluate-copilot-studio-bot/",
+      "./.github/skills/tune-copilot-studio-bot/"
     ],
     "hooks": [
       "../../hooks/fai-secrets-scanner/",
@@ -35,16 +35,16 @@
       "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
-      "dlpRequired": true,
-      "durableApprovalRequired": true,
-      "contentLoggingAllowed": false,
-      "promotionEvidenceRequired": true
+      "groundedness": 0.85,
+      "coherence": 0.8,
+      "relevance": 0.8,
+      "safety": 0,
+      "costPerQuery": 0.05
     }
   },
-  "platform": {
-    "contract": "config/power-platform.json",
-    "solutionSource": "solution/",
-    "solutionSourceAvailable": false
+  "infrastructure": {
+    "bicep": "./infra/main.bicep",
+    "parameters": "./infra/parameters.json"
   },
   "toolkit": {
     "devkit": ".github/",

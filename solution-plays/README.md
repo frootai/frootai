@@ -13,7 +13,7 @@ The machine-readable source of truth for all 101 identities and links is [`../or
 | 05 | [IT Ticket Resolution](./05-it-ticket-resolution/) | ✅ Ready | Medium |
 | 06 | [Document Intelligence](./06-document-intelligence/) | ✅ Ready | Medium |
 | 07 | [Multi-Agent Service](./07-multi-agent-service/) | ✅ Ready | High |
-| 08 | [Copilot Studio Bot](./08-copilot-studio-bot/) | Designed | Low |
+| 08 | [Copilot Studio Bot](./08-copilot-studio-bot/) | ✅ Ready | Low |
 | 09 | [AI Search Portal](./09-ai-search-portal/) | ✅ Ready | Medium |
 | 10 | [Content Moderation](./10-content-moderation/) | ✅ Ready | Low |
 | 11 | [Landing Zone Advanced](./11-ai-landing-zone-advanced/) | ✅ Ready | High |

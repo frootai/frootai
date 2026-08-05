@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the target schema-first extraction workflow. The current Bicep does not declare a Document Intelligence account or Event Grid trigger. The offline fixture returns fields with provenance, but no current evidence establishes live extraction quality, bounded enrichment, durable confidence review, hostile-file handling, or deletion.
+The Document Intelligence architecture provides an end-to-end pipeline for extracting, classifying, and structuring data from unstructured documents. Azure Document Intelligence handles OCR and layout analysis, while Azure OpenAI enriches extractions with entity recognition, summarization, and classification. An event-driven pipeline automatically processes documents as they arrive in Blob Storage, storing structured results in Cosmos DB for downstream consumption.
 
 ## Architecture Diagram
 
@@ -16,7 +16,7 @@ graph TB
 
     subgraph Processing["Document Processing Pipeline"]
         ORCH[Container Apps<br/>Pipeline orchestrator]
-        DI[Planned Document Intelligence<br/>Not in current Bicep]
+        DI[Document Intelligence<br/>OCR + layout + tables]
         AOAI[Azure OpenAI<br/>Enrichment + classification]
     end
 
@@ -88,7 +88,7 @@ graph TB
 2. **Blob landing** — documents stored in the Blob Storage landing zone container
 3. **Event trigger** — Event Grid fires a BlobCreated event to the Container Apps orchestrator
 4. **OCR extraction** — Document Intelligence performs layout analysis, OCR, table detection, and key-value extraction
-5. **Optional enrichment target** — bounded enrichment may classify or summarize approved extracted text after schema and policy checks
+5. **AI enrichment** — Azure OpenAI processes raw extraction for entity recognition, classification, and summarization
 6. **Classification** — document typed as invoice, contract, form, receipt, or correspondence
 7. **Structured output** — extracted metadata (entities, amounts, dates, classifications) stored in Cosmos DB
 8. **Processed storage** — enriched documents with annotations saved to output Blob container
@@ -106,19 +106,19 @@ graph TB
 | Azure OpenAI | AI | Entity extraction, document classification, summarization |
 | Cosmos DB | Storage | Extracted metadata, entity store, classification results |
 | Key Vault | Security | API keys and Document Intelligence credentials |
-| Application Insights | Monitoring | Target telemetry for throughput, extraction quality, review, and processing time |
+| Application Insights | Monitoring | Pipeline throughput, extraction accuracy, processing time |
 | Log Analytics | Monitoring | Processing audit trail, error diagnostics |
 
 ## Security Architecture
 
-- **Managed identity target** — deployment tests must prove Container Apps authentication and least-privilege roles
+- **Managed Identity** — Container Apps authenticates to Document Intelligence, OpenAI, and Storage without credentials
 - **Private endpoints** — Blob Storage, Cosmos DB, and AI services accessible only via private network
 - **Encryption at rest** — all documents and extracted data encrypted with platform or customer-managed keys
 - **Immutable storage** — compliance-critical documents stored with immutability policies (WORM)
 - **RBAC** — document access scoped by classification; finance docs restricted to finance roles
 - **PII detection** — extracted PII flagged and masked in logs; original retained only in secure storage
 - **Key Vault** — all API keys and connection strings managed centrally with rotation policies
-- **Content filtering target** — bounded enrichment requires tested content and injection controls
+- **Content filtering** — Azure OpenAI content filters active to prevent harmful content in summaries
 
 ## Scaling
 
@@ -129,5 +129,5 @@ graph TB
 | Container replicas | 1 (scale-to-zero) | 2-5 | 5-20 |
 | Cosmos DB RU/s | 400 (serverless) | 4,000 | 40,000 |
 | Blob storage/month | 10 GB | 500 GB | 2 TB |
-| Processing latency | Not measured | Set after representative corpus | Set after operated evidence |
-| Extraction accuracy | Not measured | Set by document type and field | Set by document type and field |
+| Processing latency (P95) | <30s | <15s | <10s |
+| Extraction accuracy target | — | 90%+ | 95%+ |

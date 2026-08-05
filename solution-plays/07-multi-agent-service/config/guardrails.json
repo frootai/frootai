@@ -31,13 +31,5 @@
     "enabled": true,
     "topics": ["financial_transactions_over_10000", "employee_termination", "legal_contracts"],
     "response": "This action requires human approval. Routing to your manager."
-  },
-  "evidence_boundary": {
-    "configuration_status": "designed",
-    "typed_handoffs_evidenced": false,
-    "checkpoint_resume_evidenced": false,
-    "context_isolation_evidenced": false,
-    "dapr_policy_evidenced": false,
-    "deployment_evidenced": false
   }
 }

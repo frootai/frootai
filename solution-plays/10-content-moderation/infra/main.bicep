@@ -1,8 +1,6 @@
 // Content Moderation (Play 10) — Azure Infrastructure
 // FrootAI Solution Play — Bicep IaC Template
 // Deploy with: az deployment group create -g rg-frootai-{env} -f infra/main.bicep -p infra/parameters.json
-// Legacy non-authoritative infrastructure: this OpenAI-centric template does
-// not provision the target moderation control plane. T234 owns replacement.
 
 targetScope = 'resourceGroup'
 

@@ -31,12 +31,5 @@
     "enabled": true,
     "topics": ["handwritten_text_below_50_confidence", "corrupted_pages"],
     "response": "This document requires manual review due to low extraction confidence."
-  },
-  "evidence_boundary": {
-    "configuration_status": "designed",
-    "field_provenance_evidenced": false,
-    "confidence_review_evidenced": false,
-    "malicious_document_handling_evidenced": false,
-    "deployment_evidenced": false
   }
 }

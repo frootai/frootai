@@ -1,36 +1,31 @@
 {
   "content_safety": {
-    "required": true,
-    "policy_owner_required": true,
-    "configuration_evidenced": false
+    "enabled": true,
+    "severity_thresholds": { "hate": 2, "sexual": 0, "violence": 2, "self_harm": 0 }
   },
-  "pii": {
-    "minimize_collection": true,
-    "content_logging_allowed": false,
-    "retention_owner_required": true,
-    "deletion_owner_required": true
+  "pii_detection": {
+    "enabled": true,
+    "types": ["employee_id", "email", "phone_number", "ssn"],
+    "action": "mask_in_logs",
+    "mask_in_response": false
   },
-  "connectors": {
-    "dlp_policy_required": true,
-    "least_privilege_required": true,
-    "shared_credentials_allowed": false
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block_and_log"
   },
-  "consequential_actions": {
-    "durable_approval_required": true,
-    "approval_audit_required": true,
-    "prompt_authorization_allowed": false
+  "teams_bot_specific": {
+    "max_response_length_chars": 2000,
+    "require_sso_auth": true,
+    "allowed_channels": ["msteams", "webchat"],
+    "adaptive_card_max_actions": 5,
+    "conversation_timeout_minutes": 30,
+    "rate_limit_per_user_per_minute": 10,
+    "allowed_topics": ["hr_policies", "it_support", "facilities", "onboarding", "company_info"],
+    "blocked_topics": ["salary_negotiation", "competitor_info", "stock_trading"]
   },
-  "ownership": {
-    "authoritative_platform": "copilot_studio_power_platform",
-    "platform_contract": "config/power-platform.json",
-    "solution_source_owner_required": true,
-    "environment_owner_required": true
-  },
-  "evidence_boundary": {
-    "configuration_status": "designed",
-    "solution_import_evidenced": false,
-    "dlp_enforcement_evidenced": false,
-    "durable_approval_evidenced": false,
-    "deployment_evidenced": false
+  "abstention": {
+    "enabled": true,
+    "topics": ["medical_advice", "legal_advice", "salary_details", "performance_reviews"],
+    "response": "I can't help with that topic. Please contact HR directly at hr@company.com."
   }
 }

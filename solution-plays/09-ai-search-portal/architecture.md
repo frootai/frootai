@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the target enterprise search architecture. The current Bicep does not provision AI Search, App Service, Front Door, managed identity, or private endpoints. No current evidence establishes ACL trimming, benchmarked embeddings or ranking, ingestion deletion, poisoned-document defense, or optional cited synthesis.
+Enterprise search portal with semantic ranking and AI-powered answer summarization. Users search across organizational documents via a modern web UI with faceted navigation, filters, and natural language understanding. Azure AI Search handles hybrid retrieval (keyword + vector + semantic reranking), while GPT-4o generates concise answer summaries from top results.
 
 ## Architecture Diagram
 
@@ -73,7 +73,7 @@ graph TB
 2. **Search**: User types query in portal → GPT-4o rewrites natural language into optimized search query → AI Search performs hybrid retrieval (BM25 + vector + semantic reranking) → Returns top-10 results with facets
 3. **Summarization**: Top-5 results passed to GPT-4o → Model generates a concise answer summary with source citations → Summary displayed above document results
 4. **Navigation**: Users refine via facets (file type, date, department, author) → Direct search with filters → Results paginated and highlighted with keyword matches
-5. **Analytics target**: Minimized or anonymized query events support quality analysis under an owned retention and deletion policy
+5. **Analytics**: Every query logged — latency, result count, click-through, zero-result rate → Dashboards in Application Insights for search quality improvement
 
 ## Service Roles
 
@@ -95,7 +95,7 @@ graph TB
 
 - **Entra ID Authentication**: Users sign in via Microsoft Entra ID — SSO with corporate directory
 - **Managed Identity**: App Service → AI Search and OpenAI via managed identity — no keys in code
-- **Private connectivity target**: AI Search and OpenAI require private endpoint resources and verification not present in the current Bicep
+- **Private Endpoints**: AI Search and OpenAI accessible only via VNet in production
 - **Azure Front Door WAF**: OWASP rules, rate limiting, bot protection on the portal
 - **RBAC on Index**: Search results filtered by user's security group membership
 

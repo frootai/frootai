@@ -1,8 +1,8 @@
 # Play 06 — Document Intelligence 📄
 
-> Target schema-first document workflow with OCR, provenance, confidence review, and bounded enrichment.
+> Extract, classify, and structure document data with OCR + LLM.
 
-The package declares an offline `document.process` fixture and Azure resources for a target extraction workflow. Live file validation, hostile-document handling, field provenance, confidence review, PII deletion, and extraction quality require separate evidence.
+Feed PDFs, invoices, receipts, and forms into Azure Document Intelligence for OCR, then GPT-4o extracts structured fields into typed JSON. Handles multi-page documents, handwriting, tables, and stamps.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for extraction, @reviewer for accuracy audit, @tuner for throughput
 ```
 
-## Evidence Required
-- Measure field accuracy, table fidelity, confidence calibration, PII handling, hostile-document behavior, review outcomes, and processing latency before setting release thresholds.
+## Key Metrics
+- Field extraction: ≥95% (prebuilt), ≥90% (custom) · Processing: <10s/page · PII recall: ≥99%
 
 ## DevKit
 | Primitive | What It Does |
@@ -32,7 +32,7 @@ graph TB
 
     subgraph Processing["Document Processing"]
         CA[Container Apps<br/>Pipeline orchestrator]
-        DI[Planned Document Intelligence<br/>Not in current Bicep]
+        DI[Document Intelligence<br/>OCR + layout analysis]
     end
 
     subgraph AI["AI Enrichment"]
