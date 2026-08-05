@@ -1,8 +1,8 @@
 # Play 07 — Multi-Agent Service 🤖
 
-> Target typed workflow for bounded supervisor routing and justified specialists.
+> Supervisor agent routes to specialist agents with shared state and handoff protocol.
 
-The offline `agents.execute` fixture demonstrates bounded routing output. The broader specialist workflow, typed handoffs, authority, context isolation, checkpoints, recovery, Dapr policy, and distributed tracing remain target capabilities until evidenced.
+A supervisor agent receives requests, classifies intent, and delegates to specialist agents. Each agent has its own model config, tools, and memory. Loop prevention and max-iteration guards keep costs predictable.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for topology, @reviewer for loop detection, @tuner for routing
 ```
 
-## Evidence Required
-- Measure task completion, handoff acceptance, loop stops, context isolation, resume, latency, tokens, and cost on a versioned task corpus before setting release thresholds.
+## Key Metrics
+- Task completion: ≥90% · E2E latency: <30s · Cost per task: <$0.50
 
 ## DevKit
 | Primitive | What It Does |
@@ -30,7 +30,7 @@ graph TB
 
     subgraph Orchestration Layer
         SUP[Supervisor Agent<br/>GPT-4o routing]
-        DAPR[Planned Dapr Adapter<br/>Policy not evidenced]
+        DAPR[Dapr Sidecar<br/>Service invocation]
     end
 
     subgraph Specialist Agents

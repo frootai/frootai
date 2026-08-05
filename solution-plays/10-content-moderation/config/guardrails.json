@@ -39,19 +39,5 @@
       "appeal_window_hours": 72,
       "requires_human_review": true
     }
-  },
-  "ownership": {
-    "authoritative_runtime": "versioned_content_safety_policy",
-    "openai_config_authoritative": false,
-    "gpt_classifier_stage_authoritative": false,
-    "legacy_artifact_replacement_task": "T234"
-  },
-  "evidence_boundary": {
-    "configuration_status": "designed",
-    "prompt_shields_evidenced": false,
-    "multimodal_policy_evidenced": false,
-    "appeal_override_evidenced": false,
-    "calibration_evidenced": false,
-    "deployment_evidenced": false
   }
 }

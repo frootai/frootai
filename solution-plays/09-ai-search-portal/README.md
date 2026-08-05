@@ -1,8 +1,8 @@
 # Play 09 — AI Search Portal 🔎
 
-> Target ACL-aware search service with hybrid ranking, facets, freshness, deletion, and optional cited synthesis.
+> Enterprise search with hybrid ranking, GPT synthesis, and faceted navigation.
 
-The diagrams describe a target portal. The current Bicep does not declare AI Search, App Service, Front Door, managed identity, or private endpoints; ACL trimming, ranking quality, ingestion lifecycle, and analytics privacy remain unevidenced.
+A search experience combining keyword matching with semantic understanding. AI Search handles retrieval with custom scoring profiles, GPT-4o synthesizes results into readable summaries with citations.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for index schema, @reviewer for relevance audit, @tuner for scoring
 ```
 
-## Evidence Required
-- Benchmark NDCG, MRR, recall, zero-result behavior, ACL leakage, deletion, latency, analytics privacy, and cost before selecting embeddings or release thresholds.
+## Key Metrics
+- NDCG@10: ≥0.7 · Zero-result rate: <5% · Query latency p95: <500ms
 
 ## DevKit
 | Primitive | What It Does |

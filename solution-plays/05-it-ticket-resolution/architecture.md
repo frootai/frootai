@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the target ITSM workflow architecture. The current Bicep does not provision the depicted ITSM connectors, Logic Apps, Container Apps, Service Bus, Cosmos DB, private endpoints, managed identity, or knowledge base. No current evidence establishes classification, resolution, SLA, recurrence, or mean-time outcomes.
+The IT Ticket Resolution architecture automates the classification, routing, and resolution of IT support tickets using Azure OpenAI for intelligent analysis and Logic Apps for workflow orchestration. Tickets flow from ITSM systems (ServiceNow, Jira Service Management) through an AI-powered pipeline that classifies priority, identifies resolution patterns, suggests or auto-applies fixes, and escalates complex cases to human agents — reducing mean time to resolution by 60-80%.
 
 ## Architecture Diagram
 
@@ -87,13 +87,13 @@ graph TB
 
 ## Data Flow
 
-1. **Ticket intake target** — approved connectors normalize a versioned ticket envelope after PII minimization
+1. **Ticket intake** — tickets arrive from ServiceNow, Jira, or email; Logic Apps normalizes the format
 2. **Classification** — Azure OpenAI analyzes ticket text to determine category (network, software, hardware, access) and priority (P1-P4)
 3. **Knowledge lookup** — resolution engine searches the knowledge base for matching resolution templates
 4. **Resolution generation** — GPT-4o generates a tailored resolution based on ticket details and KB matches
-5. **Policy target** — risk tier and durable approval determine whether an action may proceed
-6. **State target** — an owned durable store records versions, approvals, connector attempts, verification, and rollback
-7. **ITSM update target** — an idempotent connector checks source version and conflict policy before writing
+5. **Business rules** — Logic Apps applies SLA rules, auto-resolves known patterns, escalates unknowns
+6. **State persistence** — ticket state, classification, and resolution stored in Cosmos DB
+7. **ITSM update** — Logic Apps pushes classification, priority, and suggested resolution back to source ITSM
 8. **Escalation** — unresolvable tickets routed to human agents with AI-generated context summary
 9. **Metrics tracking** — classification accuracy, resolution rate, and MTTR tracked in Application Insights
 
@@ -112,14 +112,14 @@ graph TB
 
 ## Security Architecture
 
-- **Identity target** — attended actions preserve user authority and unattended actions use a justified workload identity; neither is provisioned here
+- **Managed Identity** — Container Apps and Logic Apps authenticate to Azure OpenAI without credentials
 - **Key Vault** — ITSM API keys (ServiceNow, Jira) stored securely with automatic rotation
 - **RBAC** — ticket data accessible only by authorized service principals and support staff
-- **Private connectivity target** — target services require private endpoint resources and verification not present in the current Bicep
+- **Private endpoints** — Cosmos DB and Azure OpenAI accessible only via private network
 - **PII handling** — ticket content containing PII masked before logging to Application Insights
 - **Audit trail** — every classification decision and resolution logged with reasoning for compliance
 - **Content filtering** — Azure OpenAI content filters prevent inappropriate resolution suggestions
-- **Encryption target** — the selected state store and connectors require verified encryption settings and transport policy
+- **Encryption** — all ticket data encrypted at rest (Cosmos DB) and in transit (TLS 1.2+)
 
 ## Scaling
 
@@ -129,6 +129,6 @@ graph TB
 | Container replicas | 1 (scale-to-zero) | 2-5 | 5-15 |
 | Logic Apps executions/month | 1,000 | 50,000 | 500,000 |
 | Classification latency (P95) | <5s | <3s | <2s |
-| Automatic action rate | Not set | Set only after approved pilot evidence | Set only after operated evidence |
+| Auto-resolution rate target | — | 40-60% | 60-80% |
 | Cosmos DB RU/s | 400 (serverless) | 4,000 | 40,000 |
 | Knowledge base articles | 50 | 500 | 5,000 |

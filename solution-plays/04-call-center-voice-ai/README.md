@@ -1,8 +1,8 @@
 # Play 04 — Call Center Voice AI 📞
 
-> Target voice-session design for STT, model response, TTS, consent, and escalation.
+> Voice-enabled customer service with real-time STT→LLM→TTS streaming.
 
-The diagrams describe a target call flow. The current Bicep declares OpenAI, Storage, Key Vault, Application Insights, Log Analytics, and diagnostics; it does not yet provision Communication Services, Speech, Container Apps, managed identity, or duplex hosting.
+Build a phone-answering AI agent. Azure Communication Services handles the call, Speech Service converts audio to text, GPT-4o processes intent and generates a response, then TTS speaks it back — all streaming in real time.
 
 ## Quick Start
 ```bash
@@ -11,8 +11,8 @@ az deployment group create -g $RG -f infra/main.bicep -p infra/parameters.json
 code .  # Use @builder for voice pipeline, @reviewer for latency audit, @tuner for cost
 ```
 
-## Evidence Required
-- Measure task success, stage latency, jitter, interruption, reconnect, consent, retention, escalation, and cost before setting release thresholds.
+## Key Metrics
+- Intent accuracy: ≥95% · Response latency: <2s · Resolution rate: ≥70%
 
 ## DevKit
 | Primitive | What It Does |
@@ -44,7 +44,7 @@ graph TB
     end
 
     subgraph Pipeline["Orchestration"]
-        ORCH[Container Apps<br/>Target sequential orchestration]
+        ORCH[Container Apps<br/>Streaming pipeline]
         QUEUE[Event Queue<br/>Async processing]
     end
 

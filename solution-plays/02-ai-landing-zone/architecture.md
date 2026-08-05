@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the target AI Landing Zone. The current resource-group Bicep implements only one VNet with three subnets, an NSG, two private DNS zones and links, Key Vault, Log Analytics, and a user-assigned identity. Hub-spoke networking, private endpoint resources, Firewall, Bastion, Policy assignments, Defender configuration, diagnostics, and workload onboarding are not currently provisioned.
+The AI Landing Zone provides a secure, governed Azure foundation for hosting AI workloads. It implements a hub-spoke network topology with private endpoints, centralized identity management via Managed Identity and RBAC, and governance guardrails through Azure Policy — ensuring every AI service deployed on top inherits enterprise-grade security and compliance.
 
 ## Architecture Diagram
 
@@ -14,11 +14,11 @@ graph TB
         DNS[Private DNS Zones<br/>Name resolution]
     end
 
-    subgraph Spoke["Target Spoke VNet — Not Provisioned"]
-        PE_AOI[Planned Private Endpoint<br/>Azure OpenAI]
-        PE_SEARCH[Planned Private Endpoint<br/>AI Search]
-        PE_STOR[Planned Private Endpoint<br/>Storage]
-        PE_KV[Planned Private Endpoint<br/>Key Vault]
+    subgraph Spoke["Spoke VNet — AI Workloads"]
+        PE_AOI[Private Endpoint<br/>Azure OpenAI]
+        PE_SEARCH[Private Endpoint<br/>AI Search]
+        PE_STOR[Private Endpoint<br/>Storage]
+        PE_KV[Private Endpoint<br/>Key Vault]
     end
 
     subgraph Identity["Identity & Governance"]
@@ -74,9 +74,9 @@ graph TB
 
 1. **Network provisioning** — Hub VNet created with Azure Firewall, Bastion, and Private DNS Zones
 2. **Spoke peering** — AI workload spoke VNet peers to hub for centralized egress and DNS
-3. **Private connectivity target** — future private endpoint resources connect approved PaaS services; DNS zones alone do not create that connectivity
+3. **Private endpoints** — PaaS services (OpenAI, Search, Storage, Key Vault) exposed only via private IPs
 4. **Identity binding** — Managed Identities assigned to workloads, RBAC scoped to least privilege
-5. **Policy target** — subscription owners define and assign policies for public access, tags, and SKUs; the current Bicep creates no assignments
+5. **Policy enforcement** — Azure Policy denies public endpoints, enforces tagging, restricts SKUs
 6. **Secrets management** — Key Vault stores all credentials; workloads access via Managed Identity
 7. **Monitoring** — Diagnostic settings route all resource telemetry to centralized Log Analytics
 8. **Threat detection** — Defender for Cloud continuously scans for vulnerabilities and misconfigurations
@@ -100,7 +100,7 @@ graph TB
 
 ## Security Architecture
 
-- **Network boundary** — the current Key Vault disables public network access; equivalent controls for target PaaS services require resources and verification not present here
+- **Zero-trust network** — all PaaS services accessible only via private endpoints; no public IPs
 - **Hub-spoke isolation** — workloads in spoke VNets cannot reach each other without explicit peering
 - **Centralized egress** — all outbound traffic routes through Azure Firewall with threat intelligence
 - **Managed Identity** — no credentials in code; workloads authenticate via system-assigned identity

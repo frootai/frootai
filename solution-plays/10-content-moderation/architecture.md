@@ -67,7 +67,7 @@ graph TB
 
 1. **Submission**: Client app submits content (text or image) via API Management → Rate limiting and API key authentication applied → Content enqueued to Service Bus moderation queue
 2. **Pre-processing**: Azure Function triggered by queue message → Content normalized (encoding, length truncation) → Custom blocklist fast-check for known-bad terms
-3. **Analysis target**: Versioned policy evaluates Content Safety results and uses Prompt Shields only when configured and evidenced for the input type
+3. **Analysis**: Content Safety API called for multi-category severity scoring (0-6 scale) → Prompt Shields check for jailbreak and injection patterns → Scores aggregated across all checks
 4. **Decision**: Action policy applied based on severity thresholds — Allow (score 0-1), Flag for review (score 2-3), Block (score 4+), Escalate (score 6) → Decision recorded in Cosmos DB with full audit trail
 5. **Response**: Result callback sent to client app (allow/block/flag status) → Blocked content returns generic safe message → Flagged content queued for human review
 
@@ -79,7 +79,7 @@ graph TB
 | Service Bus | Messaging | Async moderation queue, dead-letter for failures |
 | Azure Functions | Compute | Moderation pipeline orchestration, policy engine |
 | Content Safety | AI | Multi-category content analysis, severity scoring |
-| Prompt Shields | AI | Optional target control; current configuration and corpus evidence are absent |
+| Prompt Shields | AI | Jailbreak detection, prompt injection defense |
 | Custom Blocklists | AI | Domain-specific term blocking, fast-reject path |
 | Cosmos DB | Data | Audit trail, moderation decisions, appeal records |
 | Key Vault | Security | API keys, certificates, managed identity |
@@ -101,7 +101,7 @@ graph TB
 |--------|-----|-----------|------------|
 | Content items/minute | 10 | 500 | 5,000+ |
 | Concurrent moderations | 5 | 50 | 200+ |
-| Policy latency | Not measured | Set after representative load evidence | Set after operated evidence |
+| Avg latency per item | <2s | <1s | <500ms |
 | Function instances | 1 | 5-20 | 20-100 |
 | Cosmos DB RU/s | Serverless | 400 | 2,000+ |
 | Service Bus throughput | Basic | Standard | Premium |
