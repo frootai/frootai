@@ -329,6 +329,8 @@ graph LR
         B5 --> B6[Answer]
     end
 
+    A3 ~~~ B1
+
     style A2 fill:#4a90d9,color:#fff
     style B2 fill:#e67e22,color:#fff
     style B3 fill:#e67e22,color:#fff
