@@ -528,7 +528,7 @@ function findStandaloneFaiContexts() {
 
 function validateWorkflows() {
   section('⚙️  WORKFLOWS');
-  const files = listDir('workflows').filter(f => f.endsWith('.md') && f !== 'README.md');
+  const files = listDir('workflows').filter(f => f.endsWith('.md') && !f.endsWith('.lean.md') && f !== 'README.md');
   if (files.length === 0) {
     pass('workflows/ — no workflow files yet (OK for empty folder)');
     return;

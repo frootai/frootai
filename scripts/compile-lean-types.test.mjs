@@ -70,11 +70,11 @@ test("[Z4.10] written Leans are monotone (tokensLean <= tokens) — per-type sam
   }
 });
 
-test("[Z4.10] token-win gate fires on real data: some agents are Full-only", () => {
-  const agentFullOnly = byType("agent").filter((p) => !p.write);
-  assert.ok(agentFullOnly.length > 0, "expected the gate to reject some agents");
-  // The ONLY reason a faithful agent is Full-only here is the token-win gate.
-  assert.ok(agentFullOnly.every((p) => p.reason === "no-token-saving"));
+test("[Z4.10] every canonical agent now has a fidelity-passing token-win Lean", () => {
+  const agents = byType("agent");
+  assert.ok(agents.length > 0, "expected canonical agents");
+  assert.equal(agents.filter((plan) => plan.write).length, agents.length);
+  assert.ok(agents.every((plan) => plan.passed && plan.savedTokens >= 0));
 });
 
 test("[Z4.10] a real agent Lean preserves tools/model/WAF frontmatter", () => {
