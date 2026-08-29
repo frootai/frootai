@@ -1,0 +1,2256 @@
+[
+  {
+    "id": "agent-chain-configure",
+    "name": "agent-chain-configure",
+    "description": "Configure builder→reviewer→tuner agent chain with handoff rules",
+    "folder": "skills/agent-chain-configure/",
+    "size": 2406
+  },
+  {
+    "id": "api-rate-limit-configure",
+    "name": "api-rate-limit-configure",
+    "description": "Configure API rate limiting with Azure APIM policies and retry headers",
+    "folder": "skills/api-rate-limit-configure/",
+    "size": 2421
+  },
+  {
+    "id": "app-insights-configure",
+    "name": "app-insights-configure",
+    "description": "Configure Application Insights with custom metrics, alerts, and dashboards",
+    "folder": "skills/app-insights-configure/",
+    "size": 2423
+  },
+  {
+    "id": "audit-log-implement",
+    "name": "audit-log-implement",
+    "description": "Implement immutable audit logging with Azure Blob Storage and Sentinel",
+    "folder": "skills/audit-log-implement/",
+    "size": 2406
+  },
+  {
+    "id": "azure-openai-setup",
+    "name": "azure-openai-setup",
+    "description": "Set up Azure OpenAI Service with model deployments, RBAC, and monitoring",
+    "folder": "skills/azure-openai-setup/",
+    "size": 2407
+  },
+  {
+    "id": "backup-restore-ai",
+    "name": "backup-restore-ai",
+    "description": "Set up backup and restore procedures for AI application data and configurations",
+    "folder": "skills/backup-restore-ai/",
+    "size": 2418
+  },
+  {
+    "id": "bicep-module-create",
+    "name": "bicep-module-create",
+    "description": "Create a reusable Bicep module with parameters, outputs, and conditions",
+    "folder": "skills/bicep-module-create/",
+    "size": 2408
+  },
+  {
+    "id": "canary-deploy-ai",
+    "name": "canary-deploy-ai",
+    "description": "Implement canary deployment for AI model updates with rollback on quality drop",
+    "folder": "skills/canary-deploy-ai/",
+    "size": 2413
+  },
+  {
+    "id": "circuit-breaker-add",
+    "name": "circuit-breaker-add",
+    "description": "Add circuit breaker pattern for Azure OpenAI calls with fallback behavior",
+    "folder": "skills/circuit-breaker-add/",
+    "size": 2412
+  },
+  {
+    "id": "compliance-audit-run",
+    "name": "compliance-audit-run",
+    "description": "Run a compliance audit against HIPAA/FedRAMP/SOC2 requirements for AI systems",
+    "folder": "skills/compliance-audit-run/",
+    "size": 2423
+  },
+  {
+    "id": "content-safety-configure",
+    "name": "content-safety-configure",
+    "description": "Configure Azure Content Safety API with custom categories and thresholds",
+    "folder": "skills/content-safety-configure/",
+    "size": 2425
+  },
+  {
+    "id": "cost-dashboard-create",
+    "name": "cost-dashboard-create",
+    "description": "Create a cost attribution dashboard for AI workloads with Azure Cost Management",
+    "folder": "skills/cost-dashboard-create/",
+    "size": 2430
+  },
+  {
+    "id": "data-chunking-optimize",
+    "name": "data-chunking-optimize",
+    "description": "Optimize document chunking strategy for RAG with semantic boundaries",
+    "folder": "skills/data-chunking-optimize/",
+    "size": 2411
+  },
+  {
+    "id": "database-migrate-ai",
+    "name": "database-migrate-ai",
+    "description": "Migrate data and embeddings between vector databases with zero downtime",
+    "folder": "skills/database-migrate-ai/",
+    "size": 2408
+  },
+  {
+    "id": "docker-containerize",
+    "name": "docker-containerize",
+    "description": "Containerize an AI application with multi-stage Docker build and health checks",
+    "folder": "skills/docker-containerize/",
+    "size": 2422
+  },
+  {
+    "id": "embedding-model-select",
+    "name": "embedding-model-select",
+    "description": "Select and configure the optimal embedding model for vector search",
+    "folder": "skills/embedding-model-select/",
+    "size": 2407
+  },
+  {
+    "id": "evaluation-pipeline-create",
+    "name": "evaluation-pipeline-create",
+    "description": "Create an evaluation pipeline with Azure AI Evaluation SDK and CI gate logic",
+    "folder": "skills/evaluation-pipeline-create/",
+    "size": 2439
+  },
+  {
+    "id": "fai-manifest-create",
+    "name": "fai-manifest-create",
+    "description": "Create an fai-manifest.json with context, primitives, infrastructure, and guardrails",
+    "folder": "skills/fai-manifest-create/",
+    "size": 2434
+  },
+  {
+    "id": "feature-flag-ai",
+    "name": "feature-flag-ai",
+    "description": "Implement feature flags for AI capabilities with gradual rollout",
+    "folder": "skills/feature-flag-ai/",
+    "size": 2382
+  },
+  {
+    "id": "fai-agent-governance",
+    "name": "fai-agent-governance",
+    "description": "Reviews AI agent implementations for safety, budget controls, and human-in-the-loop patterns.",
+    "folder": "skills/fai-agent-governance/",
+    "size": 4897
+  },
+  {
+    "id": "fai-agentic-eval",
+    "name": "fai-agentic-eval",
+    "description": "Runs evaluator-optimizer pipelines to iteratively improve agent performance.",
+    "folder": "skills/fai-agentic-eval/",
+    "size": 4813
+  },
+  {
+    "id": "fai-api-docs-generator",
+    "name": "fai-api-docs-generator",
+    "description": "Generates API documentation from OpenAPI specs or code annotations with examples and error codes.",
+    "folder": "skills/fai-api-docs-generator/",
+    "size": 4576
+  },
+  {
+    "id": "fai-api-endpoint-generator",
+    "name": "fai-api-endpoint-generator",
+    "description": "Generates REST API endpoints with input validation, error handling, and OpenAPI documentation.",
+    "folder": "skills/fai-api-endpoint-generator/",
+    "size": 4580
+  },
+  {
+    "id": "fai-architecture-blueprint",
+    "name": "fai-architecture-blueprint",
+    "description": "name: fai-architecture-blueprint",
+    "folder": "skills/fai-architecture-blueprint/",
+    "size": 4278
+  },
+  {
+    "id": "fai-architecture-decision-record",
+    "name": "fai-architecture-decision-record",
+    "description": "Generates Architecture Decision Records (ADRs) with context, decision, alternatives considered, and consequences.",
+    "folder": "skills/fai-architecture-decision-record/",
+    "size": 4610
+  },
+  {
+    "id": "fai-aspire-orchestration",
+    "name": "fai-aspire-orchestration",
+    "description": "Sets up Azure Aspire for multi-container orchestration with service discovery.",
+    "folder": "skills/fai-aspire-orchestration/",
+    "size": 4369
+  },
+  {
+    "id": "fai-aspnet-minimal-api",
+    "name": "fai-aspnet-minimal-api",
+    "description": "Scaffolds an ASP.NET Core Minimal API with DI, health checks, OpenAPI, and Azure integration.",
+    "folder": "skills/fai-aspnet-minimal-api/",
+    "size": 4560
+  },
+  {
+    "id": "fai-az-cost-optimize",
+    "name": "fai-az-cost-optimize",
+    "description": "Analyzes Azure spending and recommends cost optimizations for AI workloads.",
+    "folder": "skills/fai-az-cost-optimize/",
+    "size": 4326
+  },
+  {
+    "id": "fai-azure-ai-foundry-setup",
+    "name": "fai-azure-ai-foundry-setup",
+    "description": "Sets up Azure AI Foundry Hub/Project with RBAC, networking, and connected services.",
+    "folder": "skills/fai-azure-ai-foundry-setup/",
+    "size": 4468
+  },
+  {
+    "id": "fai-azure-ai-search-index",
+    "name": "fai-azure-ai-search-index",
+    "description": "Creates and configures Azure AI Search vector indexes with HNSW and hybrid search.",
+    "folder": "skills/fai-azure-ai-search-index/",
+    "size": 4603
+  },
+  {
+    "id": "fai-azure-app-config",
+    "name": "fai-azure-app-config",
+    "description": "Configures Azure App Configuration with feature flags, key-value settings, and refresh patterns.",
+    "folder": "skills/fai-azure-app-config/",
+    "size": 4496
+  },
+  {
+    "id": "fai-azure-architecture-review",
+    "name": "fai-azure-architecture-review",
+    "description": "Conducts Azure Well-Architected Framework reviews with pillar scoring and recommendations.",
+    "folder": "skills/fai-azure-architecture-review/",
+    "size": 4506
+  },
+  {
+    "id": "fai-azure-blob-lifecycle",
+    "name": "fai-azure-blob-lifecycle",
+    "description": "Designs Azure Blob Storage lifecycle management with tiering and retention policies.",
+    "folder": "skills/fai-azure-blob-lifecycle/",
+    "size": 4464
+  },
+  {
+    "id": "fai-azure-cognitive-services",
+    "name": "fai-azure-cognitive-services",
+    "description": "Integrates Azure Cognitive Services — Language, Speech, Vision, and Translator.",
+    "folder": "skills/fai-azure-cognitive-services/",
+    "size": 4468
+  },
+  {
+    "id": "fai-azure-container-registry",
+    "name": "fai-azure-container-registry",
+    "description": "Configures Azure Container Registry with geo-replication, scanning, and Managed Identity access.",
+    "folder": "skills/fai-azure-container-registry/",
+    "size": 4528
+  },
+  {
+    "id": "fai-azure-cosmos-modeling",
+    "name": "fai-azure-cosmos-modeling",
+    "description": "Designs Cosmos DB data models with partition keys, RU estimation, and vector search.",
+    "folder": "skills/fai-azure-cosmos-modeling/",
+    "size": 4468
+  },
+  {
+    "id": "fai-azure-data-explorer",
+    "name": "fai-azure-data-explorer",
+    "description": "Configures Azure Data Explorer for telemetry with KQL queries and dashboards.",
+    "folder": "skills/fai-azure-data-explorer/",
+    "size": 4432
+  },
+  {
+    "id": "fai-azure-event-grid-setup",
+    "name": "fai-azure-event-grid-setup",
+    "description": "Sets up Azure Event Grid for event-driven AI pipeline triggers and routing.",
+    "folder": "skills/fai-azure-event-grid-setup/",
+    "size": 4436
+  },
+  {
+    "id": "fai-azure-event-hubs-setup",
+    "name": "fai-azure-event-hubs-setup",
+    "description": "Configures Azure Event Hubs for real-time streaming AI data ingestion.",
+    "folder": "skills/fai-azure-event-hubs-setup/",
+    "size": 4416
+  },
+  {
+    "id": "fai-azure-functions-setup",
+    "name": "fai-azure-functions-setup",
+    "description": "Creates Azure Functions apps with triggers, bindings, Managed Identity, and monitoring.",
+    "folder": "skills/fai-azure-functions-setup/",
+    "size": 4480
+  },
+  {
+    "id": "fai-azure-key-vault-setup",
+    "name": "fai-azure-key-vault-setup",
+    "description": "Configures Azure Key Vault with RBAC, rotation, CMK, and application integration.",
+    "folder": "skills/fai-azure-key-vault-setup/",
+    "size": 4456
+  },
+  {
+    "id": "fai-azure-openai-integration",
+    "name": "fai-azure-openai-integration",
+    "description": "Integrates Azure OpenAI with deployment types, content filtering, and token management.",
+    "folder": "skills/fai-azure-openai-integration/",
+    "size": 4492
+  },
+  {
+    "id": "fai-azure-resource-graph",
+    "name": "fai-azure-resource-graph",
+    "description": "Writes Azure Resource Graph KQL queries for cross-subscription resource analysis.",
+    "folder": "skills/fai-azure-resource-graph/",
+    "size": 4452
+  },
+  {
+    "id": "fai-azure-resource-health",
+    "name": "fai-azure-resource-health",
+    "description": "Diagnoses Azure resource health issues with metrics analysis and remediation steps.",
+    "folder": "skills/fai-azure-resource-health/",
+    "size": 4464
+  },
+  {
+    "id": "fai-azure-resource-visualizer",
+    "name": "fai-azure-resource-visualizer",
+    "description": "Generates visual diagrams of Azure resource topologies and dependencies.",
+    "folder": "skills/fai-azure-resource-visualizer/",
+    "size": 4436
+  },
+  {
+    "id": "fai-azure-role-selector",
+    "name": "fai-azure-role-selector",
+    "description": "Selects appropriate Azure RBAC roles for AI workloads following least privilege.",
+    "folder": "skills/fai-azure-role-selector/",
+    "size": 4444
+  },
+  {
+    "id": "fai-azure-service-bus-setup",
+    "name": "fai-azure-service-bus-setup",
+    "description": "Configures Azure Service Bus with queues, topics, dead-letter, and session-based messaging.",
+    "folder": "skills/fai-azure-service-bus-setup/",
+    "size": 4504
+  },
+  {
+    "id": "fai-azure-sql-setup",
+    "name": "fai-azure-sql-setup",
+    "description": "Configures Azure SQL Database with Hyperscale, geo-replication, and performance tuning.",
+    "folder": "skills/fai-azure-sql-setup/",
+    "size": 4456
+  },
+  {
+    "id": "fai-azure-static-web-apps-setup",
+    "name": "fai-azure-static-web-apps-setup",
+    "description": "Deploys applications to Azure Static Web Apps with API integration and custom domains.",
+    "folder": "skills/fai-azure-static-web-apps-setup/",
+    "size": 4500
+  },
+  {
+    "id": "fai-azure-storage-patterns",
+    "name": "fai-azure-storage-patterns",
+    "description": "Implements cross-service Azure Storage patterns — Blob, Queue, Table, File.",
+    "folder": "skills/fai-azure-storage-patterns/",
+    "size": 4587
+  },
+  {
+    "id": "fai-basic-prompt-optimization",
+    "name": "fai-basic-prompt-optimization",
+    "description": "Applies fundamental prompt engineering optimizations — clarity, specificity, format control.",
+    "folder": "skills/fai-basic-prompt-optimization/",
+    "size": 4516
+  },
+  {
+    "id": "fai-bicep-module-scaffold",
+    "name": "fai-bicep-module-scaffold",
+    "description": "Scaffolds a Bicep module with parameters, outputs, AVM patterns, and deployment test.",
+    "folder": "skills/fai-bicep-module-scaffold/",
+    "size": 4473
+  },
+  {
+    "id": "fai-boost-prompt",
+    "name": "fai-boost-prompt",
+    "description": "Analyzes and improves prompt quality with specificity scoring and recommendation engine.",
+    "folder": "skills/fai-boost-prompt/",
+    "size": 4440
+  },
+  {
+    "id": "fai-build-agentic-loops",
+    "name": "fai-build-agentic-loops",
+    "description": "Implements autonomous agent loops with ReAct pattern, tool calling, and termination conditions.",
+    "folder": "skills/fai-build-agentic-loops/",
+    "size": 4917
+  },
+  {
+    "id": "fai-build-bicep-module",
+    "name": "fai-build-bicep-module",
+    "description": "Creates Bicep modules with AVM patterns, parameters, outputs, and deployment tests.",
+    "folder": "skills/fai-build-bicep-module/",
+    "size": 4453
+  },
+  {
+    "id": "fai-build-data-lakehouse",
+    "name": "fai-build-data-lakehouse",
+    "description": "Designs data lakehouse architecture with medallion pattern (bronze/silver/gold).",
+    "folder": "skills/fai-build-data-lakehouse/",
+    "size": 4445
+  },
+  {
+    "id": "fai-build-docker-image",
+    "name": "fai-build-docker-image",
+    "description": "Builds optimized Docker images with multi-stage, non-root, and AI model weight caching.",
+    "folder": "skills/fai-build-docker-image/",
+    "size": 4466
+  },
+  {
+    "id": "fai-build-etl-pipeline",
+    "name": "fai-build-etl-pipeline",
+    "description": "Creates ETL pipeline designs for AI data ingestion with quality checks and scheduling.",
+    "folder": "skills/fai-build-etl-pipeline/",
+    "size": 4322
+  },
+  {
+    "id": "fai-build-genai-rag",
+    "name": "fai-build-genai-rag",
+    "description": "Builds a complete RAG pipeline with embeddings, vector store, retrieval, and evaluation.",
+    "folder": "skills/fai-build-genai-rag/",
+    "size": 4608
+  },
+  {
+    "id": "fai-build-github-workflow",
+    "name": "fai-build-github-workflow",
+    "description": "Creates GitHub Actions workflows with matrix testing, SHA-pinned actions, and quality gates.",
+    "folder": "skills/fai-build-github-workflow/",
+    "size": 4358
+  },
+  {
+    "id": "fai-build-integration-test",
+    "name": "fai-build-integration-test",
+    "description": "Generates integration tests with real service connections, test containers, and cleanup.",
+    "folder": "skills/fai-build-integration-test/",
+    "size": 4462
+  },
+  {
+    "id": "fai-build-kubernetes-manifest",
+    "name": "fai-build-kubernetes-manifest",
+    "description": "Generates Kubernetes manifests with GPU scheduling, health probes, and autoscaling.",
+    "folder": "skills/fai-build-kubernetes-manifest/",
+    "size": 4338
+  },
+  {
+    "id": "fai-build-llm-evaluator",
+    "name": "fai-build-llm-evaluator",
+    "description": "Builds custom LLM evaluation metrics for groundedness, coherence, and domain-specific quality.",
+    "folder": "skills/fai-build-llm-evaluator/",
+    "size": 4919
+  },
+  {
+    "id": "fai-build-nosql-data-model",
+    "name": "fai-build-nosql-data-model",
+    "description": "Designs NoSQL data models with access patterns, partition strategy, and consistency levels.",
+    "folder": "skills/fai-build-nosql-data-model/",
+    "size": 4497
+  },
+  {
+    "id": "fai-build-prompting-system",
+    "name": "fai-build-prompting-system",
+    "description": "Builds a multi-turn prompting system with template management and variable injection.",
+    "folder": "skills/fai-build-prompting-system/",
+    "size": 4468
+  },
+  {
+    "id": "fai-build-semantic-search",
+    "name": "fai-build-semantic-search",
+    "description": "Builds semantic similarity search with embedding generation and vector index.",
+    "folder": "skills/fai-build-semantic-search/",
+    "size": 4441
+  },
+  {
+    "id": "fai-build-sql-migration",
+    "name": "fai-build-sql-migration",
+    "description": "Creates database migration scripts with versioning, rollback, and data preservation.",
+    "folder": "skills/fai-build-sql-migration/",
+    "size": 4318
+  },
+  {
+    "id": "fai-build-terraform-module",
+    "name": "fai-build-terraform-module",
+    "description": "Creates Terraform modules with variables, outputs, examples, and testing configuration.",
+    "folder": "skills/fai-build-terraform-module/",
+    "size": 4342
+  },
+  {
+    "id": "fai-build-test-harness",
+    "name": "fai-build-test-harness",
+    "description": "Creates test infrastructure with fixtures, factories, mocks, and test data generators.",
+    "folder": "skills/fai-build-test-harness/",
+    "size": 4438
+  },
+  {
+    "id": "fai-build-tokenizer",
+    "name": "fai-build-tokenizer",
+    "description": "Implements tokenization pipelines for LLM input preparation and token counting.",
+    "folder": "skills/fai-build-tokenizer/",
+    "size": 4282
+  },
+  {
+    "id": "fai-build-unit-test",
+    "name": "fai-build-unit-test",
+    "description": "Generates unit tests for any language — detects framework and applies appropriate patterns.",
+    "folder": "skills/fai-build-unit-test/",
+    "size": 4454
+  },
+  {
+    "id": "fai-build-vector-store",
+    "name": "fai-build-vector-store",
+    "description": "Sets up and configures a vector database for embedding storage and similarity search.",
+    "folder": "skills/fai-build-vector-store/",
+    "size": 4318
+  },
+  {
+    "id": "fai-changelog-generator",
+    "name": "fai-changelog-generator",
+    "description": "Generates changelogs from git history following Keep a Changelog format with semantic versioning.",
+    "folder": "skills/fai-changelog-generator/",
+    "size": 4441
+  },
+  {
+    "id": "fai-cloud-design-patterns",
+    "name": "fai-cloud-design-patterns",
+    "description": "Applies cloud design patterns — circuit breaker, bulkhead, cache-aside, CQRS, event sourcing.",
+    "folder": "skills/fai-cloud-design-patterns/",
+    "size": 4441
+  },
+  {
+    "id": "fai-code-smell-detector",
+    "name": "fai-code-smell-detector",
+    "description": "Identifies code smells and anti-patterns with refactoring recommendations.",
+    "folder": "skills/fai-code-smell-detector/",
+    "size": 4401
+  },
+  {
+    "id": "fai-codeql-setup",
+    "name": "fai-codeql-setup",
+    "description": "Configures CodeQL analysis for security vulnerability detection in CI/CD pipelines.",
+    "folder": "skills/fai-codeql-setup/",
+    "size": 4409
+  },
+  {
+    "id": "fai-comment-tutorial",
+    "name": "fai-comment-tutorial",
+    "description": "Generates educational code comments explaining complex logic for learning and onboarding.",
+    "folder": "skills/fai-comment-tutorial/",
+    "size": 4397
+  },
+  {
+    "id": "fai-component-docs",
+    "name": "fai-component-docs",
+    "description": "Documents software components with interface contracts, usage examples, and dependency diagrams.",
+    "folder": "skills/fai-component-docs/",
+    "size": 4346
+  },
+  {
+    "id": "fai-containerize-aspnet",
+    "name": "fai-containerize-aspnet",
+    "description": "Containerizes ASP.NET Core applications with multi-stage builds and health probes.",
+    "folder": "skills/fai-containerize-aspnet/",
+    "size": 4381
+  },
+  {
+    "id": "fai-containerize-aspnet-framework",
+    "name": "fai-containerize-aspnet-framework",
+    "description": "Containerizes legacy ASP.NET Framework applications with Windows containers.",
+    "folder": "skills/fai-containerize-aspnet-framework/",
+    "size": 4397
+  },
+  {
+    "id": "fai-content-safety-review",
+    "name": "fai-content-safety-review",
+    "description": "Reviews AI outputs against Azure Content Safety categories with threshold recommendations.",
+    "folder": "skills/fai-content-safety-review/",
+    "size": 4819
+  },
+  {
+    "id": "fai-context-map",
+    "name": "fai-context-map",
+    "description": "Creates domain-driven design context maps showing bounded contexts, relationships, and integration patterns.",
+    "folder": "skills/fai-context-map/",
+    "size": 4453
+  },
+  {
+    "id": "fai-contextual-rag",
+    "name": "fai-contextual-rag",
+    "description": "Builds context-aware RAG with query routing, multi-source retrieval, and result synthesis.",
+    "folder": "skills/fai-contextual-rag/",
+    "size": 4612
+  },
+  {
+    "id": "fai-conventional-commit",
+    "name": "fai-conventional-commit",
+    "description": "Generates conventional commit messages following the Angular convention for changelogs.",
+    "folder": "skills/fai-conventional-commit/",
+    "size": 4401
+  },
+  {
+    "id": "fai-copilot-cli-quickstart",
+    "name": "fai-copilot-cli-quickstart",
+    "description": "Quick start guide for GitHub Copilot CLI setup and common usage patterns.",
+    "folder": "skills/fai-copilot-cli-quickstart/",
+    "size": 4357
+  },
+  {
+    "id": "fai-copilot-instructions-generator",
+    "name": "fai-copilot-instructions-generator",
+    "description": "Generates customized copilot-instructions.md files based on project technology stack and conventions.",
+    "folder": "skills/fai-copilot-instructions-generator/",
+    "size": 4501
+  },
+  {
+    "id": "fai-copilot-sdk-integration",
+    "name": "fai-copilot-sdk-integration",
+    "description": "Integrates Copilot SDK patterns for programmatic AI agent interactions.",
+    "folder": "skills/fai-copilot-sdk-integration/",
+    "size": 4353
+  },
+  {
+    "id": "fai-copilot-spaces-setup",
+    "name": "fai-copilot-spaces-setup",
+    "description": "Configures Copilot Spaces for collaborative AI-assisted development environments.",
+    "folder": "skills/fai-copilot-spaces-setup/",
+    "size": 4381
+  },
+  {
+    "id": "fai-copilot-usage-metrics",
+    "name": "fai-copilot-usage-metrics",
+    "description": "Generates Copilot usage analytics reports — adoption rates, acceptance rates, productivity impact.",
+    "folder": "skills/fai-copilot-usage-metrics/",
+    "size": 4461
+  },
+  {
+    "id": "fai-cosmosdb-datamodeling",
+    "name": "fai-cosmosdb-datamodeling",
+    "description": "Designs Cosmos DB data models for AI workloads with partition key strategy and vector search.",
+    "folder": "skills/fai-cosmosdb-datamodeling/",
+    "size": 4501
+  },
+  {
+    "id": "fai-cost-estimator",
+    "name": "fai-cost-estimator",
+    "description": "name: fai-cost-estimator",
+    "folder": "skills/fai-cost-estimator/",
+    "size": 4130
+  },
+  {
+    "id": "fai-daily-prep",
+    "name": "fai-daily-prep",
+    "description": "Daily preparation skill — summarizes yesterday, plans today, identifies blockers.",
+    "folder": "skills/fai-daily-prep/",
+    "size": 4349
+  },
+  {
+    "id": "fai-database-schema-designer",
+    "name": "fai-database-schema-designer",
+    "description": "Designs relational database schemas with normalization, indexes, and referential integrity.",
+    "folder": "skills/fai-database-schema-designer/",
+    "size": 4505
+  },
+  {
+    "id": "fai-dead-code-removal",
+    "name": "fai-dead-code-removal",
+    "description": "Identifies and safely removes dead code, unused imports, and unreachable branches.",
+    "folder": "skills/fai-dead-code-removal/",
+    "size": 4425
+  },
+  {
+    "id": "fai-deploy-01-enterprise-rag",
+    "name": "fai-deploy-01-enterprise-rag",
+    "description": "Deploys Play 01-enterprise-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-01-enterprise-rag/",
+    "size": 4847
+  },
+  {
+    "id": "fai-deploy-02-ai-landing-zone",
+    "name": "fai-deploy-02-ai-landing-zone",
+    "description": "Deploys Play 02-ai-landing-zone to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-02-ai-landing-zone/",
+    "size": 4855
+  },
+  {
+    "id": "fai-deploy-03-deterministic-agent",
+    "name": "fai-deploy-03-deterministic-agent",
+    "description": "Deploys Play 03-deterministic-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-03-deterministic-agent/",
+    "size": 5053
+  },
+  {
+    "id": "fai-deploy-04-call-center-voice-ai",
+    "name": "fai-deploy-04-call-center-voice-ai",
+    "description": "Deploys Play 04-call-center-voice-ai to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-04-call-center-voice-ai/",
+    "size": 4895
+  },
+  {
+    "id": "fai-deploy-05-it-ticket-resolution",
+    "name": "fai-deploy-05-it-ticket-resolution",
+    "description": "Deploys Play 05-it-ticket-resolution to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-05-it-ticket-resolution/",
+    "size": 4895
+  },
+  {
+    "id": "fai-deploy-06-document-intelligence",
+    "name": "fai-deploy-06-document-intelligence",
+    "description": "Deploys Play 06-document-intelligence to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-06-document-intelligence/",
+    "size": 4903
+  },
+  {
+    "id": "fai-deploy-07-multi-agent-service",
+    "name": "fai-deploy-07-multi-agent-service",
+    "description": "Deploys Play 07-multi-agent-service to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-07-multi-agent-service/",
+    "size": 5053
+  },
+  {
+    "id": "fai-deploy-08-copilot-studio-bot",
+    "name": "fai-deploy-08-copilot-studio-bot",
+    "description": "Deploys Play 08-copilot-studio-bot to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-08-copilot-studio-bot/",
+    "size": 4879
+  },
+  {
+    "id": "fai-deploy-09-ai-search-portal",
+    "name": "fai-deploy-09-ai-search-portal",
+    "description": "Deploys Play 09-ai-search-portal to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-09-ai-search-portal/",
+    "size": 4863
+  },
+  {
+    "id": "fai-deploy-10-content-moderation",
+    "name": "fai-deploy-10-content-moderation",
+    "description": "Deploys Play 10-content-moderation to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-10-content-moderation/",
+    "size": 4879
+  },
+  {
+    "id": "fai-deploy-11-ai-landing-zone-advanced",
+    "name": "fai-deploy-11-ai-landing-zone-advanced",
+    "description": "Deploys Play 11-ai-landing-zone-advanced to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-11-ai-landing-zone-advanced/",
+    "size": 4927
+  },
+  {
+    "id": "fai-deploy-12-model-serving-aks",
+    "name": "fai-deploy-12-model-serving-aks",
+    "description": "Deploys Play 12-model-serving-aks to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-12-model-serving-aks/",
+    "size": 4871
+  },
+  {
+    "id": "fai-deploy-13-fine-tuning-workflow",
+    "name": "fai-deploy-13-fine-tuning-workflow",
+    "description": "Deploys Play 13-fine-tuning-workflow to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-13-fine-tuning-workflow/",
+    "size": 4895
+  },
+  {
+    "id": "fai-deploy-14-cost-optimized-ai-gateway",
+    "name": "fai-deploy-14-cost-optimized-ai-gateway",
+    "description": "Deploys Play 14-cost-optimized-ai-gateway to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-14-cost-optimized-ai-gateway/",
+    "size": 4935
+  },
+  {
+    "id": "fai-deploy-15-multi-modal-docproc",
+    "name": "fai-deploy-15-multi-modal-docproc",
+    "description": "Deploys Play 15-multi-modal-docproc to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-15-multi-modal-docproc/",
+    "size": 4887
+  },
+  {
+    "id": "fai-deploy-16-copilot-teams-extension",
+    "name": "fai-deploy-16-copilot-teams-extension",
+    "description": "Deploys Play 16-copilot-teams-extension to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-16-copilot-teams-extension/",
+    "size": 4919
+  },
+  {
+    "id": "fai-deploy-17-ai-observability",
+    "name": "fai-deploy-17-ai-observability",
+    "description": "Deploys Play 17-ai-observability to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-17-ai-observability/",
+    "size": 4863
+  },
+  {
+    "id": "fai-deploy-18-prompt-management",
+    "name": "fai-deploy-18-prompt-management",
+    "description": "Deploys Play 18-prompt-management to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-18-prompt-management/",
+    "size": 4871
+  },
+  {
+    "id": "fai-deploy-19-edge-ai-phi4",
+    "name": "fai-deploy-19-edge-ai-phi4",
+    "description": "Deploys Play 19-edge-ai-phi4 to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-19-edge-ai-phi4/",
+    "size": 4831
+  },
+  {
+    "id": "fai-deploy-20-anomaly-detection",
+    "name": "fai-deploy-20-anomaly-detection",
+    "description": "Deploys Play 20-anomaly-detection to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-20-anomaly-detection/",
+    "size": 4871
+  },
+  {
+    "id": "fai-deploy-21-agentic-rag",
+    "name": "fai-deploy-21-agentic-rag",
+    "description": "Deploys Play 21-agentic-rag to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-21-agentic-rag/",
+    "size": 4989
+  },
+  {
+    "id": "fai-deploy-22-multi-agent-swarm",
+    "name": "fai-deploy-22-multi-agent-swarm",
+    "description": "Deploys Play 22-multi-agent-swarm to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-22-multi-agent-swarm/",
+    "size": 5037
+  },
+  {
+    "id": "fai-deploy-23-browser-automation-agent",
+    "name": "fai-deploy-23-browser-automation-agent",
+    "description": "Deploys Play 23-browser-automation-agent to Azure with Bicep validation, what-if check, and post-deploy health verification.",
+    "folder": "skills/fai-deploy-23-browser-automation-agent/",
+    "size": 5093
+  },
+  {
+    "id": "fai-deploy-preflight",
+    "name": "fai-deploy-preflight",
+    "description": "Validates Bicep templates, checks Azure resource availability, verifies quota, and runs what-if deployment before any Azure infrastructure changes. A safety gate for all FAI play deployments.",
+    "folder": "skills/fai-deploy-preflight/",
+    "size": 2041
+  },
+  {
+    "id": "fai-design-accessibility",
+    "name": "fai-design-accessibility",
+    "description": "Audits and improves accessibility following WCAG 2.1 AA with actionable fixes.",
+    "folder": "skills/fai-design-accessibility/",
+    "size": 4369
+  },
+  {
+    "id": "fai-design-animations",
+    "name": "fai-design-animations",
+    "description": "Creates UI animations with framer-motion, CSS transitions, and interaction design.",
+    "folder": "skills/fai-design-animations/",
+    "size": 4373
+  },
+  {
+    "id": "fai-design-data-visualization",
+    "name": "fai-design-data-visualization",
+    "description": "Designs data visualization components with charts, graphs, and interactive dashboards.",
+    "folder": "skills/fai-design-data-visualization/",
+    "size": 4489
+  },
+  {
+    "id": "fai-design-dialog-system",
+    "name": "fai-design-dialog-system",
+    "description": "Creates modal/dialog systems with focus trapping, keyboard nav, and accessibility.",
+    "folder": "skills/fai-design-dialog-system/",
+    "size": 4385
+  },
+  {
+    "id": "fai-design-error-states",
+    "name": "fai-design-error-states",
+    "description": "Designs error state UX with clear messages, recovery actions, and fallback content.",
+    "folder": "skills/fai-design-error-states/",
+    "size": 4385
+  },
+  {
+    "id": "fai-design-forms",
+    "name": "fai-design-forms",
+    "description": "Designs form experiences with validation UX, error states, and progressive disclosure.",
+    "folder": "skills/fai-design-forms/",
+    "size": 4369
+  },
+  {
+    "id": "fai-design-icon-system",
+    "name": "fai-design-icon-system",
+    "description": "Creates icon systems with SVG sprites, icon components, and size/color tokens.",
+    "folder": "skills/fai-design-icon-system/",
+    "size": 4361
+  },
+  {
+    "id": "fai-design-layouts",
+    "name": "fai-design-layouts",
+    "description": "Creates responsive page layouts with grid systems, breakpoints, and visual hierarchy.",
+    "folder": "skills/fai-design-layouts/",
+    "size": 4373
+  },
+  {
+    "id": "fai-design-loading-states",
+    "name": "fai-design-loading-states",
+    "description": "Designs loading and skeleton states for async operations and streaming AI responses.",
+    "folder": "skills/fai-design-loading-states/",
+    "size": 4397
+  },
+  {
+    "id": "fai-design-onboarding",
+    "name": "fai-design-onboarding",
+    "description": "Designs user onboarding flows with progressive disclosure and contextual help.",
+    "folder": "skills/fai-design-onboarding/",
+    "size": 4357
+  },
+  {
+    "id": "fai-design-responsive",
+    "name": "fai-design-responsive",
+    "description": "Implements responsive design patterns for mobile, tablet, and desktop breakpoints.",
+    "folder": "skills/fai-design-responsive/",
+    "size": 4373
+  },
+  {
+    "id": "fai-design-state-management",
+    "name": "fai-design-state-management",
+    "description": "Designs client-side state management patterns appropriate for the framework.",
+    "folder": "skills/fai-design-state-management/",
+    "size": 4373
+  },
+  {
+    "id": "fai-design-system-tokens",
+    "name": "fai-design-system-tokens",
+    "description": "Creates design token systems for colors, spacing, typography, and shadows.",
+    "folder": "skills/fai-design-system-tokens/",
+    "size": 4353
+  },
+  {
+    "id": "fai-design-themes",
+    "name": "fai-design-themes",
+    "description": "Designs theme systems with CSS custom properties, dark mode, and brand customization.",
+    "folder": "skills/fai-design-themes/",
+    "size": 4369
+  },
+  {
+    "id": "fai-design-ui-components",
+    "name": "fai-design-ui-components",
+    "description": "Designs reusable UI component libraries with props, states, and accessibility.",
+    "folder": "skills/fai-design-ui-components/",
+    "size": 4369
+  },
+  {
+    "id": "fai-deterministic-agent-skill",
+    "name": "fai-deterministic-agent-skill",
+    "description": "Builds deterministic AI agents with grounding, structured output, and evaluation gates.",
+    "folder": "skills/fai-deterministic-agent-skill/",
+    "size": 4909
+  },
+  {
+    "id": "fai-documentation-writer",
+    "name": "fai-documentation-writer",
+    "description": "Generates documentation aligned with the FROOT knowledge framework — module-style docs with duration, audience, table of contents, mermaid diagrams, code examples, and key takeaways sections.",
+    "folder": "skills/fai-documentation-writer/",
+    "size": 1712
+  },
+  {
+    "id": "fai-domain-driven-design",
+    "name": "fai-domain-driven-design",
+    "description": "Applies DDD patterns — aggregates, entities, value objects, repositories, and domain events.",
+    "folder": "skills/fai-domain-driven-design/",
+    "size": 4433
+  },
+  {
+    "id": "fai-drawio-generator",
+    "name": "fai-drawio-generator",
+    "description": "Generates Draw.io architecture diagrams from natural language descriptions.",
+    "folder": "skills/fai-drawio-generator/",
+    "size": 4341
+  },
+  {
+    "id": "fai-dynamic-prompt",
+    "name": "fai-dynamic-prompt",
+    "description": "Creates context-adaptive prompts that adjust based on query complexity and user profile.",
+    "folder": "skills/fai-dynamic-prompt/",
+    "size": 4448
+  },
+  {
+    "id": "fai-edge-case-generator",
+    "name": "fai-edge-case-generator",
+    "description": "Generates edge case and boundary condition test scenarios for comprehensive coverage.",
+    "folder": "skills/fai-edge-case-generator/",
+    "size": 4393
+  },
+  {
+    "id": "fai-editorconfig-setup",
+    "name": "fai-editorconfig-setup",
+    "description": "Generates .editorconfig files for consistent code formatting across editors and languages.",
+    "folder": "skills/fai-editorconfig-setup/",
+    "size": 4409
+  },
+  {
+    "id": "fai-epic-breakdown-arch",
+    "name": "fai-epic-breakdown-arch",
+    "description": "Decomposes epics into implementable stories from an architecture perspective with dependency mapping.",
+    "folder": "skills/fai-epic-breakdown-arch/",
+    "size": 4457
+  },
+  {
+    "id": "fai-epic-breakdown-pm",
+    "name": "fai-epic-breakdown-pm",
+    "description": "Decomposes epics into user stories from a product management perspective with acceptance criteria.",
+    "folder": "skills/fai-epic-breakdown-pm/",
+    "size": 4437
+  },
+  {
+    "id": "fai-eval-driven-dev",
+    "name": "fai-eval-driven-dev",
+    "description": "Implements test-driven AI development — define eval metrics first, then build to pass them.",
+    "folder": "skills/fai-eval-driven-dev/",
+    "size": 4899
+  },
+  {
+    "id": "fai-eval-runner",
+    "name": "fai-eval-runner",
+    "description": "name: fai-eval-runner",
+    "folder": "skills/fai-eval-runner/",
+    "size": 4611
+  },
+  {
+    "id": "fai-evaluate-01-enterprise-rag",
+    "name": "fai-evaluate-01-enterprise-rag",
+    "description": "Runs quality evaluation for Play 01-enterprise-rag against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-01-enterprise-rag/",
+    "size": 5067
+  },
+  {
+    "id": "fai-evaluate-02-ai-landing-zone",
+    "name": "fai-evaluate-02-ai-landing-zone",
+    "description": "Runs quality evaluation for Play 02-ai-landing-zone against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-02-ai-landing-zone/",
+    "size": 5075
+  },
+  {
+    "id": "fai-evaluate-03-deterministic-agent",
+    "name": "fai-evaluate-03-deterministic-agent",
+    "description": "Runs quality evaluation for Play 03-deterministic-agent against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-03-deterministic-agent/",
+    "size": 5101
+  },
+  {
+    "id": "fai-evaluate-04-call-center-voice-ai",
+    "name": "fai-evaluate-04-call-center-voice-ai",
+    "description": "Runs quality evaluation for Play 04-call-center-voice-ai against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-04-call-center-voice-ai/",
+    "size": 5115
+  },
+  {
+    "id": "fai-evaluate-05-it-ticket-resolution",
+    "name": "fai-evaluate-05-it-ticket-resolution",
+    "description": "Runs quality evaluation for Play 05-it-ticket-resolution against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-05-it-ticket-resolution/",
+    "size": 5115
+  },
+  {
+    "id": "fai-evaluate-06-document-intelligence",
+    "name": "fai-evaluate-06-document-intelligence",
+    "description": "Runs quality evaluation for Play 06-document-intelligence against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-06-document-intelligence/",
+    "size": 5123
+  },
+  {
+    "id": "fai-evaluate-07-multi-agent-service",
+    "name": "fai-evaluate-07-multi-agent-service",
+    "description": "Runs quality evaluation for Play 07-multi-agent-service against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-07-multi-agent-service/",
+    "size": 5101
+  },
+  {
+    "id": "fai-evaluate-08-copilot-studio-bot",
+    "name": "fai-evaluate-08-copilot-studio-bot",
+    "description": "Runs quality evaluation for Play 08-copilot-studio-bot against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-08-copilot-studio-bot/",
+    "size": 5099
+  },
+  {
+    "id": "fai-evaluate-09-ai-search-portal",
+    "name": "fai-evaluate-09-ai-search-portal",
+    "description": "Runs quality evaluation for Play 09-ai-search-portal against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-09-ai-search-portal/",
+    "size": 5083
+  },
+  {
+    "id": "fai-evaluate-10-content-moderation",
+    "name": "fai-evaluate-10-content-moderation",
+    "description": "Runs quality evaluation for Play 10-content-moderation against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-10-content-moderation/",
+    "size": 5099
+  },
+  {
+    "id": "fai-evaluate-11-ai-landing-zone-advanced",
+    "name": "fai-evaluate-11-ai-landing-zone-advanced",
+    "description": "Runs quality evaluation for Play 11-ai-landing-zone-advanced against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-11-ai-landing-zone-advanced/",
+    "size": 5147
+  },
+  {
+    "id": "fai-evaluate-12-model-serving-aks",
+    "name": "fai-evaluate-12-model-serving-aks",
+    "description": "Runs quality evaluation for Play 12-model-serving-aks against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-12-model-serving-aks/",
+    "size": 5091
+  },
+  {
+    "id": "fai-evaluate-13-fine-tuning-workflow",
+    "name": "fai-evaluate-13-fine-tuning-workflow",
+    "description": "Runs quality evaluation for Play 13-fine-tuning-workflow against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-13-fine-tuning-workflow/",
+    "size": 5115
+  },
+  {
+    "id": "fai-evaluate-14-cost-optimized-ai-gateway",
+    "name": "fai-evaluate-14-cost-optimized-ai-gateway",
+    "description": "Runs quality evaluation for Play 14-cost-optimized-ai-gateway against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-14-cost-optimized-ai-gateway/",
+    "size": 5155
+  },
+  {
+    "id": "fai-evaluate-15-multi-modal-docproc",
+    "name": "fai-evaluate-15-multi-modal-docproc",
+    "description": "Runs quality evaluation for Play 15-multi-modal-docproc against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-15-multi-modal-docproc/",
+    "size": 5107
+  },
+  {
+    "id": "fai-evaluate-16-copilot-teams-extension",
+    "name": "fai-evaluate-16-copilot-teams-extension",
+    "description": "Runs quality evaluation for Play 16-copilot-teams-extension against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-16-copilot-teams-extension/",
+    "size": 5139
+  },
+  {
+    "id": "fai-evaluate-17-ai-observability",
+    "name": "fai-evaluate-17-ai-observability",
+    "description": "Runs quality evaluation for Play 17-ai-observability against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-17-ai-observability/",
+    "size": 5083
+  },
+  {
+    "id": "fai-evaluate-18-prompt-management",
+    "name": "fai-evaluate-18-prompt-management",
+    "description": "Runs quality evaluation for Play 18-prompt-management against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-18-prompt-management/",
+    "size": 5091
+  },
+  {
+    "id": "fai-evaluate-19-edge-ai-phi4",
+    "name": "fai-evaluate-19-edge-ai-phi4",
+    "description": "Runs quality evaluation for Play 19-edge-ai-phi4 against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-19-edge-ai-phi4/",
+    "size": 5051
+  },
+  {
+    "id": "fai-evaluate-20-anomaly-detection",
+    "name": "fai-evaluate-20-anomaly-detection",
+    "description": "Runs quality evaluation for Play 20-anomaly-detection against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-20-anomaly-detection/",
+    "size": 5091
+  },
+  {
+    "id": "fai-evaluate-21-agentic-rag",
+    "name": "fai-evaluate-21-agentic-rag",
+    "description": "Runs quality evaluation for Play 21-agentic-rag against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-21-agentic-rag/",
+    "size": 5037
+  },
+  {
+    "id": "fai-evaluate-22-multi-agent-swarm",
+    "name": "fai-evaluate-22-multi-agent-swarm",
+    "description": "Runs quality evaluation for Play 22-multi-agent-swarm against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-22-multi-agent-swarm/",
+    "size": 5085
+  },
+  {
+    "id": "fai-evaluate-23-browser-automation-agent",
+    "name": "fai-evaluate-23-browser-automation-agent",
+    "description": "Runs quality evaluation for Play 23-browser-automation-agent against fai-manifest.json guardrails — groundedness, coherence, safety.",
+    "folder": "skills/fai-evaluate-23-browser-automation-agent/",
+    "size": 5141
+  },
+  {
+    "id": "fai-evaluation-framework",
+    "name": "fai-evaluation-framework",
+    "description": "Sets up an AI evaluation framework with metrics, test sets, and CI/CD integration.",
+    "folder": "skills/fai-evaluation-framework/",
+    "size": 4875
+  },
+  {
+    "id": "fai-excalidraw-generator",
+    "name": "fai-excalidraw-generator",
+    "description": "Generates Excalidraw whiteboard diagrams for informal architecture discussions.",
+    "folder": "skills/fai-excalidraw-generator/",
+    "size": 4373
+  },
+  {
+    "id": "fai-fabric-lakehouse",
+    "name": "fai-fabric-lakehouse",
+    "description": "Designs Microsoft Fabric lakehouse architecture with medallion pattern and notebooks.",
+    "folder": "skills/fai-fabric-lakehouse/",
+    "size": 4381
+  },
+  {
+    "id": "fai-fastapi-scaffold",
+    "name": "fai-fastapi-scaffold",
+    "description": "Scaffolds a FastAPI Python project with Pydantic models, async endpoints, and pytest configuration.",
+    "folder": "skills/fai-fastapi-scaffold/",
+    "size": 4576
+  },
+  {
+    "id": "fai-feature-breakdown",
+    "name": "fai-feature-breakdown",
+    "description": "Breaks down features into atomic implementation tasks with effort estimates and dependency order.",
+    "folder": "skills/fai-feature-breakdown/",
+    "size": 4433
+  },
+  {
+    "id": "fai-finalize-agent-prompt",
+    "name": "fai-finalize-agent-prompt",
+    "description": "Finalizes agent system prompts with structured sections, guardrails, and few-shot examples.",
+    "folder": "skills/fai-finalize-agent-prompt/",
+    "size": 4909
+  },
+  {
+    "id": "fai-fine-tune-llm",
+    "name": "fai-fine-tune-llm",
+    "description": "Guides LLM fine-tuning with data preparation, LoRA config, training, and evaluation.",
+    "folder": "skills/fai-fine-tune-llm/",
+    "size": 4365
+  },
+  {
+    "id": "fai-first-ask",
+    "name": "fai-first-ask",
+    "description": "Context gathering skill — asks clarifying questions before proceeding with complex tasks.",
+    "folder": "skills/fai-first-ask/",
+    "size": 4377
+  },
+  {
+    "id": "fai-flowstudio-design",
+    "name": "fai-flowstudio-design",
+    "description": "Designs Power Automate desktop flows with UI automation and data extraction.",
+    "folder": "skills/fai-flowstudio-design/",
+    "size": 4349
+  },
+  {
+    "id": "fai-folder-structure",
+    "name": "fai-folder-structure",
+    "description": "Designs optimal project folder structure based on framework, team size, and complexity.",
+    "folder": "skills/fai-folder-structure/",
+    "size": 4389
+  },
+  {
+    "id": "fai-gdpr-compliance",
+    "name": "fai-gdpr-compliance",
+    "description": "Validates GDPR compliance in code — data handling, consent, right to deletion, privacy by design.",
+    "folder": "skills/fai-gdpr-compliance/",
+    "size": 4433
+  },
+  {
+    "id": "fai-gh-cli",
+    "name": "fai-gh-cli",
+    "description": "Automates GitHub operations using gh CLI — issues, PRs, releases, and workflows.",
+    "folder": "skills/fai-gh-cli/",
+    "size": 4329
+  },
+  {
+    "id": "fai-git-commit-best-practices",
+    "name": "fai-git-commit-best-practices",
+    "description": "Guides best practices for git commits — atomic changes, descriptive messages, signed commits.",
+    "folder": "skills/fai-git-commit-best-practices/",
+    "size": 4457
+  },
+  {
+    "id": "fai-git-flow-branch",
+    "name": "fai-git-flow-branch",
+    "description": "Creates git branches following GitFlow or trunk-based development conventions.",
+    "folder": "skills/fai-git-flow-branch/",
+    "size": 4349
+  },
+  {
+    "id": "fai-github-issue-triage",
+    "name": "fai-github-issue-triage",
+    "description": "Triages GitHub issues with priority, labels, assignment, and milestone recommendations.",
+    "folder": "skills/fai-github-issue-triage/",
+    "size": 4401
+  },
+  {
+    "id": "fai-github-issues",
+    "name": "fai-github-issues",
+    "description": "Creates well-structured GitHub issues with reproduction steps, expected behavior, and labels.",
+    "folder": "skills/fai-github-issues/",
+    "size": 4401
+  },
+  {
+    "id": "fai-github-pr-review",
+    "name": "fai-github-pr-review",
+    "description": "Reviews GitHub PRs with checklist-based assessment across security, quality, and WAF alignment.",
+    "folder": "skills/fai-github-pr-review/",
+    "size": 4421
+  },
+  {
+    "id": "fai-gtm-ai-strategy",
+    "name": "fai-gtm-ai-strategy",
+    "description": "Develops AI go-to-market strategy with positioning, competitive analysis, and pricing models.",
+    "folder": "skills/fai-gtm-ai-strategy/",
+    "size": 4409
+  },
+  {
+    "id": "fai-gtm-developer-ecosystem",
+    "name": "fai-gtm-developer-ecosystem",
+    "description": "Designs developer ecosystem strategy with SDK, docs, community, and partner programs.",
+    "folder": "skills/fai-gtm-developer-ecosystem/",
+    "size": 4409
+  },
+  {
+    "id": "fai-gtm-enterprise-onboarding",
+    "name": "fai-gtm-enterprise-onboarding",
+    "description": "Designs enterprise customer onboarding workflows for AI platform adoption.",
+    "folder": "skills/fai-gtm-enterprise-onboarding/",
+    "size": 4373
+  },
+  {
+    "id": "fai-gtm-enterprise-planning",
+    "name": "fai-gtm-enterprise-planning",
+    "description": "Creates enterprise account plans for AI solution adoption with stakeholder mapping.",
+    "folder": "skills/fai-gtm-enterprise-planning/",
+    "size": 4401
+  },
+  {
+    "id": "fai-gtm-investor-comms",
+    "name": "fai-gtm-investor-comms",
+    "description": "Prepares board and investor communications with AI initiative updates and ROI metrics.",
+    "folder": "skills/fai-gtm-investor-comms/",
+    "size": 4393
+  },
+  {
+    "id": "fai-gtm-launch",
+    "name": "fai-gtm-launch",
+    "description": "Creates a go-to-market launch plan for AI products with timeline, channels, and metrics.",
+    "folder": "skills/fai-gtm-launch/",
+    "size": 4369
+  },
+  {
+    "id": "fai-gtm-operating-cadence",
+    "name": "fai-gtm-operating-cadence",
+    "description": "Establishes operating cadence for AI product teams with ceremonies and metrics reviews.",
+    "folder": "skills/fai-gtm-operating-cadence/",
+    "size": 4409
+  },
+  {
+    "id": "fai-gtm-partnerships",
+    "name": "fai-gtm-partnerships",
+    "description": "Designs partnership architecture for AI ecosystem collaboration and co-selling.",
+    "folder": "skills/fai-gtm-partnerships/",
+    "size": 4357
+  },
+  {
+    "id": "fai-gtm-positioning",
+    "name": "fai-gtm-positioning",
+    "description": "Creates product positioning statements with messaging framework and competitive differentiation.",
+    "folder": "skills/fai-gtm-positioning/",
+    "size": 4421
+  },
+  {
+    "id": "fai-gtm-product-led-growth",
+    "name": "fai-gtm-product-led-growth",
+    "description": "Designs product-led growth strategy for AI tools with activation, retention, and expansion metrics.",
+    "folder": "skills/fai-gtm-product-led-growth/",
+    "size": 4461
+  },
+  {
+    "id": "fai-guardrails-policy",
+    "name": "fai-guardrails-policy",
+    "description": "Creates content policy guardrails for AI applications with blocked categories and severity thresholds.",
+    "folder": "skills/fai-guardrails-policy/",
+    "size": 4453
+  },
+  {
+    "id": "fai-human-in-the-loop",
+    "name": "fai-human-in-the-loop",
+    "description": "Designs human-in-the-loop workflows for AI with escalation criteria and approval gates.",
+    "folder": "skills/fai-human-in-the-loop/",
+    "size": 4393
+  },
+  {
+    "id": "fai-implementation-plan-generator",
+    "name": "fai-implementation-plan-generator",
+    "description": "Creates structured implementation plans with phases, tasks, dependencies, and verification steps.",
+    "folder": "skills/fai-implementation-plan-generator/",
+    "size": 4481
+  },
+  {
+    "id": "fai-import-iac",
+    "name": "fai-import-iac",
+    "description": "Imports existing Azure resources into Bicep/Terraform Infrastructure as Code.",
+    "folder": "skills/fai-import-iac/",
+    "size": 4325
+  },
+  {
+    "id": "fai-inference-optimization",
+    "name": "fai-inference-optimization",
+    "description": "Optimizes model inference with quantization, batching, caching, and serving framework selection.",
+    "folder": "skills/fai-inference-optimization/",
+    "size": 4449
+  },
+  {
+    "id": "fai-java-extract-method",
+    "name": "fai-java-extract-method",
+    "description": "Applies Extract Method refactoring in Java with proper error handling and testing.",
+    "folder": "skills/fai-java-extract-method/",
+    "size": 4381
+  },
+  {
+    "id": "fai-jest-test",
+    "name": "fai-jest-test",
+    "description": "Generates Jest/Vitest test suites for TypeScript/JavaScript with mocking and snapshots.",
+    "folder": "skills/fai-jest-test/",
+    "size": 4406
+  },
+  {
+    "id": "fai-junit-test",
+    "name": "fai-junit-test",
+    "description": "Generates JUnit 5 test suites for Java with @Test, @ParameterizedTest, Mockito.",
+    "folder": "skills/fai-junit-test/",
+    "size": 4378
+  },
+  {
+    "id": "fai-langchain-integration",
+    "name": "fai-langchain-integration",
+    "description": "Integrates LangChain with Azure OpenAI, vector stores, and retrieval patterns.",
+    "folder": "skills/fai-langchain-integration/",
+    "size": 4373
+  },
+  {
+    "id": "fai-llms-txt-generator",
+    "name": "fai-llms-txt-generator",
+    "description": "Creates llms.txt files for AI-readable project documentation following the llms.txt specification.",
+    "folder": "skills/fai-llms-txt-generator/",
+    "size": 4441
+  },
+  {
+    "id": "fai-make-repo-contribution",
+    "name": "fai-make-repo-contribution",
+    "description": "Guides making first contribution to a FAI repository following CONTRIBUTING.md.",
+    "folder": "skills/fai-make-repo-contribution/",
+    "size": 4397
+  },
+  {
+    "id": "fai-mcp-csharp-generator",
+    "name": "fai-mcp-csharp-generator",
+    "description": "Scaffolds a complete C#/.NET MCP server project with ModelContextProtocol NuGet, dependency injection, [McpServerTool] attributes, IHostedService lifecycle, and Azure Managed Identity integration.",
+    "folder": "skills/fai-mcp-csharp-generator/",
+    "size": 1579
+  },
+  {
+    "id": "fai-mcp-csharp-scaffold",
+    "name": "fai-mcp-csharp-scaffold",
+    "description": "Scaffolds a complete csharp MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-csharp-scaffold/",
+    "size": 4651
+  },
+  {
+    "id": "fai-mcp-go-scaffold",
+    "name": "fai-mcp-go-scaffold",
+    "description": "Scaffolds a complete go MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-go-scaffold/",
+    "size": 4619
+  },
+  {
+    "id": "fai-mcp-java-scaffold",
+    "name": "fai-mcp-java-scaffold",
+    "description": "Scaffolds a complete java MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-java-scaffold/",
+    "size": 4635
+  },
+  {
+    "id": "fai-mcp-kotlin-scaffold",
+    "name": "fai-mcp-kotlin-scaffold",
+    "description": "Scaffolds a complete kotlin MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-kotlin-scaffold/",
+    "size": 4651
+  },
+  {
+    "id": "fai-mcp-php-scaffold",
+    "name": "fai-mcp-php-scaffold",
+    "description": "Scaffolds a complete php MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-php-scaffold/",
+    "size": 4627
+  },
+  {
+    "id": "fai-mcp-python-generator",
+    "name": "fai-mcp-python-generator",
+    "description": "FAI MCP Python code generator with knowledge integration, tool chaining, and Azure deployment patterns",
+    "folder": "skills/fai-mcp-python-generator/",
+    "size": 4247
+  },
+  {
+    "id": "fai-mcp-python-scaffold",
+    "name": "fai-mcp-python-scaffold",
+    "description": "Scaffolds a complete python MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-python-scaffold/",
+    "size": 4651
+  },
+  {
+    "id": "fai-mcp-ruby-scaffold",
+    "name": "fai-mcp-ruby-scaffold",
+    "description": "Scaffolds a complete ruby MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-ruby-scaffold/",
+    "size": 4635
+  },
+  {
+    "id": "fai-mcp-rust-scaffold",
+    "name": "fai-mcp-rust-scaffold",
+    "description": "Scaffolds a complete rust MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-rust-scaffold/",
+    "size": 4635
+  },
+  {
+    "id": "fai-mcp-swift-scaffold",
+    "name": "fai-mcp-swift-scaffold",
+    "description": "Scaffolds a complete swift MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-swift-scaffold/",
+    "size": 4643
+  },
+  {
+    "id": "fai-mcp-typescript-generator",
+    "name": "fai-mcp-typescript-generator",
+    "description": "FAI MCP TypeScript code generator with knowledge integration, tool chaining, and Azure deployment patterns",
+    "folder": "skills/fai-mcp-typescript-generator/",
+    "size": 4279
+  },
+  {
+    "id": "fai-mcp-typescript-scaffold",
+    "name": "fai-mcp-typescript-scaffold",
+    "description": "Scaffolds a complete typescript MCP server project with FAI patterns, tool definitions, resource handlers, and deployment configuration.",
+    "folder": "skills/fai-mcp-typescript-scaffold/",
+    "size": 4683
+  },
+  {
+    "id": "fai-mermaid-generator",
+    "name": "fai-mermaid-generator",
+    "description": "Generates Mermaid diagrams (flowcharts, sequence, Gantt) from natural language.",
+    "folder": "skills/fai-mermaid-generator/",
+    "size": 4361
+  },
+  {
+    "id": "fai-model-recommendation",
+    "name": "fai-model-recommendation",
+    "description": "Recommends optimal AI model based on task type, latency needs, cost budget, and quality requirements.",
+    "folder": "skills/fai-model-recommendation/",
+    "size": 4461
+  },
+  {
+    "id": "fai-mstest-test",
+    "name": "fai-mstest-test",
+    "description": "Generates MSTest test suites for .NET projects with TestClass, TestMethod patterns.",
+    "folder": "skills/fai-mstest-test/",
+    "size": 4398
+  },
+  {
+    "id": "fai-multi-stage-docker",
+    "name": "fai-multi-stage-docker",
+    "description": "Generates optimized multi-stage Dockerfiles with minimal runtime images.",
+    "folder": "skills/fai-multi-stage-docker/",
+    "size": 4406
+  },
+  {
+    "id": "fai-nextjs-scaffold",
+    "name": "fai-nextjs-scaffold",
+    "description": "Scaffolds a Next.js 16 project with App Router, Tailwind, TypeScript, and static export.",
+    "folder": "skills/fai-nextjs-scaffold/",
+    "size": 4389
+  },
+  {
+    "id": "fai-nunit-test",
+    "name": "fai-nunit-test",
+    "description": "Generates NUnit test suites for .NET projects with TestFixture, Assert patterns.",
+    "folder": "skills/fai-nunit-test/",
+    "size": 4382
+  },
+  {
+    "id": "fai-openapi-to-app",
+    "name": "fai-openapi-to-app",
+    "description": "Generates application code from OpenAPI specifications — routes, models, validation, and test stubs.",
+    "folder": "skills/fai-openapi-to-app/",
+    "size": 4580
+  },
+  {
+    "id": "fai-plan-breakdown",
+    "name": "fai-plan-breakdown",
+    "description": "Decomposes high-level plans into actionable phases with milestones, deliverables, and risk assessment.",
+    "folder": "skills/fai-plan-breakdown/",
+    "size": 4441
+  },
+  {
+    "id": "fai-plantuml-generator",
+    "name": "fai-plantuml-generator",
+    "description": "Generates PlantUML sequence and class diagrams from code or descriptions.",
+    "folder": "skills/fai-plantuml-generator/",
+    "size": 4341
+  },
+  {
+    "id": "fai-play-initializer",
+    "name": "fai-play-initializer",
+    "description": "Scaffolds a complete FAI solution play with DevKit, TuneKit, SpecKit, infrastructure templates, and fai-manifest.json — the full FAI Protocol structure ready for development.",
+    "folder": "skills/fai-play-initializer/",
+    "size": 3900
+  },
+  {
+    "id": "fai-playwright-dotnet-test",
+    "name": "fai-playwright-dotnet-test",
+    "description": "Generates Playwright tests in C#/.NET with MSTest or NUnit integration.",
+    "folder": "skills/fai-playwright-dotnet-test/",
+    "size": 4394
+  },
+  {
+    "id": "fai-playwright-python-test",
+    "name": "fai-playwright-python-test",
+    "description": "Generates Playwright tests in Python with async patterns and pytest integration.",
+    "folder": "skills/fai-playwright-python-test/",
+    "size": 4430
+  },
+  {
+    "id": "fai-playwright-test",
+    "name": "fai-playwright-test",
+    "description": "Generates Playwright E2E tests with role-based locators, page objects, and visual regression.",
+    "folder": "skills/fai-playwright-test/",
+    "size": 4454
+  },
+  {
+    "id": "fai-polyglot-test",
+    "name": "fai-polyglot-test",
+    "description": "Generates tests across Python, TypeScript, C#, Java — detects language and applies appropriate framework.",
+    "folder": "skills/fai-polyglot-test/",
+    "size": 4502
+  },
+  {
+    "id": "fai-postgresql-code-review",
+    "name": "fai-postgresql-code-review",
+    "description": "Reviews PostgreSQL code for performance, security, extension usage, and connection management.",
+    "folder": "skills/fai-postgresql-code-review/",
+    "size": 4493
+  },
+  {
+    "id": "fai-postgresql-optimization",
+    "name": "fai-postgresql-optimization",
+    "description": "Optimizes PostgreSQL queries and configurations including pgvector for RAG workloads.",
+    "folder": "skills/fai-postgresql-optimization/",
+    "size": 4409
+  },
+  {
+    "id": "fai-power-apps-scaffold",
+    "name": "fai-power-apps-scaffold",
+    "description": "Scaffolds Power Apps Canvas app with component library, data sources, and navigation.",
+    "folder": "skills/fai-power-apps-scaffold/",
+    "size": 4393
+  },
+  {
+    "id": "fai-power-automate-flow",
+    "name": "fai-power-automate-flow",
+    "description": "Creates Power Automate flows with triggers, actions, error handling, and approval gates.",
+    "folder": "skills/fai-power-automate-flow/",
+    "size": 4405
+  },
+  {
+    "id": "fai-power-bi-dashboard",
+    "name": "fai-power-bi-dashboard",
+    "description": "Designs Power BI dashboards with KPIs, drill-through, and real-time streaming.",
+    "folder": "skills/fai-power-bi-dashboard/",
+    "size": 4361
+  },
+  {
+    "id": "fai-power-bi-report",
+    "name": "fai-power-bi-report",
+    "description": "Creates Power BI reports with DAX measures, data modeling, and performance optimization.",
+    "folder": "skills/fai-power-bi-report/",
+    "size": 4389
+  },
+  {
+    "id": "fai-power-platform-connector",
+    "name": "fai-power-platform-connector",
+    "description": "Builds custom Power Platform connectors from OpenAPI specs with authentication.",
+    "folder": "skills/fai-power-platform-connector/",
+    "size": 4389
+  },
+  {
+    "id": "fai-powerbi-modeling",
+    "name": "fai-powerbi-modeling",
+    "description": "Designs Power BI data models with star schema, relationships, and calculation groups.",
+    "folder": "skills/fai-powerbi-modeling/",
+    "size": 4381
+  },
+  {
+    "id": "fai-prd-generator",
+    "name": "fai-prd-generator",
+    "description": "Generates Product Requirements Documents with user needs, success metrics, constraints, and AI-specific requirements.",
+    "folder": "skills/fai-prd-generator/",
+    "size": 4497
+  },
+  {
+    "id": "fai-premium-frontend-ui",
+    "name": "fai-premium-frontend-ui",
+    "description": "Generates premium UI components with animations, glassmorphism, and dark mode support.",
+    "folder": "skills/fai-premium-frontend-ui/",
+    "size": 4397
+  },
+  {
+    "id": "fai-prompt-builder",
+    "name": "fai-prompt-builder",
+    "description": "Builds prompts using the persona-context-task-format template with optimization suggestions.",
+    "folder": "skills/fai-prompt-builder/",
+    "size": 4464
+  },
+  {
+    "id": "fai-pytest-coverage",
+    "name": "fai-pytest-coverage",
+    "description": "Generates pytest test suites with fixtures, parametrize, mocks, and coverage configuration.",
+    "folder": "skills/fai-pytest-coverage/",
+    "size": 4589
+  },
+  {
+    "id": "fai-quality-playbook",
+    "name": "fai-quality-playbook",
+    "description": "Generates a quality playbook with testing strategy, coverage targets, and CI/CD integration.",
+    "folder": "skills/fai-quality-playbook/",
+    "size": 4342
+  },
+  {
+    "id": "fai-react-component-scaffold",
+    "name": "fai-react-component-scaffold",
+    "description": "Scaffolds React components with TypeScript, Storybook stories, and test files.",
+    "folder": "skills/fai-react-component-scaffold/",
+    "size": 4385
+  },
+  {
+    "id": "fai-readme-generator",
+    "name": "fai-readme-generator",
+    "description": "Generates comprehensive README.md files with badges, installation, usage, architecture, and contributing sections.",
+    "folder": "skills/fai-readme-generator/",
+    "size": 4497
+  },
+  {
+    "id": "fai-refactor-complexity",
+    "name": "fai-refactor-complexity",
+    "description": "Reduces cyclomatic complexity by extracting methods, simplifying conditions, and removing nesting.",
+    "folder": "skills/fai-refactor-complexity/",
+    "size": 4445
+  },
+  {
+    "id": "fai-refactor-plan",
+    "name": "fai-refactor-plan",
+    "description": "Creates a phased refactoring plan with risk assessment, test coverage, and rollback strategy.",
+    "folder": "skills/fai-refactor-plan/",
+    "size": 4401
+  },
+  {
+    "id": "fai-refactor-skill",
+    "name": "fai-refactor-skill",
+    "description": "Refactors code to improve readability, maintainability, and testability while preserving behavior.",
+    "folder": "skills/fai-refactor-skill/",
+    "size": 4425
+  },
+  {
+    "id": "fai-remember",
+    "name": "fai-remember",
+    "description": "Persistent memory skill — saves and retrieves project context across AI sessions.",
+    "folder": "skills/fai-remember/",
+    "size": 4341
+  },
+  {
+    "id": "fai-review-and-refactor",
+    "name": "fai-review-and-refactor",
+    "description": "Combined code review + refactor — identifies issues and applies fixes in one pass.",
+    "folder": "skills/fai-review-and-refactor/",
+    "size": 4389
+  },
+  {
+    "id": "fai-rollout-plan",
+    "name": "fai-rollout-plan",
+    "description": "name: fai-rollout-plan",
+    "folder": "skills/fai-rollout-plan/",
+    "size": 4129
+  },
+  {
+    "id": "fai-scoutqa-test",
+    "name": "fai-scoutqa-test",
+    "description": "Generates AI-powered test suggestions based on code changes and coverage gaps.",
+    "folder": "skills/fai-scoutqa-test/",
+    "size": 4382
+  },
+  {
+    "id": "fai-secret-scanning",
+    "name": "fai-secret-scanning",
+    "description": "Scans code for leaked secrets with 25+ regex patterns across cloud providers and tokens.",
+    "folder": "skills/fai-secret-scanning/",
+    "size": 4389
+  },
+  {
+    "id": "fai-security-review-skill",
+    "name": "fai-security-review-skill",
+    "description": "Conducts security review following OWASP Top 10 + LLM Top 10 with severity ratings.",
+    "folder": "skills/fai-security-review-skill/",
+    "size": 4779
+  },
+  {
+    "id": "fai-semantic-kernel-integration",
+    "name": "fai-semantic-kernel-integration",
+    "description": "Integrates Semantic Kernel with Azure OpenAI, plugins, memory stores, and agent framework.",
+    "folder": "skills/fai-semantic-kernel-integration/",
+    "size": 4445
+  },
+  {
+    "id": "fai-skill-template",
+    "name": "fai-skill-template",
+    "description": "Generates a SKILL.md template with frontmatter, sections, template variables, and verification steps.",
+    "folder": "skills/fai-skill-template/",
+    "size": 4437
+  },
+  {
+    "id": "fai-specification-generator",
+    "name": "fai-specification-generator",
+    "description": "name: fai-specification-generator",
+    "folder": "skills/fai-specification-generator/",
+    "size": 4217
+  },
+  {
+    "id": "fai-springboot-kotlin-scaffold",
+    "name": "fai-springboot-kotlin-scaffold",
+    "description": "Scaffolds a Spring Boot Kotlin project with coroutines, data classes, and Gradle config.",
+    "folder": "skills/fai-springboot-kotlin-scaffold/",
+    "size": 4433
+  },
+  {
+    "id": "fai-springboot-scaffold",
+    "name": "fai-springboot-scaffold",
+    "description": "Scaffolds a Spring Boot Java project with DI, profiles, health checks, and test configuration.",
+    "folder": "skills/fai-springboot-scaffold/",
+    "size": 4429
+  },
+  {
+    "id": "fai-springboot-test",
+    "name": "fai-springboot-test",
+    "description": "Generates Spring Boot integration tests with @SpringBootTest, MockMvc, and Testcontainers.",
+    "folder": "skills/fai-springboot-test/",
+    "size": 4442
+  },
+  {
+    "id": "fai-sql-code-review-skill",
+    "name": "fai-sql-code-review-skill",
+    "description": "Reviews SQL code for performance, security (injection), and best practices.",
+    "folder": "skills/fai-sql-code-review-skill/",
+    "size": 4413
+  },
+  {
+    "id": "fai-sql-optimization-skill",
+    "name": "fai-sql-optimization-skill",
+    "description": "Optimizes SQL queries with execution plan analysis, index recommendations, and rewrite suggestions.",
+    "folder": "skills/fai-sql-optimization-skill/",
+    "size": 4461
+  },
+  {
+    "id": "fai-suggest-agents",
+    "name": "fai-suggest-agents",
+    "description": "Discovers and recommends relevant FAI agents based on user task description.",
+    "folder": "skills/fai-suggest-agents/",
+    "size": 4837
+  },
+  {
+    "id": "fai-suggest-instructions",
+    "name": "fai-suggest-instructions",
+    "description": "Discovers and recommends relevant FAI instructions based on file type and project context.",
+    "folder": "skills/fai-suggest-instructions/",
+    "size": 4433
+  },
+  {
+    "id": "fai-suggest-skills",
+    "name": "fai-suggest-skills",
+    "description": "Discovers and recommends relevant FAI skills based on user goal description.",
+    "folder": "skills/fai-suggest-skills/",
+    "size": 4353
+  },
+  {
+    "id": "fai-tech-stack-blueprint",
+    "name": "fai-tech-stack-blueprint",
+    "description": "Generates technology stack documentation with component diagram, decision rationale, and alternatives.",
+    "folder": "skills/fai-tech-stack-blueprint/",
+    "size": 4465
+  },
+  {
+    "id": "fai-technical-spike",
+    "name": "fai-technical-spike",
+    "description": "Conducts structured technical spike research with hypothesis, experiment design, findings, and recommendation.",
+    "folder": "skills/fai-technical-spike/",
+    "size": 4477
+  },
+  {
+    "id": "fai-terraform-module-scaffold",
+    "name": "fai-terraform-module-scaffold",
+    "description": "Scaffolds a Terraform module with variables, outputs, examples, and Terratest configuration.",
+    "folder": "skills/fai-terraform-module-scaffold/",
+    "size": 4445
+  },
+  {
+    "id": "fai-threat-model",
+    "name": "fai-threat-model",
+    "description": "Creates threat models with STRIDE methodology, attack trees, and mitigation recommendations.",
+    "folder": "skills/fai-threat-model/",
+    "size": 4393
+  },
+  {
+    "id": "fai-tldr-prompt",
+    "name": "fai-tldr-prompt",
+    "description": "Summarizes long conversations into concise action items and decisions.",
+    "folder": "skills/fai-tldr-prompt/",
+    "size": 4364
+  },
+  {
+    "id": "fai-tune-01-enterprise-rag",
+    "name": "fai-tune-01-enterprise-rag",
+    "description": "Tunes configuration for Play 01-enterprise-rag — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-01-enterprise-rag/",
+    "size": 4776
+  },
+  {
+    "id": "fai-tune-02-ai-landing-zone",
+    "name": "fai-tune-02-ai-landing-zone",
+    "description": "Tunes configuration for Play 02-ai-landing-zone — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-02-ai-landing-zone/",
+    "size": 4565
+  },
+  {
+    "id": "fai-tune-03-deterministic-agent",
+    "name": "fai-tune-03-deterministic-agent",
+    "description": "Tunes configuration for Play 03-deterministic-agent — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-03-deterministic-agent/",
+    "size": 5081
+  },
+  {
+    "id": "fai-tune-04-call-center-voice-ai",
+    "name": "fai-tune-04-call-center-voice-ai",
+    "description": "Tunes configuration for Play 04-call-center-voice-ai — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-04-call-center-voice-ai/",
+    "size": 4605
+  },
+  {
+    "id": "fai-tune-05-it-ticket-resolution",
+    "name": "fai-tune-05-it-ticket-resolution",
+    "description": "Tunes configuration for Play 05-it-ticket-resolution — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-05-it-ticket-resolution/",
+    "size": 4605
+  },
+  {
+    "id": "fai-tune-06-document-intelligence",
+    "name": "fai-tune-06-document-intelligence",
+    "description": "Tunes configuration for Play 06-document-intelligence — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-06-document-intelligence/",
+    "size": 4613
+  },
+  {
+    "id": "fai-tune-07-multi-agent-service",
+    "name": "fai-tune-07-multi-agent-service",
+    "description": "Tunes configuration for Play 07-multi-agent-service — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-07-multi-agent-service/",
+    "size": 5081
+  },
+  {
+    "id": "fai-tune-08-copilot-studio-bot",
+    "name": "fai-tune-08-copilot-studio-bot",
+    "description": "Tunes configuration for Play 08-copilot-studio-bot — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-08-copilot-studio-bot/",
+    "size": 4589
+  },
+  {
+    "id": "fai-tune-09-ai-search-portal",
+    "name": "fai-tune-09-ai-search-portal",
+    "description": "Tunes configuration for Play 09-ai-search-portal — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-09-ai-search-portal/",
+    "size": 4716
+  },
+  {
+    "id": "fai-tune-10-content-moderation",
+    "name": "fai-tune-10-content-moderation",
+    "description": "Tunes configuration for Play 10-content-moderation — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-10-content-moderation/",
+    "size": 4648
+  },
+  {
+    "id": "fai-tune-11-ai-landing-zone-advanced",
+    "name": "fai-tune-11-ai-landing-zone-advanced",
+    "description": "Tunes configuration for Play 11-ai-landing-zone-advanced — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-11-ai-landing-zone-advanced/",
+    "size": 4637
+  },
+  {
+    "id": "fai-tune-12-model-serving-aks",
+    "name": "fai-tune-12-model-serving-aks",
+    "description": "Tunes configuration for Play 12-model-serving-aks — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-12-model-serving-aks/",
+    "size": 4581
+  },
+  {
+    "id": "fai-tune-13-fine-tuning-workflow",
+    "name": "fai-tune-13-fine-tuning-workflow",
+    "description": "Tunes configuration for Play 13-fine-tuning-workflow — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-13-fine-tuning-workflow/",
+    "size": 4674
+  },
+  {
+    "id": "fai-tune-14-cost-optimized-ai-gateway",
+    "name": "fai-tune-14-cost-optimized-ai-gateway",
+    "description": "Tunes configuration for Play 14-cost-optimized-ai-gateway — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-14-cost-optimized-ai-gateway/",
+    "size": 4630
+  },
+  {
+    "id": "fai-tune-15-multi-modal-docproc",
+    "name": "fai-tune-15-multi-modal-docproc",
+    "description": "Tunes configuration for Play 15-multi-modal-docproc — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-15-multi-modal-docproc/",
+    "size": 4597
+  },
+  {
+    "id": "fai-tune-16-copilot-teams-extension",
+    "name": "fai-tune-16-copilot-teams-extension",
+    "description": "Tunes configuration for Play 16-copilot-teams-extension — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-16-copilot-teams-extension/",
+    "size": 4629
+  },
+  {
+    "id": "fai-tune-17-ai-observability",
+    "name": "fai-tune-17-ai-observability",
+    "description": "Tunes configuration for Play 17-ai-observability — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-17-ai-observability/",
+    "size": 4573
+  },
+  {
+    "id": "fai-tune-18-prompt-management",
+    "name": "fai-tune-18-prompt-management",
+    "description": "Tunes configuration for Play 18-prompt-management — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-18-prompt-management/",
+    "size": 4644
+  },
+  {
+    "id": "fai-tune-19-edge-ai-phi4",
+    "name": "fai-tune-19-edge-ai-phi4",
+    "description": "Tunes configuration for Play 19-edge-ai-phi4 — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-19-edge-ai-phi4/",
+    "size": 4541
+  },
+  {
+    "id": "fai-tune-20-anomaly-detection",
+    "name": "fai-tune-20-anomaly-detection",
+    "description": "Tunes configuration for Play 20-anomaly-detection — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-20-anomaly-detection/",
+    "size": 4581
+  },
+  {
+    "id": "fai-tune-21-agentic-rag",
+    "name": "fai-tune-21-agentic-rag",
+    "description": "Tunes configuration for Play 21-agentic-rag — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-21-agentic-rag/",
+    "size": 5017
+  },
+  {
+    "id": "fai-tune-22-multi-agent-swarm",
+    "name": "fai-tune-22-multi-agent-swarm",
+    "description": "Tunes configuration for Play 22-multi-agent-swarm — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-22-multi-agent-swarm/",
+    "size": 5065
+  },
+  {
+    "id": "fai-tune-23-browser-automation-agent",
+    "name": "fai-tune-23-browser-automation-agent",
+    "description": "Tunes configuration for Play 23-browser-automation-agent — model selection, token budgets, guardrail thresholds, cost optimization.",
+    "folder": "skills/fai-tune-23-browser-automation-agent/",
+    "size": 5121
+  },
+  {
+    "id": "fai-tutorial-generator",
+    "name": "fai-tutorial-generator",
+    "description": "Creates step-by-step tutorials with code examples, screenshots, and verification steps.",
+    "folder": "skills/fai-tutorial-generator/",
+    "size": 4397
+  },
+  {
+    "id": "fai-update-avm-bicep",
+    "name": "fai-update-avm-bicep",
+    "description": "Updates Azure Verified Module references in Bicep templates to latest versions.",
+    "folder": "skills/fai-update-avm-bicep/",
+    "size": 4429
+  },
+  {
+    "id": "fai-web-coder",
+    "name": "fai-web-coder",
+    "description": "Generates web pages and components from natural language descriptions with responsive design.",
+    "folder": "skills/fai-web-coder/",
+    "size": 4437
+  },
+  {
+    "id": "fai-webapp-testing",
+    "name": "fai-webapp-testing",
+    "description": "Generates web application test suites covering unit, integration, E2E, and accessibility.",
+    "folder": "skills/fai-webapp-testing/",
+    "size": 4434
+  },
+  {
+    "id": "fai-what-context-needed",
+    "name": "fai-what-context-needed",
+    "description": "Analyzes a task and identifies what context the AI needs to produce high-quality output.",
+    "folder": "skills/fai-what-context-needed/",
+    "size": 4405
+  },
+  {
+    "id": "fai-xunit-test",
+    "name": "fai-xunit-test",
+    "description": "Generates xUnit test suites with Fact/Theory, FluentAssertions, and WebApplicationFactory.",
+    "folder": "skills/fai-xunit-test/",
+    "size": 4422
+  },
+  {
+    "id": "github-actions-ai-pipeline",
+    "name": "github-actions-ai-pipeline",
+    "description": "Create a GitHub Actions CI/CD pipeline with evaluation gates for AI apps",
+    "folder": "skills/github-actions-ai-pipeline/",
+    "size": 2431
+  },
+  {
+    "id": "health-check-implement",
+    "name": "health-check-implement",
+    "description": "Implement comprehensive health check endpoints for all AI service dependencies",
+    "folder": "skills/health-check-implement/",
+    "size": 2431
+  },
+  {
+    "id": "incident-runbook-create",
+    "name": "incident-runbook-create",
+    "description": "Create an incident response runbook for AI system failures",
+    "folder": "skills/incident-runbook-create/",
+    "size": 2394
+  },
+  {
+    "id": "key-vault-integrate",
+    "name": "key-vault-integrate",
+    "description": "Integrate Azure Key Vault for secret management with Managed Identity",
+    "folder": "skills/key-vault-integrate/",
+    "size": 2404
+  },
+  {
+    "id": "load-test-ai-endpoint",
+    "name": "load-test-ai-endpoint",
+    "description": "Load test an AI endpoint with k6/Locust for p95 latency and error rates",
+    "folder": "skills/load-test-ai-endpoint/",
+    "size": 2414
+  },
+  {
+    "id": "managed-identity-setup",
+    "name": "managed-identity-setup",
+    "description": "Set up Managed Identity with RBAC role assignments for Azure services",
+    "folder": "skills/managed-identity-setup/",
+    "size": 2413
+  },
+  {
+    "id": "model-comparison-benchmark",
+    "name": "model-comparison-benchmark",
+    "description": "Benchmark multiple AI models on cost, latency, quality for a specific task",
+    "folder": "skills/model-comparison-benchmark/",
+    "size": 2435
+  },
+  {
+    "id": "multi-model-routing",
+    "name": "multi-model-routing",
+    "description": "Implement model routing logic: cheap model for simple, capable for complex tasks",
+    "folder": "skills/multi-model-routing/",
+    "size": 2426
+  },
+  {
+    "id": "observability-dashboard",
+    "name": "observability-dashboard",
+    "description": "Create an observability dashboard with KQL queries for AI system health",
+    "folder": "skills/observability-dashboard/",
+    "size": 2420
+  },
+  {
+    "id": "pii-detection-setup",
+    "name": "pii-detection-setup",
+    "description": "Set up PII detection and masking with Azure AI Language service",
+    "folder": "skills/pii-detection-setup/",
+    "size": 2392
+  },
+  {
+    "id": "prompt-version-manage",
+    "name": "prompt-version-manage",
+    "description": "Version control prompts with A/B testing, rollback, and performance tracking",
+    "folder": "skills/prompt-version-manage/",
+    "size": 2424
+  },
+  {
+    "id": "rag-pipeline-test",
+    "name": "rag-pipeline-test",
+    "description": "Test a RAG pipeline end-to-end with relevance and groundedness metrics",
+    "folder": "skills/rag-pipeline-test/",
+    "size": 2400
+  },
+  {
+    "id": "rbac-setup-play",
+    "name": "rbac-setup-play",
+    "description": "Set up RBAC role assignments for a solution play's Azure resources",
+    "folder": "skills/rbac-setup-play/",
+    "size": 2386
+  },
+  {
+    "id": "semantic-cache-implement",
+    "name": "semantic-cache-implement",
+    "description": "Implement semantic caching for AI responses with Redis and embedding similarity",
+    "folder": "skills/semantic-cache-implement/",
+    "size": 2439
+  },
+  {
+    "id": "sla-monitor-setup",
+    "name": "sla-monitor-setup",
+    "description": "Set up SLA monitoring with availability, latency, and quality metrics",
+    "folder": "skills/sla-monitor-setup/",
+    "size": 2398
+  },
+  {
+    "id": "ssl-cert-configure",
+    "name": "ssl-cert-configure",
+    "description": "Configure SSL certificates for custom domains on Azure App Service/AKS",
+    "folder": "skills/ssl-cert-configure/",
+    "size": 2403
+  },
+  {
+    "id": "streaming-response-implement",
+    "name": "streaming-response-implement",
+    "description": "Implement streaming AI responses with Server-Sent Events (SSE)",
+    "folder": "skills/streaming-response-implement/",
+    "size": 2417
+  },
+  {
+    "id": "structured-output-enforce",
+    "name": "structured-output-enforce",
+    "description": "Enforce structured JSON output from LLMs with schema validation",
+    "folder": "skills/structured-output-enforce/",
+    "size": 2410
+  },
+  {
+    "id": "token-budget-enforce",
+    "name": "token-budget-enforce",
+    "description": "Enforce token budgets per user/team with tracking and alerting",
+    "folder": "skills/token-budget-enforce/",
+    "size": 2393
+  },
+  {
+    "id": "vector-index-create",
+    "name": "vector-index-create",
+    "description": "Create and populate a vector search index in Azure AI Search or Cosmos DB",
+    "folder": "skills/vector-index-create/",
+    "size": 2412
+  },
+  {
+    "id": "webhook-ai-event",
+    "name": "webhook-ai-event",
+    "description": "Set up webhooks for AI system events: evaluation results, safety alerts, cost alerts",
+    "folder": "skills/webhook-ai-event/",
+    "size": 2425
+  }
+]

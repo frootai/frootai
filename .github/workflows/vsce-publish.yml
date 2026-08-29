@@ -1,0 +1,129 @@
+# ═══════════════════════════════════════════════════════════════════════
+# VS Code Extension Publish — FrootAI VS Code Extension
+# ═══════════════════════════════════════════════════════════════════════
+
+name: VS Code Extension Publish
+
+on:
+  push:
+    tags:
+      - 'ext-v*'
+      - 'rel-v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (package only, no publish)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vsce-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: 🧩 Publish VS Code Extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: 📦 Install dependencies
+        working-directory: ./vscode-extension
+        run: |
+          npm ci --ignore-scripts
+          cd webview-ui && npm ci --ignore-scripts
+
+      - name: 📦 Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: 🔨 Build extension
+        working-directory: ./vscode-extension
+        run: npm run compile
+
+      - name: 🔍 Version check
+        id: version
+        working-directory: ./vscode-extension
+        run: |
+          LOCAL=$(node -p "require('./package.json').version")
+          echo "version=$LOCAL" >> $GITHUB_OUTPUT
+          echo "Extension version: $LOCAL"
+
+          # M5.29 — pre-release channel detection. A SemVer pre-release
+          # suffix (-alpha / -beta / -rc / -dev / -preview, optionally
+          # followed by .<N>) signals the build ships to VS Code
+          # Marketplace's pre-release channel via `vsce publish
+          # --pre-release`. Without this flag, `vsce publish` ships to
+          # STABLE — which would push the alpha to stable users.
+          if echo "$LOCAL" | grep -Eq -- '-(alpha|beta|rc|dev|preview)(\.[0-9]+)?$'; then
+            echo "is_pre_release=true" >> $GITHUB_OUTPUT
+            echo "Pre-release detected — will publish with --pre-release flag."
+          else
+            echo "is_pre_release=false" >> $GITHUB_OUTPUT
+            echo "Stable release — will publish to stable channel."
+          fi
+
+          # Check if already published
+          REMOTE=$(npx @vscode/vsce show frootai.frootai-vscode --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).versions[0].version" 2>/dev/null || echo "0.0.0")
+          echo "remote=$REMOTE" >> $GITHUB_OUTPUT
+          if [ "$LOCAL" = "$REMOTE" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Version $LOCAL already published — skipping."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Publishing frootai extension v$LOCAL (marketplace has $REMOTE)"
+          fi
+
+      - name: 📦 Package and Publish
+        if: steps.version.outputs.skip != 'true' && inputs.dry_run != 'true'
+        working-directory: ./vscode-extension
+        run: |
+          if [ "${{ steps.version.outputs.is_pre_release }}" = "true" ]; then
+            # M5.29 — pre-release channel: stable-channel users (e.g.
+            # frootai-vscode@5.1.8) see no update. Operators must
+            # explicitly opt into pre-release via VS Code's "Switch to
+            # Pre-Release Version" affordance.
+            vsce package --pre-release
+            vsce publish --pre-release
+          else
+            vsce package
+            vsce publish
+          fi
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: 🚀 Publish to Open VSX
+        if: steps.version.outputs.skip != 'true' && inputs.dry_run != 'true'
+        working-directory: ./vscode-extension
+        # M5.29 — Open VSX does NOT have a pre-release channel concept;
+        # the alpha lands as a regular release on Open VSX. continue-on-
+        # error preserves the build success when Open VSX publishing
+        # transiently fails (rate limit, network, etc.).
+        run: npx ovsx publish *.vsix
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        continue-on-error: true
+
+      - name: 📤 Upload VSIX artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: frootai-${{ steps.version.outputs.version }}.vsix
+          path: vscode-extension/*.vsix
+          retention-days: 30
+
+      - name: 📊 Summary
+        run: |
+          echo "## 🧩 VS Code Extension" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${{ steps.version.outputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Previous | ${{ steps.version.outputs.remote }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skipped | ${{ steps.version.outputs.skip }} |" >> $GITHUB_STEP_SUMMARY

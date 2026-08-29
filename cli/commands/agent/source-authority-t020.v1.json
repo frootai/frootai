@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "agent-fai-source-authority-t020.v1",
+  "task": "AFCLI-T020",
+  "implementationState": "offline-profile-available-terminal-preview-partial",
+  "authorities": [
+    { "id": "T019", "repository": "frootai-core-agent-fai-cli", "commit": "63908130c36347bffcf44c802e79104bfd712bf3", "treeOid": "b85569eab99a5306c8347bc61071a73166a72e8f" }
+  ],
+  "sources": [
+    { "authority": "T019", "path": "npm-mcp/index.js", "gitBlobOid": "2c0696c2493271839e66abd3778a6bd3908aefc0", "requiredPattern": "Precision Agriculture Agent" },
+    { "authority": "T019", "path": "cli/commands/agent/command-registry.v1.json", "gitBlobOid": "3f4915f3bc975ba3571701f7898ce57608155ebe", "requiredPattern": "interactive-line-host-available-lifecycle-partial" },
+    { "authority": "T019", "path": "cli/lib/agent/dispatch.js", "gitBlobOid": "0ac98b1f8c04770ff3e96239664ad54d55cd66b1", "requiredPattern": "executeInteractive" },
+    { "authority": "T019", "path": "cli/lib/agent/strict-json.js", "gitBlobOid": "7a7f11a2e65dc1d63891a41d6730564607c638e3", "requiredPattern": "parseStrictJson" },
+    { "authority": "T019", "path": "cli/lib/agent/semantic-runtime.generated.js", "gitBlobOid": "a79407f7d0e017c43c454b4d6a28c2e1129a5672", "requiredPattern": "canonicalJson" },
+    { "authority": "T019", "path": "cli/package.json", "gitBlobOid": "bd004e68a76204f4170b677f26148241d50123aa", "requiredPattern": "agent/interactive-host" },
+    { "authority": "T019", "path": "cli/commands/agent/source-authority-t019.v1.json", "gitBlobOid": "aa5cc95db9594230717087c52a2d28db2dda61ea", "requiredPattern": "AFCLI-T019" }
+  ],
+  "localLimitationInputs": [
+    { "task": "UAF-T019", "packagePath": "cli/lib/agent/offline-authority/uaf-t019-limitations.v1.json", "packageSha256": "687fa92727cf009c6017388ce47d0ad5919fc3bd68d91fa7cd20e03c19ff8091", "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t019-contract-artifact.v1.json", "sourceSha256": "cbaf02f625038e4181a6cfcdf82587a179ccb0497879bcc95b0ec1f5936799f5", "authorityState": "local-approved-uncommitted" },
+    { "task": "UAF-T021", "packagePath": "cli/lib/agent/offline-authority/uaf-t021-limitations.v1.json", "packageSha256": "9224c1c495ce19c4bf0d9e579b3fa92c3da9a2171bfdc75dd755f65840227323", "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t021-contract-artifact.v1.json", "sourceSha256": "637dc638df8a8eedd409a08fe21f3f5fe0dc1d13229028dcb8c415c08a5075bf", "authorityState": "local-approved-uncommitted" },
+    { "task": "UAF-T022", "packagePath": "cli/lib/agent/offline-authority/uaf-t022-limitations.v1.json", "packageSha256": "d7e25b594286b7bfe8283a1e5a4240f917f8b765061d45aef96aa0038b7e38c2", "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t022-contract-artifact.v1.json", "sourceSha256": "77092abf1effa132e0db094547f23b11aa832c5da69730c2edb1dc84fd03b10f", "authorityState": "local-approved-uncommitted" }
+  ],
+  "constraints": {
+    "runtimeDependencies": 0,
+    "explicitFlagRequired": true,
+    "networkAttempts": 0,
+    "knowledgeSource": "pinned-play-data-only-pricing-excluded",
+    "packagedPlays": 100,
+    "precisionAgriculturePlayId": "78",
+    "packagedSchemas": 4,
+    "freshnessMaximumAgeDays": 30,
+    "staleBehavior": "label-stale-never-refresh-or-fallback-silently",
+    "offlineAdapters": 7,
+    "capabilityStatus": "Degraded",
+    "profileReadiness": "Designed",
+    "supportedCapabilities": 0,
+    "unavailableLiveCapabilities": ["live-model-judgment", "current-cloud-state", "current-pricing", "profile-readiness", "successful-remote-validation", "network-backed-grounding"],
+    "silentFallback": false,
+    "authenticationUsed": false,
+    "telemetryUsed": false,
+    "mcpUsed": false,
+    "updatesUsed": false,
+    "azureResourcesCreated": false
+  }
+}

@@ -1,0 +1,1289 @@
+{
+  "schemaVersion": "agent-fai-offline-knowledge.v1",
+  "profile": "offline",
+  "source": {
+    "repository": "https://github.com/frootai/frootai-core.git",
+    "commit": "018931c2fffbe4eb2d3c5a3e86f2041c50fe872d",
+    "tree": "1ecd43c8de1cddafe06c5b4b489119e244ffa40b",
+    "path": "npm-mcp/index.js",
+    "gitBlobOid": "2c0696c2493271839e66abd3778a6bd3908aefc0",
+    "sha256": "d82734acd7562a3db4af13acf050028de69d7ad2ce9afc83a218d2baae1ce54b",
+    "sourceUpdatedAt": "2026-07-28T14:03:13.000Z"
+  },
+  "freshnessPolicy": {
+    "maximumAgeDays": 30,
+    "staleBehavior": "label-stale-never-refresh-or-fallback-silently"
+  },
+  "uafCompatibility": {
+    "offlineAdapters": 7,
+    "adapterStatus": "Degraded",
+    "capabilityStatus": "Degraded",
+    "profileReadiness": "Designed",
+    "supportedCapabilities": 0,
+    "readinessPromoted": false,
+    "sourceInputs": [
+      {
+        "task": "UAF-T019",
+        "packagePath": "lib/agent/offline-authority/uaf-t019-limitations.v1.json",
+        "packageSha256": "687fa92727cf009c6017388ce47d0ad5919fc3bd68d91fa7cd20e03c19ff8091",
+        "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t019-contract-artifact.v1.json",
+        "sourceSha256": "cbaf02f625038e4181a6cfcdf82587a179ccb0497879bcc95b0ec1f5936799f5",
+        "authorityState": "local-approved-uncommitted"
+      },
+      {
+        "task": "UAF-T021",
+        "packagePath": "lib/agent/offline-authority/uaf-t021-limitations.v1.json",
+        "packageSha256": "9224c1c495ce19c4bf0d9e579b3fa92c3da9a2171bfdc75dd755f65840227323",
+        "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t021-contract-artifact.v1.json",
+        "sourceSha256": "637dc638df8a8eedd409a08fe21f3f5fe0dc1d13229028dcb8c415c08a5075bf",
+        "authorityState": "local-approved-uncommitted"
+      },
+      {
+        "task": "UAF-T022",
+        "packagePath": "lib/agent/offline-authority/uaf-t022-limitations.v1.json",
+        "packageSha256": "d7e25b594286b7bfe8283a1e5a4240f917f8b765061d45aef96aa0038b7e38c2",
+        "sourcePath": "planning/unified-ai-fabric-foundation/uaf-t022-contract-artifact.v1.json",
+        "sourceSha256": "77092abf1effa132e0db094547f23b11aa832c5da69730c2edb1dc84fd03b10f",
+        "authorityState": "local-approved-uncommitted"
+      }
+    ]
+  },
+  "schemas": [
+    {
+      "id": "agent-fai-openapi.v1",
+      "path": "commands/agent/agent-fai-v1.openapi.json",
+      "sha256": "ed31d1dbd9a70770bf1cbdcc85d2ee10d25c8dabf8fffdd3b3cebed860fe4c2f"
+    },
+    {
+      "id": "agent-fai-render-result.v1",
+      "path": "commands/agent/render-result.v1.schema.json",
+      "sha256": "f6aa0d9b520f598872c6357346f10ac37e3cb5be84b1ecae893cc40781abdfe1"
+    },
+    {
+      "id": "agent-fai-generated-contracts.v1",
+      "path": "lib/agent/contracts/manifest.v1.json",
+      "sha256": "49d48f1c1b03f9324f5d70b366cca3fde648c1ab752537b2989085e401831bfb"
+    },
+    {
+      "id": "agent-fai-offline-knowledge.v1",
+      "path": "commands/agent/offline-knowledge.v1.schema.json",
+      "sha256": "40cbc82820f81035489431fdbe2bdcf0a4b765e5ef6fd7d287e7b3fd6aec7cac"
+    }
+  ],
+  "plays": [
+    {
+      "id": "01",
+      "name": "Enterprise RAG Q&A",
+      "services": [
+        "AI Search",
+        "OpenAI (gpt-4o)",
+        "Container App",
+        "Blob Storage"
+      ],
+      "pattern": "RAG hybrid search chunking semantic reranking retrieval augmented generation document qa question answering knowledge base",
+      "complexity": "Medium"
+    },
+    {
+      "id": "02",
+      "name": "AI Landing Zone",
+      "services": [
+        "VNet + PE",
+        "Key Vault"
+      ],
+      "pattern": "landing zone infrastructure network security private endpoints rbac governance hub spoke foundation baseline",
+      "complexity": "Foundation"
+    },
+    {
+      "id": "03",
+      "name": "Deterministic Agent",
+      "services": [
+        "Container App",
+        "OpenAI (gpt-4o)",
+        "Content Safety"
+      ],
+      "pattern": "deterministic agent zero temperature reliable reproducible content safety guardrails filtering consistent",
+      "complexity": "Medium"
+    },
+    {
+      "id": "04",
+      "name": "Call Center Voice AI",
+      "services": [
+        "Communication Services",
+        "Speech Service",
+        "OpenAI (gpt-4o)",
+        "App Service (B1)"
+      ],
+      "pattern": "voice call center speech to text text to speech stt tts real time audio phone ivr customer service",
+      "complexity": "High"
+    },
+    {
+      "id": "05",
+      "name": "IT Ticket Resolution",
+      "services": [
+        "OpenAI (gpt-4o-mini)",
+        "App Service (B1)"
+      ],
+      "pattern": "ticket resolution automation helpdesk it service management event driven async message queue workflow",
+      "complexity": "Medium"
+    },
+    {
+      "id": "06",
+      "name": "Document Intelligence",
+      "services": [
+        "Document Intelligence",
+        "OpenAI (gpt-4o)",
+        "Blob Storage"
+      ],
+      "pattern": "document extraction ocr form recognizer invoice receipt structured output pdf image processing",
+      "complexity": "Medium"
+    },
+    {
+      "id": "07",
+      "name": "Multi-Agent Service",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Container App",
+        "Cosmos DB"
+      ],
+      "pattern": "multi agent collaboration handoff orchestration coordinator specialist a2a agent to agent supervisor",
+      "complexity": "High"
+    },
+    {
+      "id": "08",
+      "name": "Copilot Studio Bot",
+      "services": [
+        "AI Search",
+        "OpenAI (gpt-4o-mini)",
+        "Blob Storage"
+      ],
+      "pattern": "copilot studio low code bot chatbot generative answers knowledge grounding power platform",
+      "complexity": "Low"
+    },
+    {
+      "id": "09",
+      "name": "AI Search Portal",
+      "services": [
+        "AI Search",
+        "OpenAI (gpt-4o)",
+        "App Service (B1)"
+      ],
+      "pattern": "search portal semantic hybrid keyword vector enterprise search faceted filtering web application",
+      "complexity": "Medium"
+    },
+    {
+      "id": "10",
+      "name": "Content Moderation",
+      "services": [
+        "Content Safety",
+        "OpenAI (gpt-4o-mini)",
+        "APIM"
+      ],
+      "pattern": "content moderation safety filtering toxic harmful block severity scoring content policy gateway",
+      "complexity": "Low"
+    },
+    {
+      "id": "11",
+      "name": "Landing Zone Advanced",
+      "services": [
+        "VNet + PE",
+        "Firewall",
+        "Key Vault",
+        "NAT Gateway"
+      ],
+      "pattern": "advanced landing zone enterprise network segmentation firewall nsg nat gateway dns private dns zone",
+      "complexity": "High"
+    },
+    {
+      "id": "12",
+      "name": "Model Serving AKS",
+      "services": [
+        "AKS (GPU)",
+        "ACR",
+        "OpenAI (gpt-4o)"
+      ],
+      "pattern": "model serving kubernetes aks gpu cluster custom model hosting autoscale container registry inference",
+      "complexity": "High"
+    },
+    {
+      "id": "13",
+      "name": "Fine-Tuning Workflow",
+      "services": [
+        "ML Workspace",
+        "OpenAI (gpt-4o)",
+        "Blob Storage"
+      ],
+      "pattern": "fine tuning lora qlora training dataset preparation model versioning mlops evaluation custom model",
+      "complexity": "High"
+    },
+    {
+      "id": "14",
+      "name": "Cost-Optimized AI Gateway",
+      "services": [
+        "APIM",
+        "OpenAI (gpt-4o)",
+        "Redis Cache"
+      ],
+      "pattern": "cost optimization finops gateway caching semantic cache token metering rate limiting api management budget",
+      "complexity": "Medium"
+    },
+    {
+      "id": "15",
+      "name": "Multi-Modal DocProc",
+      "services": [
+        "Document Intelligence",
+        "OpenAI (gpt-4o)",
+        "Cosmos DB"
+      ],
+      "pattern": "multi modal document processing images tables text extraction structured data vision ocr",
+      "complexity": "Medium"
+    },
+    {
+      "id": "16",
+      "name": "Copilot Teams Extension",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "App Service (B1)"
+      ],
+      "pattern": "teams bot copilot extension adaptive cards microsoft teams messaging collaboration enterprise chat",
+      "complexity": "Medium"
+    },
+    {
+      "id": "17",
+      "name": "AI Observability",
+      "services": [
+        "Log Analytics",
+        "App Insights"
+      ],
+      "pattern": "observability monitoring telemetry kql dashboards alerts application insights log analytics metrics",
+      "complexity": "Medium"
+    },
+    {
+      "id": "18",
+      "name": "Prompt Management",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Cosmos DB",
+        "App Service (B1)"
+      ],
+      "pattern": "prompt management versioning ab testing rollback template registry prompt engineering lifecycle",
+      "complexity": "Medium"
+    },
+    {
+      "id": "19",
+      "name": "Edge AI Phi-4",
+      "services": [
+        "IoT Hub",
+        "ACR",
+        "Blob Storage"
+      ],
+      "pattern": "edge ai phi small language model iot offline inference device deployment lightweight mobile embedded",
+      "complexity": "High"
+    },
+    {
+      "id": "20",
+      "name": "Anomaly Detection",
+      "services": [
+        "Event Hub",
+        "Stream Analytics",
+        "OpenAI (gpt-4o)",
+        "Cosmos DB"
+      ],
+      "pattern": "anomaly detection streaming real time event processing alert iot sensor time series",
+      "complexity": "High"
+    },
+    {
+      "id": "21",
+      "name": "Agentic RAG",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "AI Search",
+        "Container Apps",
+        "Key Vault"
+      ],
+      "pattern": "agentic rag autonomous retrieval multi-source semantic caching citation self-evaluation",
+      "complexity": "High"
+    },
+    {
+      "id": "22",
+      "name": "Multi-Agent Swarm",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Container Apps",
+        "Service Bus",
+        "Cosmos DB"
+      ],
+      "pattern": "multi agent swarm supervisor pipeline debate collaboration handoff state",
+      "complexity": "Very High"
+    },
+    {
+      "id": "23",
+      "name": "Browser Automation",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Container Apps",
+        "Playwright"
+      ],
+      "pattern": "browser automation playwright vision web navigation form filling screenshot",
+      "complexity": "High"
+    },
+    {
+      "id": "24",
+      "name": "AI Code Review",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "GitHub Actions",
+        "CodeQL"
+      ],
+      "pattern": "code review codeql owasp pr pipeline ci cd security audit inline suggestions",
+      "complexity": "Medium"
+    },
+    {
+      "id": "25",
+      "name": "Conversation Memory",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Cosmos DB",
+        "AI Search",
+        "Redis"
+      ],
+      "pattern": "conversation memory short long episodic recall session persistence personalization",
+      "complexity": "High"
+    },
+    {
+      "id": "26",
+      "name": "Semantic Search Engine",
+      "services": [
+        "AI Search",
+        "OpenAI (gpt-4o)",
+        "Blob Storage"
+      ],
+      "pattern": "semantic search hybrid vector bm25 reranking query expansion personalization answer generation",
+      "complexity": "Medium"
+    },
+    {
+      "id": "27",
+      "name": "AI Data Pipeline",
+      "services": [
+        "OpenAI (gpt-4o-mini)",
+        "Data Factory",
+        "Cosmos DB",
+        "Event Hubs"
+      ],
+      "pattern": "data pipeline etl llm augmented classify extract pii redaction quality score lakehouse",
+      "complexity": "High"
+    },
+    {
+      "id": "28",
+      "name": "Knowledge Graph RAG",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Cosmos DB Gremlin",
+        "AI Search"
+      ],
+      "pattern": "knowledge graph rag entity extraction relationship mapping gremlin vector fusion contextual",
+      "complexity": "High"
+    },
+    {
+      "id": "29",
+      "name": "MCP Gateway",
+      "services": [
+        "APIM",
+        "Container Apps",
+        "Monitor",
+        "Key Vault"
+      ],
+      "pattern": "mcp gateway proxy rate limit tool discovery authentication analytics governance",
+      "complexity": "Medium"
+    },
+    {
+      "id": "30",
+      "name": "AI Security Hardening",
+      "services": [
+        "Content Safety",
+        "OpenAI (gpt-4o)",
+        "Container Apps",
+        "Monitor"
+      ],
+      "pattern": "security hardening prompt injection jailbreak owasp llm top 10 red teaming content safety defense",
+      "complexity": "High"
+    },
+    {
+      "id": "31",
+      "name": "Low-Code AI Builder",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Container Apps",
+        "Cosmos DB",
+        "Static Web Apps"
+      ],
+      "pattern": "low code visual builder drag drop pipeline template one click deploy citizen developer",
+      "complexity": "Medium"
+    },
+    {
+      "id": "32",
+      "name": "AI-Powered Testing",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "GitHub Actions",
+        "Container Apps"
+      ],
+      "pattern": "ai testing autonomous test generation unit integration e2e mutation coverage polyglot",
+      "complexity": "Medium"
+    },
+    {
+      "id": "33",
+      "name": "Voice AI Agent",
+      "services": [
+        "AI Speech",
+        "OpenAI (gpt-4o)",
+        "Communication Services",
+        "Container Apps"
+      ],
+      "pattern": "voice ai agent stt tts speech intent recognition real time streaming ivr customer service",
+      "complexity": "High"
+    },
+    {
+      "id": "34",
+      "name": "Edge AI Deployment",
+      "services": [
+        "IoT Hub",
+        "ONNX Runtime",
+        "Container Instances",
+        "Monitor"
+      ],
+      "pattern": "edge ai deployment onnx quantization offline inference fleet management cloud sync disconnected",
+      "complexity": "High"
+    },
+    {
+      "id": "35",
+      "name": "AI Compliance Engine",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Azure Policy",
+        "Key Vault",
+        "Cosmos DB"
+      ],
+      "pattern": "compliance engine gdpr hipaa soc2 eu ai act audit trail regulatory risk assessment",
+      "complexity": "High"
+    },
+    {
+      "id": "36",
+      "name": "Multimodal Agent",
+      "services": [
+        "OpenAI (gpt-4o Vision)",
+        "AI Vision",
+        "Blob Storage",
+        "Container Apps"
+      ],
+      "pattern": "multimodal agent vision text code image screenshot diagram cross modal understanding",
+      "complexity": "Medium"
+    },
+    {
+      "id": "37",
+      "name": "AI-Powered DevOps",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Monitor",
+        "DevOps",
+        "GitHub Actions"
+      ],
+      "pattern": "devops sre incident triage runbook automation risk scoring predictive scaling deployment",
+      "complexity": "Medium"
+    },
+    {
+      "id": "38",
+      "name": "Document Understanding v2",
+      "services": [
+        "Document Intelligence",
+        "OpenAI (gpt-4o)",
+        "Cosmos DB"
+      ],
+      "pattern": "document understanding v2 multi page table relationship handwriting entity linking structured",
+      "complexity": "High"
+    },
+    {
+      "id": "39",
+      "name": "AI Meeting Assistant",
+      "services": [
+        "AI Speech",
+        "OpenAI (gpt-4o)",
+        "Graph",
+        "Container Apps"
+      ],
+      "pattern": "meeting assistant transcription diarization action items decision tracking followup scheduling",
+      "complexity": "Medium"
+    },
+    {
+      "id": "40",
+      "name": "Copilot Studio Advanced",
+      "services": [
+        "Copilot Studio",
+        "OpenAI (gpt-4o)",
+        "Dataverse",
+        "Graph"
+      ],
+      "pattern": "copilot studio advanced typespec declarative agents api plugins m365 sso adaptive cards",
+      "complexity": "High"
+    },
+    {
+      "id": "41",
+      "name": "AI Red Teaming",
+      "services": [
+        "AI Foundry",
+        "Content Safety",
+        "OpenAI (gpt-4o)",
+        "Monitor"
+      ],
+      "pattern": "red teaming adversarial testing prompt injection jailbreak safety scorecard eu ai act nist",
+      "complexity": "High"
+    },
+    {
+      "id": "42",
+      "name": "Computer Use Agent",
+      "services": [
+        "OpenAI (gpt-4o Vision)",
+        "Container Apps",
+        "Blob Storage"
+      ],
+      "pattern": "computer use agent vision desktop web automation rpa screenshot mouse keyboard legacy",
+      "complexity": "Very High"
+    },
+    {
+      "id": "43",
+      "name": "AI Video Generation",
+      "services": [
+        "OpenAI",
+        "Blob Storage",
+        "Content Safety",
+        "Service Bus",
+        "CDN"
+      ],
+      "pattern": "video generation text to video content safety batch processing watermark brand media",
+      "complexity": "Very High"
+    },
+    {
+      "id": "44",
+      "name": "Foundry Local On-Device",
+      "services": [
+        "OpenAI",
+        "IoT Hub",
+        "Monitor",
+        "Key Vault"
+      ],
+      "pattern": "foundry local on device air gapped inference cloud escalation offline queue fleet sync",
+      "complexity": "High"
+    },
+    {
+      "id": "45",
+      "name": "Real-Time Event AI",
+      "services": [
+        "Event Hubs",
+        "Functions",
+        "OpenAI",
+        "Cosmos DB",
+        "SignalR"
+      ],
+      "pattern": "real time event streaming fraud iot anomaly sentiment supply chain sub second websocket dashboard",
+      "complexity": "Very High"
+    },
+    {
+      "id": "46",
+      "name": "Healthcare Clinical AI",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "Health Data Services",
+        "AI Search",
+        "Content Safety"
+      ],
+      "pattern": "healthcare clinical hipaa medical coding drug interaction triage fhir audit human in the loop",
+      "complexity": "Very High"
+    },
+    {
+      "id": "47",
+      "name": "Synthetic Data Factory",
+      "services": [
+        "OpenAI",
+        "Machine Learning",
+        "Blob Storage",
+        "Key Vault"
+      ],
+      "pattern": "synthetic data generation privacy differential tabular text pii zero gdpr ccpa statistical fidelity",
+      "complexity": "High"
+    },
+    {
+      "id": "48",
+      "name": "AI Model Governance",
+      "services": [
+        "Machine Learning",
+        "AI Foundry",
+        "DevOps",
+        "Cosmos DB",
+        "Policy"
+      ],
+      "pattern": "model governance registry approval gates ab testing audit trail sox eu ai act lineage mlops",
+      "complexity": "High"
+    },
+    {
+      "id": "49",
+      "name": "Creative AI Studio",
+      "services": [
+        "OpenAI",
+        "Blob Storage",
+        "Content Safety",
+        "Functions",
+        "CDN"
+      ],
+      "pattern": "creative ai studio multi modal text image audio campaign brand voice content marketing",
+      "complexity": "High"
+    },
+    {
+      "id": "50",
+      "name": "Financial Risk Intelligence",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "AI Search",
+        "Cosmos DB",
+        "Event Hubs"
+      ],
+      "pattern": "financial risk market analysis credit fraud detection sec basel explainable ai regulatory audit",
+      "complexity": "Very High"
+    },
+    {
+      "id": "51",
+      "name": "Autonomous Coding Agent",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "GitHub Actions",
+        "Container Apps"
+      ],
+      "pattern": "autonomous coding agent issue pr multi file test generation human approval code review",
+      "complexity": "Very High"
+    },
+    {
+      "id": "52",
+      "name": "AI API Gateway v2",
+      "services": [
+        "APIM",
+        "OpenAI",
+        "Redis",
+        "Monitor",
+        "Key Vault"
+      ],
+      "pattern": "api gateway v2 semantic caching model routing token budget rate limiting cost attribution",
+      "complexity": "High"
+    },
+    {
+      "id": "53",
+      "name": "Legal Document AI",
+      "services": [
+        "OpenAI (gpt-4o)",
+        "AI Search",
+        "Blob Storage",
+        "Cosmos DB"
+      ],
+      "pattern": "legal document contract clause extraction risk identification privilege redline audit compliance",
+      "complexity": "Very High"
+    },
+    {
+      "id": "54",
+      "name": "AI Customer Support v2",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Communication Services",
+        "Cosmos DB"
+      ],
+      "pattern": "customer support multi channel sentiment routing knowledge base csat escalation omnichannel",
+      "complexity": "High"
+    },
+    {
+      "id": "55",
+      "name": "Supply Chain AI",
+      "services": [
+        "OpenAI",
+        "Cosmos DB",
+        "Event Hubs",
+        "Functions",
+        "ML"
+      ],
+      "pattern": "supply chain demand forecast inventory optimization supplier risk disruption route alert",
+      "complexity": "Very High"
+    },
+    {
+      "id": "56",
+      "name": "Semantic Code Search",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Blob Storage",
+        "Container Apps"
+      ],
+      "pattern": "semantic code search natural language function discovery cross repo dependency mapping intent",
+      "complexity": "Medium"
+    },
+    {
+      "id": "57",
+      "name": "AI Translation Engine",
+      "services": [
+        "OpenAI",
+        "AI Translator",
+        "Cosmos DB",
+        "Container Apps",
+        "CDN"
+      ],
+      "pattern": "translation multilingual 100 languages glossary cultural adaptation quality scoring batch",
+      "complexity": "High"
+    },
+    {
+      "id": "58",
+      "name": "Digital Twin Agent",
+      "services": [
+        "IoT Hub",
+        "Digital Twins",
+        "OpenAI",
+        "Functions",
+        "Cosmos DB"
+      ],
+      "pattern": "digital twin iot simulation predictive modeling anomaly detection manufacturing energy infrastructure",
+      "complexity": "Very High"
+    },
+    {
+      "id": "59",
+      "name": "AI Recruiter Agent",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Cosmos DB",
+        "Functions",
+        "Graph"
+      ],
+      "pattern": "recruiter screening matching bias detection skills assessment diversity explainability fair hiring",
+      "complexity": "High"
+    },
+    {
+      "id": "60",
+      "name": "Responsible AI Dashboard",
+      "services": [
+        "OpenAI",
+        "ML",
+        "Monitor",
+        "Cosmos DB",
+        "Static Web Apps"
+      ],
+      "pattern": "responsible ai dashboard fairness metrics bias detection transparency eu ai act compliance report",
+      "complexity": "High"
+    },
+    {
+      "id": "61",
+      "name": "Content Moderation v2",
+      "services": [
+        "Content Safety",
+        "OpenAI",
+        "Cosmos DB",
+        "Functions",
+        "Service Bus"
+      ],
+      "pattern": "content moderation v2 multi modal cultural context human appeal false positive severity",
+      "complexity": "High"
+    },
+    {
+      "id": "62",
+      "name": "Federated Learning Pipeline",
+      "services": [
+        "ML",
+        "Confidential Computing",
+        "Blob Storage",
+        "Key Vault"
+      ],
+      "pattern": "federated learning privacy distributed training aggregation differential noise convergence",
+      "complexity": "Very High"
+    },
+    {
+      "id": "63",
+      "name": "Fraud Detection Agent",
+      "services": [
+        "OpenAI",
+        "Event Hubs",
+        "Stream Analytics",
+        "Cosmos DB"
+      ],
+      "pattern": "fraud detection real time transaction behavioral anomaly velocity fingerprint explainable sub 100ms",
+      "complexity": "High"
+    },
+    {
+      "id": "64",
+      "name": "AI Sales Assistant",
+      "services": [
+        "OpenAI",
+        "Cosmos DB",
+        "Graph",
+        "AI Search",
+        "Functions"
+      ],
+      "pattern": "sales assistant crm lead scoring email personalization pipeline forecast deal risk next action",
+      "complexity": "Medium"
+    },
+    {
+      "id": "65",
+      "name": "AI Training Curriculum",
+      "services": [
+        "OpenAI",
+        "Cosmos DB",
+        "Static Web Apps",
+        "Functions"
+      ],
+      "pattern": "training curriculum adaptive learning assessment exercise personalization micro certification",
+      "complexity": "Medium"
+    },
+    {
+      "id": "66",
+      "name": "AI Infrastructure Optimizer",
+      "services": [
+        "OpenAI",
+        "Monitor",
+        "Advisor",
+        "Cost Management"
+      ],
+      "pattern": "infrastructure optimizer finops right sizing gpu utilization idle resource reserved scaling anomaly",
+      "complexity": "High"
+    },
+    {
+      "id": "67",
+      "name": "AI Knowledge Management",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Cosmos DB",
+        "Blob Storage",
+        "Graph"
+      ],
+      "pattern": "knowledge management freshness detection gap analysis expert identification contextual qa semantic",
+      "complexity": "High"
+    },
+    {
+      "id": "68",
+      "name": "Predictive Maintenance AI",
+      "services": [
+        "IoT Hub",
+        "OpenAI",
+        "ML",
+        "Stream Analytics",
+        "Cosmos DB"
+      ],
+      "pattern": "predictive maintenance iot sensor rul remaining useful life anomaly scheduling spare parts dispatch",
+      "complexity": "High"
+    },
+    {
+      "id": "69",
+      "name": "Carbon Footprint Tracker",
+      "services": [
+        "Azure Monitor",
+        "OpenAI",
+        "Cosmos DB",
+        "Event Hubs"
+      ],
+      "pattern": "carbon footprint tracker accounting emission scope ghg esg supply chain cloud sustainability",
+      "complexity": "High"
+    },
+    {
+      "id": "70",
+      "name": "ESG Compliance Agent",
+      "services": [
+        "OpenAI",
+        "Document Intelligence",
+        "Cosmos DB",
+        "AI Search"
+      ],
+      "pattern": "esg compliance environmental social governance gri sasb tcfd csrd regulatory reporting",
+      "complexity": "High"
+    },
+    {
+      "id": "71",
+      "name": "Smart Energy Grid AI",
+      "services": [
+        "IoT Hub",
+        "OpenAI",
+        "Stream Analytics",
+        "Digital Twins"
+      ],
+      "pattern": "smart energy grid renewable solar wind battery demand prediction balancing optimization",
+      "complexity": "Very High"
+    },
+    {
+      "id": "72",
+      "name": "Climate Risk Assessor",
+      "services": [
+        "OpenAI",
+        "ML",
+        "Cosmos DB",
+        "AI Search"
+      ],
+      "pattern": "climate risk physical transition liability scenario modeling insurance financial rcp",
+      "complexity": "High"
+    },
+    {
+      "id": "73",
+      "name": "Waste & Recycling Optimizer",
+      "services": [
+        "AI Vision",
+        "OpenAI",
+        "IoT Hub",
+        "Container Apps"
+      ],
+      "pattern": "waste recycling material classification route optimization contamination detection",
+      "complexity": "Medium"
+    },
+    {
+      "id": "74",
+      "name": "AI Tutoring Agent",
+      "services": [
+        "OpenAI",
+        "Cosmos DB",
+        "AI Search",
+        "Static Web Apps",
+        "Functions"
+      ],
+      "pattern": "tutoring agent socratic method knowledge gap adaptive difficulty personalized learning progress tracking",
+      "complexity": "Medium"
+    },
+    {
+      "id": "75",
+      "name": "Exam Generation Engine",
+      "services": [
+        "OpenAI",
+        "Blob Storage",
+        "Cosmos DB",
+        "Functions"
+      ],
+      "pattern": "exam generation curriculum difficulty calibration rubric answer key anti cheating question variation bloom taxonomy",
+      "complexity": "Medium"
+    },
+    {
+      "id": "76",
+      "name": "Accessibility Learning Agent",
+      "services": [
+        "AI Speech",
+        "OpenAI",
+        "AI Vision",
+        "Container Apps",
+        "Cosmos DB"
+      ],
+      "pattern": "accessibility learning screen reader dyslexia multi modal text to speech wcag content adaptation inclusive",
+      "complexity": "High"
+    },
+    {
+      "id": "77",
+      "name": "Research Paper AI",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Cosmos DB",
+        "Graph",
+        "Functions"
+      ],
+      "pattern": "research paper academic literature review citation network methodology critique gap identification summarization",
+      "complexity": "High"
+    },
+    {
+      "id": "78",
+      "name": "Precision Agriculture Agent",
+      "services": [
+        "IoT Hub",
+        "AI Vision",
+        "OpenAI",
+        "Digital Twins",
+        "ML"
+      ],
+      "pattern": "precision agriculture satellite imagery IoT sensor crop health irrigation fertilization yield prediction digital twin farmland",
+      "complexity": "Very High"
+    },
+    {
+      "id": "79",
+      "name": "Food Safety Inspector AI",
+      "services": [
+        "Document Intelligence",
+        "OpenAI",
+        "Cosmos DB",
+        "Event Hubs",
+        "IoT Hub"
+      ],
+      "pattern": "food safety HACCP contamination supply chain traceability temperature pathogen risk audit regulatory compliance",
+      "complexity": "High"
+    },
+    {
+      "id": "80",
+      "name": "Biodiversity Monitor",
+      "services": [
+        "AI Vision",
+        "OpenAI",
+        "IoT Hub",
+        "Cosmos DB",
+        "Functions"
+      ],
+      "pattern": "biodiversity species identification camera trap drone acoustic sensor ecosystem health population conservation",
+      "complexity": "High"
+    },
+    {
+      "id": "81",
+      "name": "Property Valuation AI",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Cosmos DB",
+        "Machine Learning",
+        "Functions"
+      ],
+      "pattern": "property valuation appraisal comparable sales market trend neighborhood scoring satellite imagery real estate mortgage underwriting",
+      "complexity": "High"
+    },
+    {
+      "id": "82",
+      "name": "Construction Safety AI",
+      "services": [
+        "AI Vision",
+        "IoT Hub",
+        "OpenAI",
+        "Container Apps",
+        "Cosmos DB"
+      ],
+      "pattern": "construction safety PPE compliance hazard detection unauthorized zone entry incident reporting camera monitoring site",
+      "complexity": "High"
+    },
+    {
+      "id": "83",
+      "name": "Building Energy Optimizer",
+      "services": [
+        "Digital Twins",
+        "IoT Hub",
+        "OpenAI",
+        "Functions",
+        "Cosmos DB"
+      ],
+      "pattern": "building energy HVAC lighting occupancy optimization digital twin scheduling predictive maintenance renewable commercial",
+      "complexity": "Very High"
+    },
+    {
+      "id": "84",
+      "name": "Citizen Services Chatbot",
+      "services": [
+        "OpenAI",
+        "AI Translator",
+        "Communication Services",
+        "AI Search",
+        "Cosmos DB"
+      ],
+      "pattern": "citizen services municipal chatbot multi-language form filling appointment scheduling permit status FAQ escalation government",
+      "complexity": "Medium"
+    },
+    {
+      "id": "85",
+      "name": "Policy Impact Analyzer",
+      "services": [
+        "OpenAI",
+        "AI Search",
+        "Document Intelligence",
+        "Cosmos DB",
+        "Functions"
+      ],
+      "pattern": "policy impact regulatory change detection stakeholder mapping public comment analysis briefing generation legislative executive",
+      "complexity": "High"
+    },
+    {
+      "id": "86",
+      "name": "Public Safety Analytics",
+      "services": [
+        "OpenAI",
+        "Machine Learning",
+        "Event Hubs",
+        "Cosmos DB",
+        "Stream Analytics"
+      ],
+      "pattern": "public safety crime pattern prediction resource allocation community sentiment 311 calls incident dashboard law enforcement emergency",
+      "complexity": "Very High"
+    },
+    {
+      "id": "87",
+      "name": "Dynamic Pricing Engine",
+      "services": [
+        "OpenAI",
+        "Event Hubs",
+        "Cosmos DB",
+        "Redis Cache",
+        "Machine Learning"
+      ],
+      "pattern": "dynamic pricing real-time price optimization demand signals competitor pricing inventory seasonality customer segments revenue fairness retail",
+      "complexity": "High"
+    },
+    {
+      "id": "88",
+      "name": "Visual Product Search",
+      "services": [
+        "AI Vision",
+        "OpenAI",
+        "AI Search",
+        "Container Apps",
+        "Cosmos DB"
+      ],
+      "pattern": "visual product search reverse image similarity matching style recommendation virtual try-on fashion furniture home decor retail",
+      "complexity": "High"
+    },
+    {
+      "id": "89",
+      "name": "Retail Inventory Predictor",
+      "services": [
+        "OpenAI",
+        "Machine Learning",
+        "Cosmos DB",
+        "Event Hubs",
+        "Functions"
+      ],
+      "pattern": "retail inventory demand forecasting sales data weather social trends economic indicators stock prediction reorder supplier automation",
+      "complexity": "High"
+    },
+    {
+      "id": "90",
+      "name": "Network Optimization Agent",
+      "services": [
+        "IoT Hub",
+        "Stream Analytics",
+        "OpenAI",
+        "Digital Twins",
+        "Cosmos DB"
+      ],
+      "pattern": "5G LTE network capacity planning anomaly detection self-healing automation traffic prediction cell tower load balancing digital twin topology telecom",
+      "complexity": "Very High"
+    },
+    {
+      "id": "91",
+      "name": "Customer Churn Predictor",
+      "services": [
+        "OpenAI",
+        "Machine Learning",
+        "Cosmos DB",
+        "Communication Services",
+        "Functions"
+      ],
+      "pattern": "customer churn prediction usage patterns billing history support interactions network quality retention campaigns telecom subscriber",
+      "complexity": "High"
+    },
+    {
+      "id": "92",
+      "name": "Telecom Fraud Shield",
+      "services": [
+        "Event Hubs",
+        "Stream Analytics",
+        "OpenAI",
+        "Cosmos DB",
+        "Functions"
+      ],
+      "pattern": "telecom fraud detection SIM swap international revenue share subscription fraud Wangiri callback toll fraud real-time blocking explainable alerts",
+      "complexity": "High"
+    },
+    {
+      "id": "93",
+      "name": "Continual Learning Agent",
+      "services": [
+        "OpenAI",
+        "Cosmos DB",
+        "AI Search",
+        "Redis Cache",
+        "Functions"
+      ],
+      "pattern": "continual learning memory persistence session reflection failure analysis pattern detection knowledge distillation ever-improving agent",
+      "complexity": "Very High"
+    },
+    {
+      "id": "94",
+      "name": "AI Podcast Generator",
+      "services": [
+        "AI Speech",
+        "OpenAI",
+        "Blob Storage",
+        "CDN",
+        "Functions"
+      ],
+      "pattern": "text to podcast multi-speaker voice synthesis music transitions chapter markers content safety audio narration blog research meeting notes",
+      "complexity": "High"
+    },
+    {
+      "id": "95",
+      "name": "Multimodal Search Engine v2",
+      "services": [
+        "AI Search",
+        "AI Vision",
+        "AI Speech",
+        "OpenAI",
+        "Container Apps"
+      ],
+      "pattern": "multimodal search images text code audio cross-modal reasoning vector index fusion query expansion relevance feedback unified",
+      "complexity": "Very High"
+    },
+    {
+      "id": "96",
+      "name": "Real-Time Voice Agent v2",
+      "services": [
+        "AI Voice Live",
+        "OpenAI",
+        "Container Apps",
+        "Functions",
+        "Cosmos DB"
+      ],
+      "pattern": "real-time voice agent bidirectional websocket VAD voice activity detection function calling avatar rendering transcription sub-200ms latency conversational",
+      "complexity": "Very High"
+    },
+    {
+      "id": "97",
+      "name": "AI Data Marketplace",
+      "services": [
+        "Machine Learning",
+        "Blob Storage",
+        "API Management",
+        "Cosmos DB",
+        "Functions"
+      ],
+      "pattern": "data marketplace synthetic anonymized datasets differential privacy statistical fidelity usage billing API access training testing monetization",
+      "complexity": "High"
+    },
+    {
+      "id": "98",
+      "name": "Agent Evaluation Platform",
+      "services": [
+        "OpenAI",
+        "Container Apps",
+        "Cosmos DB",
+        "Machine Learning",
+        "Functions"
+      ],
+      "pattern": "agent evaluation benchmarks regression testing A/B experimentation human preference scoring leaderboard quality safety speed cost satisfaction",
+      "complexity": "High"
+    },
+    {
+      "id": "99",
+      "name": "Enterprise AI Governance Hub",
+      "services": [
+        "API Management",
+        "Policy",
+        "Monitor",
+        "Cosmos DB",
+        "Machine Learning",
+        "Key Vault"
+      ],
+      "pattern": "enterprise AI governance model registry approval gates policy enforcement cost attribution safety monitoring regulatory compliance SOX EU AI Act ISO 42001",
+      "complexity": "Very High"
+    },
+    {
+      "id": "100",
+      "name": "FAI Meta-Agent",
+      "services": [
+        "OpenAI",
+        "MCP Server",
+        "Container Apps",
+        "Cosmos DB",
+        "AI Search",
+        "Key Vault"
+      ],
+      "pattern": "meta-agent self-orchestrating super-agent play selection chain assembly infrastructure provisioning primitive configuration evaluation delivery autonomous",
+      "complexity": "Very High"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "component": "webview-ui/src/panels/FederationExplorer.tsx",
+  "resolution": {
+    "width": 800,
+    "height": 600
+  },
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "screenshots": [
+    {
+      "id": "catalog-empty",
+      "caption": "Catalog tab — no marketplace entries",
+      "state": "explorer just opened, marketplace fetch in flight, area list empty"
+    },
+    {
+      "id": "catalog-filtered",
+      "caption": "Catalog tab — tier filter applied",
+      "state": "marketplace populated, first-party-ms tier filter active, 3 entries visible"
+    },
+    {
+      "id": "attached-empty",
+      "caption": "Attached tab — no areas attached",
+      "state": "Attached tab active, empty-state copy rendered with discover affordance"
+    },
+    {
+      "id": "attached-list",
+      "caption": "Attached tab — two areas with idle timer",
+      "state": "azure + playwright attached, fresh idle timers, tool counts populated"
+    },
+    {
+      "id": "warning-state",
+      "caption": "Attached tab — area near idle-disconnect",
+      "state": "azure attached at 9.5min / 10min idle, amber warning badge visible per M5.19 doctrine"
+    }
+  ]
+}

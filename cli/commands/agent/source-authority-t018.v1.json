@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "agent-fai-source-authority-t018.v1",
+  "task": "AFCLI-T018",
+  "implementationState": "headless-command-host-available-interactive-unavailable",
+  "authorities": [
+    { "id": "T017", "repository": "frootai-core-agent-fai-cli", "commit": "f591e87e521866edbde2949ad5cba2695f70ae18", "treeOid": "140d95f70aba4534acb5e1463b8b77b355ac1b13" }
+  ],
+  "sources": [
+    { "authority": "T017", "path": "cli/bin.js", "gitBlobOid": "5a681701083ad2d102a4e16f71aed9eec90939f0", "requiredPattern": "dispatchAgent" },
+    { "authority": "T017", "path": "cli/lib/agent/dispatch.js", "gitBlobOid": "95807ec3ac7d08a26137b200947ccf00de5eff3b", "requiredPattern": "dispatchAgent" },
+    { "authority": "T017", "path": "cli/lib/agent/protocol-client.js", "gitBlobOid": "f53a00880103fb7cd66be3de0fa2da781408eca5", "requiredPattern": "streamTurnEvents" },
+    { "authority": "T017", "path": "cli/lib/agent/renderers.js", "gitBlobOid": "9b51b0d906ff8cb37993a0b6236001df8e8aba28", "requiredPattern": "createRenderer" },
+    { "authority": "T017", "path": "cli/lib/agent/config-v2.js", "gitBlobOid": "8154b22be1b13a053b1ac26c8f0b9f841076a585", "requiredPattern": "requestTimeoutMs" },
+    { "authority": "T017", "path": "cli/lib/agent/identity-coordinator.js", "gitBlobOid": "d3748c5342d0368a8b35edf258a69f09731fedf3", "requiredPattern": "authProvider" },
+    { "authority": "T017", "path": "cli/lib/agent/client-error.js", "gitBlobOid": "d7e31d472a05d689f6d47cfe48712ed94ed44ecc", "requiredPattern": "EXIT_BY_CODE" },
+    { "authority": "T017", "path": "cli/commands/agent/command-registry.v1.json", "gitBlobOid": "499cbdb454dc5e465953fc1f1dc2dea11bcc4d9b", "requiredPattern": "command-host-unavailable" },
+    { "authority": "T017", "path": "cli/package.json", "gitBlobOid": "399ce21bb153d3428c0a3d1b13c1b137219eae17", "requiredPattern": "agent/session-metadata" },
+    { "authority": "T017", "path": "cli/commands/agent/source-authority-t017.v1.json", "gitBlobOid": "cc41c3a56923b366fd5a719991c560168de3653c", "requiredPattern": "AFCLI-T017" }
+  ],
+  "constraints": {
+    "runtimeDependencies": 0,
+    "backendAuthority": "shared-agent-fai-control-plane-no-new-backend",
+    "headlessCommandHostAvailable": true,
+    "interactiveCommandHostAvailable": false,
+    "implementedCommands": ["ask", "run"],
+    "sessionStrategy": "one-fresh-session-and-turn-per-invocation",
+    "intent": "answer-only",
+    "requestedAuthority": "observe-only",
+    "contextManifest": "null-until-trusted-context-broker",
+    "stdin": "redirected-only-no-interactive-read",
+    "maximumPromptCharacters": 8000,
+    "maximumStdinBytes": 32000,
+    "deadlineMilliseconds": "100-through-300000-absolute-across-host-stages",
+    "formats": ["text", "markdown", "json", "jsonl", "tty"],
+    "remoteCancellation": "best-effort-bounded-after-local-abort",
+    "toolsImplemented": false,
+    "offlineImplemented": false,
+    "resumeImplemented": false,
+    "externalMutationImplemented": false,
+    "azureResourcesCreated": false
+  }
+}

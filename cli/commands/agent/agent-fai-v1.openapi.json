@@ -1,0 +1,3051 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Agent FAI API",
+    "version": "1.0.0",
+    "summary": "Versioned Agent FAI session, turn, event, job, artifact, context, and usage contract.",
+    "description": "Contract-only public OpenAPI surface. Runtime implementation remains owned by AF-2.02 and is not asserted by this document.",
+    "contact": {
+      "name": "FrootAI",
+      "url": "https://frootai.dev"
+    }
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "servers": [
+    {
+      "url": "https://frootai.dev",
+      "description": "Future canonical Agent FAI gateway; operations remain unavailable until separately deployed."
+    }
+  ],
+  "security": [
+    {
+      "FaiAccessToken": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Compatibility"
+    },
+    {
+      "name": "Sessions"
+    },
+    {
+      "name": "Turns"
+    },
+    {
+      "name": "Events"
+    },
+    {
+      "name": "Jobs"
+    },
+    {
+      "name": "Artifacts"
+    },
+    {
+      "name": "Context"
+    },
+    {
+      "name": "Usage"
+    }
+  ],
+  "paths": {
+    "/v1/agent-fai/compatibility": {
+      "get": {
+        "operationId": "negotiateAgentFaiCompatibility",
+        "summary": "Negotiate Agent FAI contract version and capabilities",
+        "tags": [
+          "Compatibility"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/RequestedVersion"
+          },
+          {
+            "name": "Agent-FAI-Capabilities",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 1024
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supported and negotiated contract version and capabilities.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompatibilityResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/agent-fai/sessions": {
+      "get": {
+        "operationId": "listAgentFaiSessions",
+        "summary": "List authorized Agent FAI sessions",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized session page.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAgentFaiSession",
+        "summary": "Create an Agent FAI session",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Session created or idempotently replayed.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}": {
+      "get": {
+        "operationId": "getAgentFaiSession",
+        "summary": "Get an authorized Agent FAI session",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized session.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/resume": {
+      "post": {
+        "operationId": "resumeAgentFaiSession",
+        "summary": "Resume an authorized Agent FAI session",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResumeSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resumed session.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/export": {
+      "post": {
+        "operationId": "exportAgentFaiSession",
+        "summary": "Export an authorized Agent FAI session as an immutable artifact",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Session export artifact accepted or idempotently replayed.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artifact"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/turns": {
+      "post": {
+        "operationId": "createAgentFaiTurn",
+        "summary": "Create an idempotent Agent FAI turn",
+        "tags": [
+          "Turns"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTurnRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Turn accepted or idempotently replayed.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Turn"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "413": {
+            "$ref": "#/components/responses/Problem413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          },
+          "504": {
+            "$ref": "#/components/responses/Problem504"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/turns/{turnId}": {
+      "get": {
+        "operationId": "getAgentFaiTurn",
+        "summary": "Get an authorized Agent FAI turn",
+        "tags": [
+          "Turns"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          },
+          {
+            "$ref": "#/components/parameters/TurnId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized turn.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Turn"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/turns/{turnId}/events": {
+      "get": {
+        "operationId": "listAgentFaiTurnEvents",
+        "summary": "Replay ordered events for a turn",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          },
+          {
+            "$ref": "#/components/parameters/TurnId"
+          },
+          {
+            "$ref": "#/components/parameters/EventCursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounded event page or SSE replay stream.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Agent-FAI-Last-Sequence": {
+                "$ref": "#/components/headers/LastSequence"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPage"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventStream"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/sessions/{sessionId}/turns/{turnId}/cancel": {
+      "post": {
+        "operationId": "cancelAgentFaiTurn",
+        "summary": "Request cancellation of a turn",
+        "tags": [
+          "Turns"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/SessionId"
+          },
+          {
+            "$ref": "#/components/parameters/TurnId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancellationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Cancellation acknowledged or turn already terminal.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancellationAcknowledgement"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "499": {
+            "$ref": "#/components/responses/Problem499"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/jobs": {
+      "get": {
+        "operationId": "listAgentFaiJobs",
+        "summary": "List authorized durable Agent FAI jobs",
+        "tags": [
+          "Jobs"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized job page.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAgentFaiJob",
+        "summary": "Create an idempotent durable Agent FAI job",
+        "tags": [
+          "Jobs"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Job accepted or idempotently replayed.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "413": {
+            "$ref": "#/components/responses/Problem413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          },
+          "504": {
+            "$ref": "#/components/responses/Problem504"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/jobs/{jobId}": {
+      "get": {
+        "operationId": "getAgentFaiJob",
+        "summary": "Get an authorized Agent FAI job",
+        "tags": [
+          "Jobs"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/JobId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized job.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/jobs/{jobId}/events": {
+      "get": {
+        "operationId": "listAgentFaiJobEvents",
+        "summary": "Replay ordered events for a durable job",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/JobId"
+          },
+          {
+            "$ref": "#/components/parameters/EventCursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounded event page or SSE replay stream.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Agent-FAI-Last-Sequence": {
+                "$ref": "#/components/headers/LastSequence"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPage"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventStream"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/jobs/{jobId}/cancel": {
+      "post": {
+        "operationId": "cancelAgentFaiJob",
+        "summary": "Request cancellation of a durable job",
+        "tags": [
+          "Jobs"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/JobId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancellationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Cancellation acknowledged or job already terminal.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancellationAcknowledgement"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "499": {
+            "$ref": "#/components/responses/Problem499"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/artifacts": {
+      "get": {
+        "operationId": "listAgentFaiArtifacts",
+        "summary": "List authorized immutable artifacts",
+        "tags": [
+          "Artifacts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "$ref": "#/components/parameters/SessionFilter"
+          },
+          {
+            "$ref": "#/components/parameters/JobFilter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized artifact page.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/artifacts/{artifactId}": {
+      "get": {
+        "operationId": "getAgentFaiArtifact",
+        "summary": "Get immutable artifact metadata",
+        "tags": [
+          "Artifacts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/ArtifactId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized artifact metadata.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artifact"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/artifacts/{artifactId}/verify": {
+      "post": {
+        "operationId": "verifyAgentFaiArtifact",
+        "summary": "Verify an artifact against an expected digest",
+        "tags": [
+          "Artifacts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/ArtifactId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtifactVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Artifact verification result.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactVerification"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/context-manifests/{manifestId}": {
+      "get": {
+        "operationId": "getAgentFaiContextManifest",
+        "summary": "Get an authorized context manifest",
+        "tags": [
+          "Context"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/ManifestId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized context manifest.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextManifest"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    },
+    "/v1/agent-fai/usage-receipts/{receiptId}": {
+      "get": {
+        "operationId": "getAgentFaiUsageReceipt",
+        "summary": "Get an authorized usage receipt",
+        "tags": [
+          "Usage"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ContractVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "$ref": "#/components/parameters/ReceiptId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized usage receipt.",
+            "headers": {
+              "Agent-FAI-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageReceipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem404"
+          },
+          "410": {
+            "$ref": "#/components/responses/Problem410"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem503"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "FaiAccessToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "fai_live_ or OAuth access token",
+        "description": "Revocable account or workload credential. Organization and principal are derived after verification."
+      }
+    },
+    "headers": {
+      "ContractVersion": {
+        "description": "Selected Agent FAI API major version.",
+        "schema": {
+          "type": "string",
+          "const": "1"
+        }
+      },
+      "RequestId": {
+        "description": "Server-confirmed request correlation identifier.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "LastSequence": {
+        "description": "Highest event sequence included in this response.",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "parameters": {
+      "ContractVersion": {
+        "name": "Agent-FAI-Version",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "const": "1"
+        }
+      },
+      "RequestedVersion": {
+        "name": "Agent-FAI-Version",
+        "in": "header",
+        "required": false,
+        "description": "Optional API major requested during compatibility bootstrap.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "RequestId": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Opaque key reused with the byte-equivalent request for ambiguous acceptance replay.",
+        "schema": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      },
+      "EventCursor": {
+        "name": "Last-Event-ID",
+        "in": "header",
+        "required": false,
+        "description": "Last accepted per-resource event sequence.",
+        "schema": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,15})$"
+        }
+      },
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25
+        }
+      },
+      "Cursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "SessionId": {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "TurnId": {
+        "name": "turnId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "JobId": {
+        "name": "jobId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "ArtifactId": {
+        "name": "artifactId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "ManifestId": {
+        "name": "manifestId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "ReceiptId": {
+        "name": "receiptId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "SessionFilter": {
+        "name": "sessionId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "JobFilter": {
+        "name": "jobId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "schemas": {
+      "Session": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-session.v1.json"
+      },
+      "Turn": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-turn.v1.json"
+      },
+      "Event": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-event.v1.json"
+      },
+      "ContextManifest": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-context-manifest.v1.json"
+      },
+      "UsageReceipt": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-usage-receipt.v1.json"
+      },
+      "Problem": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-problem.v1.json"
+      },
+      "Client": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "surface",
+          "version",
+          "capabilities"
+        ],
+        "properties": {
+          "surface": {
+            "enum": [
+              "web",
+              "cli",
+              "api",
+              "mcp",
+              "sdk",
+              "vscode",
+              "github",
+              "studio",
+              "automation"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+          },
+          "capabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          }
+        }
+      },
+      "Capability": {
+        "enum": [
+          "events.v1",
+          "citations",
+          "mermaid",
+          "ascii",
+          "artifacts",
+          "usage",
+          "cancellation",
+          "replay"
+        ]
+      },
+      "RequestedAuthority": {
+        "enum": [
+          "observe",
+          "propose",
+          "local-write",
+          "external-mutation"
+        ]
+      },
+      "Input": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "content"
+        ],
+        "properties": {
+          "kind": {
+            "const": "user-text"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000
+          }
+        }
+      },
+      "ContextManifestRef": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "additionalProperties": false,
+        "required": [
+          "manifestId",
+          "manifestDigest"
+        ],
+        "properties": {
+          "manifestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "manifestDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "Budgets": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deadlineMs",
+          "maxOutputTokens",
+          "maxEstimatedCostUsd"
+        ],
+        "properties": {
+          "deadlineMs": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 300000
+          },
+          "maxOutputTokens": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 32768
+          },
+          "maxEstimatedCostUsd": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1000
+          }
+        }
+      },
+      "CreateSessionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "client",
+          "retentionProfileId"
+        ],
+        "properties": {
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "retentionProfileId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+          },
+          "projectId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          }
+        }
+      },
+      "ResumeSessionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "client"
+        ],
+        "properties": {
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          }
+        }
+      },
+      "CreateTurnRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "intent",
+          "requestedAuthority",
+          "client",
+          "input",
+          "contextManifestRef",
+          "budgets"
+        ],
+        "properties": {
+          "intent": {
+            "enum": [
+              "answer",
+              "architecture",
+              "plan",
+              "review",
+              "operate"
+            ]
+          },
+          "requestedAuthority": {
+            "$ref": "#/components/schemas/RequestedAuthority"
+          },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "contextManifestRef": {
+            "$ref": "#/components/schemas/ContextManifestRef"
+          },
+          "budgets": {
+            "$ref": "#/components/schemas/Budgets"
+          }
+        }
+      },
+      "CreateJobRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "sessionId",
+          "requestedAuthority",
+          "client",
+          "input",
+          "contextManifestRef",
+          "budgets"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "review",
+              "artifact",
+              "operate"
+            ]
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestedAuthority": {
+            "$ref": "#/components/schemas/RequestedAuthority"
+          },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "contextManifestRef": {
+            "$ref": "#/components/schemas/ContextManifestRef"
+          },
+          "budgets": {
+            "$ref": "#/components/schemas/Budgets"
+          }
+        }
+      },
+      "CancellationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "enum": [
+              "user",
+              "deadline",
+              "policy",
+              "shutdown"
+            ]
+          }
+        }
+      },
+      "ExportSessionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "format"
+        ],
+        "properties": {
+          "format": {
+            "enum": [
+              "json",
+              "markdown"
+            ]
+          }
+        }
+      },
+      "ArtifactVerificationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expectedDigest"
+        ],
+        "properties": {
+          "expectedDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "PageCursor": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 512
+      },
+      "SessionPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            }
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        }
+      },
+      "EventPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "nextAfter",
+          "terminal"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          },
+          "nextAfter": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "terminal": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EventStream": {
+        "type": "string",
+        "description": "UTF-8 SSE stream. Every message MUST contain exactly one decimal `id` equal to the JSON event `sequence`, and one `data` field containing that complete Agent FAI Event JSON object. Heartbeats are comments and do not advance sequence.",
+        "x-frootai-sse-framing": {
+          "idField": "sequence",
+          "dataSchema": "https://frootai.dev/schemas/agent-fai-event.v1.json",
+          "oneEventPerMessage": true
+        }
+      },
+      "JobResultRefs": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifactIds",
+          "evidenceIds"
+        ],
+        "properties": {
+          "artifactIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "evidenceIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "Job": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "jobId",
+          "requestId",
+          "sessionId",
+          "turnId",
+          "kind",
+          "status",
+          "deadlineAt",
+          "attempts",
+          "cancellationRequested",
+          "resultRefs",
+          "errorId",
+          "createdAt",
+          "updatedAt",
+          "completedAt"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": "agent-fai-job.v1"
+          },
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "turnId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "enum": [
+              "review",
+              "artifact",
+              "operate"
+            ]
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "deadlineAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "cancellationRequested": {
+            "type": "boolean"
+          },
+          "resultRefs": {
+            "$ref": "#/components/schemas/JobResultRefs"
+          },
+          "errorId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "JobPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            }
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        }
+      },
+      "Artifact": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "artifactId",
+          "sessionId",
+          "turnId",
+          "jobId",
+          "kind",
+          "mediaType",
+          "digest",
+          "sizeBytes",
+          "createdAt",
+          "downloadUrl",
+          "supersededBy",
+          "revoked"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": "agent-fai-artifact.v1"
+          },
+          "artifactId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "turnId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "jobId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "kind": {
+            "enum": [
+              "answer",
+              "architecture",
+              "plan",
+              "review",
+              "patch",
+              "manifest",
+              "receipt",
+              "evidence",
+              "export"
+            ]
+          },
+          "mediaType": {
+            "type": "string",
+            "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$",
+            "maxLength": 255
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1073741824
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "downloadUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "supersededBy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "revoked": {
+            "type": "boolean"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "revoked": {
+                  "const": true
+                }
+              },
+              "required": [
+                "revoked"
+              ]
+            },
+            "then": {
+              "properties": {
+                "downloadUrl": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ArtifactPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/Artifact"
+            }
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        }
+      },
+      "ArtifactVerification": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifactId",
+          "expectedDigest",
+          "actualDigest",
+          "verified"
+        ],
+        "properties": {
+          "artifactId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "actualDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CancellationAcknowledgement": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requestId",
+          "resourceId",
+          "status",
+          "acknowledgedAt"
+        ],
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resourceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "enum": [
+              "cancellation-requested",
+              "already-terminal"
+            ]
+          },
+          "acknowledgedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CompatibilityResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "requestedApiVersion",
+          "supportedApiVersions",
+          "negotiatedApiVersion",
+          "contractVersion",
+          "minimumClientVersion",
+          "supportedEventVersions",
+          "supportedCapabilities",
+          "negotiatedCapabilities",
+          "unsupportedCapabilities",
+          "deprecation"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": "agent-fai-compatibility.v1"
+          },
+          "requestedApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "supportedApiVersions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "const": "1"
+            }
+          },
+          "negotiatedApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "1",
+              null
+            ]
+          },
+          "contractVersion": {
+            "const": "1.0.0"
+          },
+          "minimumClientVersion": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "supportedEventVersions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "const": "agent-fai-event.v1"
+            }
+          },
+          "supportedCapabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          },
+          "negotiatedCapabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          },
+          "unsupportedCapabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+            }
+          },
+          "deprecation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "deprecated",
+              "sunsetAt",
+              "replacement"
+            ],
+            "properties": {
+              "deprecated": {
+                "const": false
+              },
+              "sunsetAt": {
+                "type": "null"
+              },
+              "replacement": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      },
+      "ProblemStatus400": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "invalid_argument",
+                      "invalid_json"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 400
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus401": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "authentication_required"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 401
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus403": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "authorization_denied",
+                      "policy_denied",
+                      "approval_required"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 403
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus404": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "not_found"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 404
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus409": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "conflict",
+                      "idempotency_conflict"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 409
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus410": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "resource_gone"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 410
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus413": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "request_too_large",
+                      "message_too_large"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 413
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus422": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "integrity_failed"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 422
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus429": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "quota_exceeded",
+                      "budget_exceeded"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 429
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus499": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "cancelled"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 499
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus502": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "transport_failed",
+                      "tool_failed"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 502
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus503": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "service_unavailable",
+                      "model_unavailable"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 503
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "ProblemStatus504": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "deadline_exceeded"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 504
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      }
+    },
+    "responses": {
+      "Problem400": {
+        "description": "Agent FAI problem response (400).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus400"
+            }
+          }
+        }
+      },
+      "Problem401": {
+        "description": "Agent FAI problem response (401).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus401"
+            }
+          }
+        }
+      },
+      "Problem403": {
+        "description": "Agent FAI problem response (403).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus403"
+            }
+          }
+        }
+      },
+      "Problem404": {
+        "description": "Agent FAI problem response (404).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus404"
+            }
+          }
+        }
+      },
+      "Problem409": {
+        "description": "Agent FAI problem response (409).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus409"
+            }
+          }
+        }
+      },
+      "Problem410": {
+        "description": "Agent FAI problem response (410).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus410"
+            }
+          }
+        }
+      },
+      "Problem413": {
+        "description": "Agent FAI problem response (413).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus413"
+            }
+          }
+        }
+      },
+      "Problem422": {
+        "description": "Agent FAI problem response (422).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus422"
+            }
+          }
+        }
+      },
+      "Problem429": {
+        "description": "Agent FAI problem response (429).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus429"
+            }
+          }
+        }
+      },
+      "Problem499": {
+        "description": "Agent FAI problem response (499).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus499"
+            }
+          }
+        }
+      },
+      "Problem502": {
+        "description": "Agent FAI problem response (502).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus502"
+            }
+          }
+        }
+      },
+      "Problem503": {
+        "description": "Agent FAI problem response (503).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus503"
+            }
+          }
+        }
+      },
+      "Problem504": {
+        "description": "Agent FAI problem response (504).",
+        "headers": {
+          "Agent-FAI-Version": {
+            "$ref": "#/components/headers/ContractVersion"
+          },
+          "X-Request-Id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemStatus504"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-frootai-contract-status": "contract-only-unimplemented",
+  "x-frootai-compatibility": {
+    "apiMajor": 1,
+    "pathPrefix": "/v1/agent-fai",
+    "minimumDeprecationDays": 90,
+    "breakingChangesRequireNewMajor": true,
+    "errorSchema": "https://frootai.dev/schemas/agent-fai-problem.v1.json",
+    "versionRequestHeader": "Agent-FAI-Version",
+    "versionResponseHeader": "Agent-FAI-Version",
+    "capabilityRequestHeader": "Agent-FAI-Capabilities",
+    "parentStories": {
+      "AF-0.04": "planned",
+      "AF-2.02": "planned"
+    }
+  }
+}

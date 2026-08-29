@@ -1,0 +1,933 @@
+{
+  "name": "frootai-vscode",
+  "displayName": "FrootAI — From the Roots to the Fruits",
+  "description": "The native FrootAI product system for VS Code — discover, define, develop, govern, verify, and improve AI solutions.",
+  "version": "6.7.2",
+  "publisher": "frootai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI",
+    "Education",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "architecture",
+    "azure",
+    "mcp",
+    "agents",
+    "rag",
+    "copilot",
+    "frootai",
+    "solution-plays",
+    "devkit",
+    "tunekit",
+    "fai-protocol",
+    "llm",
+    "genai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frootai/frootai",
+    "directory": "vscode-extension"
+  },
+  "homepage": "https://frootai.dev",
+  "bugs": {
+    "url": "https://github.com/frootai/frootai/issues"
+  },
+  "license": "MIT",
+  "icon": "media/frootai-mark.png",
+  "galleryBanner": {
+    "color": "#0a0a0f",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "frootai",
+        "label": "FrootAI MCP Server"
+      },
+      {
+        "id": "frootai-federated",
+        "label": "FrootAI Federated"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "frootai-sidebar",
+          "title": "FrootAI",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "frootai-sidebar": [
+        {
+          "id": "frootai.sidebarView",
+          "name": "FAI Product System",
+          "type": "webview",
+          "visibility": "visible"
+        },
+        {
+          "id": "frootai.welcome",
+          "name": "Hi FAI",
+          "when": "false"
+        },
+        {
+          "id": "frootai.solutionPlays",
+          "name": "FAI Solution Plays (101)",
+          "when": "false"
+        },
+        {
+          "id": "frootai.primitivesCatalog",
+          "name": "FAI Primitives Catalog",
+          "when": "false"
+        },
+        {
+          "id": "frootai.faiProtocol",
+          "name": "FAI Learning Hub",
+          "when": "false"
+        },
+        {
+          "id": "frootai.mcpTools",
+          "name": "FAI Packages",
+          "when": "false"
+        },
+        {
+          "id": "frootai.devHub",
+          "name": "FAI Dev Hub",
+          "when": "false"
+        },
+        {
+          "id": "frootai.community",
+          "name": "FAI Community",
+          "when": "false"
+        },
+        {
+          "id": "frootai.orchard.tree",
+          "name": "FAI Orchard",
+          "when": "false"
+        },
+        {
+          "id": "frootai.federation.attached",
+          "name": "FAI Federated MCP (Attached)",
+          "when": "false"
+        },
+        {
+          "id": "frootai.federation.marketplace",
+          "name": "FAI Federated MCP (Catalog)",
+          "when": "false"
+        },
+        {
+          "id": "frootai.tokenOps",
+          "name": "FAI TokenOps",
+          "type": "webview",
+          "when": "false"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "frootai.fai",
+        "name": "fai",
+        "fullName": "Agent FAI",
+        "description": "Ask about solution plays, architecture patterns, MCP tools, AI glossary, and getting started with FrootAI",
+        "isSticky": true
+      }
+    ],
+    "commands": [
+      {
+        "command": "frootai.openSolutionPlay",
+        "title": "FrootAI: Open Solution Play"
+      },
+      {
+        "command": "frootai.lean.compile",
+        "title": "FrootAI: Compile to Lean",
+        "category": "FrootAI Lean"
+      },
+      {
+        "command": "frootai.lean.toggleView",
+        "title": "FrootAI: Toggle Full / Lean View",
+        "category": "FrootAI Lean"
+      },
+      {
+        "command": "frootai.orchard.install",
+        "title": "FrootAI: Install Accelerator into Workspace",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.installWithPlay",
+        "title": "FrootAI: Install Accelerator with Solution Play",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.diffWithPlay",
+        "title": "FrootAI: Diff Accelerator with Solution Play",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.addToBushel",
+        "title": "FrootAI: Add Accelerator to Bushel",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.browse",
+        "title": "FrootAI: Browse Orchard",
+        "category": "FrootAI Orchard",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frootai.orchard.signIn",
+        "title": "FrootAI: Sign in (Orchard)",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.show",
+        "title": "FrootAI: Show Accelerator Details",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.startMcpServer",
+        "title": "FrootAI: Start Orchard MCP Server",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.orchard.showMcpDiscovery",
+        "title": "FrootAI: Show MCP Discovery File",
+        "category": "FrootAI Orchard"
+      },
+      {
+        "command": "frootai.initDevKit",
+        "title": "FrootAI: Initialize DevKit"
+      },
+      {
+        "command": "frootai.initTuneKit",
+        "title": "FrootAI: Initialize TuneKit"
+      },
+      {
+        "command": "frootai.initSpecKit",
+        "title": "FrootAI: Initialize SpecKit"
+      },
+      {
+        "command": "frootai.installMcpServer",
+        "title": "FrootAI: Setup MCP Server",
+        "icon": "$(cloud-download)",
+        "shortTitle": "Install"
+      },
+      {
+        "command": "frootai.configureMcp",
+        "title": "FrootAI: Configure MCP"
+      },
+      {
+        "command": "frootai.quickCostEstimate",
+        "title": "FrootAI: Cost Estimate"
+      },
+      {
+        "command": "frootai.validateConfig",
+        "title": "FrootAI: Validate Config"
+      },
+      {
+        "command": "frootai.autoChainAgents",
+        "title": "FrootAI: Build → Review → Tune"
+      },
+      {
+        "command": "frootai.installPlugin",
+        "title": "FrootAI: Install Plugin"
+      },
+      {
+        "command": "frootai.browsePrimitives",
+        "title": "FrootAI: Browse Primitives Catalog"
+      },
+      {
+        "command": "frootai.installAgent",
+        "title": "FrootAI: Install Agent"
+      },
+      {
+        "command": "frootai.installInstruction",
+        "title": "FrootAI: Install Instruction"
+      },
+      {
+        "command": "frootai.installSkill",
+        "title": "FrootAI: Install Skill"
+      },
+      {
+        "command": "frootai.installHook",
+        "title": "FrootAI: Install Hook"
+      },
+      {
+        "command": "frootai.installPrompt",
+        "title": "FrootAI: Install Prompt"
+      },
+      {
+        "command": "frootai.viewFaiProtocol",
+        "title": "FrootAI: View FAI Protocol"
+      },
+      {
+        "command": "frootai.createManifest",
+        "title": "FrootAI: Create fai-manifest.json"
+      },
+      {
+        "command": "frootai.runEvaluation",
+        "title": "FrootAI: Run Evaluation"
+      },
+      {
+        "command": "frootai.estimateCostForPlay",
+        "title": "FrootAI: Estimate Cost for Play"
+      },
+      {
+        "command": "frootai.showArchitectureDiagram",
+        "title": "FrootAI: Show Architecture Diagram"
+      },
+      {
+        "command": "frootai.healthCheck",
+        "title": "FrootAI: Health Check (verify all 9 PlayDetail buttons)"
+      },
+      {
+        "command": "frootai.browseSolutionPlays",
+        "title": "FrootAI: Browse All Plays",
+        "icon": "$(globe)",
+        "shortTitle": "Browse"
+      },
+      {
+        "command": "frootai.startMcpServer",
+        "title": "FrootAI: Start MCP Server"
+      },
+      {
+        "command": "frootai.lookupTerm",
+        "title": "FrootAI: Look Up Term"
+      },
+      {
+        "command": "frootai.searchKnowledge",
+        "title": "FrootAI: Search Knowledge"
+      },
+      {
+        "command": "frootai.showArchitecturePattern",
+        "title": "FrootAI: Architecture Patterns"
+      },
+      {
+        "command": "frootai.initHooks",
+        "title": "FrootAI: Initialize Hooks"
+      },
+      {
+        "command": "frootai.initPrompts",
+        "title": "FrootAI: Initialize Prompts"
+      },
+      {
+        "command": "frootai.openNpmPage",
+        "title": "FrootAI: Open npm Page",
+        "icon": "$(globe)",
+        "shortTitle": "npm"
+      },
+      {
+        "command": "frootai.openSetupGuide",
+        "title": "FrootAI: Open Setup Guide",
+        "icon": "$(book)",
+        "shortTitle": "Docs"
+      },
+      {
+        "command": "frootai.searchAll",
+        "title": "FrootAI: Search Everything",
+        "icon": "$(search)",
+        "shortTitle": "Search"
+      },
+      {
+        "command": "frootai.analyzeWorkspace",
+        "title": "FrootAI: Analyze Workspace (v6.8+)",
+        "icon": "$(search-view-icon)"
+      },
+      {
+        "command": "frootai.scaffoldComponent",
+        "title": "FrootAI: Scaffold Component (v6.8+)",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "frootai.getPlayConfig",
+        "title": "FrootAI: Get Play Config (v6.8+)",
+        "icon": "$(settings)"
+      },
+      {
+        "command": "frootai.getDependencies",
+        "title": "FrootAI: Get Dependencies (v6.8+)",
+        "icon": "$(package)"
+      },
+      {
+        "command": "frootai.generateBicep",
+        "title": "FrootAI: Generate Bicep IaC (v6.8+)",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "frootai.runEvalLive",
+        "title": "FrootAI: Run Live Evaluation (v6.8+)",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "frootai.openPlayDetail",
+        "title": "FrootAI: Open Play Detail Panel"
+      },
+      {
+        "command": "frootai.openEvaluationDashboard",
+        "title": "FrootAI: Open Evaluation Dashboard"
+      },
+      {
+        "command": "frootai.factoryStatus",
+        "title": "FrootAI: Factory Status Dashboard"
+      },
+      {
+        "command": "frootai.openScaffoldWizard",
+        "title": "FrootAI: Open Scaffold Wizard"
+      },
+      {
+        "command": "frootai.openMcpExplorer",
+        "title": "FrootAI: Explore MCP Tools"
+      },
+      {
+        "command": "frootai.browsePlays",
+        "title": "FrootAI: Browse Solution Plays",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "frootai.openConfigurator",
+        "title": "FrootAI: Solution Configurator",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "frootai.openWelcome",
+        "title": "FrootAI: Welcome",
+        "icon": "$(home)"
+      },
+      {
+        "command": "frootai.filterPlays",
+        "title": "FrootAI: Filter Solution Plays",
+        "icon": "$(search)"
+      },
+      {
+        "command": "frootai.refreshPlays",
+        "title": "FrootAI: Refresh Plays",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frootai.togglePlayView",
+        "title": "FrootAI: Toggle Play View",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "frootai.validateManifest",
+        "title": "FrootAI: Validate Manifest",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "frootai.openPlayFromManifest",
+        "title": "FrootAI: Open Play from Manifest",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "frootai.peekFaiFile",
+        "title": "FrootAI: Open FAI File",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "frootai.openDetectedPlay",
+        "title": "FrootAI: Open Detected Play"
+      },
+      {
+        "command": "frootai.openPrimitivesCatalog",
+        "title": "FrootAI: Browse Primitives Catalog",
+        "icon": "$(extensions)"
+      },
+      {
+        "command": "frootai.openMarketplace",
+        "title": "FrootAI: Open Plugin Marketplace",
+        "icon": "$(package)"
+      },
+      {
+        "command": "frootai.openAgentFai",
+        "title": "FrootAI: Ask Agent FAI",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "frootai.account.open",
+        "title": "FrootAI: Account",
+        "icon": "$(account)"
+      },
+      {
+        "command": "frootai.account.setApiKey",
+        "title": "FrootAI: Enter Personal API Key",
+        "category": "FrootAI Account"
+      },
+      {
+        "command": "frootai.account.removeApiKey",
+        "title": "FrootAI: Disconnect Account",
+        "category": "FrootAI Account"
+      },
+      {
+        "command": "frootai.repository.analyze",
+        "title": "FrootAI: Analyze Repository Intelligence",
+        "category": "FrootAI Workspace",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "frootai.openProtocolExplainer",
+        "title": "FrootAI: FAI Protocol & Architecture",
+        "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "frootai.openWebsite",
+        "title": "FrootAI: Open frootai.dev",
+        "icon": "$(globe)",
+        "shortTitle": "Website"
+      },
+      {
+        "command": "frootai.federation.attach",
+        "title": "FrootAI: Federation — Attach MCP Area",
+        "category": "FrootAI Federation",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "frootai.federation.detach",
+        "title": "FrootAI: Federation — Detach MCP Area",
+        "category": "FrootAI Federation",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "frootai.federation.listAttached",
+        "title": "FrootAI: Federation — List Attached Areas",
+        "category": "FrootAI Federation",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "frootai.federation.discoverMcp",
+        "title": "FrootAI: Federation — Discover MCP Marketplace",
+        "category": "FrootAI Federation",
+        "icon": "$(search)"
+      },
+      {
+        "command": "frootai.federation.trustQuery",
+        "title": "FrootAI: Federation — Query Publisher Trust",
+        "category": "FrootAI Federation",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "frootai.federation.attachFromManifest",
+        "title": "FrootAI: Federation — Attach from fai-manifest.json",
+        "category": "FrootAI Federation",
+        "icon": "$(file-symlink-file)"
+      },
+      {
+        "command": "frootai.federation.marketplace.attach",
+        "title": "FrootAI: Federation — Attach Server",
+        "category": "FrootAI Federation",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "frootai.federation.marketplace.viewOnWeb",
+        "title": "FrootAI: Federation — View Server on frootai.dev",
+        "category": "FrootAI Federation",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "frootai.tokenOps.openDashboard",
+        "title": "FrootAI: TokenOps — Open Dashboard",
+        "category": "FrootAI TokenOps",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "frootai.tokenOps.refresh",
+        "title": "FrootAI: TokenOps — Refresh Evidence",
+        "category": "FrootAI TokenOps",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frootai.tokenOps.connectGitHub",
+        "title": "FrootAI: TokenOps — Connect GitHub Usage",
+        "category": "FrootAI TokenOps"
+      },
+      {
+        "command": "frootai.tokenOps.importReceipt",
+        "title": "FrootAI: TokenOps — Import Usage Receipt",
+        "category": "FrootAI TokenOps"
+      },
+      {
+        "command": "frootai.tokenOps.saveReceiptTemplate",
+        "title": "FrootAI: TokenOps — Save Receipt Template",
+        "category": "FrootAI TokenOps"
+      },
+      {
+        "command": "frootai.tokenOps.exportData",
+        "title": "FrootAI: TokenOps — Export Local Data",
+        "category": "FrootAI TokenOps"
+      },
+      {
+        "command": "frootai.tokenOps.clearData",
+        "title": "FrootAI: TokenOps — Clear Local Data",
+        "category": "FrootAI TokenOps"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "frootai.togglePlayView",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation"
+        },
+        {
+          "command": "frootai.refreshPlays",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation"
+        },
+        {
+          "command": "frootai.filterPlays",
+          "when": "view == frootai.solutionPlays",
+          "group": "navigation"
+        },
+        {
+          "command": "frootai.openConfigurator",
+          "when": "view == frootai.solutionPlays",
+          "group": "2_more"
+        },
+        {
+          "command": "frootai.browsePlays",
+          "when": "view == frootai.solutionPlays",
+          "group": "2_more"
+        },
+        {
+          "command": "frootai.openWebsite",
+          "when": "view == frootai.welcome",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "frootai.initDevKit",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@1"
+        },
+        {
+          "command": "frootai.initTuneKit",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@2"
+        },
+        {
+          "command": "frootai.federation.marketplace.attach",
+          "when": "view == frootai.federation.marketplace && viewItem == federation.server",
+          "group": "inline@1"
+        },
+        {
+          "command": "frootai.federation.marketplace.viewOnWeb",
+          "when": "view == frootai.federation.marketplace && viewItem == federation.server",
+          "group": "inline@2"
+        },
+        {
+          "command": "frootai.federation.marketplace.attach",
+          "when": "view == frootai.federation.marketplace && viewItem == federation.server",
+          "group": "1_attach@1"
+        },
+        {
+          "command": "frootai.federation.marketplace.viewOnWeb",
+          "when": "view == frootai.federation.marketplace && viewItem == federation.server",
+          "group": "1_attach@2"
+        },
+        {
+          "command": "frootai.initHooks",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@3"
+        },
+        {
+          "command": "frootai.initPrompts",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@4"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "frootai.validateManifest",
+          "when": "resourceFilename == fai-manifest.json",
+          "group": "frootai@1"
+        },
+        {
+          "command": "frootai.openPlayFromManifest",
+          "when": "resourceFilename == fai-manifest.json",
+          "group": "frootai@2"
+        },
+        {
+          "command": "frootai.peekFaiFile",
+          "when": "resourceFilename =~ /\\.(agent|instructions)\\.md$|^SKILL\\.md$|^fai-context\\.json$|^hooks\\.json$/",
+          "group": "frootai@1"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "frootai.searchAll",
+        "key": "ctrl+shift+f9",
+        "mac": "cmd+shift+f9"
+      },
+      {
+        "command": "frootai.browsePlays",
+        "key": "ctrl+shift+f10",
+        "mac": "cmd+shift+f10"
+      },
+      {
+        "command": "frootai.openWelcome",
+        "key": "ctrl+shift+f11",
+        "mac": "cmd+shift+f11"
+      },
+      {
+        "command": "frootai.federation.discoverMcp",
+        "key": "ctrl+shift+f12",
+        "mac": "cmd+shift+f12"
+      }
+    ],
+    "configuration": {
+      "title": "FrootAI",
+      "properties": {
+        "frootai.mcpServerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the FrootAI MCP server (index.js). Leave empty to use npx frootai-mcp."
+        },
+        "frootai.solutionPlaysPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the solution-plays directory. Leave empty for auto-detect."
+        },
+        "frootai.mcpAutoRegister": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically register the FrootAI MCP server so it appears in VS Code's @mcp gallery and is ready to use in Copilot Agent mode without manual configuration."
+        },
+        "frootai.mcpTransport": {
+          "type": "string",
+          "default": "stdio",
+          "enum": [
+            "stdio",
+            "http"
+          ],
+          "enumDescriptions": [
+            "Run MCP server as a local process (recommended for most users)",
+            "Connect to a remote MCP server over HTTP (requires a hosted endpoint)"
+          ],
+          "description": "Transport protocol for the FrootAI MCP server."
+        },
+        "frootai.mcpHttpUrl": {
+          "type": "string",
+          "default": "https://mcp.frootai.dev/mcp",
+          "description": "URL of the remote FrootAI MCP server (only used when mcpTransport is 'http')."
+        },
+        "frootai.orchard.mcpServer.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically start the FrootAI Orchard MCP server when the extension activates. When enabled, other VS Code extensions can discover and call orchard.search / .show / .install_command / .find_play / .list_pollinations via the discovery file at ~/.frootai/vscode-mcp-endpoint.json."
+        },
+        "frootai.orchard.mcpServer.port": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "Explicit port for the FrootAI Orchard MCP server. Default 0 picks a free port (recommended — the actual port is written to the discovery file)."
+        },
+        "frootai.federation.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Master switch for the M5 MCP Federation surface in this extension. When false, the extension's federation commands are inert and the spawned `frootai-mcp` subprocess receives FROOTAI_FEDERATION=off (total disable path)."
+        },
+        "frootai.federation.preAttach": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "description": "Area names to eagerly attach when the federation kernel boots. Each entry must match `[a-zA-Z0-9_-]+` (no dots, no spaces). Mapped to the FROOTAI_PREATTACH env var (comma-separated) at M5.14."
+        },
+        "frootai.federation.trustFile": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to the operator trust override file. Leave empty to use the default `~/.frootai/trust.json` (XDG-aware). Mapped to FROOTAI_TRUST_FILE at M5.15."
+        },
+        "frootai.federation.idleDisconnectMinutes": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 1440,
+          "description": "Minutes of zero MCP traffic before the kernel disconnects an attached area. Default 10. Mapped to FROOTAI_IDLE_DISCONNECT_MIN at M5.15."
+        },
+        "frootai.federation.autoAttachFromPlayManifest": {
+          "type": "boolean",
+          "default": true,
+          "description": "When an Orchard Play is opened with `mcp_scope.attached` in its manifest, prompt the operator to attach the required federated areas. M5.18 implements the notification."
+        },
+        "frootai.federation.lean": {
+          "type": "boolean",
+          "default": false,
+          "description": "⚡ Lean federation (low-calorie). Losslessly byte-compact federated tool descriptions (strip whitespace + routing ceremony) so an attached area's tool list loads with fewer tokens — same capability, no imperative/parameter altered. Maps to FROOTAI_LEAN_FEDERATION=1 for the spawned kernel."
+        },
+        "frootai.tokenOps.repository": {
+          "type": "string",
+          "default": "",
+          "description": "Repository or chargeback key attached to imported TokenOps observations. Defaults to the workspace folder."
+        },
+        "frootai.tokenOps.defaultModel": {
+          "type": "string",
+          "default": "openai:gpt-5",
+          "description": "Default TokenOps model registry ID."
+        },
+        "frootai.tokenOps.modelCatalogOverrides": {
+          "type": "array",
+          "default": [],
+          "description": "Administrator model definitions and sourced pricing overrides. Prices require priceSource and priceAsOf provenance.",
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "provider": { "type": "string", "enum": ["openai", "azure-openai", "anthropic", "google", "github-copilot", "custom"] },
+              "displayName": { "type": "string" },
+              "encoding": { "type": ["string", "null"], "enum": ["o200k_base", "cl100k_base", null] },
+              "contextWindow": { "type": ["number", "null"], "minimum": 1 },
+              "inputPerMillion": { "type": ["number", "null"], "minimum": 0 },
+              "outputPerMillion": { "type": ["number", "null"], "minimum": 0 },
+              "priceSource": { "type": ["string", "null"] },
+              "priceAsOf": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+              "notes": { "type": "string" }
+            }
+          }
+        },
+        "frootai.tokenOps.githubOrganization": {
+          "type": "string",
+          "default": "",
+          "pattern": "^[A-Za-z0-9-]*$",
+          "description": "GitHub organization used for aggregate Copilot metrics collection."
+        },
+        "frootai.tokenOps.monthlyBudgetUsd": {
+          "type": ["number", "null"],
+          "default": null,
+          "minimum": 0,
+          "description": "Monthly observed-cost budget in USD. Estimated costs do not consume this budget."
+        },
+        "frootai.tokenOps.budgetAlertPercent": {
+          "type": "number",
+          "default": 80,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Warn when observed month-to-date cost reaches this percentage of budget."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "frootai.gettingStarted",
+        "title": "Get Started with FrootAI",
+        "description": "Learn how to use FrootAI to build production AI solutions on Azure",
+        "steps": [
+          {
+            "id": "explore",
+            "title": "Browse 101 Solution Plays",
+            "description": "Explore pre-architected AI solutions in the sidebar.\n\n[Open Solution Plays](command:frootai.browseSolutionPlays)",
+            "media": {
+              "markdown": "media/walkthrough-explore.md"
+            }
+          },
+          {
+            "id": "search",
+            "title": "Search Across Everything",
+            "description": "Search plays, MCP tools, and glossary terms.\n\n[Search FrootAI](command:frootai.searchAll)",
+            "media": {
+              "markdown": "media/walkthrough-search.md"
+            }
+          },
+          {
+            "id": "initDevKit",
+            "title": "Initialize Your First Play",
+            "description": "Scaffold a solution play with DevKit — agents, instructions, skills, and MCP config.\n\n[Init DevKit](command:frootai.initDevKit)",
+            "media": {
+              "markdown": "media/walkthrough-init.md"
+            }
+          },
+          {
+            "id": "mcp",
+            "title": "Connect MCP Server",
+            "description": "Connect FrootAI MCP and inspect the tool surface discovered from the active runtime.\n\n[Setup MCP](command:frootai.installMcpServer)",
+            "media": {
+              "markdown": "media/walkthrough-mcp.md"
+            }
+          },
+          {
+            "id": "evaluate",
+            "title": "Run Your First Evaluation",
+            "description": "Validate AI quality with groundedness, relevance, coherence, and fluency checks.\n\n[Run Evaluation](command:frootai.runEvaluation)",
+            "media": {
+              "markdown": "media/walkthrough-evaluate.md"
+            }
+          },
+          {
+            "id": "tryFederation_openExplorer",
+            "title": "Open Federation Explorer",
+            "description": "Discover MCP areas published to the FrootAI Marketplace and attach them to your kernel.\n\n[Open Federation Explorer](command:frootai.federation.discoverMcp)",
+            "media": {
+              "markdown": "media/walkthrough-fed-explorer.md"
+            }
+          },
+          {
+            "id": "tryFederation_attachMarkitdown",
+            "title": "Attach Markitdown",
+            "description": "Try federation by attaching Microsoft's `markitdown` MCP area — it converts files (PDF, DOCX, PPTX, images) to clean Markdown.\n\n[Attach an MCP Area](command:frootai.federation.attach)",
+            "media": {
+              "markdown": "media/walkthrough-fed-attach-markitdown.md"
+            }
+          },
+          {
+            "id": "tryFederation_convertFile",
+            "title": "Convert a File with Markitdown",
+            "description": "From the FrootAI chat or any MCP-aware agent, ask: _\"Convert `quarterly-report.pdf` to Markdown.\"_ The federated `markitdown.*` tools will route to the kernel automatically.\n\n[See Attached Areas](command:frootai.federation.listAttached)",
+            "media": {
+              "markdown": "media/walkthrough-fed-convert-file.md"
+            }
+          },
+          {
+            "id": "tokenOps",
+            "title": "Measure AI usage with TokenOps",
+            "description": "Estimate visible workloads, import real provider or gateway receipts, and reconcile planning ranges with observed evidence.\n\n[Open TokenOps](command:frootai.tokenOps.openDashboard) · [Save receipt template](command:frootai.tokenOps.saveReceiptTemplate)",
+            "media": {
+              "markdown": "media/walkthrough-tokenops.md"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build:webview && npm run package",
+    "compile": "npm run check-types && npm run build:webview && node esbuild.config.mjs",
+    "check-types": "tsc --noEmit",
+    "build:webview": "cd webview-ui && npm run build:win",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "npm run check-types && node esbuild.config.mjs --production",
+    "lint": "eslint src/",
+    "test": "tsx src/test/extension.test.ts && tsx src/test/tokenops.test.ts && tsx src/test/play-detail-workflow.test.ts && tsx src/test/account-agent-platform.test.ts && tsx src/test/repository-intelligence.test.ts && tsx src/test/accelerator-assets.test.ts",
+    "test:federation": "node src/test/federation/command-registration.test.js && node src/test/federation/settings-env-mapping.test.js && node src/test/federation/tree-provider-data-shape.test.js && node src/test/federation/webview-message-handlers.test.js",
+    "test:webview": "npm --prefix webview-ui test",
+    "test:play-detail:live": "tsx scripts/smoke-play-detail-live.mts",
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish"
+  },
+  "dependencies": {
+    "js-tiktoken": "1.0.21"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.23.1",
+    "typescript": "^5.7.0"
+  }
+}

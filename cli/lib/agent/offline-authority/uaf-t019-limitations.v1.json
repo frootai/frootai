@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "agent-fai-offline-uaf-limitation.v1",
+  "task": "UAF-T019",
+  "authorityState": "local-approved-uncommitted",
+  "source": {
+    "path": "planning/unified-ai-fabric-foundation/uaf-t019-contract-artifact.v1.json",
+    "sha256": "cbaf02f625038e4181a6cfcdf82587a179ccb0497879bcc95b0ec1f5936799f5"
+  },
+  "claims": {
+    "offlineAdapters": 7,
+    "adapterStatus": "Degraded",
+    "capabilityStatus": "Degraded",
+    "profileReadiness": "Designed",
+    "evidenceRefs": [],
+    "readinessPromoted": false
+  }
+}
