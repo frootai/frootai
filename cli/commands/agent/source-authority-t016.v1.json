@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "agent-fai-source-authority-t016.v1",
+  "task": "AFCLI-T016",
+  "implementationState": "protocol-client-and-renderers-available-command-host-unavailable",
+  "authorities": [
+    { "id": "T005-decision", "repository": "frootai-planning-agent-fai-cli", "commit": "58191c32c8679fd29f183fefc5fdb7b25f7a3c98", "treeOid": "2121f22ea874dd0ab6c9c84b19a90eabdef99976" },
+    { "id": "planning-closure", "repository": "frootai-planning-agent-fai-cli", "commit": "273ebf383b136cf49e24badb1f4e1e098489253a", "treeOid": "fe1462e0c3794913de910e32a2bdfd165fdbc416" },
+    { "id": "T006", "repository": "frootai-agent-fai-cli-contracts", "commit": "bbd9002f5bbaaa87ce08bc4c06c0b8d071c35640", "treeOid": "06c841c354108fb76f87f157aa1c055e813f6e00" },
+    { "id": "T008-original", "repository": "frootai-agent-fai-cli-contracts", "commit": "da368fbbf7cbdb05e4e14d709c809ddab3b98102", "treeOid": "8f1270eab24ae25acf161a0d8ff70f56c8c53b44" },
+    { "id": "T008-superseding", "repository": "frootai-agent-fai-cli-contracts", "commit": "3792caba8912c1014d8f9b490002e242af0c3b3b", "treeOid": "e6eed39bfef8930061775610310795a3da97bf80" },
+    { "id": "T010", "repository": "frootai-agent-fai-cli-contracts", "commit": "34cf6ab636447c4b7e7df8bde920f748a46987cf", "treeOid": "345cd93973627d24ccca11b9aca8877270f66129" },
+    { "id": "T014", "repository": "frootai-core-agent-fai-cli", "commit": "a1f62dc561d883b35f6bf7251cd5331d235d8b44", "treeOid": "64782af0dc086eb8f7aa888a71d2c6b2eff11cfc" },
+    { "id": "T015", "repository": "frootai-core-agent-fai-cli", "commit": "53c914b7fbc6116b87967c9e84ba7721de618147", "treeOid": "c17e42a71f71d76cd4e0d2c559a717aba326f31b" }
+  ],
+  "sources": [
+    { "authority": "T005-decision", "path": "planning/agent-fai-cli/afcli-t005-invocation-research.v1.json", "gitBlobOid": "1f89b9a791ce0c316fab8609c283af85dbda2a24" },
+    { "authority": "T005-decision", "path": "planning/agent-fai-cli/afcli-t005-invocation-workflow-research.md", "gitBlobOid": "38f99645b267d3a82e497b4c4e3453f59a2a468c" },
+    { "authority": "planning-closure", "path": "planning/agent-fai-cli/README.md", "gitBlobOid": "0c7a6ac4772822339ebe0c88b3848e9ca025e9ed" },
+    { "authority": "planning-closure", "path": "planning/agent-fai-cli/plan.md", "gitBlobOid": "19febb9960759087294ab52ce40b046b04e6442c" },
+    { "authority": "T006", "path": "schemas/agent-fai-event.v1.schema.json", "gitBlobOid": "ec446ac41d8cfdf42f683820dd92a72fb8884dec" },
+    { "authority": "T006", "path": "scripts/validate-agent-fai-contracts.cjs", "gitBlobOid": "d8e30e0fd993371fd8f3c2de196dba76c5c9af50" },
+    { "authority": "T008-original", "path": "scripts/reduce-agent-fai-events.cjs", "gitBlobOid": "cc5b68ba968942f14713b8d53af4624a0d18c859" },
+    { "authority": "T008-superseding", "path": "scripts/reduce-agent-fai-events.cjs", "gitBlobOid": "cc5b68ba968942f14713b8d53af4624a0d18c859" },
+    { "authority": "T008-superseding", "path": "tests/fixtures/agent-fai-golden-transcripts/manifest.v1.json", "gitBlobOid": "59fef76856a011f439c3978e9c8a3cc829ab418b" },
+    { "authority": "T008-superseding", "path": "tests/fixtures/agent-fai-golden-transcripts/grounded-success/expected-state.json", "gitBlobOid": "d06e20ce8f400d28e39559de6a78656325b7f647" },
+    { "authority": "T008-superseding", "path": "tests/fixtures/agent-fai-golden-transcripts/model-cancelled/expected-state.json", "gitBlobOid": "b5a321c0d6994b6085badf777111509b4174013c" },
+    { "authority": "T008-superseding", "path": "tests/fixtures/agent-fai-golden-transcripts/tool-failed/expected-state.json", "gitBlobOid": "b888f94b5d2a182b7a3d902903c516a5becf0f63" },
+    { "authority": "T010", "path": "generated/agent-fai/validators.cjs", "gitBlobOid": "89013085a70b63be91c47a9cc683005e012c2de7", "vendoredPath": "cli/lib/agent/contracts/validators.cjs" },
+    { "authority": "T014", "path": "cli/commands/agent/command-registry.v1.json", "gitBlobOid": "01a09d607a266e4e276b1043c6024637dfae9b87" },
+    { "authority": "T014", "path": "cli/lib/agent/command-registry.generated.js", "gitBlobOid": "bd1a433169c7ff8dd2498b3d84340e71bc216b21" },
+    { "authority": "T015", "path": "cli/lib/agent/protocol-client.js", "gitBlobOid": "204a1b856069e636356ed4c7830c9b2b931a529a" },
+    { "authority": "T015", "path": "cli/commands/agent/source-authority-t015.v1.json", "gitBlobOid": "d081056a7ff018c9b069ffcd2088d18dd47130ed" }
+  ],
+  "constraints": {
+    "runtimeDependencies": 0,
+    "commandHostAvailable": false,
+    "networkAtRuntime": false,
+    "transcriptCardinality": 27,
+    "stateCardinality": 3,
+    "reducerStartMode": "complete-stream-only",
+    "rendererReplayStartSequence": 1,
+    "limits": {
+      "acceptedEvents": 100000,
+      "deliveredEvents": 200000,
+      "aggregateEventBytes": 16777216,
+      "eventBytes": 1048576,
+      "contentBytes": 2097152,
+      "sources": 1000,
+      "tools": 1000,
+      "artifacts": 1000,
+      "evidence": 1000,
+      "usage": 1000,
+      "diagnostics": 1000
+    },
+    "semanticRuntime": {
+      "sourceCommit": "bbd9002f5bbaaa87ce08bc4c06c0b8d071c35640",
+      "sourceBlobOid": "d8e30e0fd993371fd8f3c2de196dba76c5c9af50",
+      "generatedPath": "cli/lib/agent/semantic-runtime.generated.js",
+      "generatedSha256": "a6f95c666bd5379607ea06f46d76eba216a8ff2cdf2dec8820718d2828e10ab2"
+    },
+    "renderResultValidator": {
+      "schemaPath": "cli/commands/agent/render-result.v1.schema.json",
+      "schemaSha256": "4d270d86d57ba4fb28cc538ee7232b55bc4e5ce4cf212ba5b0c4796527a86be3",
+      "generatedPath": "cli/lib/agent/render-result-validator.js",
+      "generatedSha256": "24b7b68da4fa639a5247052e953fc08c9386464611f339168a9e8516100bbdc8"
+    }
+  }
+}

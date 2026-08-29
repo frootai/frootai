@@ -1,0 +1,98 @@
+{
+  "name": "frootai",
+  "version": "6.2.0",
+  "description": "FrootAI CLI — product discovery, Orchard, MCP federation, FAI Protocol, Lean, auth, and Factory workflows.",
+  "bin": {
+    "frootai": "./bin.js",
+    "fai": "./bin.js",
+    "agent-fai": "./agent-fai.js"
+  },
+  "main": "./lib/orchard/dispatch.js",
+  "exports": {
+    ".": "./lib/orchard/dispatch.js",
+    "./orchard": "./lib/orchard/dispatch.js",
+    "./auth": "./lib/auth/dispatch.js",
+    "./scaffold": "./lib/scaffold/engine.js",
+    "./diff": "./lib/diff/engine.js",
+    "./telemetry": "./lib/telemetry/emitter.js",
+    "./products": "./lib/products/catalog.js",
+    "./capabilities": "./lib/capabilities/inspect.js",
+    "./security/policy": "./lib/security/command-policy.js",
+    "./security/audit": "./lib/security/audit-log.js",
+    "./security/script-authorization": "./lib/security/script-authorization.js",
+    "./agent/protocol-client": "./lib/agent/protocol-client.js",
+    "./agent/client-error": "./lib/agent/client-error.js",
+    "./agent/event-reducer": "./lib/agent/event-reducer.js",
+    "./agent/renderers": "./lib/agent/renderers.js",
+    "./agent/headless-host": "./lib/agent/headless-host.js",
+    "./agent/interactive-host": "./lib/agent/interactive-host.js",
+    "./agent/offline-host": "./lib/agent/offline-host.js",
+    "./agent/identity": "./lib/agent/identity-coordinator.js",
+    "./agent/config": "./lib/agent/config-v2.js",
+    "./agent/organization-context": "./lib/agent/organization-context.js",
+    "./agent/session-metadata": "./lib/agent/session-metadata-store.js",
+    "./version": "./lib/version-info.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "frootai",
+    "fai",
+    "cli",
+    "orchard",
+    "accelerator",
+    "scaffold",
+    "ai-primitives",
+    "mcp",
+    "copilot",
+    "agents",
+    "skills"
+  ],
+  "author": "FrootAI",
+  "license": "MIT",
+  "homepage": "https://frootai.dev/cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frootai/frootai"
+  },
+  "bugs": {
+    "url": "https://github.com/frootai/frootai/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "generate:agent-registry": "node scripts/generate-agent-command-registry.js --write",
+    "check:agent-registry": "node scripts/generate-agent-command-registry.js --check",
+    "generate:agent-operations": "node scripts/generate-agent-operation-registry.js --write",
+    "check:agent-operations": "node scripts/generate-agent-operation-registry.js --check",
+    "generate:agent-renderers": "node scripts/generate-agent-renderer-registry.js --write",
+    "check:agent-renderers": "node scripts/generate-agent-renderer-registry.js --check",
+    "generate:agent-render-result": "node scripts/generate-agent-render-result-validator.js --write",
+    "check:agent-render-result": "node scripts/generate-agent-render-result-validator.js --check",
+    "generate:agent-semantics": "node scripts/generate-agent-semantic-runtime.js --write",
+    "check:agent-semantics": "node scripts/generate-agent-semantic-runtime.js --check",
+    "generate:agent-offline": "node scripts/generate-agent-offline-knowledge.js --write",
+    "check:agent-offline": "node scripts/generate-agent-offline-knowledge.js --check",
+    "test:agent-registry": "node --test tests/agent-command-registry.test.js",
+    "test:agent-protocol": "node --test tests/agent-protocol-client.test.js",
+    "test:agent-renderers": "node --test tests/agent-renderers.test.js",
+    "gate:agent-renderers": "npm run check:agent-registry && npm run check:agent-operations && npm run check:agent-renderers && npm run check:agent-render-result && npm run check:agent-semantics && npm run check:agent-offline && npm run test:agent-renderers"
+  },
+  "files": [
+    "bin.js",
+    "agent-fai.js",
+    "lib/**/*.js",
+    "lib/**/*.cjs",
+    "lib/**/*.json",
+    "commands/**/*.js",
+    "commands/**/*.json",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "ENTERPRISE-OPERATIONS.md",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  }
+}

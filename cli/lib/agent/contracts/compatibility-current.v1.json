@@ -1,0 +1,6822 @@
+{
+  "schemaVersion": "agent-fai-compatibility-snapshot.v1",
+  "schemas": {
+    "schemas/agent-fai-authority-bindings.v1.schema.json": {
+      "$defs": {
+        "approval": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/engine/fai-engine-approval.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^approval\\.",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "approved",
+                "denied",
+                "expired",
+                "revoked",
+                "consumed"
+              ]
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest",
+            "status"
+          ],
+          "type": "object"
+        },
+        "artifact": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "$ref": "#/$defs/stable"
+            },
+            "mediaType": {
+              "maxLength": 255,
+              "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$",
+              "type": "string"
+            },
+            "uri": {
+              "format": "uri",
+              "maxLength": 2048,
+              "pattern": "^https://",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "digest",
+            "mediaType"
+          ],
+          "type": "object"
+        },
+        "canonicalReceipt": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/fai-receipt.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^receipt\\.",
+              "type": "string"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "effectivePolicy": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/fai-policy-decision.v1.json"
+            },
+            "decision": {
+              "enum": [
+                "allow",
+                "deny"
+              ]
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^policy-decision\\.",
+              "type": "string"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest",
+            "decision"
+          ],
+          "type": "object"
+        },
+        "engineReceipt": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/engine/fai-engine-receipt.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^engine-receipt\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "evidence": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/fai-evidence.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^evidence\\.",
+              "type": "string"
+            },
+            "profile": {
+              "$ref": "#/$defs/profile"
+            },
+            "type": {
+              "enum": [
+                "requirement",
+                "context",
+                "source",
+                "schema",
+                "build",
+                "adapter-conformance",
+                "test",
+                "evaluation",
+                "security",
+                "review",
+                "approval",
+                "receipt",
+                "deployment",
+                "rollback",
+                "cleanup",
+                "deletion",
+                "observation",
+                "sbom",
+                "provenance",
+                "drift",
+                "retirement"
+              ]
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "type",
+            "digest",
+            "profile"
+          ],
+          "type": "object"
+        },
+        "evidenceRelease": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/fai-evidence-release-bundle.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^release\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "profile": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^profile\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "promotion": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/fai-promotion.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^promotion\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "scope": {
+          "additionalProperties": false,
+          "properties": {
+            "environment": {
+              "$ref": "#/$defs/stable"
+            },
+            "jobId": {
+              "$ref": "#/$defs/stable"
+            },
+            "organization": {
+              "$ref": "#/$defs/stable"
+            },
+            "project": {
+              "$ref": "#/$defs/stable"
+            },
+            "runId": {
+              "$ref": "#/$defs/stable"
+            }
+          },
+          "required": [
+            "organization",
+            "project",
+            "environment",
+            "runId",
+            "jobId"
+          ],
+          "type": "object"
+        },
+        "semver": {
+          "maxLength": 128,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "stable": {
+          "maxLength": 128,
+          "pattern": "^[a-z0-9][a-z0-9.-]{1,127}$",
+          "type": "string"
+        },
+        "toolProposal": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/engine/fai-engine-command.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^engine-command\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "toolResult": {
+          "additionalProperties": false,
+          "properties": {
+            "authoritySchema": {
+              "const": "https://frootai.dev/schemas/engine/fai-engine-event.v1.json"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "maxLength": 128,
+              "pattern": "^engine-event\\.",
+              "type": "string"
+            },
+            "version": {
+              "$ref": "#/$defs/semver"
+            }
+          },
+          "required": [
+            "authoritySchema",
+            "id",
+            "version",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-authority-bindings.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-authority-bindings.v1.json"
+        },
+        "approvals": {
+          "items": {
+            "$ref": "#/$defs/approval"
+          },
+          "maxItems": 32,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "bindingId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "canonicalReceipt": {
+          "$ref": "#/$defs/canonicalReceipt"
+        },
+        "effectivePolicy": {
+          "$ref": "#/$defs/effectivePolicy"
+        },
+        "engineReceipt": {
+          "$ref": "#/$defs/engineReceipt"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "evidenceRelease": {
+          "$ref": "#/$defs/evidenceRelease"
+        },
+        "identityDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "profile": {
+          "$ref": "#/$defs/profile"
+        },
+        "promotion": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/promotion"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requestId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-authority-bindings.v1"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "toolProposal": {
+          "$ref": "#/$defs/toolProposal"
+        },
+        "toolResult": {
+          "$ref": "#/$defs/toolResult"
+        },
+        "turnId": {
+          "$ref": "#/$defs/uuid"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "bindingId",
+        "sessionId",
+        "turnId",
+        "requestId",
+        "identityDigest",
+        "scope",
+        "profile",
+        "toolProposal",
+        "toolResult",
+        "engineReceipt",
+        "canonicalReceipt",
+        "effectivePolicy",
+        "approvals",
+        "artifacts",
+        "evidence",
+        "evidenceRelease",
+        "promotion"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-context-manifest.v1.schema.json": {
+      "$defs": {
+        "aggregateCount": {
+          "maximum": 1000000000000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "positiveCount": {
+          "maximum": 1000000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-context-manifest.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-context-manifest.v1.json"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "digestAlgorithm": {
+          "const": "sha256-rfc8785-jcs"
+        },
+        "digestScope": {
+          "const": "document-without-manifestDigest"
+        },
+        "egress": {
+          "additionalProperties": false,
+          "properties": {
+            "consentRef": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "destinationClass": {
+              "enum": [
+                "none",
+                "agent-fai-control-plane",
+                "approved-model-provider",
+                "approved-mcp-server",
+                "private-runner"
+              ]
+            },
+            "purpose": {
+              "pattern": "^[a-z][a-z0-9-]{2,63}$",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "local-only",
+                "consent-required",
+                "consented"
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "purpose",
+            "destinationClass",
+            "consentRef"
+          ],
+          "type": "object"
+        },
+        "exclusions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "category": {
+                "enum": [
+                  "ignored",
+                  "secret",
+                  "credential",
+                  "private-key",
+                  "environment",
+                  "pii",
+                  "policy",
+                  "binary",
+                  "oversized",
+                  "outside-root",
+                  "untrusted-link"
+                ]
+              },
+              "count": {
+                "$ref": "#/$defs/positiveCount"
+              }
+            },
+            "required": [
+              "category",
+              "count"
+            ],
+            "type": "object"
+          },
+          "maxItems": 1000,
+          "type": "array"
+        },
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "manifestDigest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "manifestId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-context-manifest.v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "sources": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "maximum": 10485760,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "classification": {
+                "enum": [
+                  "public",
+                  "internal",
+                  "confidential",
+                  "restricted"
+                ]
+              },
+              "freshness": {
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "properties": {
+                      "knowledgeAgeSeconds": {
+                        "type": "null"
+                      },
+                      "sourceUpdatedAt": {
+                        "type": "null"
+                      },
+                      "status": {
+                        "const": "unknown"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "knowledgeAgeSeconds": {
+                        "maximum": 3155760000,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sourceUpdatedAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "status": {
+                        "enum": [
+                          "current",
+                          "stale"
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "knowledgeAgeSeconds": {
+                    "oneOf": [
+                      {
+                        "maximum": 3155760000,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observedAt": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "sourceUpdatedAt": {
+                    "oneOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "current",
+                      "stale",
+                      "unknown"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "observedAt",
+                  "sourceUpdatedAt",
+                  "knowledgeAgeSeconds"
+                ],
+                "type": "object"
+              },
+              "path": {
+                "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).{1,1024}$",
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "explicit-reference",
+                  "project-instruction",
+                  "dependency",
+                  "test",
+                  "symbol-relevance",
+                  "repository-intelligence",
+                  "canonical-grounding"
+                ]
+              },
+              "redactions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "category": {
+                      "enum": [
+                        "secret",
+                        "credential",
+                        "private-key",
+                        "environment",
+                        "pii",
+                        "policy",
+                        "binary",
+                        "oversized"
+                      ]
+                    },
+                    "count": {
+                      "$ref": "#/$defs/positiveCount"
+                    }
+                  },
+                  "required": [
+                    "category",
+                    "count"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1000,
+                "type": "array"
+              },
+              "sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "tokens": {
+                "maximum": 1000000,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "classification",
+              "bytes",
+              "tokens",
+              "reason",
+              "freshness",
+              "redactions"
+            ],
+            "type": "object"
+          },
+          "maxItems": 1000,
+          "type": "array"
+        },
+        "totals": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "$ref": "#/$defs/aggregateCount"
+            },
+            "exclusionCount": {
+              "$ref": "#/$defs/aggregateCount"
+            },
+            "redactionCount": {
+              "$ref": "#/$defs/aggregateCount"
+            },
+            "sourceCount": {
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "tokens": {
+              "$ref": "#/$defs/aggregateCount"
+            }
+          },
+          "required": [
+            "sourceCount",
+            "bytes",
+            "tokens",
+            "redactionCount",
+            "exclusionCount"
+          ],
+          "type": "object"
+        },
+        "truncation": {
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "properties": {
+                "discardedBytes": {
+                  "const": 0
+                },
+                "discardedTokens": {
+                  "const": 0
+                },
+                "occurred": {
+                  "const": false
+                },
+                "reason": {
+                  "type": "null"
+                }
+              }
+            },
+            {
+              "anyOf": [
+                {
+                  "properties": {
+                    "discardedBytes": {
+                      "minimum": 1,
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "discardedTokens": {
+                      "minimum": 1,
+                      "type": "integer"
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "occurred": {
+                  "const": true
+                },
+                "reason": {
+                  "enum": [
+                    "byte-budget",
+                    "token-budget",
+                    "source-count",
+                    "policy"
+                  ]
+                }
+              }
+            }
+          ],
+          "properties": {
+            "discardedBytes": {
+              "$ref": "#/$defs/aggregateCount"
+            },
+            "discardedTokens": {
+              "$ref": "#/$defs/aggregateCount"
+            },
+            "occurred": {
+              "type": "boolean"
+            },
+            "reason": {
+              "oneOf": [
+                {
+                  "enum": [
+                    "byte-budget",
+                    "token-budget",
+                    "source-count",
+                    "policy"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "occurred",
+            "reason",
+            "discardedBytes",
+            "discardedTokens"
+          ],
+          "type": "object"
+        },
+        "turnId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "workspaceRootDigest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "manifestId",
+        "manifestDigest",
+        "digestAlgorithm",
+        "digestScope",
+        "sessionId",
+        "turnId",
+        "createdAt",
+        "expiresAt",
+        "workspaceRootDigest",
+        "sources",
+        "exclusions",
+        "totals",
+        "truncation",
+        "egress"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-event.v1.schema.json": {
+      "$defs": {
+        "code": {
+          "pattern": "^[a-z][a-z0-9._-]{1,63}$",
+          "type": "string"
+        },
+        "eventType": {
+          "enum": [
+            "session.started",
+            "session.resumed",
+            "turn.accepted",
+            "turn.completed",
+            "turn.failed",
+            "turn.cancelled",
+            "context.accepted",
+            "context.rejected",
+            "context.compacted",
+            "retrieval.started",
+            "retrieval.source",
+            "retrieval.completed",
+            "retrieval.failed",
+            "retrieval.cancelled",
+            "tool.proposed",
+            "policy.decided",
+            "approval.required",
+            "approval.granted",
+            "tool.started",
+            "tool.progress",
+            "tool.completed",
+            "tool.failed",
+            "model.started",
+            "model.delta",
+            "model.completed",
+            "model.failed",
+            "artifact.created",
+            "evidence.created",
+            "usage.receipt",
+            "warning",
+            "limitation"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-event.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-event.v1.json"
+        },
+        "data": {
+          "additionalProperties": false,
+          "properties": {
+            "actionId": {
+              "enum": [
+                "ACT-001",
+                "ACT-002",
+                "ACT-003",
+                "ACT-004",
+                "ACT-005",
+                "ACT-006",
+                "ACT-007",
+                "ACT-008",
+                "ACT-009",
+                "ACT-010",
+                "ACT-011",
+                "ACT-012",
+                "ACT-013",
+                "ACT-014"
+              ]
+            },
+            "approvalContract": {
+              "enum": [
+                "APR-ACT-001-NONE-V1",
+                "APR-ACT-002-TRUSTED-ROOT-V1",
+                "APR-ACT-003-CONTEXT-EGRESS-V1",
+                "APR-ACT-004-MCP-READ-V1",
+                "APR-ACT-005-LOCAL-PATCH-V1",
+                "APR-ACT-006-LOCAL-COMMAND-V1",
+                "APR-ACT-007-REMOTE-MUTATION-V1",
+                "APR-ACT-008-DEPLOY-V1",
+                "APR-ACT-009-PUBLISH-V1",
+                "APR-ACT-010-PROMOTE-V1",
+                "APR-ACT-011-CLEANUP-V1",
+                "APR-ACT-012-DELETE-V1",
+                "APR-ACT-013-EXPORT-V1",
+                "APR-ACT-014-GOVERNANCE-V1"
+              ]
+            },
+            "approvalId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "artifactId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "artifactRefs": {
+              "items": {
+                "$ref": "#/$defs/uuid"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "authority": {
+              "enum": [
+                "observe",
+                "propose",
+                "local-write",
+                "external-mutation"
+              ]
+            },
+            "bindings": {
+              "items": {
+                "enum": [
+                  "principal",
+                  "organization",
+                  "purpose",
+                  "destination",
+                  "manifest-digest",
+                  "turn",
+                  "expiry",
+                  "one-operation",
+                  "trusted-root",
+                  "bounded-scope",
+                  "tenant-scope",
+                  "session",
+                  "consent-digest",
+                  "tool",
+                  "input",
+                  "risk",
+                  "policy-version",
+                  "action",
+                  "patch",
+                  "cwd",
+                  "executable",
+                  "argv",
+                  "environment",
+                  "profile",
+                  "artifact",
+                  "channel",
+                  "stage",
+                  "evidence-set",
+                  "resource-set",
+                  "resource-or-data-set",
+                  "legal-state",
+                  "scope",
+                  "policy-diff"
+                ]
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "bindingValuesDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "category": {
+              "pattern": "^[a-z][a-z0-9-]{1,63}$",
+              "type": "string"
+            },
+            "code": {
+              "$ref": "#/$defs/code"
+            },
+            "consentDigest": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "content": {
+              "maxLength": 16384,
+              "minLength": 1,
+              "type": "string"
+            },
+            "decision": {
+              "enum": [
+                "allow",
+                "deny",
+                "require-approval"
+              ]
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "effectId": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "egress": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "consentRef": {
+                      "$ref": "#/$defs/uuid"
+                    },
+                    "destinationClass": {
+                      "enum": [
+                        "agent-fai-control-plane",
+                        "approved-model-provider",
+                        "approved-mcp-server",
+                        "private-runner"
+                      ]
+                    },
+                    "organizationDigest": {
+                      "$ref": "#/$defs/sha256"
+                    },
+                    "purpose": {
+                      "enum": [
+                        "repository-review",
+                        "model-inference",
+                        "approved-tool-operation",
+                        "artifact-publication"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "organizationDigest",
+                    "purpose",
+                    "destinationClass",
+                    "consentRef"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "errorId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "eventType": {
+              "$ref": "#/$defs/eventType"
+            },
+            "evidenceId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "expiresAt": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "finishReason": {
+              "enum": [
+                "stop",
+                "length",
+                "tool",
+                "content-filter",
+                "cancelled"
+              ]
+            },
+            "href": {
+              "format": "uri",
+              "pattern": "^https://",
+              "type": "string"
+            },
+            "initiator": {
+              "enum": [
+                "user",
+                "client",
+                "server",
+                "policy"
+              ]
+            },
+            "inputDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "intent": {
+              "enum": [
+                "answer",
+                "architecture",
+                "plan",
+                "review",
+                "operate"
+              ]
+            },
+            "manifestDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "manifestId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "messageCode": {
+              "$ref": "#/$defs/code"
+            },
+            "modelAlias": {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            },
+            "modelDisposition": {
+              "enum": [
+                "not-started",
+                "completed-before-cancellation",
+                "cancelled"
+              ]
+            },
+            "outcome": {
+              "const": "completed"
+            },
+            "outputDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "policyVersion": {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            },
+            "prerequisiteApprovalId": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "principalDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "profileRef": {
+              "oneOf": [
+                {
+                  "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "progressPercent": {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "queryDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "rank": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "reason": {
+              "enum": [
+                "user",
+                "deadline",
+                "policy",
+                "shutdown"
+              ]
+            },
+            "reasonCode": {
+              "$ref": "#/$defs/code"
+            },
+            "receiptId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "risk": {
+              "enum": [
+                "read",
+                "read-sensitive",
+                "data-egress",
+                "local-write",
+                "external-mutation",
+                "destructive"
+              ]
+            },
+            "sourceCount": {
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "sourceId": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            "stream": {
+              "type": "boolean"
+            },
+            "surface": {
+              "enum": [
+                "web",
+                "cli",
+                "api",
+                "mcp",
+                "sdk",
+                "vscode",
+                "github",
+                "studio",
+                "automation"
+              ]
+            },
+            "toolCallId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "toolName": {
+              "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "eventType"
+          ],
+          "type": "object"
+        },
+        "eventId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "requestId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-event.v1"
+        },
+        "sequence": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "turnId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "type": {
+          "$ref": "#/$defs/eventType"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "eventId",
+        "requestId",
+        "sessionId",
+        "turnId",
+        "sequence",
+        "occurredAt",
+        "type",
+        "data"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-exit.v1.schema.json": {
+      "$id": "https://frootai.dev/schemas/agent-fai-exit.v1.json",
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "errorCode": {
+              "type": "null"
+            },
+            "exitCode": {
+              "const": 0
+            },
+            "outcome": {
+              "const": "success"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "invalid_argument",
+                "invalid_json",
+                "request_too_large",
+                "message_too_large"
+              ]
+            },
+            "exitCode": {
+              "const": 2
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "const": "authentication_required"
+            },
+            "exitCode": {
+              "const": 65
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "not_found",
+                "resource_gone"
+              ]
+            },
+            "exitCode": {
+              "const": 66
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "service_unavailable",
+                "transport_failed",
+                "model_unavailable"
+              ]
+            },
+            "exitCode": {
+              "const": 69
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": true
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "tool_failed",
+                "internal"
+              ]
+            },
+            "exitCode": {
+              "const": 70
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "conflict",
+                "idempotency_conflict"
+              ]
+            },
+            "exitCode": {
+              "const": 73
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "const": "integrity_failed"
+            },
+            "exitCode": {
+              "const": 74
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "const": "deadline_exceeded"
+            },
+            "exitCode": {
+              "const": 75
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": true
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "authorization_denied",
+                "policy_denied"
+              ]
+            },
+            "exitCode": {
+              "const": 77
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "const": "approval_required"
+            },
+            "exitCode": {
+              "const": 78
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "enum": [
+                "quota_exceeded",
+                "budget_exceeded"
+              ]
+            },
+            "exitCode": {
+              "const": 79
+            },
+            "outcome": {
+              "const": "failure"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "errorCode": {
+              "const": "cancelled"
+            },
+            "exitCode": {
+              "const": 130
+            },
+            "outcome": {
+              "const": "cancelled"
+            },
+            "retryable": {
+              "const": false
+            }
+          }
+        }
+      ],
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-exit.v1.json"
+        },
+        "errorCode": {
+          "oneOf": [
+            {
+              "$ref": "agent-fai-problem.v1.json#/$defs/errorCode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exitCode": {
+          "enum": [
+            0,
+            2,
+            65,
+            66,
+            69,
+            70,
+            73,
+            74,
+            75,
+            77,
+            78,
+            79,
+            130
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "success",
+            "failure",
+            "cancelled"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-exit.v1"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "outcome",
+        "exitCode",
+        "errorCode",
+        "retryable"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-golden-transcripts.v1.schema.json": {
+      "$defs": {
+        "scenario": {
+          "additionalProperties": false,
+          "properties": {
+            "coverage": {
+              "items": {
+                "$ref": "#/$defs/semantic"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "id": {
+              "$ref": "#/$defs/scenarioId"
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "stateDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "statePath": {
+              "pattern": "^[a-z][a-z0-9-]{2,63}/expected-state\\.json$",
+              "type": "string"
+            },
+            "surfaces": {
+              "items": {
+                "$ref": "#/$defs/surface"
+              },
+              "maxItems": 9,
+              "minItems": 9,
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "id",
+            "coverage",
+            "semanticDigest",
+            "stateDigest",
+            "statePath",
+            "surfaces"
+          ],
+          "type": "object"
+        },
+        "scenarioId": {
+          "pattern": "^[a-z][a-z0-9-]{2,63}$",
+          "type": "string"
+        },
+        "semantic": {
+          "enum": [
+            "sequence",
+            "replay",
+            "cancellation",
+            "error",
+            "source",
+            "tool",
+            "artifact",
+            "usage",
+            "terminal-state"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "surface": {
+          "enum": [
+            "web",
+            "cli",
+            "api",
+            "mcp",
+            "sdk",
+            "vscode",
+            "github",
+            "studio",
+            "automation"
+          ]
+        },
+        "transcript": {
+          "additionalProperties": false,
+          "properties": {
+            "eventCount": {
+              "maximum": 10000,
+              "minimum": 2,
+              "type": "integer"
+            },
+            "path": {
+              "pattern": "^[a-z][a-z0-9-]{2,63}/(?:web|cli|api|mcp|sdk|vscode|github|studio|automation)\\.json$",
+              "type": "string"
+            },
+            "scenario": {
+              "$ref": "#/$defs/scenarioId"
+            },
+            "semanticDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "stateDigest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "surface": {
+              "$ref": "#/$defs/surface"
+            },
+            "transcriptSha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          },
+          "required": [
+            "scenario",
+            "surface",
+            "path",
+            "eventCount",
+            "transcriptSha256",
+            "semanticDigest",
+            "stateDigest"
+          ],
+          "type": "object"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-golden-transcripts.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-golden-transcripts.v1.json"
+        },
+        "requiredSemantics": {
+          "items": {
+            "$ref": "#/$defs/semantic"
+          },
+          "maxItems": 9,
+          "minItems": 9,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "scenarios": {
+          "items": {
+            "$ref": "#/$defs/scenario"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-golden-transcripts.v1"
+        },
+        "surfaces": {
+          "items": {
+            "$ref": "#/$defs/surface"
+          },
+          "maxItems": 9,
+          "minItems": 9,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "transcripts": {
+          "items": {
+            "$ref": "#/$defs/transcript"
+          },
+          "maxItems": 27,
+          "minItems": 27,
+          "type": "array"
+        }
+      },
+      "required": [
+        "$schema",
+        "schemaVersion",
+        "surfaces",
+        "requiredSemantics",
+        "scenarios",
+        "transcripts"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-problem.v1.schema.json": {
+      "$defs": {
+        "errorCode": {
+          "enum": [
+            "invalid_argument",
+            "invalid_json",
+            "request_too_large",
+            "message_too_large",
+            "authentication_required",
+            "not_found",
+            "resource_gone",
+            "authorization_denied",
+            "policy_denied",
+            "approval_required",
+            "quota_exceeded",
+            "budget_exceeded",
+            "conflict",
+            "idempotency_conflict",
+            "service_unavailable",
+            "deadline_exceeded",
+            "cancelled",
+            "transport_failed",
+            "model_unavailable",
+            "tool_failed",
+            "integrity_failed",
+            "internal"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-problem.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-problem.v1.json"
+        },
+        "error": {
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "invalid_argument",
+                    "invalid_json"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 400
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "request_too_large",
+                    "message_too_large"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 413
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "authentication_required"
+                },
+                "httpStatus": {
+                  "const": 401
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "not_found"
+                },
+                "httpStatus": {
+                  "const": 404
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "resource_gone"
+                },
+                "httpStatus": {
+                  "const": 410
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "authorization_denied",
+                    "policy_denied",
+                    "approval_required"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 403
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "quota_exceeded",
+                    "budget_exceeded"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 429
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "conflict",
+                    "idempotency_conflict"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 409
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "service_unavailable",
+                    "model_unavailable"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 503
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "deadline_exceeded"
+                },
+                "httpStatus": {
+                  "const": 504
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "cancelled"
+                },
+                "httpStatus": {
+                  "const": 499
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "enum": [
+                    "transport_failed",
+                    "tool_failed"
+                  ]
+                },
+                "httpStatus": {
+                  "const": 502
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "integrity_failed"
+                },
+                "httpStatus": {
+                  "const": 422
+                }
+              }
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "internal"
+                },
+                "httpStatus": {
+                  "const": 500
+                }
+              }
+            }
+          ],
+          "properties": {
+            "code": {
+              "$ref": "#/$defs/errorCode"
+            },
+            "details": {
+              "additionalProperties": false,
+              "properties": {
+                "approval": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actionId": {
+                      "enum": [
+                        "ACT-001",
+                        "ACT-002",
+                        "ACT-003",
+                        "ACT-004",
+                        "ACT-005",
+                        "ACT-006",
+                        "ACT-007",
+                        "ACT-008",
+                        "ACT-009",
+                        "ACT-010",
+                        "ACT-011",
+                        "ACT-012",
+                        "ACT-013",
+                        "ACT-014"
+                      ]
+                    },
+                    "approvalContract": {
+                      "enum": [
+                        "APR-ACT-001-NONE-V1",
+                        "APR-ACT-002-TRUSTED-ROOT-V1",
+                        "APR-ACT-003-CONTEXT-EGRESS-V1",
+                        "APR-ACT-004-MCP-READ-V1",
+                        "APR-ACT-005-LOCAL-PATCH-V1",
+                        "APR-ACT-006-LOCAL-COMMAND-V1",
+                        "APR-ACT-007-REMOTE-MUTATION-V1",
+                        "APR-ACT-008-DEPLOY-V1",
+                        "APR-ACT-009-PUBLISH-V1",
+                        "APR-ACT-010-PROMOTE-V1",
+                        "APR-ACT-011-CLEANUP-V1",
+                        "APR-ACT-012-DELETE-V1",
+                        "APR-ACT-013-EXPORT-V1",
+                        "APR-ACT-014-GOVERNANCE-V1"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "actionId",
+                    "approvalContract"
+                  ],
+                  "type": "object"
+                },
+                "conflict": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actualDigest": {
+                      "$ref": "#/$defs/sha256"
+                    },
+                    "expectedDigest": {
+                      "$ref": "#/$defs/sha256"
+                    },
+                    "resourceDigest": {
+                      "$ref": "#/$defs/sha256"
+                    }
+                  },
+                  "required": [
+                    "resourceDigest",
+                    "expectedDigest",
+                    "actualDigest"
+                  ],
+                  "type": "object"
+                },
+                "fieldIssues": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "code": {
+                        "enum": [
+                          "required",
+                          "invalid",
+                          "unsupported",
+                          "out_of_range",
+                          "conflict"
+                        ]
+                      },
+                      "field": {
+                        "enum": [
+                          "request",
+                          "schemaVersion",
+                          "sessionId",
+                          "turnId",
+                          "idempotencyKey",
+                          "intent",
+                          "authority",
+                          "input",
+                          "contextManifestRef",
+                          "budgets",
+                          "status",
+                          "event",
+                          "usage"
+                        ]
+                      },
+                      "messageCode": {
+                        "enum": [
+                          "field.required",
+                          "field.invalid",
+                          "field.unsupported",
+                          "field.out_of_range",
+                          "field.conflict"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "code",
+                      "messageCode"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actual": {
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "maximum": {
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "name": {
+                      "enum": [
+                        "requestBytes",
+                        "messageBytes",
+                        "inputTokens",
+                        "outputTokens",
+                        "costUsd",
+                        "durationMs",
+                        "retries",
+                        "toolCalls",
+                        "sources"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "maximum",
+                    "actual"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "errorId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "httpStatus": {
+              "maximum": 599,
+              "minimum": 400,
+              "type": "integer"
+            },
+            "message": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            },
+            "requestId": {
+              "$ref": "#/$defs/uuid"
+            },
+            "retryable": {
+              "type": "boolean"
+            },
+            "retryAfterSeconds": {
+              "oneOf": [
+                {
+                  "maximum": 86400,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "errorId",
+            "code",
+            "message",
+            "requestId",
+            "httpStatus",
+            "retryable",
+            "retryAfterSeconds",
+            "details"
+          ],
+          "type": "object"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-problem.v1"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "error"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-session.v1.schema.json": {
+      "$defs": {
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-session.v1.json",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "principal": {
+                "properties": {
+                  "type": {
+                    "const": "guest"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "principal"
+            ]
+          },
+          "then": {
+            "properties": {
+              "organizationId": {
+                "type": "null"
+              },
+              "retention": {
+                "properties": {
+                  "contentPersistence": {
+                    "enum": [
+                      "none",
+                      "account"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "deleted"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "retention": {
+                "properties": {
+                  "deleteRequested": {
+                    "const": true
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-session.v1.json"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expiresAt": {
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lastTurnId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organizationId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "policyVersion": {
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "type": "string"
+        },
+        "principal": {
+          "additionalProperties": false,
+          "properties": {
+            "subjectId": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "user",
+                "api-key",
+                "service-principal",
+                "github-installation",
+                "guest"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "subjectId"
+          ],
+          "type": "object"
+        },
+        "projectId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retention": {
+          "additionalProperties": false,
+          "properties": {
+            "contentPersistence": {
+              "enum": [
+                "none",
+                "account",
+                "organization"
+              ]
+            },
+            "deleteRequested": {
+              "type": "boolean"
+            },
+            "legalHold": {
+              "type": "boolean"
+            },
+            "profileId": {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "profileId",
+            "contentPersistence",
+            "deleteRequested"
+          ],
+          "type": "object"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-session.v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "archived",
+            "expired",
+            "deleted"
+          ]
+        },
+        "surfaces": {
+          "items": {
+            "enum": [
+              "web",
+              "cli",
+              "api",
+              "mcp",
+              "sdk",
+              "vscode",
+              "github",
+              "studio",
+              "automation"
+            ]
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "principal",
+        "organizationId",
+        "status",
+        "createdAt",
+        "updatedAt",
+        "surfaces",
+        "policyVersion",
+        "retention"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-turn.v1.schema.json": {
+      "$defs": {
+        "authority": {
+          "enum": [
+            "observe",
+            "propose",
+            "local-write",
+            "external-mutation"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-turn.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-turn.v1.json"
+        },
+        "authority": {
+          "additionalProperties": false,
+          "properties": {
+            "ceiling": {
+              "$ref": "#/$defs/authority"
+            },
+            "decidedBy": {
+              "const": "effective-policy"
+            },
+            "grantsOperationApproval": {
+              "const": false
+            },
+            "policyDecisionRef": {
+              "$ref": "#/$defs/uuid"
+            },
+            "requested": {
+              "$ref": "#/$defs/authority"
+            }
+          },
+          "required": [
+            "requested",
+            "ceiling",
+            "decidedBy",
+            "policyDecisionRef",
+            "grantsOperationApproval"
+          ],
+          "type": "object"
+        },
+        "budgets": {
+          "additionalProperties": false,
+          "properties": {
+            "deadlineMs": {
+              "maximum": 300000,
+              "minimum": 100,
+              "type": "integer"
+            },
+            "maxEstimatedCostUsd": {
+              "oneOf": [
+                {
+                  "maximum": 1000,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maxOutputTokens": {
+              "maximum": 32768,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "deadlineMs",
+            "maxOutputTokens",
+            "maxEstimatedCostUsd"
+          ],
+          "type": "object"
+        },
+        "client": {
+          "additionalProperties": false,
+          "properties": {
+            "capabilities": {
+              "items": {
+                "enum": [
+                  "events.v1",
+                  "citations",
+                  "mermaid",
+                  "ascii",
+                  "artifacts",
+                  "usage",
+                  "cancellation",
+                  "replay"
+                ]
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "surface": {
+              "enum": [
+                "web",
+                "cli",
+                "api",
+                "mcp",
+                "sdk",
+                "vscode",
+                "github",
+                "studio",
+                "automation"
+              ]
+            },
+            "version": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "surface",
+            "version",
+            "capabilities"
+          ],
+          "type": "object"
+        },
+        "completedAt": {
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contextManifestRef": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "manifestDigest": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "manifestId": {
+                  "$ref": "#/$defs/uuid"
+                }
+              },
+              "required": [
+                "manifestId",
+                "manifestDigest"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "idempotencyKey": {
+          "pattern": "^[A-Za-z0-9._:-]{8,256}$",
+          "type": "string"
+        },
+        "input": {
+          "additionalProperties": false,
+          "properties": {
+            "content": {
+              "maxLength": 8000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "kind": {
+              "const": "user-text"
+            }
+          },
+          "required": [
+            "kind",
+            "content"
+          ],
+          "type": "object"
+        },
+        "intent": {
+          "enum": [
+            "answer",
+            "architecture",
+            "plan",
+            "review",
+            "operate"
+          ]
+        },
+        "requestId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-turn.v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "startedAt": {
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "running",
+            "awaiting-approval",
+            "completed",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "turnId": {
+          "$ref": "#/$defs/uuid"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "turnId",
+        "sessionId",
+        "requestId",
+        "idempotencyKey",
+        "intent",
+        "authority",
+        "client",
+        "input",
+        "contextManifestRef",
+        "budgets",
+        "status",
+        "createdAt",
+        "startedAt",
+        "completedAt"
+      ],
+      "type": "object"
+    },
+    "schemas/agent-fai-usage-receipt.v1.schema.json": {
+      "$defs": {
+        "count": {
+          "maximum": 1000000000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "$id": "https://frootai.dev/schemas/agent-fai-usage-receipt.v1.json",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "const": "https://frootai.dev/schemas/agent-fai-usage-receipt.v1.json"
+        },
+        "cache": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "not-used",
+                "hit",
+                "miss",
+                "bypassed",
+                "unavailable"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        "contentLogged": {
+          "const": false
+        },
+        "cost": {
+          "additionalProperties": false,
+          "properties": {
+            "currency": {
+              "const": "USD"
+            },
+            "estimatedAmount": {
+              "oneOf": [
+                {
+                  "maximum": 1000,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maximumAuthorizedAmount": {
+              "oneOf": [
+                {
+                  "maximum": 1000,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "priceRecordRef": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source": {
+              "enum": [
+                "provider-price-record",
+                "historical-directional",
+                "unavailable"
+              ]
+            },
+            "toolAmount": {
+              "oneOf": [
+                {
+                  "maximum": 1000,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "currency",
+            "estimatedAmount",
+            "toolAmount",
+            "maximumAuthorizedAmount",
+            "priceRecordRef",
+            "source"
+          ],
+          "type": "object"
+        },
+        "durationMs": {
+          "maximum": 3600000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "generatedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "modelAlias": {
+          "oneOf": [
+            {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profile": {
+          "enum": [
+            "live",
+            "offline",
+            "deterministic"
+          ]
+        },
+        "receiptId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "requestId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "retries": {
+          "maximum": 20,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "schemaVersion": {
+          "const": "agent-fai-usage-receipt.v1"
+        },
+        "sessionId": {
+          "$ref": "#/$defs/uuid"
+        },
+        "tokens": {
+          "additionalProperties": false,
+          "properties": {
+            "cacheRead": {
+              "$ref": "#/$defs/count"
+            },
+            "cacheWrite": {
+              "$ref": "#/$defs/count"
+            },
+            "input": {
+              "$ref": "#/$defs/count"
+            },
+            "output": {
+              "$ref": "#/$defs/count"
+            },
+            "source": {
+              "enum": [
+                "provider",
+                "deterministic",
+                "unavailable"
+              ]
+            },
+            "total": {
+              "$ref": "#/$defs/count"
+            }
+          },
+          "required": [
+            "input",
+            "output",
+            "cacheRead",
+            "cacheWrite",
+            "total",
+            "source"
+          ],
+          "type": "object"
+        },
+        "tools": {
+          "additionalProperties": false,
+          "properties": {
+            "completed": {
+              "$ref": "#/$defs/count"
+            },
+            "denied": {
+              "$ref": "#/$defs/count"
+            },
+            "failed": {
+              "$ref": "#/$defs/count"
+            },
+            "proposed": {
+              "$ref": "#/$defs/count"
+            },
+            "started": {
+              "$ref": "#/$defs/count"
+            }
+          },
+          "required": [
+            "proposed",
+            "started",
+            "completed",
+            "failed",
+            "denied"
+          ],
+          "type": "object"
+        },
+        "turnId": {
+          "$ref": "#/$defs/uuid"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "sessionId",
+        "turnId",
+        "requestId",
+        "profile",
+        "modelAlias",
+        "tokens",
+        "cost",
+        "durationMs",
+        "retries",
+        "tools",
+        "cache",
+        "contentLogged",
+        "generatedAt"
+      ],
+      "type": "object"
+    }
+  },
+  "openapi": {
+    "openapi": "3.1.0",
+    "infoVersion": "1.0.0",
+    "contractStatus": "contract-only-unimplemented",
+    "compatibility": {
+      "apiMajor": 1,
+      "pathPrefix": "/v1/agent-fai",
+      "minimumDeprecationDays": 90,
+      "breakingChangesRequireNewMajor": true,
+      "errorSchema": "https://frootai.dev/schemas/agent-fai-problem.v1.json",
+      "versionRequestHeader": "Agent-FAI-Version",
+      "versionResponseHeader": "Agent-FAI-Version",
+      "capabilityRequestHeader": "Agent-FAI-Capabilities",
+      "parentStories": {
+        "AF-0.04": "planned",
+        "AF-2.02": "planned"
+      }
+    },
+    "operations": {
+      "GET /v1/agent-fai/artifacts": {
+        "operationId": "listAgentFaiArtifacts",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ArtifactPage"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/artifacts/{artifactId}": {
+        "operationId": "getAgentFaiArtifact",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "artifactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Artifact"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/artifacts/{artifactId}/verify": {
+        "operationId": "verifyAgentFaiArtifact",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "artifactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/ArtifactVerificationRequest"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ArtifactVerification"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/compatibility": {
+        "operationId": "negotiateAgentFaiCompatibility",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Capabilities",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "pattern": "^[1-9][0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/CompatibilityResponse"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/context-manifests/{manifestId}": {
+        "operationId": "getAgentFaiContextManifest",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "manifestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ContextManifest"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/jobs": {
+        "operationId": "listAgentFaiJobs",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/JobPage"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/jobs": {
+        "operationId": "createAgentFaiJob",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/CreateJobRequest"
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Job"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus413"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus429"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus504"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/jobs/{jobId}": {
+        "operationId": "getAgentFaiJob",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Job"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/jobs/{jobId}/cancel": {
+        "operationId": "cancelAgentFaiJob",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/CancellationRequest"
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/CancellationAcknowledgement"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "499": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus499"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/jobs/{jobId}/events": {
+        "operationId": "listAgentFaiJobEvents",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "pattern": "^(?:0|[1-9][0-9]{0,15})$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/EventPage"
+              },
+              "text/event-stream": {
+                "$ref": "#/components/schemas/EventStream"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Last-Sequence",
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/sessions": {
+        "operationId": "listAgentFaiSessions",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/SessionPage"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/sessions": {
+        "operationId": "createAgentFaiSession",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/CreateSessionRequest"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus429"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/sessions/{sessionId}": {
+        "operationId": "getAgentFaiSession",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/sessions/{sessionId}/export": {
+        "operationId": "exportAgentFaiSession",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/ExportSessionRequest"
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Artifact"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/sessions/{sessionId}/resume": {
+        "operationId": "resumeAgentFaiSession",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/ResumeSessionRequest"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/sessions/{sessionId}/turns": {
+        "operationId": "createAgentFaiTurn",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/CreateTurnRequest"
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Turn"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus413"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus422"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus429"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus504"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/sessions/{sessionId}/turns/{turnId}": {
+        "operationId": "getAgentFaiTurn",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "turnId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Turn"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "POST /v1/agent-fai/sessions/{sessionId}/turns/{turnId}/cancel": {
+        "operationId": "cancelAgentFaiTurn",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 8,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "turnId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "$ref": "#/components/schemas/CancellationRequest"
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/CancellationAcknowledgement"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "499": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus499"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/sessions/{sessionId}/turns/{turnId}/events": {
+        "operationId": "listAgentFaiTurnEvents",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "pattern": "^(?:0|[1-9][0-9]{0,15})$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "turnId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/EventPage"
+              },
+              "text/event-stream": {
+                "$ref": "#/components/schemas/EventStream"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Last-Sequence",
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus409"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      },
+      "GET /v1/agent-fai/usage-receipts/{receiptId}": {
+        "operationId": "getAgentFaiUsageReceipt",
+        "parameters": [
+          {
+            "name": "Agent-FAI-Version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "const": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "receiptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/UsageReceipt"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus400"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus401"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus403"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus404"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus410"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/ProblemStatus503"
+              }
+            },
+            "headers": [
+              "Agent-FAI-Version",
+              "X-Request-Id"
+            ]
+          }
+        }
+      }
+    },
+    "components": {
+      "Artifact": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "revoked": {
+                  "const": true
+                }
+              },
+              "required": [
+                "revoked"
+              ]
+            },
+            "then": {
+              "properties": {
+                "downloadUrl": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ],
+        "properties": {
+          "artifactId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "downloadUrl": {
+            "format": "uri",
+            "pattern": "^https://",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "jobId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "answer",
+              "architecture",
+              "plan",
+              "review",
+              "patch",
+              "manifest",
+              "receipt",
+              "evidence",
+              "export"
+            ]
+          },
+          "mediaType": {
+            "maxLength": 255,
+            "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$",
+            "type": "string"
+          },
+          "revoked": {
+            "type": "boolean"
+          },
+          "schemaVersion": {
+            "const": "agent-fai-artifact.v1"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "sizeBytes": {
+            "maximum": 1073741824,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "supersededBy": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "turnId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "artifactId",
+          "sessionId",
+          "turnId",
+          "jobId",
+          "kind",
+          "mediaType",
+          "digest",
+          "sizeBytes",
+          "createdAt",
+          "downloadUrl",
+          "supersededBy",
+          "revoked"
+        ],
+        "type": "object"
+      },
+      "ArtifactPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Artifact"
+            },
+            "maxItems": 100,
+            "type": "array"
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "type": "object"
+      },
+      "ArtifactVerification": {
+        "additionalProperties": false,
+        "properties": {
+          "actualDigest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "artifactId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "expectedDigest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "artifactId",
+          "expectedDigest",
+          "actualDigest",
+          "verified"
+        ],
+        "type": "object"
+      },
+      "ArtifactVerificationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "expectedDigest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expectedDigest"
+        ],
+        "type": "object"
+      },
+      "Budgets": {
+        "additionalProperties": false,
+        "properties": {
+          "deadlineMs": {
+            "maximum": 300000,
+            "minimum": 100,
+            "type": "integer"
+          },
+          "maxEstimatedCostUsd": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "maxOutputTokens": {
+            "maximum": 32768,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deadlineMs",
+          "maxOutputTokens",
+          "maxEstimatedCostUsd"
+        ],
+        "type": "object"
+      },
+      "CancellationAcknowledgement": {
+        "additionalProperties": false,
+        "properties": {
+          "acknowledgedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "requestId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "resourceId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "cancellation-requested",
+              "already-terminal"
+            ]
+          }
+        },
+        "required": [
+          "requestId",
+          "resourceId",
+          "status",
+          "acknowledgedAt"
+        ],
+        "type": "object"
+      },
+      "CancellationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "enum": [
+              "user",
+              "deadline",
+              "policy",
+              "shutdown"
+            ]
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "type": "object"
+      },
+      "Capability": {
+        "enum": [
+          "events.v1",
+          "citations",
+          "mermaid",
+          "ascii",
+          "artifacts",
+          "usage",
+          "cancellation",
+          "replay"
+        ]
+      },
+      "Client": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "surface": {
+            "enum": [
+              "web",
+              "cli",
+              "api",
+              "mcp",
+              "sdk",
+              "vscode",
+              "github",
+              "studio",
+              "automation"
+            ]
+          },
+          "version": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "surface",
+          "version",
+          "capabilities"
+        ],
+        "type": "object"
+      },
+      "CompatibilityResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "contractVersion": {
+            "const": "1.0.0"
+          },
+          "deprecation": {
+            "additionalProperties": false,
+            "properties": {
+              "deprecated": {
+                "const": false
+              },
+              "replacement": {
+                "type": "null"
+              },
+              "sunsetAt": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "deprecated",
+              "sunsetAt",
+              "replacement"
+            ],
+            "type": "object"
+          },
+          "minimumClientVersion": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+            "type": "string"
+          },
+          "negotiatedApiVersion": {
+            "enum": [
+              "1",
+              null
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "negotiatedCapabilities": {
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "requestedApiVersion": {
+            "pattern": "^[1-9][0-9]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "schemaVersion": {
+            "const": "agent-fai-compatibility.v1"
+          },
+          "supportedApiVersions": {
+            "items": {
+              "const": "1"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "supportedCapabilities": {
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "supportedEventVersions": {
+            "items": {
+              "const": "agent-fai-event.v1"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "unsupportedCapabilities": {
+            "items": {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "requestedApiVersion",
+          "supportedApiVersions",
+          "negotiatedApiVersion",
+          "contractVersion",
+          "minimumClientVersion",
+          "supportedEventVersions",
+          "supportedCapabilities",
+          "negotiatedCapabilities",
+          "unsupportedCapabilities",
+          "deprecation"
+        ],
+        "type": "object"
+      },
+      "ContextManifest": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-context-manifest.v1.json"
+      },
+      "ContextManifestRef": {
+        "additionalProperties": false,
+        "properties": {
+          "manifestDigest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "manifestId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "manifestId",
+          "manifestDigest"
+        ],
+        "type": [
+          "object",
+          "null"
+        ]
+      },
+      "CreateJobRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "budgets": {
+            "$ref": "#/components/schemas/Budgets"
+          },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "contextManifestRef": {
+            "$ref": "#/components/schemas/ContextManifestRef"
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "kind": {
+            "enum": [
+              "review",
+              "artifact",
+              "operate"
+            ]
+          },
+          "requestedAuthority": {
+            "$ref": "#/components/schemas/RequestedAuthority"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "sessionId",
+          "requestedAuthority",
+          "client",
+          "input",
+          "contextManifestRef",
+          "budgets"
+        ],
+        "type": "object"
+      },
+      "CreateSessionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "projectId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "retentionProfileId": {
+            "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client",
+          "retentionProfileId"
+        ],
+        "type": "object"
+      },
+      "CreateTurnRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "budgets": {
+            "$ref": "#/components/schemas/Budgets"
+          },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "contextManifestRef": {
+            "$ref": "#/components/schemas/ContextManifestRef"
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "intent": {
+            "enum": [
+              "answer",
+              "architecture",
+              "plan",
+              "review",
+              "operate"
+            ]
+          },
+          "requestedAuthority": {
+            "$ref": "#/components/schemas/RequestedAuthority"
+          }
+        },
+        "required": [
+          "intent",
+          "requestedAuthority",
+          "client",
+          "input",
+          "contextManifestRef",
+          "budgets"
+        ],
+        "type": "object"
+      },
+      "Event": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-event.v1.json"
+      },
+      "EventPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "maxItems": 1000,
+            "type": "array"
+          },
+          "nextAfter": {
+            "maximum": 9007199254740991,
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "terminal": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "nextAfter",
+          "terminal"
+        ],
+        "type": "object"
+      },
+      "EventStream": {
+        "type": "string"
+      },
+      "ExportSessionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "format": {
+            "enum": [
+              "json",
+              "markdown"
+            ]
+          }
+        },
+        "required": [
+          "format"
+        ],
+        "type": "object"
+      },
+      "Input": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "maxLength": 8000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "kind": {
+            "const": "user-text"
+          }
+        },
+        "required": [
+          "kind",
+          "content"
+        ],
+        "type": "object"
+      },
+      "Job": {
+        "additionalProperties": false,
+        "properties": {
+          "attempts": {
+            "maximum": 10,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "cancellationRequested": {
+            "type": "boolean"
+          },
+          "completedAt": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deadlineAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "errorId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "jobId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "review",
+              "artifact",
+              "operate"
+            ]
+          },
+          "requestId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "resultRefs": {
+            "$ref": "#/components/schemas/JobResultRefs"
+          },
+          "schemaVersion": {
+            "const": "agent-fai-job.v1"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "turnId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "jobId",
+          "requestId",
+          "sessionId",
+          "turnId",
+          "kind",
+          "status",
+          "deadlineAt",
+          "attempts",
+          "cancellationRequested",
+          "resultRefs",
+          "errorId",
+          "createdAt",
+          "updatedAt",
+          "completedAt"
+        ],
+        "type": "object"
+      },
+      "JobPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            },
+            "maxItems": 100,
+            "type": "array"
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "type": "object"
+      },
+      "JobResultRefs": {
+        "additionalProperties": false,
+        "properties": {
+          "artifactIds": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "evidenceIds": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "artifactIds",
+          "evidenceIds"
+        ],
+        "type": "object"
+      },
+      "PageCursor": {
+        "maxLength": 512,
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Problem": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-problem.v1.json"
+      },
+      "ProblemStatus400": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "invalid_argument",
+                      "invalid_json"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 400
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus401": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "authentication_required"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 401
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus403": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "authorization_denied",
+                      "policy_denied",
+                      "approval_required"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 403
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus404": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "not_found"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 404
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus409": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "conflict",
+                      "idempotency_conflict"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 409
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus410": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "resource_gone"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 410
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus413": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "request_too_large",
+                      "message_too_large"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 413
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus422": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "integrity_failed"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 422
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus429": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "quota_exceeded",
+                      "budget_exceeded"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 429
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus499": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "cancelled"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 499
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus502": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "transport_failed",
+                      "tool_failed"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 502
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus503": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "service_unavailable",
+                      "model_unavailable"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 503
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ProblemStatus504": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Problem"
+          },
+          {
+            "properties": {
+              "error": {
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "deadline_exceeded"
+                    ]
+                  },
+                  "httpStatus": {
+                    "const": 504
+                  }
+                },
+                "required": [
+                  "code",
+                  "httpStatus"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "RequestedAuthority": {
+        "enum": [
+          "observe",
+          "propose",
+          "local-write",
+          "external-mutation"
+        ]
+      },
+      "ResumeSessionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          }
+        },
+        "required": [
+          "client"
+        ],
+        "type": "object"
+      },
+      "Session": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-session.v1.json"
+      },
+      "SessionPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            },
+            "maxItems": 100,
+            "type": "array"
+          },
+          "nextCursor": {
+            "$ref": "#/components/schemas/PageCursor"
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "type": "object"
+      },
+      "Turn": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-turn.v1.json"
+      },
+      "UsageReceipt": {
+        "$ref": "https://frootai.dev/schemas/agent-fai-usage-receipt.v1.json"
+      }
+    }
+  }
+}

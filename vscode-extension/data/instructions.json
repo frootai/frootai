@@ -1,0 +1,1234 @@
+[
+  {
+    "id": "a11y-waf",
+    "description": "Accessibility standards — WCAG 2.2 AA compliance, semantic HTML, ARIA roles/properties, keyboard navigation, focus management, color contrast.",
+    "applyTo": "**/*.tsx, **/*.html, **/*.vue",
+    "file": "instructions/a11y-waf.instructions.md",
+    "size": 7096
+  },
+  {
+    "id": "agent-safety",
+    "description": "AI agent safety standards — fail-closed defaults, least-privilege tool access, human-in-the-loop for destructive actions, prompt injection defense.",
+    "applyTo": "**/*.agent.md, **/*.instructions.md",
+    "file": "instructions/agent-safety.instructions.md",
+    "size": 10153
+  },
+  {
+    "id": "ai-prompt-safety-waf",
+    "description": "AI prompt safety in application code — input sanitization, output validation, structured output enforcement, content filtering, token budget management.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js",
+    "file": "instructions/ai-prompt-safety-waf.instructions.md",
+    "size": 9222
+  },
+  {
+    "id": "ansible-waf",
+    "description": "Ansible automation standards — idempotent playbooks, secure vault usage, role structure, handler patterns, variable naming, error handling.",
+    "applyTo": "**/*.yml, **/playbooks/**, **/roles/**",
+    "file": "instructions/ansible-waf.instructions.md",
+    "size": 8923
+  },
+  {
+    "id": "arch-linux-waf",
+    "description": "Arch Linux packaging standards — PKGBUILD structure, makepkg rules, dependency management, package signing, AUR submission, namcap validation.",
+    "applyTo": "**/PKGBUILD, **/*.sh, **/makepkg.conf",
+    "file": "instructions/arch-linux-waf.instructions.md",
+    "size": 8774
+  },
+  {
+    "id": "aspnet-waf",
+    "description": "ASP.NET Core 9 standards — Minimal APIs, DI, middleware pipeline, Entra ID auth, EF Core, health checks, rate limiting, output caching.",
+    "applyTo": "**/*.cs, **/*.cshtml, **/*.razor",
+    "file": "instructions/aspnet-waf.instructions.md",
+    "size": 10062
+  },
+  {
+    "id": "astro-waf",
+    "description": "Astro framework standards — Islands Architecture, content collections, view transitions, SSG/SSR modes, image optimization, MDX, and deployment patterns.",
+    "applyTo": "**/*.astro, **/astro.config.*, **/*.mdx",
+    "file": "instructions/astro-waf.instructions.md",
+    "size": 10389
+  },
+  {
+    "id": "azure-ai-document-intelligence-waf",
+    "description": "Azure AI Document Intelligence standards — model selection, layout analysis, table/form extraction, custom models, batch processing.",
+    "applyTo": "**/*.py, **/*.ts, **/*.bicep",
+    "file": "instructions/azure-ai-document-intelligence-waf.instructions.md",
+    "size": 10466
+  },
+  {
+    "id": "azure-ai-language-waf",
+    "description": "Azure AI Language standards — text analytics, NER, sentiment analysis, PII detection, summarization, CLU, custom text classification, healthcare NLP.",
+    "applyTo": "**/*.py, **/*.ts, **/*.bicep",
+    "file": "instructions/azure-ai-language-waf.instructions.md",
+    "size": 11361
+  },
+  {
+    "id": "azure-ai-speech-waf",
+    "description": "Azure AI Speech standards — STT (real-time + batch), TTS (neural voices, SSML, custom voice), speech translation, pronunciation assessment.",
+    "applyTo": "**/*.py, **/*.ts, **/*.bicep",
+    "file": "instructions/azure-ai-speech-waf.instructions.md",
+    "size": 14349
+  },
+  {
+    "id": "azure-ai-vision-waf",
+    "description": "Azure AI Vision standards — image analysis, OCR, custom classification, spatial analysis, and content safety patterns.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js",
+    "file": "instructions/azure-ai-vision-waf.instructions.md",
+    "size": 4918
+  },
+  {
+    "id": "azure-app-service-waf",
+    "description": "Azure App Service standards — deployment slots, scaling, authentication, monitoring, and security patterns.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/Dockerfile",
+    "file": "instructions/azure-app-service-waf.instructions.md",
+    "size": 4330
+  },
+  {
+    "id": "azure-bicep-avm",
+    "description": "Azure Bicep AVM (Azure Verified Modules) standards — module usage, parameter patterns, WAF-aligned infrastructure.",
+    "applyTo": "**/*.bicep, **/parameters.json",
+    "file": "instructions/azure-bicep-avm.instructions.md",
+    "size": 4876
+  },
+  {
+    "id": "azure-cosmos-waf",
+    "description": "Azure Cosmos DB standards — global distribution, partitioning, consistency, RU optimization, vector search.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-cosmos-waf.instructions.md",
+    "size": 4958
+  },
+  {
+    "id": "azure-devops-waf",
+    "description": "Azure DevOps standards — YAML pipelines, environments, service connections, test management, boards.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-devops-waf.instructions.md",
+    "size": 4933
+  },
+  {
+    "id": "azure-front-door-waf",
+    "description": "Azure Front Door & WAF standards — global load balancing, WAF rules, caching, SSL offloading, origin protection.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-front-door-waf.instructions.md",
+    "size": 4968
+  },
+  {
+    "id": "azure-functions-waf",
+    "description": "Azure Functions standards — serverless compute, triggers, bindings, durable functions, cold start optimization.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-functions-waf.instructions.md",
+    "size": 4969
+  },
+  {
+    "id": "azure-logic-apps-waf",
+    "description": "Azure Logic Apps standards — workflow automation, connectors, error handling, B2B integration.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-logic-apps-waf.instructions.md",
+    "size": 4941
+  },
+  {
+    "id": "azure-redis-waf",
+    "description": "Azure Cache for Redis standards — caching patterns, data structures, pub/sub, clustering, security.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-redis-waf.instructions.md",
+    "size": 4941
+  },
+  {
+    "id": "azure-static-web-apps-waf",
+    "description": "Azure Static Web Apps standards — static hosting, serverless API, authentication, CI/CD, custom domains.",
+    "applyTo": "**/*.py, **/*.ts, **/*.js, **/*.cs, **/*.bicep",
+    "file": "instructions/azure-static-web-apps-waf.instructions.md",
+    "size": 4957
+  },
+  {
+    "id": "bicep-code-best-practices",
+    "description": "Bicep Code Best Practices standards — module design, naming, parameters, outputs, testing",
+    "applyTo": "**/*.bicep, **/parameters.json",
+    "file": "instructions/bicep-code-best-practices.instructions.md",
+    "size": 3011
+  },
+  {
+    "id": "bicep-waf",
+    "description": "Bicep infrastructure-as-code standards aligned with Azure WAF pillars — Azure Verified Modules, secure parameter handling, tagging conventions.",
+    "applyTo": "**/*.bicep, **/*.bicepparam, **/parameters.json",
+    "file": "instructions/bicep-waf.instructions.md",
+    "size": 4312
+  },
+  {
+    "id": "blazor-waf",
+    "description": "Blazor standards — Server/WebAssembly/United components, state, performance, security",
+    "applyTo": "**/*.razor, **/*.cs",
+    "file": "instructions/blazor-waf.instructions.md",
+    "size": 2276
+  },
+  {
+    "id": "clojure-waf",
+    "description": "Clojure Waf standards — Clojure coding standards — REPL-driven, immutable data, pure functions, and spec for validation.",
+    "applyTo": "**/*.clj, **/*.cljs",
+    "file": "instructions/clojure-waf.instructions.md",
+    "size": 2931
+  },
+  {
+    "id": "code-review-waf",
+    "description": "Code Review Waf standards — Code review standards — what to check, severity levels, constructive feedback, and merge blocking criteria.",
+    "applyTo": "**",
+    "file": "instructions/code-review-waf.instructions.md",
+    "size": 2933
+  },
+  {
+    "id": "containerization-waf",
+    "description": "Containerization Waf standards — Containerization standards — immutability, reproducible builds, health probes, 12-factor.",
+    "applyTo": "**/Dockerfile",
+    "file": "instructions/containerization-waf.instructions.md",
+    "size": 2936
+  },
+  {
+    "id": "context-engineering-waf",
+    "description": "Context Engineering Waf standards — Context engineering standards — maximize Copilot effectiveness through structured instructions, examples, and constraints.",
+    "applyTo": "**",
+    "file": "instructions/context-engineering-waf.instructions.md",
+    "size": 2964
+  },
+  {
+    "id": "copilot-studio-waf",
+    "description": "Copilot Studio Waf standards — Copilot Studio standards — topic design, generative answers, knowledge sources, channel config.",
+    "applyTo": "**/*.json",
+    "file": "instructions/copilot-studio-waf.instructions.md",
+    "size": 2934
+  },
+  {
+    "id": "copilot-thought-logging-waf",
+    "description": "Copilot Thought Logging Waf standards — Copilot thought logging — track reasoning process, tool selection rationale, confidence levels.",
+    "applyTo": "**",
+    "file": "instructions/copilot-thought-logging-waf.instructions.md",
+    "size": 2945
+  },
+  {
+    "id": "cost-bicep",
+    "description": "Cost Bicep standards — Bicep cost optimization — consumption SKUs, auto-shutdown, tags for cost centers, budget resources.",
+    "applyTo": "**/*.bicep",
+    "file": "instructions/cost-bicep.instructions.md",
+    "size": 2927
+  },
+  {
+    "id": "cost-python",
+    "description": "Python cost optimization — token budgets, model routing, caching, batch embedding, async for throughput.",
+    "applyTo": "**/*.py",
+    "file": "instructions/cost-python.instructions.md",
+    "size": 8253
+  },
+  {
+    "id": "cost-typescript",
+    "description": "TypeScript cost optimization — streaming responses, semantic cache, token metering, efficient serialization.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/cost-typescript.instructions.md",
+    "size": 7802
+  },
+  {
+    "id": "cpp-waf",
+    "description": "C++ coding standards — modern C++20/23, RAII, smart pointers, and safe concurrency patterns.",
+    "applyTo": "**/*.cpp, **/*.h, **/*.hpp",
+    "file": "instructions/cpp-waf.instructions.md",
+    "size": 8328
+  },
+  {
+    "id": "csharp-mcp-development",
+    "description": "C#/.NET MCP server development standards — ModelContextProtocol NuGet patterns, [McpServerTool] attributes, dependency injection.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/csharp-mcp-development.instructions.md",
+    "size": 8898
+  },
+  {
+    "id": "csharp-waf",
+    "description": "C#/.NET coding standards aligned with Azure WAF pillars — Managed Identity, async patterns, dependency injection, structured logging.",
+    "applyTo": "**/*.cs, **/*.csproj, **/*.sln",
+    "file": "instructions/csharp-waf.instructions.md",
+    "size": 7876
+  },
+  {
+    "id": "dart-flutter-waf",
+    "description": "Dart/Flutter coding standards — effective Dart, widget composition, state management, and null safety.",
+    "applyTo": "**/*.dart",
+    "file": "instructions/dart-flutter-waf.instructions.md",
+    "size": 6673
+  },
+  {
+    "id": "dataverse-waf",
+    "description": "Dataverse SDK standards — entity operations, metadata, batch requests, and Power Platform integration.",
+    "applyTo": "**/*.py, **/*.cs",
+    "file": "instructions/dataverse-waf.instructions.md",
+    "size": 9644
+  },
+  {
+    "id": "debian-waf",
+    "description": "Debian/Ubuntu administration standards — apt, systemd, UFW firewall, and server hardening.",
+    "applyTo": "**/*.sh, **/*.conf",
+    "file": "instructions/debian-waf.instructions.md",
+    "size": 6800
+  },
+  {
+    "id": "design-patterns-waf",
+    "description": "OOP design patterns — interface segregation, composition over inheritance, and SOLID principles.",
+    "applyTo": "**/*.cs, **/*.ts, **/*.java, **/*.py",
+    "file": "instructions/design-patterns-waf.instructions.md",
+    "size": 8069
+  },
+  {
+    "id": "django-waf",
+    "description": "Django standards — models, views, URLs, ORM queries, and security middleware patterns.",
+    "applyTo": "**/*.py, **/settings*.py",
+    "file": "instructions/django-waf.instructions.md",
+    "size": 8554
+  },
+  {
+    "id": "docker-waf",
+    "description": "Dockerfile standards — multi-stage builds, non-root user, minimal base images, and security scanning.",
+    "applyTo": "**/Dockerfile, **/docker-compose*",
+    "file": "instructions/docker-waf.instructions.md",
+    "size": 7006
+  },
+  {
+    "id": "dotnet-architecture-waf",
+    "description": ".NET architecture standards — DDD, SOLID, clean architecture, CQRS, event sourcing.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/dotnet-architecture-waf.instructions.md",
+    "size": 9296
+  },
+  {
+    "id": "drawio-waf",
+    "description": "Draw.io diagram standards — consistent styling, layers, export formats, and architecture diagram patterns.",
+    "applyTo": "**/*.drawio, **/*.drawio.svg",
+    "file": "instructions/drawio-waf.instructions.md",
+    "size": 8297
+  },
+  {
+    "id": "ef-core-waf",
+    "description": "Entity Framework Core standards — migrations, query optimization, eager/lazy loading, concurrency handling.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/ef-core-waf.instructions.md",
+    "size": 6096
+  },
+  {
+    "id": "electron-waf",
+    "description": "Electron standards — IPC security, preload scripts, context isolation.",
+    "applyTo": "**/*.ts, **/*.js",
+    "file": "instructions/electron-waf.instructions.md",
+    "size": 8565
+  },
+  {
+    "id": "fastapi-waf",
+    "description": "FastAPI standards — Pydantic models, dependency injection, async endpoints, and OpenAPI-first design.",
+    "applyTo": "**/*.py",
+    "file": "instructions/fastapi-waf.instructions.md",
+    "size": 5945
+  },
+  {
+    "id": "flask-waf",
+    "description": "Flask standards — blueprints, app factory, SQLAlchemy, and production configuration patterns.",
+    "applyTo": "**/*.py",
+    "file": "instructions/flask-waf.instructions.md",
+    "size": 7835
+  },
+  {
+    "id": "genai-foundations",
+    "description": "GenAI foundations coding — token counting, model parameter configuration, inference optimization.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/genai-foundations.instructions.md",
+    "size": 5975
+  },
+  {
+    "id": "llm-model-selection",
+    "description": "LLM selection standards — model routing config, benchmark-driven selection, cost/quality tradeoffs.",
+    "applyTo": "**/*.json, **/*.py",
+    "file": "instructions/llm-model-selection.instructions.md",
+    "size": 8259
+  },
+  {
+    "id": "ai-glossary",
+    "description": "AI glossary consistency — use standard FAI terminology, avoid ambiguous AI terms in code comments.",
+    "applyTo": "**",
+    "file": "instructions/ai-glossary.instructions.md",
+    "size": 9185
+  },
+  {
+    "id": "agentic-os-customization",
+    "description": "Agentic OS standards — .github folder structure, 7 primitives, 4 layers, plugin packaging.",
+    "applyTo": "**/.github/**",
+    "file": "instructions/agentic-os-customization.instructions.md",
+    "size": 7793
+  },
+  {
+    "id": "semantic-kernel",
+    "description": "Semantic Kernel standards — kernel config, plugin design, filter pipeline, memory store integration.",
+    "applyTo": "**/*.cs, **/*.py",
+    "file": "instructions/semantic-kernel.instructions.md",
+    "size": 9397
+  },
+  {
+    "id": "agent-coding-patterns",
+    "description": "Agent coding standards — ReAct loop, tool selection, memory management, circuit breaker on tools.",
+    "applyTo": "**/*.py, **/*.ts, **/*.cs",
+    "file": "instructions/agent-coding-patterns.instructions.md",
+    "size": 9778
+  },
+  {
+    "id": "mcp-integration-patterns",
+    "description": "MCP integration patterns — tool description quality, parameter design, error handling, transport selection.",
+    "applyTo": "**/*.py, **/*.ts, **/*.cs",
+    "file": "instructions/mcp-integration-patterns.instructions.md",
+    "size": 9569
+  },
+  {
+    "id": "azure-ai-foundry",
+    "description": "Azure AI Foundry config — Hub/Project RBAC, deployment types, evaluation pipeline, content filter config.",
+    "applyTo": "**/*.bicep, **/*.json",
+    "file": "instructions/azure-ai-foundry.instructions.md",
+    "size": 8187
+  },
+  {
+    "id": "gpu-infrastructure",
+    "description": "GPU infrastructure standards — VRAM sizing, quantization selection, serving framework config, scaling rules.",
+    "applyTo": "**/*.yaml, **/*.py",
+    "file": "instructions/gpu-infrastructure.instructions.md",
+    "size": 8528
+  },
+  {
+    "id": "copilot-extensibility",
+    "description": "Copilot extensibility — Graph connectors, plugin manifest, action design, M365 integration patterns.",
+    "applyTo": "**/*.json, **/*.ts",
+    "file": "instructions/copilot-extensibility.instructions.md",
+    "size": 11475
+  },
+  {
+    "id": "prompt-engineering",
+    "description": "Prompt engineering standards — system message structure, few-shot patterns, output format enforcement.",
+    "applyTo": "**/*.py, **/*.ts, **/*.md",
+    "file": "instructions/prompt-engineering.instructions.md",
+    "size": 7670
+  },
+  {
+    "id": "rag-coding-patterns",
+    "description": "RAG coding standards — chunking config, embedding batch calls, reranker integration, citation injection.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/rag-coding-patterns.instructions.md",
+    "size": 6449
+  },
+  {
+    "id": "deterministic-ai",
+    "description": "Determinism standards — temperature=0+seed, structured output, validation pipeline, grounding checks.",
+    "applyTo": "**/*.py, **/*.ts, **/*.json",
+    "file": "instructions/deterministic-ai.instructions.md",
+    "size": 7954
+  },
+  {
+    "id": "fine-tuning-data",
+    "description": "Fine-tuning data standards — JSONL format, quality validation, class balance, edge case inclusion.",
+    "applyTo": "**/*.jsonl, **/*.py",
+    "file": "instructions/fine-tuning-data.instructions.md",
+    "size": 9938
+  },
+  {
+    "id": "responsible-ai-coding",
+    "description": "Responsible AI coding — content safety integration, red team test coverage, bias metric collection.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/responsible-ai-coding.instructions.md",
+    "size": 11319
+  },
+  {
+    "id": "production-deployment",
+    "description": "Production deployment standards — blue-green, canary rollout, health probes, rollback criteria.",
+    "applyTo": "**/*.yaml, **/*.bicep",
+    "file": "instructions/production-deployment.instructions.md",
+    "size": 9315
+  },
+  {
+    "id": "github-actions-waf",
+    "description": "GitHub Actions CI/CD standards — SHA-pinned actions, minimal permissions, secrets handling, and reusable workflows.",
+    "applyTo": "**/.github/workflows/*.yml",
+    "file": "instructions/github-actions-waf.instructions.md",
+    "size": 6035
+  },
+  {
+    "id": "go-mcp-development",
+    "description": "Go MCP server development — go-sdk/mcp, struct-based I/O, context handling.",
+    "applyTo": "**/*.go",
+    "file": "instructions/go-mcp-development.instructions.md",
+    "size": 9129
+  },
+  {
+    "id": "go-waf",
+    "description": "Go coding standards — idiomatic Go, return early, error handling, goroutines, and minimal dependency patterns.",
+    "applyTo": "**/*.go",
+    "file": "instructions/go-waf.instructions.md",
+    "size": 5081
+  },
+  {
+    "id": "graphql-waf",
+    "description": "GraphQL standards — schema design, resolvers, DataLoader, error handling.",
+    "applyTo": "**/*.graphql, **/*.ts",
+    "file": "instructions/graphql-waf.instructions.md",
+    "size": 10152
+  },
+  {
+    "id": "grpc-waf",
+    "description": "gRPC standards — protobuf design, streaming, error codes, health checking.",
+    "applyTo": "**/*.proto, **/*.cs, **/*.go",
+    "file": "instructions/grpc-waf.instructions.md",
+    "size": 7712
+  },
+  {
+    "id": "html-css-waf",
+    "description": "HTML/CSS standards — semantic HTML, accessibility, 60-30-10 color rule, and responsive design.",
+    "applyTo": "**/*.html, **/*.css",
+    "file": "instructions/html-css-waf.instructions.md",
+    "size": 5558
+  },
+  {
+    "id": "java-mcp-development",
+    "description": "Java MCP server development — official SDK, reactive streams, Spring Boot integration.",
+    "applyTo": "**/*.java",
+    "file": "instructions/java-mcp-development.instructions.md",
+    "size": 9095
+  },
+  {
+    "id": "java-waf",
+    "description": "Java coding standards — constructor injection, immutable objects, streams API, JUnit 5, and Spring Boot patterns.",
+    "applyTo": "**/*.java",
+    "file": "instructions/java-waf.instructions.md",
+    "size": 9167
+  },
+  {
+    "id": "kotlin-mcp-development",
+    "description": "Kotlin MCP server development — coroutines, data classes, Ktor, and Gradle patterns.",
+    "applyTo": "**/*.kt",
+    "file": "instructions/kotlin-mcp-development.instructions.md",
+    "size": 9730
+  },
+  {
+    "id": "kotlin-waf",
+    "description": "Kotlin coding standards — coroutines, data classes, null safety, extension functions, and Gradle build patterns.",
+    "applyTo": "**/*.kt",
+    "file": "instructions/kotlin-waf.instructions.md",
+    "size": 8688
+  },
+  {
+    "id": "kubernetes-waf",
+    "description": "Kubernetes standards — pod security, resource limits, health probes, and production deployment patterns.",
+    "applyTo": "**/*.yaml, **/*.yml",
+    "file": "instructions/kubernetes-waf.instructions.md",
+    "size": 9370
+  },
+  {
+    "id": "laravel-waf",
+    "description": "Laravel standards — Eloquent, Blade, Artisan, queue workers, and security.",
+    "applyTo": "**/*.php",
+    "file": "instructions/laravel-waf.instructions.md",
+    "size": 10681
+  },
+  {
+    "id": "localization-waf",
+    "description": "Localization standards — i18n key management, RTL support, pluralization, date/number formatting.",
+    "applyTo": "**/*.ts, **/*.json",
+    "file": "instructions/localization-waf.instructions.md",
+    "size": 9321
+  },
+  {
+    "id": "markdown-waf",
+    "description": "Markdown standards — CommonMark, GFM, accessibility, heading hierarchy, and structured documentation.",
+    "applyTo": "**/*.md",
+    "file": "instructions/markdown-waf.instructions.md",
+    "size": 6291
+  },
+  {
+    "id": "maui-waf",
+    "description": "MAUI standards — cross-platform, MVVM, dependency injection, platform-specific.",
+    "applyTo": "**/*.xaml, **/*.cs",
+    "file": "instructions/maui-waf.instructions.md",
+    "size": 11204
+  },
+  {
+    "id": "memory-bank-waf",
+    "description": "Persistent project documentation standards — maintain context across AI sessions with structured memory files.",
+    "applyTo": "**",
+    "file": "instructions/memory-bank-waf.instructions.md",
+    "size": 7171
+  },
+  {
+    "id": "minimal-api-waf",
+    "description": "ASP.NET Minimal API standards — endpoint routing, DI, filters, OpenAPI, rate limiting.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/minimal-api-waf.instructions.md",
+    "size": 9082
+  },
+  {
+    "id": "mongodb-waf",
+    "description": "MongoDB standards — schema design, indexes, aggregation pipelines, and Atlas Vector Search patterns.",
+    "applyTo": "**/*.js, **/*.ts",
+    "file": "instructions/mongodb-waf.instructions.md",
+    "size": 6871
+  },
+  {
+    "id": "nestjs-waf",
+    "description": "NestJS standards — DI, decorators, modular architecture, Pipes validation, and TypeORM patterns.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/nestjs-waf.instructions.md",
+    "size": 7180
+  },
+  {
+    "id": "nextjs-waf",
+    "description": "Next.js 16 App Router standards — Server Components by default, streaming with Suspense, Turbopack, Tailwind v4, static export for frootai.dev.",
+    "applyTo": "**/*.tsx, **/*.ts, **/*.jsx, **/next.config.*",
+    "file": "instructions/nextjs-waf.instructions.md",
+    "size": 7017
+  },
+  {
+    "id": "no-heredoc-waf",
+    "description": "No heredoc in terminal — prevent terminal file corruption from heredoc syntax in AI-generated commands.",
+    "applyTo": "**/*.sh",
+    "file": "instructions/no-heredoc-waf.instructions.md",
+    "size": 6286
+  },
+  {
+    "id": "nuxt-waf",
+    "description": "Nuxt 3 standards — Vue 3, SSR, auto-imports, and composable patterns.",
+    "applyTo": "**/*.vue, **/*.ts",
+    "file": "instructions/nuxt-waf.instructions.md",
+    "size": 5441
+  },
+  {
+    "id": "object-calisthenics-waf",
+    "description": "Object calisthenics standards — 9 rules for clean, maintainable code across OOP languages.",
+    "applyTo": "**/*.cs, **/*.ts, **/*.java, **/*.py",
+    "file": "instructions/object-calisthenics-waf.instructions.md",
+    "size": 9068
+  },
+  {
+    "id": "openapi-waf",
+    "description": "OpenAPI standards — spec-first design, versioning, security schemes, examples.",
+    "applyTo": "**/*.yaml, **/*.json",
+    "file": "instructions/openapi-waf.instructions.md",
+    "size": 6847
+  },
+  {
+    "id": "opex-github-actions",
+    "description": "GitHub Actions operational excellence — reusable workflows, matrix testing, artifact management.",
+    "applyTo": "**/.github/workflows/*.yml",
+    "file": "instructions/opex-github-actions.instructions.md",
+    "size": 5928
+  },
+  {
+    "id": "opex-monitoring",
+    "description": "Monitoring standards — Application Insights, structured logging, custom metrics, alert thresholds.",
+    "applyTo": "**/*.py, **/*.ts, **/*.cs",
+    "file": "instructions/opex-monitoring.instructions.md",
+    "size": 11905
+  },
+  {
+    "id": "pcf-waf",
+    "description": "Power Apps Component Framework standards — lifecycle methods, React integration, and TypeScript patterns.",
+    "applyTo": "**/*.ts, **/*.tsx",
+    "file": "instructions/pcf-waf.instructions.md",
+    "size": 10097
+  },
+  {
+    "id": "performance-optimization-waf",
+    "description": "Performance optimization standards — measure first, profile before optimizing, and avoid premature optimization.",
+    "applyTo": "*",
+    "file": "instructions/performance-optimization-waf.instructions.md",
+    "size": 9441
+  },
+  {
+    "id": "performance-python",
+    "description": "Python performance — async/await, connection pooling, streaming, profiling with cProfile/py-spy.",
+    "applyTo": "**/*.py",
+    "file": "instructions/performance-python.instructions.md",
+    "size": 7678
+  },
+  {
+    "id": "performance-typescript",
+    "description": "TypeScript performance — event loop, streaming SSE, connection pooling, memory profiling.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/performance-typescript.instructions.md",
+    "size": 7963
+  },
+  {
+    "id": "pester-waf",
+    "description": "Pester 5 testing standards — Describe/It blocks, TestDrive, and PowerShell module testing patterns.",
+    "applyTo": "**/*.Tests.ps1",
+    "file": "instructions/pester-waf.instructions.md",
+    "size": 7330
+  },
+  {
+    "id": "php-mcp-development",
+    "description": "PHP MCP server development — attributes, typed properties, Composer.",
+    "applyTo": "**/*.php",
+    "file": "instructions/php-mcp-development.instructions.md",
+    "size": 8432
+  },
+  {
+    "id": "php-waf",
+    "description": "PHP coding standards — typed properties, attributes, PSR-12, Composer, and modern PHP 8.3+ patterns.",
+    "applyTo": "**/*.php",
+    "file": "instructions/php-waf.instructions.md",
+    "size": 8863
+  },
+  {
+    "id": "enterprise-rag-patterns",
+    "description": "Play 01 patterns — RAG-specific patterns — chunking strategy, embedding batch, hybrid search, citation enforcement, hallucination prevention.",
+    "applyTo": "**/*.py, **/*.bicep",
+    "file": "instructions/enterprise-rag-patterns.instructions.md",
+    "size": 12037
+  },
+  {
+    "id": "ai-landing-zone-patterns",
+    "description": "Play 02 patterns — Landing zone patterns — hub-spoke VNet, private endpoints on ALL PaaS, Managed Identity, tag enforcement, GPU quota.",
+    "applyTo": "**/*.bicep, **/*.json",
+    "file": "instructions/ai-landing-zone-patterns.instructions.md",
+    "size": 8012
+  },
+  {
+    "id": "deterministic-agent-patterns",
+    "description": "Play 03 patterns — Deterministic AI patterns — temperature=0, structured output, grounding, citation, evaluation-driven reliability.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/deterministic-agent-patterns.instructions.md",
+    "size": 8902
+  },
+  {
+    "id": "call-center-voice-ai-patterns",
+    "description": "Play 04 patterns — Voice AI patterns — Azure Speech SDK, real-time transcription, sentiment detection, turn-taking, noise handling.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/call-center-voice-ai-patterns.instructions.md",
+    "size": 11973
+  },
+  {
+    "id": "it-ticket-resolution-patterns",
+    "description": "Play 05 patterns — IT ticket patterns — intent classification, knowledge base search, automated resolution, escalation rules.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/it-ticket-resolution-patterns.instructions.md",
+    "size": 11588
+  },
+  {
+    "id": "document-intelligence-patterns",
+    "description": "Play 06 patterns — Document processing patterns — AI Document Intelligence, table extraction, OCR confidence, structured output.",
+    "applyTo": "**/*.py",
+    "file": "instructions/document-intelligence-patterns.instructions.md",
+    "size": 11911
+  },
+  {
+    "id": "multi-agent-service-patterns",
+    "description": "Play 07 patterns — Multi-agent patterns — supervisor routing, turn limits, token budgets, cross-agent context passing.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/multi-agent-service-patterns.instructions.md",
+    "size": 10714
+  },
+  {
+    "id": "copilot-studio-bot-patterns",
+    "description": "Play 08 patterns — Copilot Studio patterns — topics, generative answers, knowledge sources, channel deployment, Dataverse integration.",
+    "applyTo": "**/*.json",
+    "file": "instructions/copilot-studio-bot-patterns.instructions.md",
+    "size": 9706
+  },
+  {
+    "id": "ai-search-portal-patterns",
+    "description": "Play 09 patterns — Search portal patterns — faceted search, semantic ranker, result rendering, analytics, personalization.",
+    "applyTo": "**/*.py, **/*.ts, **/*.bicep",
+    "file": "instructions/ai-search-portal-patterns.instructions.md",
+    "size": 10405
+  },
+  {
+    "id": "content-moderation-patterns",
+    "description": "Play 10 patterns — Content moderation patterns — Azure Content Safety, 4 harm categories, threshold tuning, human review pipeline.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/content-moderation-patterns.instructions.md",
+    "size": 10653
+  },
+  {
+    "id": "ai-landing-zone-advanced-patterns",
+    "description": "Play 11 patterns — Advanced landing zone — multi-region, ExpressRoute, Azure Firewall, Policy as Code, Defender for Cloud.",
+    "applyTo": "**/*.bicep",
+    "file": "instructions/ai-landing-zone-advanced-patterns.instructions.md",
+    "size": 8282
+  },
+  {
+    "id": "model-serving-aks-patterns",
+    "description": "Play 12 patterns — Model serving patterns — vLLM config, GPU scheduling, health probes, autoscaling, quantization selection.",
+    "applyTo": "**/*.yaml, **/*.py",
+    "file": "instructions/model-serving-aks-patterns.instructions.md",
+    "size": 9211
+  },
+  {
+    "id": "fine-tuning-workflow-patterns",
+    "description": "Play 13 patterns — Fine-tuning patterns — JSONL data prep, LoRA config, eval metrics, A/B comparison, model versioning.",
+    "applyTo": "**/*.py, **/*.jsonl",
+    "file": "instructions/fine-tuning-workflow-patterns.instructions.md",
+    "size": 10243
+  },
+  {
+    "id": "cost-optimized-ai-gateway-patterns",
+    "description": "Play 14 patterns — AI gateway patterns — APIM policies, semantic cache, token metering, multi-backend retry, budget enforcement.",
+    "applyTo": "**/*.xml, **/*.bicep",
+    "file": "instructions/cost-optimized-ai-gateway-patterns.instructions.md",
+    "size": 8921
+  },
+  {
+    "id": "multi-modal-docproc-patterns",
+    "description": "Play 15 patterns — Multi-modal patterns — GPT-4o Vision, image+text pipelines, PDF rendering, chart interpretation.",
+    "applyTo": "**/*.py",
+    "file": "instructions/multi-modal-docproc-patterns.instructions.md",
+    "size": 11814
+  },
+  {
+    "id": "copilot-teams-extension-patterns",
+    "description": "Play 16 patterns — Teams extension patterns — adaptive cards, message extensions, bot framework, Teams toolkit.",
+    "applyTo": "**/*.ts, **/*.json",
+    "file": "instructions/copilot-teams-extension-patterns.instructions.md",
+    "size": 11071
+  },
+  {
+    "id": "ai-observability-patterns",
+    "description": "Play 17 patterns — AI observability patterns — OpenTelemetry spans, token metrics, quality dashboards, alert thresholds.",
+    "applyTo": "**/*.py, **/*.ts, **/*.bicep",
+    "file": "instructions/ai-observability-patterns.instructions.md",
+    "size": 10177
+  },
+  {
+    "id": "prompt-management-patterns",
+    "description": "Play 18 patterns — Prompt management patterns — version control, A/B testing, template variables, prompt libraries.",
+    "applyTo": "**/*.py, **/*.json",
+    "file": "instructions/prompt-management-patterns.instructions.md",
+    "size": 12350
+  },
+  {
+    "id": "edge-ai-phi4-patterns",
+    "description": "Play 19 patterns — Edge AI patterns — Phi-4 optimization, ONNX Runtime, quantization, batch size tuning, device constraints.",
+    "applyTo": "**/*.py, **/*.onnx",
+    "file": "instructions/edge-ai-phi4-patterns.instructions.md",
+    "size": 9656
+  },
+  {
+    "id": "anomaly-detection-patterns",
+    "description": "Play 20 patterns — Anomaly detection patterns — streaming analytics, statistical thresholds, ML models, alert routing.",
+    "applyTo": "**/*.py",
+    "file": "instructions/anomaly-detection-patterns.instructions.md",
+    "size": 13107
+  },
+  {
+    "id": "agentic-rag-patterns",
+    "description": "Play 21 patterns — Agentic RAG patterns — retrieval decision loop, multi-source routing, query refinement, self-evaluation.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/agentic-rag-patterns.instructions.md",
+    "size": 11049
+  },
+  {
+    "id": "multi-agent-swarm-patterns",
+    "description": "Play 22 patterns — Swarm patterns — supervisor delegation, specialist budgets, turn management, result synthesis.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/multi-agent-swarm-patterns.instructions.md",
+    "size": 10130
+  },
+  {
+    "id": "browser-automation-agent-patterns",
+    "description": "Play 23 patterns — Browser automation patterns — domain allowlist, no credential entry, screenshot analysis, action limits.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/browser-automation-agent-patterns.instructions.md",
+    "size": 11093
+  },
+  {
+    "id": "playwright-waf",
+    "description": "Playwright testing standards — role-based locators, auto-wait, visual regression, and accessibility testing.",
+    "applyTo": "**/*.spec.ts, **/*.test.ts",
+    "file": "instructions/playwright-waf.instructions.md",
+    "size": 7420
+  },
+  {
+    "id": "power-apps-canvas-waf",
+    "description": "Power Apps Canvas standards — delegation, collections, component libraries.",
+    "applyTo": "**/*.msapp",
+    "file": "instructions/power-apps-canvas-waf.instructions.md",
+    "size": 8493
+  },
+  {
+    "id": "power-apps-model-driven-waf",
+    "description": "Power Apps Model-driven standards — forms, views, business rules, Dataverse security.",
+    "applyTo": "**/*.xml",
+    "file": "instructions/power-apps-model-driven-waf.instructions.md",
+    "size": 9393
+  },
+  {
+    "id": "power-automate-waf",
+    "description": "Power Automate flow standards — error handling, parallel branches, approvals, SLA tracking.",
+    "applyTo": "**/*.json",
+    "file": "instructions/power-automate-waf.instructions.md",
+    "size": 8806
+  },
+  {
+    "id": "power-bi-dax-waf",
+    "description": "Power BI DAX standards — CALCULATE patterns, time intelligence, performance optimization.",
+    "applyTo": "**/*.dax, **/*.pbix",
+    "file": "instructions/power-bi-dax-waf.instructions.md",
+    "size": 8754
+  },
+  {
+    "id": "power-pages-waf",
+    "description": "Power Pages standards — Liquid templates, web forms, entity permissions, progressive profiles.",
+    "applyTo": "**/*.html, **/*.liquid",
+    "file": "instructions/power-pages-waf.instructions.md",
+    "size": 9036
+  },
+  {
+    "id": "power-platform-connector-waf",
+    "description": "Custom connector standards — OpenAPI definition, auth configuration, throttling, testing.",
+    "applyTo": "**/*.json, **/*.yaml",
+    "file": "instructions/power-platform-connector-waf.instructions.md",
+    "size": 7166
+  },
+  {
+    "id": "powershell-waf",
+    "description": "PowerShell standards — Verb-Noun naming, PascalCase, standard parameters, and error handling patterns.",
+    "applyTo": "**/*.ps1",
+    "file": "instructions/powershell-waf.instructions.md",
+    "size": 6633
+  },
+  {
+    "id": "prisma-waf",
+    "description": "Prisma ORM standards — schema design, migrations, query optimization, relation loading, type safety.",
+    "applyTo": "**/*.ts, **/schema.prisma",
+    "file": "instructions/prisma-waf.instructions.md",
+    "size": 6939
+  },
+  {
+    "id": "pydantic-waf",
+    "description": "Pydantic standards — model design, validation, serialization, settings management, custom validators.",
+    "applyTo": "**/*.py",
+    "file": "instructions/pydantic-waf.instructions.md",
+    "size": 9111
+  },
+  {
+    "id": "pytest-waf",
+    "description": "pytest testing standards — fixtures, parametrize, coverage, and mock patterns for Python.",
+    "applyTo": "**/test_*.py, **/*_test.py",
+    "file": "instructions/pytest-waf.instructions.md",
+    "size": 6231
+  },
+  {
+    "id": "python-mcp-development",
+    "description": "Python MCP server development standards — FastMCP patterns, @mcp.tool() decorators, Pydantic parameter types, async handlers, resource definitions.",
+    "applyTo": "**/*.py, **/pyproject.toml",
+    "file": "instructions/python-mcp-development.instructions.md",
+    "size": 7716
+  },
+  {
+    "id": "python-waf",
+    "description": "Python coding standards aligned with Azure Well-Architected Framework pillars — secure credential handling, async patterns, structured error handling.",
+    "applyTo": "**/*.py, **/pyproject.toml, **/requirements.txt",
+    "file": "instructions/python-waf.instructions.md",
+    "size": 4251
+  },
+  {
+    "id": "quarkus-waf",
+    "description": "Quarkus standards — Java 21, CDI, reactive, native compilation patterns.",
+    "applyTo": "*",
+    "file": "instructions/quarkus-waf.instructions.md",
+    "size": 8739
+  },
+  {
+    "id": "r-waf",
+    "description": "R coding standards — vectorized operations, tidyverse, lower_snake_case, and reproducible analysis patterns.",
+    "applyTo": "**/*.R, **/*.Rmd",
+    "file": "instructions/r-waf.instructions.md",
+    "size": 7605
+  },
+  {
+    "id": "rai-bias-testing",
+    "description": "Responsible AI bias testing — disaggregated metrics, diverse evaluation datasets, fairness benchmarks.",
+    "applyTo": "**/*.py",
+    "file": "instructions/rai-bias-testing.instructions.md",
+    "size": 8896
+  },
+  {
+    "id": "rai-content-safety",
+    "description": "Responsible AI content safety — Azure Content Safety integration, filter thresholds, PII redaction.",
+    "applyTo": "**/*.py, **/*.ts",
+    "file": "instructions/rai-content-safety.instructions.md",
+    "size": 8481
+  },
+  {
+    "id": "rails-waf",
+    "description": "Ruby on Rails standards — MVC conventions, Active Record, migrations, and RuboCop enforcement.",
+    "applyTo": "**/*.rb, **/Gemfile",
+    "file": "instructions/rails-waf.instructions.md",
+    "size": 10043
+  },
+  {
+    "id": "reliability-csharp",
+    "description": "C# reliability standards — Polly retry/circuit breaker, health checks, exception handling, resilience.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/reliability-csharp.instructions.md",
+    "size": 8514
+  },
+  {
+    "id": "reliability-python",
+    "description": "Python reliability standards — retry with tenacity, circuit breakers, health checks, structured logging.",
+    "applyTo": "**/*.py",
+    "file": "instructions/reliability-python.instructions.md",
+    "size": 8994
+  },
+  {
+    "id": "reliability-typescript",
+    "description": "TypeScript reliability standards — AbortSignal timeout, retry patterns, health endpoints, error boundaries.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/reliability-typescript.instructions.md",
+    "size": 7931
+  },
+  {
+    "id": "ruby-mcp-development",
+    "description": "Ruby MCP server development — mcp gem, block DSL, Rails integration.",
+    "applyTo": "**/*.rb",
+    "file": "instructions/ruby-mcp-development.instructions.md",
+    "size": 7605
+  },
+  {
+    "id": "ruby-waf",
+    "description": "Ruby coding standards — Ruby 3.3+, RuboCop enforcement, Ractor patterns, and Rails conventions.",
+    "applyTo": "**/*.rb",
+    "file": "instructions/ruby-waf.instructions.md",
+    "size": 7990
+  },
+  {
+    "id": "rust-mcp-development",
+    "description": "Rust MCP server development — rmcp SDK, tokio, proc macros, serde, and high-performance tool serving.",
+    "applyTo": "**/*.rs",
+    "file": "instructions/rust-mcp-development.instructions.md",
+    "size": 7851
+  },
+  {
+    "id": "rust-waf",
+    "description": "Rust coding standards — ownership, lifetimes, Result<T,E>, serde, tokio async, and memory safety patterns.",
+    "applyTo": "**/*.rs",
+    "file": "instructions/rust-waf.instructions.md",
+    "size": 9251
+  },
+  {
+    "id": "salesforce-apex-waf",
+    "description": "Salesforce Apex standards — bulkification, governor limits, trigger patterns, and testing.",
+    "applyTo": "**/*.cls, **/*.trigger",
+    "file": "instructions/salesforce-apex-waf.instructions.md",
+    "size": 10580
+  },
+  {
+    "id": "salesforce-lwc-waf",
+    "description": "Salesforce Lightning Web Components standards — reactive properties, wire adapters, and accessibility.",
+    "applyTo": "**/*.js, **/*.html",
+    "file": "instructions/salesforce-lwc-waf.instructions.md",
+    "size": 7263
+  },
+  {
+    "id": "scala-waf",
+    "description": "Scala coding standards — immutability, val over var, pattern matching, and functional programming patterns.",
+    "applyTo": "**/*.scala",
+    "file": "instructions/scala-waf.instructions.md",
+    "size": 6447
+  },
+  {
+    "id": "security-bicep",
+    "description": "Bicep security standards — @secure() parameters, private endpoints, Managed Identity, diagnostic settings.",
+    "applyTo": "**/*.bicep",
+    "file": "instructions/security-bicep.instructions.md",
+    "size": 6753
+  },
+  {
+    "id": "security-csharp",
+    "description": "C# security standards — parameterized queries, output encoding, anti-forgery tokens, secure headers.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/security-csharp.instructions.md",
+    "size": 7304
+  },
+  {
+    "id": "security-owasp",
+    "description": "Comprehensive OWASP security standards for all code — covers Top 10 vulnerabilities, LLM-specific security (OWASP Top 10 for LLMs), input validation.",
+    "applyTo": "*",
+    "file": "instructions/security-owasp.instructions.md",
+    "size": 6171
+  },
+  {
+    "id": "security-python",
+    "description": "Python security standards — input validation, secrets handling, dependency scanning, SQL injection prevention.",
+    "applyTo": "**/*.py",
+    "file": "instructions/security-python.instructions.md",
+    "size": 7058
+  },
+  {
+    "id": "security-typescript",
+    "description": "TypeScript security standards — XSS prevention, CSP headers, input sanitization, dependency audit.",
+    "applyTo": "**/*.ts, **/*.tsx",
+    "file": "instructions/security-typescript.instructions.md",
+    "size": 7615
+  },
+  {
+    "id": "self-documenting-code-waf",
+    "description": "Self-documenting code standards — comment WHY not WHAT, meaningful names, and code as documentation.",
+    "applyTo": "**",
+    "file": "instructions/self-documenting-code-waf.instructions.md",
+    "size": 8955
+  },
+  {
+    "id": "shell-waf",
+    "description": "Shell scripting standards — set -euo pipefail, safe expansions, quoting, and portable POSIX patterns.",
+    "applyTo": "**/*.sh",
+    "file": "instructions/shell-waf.instructions.md",
+    "size": 7546
+  },
+  {
+    "id": "signalr-waf",
+    "description": "SignalR real-time standards — hub design, groups, streaming, connection management, Azure SignalR Service.",
+    "applyTo": "**/*.cs, **/*.ts",
+    "file": "instructions/signalr-waf.instructions.md",
+    "size": 8256
+  },
+  {
+    "id": "springboot-waf",
+    "description": "Spring Boot standards — constructor injection, profiles, YAML config, and production patterns.",
+    "applyTo": "**/*.java, **/application*.yml",
+    "file": "instructions/springboot-waf.instructions.md",
+    "size": 10198
+  },
+  {
+    "id": "sql-optimization-waf",
+    "description": "SQL optimization standards — index strategy, query plans, normalized design, and migration patterns.",
+    "applyTo": "**/*.sql",
+    "file": "instructions/sql-optimization-waf.instructions.md",
+    "size": 9737
+  },
+  {
+    "id": "sqlalchemy-waf",
+    "description": "SQLAlchemy standards — async sessions, relationship mapping, migration with Alembic, connection pooling.",
+    "applyTo": "**/*.py",
+    "file": "instructions/sqlalchemy-waf.instructions.md",
+    "size": 7887
+  },
+  {
+    "id": "svelte-waf",
+    "description": "Svelte 5 standards — runes, SvelteKit, TypeScript, and minimal-bundle patterns.",
+    "applyTo": "**/*.svelte, **/*.ts",
+    "file": "instructions/svelte-waf.instructions.md",
+    "size": 9616
+  },
+  {
+    "id": "swift-mcp-development",
+    "description": "Swift MCP server development — actors, Codable, async/await patterns.",
+    "applyTo": "**/*.swift",
+    "file": "instructions/swift-mcp-development.instructions.md",
+    "size": 9678
+  },
+  {
+    "id": "swift-waf",
+    "description": "Swift coding standards — actors for concurrency, Codable, async/await, SwiftUI, and value types over reference types.",
+    "applyTo": "**/*.swift",
+    "file": "instructions/swift-waf.instructions.md",
+    "size": 8000
+  },
+  {
+    "id": "tailwind-waf",
+    "description": "Tailwind CSS v4 standards — utility-first, component extraction, responsive design, and dark mode patterns.",
+    "applyTo": "**/*.css, **/*.tsx, **/*.vue",
+    "file": "instructions/tailwind-waf.instructions.md",
+    "size": 8025
+  },
+  {
+    "id": "taming-copilot-waf",
+    "description": "Taming Copilot — prevent overreach, enforce constraints, verify before executing, undo patterns.",
+    "applyTo": "**",
+    "file": "instructions/taming-copilot-waf.instructions.md",
+    "size": 9316
+  },
+  {
+    "id": "terraform-azure-waf",
+    "description": "Terraform Azure standards — AVM modules, CALMS framework, modular design.",
+    "applyTo": "**/*.tf",
+    "file": "instructions/terraform-azure-waf.instructions.md",
+    "size": 8553
+  },
+  {
+    "id": "terraform-waf",
+    "description": "Terraform standards — latest providers, modular design, state safety, and secrets management.",
+    "applyTo": "**/*.tf, **/*.tfvars",
+    "file": "instructions/terraform-waf.instructions.md",
+    "size": 8819
+  },
+  {
+    "id": "testing-best-practices",
+    "description": "Polyglot testing standards — unit, integration, and E2E testing patterns for AI applications. Covers pytest, Vitest, xUnit, Playwright.",
+    "applyTo": "**/*.test.*, **/*.spec.*, **/test_*, **/tests/**, **/__tests__/**",
+    "file": "instructions/testing-best-practices.instructions.md",
+    "size": 8192
+  },
+  {
+    "id": "trpc-waf",
+    "description": "tRPC standards — router design, middleware, error handling, type-safe API calls, input validation.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/trpc-waf.instructions.md",
+    "size": 9415
+  },
+  {
+    "id": "typescript-mcp-development",
+    "description": "TypeScript MCP server development standards — @modelcontextprotocol/sdk patterns, Zod parameter schemas, McpServer class, stdio/SSE transports.",
+    "applyTo": "**/*.ts, **/*.mts",
+    "file": "instructions/typescript-mcp-development.instructions.md",
+    "size": 9292
+  },
+  {
+    "id": "typescript-waf",
+    "description": "TypeScript/JavaScript coding standards aligned with Azure WAF pillars — secure credential handling, async patterns, Zod validation.",
+    "applyTo": "**/*.ts, **/*.tsx, **/*.js, **/*.jsx",
+    "file": "instructions/typescript-waf.instructions.md",
+    "size": 7644
+  },
+  {
+    "id": "uvicorn-waf",
+    "description": "Uvicorn/ASGI standards — worker config, graceful shutdown, health checks, production settings.",
+    "applyTo": "**/*.py",
+    "file": "instructions/uvicorn-waf.instructions.md",
+    "size": 7675
+  },
+  {
+    "id": "vitest-waf",
+    "description": "Vitest testing standards — ES2022, snapshot testing, coverage, and mock patterns for Node.js/TypeScript.",
+    "applyTo": "**/*.test.ts, **/*.spec.ts",
+    "file": "instructions/vitest-waf.instructions.md",
+    "size": 7959
+  },
+  {
+    "id": "winui3-waf",
+    "description": "WinUI 3 standards — XAML, MVVM, Windows App SDK patterns.",
+    "applyTo": "**/*.xaml, **/*.cs",
+    "file": "instructions/winui3-waf.instructions.md",
+    "size": 8464
+  },
+  {
+    "id": "wordpress-waf",
+    "description": "WordPress development standards — hooks/filters, custom post types, security, and performance.",
+    "applyTo": "**/*.php",
+    "file": "instructions/wordpress-waf.instructions.md",
+    "size": 9173
+  },
+  {
+    "id": "wpf-waf",
+    "description": "WPF standards — MVVM, data binding, commands, styles, templates.",
+    "applyTo": "**/*.xaml, **/*.cs",
+    "file": "instructions/wpf-waf.instructions.md",
+    "size": 9048
+  },
+  {
+    "id": "xunit-waf",
+    "description": "xUnit testing standards — Fact/Theory, FluentAssertions, and integration testing with WebApplicationFactory.",
+    "applyTo": "**/*.cs",
+    "file": "instructions/xunit-waf.instructions.md",
+    "size": 11731
+  },
+  {
+    "id": "zod-waf",
+    "description": "Zod validation standards — schema design, type inference, transform, error messages, API input validation.",
+    "applyTo": "**/*.ts",
+    "file": "instructions/zod-waf.instructions.md",
+    "size": 5993
+  }
+]

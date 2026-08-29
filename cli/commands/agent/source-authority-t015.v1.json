@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "agent-fai-source-authority-t015.v1",
+  "task": "AFCLI-T015",
+  "implementationState": "protocol-client-available-command-host-unavailable",
+  "authorities": [
+    { "repository": "frootai-agent-fai-cli-contracts", "commit": "bbd9002f5bbaaa87ce08bc4c06c0b8d071c35640", "task": "AFCLI-T006" },
+    { "repository": "frootai-agent-fai-cli-contracts", "commit": "5f39c4304eb5047769420ca8927bc06097fd4e3f", "task": "AFCLI-T009" },
+    { "repository": "frootai-agent-fai-cli-contracts", "commit": "34cf6ab636447c4b7e7df8bde920f748a46987cf", "task": "AFCLI-T010" },
+    { "repository": "frootai-core-agent-fai-cli", "commit": "a1f62dc561d883b35f6bf7251cd5331d235d8b44", "task": "AFCLI-T014" }
+  ],
+  "sources": [
+    { "task": "AFCLI-T006", "path": "schemas/agent-fai-problem.v1.schema.json", "gitBlobOid": "8570b07fb8baecb6cb0f6a79f62b753d3bad7c1f" },
+    { "task": "AFCLI-T006", "path": "schemas/agent-fai-exit.v1.schema.json", "gitBlobOid": "48e78cb3d24cfc3ff60c83b848da1085014ba0ac" },
+    { "task": "AFCLI-T006", "path": "schemas/agent-fai-event.v1.schema.json", "gitBlobOid": "ec446ac41d8cfdf42f683820dd92a72fb8884dec" },
+    { "task": "AFCLI-T006", "path": "scripts/validate-agent-fai-contracts.cjs", "gitBlobOid": "d8e30e0fd993371fd8f3c2de196dba76c5c9af50" },
+    { "task": "AFCLI-T009", "path": "openapi/agent-fai-v1.openapi.json", "gitBlobOid": "29e000ee4a3d083291970cb2ab187b359c507138", "vendoredPath": "cli/commands/agent/agent-fai-v1.openapi.json" },
+    { "task": "AFCLI-T010", "path": "generated/agent-fai/validators.cjs", "gitBlobOid": "89013085a70b63be91c47a9cc683005e012c2de7", "vendoredPath": "cli/lib/agent/contracts/validators.cjs" },
+    { "task": "AFCLI-T010", "path": "generated/agent-fai/manifest.v1.json", "gitBlobOid": "a6c8daadbbc678b37916d86d74207b4b9c3f81dd", "vendoredPath": "cli/lib/agent/contracts/manifest.v1.json" },
+    { "task": "AFCLI-T010", "path": "generated/agent-fai/compatibility-current.v1.json", "gitBlobOid": "d088ce1e0b80ef6b51f946f068ec91eb99092167", "vendoredPath": "cli/lib/agent/contracts/compatibility-current.v1.json" },
+    { "task": "AFCLI-T014", "path": "cli/package.json", "gitBlobOid": "a091ea82059f733d2ab7c7a1187d118e531620e6" },
+    { "task": "AFCLI-T014", "path": "cli/commands/auth/credentials-store.js", "gitBlobOid": "619fb5fea0df05bbfa72d079d5ce5b61754e0805" },
+    { "task": "AFCLI-T014", "path": "cli/lib/agent/command-registry.generated.js", "gitBlobOid": "bd1a433169c7ff8dd2498b3d84340e71bc216b21" },
+    { "task": "AFCLI-T014", "path": "cli/lib/agent/dispatch.js", "gitBlobOid": "caa6497fadb6fc30b6857207f7e64e50b2446d21" }
+  ],
+  "constraints": {
+    "httpsOnly": true,
+    "environmentEndpointOverride": false,
+    "defaultCredentialStore": "cli/commands/auth/credentials-store.js",
+    "proxyDispatcherInjected": true,
+    "runtimeDependencies": 0,
+    "commandHostAvailable": false
+  }
+}

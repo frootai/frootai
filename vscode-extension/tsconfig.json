@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2022",
+    "outDir": "out",
+    "lib": ["ES2022"],
+    "sourceMap": true,
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", ".vscode-test", "out", "webview-ui", "esbuild.config.mjs"]
+}
