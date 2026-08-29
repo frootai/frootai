@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && VITE_ENTRY=main vite build && VITE_ENTRY=sidebar vite build && node scripts/check-browser-bundles.mjs",
-    "build:win": "tsc && set VITE_ENTRY=main&& vite build && set VITE_ENTRY=sidebar&& vite build && node scripts/check-browser-bundles.mjs",
+    "build": "tsc && node scripts/build-webviews.mjs && node scripts/check-browser-bundles.mjs",
+    "build:win": "npm run build",
     "test": "vitest run --pool=threads --maxWorkers=1",
     "preview": "vite preview"
   },
