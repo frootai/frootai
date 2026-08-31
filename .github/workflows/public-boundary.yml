@@ -40,7 +40,7 @@ jobs:
             [[ "$status" == D* ]] && continue
 
             case "$path" in
-              vscode-extension/README.md|cli/README.md|eval-sdk/README.md|eval-sdk-py/README.md)
+              vscode-extension/README.md|cli/README.md|eval-sdk/README.md|eval-sdk-py/README.md|github-app/README.md)
                 continue
                 ;;
               vscode-extension/*|cli/*|engine/*|foundry-agent/*|github-app/*|scripts/factory/*|eval-sdk/*|eval-sdk-py/*)
