@@ -1,6 +1,6 @@
 # FrootAI Governance
 
-> How decisions are made, who makes them, and how you can shape FrootAI's future.
+This document describes stewardship and decision-making for the public FAI Protocol, catalog, and community surfaces.
 
 ## Mission
 
@@ -12,7 +12,7 @@ plugins, tools, prompts, and guardrails into deployable solution plays.
 
 | Role | Responsibility |
 |------|---------------|
-| **Founder / BDFL** | Pavle (project founder). Casts deciding vote on protocol direction, breaking changes, and licensing. Accountable for the long-term mission. |
+| **Founder / Project Lead** | Pavle. Accountable for protocol direction, breaking changes, licensing, and the long-term mission. |
 | **Core Maintainers** | Merge rights on `frootai/*` repos. Review PRs, triage issues, cut releases. Listed in [`MAINTAINERS.md`](./MAINTAINERS.md). |
 | **Domain Owners** | Subject-matter experts for specific areas (RAG, security, infra). Listed in [`.github/CODEOWNERS`](./.github/CODEOWNERS). Auto-assigned PR reviews in their domain. |
 | **Contributors** | Anyone who has had a PR merged. Recognized in `CONTRIBUTORS.md` (auto-generated). |
@@ -34,8 +34,8 @@ We use a **lazy consensus** model with three escalation tiers:
 
 ### Tier 3 — Strategic Changes (RFC Process)
 - Protocol changes, major architecture shifts, repo splits, license changes
-- Requires an **RFC** (Request for Comments) document in
-  [`frootai/rfcs`](https://github.com/frootai/rfcs) (planned repo)
+- Requires an **RFC** (Request for Comments) proposal submitted through a
+  GitHub issue or pull request in this repository
 - 14-day public comment period
 - Final decision rests with the Founder + Core Maintainers
 
@@ -53,21 +53,17 @@ review + triage rights, gaining merge rights after a 4-week probation.
 
 ## Releases
 
-Releases follow [SemVer](https://semver.org). Each distribution channel ships
-independently:
+Public protocol, schema, catalog, and community changes are versioned and validated in this repository. Distribution products—including npm, PyPI, container, CLI, and VS Code artifacts—are built and published through controlled release systems from their canonical implementation repositories.
 
-| Channel | Cadence | Cut By |
-|---------|---------|--------|
-| `frootai-mcp` (npm) | As needed; bug fixes batched weekly | Any maintainer via `npm run release:mcp` |
-| `frootai-vscode` (vsce) | Aligned with VS Code monthly release | Any maintainer via `npm run release:ext` |
-| `frootai` (npm CLI) | As needed | Any maintainer via `npm run release:cli` |
-| `frootai-mcp` / `frootai` (PyPI) | Aligned with npm cadence | Any maintainer via `npm run release:pymcp` |
-| `frootai/frootai` (catalog) | Continuous (factory pipeline auto-syncs to `frootai-core`) | Automatic on merge to `main` |
+Release requirements include:
 
-Channel doctrine (enforced by `scripts/validate-channels.js`):
-**local version ≤ registry-published + 1 patch + tolerance**.
-Maintainers MUST NOT bump beyond this without first publishing the previous
-version to the registry.
+1. Immutable version identifiers and source provenance.
+2. Required validation, security, and compatibility gates.
+3. Least-privilege publishing identities.
+4. Consumer-verifiable checksums, signatures, or attestations where supported.
+5. No dependency on transitional implementation copies in this public repository.
+
+See [Repository Scope](./REPOSITORY_SCOPE.md) for the public/private boundary.
 
 ## Conflict Resolution
 
@@ -96,5 +92,5 @@ Existing maintainers + Founder must approve.
 
 ---
 
-*Last updated: May 03, 2026.*
+*Last updated: August 31, 2026.*
 *Adapted from open-source governance patterns observed in CNCF, Apache, and Vercel projects.*

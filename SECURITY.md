@@ -9,11 +9,11 @@ across all distribution channels:
 
 | Channel | Currently Supported |
 |---------|--------------------|
-| `frootai` (npm CLI) | 5.4.x |
-| `frootai-mcp` (npm) | 5.2.x |
-| `frootai-vscode` (vsce) | 5.1.x |
-| `frootai-mcp` (PyPI) | 5.0.x |
-| `frootai` (PyPI SDK) | 5.0.x |
+| `frootai` (npm CLI) | 6.2.x |
+| `frootai-mcp` (npm) | 6.1.x |
+| `frootai-vscode` (Marketplace) | 6.7.x |
+| `frootai-mcp` (PyPI) | 6.1.x |
+| `frootai` (PyPI SDK) | 5.1.x |
 | `frootai/frootai` (catalog primitives) | always latest `main` |
 
 Older majors (`4.x`, `3.x`, etc.) receive **critical fixes only** for 6 months
@@ -27,12 +27,7 @@ after the next major ships. After that, please upgrade.
 
 Use one of these private channels:
 
-### Preferred — GitHub Private Vulnerability Reporting
-1. Go to <https://github.com/frootai/frootai/security/advisories/new>
-2. Fill in the form (description, affected versions, reproduction)
-3. We will respond within **3 business days**
-
-### Alternative — Email
+### Private security email
 Email **security@frootai.dev** with:
 - A clear description of the issue
 - Affected version(s) and channel(s)
@@ -67,11 +62,12 @@ We use [CVSS v3.1](https://www.first.org/cvss/calculator/3.1):
 ## Scope
 
 ### In Scope
-- All code in `frootai/frootai`, `frootai/frootai-core`, `frootai/frootai.dev`
+- Public protocol, catalog, examples, and integration contracts in `frootai/frootai`
+- Published FrootAI artifacts and hosted services, regardless of their source repository
 - All published packages (`frootai`, `frootai-mcp`, `frootai-vscode`, etc.)
 - Solution-play primitives (agents, skills, instructions, hooks, plugins)
 - The FAI Protocol schemas (`schemas/*.schema.json`)
-- The FAI Factory pipeline scripts (`scripts/factory/`)
+- Public FAI Protocol conformance and validation behavior
 - Hosted services on `*.frootai.dev`
 
 ### Out of Scope
@@ -87,38 +83,32 @@ We use [CVSS v3.1](https://www.first.org/cvss/calculator/3.1):
 If you operate FrootAI in production:
 
 1. **Pin versions** — use `npm ci` / `pip install --require-hashes`, never `latest`
-2. **Run `validate-channels.js`** before any release to detect drift
+2. **Verify artifact provenance** — confirm checksums, publisher identity, and package signatures before installation
 3. **Use Managed Identity / Workload Identity** — never hardcode keys in agents or `fai-manifest.json`
 4. **Enable hooks** — `SessionStart` guardrails for secret-scanning are shipped; turn them on
-5. **Review the security grade** of every primitive you use:
-   ```bash
-   npm run factory:security-grade
-   cat .factory/security-grades.json | jq '.grades[] | select(.grade=="F" or .grade=="D")'
-   ```
+5. **Review each primitive** — inspect declared tools, permissions, data access, and guardrails before enabling it
 6. **Monitor `frootai-mcp` telemetry** — OTEL histograms expose `fai.tool.duration_ms` and `fai.tool.errors`
 7. **Subscribe** to GitHub Security Advisories for the `frootai` org
 
 ## Cryptographic Signatures
 
-**Canonical trust home**: [`frootai.dev/security`](https://frootai.dev/security) lists every signing mechanism, the exact location of each signing key/secret, and the verify command for each artifact surface.
+**Canonical trust home**: [`frootai.dev/security`](https://frootai.dev/security) documents supported verification mechanisms and consumer verification commands. Internal secret locations and release credentials are not published.
 
 Summary:
 - **npm packages** (`frootai-mcp`, `frootai-cli`, `frootai-sdk`) — npm provenance (Sigstore via GitHub Actions OIDC; no long-lived key). Verify: `npm audit signatures frootai-mcp`.
 - **PyPI packages** (`frootai-mcp`, `frootai-sdk`) — PyPI Trusted Publishing with PEP 740 attestations (no `PYPI_TOKEN` secret; OIDC trusted-publishing).
-- **VS Code extension** (`frootai-vscode`) — signed by Microsoft Marketplace at install; publish auth via `secrets.VSCE_PAT`.
-- **Linux .deb / .rpm** — GPG signature. Private key in GitHub Actions secrets `GPG_PRIVATE_KEY_B64` + `GPG_KEY_PASSPHRASE`. Public key + fingerprint published at [frootai.dev/security](https://frootai.dev/security).
+- **VS Code extension** (`frootai-vscode`) — distributed and signed through Microsoft Marketplace. Verify the publisher and version in VS Code before installation.
+- **Linux .deb / .rpm** — GPG signature. The public key and fingerprint are published at [frootai.dev/security](https://frootai.dev/security); private signing material remains in the controlled release environment.
 - **Orchard play ZIP bundles** (planned [H7.14]) — sigstore-cosign keyless OIDC + sha256 sidecar.
 - **Orchard manifest.json** (planned [H7.15]) — embedded sha256 + cosign signature reference.
 
 Policy: **keyless first**. Every new publishing surface MUST attempt keyless OIDC (Sigstore / Fulcio + Rekor) before introducing a long-lived private key.
 
-## Hall of Fame
+## Recognition
 
-Security researchers who responsibly disclosed issues are listed at
-**[frootai.dev/security/hall-of-fame](https://frootai.dev/security/hall-of-fame)**
-(unless they prefer to stay anonymous).
+Security researchers who responsibly disclose qualifying issues may be recognized in release notes or a security advisory, unless they prefer to remain anonymous.
 
 ---
 
 *Thank you for helping keep FrootAI and its users safe.*
-*Last updated: May 03, 2026.*
+*Last updated: August 31, 2026.*
