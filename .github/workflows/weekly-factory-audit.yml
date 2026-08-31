@@ -95,14 +95,7 @@ jobs:
               errors++;
             }
 
-            // Check 2: VS Code extension stats
-            const vscodePkg = 'vscode-extension/package.json';
-            if (fs.existsSync(vscodePkg)) {
-              const pkg = JSON.parse(fs.readFileSync(vscodePkg, 'utf8'));
-              console.log('  VS Code extension: v' + pkg.version);
-            }
-
-            // Check 3: npm-mcp description tools count
+            // Check 2: npm-mcp description tools count
             const mcpPkg = 'npm-mcp/package.json';
             if (fs.existsSync(mcpPkg)) {
               const pkg = JSON.parse(fs.readFileSync(mcpPkg, 'utf8'));
@@ -115,7 +108,7 @@ jobs:
               console.log('  npm-mcp description: ' + descTools + ' tools (catalog: ' + stats.mcpTools + ')');
             }
 
-            // Check 4: Python MCP knowledge
+            // Check 3: Python MCP knowledge
             const pyKnowledge = 'python-mcp/frootai_mcp/knowledge.json';
             if (fs.existsSync(pyKnowledge)) {
               const pyK = JSON.parse(fs.readFileSync(pyKnowledge, 'utf8'));
