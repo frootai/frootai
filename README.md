@@ -63,7 +63,7 @@ Published artifacts are the supported installation boundary for distribution pro
 
 | Surface | Install | Current release |
 |---|---|---:|
-| FrootAI MCP | `npx -y frootai-mcp@6.1.1` | 6.1.1 |
+| FrootAI MCP | `npx -y frootai-mcp` | 6.1.1 |
 | FrootAI CLI | `npx -y frootai@6.2.0` | 6.2.0 |
 | VS Code | `code --install-extension frootai.frootai-vscode` | 6.7.3 |
 | Python SDK | `pip install frootai==5.1.0` | 5.1.0 |
@@ -76,7 +76,7 @@ Published artifacts are the supported installation boundary for distribution pro
   "servers": {
     "frootai": {
       "command": "npx",
-      "args": ["-y", "frootai-mcp@6.1.1"]
+      "args": ["-y", "frootai-mcp"]
     }
   }
 }
