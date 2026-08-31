@@ -7,11 +7,18 @@
 - [ ] New Solution Play (`solution-plays/XX-name/`)
 - [ ] Improvement to existing play
 - [ ] Knowledge module (docs/)
-- [ ] MCP server feature
-- [ ] VS Code extension feature
-- [ ] Website improvement
+- [ ] Protocol, schema, or conformance change
+- [ ] Public primitive or community plugin
+- [ ] Public registry or integration contract
 - [ ] Bug fix
 - [ ] Documentation update
+
+## Repository Boundary
+
+- [ ] I read the [public repository scope](https://github.com/frootai/frootai/blob/main/REPOSITORY_SCOPE.md).
+- [ ] This PR does not add VS Code, CLI, hosted-service, Engine, Factory, private plugin-runtime, or release-system implementation.
+- [ ] This PR contains no credentials, customer data, production configuration, or private repository material.
+- [ ] Any generated public artifact identifies its canonical source and can be reproduced by the controlled release system.
 
 ## Solution Play Checklist (if applicable)
 
@@ -48,4 +55,4 @@
 
 ## Screenshots (if applicable)
 
-<!-- For website or VS Code extension changes -->
+<!-- For public documentation, catalog, or community-facing presentation changes -->

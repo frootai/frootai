@@ -1,9 +1,8 @@
 # Contributing to FrootAI
 
-> **From the Roots to the Fruits.**
-> The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem.
+Thank you for contributing to the public FAI Protocol, catalog, and community ecosystem. This repository welcomes standards, schemas, conformance assets, primitives, Solution Plays, documentation, recipes, workshops, and public registry contributions.
 
-Thank you for contributing! FrootAI grows with every contribution.
+Before starting, read [Repository Scope](./REPOSITORY_SCOPE.md). Distribution-product implementations, hosted-service internals, Factory machinery, and private release systems are maintained outside this public repository.
 
 ---
 
@@ -65,11 +64,15 @@ solution-plays/XX-your-solution/
 - Add glossary terms to `F3-AI-Glossary-AZ.md`
 - Propose new modules via GitHub Issue
 
-### 4. Platform Features
+### 4. Public protocol and integration contracts
 
-- MCP server tools (`npm-mcp/index.js`)
-- VS Code extension features ([`frootai-core/vscode-extension/src/extension.ts`](https://github.com/frootai/frootai-core/tree/main/vscode-extension) — published as `frootai-vscode` on the Marketplace; `frootai/vscode-extension/` here is asset CDN only)
-- Website improvements (`website/src/pages/*.tsx`)
+- FAI Protocol specifications and schemas
+- Conformance fixtures and compatibility evidence
+- Public MCP, API, and package contracts
+- Community plugin descriptors and Orchard registry records
+- Public documentation and website metadata
+
+For a distribution-product or hosted-service issue, file a bug report describing the observable behavior. Do not submit proprietary implementation or release-system code to this repository.
 
 ---
 
@@ -96,7 +99,7 @@ Before submitting, verify your contribution:
 4. Submit a **Pull Request** targeting the `main` branch
 5. CI validation runs automatically:
    - `validate-primitives.yml` — schema, naming, frontmatter, secrets scan
-   - `validate-plays.yml` — solution play structure (23 plays)
+  - `validate-plays.yml` — Solution Play structure and contract validation
    - `auto-generate.yml` — marketplace.json regenerated on merge
 6. Address review feedback → merge
 
@@ -117,11 +120,7 @@ Before submitting, verify your contribution:
 - Squash merge preferred for clean history
 - Delete feature branches after merge
 
-**Future consideration:** As the community grows, we may adopt a **staged→main** model where:
-- `staged` is the development branch (PRs target here)
-- `main` is the published artifact (force-pushed from staged after CI build)
-- This ensures `main` always has regenerated marketplace.json, docs, and validated state
-- Currently not needed — direct-to-main with CI gates is sufficient for our scale
+Repository and release-process changes require maintainer review and must preserve the boundary documented in [Repository Scope](./REPOSITORY_SCOPE.md).
 
 ---
 
@@ -182,9 +181,8 @@ follow-up.
 
 ### Where to start
 
-1. **Read the front door**:
-   [`frootai-core/docs/contributing-mcp-specs.md`](https://github.com/frootai/frootai-core/blob/main/docs/contributing-mcp-specs.md) ([X5.2])
-   — the canonical authoring guide with the community-tier section.
+1. **Read the public registry guidance** in [`orchard/README.md`](orchard/README.md)
+  and inspect the schema and examples under [`orchard/schema/`](orchard/schema/).
 2. **Walk a worked example**:
    [`cookbook/27-submit-mcp-spec.md`](cookbook/27-submit-mcp-spec.md) ([X5.28])
    — 6 numbered steps from `frootai mcp test <slug>` to merged-and-rendering.
@@ -211,12 +209,10 @@ A maintainer reviews within the [X5.9] 14-day SLA.
 
 - **Promotion `community → verified-publisher`** → use the dedicated
   [`tier-promotion.md`](.github/PULL_REQUEST_TEMPLATE/tier-promotion.md)
-  PR template; walkthrough at
-  [`docs/tier-promotion.md`](https://github.com/frootai/frootai-core/blob/main/docs/tier-promotion.md) ([X5.11]).
+  PR template and attach the public evidence requested by that template.
 - **Handing off maintenance** → use
-  [`ownership-transfer.md`](.github/PULL_REQUEST_TEMPLATE/ownership-transfer.md);
-  walkthrough at
-  [`docs/ownership-transfer.md`](https://github.com/frootai/frootai-core/blob/main/docs/ownership-transfer.md) ([X5.24]).
+  [`ownership-transfer.md`](.github/PULL_REQUEST_TEMPLATE/ownership-transfer.md)
+  and provide consent from the current and proposed maintainers.
 - **Reporting breakage / requesting a snapshot refresh** → open an issue
   with [`mcp-spec-issue.md`](.github/ISSUE_TEMPLATE/mcp-spec-issue.md) ([X5.25]).
 
@@ -232,16 +228,15 @@ is separated out.
 Community-tier specs attach **with a per-call prompt**
 (`attachWithoutPrompt: false`) — the user reads a clear elicitation before
 the transport spawns. That's the safer-by-default posture and exactly what
-the [X5.2] guide promises. Promotion to `verified-publisher` removes the
-prompt; see the [§5.4 trust criteria](https://github.com/frootai/frootai-core/blob/main/docs/internal/trust-assignment-criteria.md)
-for the substantive-signal bar.
+the public contract requires. Promotion to `verified-publisher` requires
+maintainer review of publisher identity, operational history, security posture,
+and submitted public trust evidence.
 
 ### Spec lifecycle (after merge)
 
 - Nightly attach validation against the upstream server ([X2.12]).
-- 14-day flag → 90-day archive cascade for unmaintained servers
-  ([X5.18] → [X5.19]); full policy in
-  [`docs/spec-deprecation.md`](https://github.com/frootai/frootai-core/blob/main/docs/spec-deprecation.md) ([X5.23]).
+- Flagging and archival review for unmaintained servers; affected publishers
+  are notified through the repository issue process before a registry change.
 - Per-spec shields.io badges for your upstream README ([X5.26]).
 - Marketplace listing on `frootai.dev/ecosystem/mcp/marketplace/<slug>`
   with contributor list, freshness stamps, and a "Help improve this spec"
