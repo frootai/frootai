@@ -36,7 +36,6 @@ on:
       - 'solution-plays/**'
       - 'scripts/factory/**'
       - 'npm-mcp/**'
-      - 'vscode-extension/**'
   workflow_dispatch:
     inputs:
       full_audit:
@@ -302,17 +301,7 @@ jobs:
               checks.push({ channel: 'npm-mcp', file: 'package.json', ok: true, note: 'v' + pkg.version });
             }
 
-            // 3. VS Code extension — plays data exists
-            const vscodePlays = 'vscode-extension/src/data/plays.ts';
-            if (fs.existsSync(vscodePlays)) {
-              const content = fs.readFileSync(vscodePlays, 'utf8');
-              const playCount = (content.match(/id:\s*['\"](\d+)/g) || []).length;
-              checks.push({ channel: 'vscode', file: 'data/plays.ts', ok: playCount > 0, note: playCount + ' plays' });
-            } else {
-              checks.push({ channel: 'vscode', file: 'data/plays.ts', ok: false, note: 'FILE MISSING' });
-            }
-
-            // 4. Python MCP — knowledge.json exists
+            // 3. Python MCP — knowledge.json exists
             const pyKj = 'python-mcp/frootai_mcp/knowledge.json';
             if (fs.existsSync(pyKj)) {
               const size = (fs.statSync(pyKj).size / 1024).toFixed(0);

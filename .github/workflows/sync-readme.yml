@@ -10,7 +10,7 @@ on:
       - 'scripts/validate-readmes.mjs'
       - 'scripts/test-validate-readmes.mjs'
       - '.github/workflows/sync-readme.yml'
-      - 'vscode-extension/package.json'
+      - 'vscode-extension/README.md'
   push:
     branches: [main]
     paths:

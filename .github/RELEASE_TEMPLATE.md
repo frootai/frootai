@@ -4,7 +4,7 @@
 
 ### Version Bump
 - [ ] `mcp-server/package.json` version updated
-- [ ] `vscode-extension/package.json` version updated
+- [ ] Distribution-product versions verified against their public registries
 - [ ] `functions/server.js` chatbot system prompt references updated
 
 ### Content Sync

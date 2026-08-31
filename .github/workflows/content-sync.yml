@@ -7,7 +7,7 @@ on:
       - 'npm-mcp/index.js'
       - 'npm-mcp/package.json'
       - 'npm-mcp/knowledge.json'
-      - 'vscode-extension/package.json'
+      - 'vscode-extension/README.md'
       - 'solution-plays/**'
       - 'README.md'
       - 'functions/server.js'
@@ -41,7 +41,6 @@ jobs:
           const readJSON = (r) => { const c=read(r); return c ? JSON.parse(c) : null; };
           
           const mcpPkg = readJSON('npm-mcp/package.json');
-          const extPkg = readJSON('vscode-extension/package.json');
           const mcpVersion = mcpPkg?.version || '0.0.0';
           
           const mcpIndex = read('npm-mcp/index.js') || '';

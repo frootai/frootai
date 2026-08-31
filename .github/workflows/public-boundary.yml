@@ -1,0 +1,62 @@
+name: Public Repository Boundary
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-boundary-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 2
+
+      - name: Reject controlled implementation additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch --no-tags origin "${{ github.base_ref }}" --depth=1
+            base="origin/${{ github.base_ref }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+
+          failures=0
+          while IFS=$'\t' read -r status old_path new_path; do
+            path="${new_path:-$old_path}"
+            [[ -z "${path:-}" ]] && continue
+            [[ "$status" == D* ]] && continue
+
+            case "$path" in
+              vscode-extension/README.md|cli/README.md|eval-sdk/README.md|eval-sdk-py/README.md)
+                continue
+                ;;
+              vscode-extension/*|cli/*|engine/*|foundry-agent/*|github-app/*|scripts/factory/*|eval-sdk/*|eval-sdk-py/*)
+                echo "::error file=$path::Controlled implementation belongs in private FrootAI engineering repositories."
+                failures=$((failures + 1))
+                ;;
+              .github/workflows/vsce-publish.yml|.github/workflows/release.yml)
+                echo "::error file=$path::Distribution publication workflows must not be reintroduced into the public repository."
+                failures=$((failures + 1))
+                ;;
+            esac
+          done < <(git diff --name-status "$base"...HEAD)
+
+          if (( failures > 0 )); then
+            echo "Public repository boundary failed with $failures controlled path change(s)."
+            exit 1
+          fi
+
+          echo "Public repository boundary verified."
