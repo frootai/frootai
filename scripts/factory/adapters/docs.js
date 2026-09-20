@@ -814,7 +814,7 @@ function generateSolutionPlays() {
   // Solution plays index
   const indexContent = addFrontmatter(`# Solution Plays
 
-100 production-ready AI architectures — each a self-contained, deployable solution with agents, infrastructure, evaluation, and quality guardrails.
+102 canonical AI solution plays with agents, infrastructure, evaluation, and explicit evidence boundaries.
 
 ## Browse by Category
 
@@ -827,6 +827,7 @@ function generateSolutionPlays() {
 | **Infrastructure** | 02, 11, 14 | Landing zones, gateways, cost optimization |
 | **Observability** | 17 | AI monitoring, KQL dashboards |
 | **Security** | 10, 41 | Content moderation, red teaming |
+| **Finance & Cost** | 50, 63, 102 | Financial risk, fraud detection, Azure cost optimization |
 
 ## Play Structure
 
@@ -841,7 +842,7 @@ solution-play-NN/
 └── spec/fai-manifest.json       # FAI Protocol manifest
 \`\`\`
 `,
-    { title: 'Solution Plays', description: '100 production-ready AI architectures', icon: '🎯', order: 5 }
+    { title: 'Solution Plays', description: '102 canonical AI solution plays', icon: '🎯', order: 5 }
   );
   writeDoc(path.join(playsDir, 'index.mdx'), indexContent);
   recordPage('solution-plays', 'index.mdx', wordCount(indexContent), indexContent.length);
@@ -862,8 +863,8 @@ solution-play-NN/
     let manifest = null;
     try { manifest = JSON.parse(readFile(manifestPath) || '{}'); } catch { /* skip */ }
 
-    const title = extractTitle(readme);
     const playNum = folder.match(/^(\d+)/)?.[1] || '00';
+    const title = extractTitle(readme).replace(new RegExp(`^Play\\s+${playNum}\\s*(?:—|–|-|:)\\s*`, 'i'), '');
     const stripped = stripFrontmatter(readme);
 
     // Enrich with manifest data
