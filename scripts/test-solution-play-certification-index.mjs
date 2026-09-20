@@ -16,9 +16,9 @@ const validate = ajv.compile(schema);
 const generatedAt = '2026-07-18T12:00:00.000Z';
 const index = await buildCertificationIndex({ generatedAt });
 
-test('certification index covers all 101 plays and five flagships', () => {
-  assert.equal(index.count, 101);
-  assert.equal(index.plays.length, 101);
+test('certification index covers all 102 plays and five flagships', () => {
+  assert.equal(index.count, 102);
+  assert.equal(index.plays.length, 102);
   assert.equal(index.summary.flagship, 5);
   assert.deepEqual(index.plays.filter((play) => play.profile === 'flagship-v1').map((play) => play.slug), policy.cohort);
 });

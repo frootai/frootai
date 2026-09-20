@@ -18,9 +18,9 @@ test("deterministic search generation includes all canonical plays and guides", 
   for (const key of ["agents", "instructions", "skills", "hooks", "plugins", "workflows", "cookbook", "mcpTools"]) if (Array.isArray(reversed[key])) reversed[key].reverse();
   assert.deepEqual(buildSearchIndex(reversed), first);
   assert.deepEqual(validateSearchIndex(first), { valid: true, count: first.length });
-  assert.equal(first.filter((entry) => entry.type === "play").length, 101);
-  assert.equal(first.filter((entry) => entry.type === "user-guide").length, 101);
-  assert.equal(new Set(first.filter((entry) => entry.type === "play").map((entry) => entry.u)).size, 101);
+  assert.equal(first.filter((entry) => entry.type === "play").length, 102);
+  assert.equal(first.filter((entry) => entry.type === "user-guide").length, 102);
+  assert.equal(new Set(first.filter((entry) => entry.type === "play").map((entry) => entry.u)).size, 102);
   assert.ok(first.filter((entry) => entry.type === "user-guide").every((entry) => /^\/solution-plays\/\d{2,3}-[a-z0-9-]+#user-guide$/.test(entry.u)));
   assert.ok(first.filter((entry) => entry.type === "play-category").length >= 20);
   const cookbookIds = new Set(catalog.cookbook.map((item) => item.id));

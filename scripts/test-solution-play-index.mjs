@@ -26,8 +26,8 @@ test("canonical Solution Play index is deterministic and current", () => {
   const generated = buildSolutionPlayIndex(repoRoot);
   const committed = readJson(indexPath);
   assert.deepEqual(committed, generated);
-  assert.equal(committed.count, 101);
-  assert.equal(committed.plays.length, 101);
+  assert.equal(committed.count, 102);
+  assert.equal(committed.plays.length, 102);
 });
 
 test("canonical index and public example validate against the schema", () => {
@@ -37,11 +37,11 @@ test("canonical index and public example validate against the schema", () => {
   }
 });
 
-test("all IDs 01-101 occur exactly once in numeric order", () => {
+test("all IDs 01-102 occur exactly once in numeric order", () => {
   const index = readJson(indexPath);
-  const expected = Array.from({ length: 101 }, (_, offset) => String(offset + 1).padStart(2, "0"));
+  const expected = Array.from({ length: 102 }, (_, offset) => String(offset + 1).padStart(2, "0"));
   assert.deepEqual(index.plays.map((play) => play.id), expected);
-  assert.equal(new Set(index.plays.map((play) => play.slug)).size, 101);
+  assert.equal(new Set(index.plays.map((play) => play.slug)).size, 102);
 });
 
 test("every canonical path, README, and spec exists", () => {
@@ -76,9 +76,9 @@ test("public descriptions use safe spec text or neutral canonical fallbacks", ()
   assert.notEqual(index.plays.find((play) => play.id === "100").description, index.plays.find((play) => play.id === "101").description);
 });
 
-test("public Solution Plays README names the complete 101-play inventory", () => {
+test("public Solution Plays README names the complete 102-play inventory", () => {
   const readme = fs.readFileSync(playsReadmePath, "utf8");
-  assert.match(readme, /\*\*101 solution plays\./);
+  assert.match(readme, /\*\*102 solution plays\./);
   assert.match(readme, /solution-play-index\.json/);
   assert.doesNotMatch(readme, /\*\*50 solution plays\./);
 });
