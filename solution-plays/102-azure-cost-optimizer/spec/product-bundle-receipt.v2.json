@@ -1,0 +1,32 @@
+{
+    "schema_version":  "1.0.0",
+    "bundle_id":  "azure-cost-optimizer-solution",
+    "version":  "2.0.0",
+    "recorded_date":  "2026-09-20",
+    "manifest":  {
+                     "path":  "spec/product-bundle.v2.json",
+                     "sha256":  "99f936400b903aae4070599ca6214ed35ba44e6643d08d92e46316df09934257"
+                 },
+    "archive":  {
+                    "path":  "templates/product/azure-cost-optimizer-solution-2.0.0.zip",
+                    "sha256":  "7bd9ea351820f7ccabc7deed76e6f96fde105ee0875c78642f0dc4705c15f856",
+                    "bytes":  1438802,
+                    "files":  187
+                },
+    "validation":  {
+                       "static_solution_checks":  "11/11 passed",
+                       "backend_tests":  "152/152 passed",
+                       "frontend_dependency_audit":  "0 vulnerabilities",
+                       "frontend_production_build":  "passed",
+                       "response_layer_browser_tests":  "44/44 passed across desktop and mobile",
+                       "bicep_files":  "7/7 compiled",
+                       "semantic_cache_principal_isolation":  "passed",
+                       "public_sanitization":  "passed",
+                       "openapi_route_parity":  "passed",
+                       "fai_reference_resolution":  "passed"
+                   },
+    "limitations":  [
+                        "Azure authorization, financial parity, model activation, deployment, rollback, and cleanup are deployment-specific gates.",
+                        "This receipt does not certify production security, compliance, private networking, HA, DR, or realized savings."
+                    ]
+}

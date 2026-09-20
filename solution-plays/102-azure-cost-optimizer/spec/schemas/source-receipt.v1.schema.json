@@ -1,0 +1,172 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://frootai.dev/schemas/102/source-receipt.v1.json",
+    "title": "Azure Cost Intelligence Source Receipt v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "source",
+        "apiVersion",
+        "tenantAlias",
+        "scopeAlias",
+        "requestedPeriod",
+        "actualPeriod",
+        "financialBasis",
+        "collectedAt",
+        "status",
+        "complete",
+        "counts",
+        "contentSha256",
+        "evidenceIds"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "const": "1.0.0"
+        },
+        "source": {
+            "enum": [
+                "focus-snapshot",
+                "cost-management-query",
+                "cost-details",
+                "exports",
+                "advisor",
+                "resource-graph",
+                "monitor",
+                "retail-prices",
+                "finops-hub",
+                "optimization-engine"
+            ]
+        },
+        "apiVersion": {
+            "type": "string",
+            "minLength": 1
+        },
+        "tenantAlias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "scopeAlias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "requestedPeriod": {
+            "$ref": "#/$defs/period"
+        },
+        "actualPeriod": {
+            "$ref": "#/$defs/period"
+        },
+        "financialBasis": {
+            "enum": [
+                "billed",
+                "effective",
+                "not-applicable"
+            ]
+        },
+        "currency": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^[A-Z]{3}$"
+        },
+        "collectedAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "status": {
+            "enum": [
+                "complete",
+                "partial",
+                "throttled",
+                "denied",
+                "failed"
+            ]
+        },
+        "complete": {
+            "type": "boolean"
+        },
+        "counts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "requests",
+                "pages",
+                "rows",
+                "bytes"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "pages": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "rows": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "queryProcessingUnits": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 0
+                }
+            }
+        },
+        "safeIssueCode": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+        },
+        "retryAt": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date-time"
+        },
+        "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+        },
+        "evidenceIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "pattern": "^ev_[a-f0-9]{16,64}$"
+            }
+        }
+    },
+    "$defs": {
+        "period": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "start",
+                "end"
+            ],
+            "properties": {
+                "start": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "end": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        }
+    }
+}

@@ -11,9 +11,9 @@ const { buildSolutionPlayDetails, renderSolutionPlayDetails, validateSolutionPla
 const index = JSON.parse(fs.readFileSync(path.join(root, "orchard", "registry", "solution-play-index.json"), "utf8"));
 const catalog = JSON.parse(fs.readFileSync(path.join(root, ".factory", "fai-catalog.json"), "utf8"));
 
-test("generates exactly 101 compact details and five bounded runtime summaries", () => {
+test("generates exactly 102 compact details and five bounded runtime summaries", () => {
   const data = buildSolutionPlayDetails(structuredClone(index), structuredClone(catalog));
-  assert.equal(data.count, 101);
+  assert.equal(data.count, 102);
   assert.equal(data.runtimeContractCount, 5);
   assert.equal(data.details.filter((detail) => detail.runtime !== null).length, 5);
   assert.deepEqual(data.details.filter((detail) => detail.runtime !== null).map((detail) => [detail.slug, detail.runtime.scenarioId]), [

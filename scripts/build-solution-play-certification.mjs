@@ -172,9 +172,13 @@ async function designedEvidence(play, generatedAt) {
   const manifestPath = path.join(playRoot, 'spec', 'fai-manifest.json');
   const architecturePath = path.join(playRoot, 'architecture.md');
   const costPath = path.join(playRoot, 'cost.json');
-  const evaluationPath = path.join(playRoot, 'evaluation', 'eval.py');
   const engine = initEngine(manifestPath);
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const evaluationRelative = typeof manifest.evaluation?.entrypoint === 'string'
+    ? manifest.evaluation.entrypoint
+    : 'evaluation/eval.py';
+  const evaluationPath = path.resolve(playRoot, evaluationRelative);
+  const evaluationInsidePlay = evaluationPath.startsWith(`${playRoot}${path.sep}`);
   const iacRelative = manifest.infrastructure?.bicep || manifest.infrastructure?.template;
   const iacPath = iacRelative ? path.resolve(playRoot, iacRelative) : null;
   const observabilityDeclared = architectureCheck(architecturePath)
@@ -185,7 +189,7 @@ async function designedEvidence(play, generatedAt) {
     check('architecture', architectureCheck(architecturePath), 'diagram, service roles, and security are declared'),
     check('cost', costCheck(costPath), 'component totals reconcile for dev, prod, and enterprise'),
     check('iac-declaration', Boolean(iacPath && fs.existsSync(iacPath)), iacRelative || 'missing'),
-    check('evaluation-declaration', fs.existsSync(evaluationPath), 'evaluation entry point exists'),
+    check('evaluation-declaration', evaluationInsidePlay && fs.existsSync(evaluationPath), evaluationInsidePlay ? evaluationRelative : 'evaluation entry point escapes play root'),
     check('observability-declaration', observabilityDeclared, 'observability service is present in architecture'),
   ];
   const passed = checks.every((item) => item.status === 'passed');
@@ -222,7 +226,7 @@ async function designedEvidence(play, generatedAt) {
           { type: 'manifest', url: `solution-plays/${play}/spec/fai-manifest.json`, sha256: hashFile(manifestPath), media_type: 'application/json' },
           { type: 'architecture', url: `solution-plays/${play}/architecture.md`, sha256: hashFile(architecturePath), media_type: 'text/markdown' },
           { type: 'cost', url: `solution-plays/${play}/cost.json`, sha256: hashFile(costPath), media_type: 'application/json' },
-        ],
+        ].filter((artifact) => artifact.sha256 !== null),
       },
     },
   };

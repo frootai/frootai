@@ -1,0 +1,113 @@
+{
+    "play": "102",
+    "name": "Azure Cost Optimizer",
+    "currency": "USD",
+    "updated": "2026-09-20",
+    "basis": "planning-envelope-not-a-price-quote",
+    "note": "Local snapshot mode can run without Azure or model charges. Hosted values are review envelopes; actual prices depend on region, agreement, usage, retention, model, and existing shared services.",
+    "calculator": "https://azure.microsoft.com/pricing/calculator/",
+    "services": [
+        {
+            "name": "Microsoft Foundry model",
+            "category": "AI",
+            "purpose": "Optional grounded ACO Agent explanations over minimized typed evidence",
+            "tiers": {
+                "dev": {
+                    "sku": "Pay-as-you-go development envelope",
+                    "cost": 10,
+                    "note": "Low-volume grounded explanation tests; keep disabled when using the free local sample"
+                },
+                "prod": {
+                    "sku": "Pay-as-you-go envelope",
+                    "cost": 40,
+                    "note": "Bounded solution traffic; verify selected model pricing"
+                },
+                "enterprise": {
+                    "sku": "Selected after load evidence",
+                    "cost": 300,
+                    "note": "Capacity and model routing require measured demand"
+                }
+            }
+        },
+        {
+            "name": "Azure Container Apps",
+            "category": "Compute",
+            "purpose": "Optional single-container public-authenticated hosted demo",
+            "tiers": {
+                "dev": {
+                    "sku": "Consumption min 0 max 1",
+                    "cost": 8,
+                    "note": "Low-volume development deployment with scale-to-zero"
+                },
+                "prod": {
+                    "sku": "Consumption min 0 max 1",
+                    "cost": 25,
+                    "note": "Time-bounded demo envelope"
+                },
+                "enterprise": {
+                    "sku": "Selected after load evidence",
+                    "cost": 180,
+                    "note": "Availability and scale requirements drive topology"
+                }
+            }
+        },
+        {
+            "name": "Azure Monitor and Application Insights",
+            "category": "Observability",
+            "purpose": "Dependency latency, refresh health, cache, model, and evaluation telemetry",
+            "tiers": {
+                "dev": {
+                    "sku": "Capped pay-as-you-go development envelope",
+                    "cost": 5,
+                    "note": "Short retention, sampling, and low ingestion volume"
+                },
+                "prod": {
+                    "sku": "Capped pay-as-you-go envelope",
+                    "cost": 15,
+                    "note": "Short retention and sampling"
+                },
+                "enterprise": {
+                    "sku": "Governed retention",
+                    "cost": 90,
+                    "note": "Volume and retention must be measured"
+                }
+            }
+        },
+        {
+            "name": "Azure Cosmos DB Serverless and Blob Storage",
+            "category": "Data",
+            "purpose": "Blob content-addressed evidence, receipts, and report files; Cosmos scope-partitioned current-revision pointers",
+            "tiers": {
+                "dev": {
+                    "sku": "Blob LRS + Cosmos Serverless development envelope",
+                    "cost": 2,
+                    "note": "Small evidence volume and intermittent requests; the free local sample needs neither service"
+                },
+                "prod": {
+                    "sku": "Cosmos Serverless + Blob LRS envelope",
+                    "cost": 10,
+                    "note": "Intermittent solution traffic and short retention"
+                },
+                "enterprise": {
+                    "sku": "Exports or FinOps Hub envelope",
+                    "cost": 120,
+                    "note": "Scale path selected from measured data volume"
+                }
+            }
+        }
+    ],
+    "totals": {
+        "dev": 25,
+        "prod": 90,
+        "enterprise": 690
+    },
+    "optimization_tips": [
+        "Keep paid inference disabled until the deterministic dashboard and reports pass",
+        "Use a smaller capable model for explanation and reserve stronger models for complex cross-source investigations",
+        "Refresh cost details at most daily and query local snapshots for interaction",
+        "Use Cost Management Exports instead of repeated Cost Details calls for large recurring datasets",
+        "Scale Container Apps to zero outside demonstration windows",
+        "Sample traces and cap retention; never log raw billing rows or full prompts",
+        "Treat these values as envelopes and verify current prices before approving deployment"
+    ]
+}

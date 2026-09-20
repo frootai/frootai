@@ -1,0 +1,33 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "aco-solution-toolchain-v2",
+  "tracks": {
+    "local": {
+      "required": ["PowerShell", ".NET 10 SDK", "Node.js 24", "npm"],
+      "doctor": "ops/doctor.ps1 -Track Local",
+      "docker_required": false
+    },
+    "azure": {
+      "required": ["local track", "Azure CLI", "Azure Bicep CLI", "ACR remote build"],
+      "doctor": "ops/doctor.ps1 -Track Azure",
+      "docker_required": false
+    },
+    "foundry": {
+      "required": ["azure track", "Microsoft Foundry project", "compatible model deployment", "data-plane access"],
+      "doctor": "ops/doctor.ps1 -Track Foundry"
+    }
+  },
+  "commands": {
+    "setup": "npm run setup",
+    "validate": "npm run validate",
+    "sample": "ops/start-solution.ps1 -Mode Sample",
+    "live": "ops/start-solution.ps1 -Mode Live",
+    "foundation": "ops/solution-infra.ps1",
+    "image": "ops/solution-image.ps1",
+    "application": "ops/solution-app.ps1",
+    "smoke": "ops/solution-smoke.ps1",
+    "pre_demo": "ops/pre-demo.ps1",
+    "cleanup": "ops/solution-cleanup.ps1"
+  },
+  "policy": "Scripts install nothing automatically, never change the global Azure CLI subscription, and stage Azure writes behind explicit commands and reviewed what-if artifacts."
+}

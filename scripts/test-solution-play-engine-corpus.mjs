@@ -12,8 +12,8 @@ const playDirectories = fs.readdirSync(playsRoot, { withFileTypes: true })
   .map((entry) => entry.name)
   .sort((left, right) => Number(left.split('-')[0]) - Number(right.split('-')[0]));
 
-test('all 101 canonical Solution Plays initialize successfully', () => {
-  assert.equal(playDirectories.length, 101);
+test('all 102 canonical Solution Plays initialize successfully', () => {
+  assert.equal(playDirectories.length, 102);
   const failures = [];
   for (const play of playDirectories) {
     const manifestPath = path.join(playsRoot, play, 'spec', 'fai-manifest.json');
@@ -23,8 +23,8 @@ test('all 101 canonical Solution Plays initialize successfully', () => {
   assert.deepEqual(failures, []);
 });
 
-test('Play 100 and Play 101 participate in engine initialization', () => {
-  for (const play of ['100-fai-meta-agent', '101-pester-test-development']) {
+test('three-digit plays participate in engine initialization', () => {
+  for (const play of ['100-fai-meta-agent', '101-pester-test-development', '102-azure-cost-optimizer']) {
     const engine = initEngine(path.join(playsRoot, play, 'spec', 'fai-manifest.json'));
     assert.equal(engine.success, true, `${play}: ${engine.errors.join(', ')}`);
     assert.equal(engine.manifest.play, play);

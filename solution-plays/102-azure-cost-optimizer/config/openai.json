@@ -1,0 +1,57 @@
+{
+    "host": "microsoft-foundry",
+    "provider": "${ACI_AI_PROVIDER}",
+    "default_provider": "foundry",
+    "providers": {
+        "foundry": {
+            "project_endpoint": "${AZURE_AI_PROJECT_ENDPOINT}",
+            "deployment_name": "${AZURE_AI_MODEL_DEPLOYMENT_NAME}",
+            "credential": "host-token-credential"
+        },
+        "azure-openai": {
+            "endpoint": "${AZURE_OPENAI_ENDPOINT}",
+            "deployment_name": "${AZURE_OPENAI_DEPLOYMENT_NAME}",
+            "auth_mode": "${AZURE_OPENAI_AUTH_MODE}",
+            "default_auth_mode": "identity",
+            "api_key_environment_variable": "AZURE_OPENAI_API_KEY"
+        },
+        "none": {
+            "model_calls_enabled": false
+        }
+    },
+    "snapshot_model_calls_enabled": false,
+    "model": "${AZURE_AI_MODEL_DEPLOYMENT_NAME}",
+    "project_endpoint": "${AZURE_AI_PROJECT_ENDPOINT}",
+    "deployment_name": "${AZURE_AI_MODEL_DEPLOYMENT_NAME}",
+    "credential": "default-azure-credential",
+    "paid_inference_enabled": false,
+    "temperature": 0.1,
+    "max_tokens": 32768,
+    "max_output_tokens": 32768,
+    "top_p": 0.9,
+    "stream": true,
+    "response_format": "structured",
+    "system_message_ref": "config/aco-system-prompt.md",
+    "limits": {
+        "max_model_calls_per_request": 6,
+        "fast_model_calls_per_request": 3,
+        "max_tool_rounds_per_request": 6,
+        "fast_tool_rounds_per_request": 3,
+        "max_serialized_context_chars": 24000,
+        "max_tool_result_chars": 16000,
+        "request_deadline_seconds": 150,
+        "max_concurrent_requests_per_user": 1
+    },
+    "retry": {
+        "safe_read_retries": 1,
+        "respect_retry_after": true,
+        "max_backoff_seconds": 10
+    },
+    "safety": {
+        "content_safety_required": true,
+        "grounded_numeric_claims_required": true,
+        "write_requests_refused": true,
+        "raw_cost_rows_allowed": false,
+        "credentials_allowed": false
+    }
+}

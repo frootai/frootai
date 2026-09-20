@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "bundle_id": "azure-cost-optimizer-solution",
+  "version": "2.0.0",
+  "product_revision": "v99-public",
+  "delivery_contract": "spec/solution-delivery-contract.v1.json",
+  "runtime_contract": "spec/runtime-contract.v1.json",
+  "experience_contract": "spec/experience-contract.v1.json",
+  "verification_receipt": "spec/product-bundle-receipt.v2.json",
+  "archive": {
+    "path": "templates/product/azure-cost-optimizer-solution-2.0.0.zip",
+    "sha256": "7bd9ea351820f7ccabc7deed76e6f96fde105ee0875c78642f0dc4705c15f856",
+    "bytes": 1438802,
+    "files": 187,
+    "format": "zip",
+    "purpose": "Sanitized public source, Copilot delivery contract, infrastructure, tests, and documentation"
+  },
+  "source_tree": {
+    "validation_identity_sha256": "f7ce54673f76529822457d25e660b10f8f381b9ddbb6309a20e4f2cc9548e678",
+    "private_or_generated_state_included": false
+  },
+  "entrypoints": {
+    "guide": "AzureCostOptimizerGuide.md",
+    "copilot_agent": ".github/agents/builder.agent.md",
+    "validation": "npm run validate",
+    "solution_package": "npm run package:solution"
+  },
+  "certification": {
+    "feature_implementation": "validated",
+    "local_readiness": "validated on the producer workstation; each installation must validate locally",
+    "hosted_solution_readiness": "deployment-specific validation required",
+    "production_certified": false
+  }
+}

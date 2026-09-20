@@ -1,0 +1,52 @@
+{
+    "play": "102-azure-cost-optimizer",
+    "topology": "single-supervisor",
+    "chain": "builder -> reviewer -> tuner",
+    "runtime": {
+        "agent": "aco-supervisor",
+        "sdk": "microsoft-agent-framework-dotnet",
+        "tools": [
+            "get_cost_summary",
+            "get_cost_breakdown",
+            "get_opportunities",
+            "get_advisor_findings",
+            "get_data_health",
+            "get_evidence",
+            "create_report",
+            "get_optimization_guidance"
+        ],
+        "write_tools": [],
+        "specialist_agents_enabled": false,
+        "reason": "Deterministic modules own cost, WAF/FinOps guidance selection, opportunity rules and reporting; one supervisor avoids unnecessary orchestration failures."
+    },
+    "activation": {
+        "requires_validated_live_evidence": true,
+        "project_endpoint_environment_variable": "AZURE_AI_PROJECT_ENDPOINT",
+        "model_deployment_environment_variable": "AZURE_AI_MODEL_DEPLOYMENT_NAME",
+        "credential": "default-azure-credential",
+        "paid_inference_enabled_by_default": false,
+        "paid_inference_requires_explicit_approval": true,
+        "deterministic_guard_role": "fallback-only",
+        "activation_receipt": ".artifacts/deploy/aco-agent-activation.json",
+        "activation_proof": "one grounded Microsoft Foundry model response through Microsoft Agent Framework with all numeric claims resolving to the validated live evidence revision"
+    },
+    "development": {
+        "builder": {
+            "file": ".github/agents/builder.agent.md",
+            "role": "Implement one tested vertical slice"
+        },
+        "reviewer": {
+            "file": ".github/agents/reviewer.agent.md",
+            "role": "Audit finance, evidence, authorization, degradation, and claims"
+        },
+        "tuner": {
+            "file": ".github/agents/tuner.agent.md",
+            "role": "Tune measured cost, latency, caching, and stability"
+        }
+    },
+    "optional_channels": {
+        "foundry_toolkit_inspector": "recommended-after-snapshot",
+        "microsoft_365_agents_playground": "deferred-until-web-and-foundry-pass",
+        "teams_publish": "separate-delivery-profile"
+    }
+}

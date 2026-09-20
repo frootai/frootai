@@ -1,0 +1,79 @@
+{
+    "reviewed_at": "2026-09-16T00:00:00Z",
+    "sources": {
+        "cost_management_query": {
+            "required": true,
+            "api_version": "2025-03-01",
+            "use": "bounded-summary-refresh",
+            "refresh_interval_hours": 24,
+            "track_query_processing_units": true,
+            "track_service_quota_headers": true
+        },
+        "cost_details": {
+            "required": true,
+            "api_version": "2025-03-01",
+            "use": "small-on-demand-detail",
+            "refresh_interval_hours": 24,
+            "generation_post_auto_retry": false,
+            "scale_limit_bytes": 2147483648,
+            "capability_negotiation_required": true,
+            "supported_agreements": [
+                "EA",
+                "MCA"
+            ],
+            "maximum_period": "P1M",
+            "maximum_lookback_months": 13,
+            "unsupported_scopes": [
+                "resource-group",
+                "management-group"
+            ]
+        },
+        "cost_management_exports": {
+            "required": false,
+            "api_version": "2025-03-01",
+            "use": "recurring-large-detail-ingestion",
+            "preferred_above_bytes": 2147483648
+        },
+        "advisor": {
+            "required": true,
+            "api_version": "2025-01-01",
+            "category": "Cost",
+            "use": "recommendations"
+        },
+        "resource_graph": {
+            "required": true,
+            "api_version": "2022-10-01",
+            "use": "resource-inventory"
+        },
+        "azure_monitor_metrics": {
+            "required": false,
+            "api_version": "2023-10-01",
+            "use": "rightsizing-evidence",
+            "prefer_batch_for_multi_resource": true
+        },
+        "retail_prices": {
+            "required": false,
+            "api_version": "2023-01-01-preview",
+            "use": "public-list-price-estimates",
+            "authenticated": false,
+            "customer_billed_rate": false
+        },
+        "focus": {
+            "required": true,
+            "azure_profile": "1.2",
+            "general_spec_observed": "1.4",
+            "use": "normalized-cost-and-usage",
+            "silent_upgrade_allowed": false
+        },
+        "finops_hub": {
+            "required": false,
+            "use": "multi-scope-focus-analytics",
+            "new_capacity_enabled_by_default": false
+        },
+        "azure_optimization_engine": {
+            "required": false,
+            "use": "separately-deployed-optimization-import",
+            "execute_upstream_automation": false
+        }
+    }
+}

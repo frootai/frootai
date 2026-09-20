@@ -1,0 +1,81 @@
+{
+    "schema_version": "1.0.0",
+    "mode": "microsoft-native-lightweight",
+    "local_snapshot": {
+        "store": "bundled-read-only-fixture",
+        "persistence_required": false,
+        "azure_calls": false
+    },
+    "raw_store": {
+        "service": "azure-blob-storage",
+        "purpose": [
+            "raw-focus-and-provider-exports",
+            "immutable-source-receipts",
+            "report-files"
+        ],
+        "layout": "scope-alias/billing-period/revision-id",
+        "content_addressed": true,
+        "public_access": false
+    },
+    "operational_store": {
+        "service": "azure-cosmos-db-for-nosql",
+        "capacity_mode": "serverless",
+        "consistency": "Session",
+        "local_auth_disabled": true,
+        "database": "cost-intelligence",
+        "containers": {
+            "intelligence": {
+                "partition_key": "/scopePartition",
+                "document_types": [
+                    "inventory",
+                    "summary",
+                    "opportunity",
+                    "advisor",
+                    "data-health",
+                    "report-metadata",
+                    "current-revision"
+                ],
+                "query_rule": "Every dashboard query supplies one authorized scopePartition."
+            },
+            "conversations": {
+                "partition_key": "/principalPartition",
+                "document_types": [
+                    "conversation",
+                    "message-metadata"
+                ],
+                "default_ttl_seconds": 604800,
+                "query_rule": "Every conversation query supplies the authorized tenant and principal partition."
+            }
+        }
+    },
+    "document_contract": {
+        "type_discriminator_required": true,
+        "schema_version_required": true,
+        "maximum_item_bytes": 1048576,
+        "money_encoding": "base-10-decimal-string-no-exponent",
+        "raw_cost_rows_in_cosmos": false,
+        "cross_partition_dashboard_queries": false,
+        "continuation_tokens_required": true,
+        "optimistic_concurrency": "etag",
+        "publish_atomicity": "transactional-batch-within-scope-partition"
+    },
+    "sdk_contract": {
+        "package": "Microsoft.Azure.Cosmos",
+        "authentication": "DefaultAzureCredential",
+        "client_lifetime": "singleton",
+        "connection_mode": "Direct",
+        "async_only": true,
+        "respect_retry_after": true,
+        "diagnostics": "safe-ru-latency-status-only"
+    },
+    "scale_boundary": {
+        "fit": "intermittent-low-traffic-single-region-solution",
+        "not_for": [
+            "raw-cost-row-warehouse",
+            "sustained-high-throughput",
+            "cross-scope-ad-hoc-analytics",
+            "multi-region-serverless"
+        ],
+        "enterprise_path": "Cost Management Exports to FinOps Hub, Microsoft Fabric, or Azure Data Explorer after measured need."
+    }
+}

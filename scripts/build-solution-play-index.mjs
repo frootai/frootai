@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { assertSolutionPlayQuality } from "./solution-play-quality-gate.mjs";
 
-const EXPECTED_PLAY_COUNT = 101;
+const EXPECTED_PLAY_COUNT = 102;
 const ID_PATTERN = /^(\d{2,3})-(.+)$/;
 const HEADING_PATTERN = /^#\s*Play\s+(\d+)\s*(?:—|–|-|:)\s*(.+?)\s*$/u;
 

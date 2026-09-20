@@ -26,6 +26,13 @@ function adapt(catalog) {
       stats: catalog.stats,
       embeddedStats: catalog.embeddedStats,
       crossRefCount: catalog.crossRefCount,
+      plays: (catalog.plays || []).map((play) => ({
+        id: play.id,
+        slug: play.slug,
+        name: play.name,
+        description: play.description || "",
+        waf: play.speckit?.waf || [],
+      })),
     };
     fs.writeFileSync(kjPath, JSON.stringify(kj));
     results.updates.push("knowledge.json — ecosystem section injected");

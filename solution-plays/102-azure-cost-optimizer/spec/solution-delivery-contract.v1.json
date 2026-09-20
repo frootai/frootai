@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "aco-solution-v1",
+  "product_revision": "v99-user",
+  "goal": "Guide a user from a clean workstation to a validated local Azure Cost Optimizer and, when separately approved, a hosted Container Apps experience and Foundry agent channels.",
+  "source_of_truth": {
+    "runtime": "spec/runtime-contract.v1.json",
+    "guide": "AzureCostOptimizerGuide.md",
+    "architecture": "architecture.md",
+    "api": "spec/openapi.v1.yaml",
+    "tools": "spec/tool-schemas.v1.json",
+    "fai": "spec/fai-manifest.json"
+  },
+  "tracks": [
+    { "id": "sample", "azure_writes": false, "provider_calls": 0, "model_calls": 0 },
+    { "id": "live-local", "azure_writes": false, "collection_requires_explicit_approval": true, "model_optional": true },
+    { "id": "hosted-web", "azure_writes": true, "requires_what_if": true, "model_optional": true },
+    { "id": "foundry-channels", "azure_writes": true, "requires_hosted_web": true, "model_required": true }
+  ],
+  "required_questions": [
+    "track",
+    "subscription and tenant",
+    "authority level",
+    "region",
+    "prefix and resource group",
+    "cost source",
+    "provider and model lifecycle",
+    "authentication profile and allowed users",
+    "organization policy tags",
+    "spend and inference bounds",
+    "expiry",
+    "rollback owner",
+    "cleanup owner"
+  ],
+  "approval": {
+    "default_cloud_writes": false,
+    "separate_approval_required": ["Azure reads", "resource creation", "role assignment", "model deployment", "paid inference", "public anonymous demo", "deployment", "rollback", "deletion"],
+    "not_approval": ["subscription ownership", "credentials present", "generic deploy request", "successful what-if"]
+  },
+  "defaults": {
+    "profile": "sample",
+    "region": "eastus2",
+    "auth": "container-apps-easy-auth",
+    "provider": "none",
+    "cost_source": "query",
+    "scheduled_refresh_minutes": 0,
+    "mcp_enabled": false,
+    "public_anonymous_access": false
+  },
+  "security_control_tag": {
+    "optional": true,
+    "meaning": "Organization-specific policy metadata only",
+    "rule": "Never set a bypass or exception value unless the user's subscription owner explicitly approves that exact value. The tag does not replace identity, authorization, TLS, or data protection."
+  },
+  "delivery_sequence": [
+    "doctor",
+    "subscription selection",
+    "naming and policy inputs",
+    "local sample",
+    "authorized live-local evidence",
+    "portal parity",
+    "optional model selection",
+    "local validation",
+    "foundation what-if and approval",
+    "foundation apply",
+    "model reuse or approved deployment",
+    "digest-pinned image build",
+    "application what-if and approval",
+    "application apply",
+    "hosted smoke",
+    "optional OpenAPI and MCP agents",
+    "rollback receipt",
+    "cleanup decision"
+  ],
+  "acceptance": {
+    "local": ["sample UI", "backend tests", "frontend build", "desktop/mobile response tests", "Bicep compile", "sanitization scan"],
+    "live": ["authorized scope", "fresh evidence", "source receipts", "portal parity or explicit pending state", "write refusal"],
+    "hosted": ["immutable image", "reviewed what-if", "health and readiness", "authentication boundary", "config fingerprint", "reports", "rollback digest"],
+    "channels": ["OpenAPI prompt agent", "MCP prompt agent", "complete web experience"]
+  },
+  "limitations": [
+    "Cost data can be delayed and current-period values can change.",
+    "Advisor savings are estimates and can overlap.",
+    "The solution is not a production security, compliance, high-availability, or disaster-recovery certification.",
+    "Public network access is a solution option; private networking is a separate architecture initiative."
+  ]
+}

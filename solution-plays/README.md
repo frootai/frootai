@@ -1,8 +1,8 @@
 # FrootAI Solution Plays
 
-> **101 solution plays. Each has a canonical numeric identity, DevKit (.github Agentic OS), TuneKit (AI config + eval), SpecKit (architecture + wiring), and infrastructure assets.**
+> **102 solution plays. Each has a canonical numeric identity. Available runtime, developer tooling and infrastructure vary by play and verification state.**
 
-The machine-readable source of truth for all 101 identities and links is [`../orchard/registry/solution-play-index.json`](../orchard/registry/solution-play-index.json). The table below is the original first-50 launch roster; the canonical index includes Plays 51-101 without renaming or deleting any play.
+The machine-readable source of truth for all 102 identities and links is [`../orchard/registry/solution-play-index.json`](../orchard/registry/solution-play-index.json). The table below is the original first-50 launch roster. Play 102 adds the complete public [Azure Cost Optimizer solution](./102-azure-cost-optimizer/README.md), including product source, infrastructure, evaluation, and distribution assets.
 
 | # | Solution | Status | Complexity |
 |---|---------|--------|-----------|

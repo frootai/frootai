@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "profile": "solution_snapshot",
+  "tenantAlias": "tenant-sample",
+  "scopeAlias": "solution-scope",
+  "financialBasis": "billed",
+  "currency": "USD",
+  "publishedAt": "2026-09-03T12:00:00+00:00",
+  "contentSha256": "0395c19921c36bb8acf2cf8ace357f4346f2b5742a1838601039fc66ebff3f77",
+  "payload": {
+    "services": [
+      { "name": "Compute", "amount": 68.42 },
+      { "name": "Storage", "amount": 21.18 },
+      { "name": "Databases", "amount": 10.4 }
+    ],
+    "daily": [
+      { "date": "2026-09-01", "amount": 30.1 },
+      { "date": "2026-09-02", "amount": 33.5 },
+      { "date": "2026-09-03", "amount": 36.4 }
+    ],
+    "advisor": [
+      {
+        "findingId": "sample-commitment-review",
+        "title": "Review compute commitment coverage",
+        "resourceAlias": null,
+        "evidenceId": "ev_11111111111111111111",
+        "estimatedAnnualSavings": 120,
+        "savingsCurrency": "USD"
+      },
+      {
+        "findingId": "sample-storage-review",
+        "title": "Review storage lifecycle configuration",
+        "resourceAlias": null,
+        "evidenceId": "ev_22222222222222222222",
+        "estimatedAnnualSavings": null,
+        "savingsCurrency": null
+      }
+    ],
+    "resourceCount": 12,
+    "actualPeriod": {
+      "start": "2026-09-01T00:00:00+00:00",
+      "end": "2026-09-03T00:00:00+00:00"
+    }
+  }
+}

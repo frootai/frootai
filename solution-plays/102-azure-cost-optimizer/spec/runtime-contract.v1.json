@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "aco-solution-runtime-v1",
+  "product_revision": "v99-user",
+  "application": {
+    "host": ".NET 10 ASP.NET Core",
+    "frontend": "React 19 and Vite, compiled into the backend wwwroot",
+    "processes": 1,
+    "default_scope_alias": "solution-scope",
+    "write_operations": false
+  },
+  "evidence": {
+    "sources": ["cost-management-query", "cost-details", "cost-exports", "advisor", "resource-graph"],
+    "financial_basis": "billed",
+    "money_representation": "decimal and canonical decimal strings",
+    "missing_is_zero": false,
+    "provider_calls_on_ordinary_read": 0,
+    "refresh_is_explicit": true
+  },
+  "agent": {
+    "runtime": "Microsoft Agent Framework ChatClientAgent",
+    "maximum_model_calls": 6,
+    "fast_model_calls": 3,
+    "maximum_tool_calls": 6,
+    "maximum_output_tokens": 32768,
+    "maximum_validated_characters": 16384,
+    "deadline_seconds": 150,
+    "tools": [
+      "get_cost_summary",
+      "get_cost_breakdown",
+      "get_advisor_findings",
+      "get_opportunities",
+      "get_data_health",
+      "get_evidence",
+      "create_report",
+      "get_optimization_guidance"
+    ],
+    "sections": ["Answer", "Evidence", "Data health", "Risks", "Next action"],
+    "events": ["meta", "tool", "section", "delta", "reset", "artifact", "done", "error"],
+    "artifact_types": ["table", "chart", "diagram", "flow", "actions"],
+    "success": "done.validated=true"
+  },
+  "mcp": {
+    "transport": "Streamable HTTP",
+    "path": "/mcp",
+    "protocol": "2025-06-18",
+    "tools": [
+      "get_cost_summary",
+      "get_cost_breakdown",
+      "get_advisor_findings",
+      "get_opportunities",
+      "get_data_health",
+      "get_evidence",
+      "create_report",
+      "get_optimization_guidance",
+      "describe_data_sources"
+    ],
+    "read_only": true,
+    "enabled_by": "ACI_MCP_ENABLED"
+  },
+  "reports": ["json", "csv", "html", "focus", "xlsx", "markdown", "pdf"],
+  "cache": {
+    "local_snapshot": "Windows DPAPI CurrentUser outside the workspace",
+    "hosted_snapshot": "Blob content plus Cosmos scope-partitioned revision pointer",
+    "semantic_answers": {
+      "enabled_when_embedding_endpoint_is_configured": true,
+      "capacity": 64,
+      "ttl_minutes": 30,
+      "default_similarity_threshold": 0.88,
+      "scope_fields": ["principal", "scope", "report-id", "period", "collected-at", "source-receipt-hashes"],
+      "revalidation": "cached structured output is revalidated against the current snapshot before replay"
+    }
+  },
+  "hosting": {
+    "default_auth": "container-apps-easy-auth",
+    "public_anonymous_demo": "optional explicit time-bounded solution exception",
+    "image": "immutable digest required",
+    "telemetry": "Azure Monitor OpenTelemetry when APPLICATIONINSIGHTS_CONNECTION_STRING is supplied",
+    "data": "Blob and Cosmos endpoints are required for durable hosted restore"
+  }
+}

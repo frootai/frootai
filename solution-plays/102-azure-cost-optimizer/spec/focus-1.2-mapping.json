@@ -1,0 +1,353 @@
+{
+    "schema_version": "1.0.0",
+    "target": "FOCUS 1.2 Azure profile",
+    "conformance_claim": "mapping-contract-not-product-conformance",
+    "canonical_amount_encoding": "base-10-decimal-string-no-exponent",
+    "columns": [
+        {
+            "focus": "BillingAccountId",
+            "sources": [
+                "BillingAccountId",
+                "billingAccountId"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "BillingAccountName",
+            "sources": [
+                "BillingAccountName",
+                "billingAccountName"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "BillingCurrency",
+            "sources": [
+                "BillingCurrency",
+                "billingCurrencyCode"
+            ],
+            "status": "mapped",
+            "requiredForCore": true
+        },
+        {
+            "focus": "BilledCost",
+            "sources": [
+                "BilledCost",
+                "costInBillingCurrency"
+            ],
+            "status": "mapped-decimal",
+            "requiredForCore": true
+        },
+        {
+            "focus": "EffectiveCost",
+            "sources": [
+                "EffectiveCost",
+                "effectivePrice"
+            ],
+            "status": "mapped-when-supported",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ChargeCategory",
+            "sources": [
+                "ChargeCategory",
+                "chargeType"
+            ],
+            "status": "normalized-enum",
+            "requiredForCore": true
+        },
+        {
+            "focus": "ChargeClass",
+            "sources": [
+                "ChargeClass"
+            ],
+            "status": "mapped-when-supplied",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ChargeDescription",
+            "sources": [
+                "ChargeDescription",
+                "productName"
+            ],
+            "status": "mapped-untrusted-text",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ChargeFrequency",
+            "sources": [
+                "ChargeFrequency",
+                "frequency"
+            ],
+            "status": "normalized-enum",
+            "requiredForCore": true
+        },
+        {
+            "focus": "ChargePeriodStart",
+            "sources": [
+                "ChargePeriodStart",
+                "date"
+            ],
+            "status": "mapped-utc",
+            "requiredForCore": true
+        },
+        {
+            "focus": "ChargePeriodEnd",
+            "sources": [
+                "ChargePeriodEnd",
+                "date"
+            ],
+            "status": "mapped-utc",
+            "requiredForCore": true
+        },
+        {
+            "focus": "CommitmentDiscountCategory",
+            "sources": [
+                "CommitmentDiscountCategory",
+                "pricingModel"
+            ],
+            "status": "mapped-when-supported",
+            "requiredForCore": false
+        },
+        {
+            "focus": "CommitmentDiscountId",
+            "sources": [
+                "CommitmentDiscountId",
+                "benefitId"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": false
+        },
+        {
+            "focus": "CommitmentDiscountName",
+            "sources": [
+                "CommitmentDiscountName",
+                "benefitName"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ConsumedQuantity",
+            "sources": [
+                "ConsumedQuantity",
+                "quantity"
+            ],
+            "status": "mapped-decimal",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ConsumedUnit",
+            "sources": [
+                "ConsumedUnit",
+                "unitOfMeasure"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ContractedCost",
+            "sources": [
+                "ContractedCost"
+            ],
+            "status": "source-dependent",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ContractedUnitPrice",
+            "sources": [
+                "ContractedUnitPrice",
+                "unitPrice"
+            ],
+            "status": "source-dependent",
+            "requiredForCore": false
+        },
+        {
+            "focus": "InvoiceIssuerName",
+            "sources": [
+                "InvoiceIssuerName",
+                "publisherName"
+            ],
+            "status": "mapped",
+            "requiredForCore": true
+        },
+        {
+            "focus": "ListCost",
+            "sources": [
+                "ListCost"
+            ],
+            "status": "source-dependent",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ListUnitPrice",
+            "sources": [
+                "ListUnitPrice",
+                "payGPrice"
+            ],
+            "status": "source-dependent",
+            "requiredForCore": false
+        },
+        {
+            "focus": "PricingCategory",
+            "sources": [
+                "PricingCategory",
+                "pricingModel"
+            ],
+            "status": "normalized-enum",
+            "requiredForCore": false
+        },
+        {
+            "focus": "PricingQuantity",
+            "sources": [
+                "PricingQuantity",
+                "quantity"
+            ],
+            "status": "mapped-decimal",
+            "requiredForCore": false
+        },
+        {
+            "focus": "PricingUnit",
+            "sources": [
+                "PricingUnit",
+                "unitOfMeasure"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ProviderName",
+            "sources": [
+                "ProviderName"
+            ],
+            "status": "constant-microsoft",
+            "requiredForCore": true
+        },
+        {
+            "focus": "PublisherName",
+            "sources": [
+                "PublisherName",
+                "publisherName"
+            ],
+            "status": "mapped",
+            "requiredForCore": true
+        },
+        {
+            "focus": "RegionId",
+            "sources": [
+                "RegionId",
+                "resourceLocation"
+            ],
+            "status": "normalized",
+            "requiredForCore": false
+        },
+        {
+            "focus": "RegionName",
+            "sources": [
+                "RegionName",
+                "resourceLocation"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ResourceId",
+            "sources": [
+                "ResourceId",
+                "resourceId"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ResourceName",
+            "sources": [
+                "ResourceName",
+                "resourceName"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ResourceType",
+            "sources": [
+                "ResourceType",
+                "resourceType"
+            ],
+            "status": "normalized",
+            "requiredForCore": false
+        },
+        {
+            "focus": "ServiceCategory",
+            "sources": [
+                "ServiceCategory",
+                "serviceFamily"
+            ],
+            "status": "normalized",
+            "requiredForCore": true
+        },
+        {
+            "focus": "ServiceName",
+            "sources": [
+                "ServiceName",
+                "meterCategory"
+            ],
+            "status": "mapped",
+            "requiredForCore": true
+        },
+        {
+            "focus": "SkuId",
+            "sources": [
+                "SkuId",
+                "meterId"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "SkuPriceId",
+            "sources": [
+                "SkuPriceId",
+                "productId"
+            ],
+            "status": "mapped",
+            "requiredForCore": false
+        },
+        {
+            "focus": "SubAccountId",
+            "sources": [
+                "SubAccountId",
+                "subscriptionId"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": true
+        },
+        {
+            "focus": "SubAccountName",
+            "sources": [
+                "SubAccountName",
+                "subscriptionName"
+            ],
+            "status": "mapped-private",
+            "requiredForCore": false
+        },
+        {
+            "focus": "Tags",
+            "sources": [
+                "Tags",
+                "tags"
+            ],
+            "status": "mapped-untrusted-private",
+            "requiredForCore": false
+        }
+    ],
+    "declared_gaps": [
+        "Agreement-specific source fields can prevent complete ContractedCost, ListCost, and EffectiveCost mapping.",
+        "Cost Management Query summary responses do not provide the complete detail column set.",
+        "Retail Prices cannot fill customer-contracted or billed fields.",
+        "Provider conformance must be measured against actual export files before a product claims FOCUS conformance.",
+        "General FOCUS versions newer than the Azure-advertised 1.2 profile require an explicit adapter and migration test."
+    ]
+}

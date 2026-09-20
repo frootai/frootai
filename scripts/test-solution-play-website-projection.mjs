@@ -13,13 +13,13 @@ const require = createRequire(import.meta.url);
 const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, readSolutionPlayArtifact, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
 const index = JSON.parse(fs.readFileSync(path.join(root, "orchard", "registry", "solution-play-index.json"), "utf8"));
 
-test("generates a deterministic typed projection for all 101 canonical identities", () => {
+test("generates a deterministic typed projection for all 102 canonical identities", () => {
   const first = buildSolutionPlayProjection(structuredClone(index));
   const second = buildSolutionPlayProjection(structuredClone(index));
   assert.deepEqual(first, second);
-  assert.equal(first.count, 101);
-  assert.equal(new Set(first.plays.map((play) => play.id)).size, 101);
-  assert.equal(new Set(first.plays.map((play) => play.slug)).size, 101);
+  assert.equal(first.count, 102);
+  assert.equal(new Set(first.plays.map((play) => play.id)).size, 102);
+  assert.equal(new Set(first.plays.map((play) => play.slug)).size, 102);
   assert.deepEqual(first.plays.map((play) => play.slug), index.plays.map((play) => play.slug));
   assert.deepEqual(first.plays.map((play) => play.description), index.plays.map((play) => play.description));
 });
@@ -33,13 +33,14 @@ test("projection contains only source-backed content and deterministic presentat
   assert.equal("tuning" in projection.plays[0], false);
   assert.match(renderSolutionPlayProjection(projection), /as const satisfies/);
   assert.equal(projection.plays.find((play) => play.id === "48").category, "mlops");
+  assert.equal(projection.plays.find((play) => play.id === "102").category, "finance");
   for (const play of projection.plays) assert.doesNotMatch(play.description, /actual costs vary|^\s*>|production[- ](?:ready|grade)|enterprise[- ]grade|compliance[- ]ready|\bcompliant\b|guarantees?|satisfying|sub-?\d+\s*ms|\d+\s*%/i);
 });
 
 test("fails closed on count, identity, duplicate, and link drift", () => {
   const missing = structuredClone(index);
   missing.plays.pop();
-  assert.throws(() => buildSolutionPlayProjection(missing), /exactly 101/);
+  assert.throws(() => buildSolutionPlayProjection(missing), /exactly 102/);
 
   const duplicate = structuredClone(index);
   duplicate.plays[1].id = duplicate.plays[0].id;

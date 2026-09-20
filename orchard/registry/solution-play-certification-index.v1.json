@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-07-27T06:26:06.692Z",
-  "count": 101,
+  "generated_at": "2026-09-20T13:44:47.646Z",
+  "count": 102,
   "summary": {
-    "designed": 95,
+    "designed": 96,
     "uncertified": 1,
     "flagship": 5
   },
@@ -1441,6 +1441,20 @@
       "evidence_path": "solution-plays/101-pester-test-development/certification/evidence.v1.json",
       "profile": "design-v1",
       "expires_at": "2026-08-26T06:26:06.692Z"
+    },
+    {
+      "id": "102",
+      "slug": "102-azure-cost-optimizer",
+      "level": "designed",
+      "valid": true,
+      "reasons": [
+        "scaffold_verified is missing"
+      ],
+      "content_sha256": "219b947f5b8d1dd472b3f6b8e6824351246089a89393058d2a784237293ec822",
+      "commit_sha": "9972c8cf79a635fc172127c3523a25873ad9ffa9",
+      "evidence_path": "solution-plays/102-azure-cost-optimizer/certification/evidence.v1.json",
+      "profile": "design-v1",
+      "expires_at": "2026-10-20T13:44:47.646Z"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.agent.md": "markdown",
+        "*.instructions.md": "markdown",
+        "*.prompt.md": "markdown"
+    },
+    "files.exclude": {
+        "**/.artifacts": true,
+        "**/aco-reports": true
+    },
+    "typescript.tsserver.exclude": [
+        "**/templates/**"
+    ]
+}

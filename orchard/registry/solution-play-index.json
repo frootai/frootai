@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "source": "frootai/solution-plays",
-  "count": 101,
+  "count": 102,
   "plays": [
     {
       "id": "01",
@@ -1315,6 +1315,19 @@
       "spec_version": "1.0.0",
       "github_url": "https://github.com/frootai/frootai/tree/main/solution-plays/101-pester-test-development",
       "detail_url": "https://frootai.dev/solution-plays/101-pester-test-development"
+    },
+    {
+      "id": "102",
+      "numeric_id": 102,
+      "slug": "102-azure-cost-optimizer",
+      "name": "Azure Cost Optimizer",
+      "description": "Complete public Azure Cost Optimizer solution with cached evidence, deterministic financial analysis, a grounded ACO Agent, typed read-only channels, reports, and an optional Azure-hosted path.",
+      "relative_path": "solution-plays/102-azure-cost-optimizer",
+      "readme_path": "solution-plays/102-azure-cost-optimizer/README.md",
+      "spec_path": "solution-plays/102-azure-cost-optimizer/spec/play-spec.json",
+      "spec_version": "2.0.0",
+      "github_url": "https://github.com/frootai/frootai/tree/main/solution-plays/102-azure-cost-optimizer",
+      "detail_url": "https://frootai.dev/solution-plays/102-azure-cost-optimizer"
     }
   ]
 }

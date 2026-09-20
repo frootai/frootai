@@ -117,7 +117,7 @@ const solutionPlayCategories = [
   ["education", /training-curriculum|tutor|exam|accessibility-learning|research-paper/],
   ["climate", /carbon|esg|energy-grid|climate|waste|biodiversity/],
   ["healthcare", /healthcare|clinical/],
-  ["finance", /financial|fraud/],
+  ["finance", /financial|fraud|cost-optimizer/],
   ["voice", /voice|call-center/],
   ["document", /document|docproc|legal/],
   ["mlops", /model-governance|fine-tun|prompt-management|federated-learning/],
@@ -206,8 +206,8 @@ function classifySolutionPlay(play) {
 }
 
 function buildSolutionPlayProjection(index) {
-  if (!index || index.schema_version !== "1.0.0" || index.count !== 101 || !Array.isArray(index.plays) || index.plays.length !== 101) {
-    throw new Error("Canonical Solution Play index must contain exactly 101 version 1.0.0 records");
+  if (!index || index.schema_version !== "1.0.0" || index.count !== 102 || !Array.isArray(index.plays) || index.plays.length !== 102) {
+    throw new Error("Canonical Solution Play index must contain exactly 102 version 1.0.0 records");
   }
   const ids = new Set();
   const slugs = new Set();
@@ -215,7 +215,7 @@ function buildSolutionPlayProjection(index) {
     if (!play || typeof play !== "object") throw new Error(`Solution Play record ${offset + 1} must be an object`);
     const expectedId = String(offset + 1).padStart(2, "0");
     if (play.id !== expectedId || play.numeric_id !== offset + 1) throw new Error(`Solution Play identity is not contiguous at record ${offset + 1}`);
-    if (!/^(?:0[1-9]|[1-9]\d|10[01])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play ${play.id} slug is invalid`);
+    if (!/^(?:0[1-9]|[1-9]\d|10[0-2])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play ${play.id} slug is invalid`);
     if (ids.has(play.id) || slugs.has(play.slug)) throw new Error(`Duplicate Solution Play identity: ${play.id}`);
     ids.add(play.id);
     slugs.add(play.slug);
@@ -279,7 +279,7 @@ function buildSolutionPlayDetails(index, catalog) {
     ["33-voice-ai-agent", "voice.simulate-turn"],
   ]);
   const details = projection.plays.map((play) => {
-    if (!/^(?:0[1-9]|[1-9]\d|10[01])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play detail slug is invalid: ${play.slug}`);
+    if (!/^(?:0[1-9]|[1-9]\d|10[0-2])-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(play.slug)) throw new Error(`Solution Play detail slug is invalid: ${play.slug}`);
     const catalogPlay = catalogBySlug.get(play.slug);
     if (!catalogPlay) throw new Error(`Solution Play detail catalog record is missing: ${play.slug}`);
     const playRoot = path.resolve(playsRoot, play.slug);
@@ -329,14 +329,14 @@ function buildSolutionPlayDetails(index, catalog) {
     validateSolutionPlayDetail(detail);
     return detail;
   });
-  if (details.length !== 101 || details.filter((detail) => detail.runtime !== null).length !== expectedRuntimeScenarios.size) throw new Error("Solution Play details require exactly 101 records and the five canonical runtime contracts");
+  if (details.length !== index.count || details.filter((detail) => detail.runtime !== null).length !== expectedRuntimeScenarios.size) throw new Error("Solution Play details require the complete canonical index and the five canonical runtime contracts");
   return { schemaVersion: "1.0.0", source: index.source, count: details.length, runtimeContractCount: 5, details };
 }
 
 function validateSolutionPlayDetail(detail) {
   if (!detail || typeof detail !== "object" || Array.isArray(detail)) throw new Error("Solution Play detail must be an object");
   for (const field of ["status", "complexity", "services", "devkit", "tunekit", "tuningParams", "costDev", "costProd"]) if (Object.hasOwn(detail, field)) throw new Error(`Solution Play detail contains prohibited field ${field}: ${detail.slug || "unknown"}`);
-  if (!/^(?:0[1-9]|[1-9]\d|10[01])$/.test(detail.id) || !new RegExp(`^${detail.id}-[a-z0-9]+(?:-[a-z0-9]+)*$`).test(detail.slug) || typeof detail.name !== "string" || !detail.name || typeof detail.description !== "string" || !detail.description) throw new Error(`Solution Play detail identity is invalid: ${detail.slug || "unknown"}`);
+  if (!/^(?:0[1-9]|[1-9]\d|10[0-2])$/.test(detail.id) || !new RegExp(`^${detail.id}-[a-z0-9]+(?:-[a-z0-9]+)*$`).test(detail.slug) || typeof detail.name !== "string" || !detail.name || typeof detail.description !== "string" || !detail.description) throw new Error(`Solution Play detail identity is invalid: ${detail.slug || "unknown"}`);
   if (!/^[a-z0-9][a-z0-9-]*$/.test(detail.architecturePattern) || !Array.isArray(detail.wafPillars) || !detail.wafPillars.every((pillar) => /^[a-z0-9][a-z0-9-]*$/.test(pillar))) throw new Error(`Solution Play detail architecture metadata is invalid: ${detail.slug}`);
   const inventory = detail.sourceInventory;
   if (!inventory || !["manifest", "rootAgent", "configuration", "infrastructure", "evaluation"].every((key) => typeof inventory[key] === "boolean") || !["agents", "skills", "instructions", "hooks"].every((key) => Number.isSafeInteger(inventory[key]) && inventory[key] >= 0 && inventory[key] <= 1000)) throw new Error(`Solution Play detail inventory is invalid: ${detail.slug}`);
@@ -364,7 +364,7 @@ function renderSolutionPlayDetails(data) {
     `const solutionPlayDetailMetadata = ${JSON.stringify(metadata, null, 2)} as const satisfies readonly GeneratedSolutionPlayDetailMetadata[];\n\n` +
     `const metadataBySlug = new Map(solutionPlayDetailMetadata.map((detail) => [detail.slug, detail]));\n` +
     `export const solutionPlayDetails: readonly GeneratedSolutionPlayDetail[] = solutionPlays.map((play) => {\n  const metadata = metadataBySlug.get(play.slug);\n  if (!metadata) throw new Error(\`Generated Solution Play detail is missing: \${play.slug}\`);\n  return { ...play, ...metadata };\n});\n\n` +
-    `export const solutionPlayDetailProjection = { schemaVersion: "1.0.0", source: ${JSON.stringify(data.source)}, count: 101, runtimeContractCount: 5, details: solutionPlayDetails } as const;\n`;
+    `export const solutionPlayDetailProjection = { schemaVersion: "1.0.0", source: ${JSON.stringify(data.source)}, count: ${data.count}, runtimeContractCount: ${data.runtimeContractCount}, details: solutionPlayDetails } as const;\n`;
 }
 
 function writeSolutionPlayDetails(catalog) {
