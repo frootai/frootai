@@ -16,7 +16,7 @@
     "purpose": "Sanitized public source, Copilot delivery contract, infrastructure, tests, and documentation"
   },
   "source_tree": {
-    "validation_identity_sha256": "64b59b528869307723fee5988d1ace6eebb728b963114c370907f6b4650dc442",
+    "validation_identity_sha256": "f7ce54673f76529822457d25e660b10f8f381b9ddbb6309a20e4f2cc9548e678",
     "private_or_generated_state_included": false
   },
   "entrypoints": {

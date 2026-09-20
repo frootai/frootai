@@ -5,7 +5,7 @@
     "recorded_date":  "2026-09-20",
     "manifest":  {
                      "path":  "spec/product-bundle.v2.json",
-                     "sha256":  "d38f22ea139c1c4cb70350f88f02d7ae6f5c15f38664cf1b58aec18c71c22e89"
+                     "sha256":  "99f936400b903aae4070599ca6214ed35ba44e6643d08d92e46316df09934257"
                  },
     "archive":  {
                     "path":  "templates/product/azure-cost-optimizer-solution-2.0.0.zip",

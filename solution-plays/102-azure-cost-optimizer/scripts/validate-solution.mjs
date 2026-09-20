@@ -13,6 +13,10 @@ function text(relative) { return fs.readFileSync(path.join(root, relative), 'utf
 function json(relative) { return JSON.parse(text(relative)) }
 function exists(relative) { return fs.existsSync(path.join(root, relative)) }
 function sha256(value) { return crypto.createHash('sha256').update(value).digest('hex') }
+function identityBytes(file) {
+  const value = fs.readFileSync(file)
+  return value.includes(0) ? value : Buffer.from(value.toString('utf8').replace(/\r\n/g, '\n'))
+}
 function walk(directory, files = []) {
   if (!fs.existsSync(directory)) return files
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -174,7 +178,7 @@ if (hasBundleManifest && hasBundleReceipt) {
 const checksums = walk(root)
   .filter((file) => !isPackageExcluded(file))
   .sort((left, right) => relative(left).localeCompare(relative(right)))
-  .map((file) => `${sha256(fs.readFileSync(file))}  ${relative(file)}`)
+  .map((file) => `${sha256(identityBytes(file))}  ${relative(file)}`)
 const manifestDigest = sha256(checksums.join('\n'))
 if (hasBundleManifest) {
   const recordedDigest = json('spec/product-bundle.v2.json').source_tree?.validation_identity_sha256
