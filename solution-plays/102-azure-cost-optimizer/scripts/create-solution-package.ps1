@@ -14,7 +14,7 @@ Remove-Item -LiteralPath $staging -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path $staging -Force | Out-Null
 New-Item -ItemType Directory -Path $packageRoot -Force | Out-Null
 
-$excludeDirectories = @('.git', '.artifacts', '.solution', '.azure', '.foundry', '.checkpoints', 'bin', 'obj', 'node_modules', 'TestResults', 'playwright-report', 'test-results', 'coverage', 'solution-package', (Join-Path $root 'templates\product'))
+$excludeDirectories = @('.git', '.artifacts', '.solution', '.azure', '.foundry', '.checkpoints', 'certification', 'bin', 'obj', 'node_modules', 'TestResults', 'playwright-report', 'test-results', 'coverage', 'solution-package', (Join-Path $root 'templates\product'))
 $excludeFiles = @('.env', '.env.*', '.agent.log', '*.log', '*.user', '*.suo', '*.pdb', '*.dll', '*.exe', 'product-bundle.v2.json', 'product-bundle-receipt.v2.json')
 $arguments = @($root, $staging, '/E', '/NFL', '/NDL', '/NJH', '/NJS', '/NP', '/XD') + $excludeDirectories + @('/XF') + $excludeFiles
 & robocopy @arguments | Out-Null

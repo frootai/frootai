@@ -23,7 +23,7 @@ function walk(directory, files = []) {
   return files
 }
 function relative(absolute) { return path.relative(root, absolute).split(path.sep).join('/') }
-const packageExcludedDirectoryNames = new Set(['.git', '.artifacts', '.solution', '.azure', '.foundry', '.checkpoints', 'bin', 'obj', 'node_modules', 'TestResults', 'playwright-report', 'test-results', 'coverage', 'solution-package'])
+const packageExcludedDirectoryNames = new Set(['.git', '.artifacts', '.solution', '.azure', '.foundry', '.checkpoints', 'certification', 'bin', 'obj', 'node_modules', 'TestResults', 'playwright-report', 'test-results', 'coverage', 'solution-package'])
 const packageExcludedFileNames = new Set(['.env', '.agent.log', 'product-bundle.v2.json', 'product-bundle-receipt.v2.json'])
 function isPackageExcluded(file) {
   const rel = relative(file)

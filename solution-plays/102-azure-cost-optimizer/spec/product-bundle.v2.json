@@ -9,14 +9,14 @@
   "verification_receipt": "spec/product-bundle-receipt.v2.json",
   "archive": {
     "path": "templates/product/azure-cost-optimizer-solution-2.0.0.zip",
-    "sha256": "16808ca7b325be8ec85159f9571554fce1feda2f183234fcc226e41cd55f1dc9",
-    "bytes": 1438787,
+    "sha256": "7bd9ea351820f7ccabc7deed76e6f96fde105ee0875c78642f0dc4705c15f856",
+    "bytes": 1438802,
     "files": 187,
     "format": "zip",
     "purpose": "Sanitized public source, Copilot delivery contract, infrastructure, tests, and documentation"
   },
   "source_tree": {
-    "validation_identity_sha256": "6cdb392b102af979b70c2adc010c8c1e051960c62c4e762c2f6bc51cdf13903c",
+    "validation_identity_sha256": "64b59b528869307723fee5988d1ace6eebb728b963114c370907f6b4650dc442",
     "private_or_generated_state_included": false
   },
   "entrypoints": {

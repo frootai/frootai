@@ -1,32 +1,32 @@
 {
-  "schema_version": "1.0.0",
-  "bundle_id": "azure-cost-optimizer-solution",
-  "version": "2.0.0",
-  "recorded_date": "2026-09-20",
-  "manifest": {
-    "path": "spec/product-bundle.v2.json",
-    "sha256": "8980d9086530dbad1b614e0233d7c265f42db72fe24e395a3bab7e4e845485e7"
-  },
-  "archive": {
-    "path": "templates/product/azure-cost-optimizer-solution-2.0.0.zip",
-    "sha256": "16808ca7b325be8ec85159f9571554fce1feda2f183234fcc226e41cd55f1dc9",
-    "bytes": 1438787,
-    "files": 187
-  },
-  "validation": {
-    "static_solution_checks": "11/11 passed",
-    "backend_tests": "152/152 passed",
-    "frontend_dependency_audit": "0 vulnerabilities",
-    "frontend_production_build": "passed",
-    "response_layer_browser_tests": "44/44 passed across desktop and mobile",
-    "bicep_files": "7/7 compiled",
-    "semantic_cache_principal_isolation": "passed",
-    "public_sanitization": "passed",
-    "openapi_route_parity": "passed",
-    "fai_reference_resolution": "passed"
-  },
-  "limitations": [
-    "Azure authorization, financial parity, model activation, deployment, rollback, and cleanup are deployment-specific gates.",
-    "This receipt does not certify production security, compliance, private networking, HA, DR, or realized savings."
-  ]
+    "schema_version":  "1.0.0",
+    "bundle_id":  "azure-cost-optimizer-solution",
+    "version":  "2.0.0",
+    "recorded_date":  "2026-09-20",
+    "manifest":  {
+                     "path":  "spec/product-bundle.v2.json",
+                     "sha256":  "d38f22ea139c1c4cb70350f88f02d7ae6f5c15f38664cf1b58aec18c71c22e89"
+                 },
+    "archive":  {
+                    "path":  "templates/product/azure-cost-optimizer-solution-2.0.0.zip",
+                    "sha256":  "7bd9ea351820f7ccabc7deed76e6f96fde105ee0875c78642f0dc4705c15f856",
+                    "bytes":  1438802,
+                    "files":  187
+                },
+    "validation":  {
+                       "static_solution_checks":  "11/11 passed",
+                       "backend_tests":  "152/152 passed",
+                       "frontend_dependency_audit":  "0 vulnerabilities",
+                       "frontend_production_build":  "passed",
+                       "response_layer_browser_tests":  "44/44 passed across desktop and mobile",
+                       "bicep_files":  "7/7 compiled",
+                       "semantic_cache_principal_isolation":  "passed",
+                       "public_sanitization":  "passed",
+                       "openapi_route_parity":  "passed",
+                       "fai_reference_resolution":  "passed"
+                   },
+    "limitations":  [
+                        "Azure authorization, financial parity, model activation, deployment, rollback, and cleanup are deployment-specific gates.",
+                        "This receipt does not certify production security, compliance, private networking, HA, DR, or realized savings."
+                    ]
 }
