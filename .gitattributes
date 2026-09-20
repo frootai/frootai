@@ -2,3 +2,7 @@
 # pin LF so the on-disk bytes match the compiler exactly and re-running
 # `scripts/compile-lean.mjs --write` produces no diff ([Z2.7] idempotence).
 *.lean.md text eol=lf
+
+# Play 102 publishes a byte-verified source bundle. Keep text bytes stable
+# across Windows and Linux so its recorded source-tree identity is portable.
+solution-plays/102-azure-cost-optimizer/** text=auto eol=lf
