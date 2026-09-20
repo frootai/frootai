@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "knowledgeId": "aco-optimization-knowledge-v1",
+  "sources": [
+    {
+      "id": "waf-cost-checklist",
+      "title": "Azure Well-Architected Framework - Design review checklist for Cost Optimization",
+      "url": "https://learn.microsoft.com/azure/well-architected/cost-optimization/checklist",
+      "retrieved": "2026-09-18"
+    },
+    {
+      "id": "finops-framework",
+      "title": "FinOps Framework overview (Microsoft Learn)",
+      "url": "https://learn.microsoft.com/cloud-computing/finops/framework/finops-framework",
+      "retrieved": "2026-09-18"
+    }
+  ],
+  "waf": [
+    { "id": "waf_co01", "code": "CO:01", "title": "Create a culture of financial responsibility", "recommendation": "Regularly train personnel so technical skills stay sharp. Foster creativity and spending accountability, and invest in tooling and automation.", "topics": ["governance", "culture"] },
+    { "id": "waf_co02", "code": "CO:02", "title": "Create and maintain a cost model", "recommendation": "Estimate initial cost, run rates and ongoing costs. Negotiate a budget that covers the cost model and has a buffer for unplanned spending.", "topics": ["budget", "forecast", "governance"] },
+    { "id": "waf_co03", "code": "CO:03", "title": "Collect and review cost data", "recommendation": "Capture daily costs. Include metered and amortized costs, trends and forecasts. Review spending against budget, and automate alerts and anomaly detection.", "topics": ["visibility", "reporting", "anomaly", "budget"] },
+    { "id": "waf_co04", "code": "CO:04", "title": "Set spending guardrails", "recommendation": "Use release gates, governance policies, resource limits and access controls. Prefer platform automation over manual processes.", "topics": ["governance", "policy"] },
+    { "id": "waf_co05", "code": "CO:05", "title": "Get the best rates from providers", "recommendation": "Find and use the best rates for resources and licenses. Review regional pricing, pricing tiers, consumption versus commitment models, license portability and price sheets.", "topics": ["rate", "reservation", "savings-plan", "licensing"], "services": ["Virtual Machines", "Azure Cosmos DB", "SQL Database", "Azure Container Apps", "Azure App Service"] },
+    { "id": "waf_co06", "code": "CO:06", "title": "Align usage to billing increments", "recommendation": "Understand billing meters and align resource usage to those increments, modifying the service or the usage pattern to fit.", "topics": ["metering", "usage"] },
+    { "id": "waf_co07", "code": "CO:07", "title": "Optimize component costs", "recommendation": "Regularly remove or optimize legacy, unneeded and underutilized workload components, including application features, platform features and resources.", "topics": ["rightsizing", "idle", "waste", "cleanup"], "services": ["Virtual Machines", "Azure Firewall", "Load Balancer", "Azure Bastion", "Public IP Addresses", "Virtual Network"] },
+    { "id": "waf_co08", "code": "CO:08", "title": "Optimize environment costs", "recommendation": "Prioritize spending across preproduction, production, operations and disaster recovery. Consider availability, licensing, operating hours and security per environment, and apply strategic tradeoffs in nonproduction.", "topics": ["environment", "schedule", "nonproduction"], "services": ["Azure Container Apps", "Virtual Machines", "Azure App Service"] },
+    { "id": "waf_co09", "code": "CO:09", "title": "Optimize flow costs", "recommendation": "Align the cost of each flow with the priority of that flow, considering features, functionality and nonfunctional requirements.", "topics": ["workload", "prioritization"] },
+    { "id": "waf_co10", "code": "CO:10", "title": "Optimize data costs", "recommendation": "Align data spending with data priority. Improve tiering and retention, volume, replication, backups, file formats and storage choices.", "topics": ["storage", "retention", "backup", "logs"], "services": ["Storage", "Azure Cosmos DB", "Log Analytics", "Azure Monitor", "Container Registry", "Bandwidth"] },
+    { "id": "waf_co11", "code": "CO:11", "title": "Optimize code costs", "recommendation": "Evaluate and modify code so it meets functional and nonfunctional requirements with fewer or cheaper resources.", "topics": ["code", "efficiency"] },
+    { "id": "waf_co12", "code": "CO:12", "title": "Optimize scaling costs", "recommendation": "Evaluate alternative scaling configurations within scale units, align them with the cost model, and use strategies that control both demand and supply.", "topics": ["scaling", "autoscale", "elasticity"], "services": ["Azure Container Apps", "Azure Kubernetes Service", "Azure App Service", "Virtual Machines"] },
+    { "id": "waf_co13", "code": "CO:13", "title": "Optimize personnel time", "recommendation": "Align time spent with task priority. Reduce noise, build times and debugging effort without degrading outcomes.", "topics": ["operations", "productivity"] },
+    { "id": "waf_co14", "code": "CO:14", "title": "Consolidate resources and responsibility", "recommendation": "Consolidate resources and increase density inside the workload, and use existing centralized services outside it.", "topics": ["consolidation", "density"], "services": ["Azure Firewall", "Application Gateway", "Log Analytics", "Container Registry", "Azure Bastion"] }
+  ],
+  "finops": [
+    { "id": "finops_inform", "phase": "Inform", "title": "Deliver cost visibility and shared accountability", "practice": "Allocate cost to owners, benchmark, budget and forecast so every team can see what it spends before it is asked to change anything.", "topics": ["visibility", "allocation", "budget", "forecast"] },
+    { "id": "finops_optimize", "phase": "Optimize", "title": "Reduce waste and improve efficiency", "practice": "Apply workload optimization such as rightsizing and scheduling, then rate optimization such as reservations and savings plans. Usage changes first, rate commitments second.", "topics": ["rightsizing", "rate", "reservation", "waste"] },
+    { "id": "finops_operate", "phase": "Operate", "title": "Govern continuously against business goals", "practice": "Define and track KPIs and governance policies, assign owners, and review on a recurring cadence so savings persist instead of drifting back.", "topics": ["governance", "kpi", "review"] },
+    { "id": "finops_architecting", "phase": "Optimize", "title": "Architecting for the cloud", "practice": "Choose services and topologies that match demand, favouring elastic and serverless options where the workload is bursty or idle for long periods.", "topics": ["architecture", "serverless", "elasticity"] },
+    { "id": "finops_workload", "phase": "Optimize", "title": "Workload optimization", "practice": "Rightsize to observed utilization, shut down or scale idle non-production workloads outside working hours, and remove orphaned resources.", "topics": ["rightsizing", "idle", "schedule", "waste"] },
+    { "id": "finops_rate", "phase": "Optimize", "title": "Rate optimization", "practice": "Commit to reservations or savings plans only for steady, predictable baseline usage, after usage has been optimized, and track utilization of what you commit to.", "topics": ["rate", "reservation", "savings-plan", "commitment"] },
+    { "id": "finops_anomaly", "phase": "Inform", "title": "Anomaly management", "practice": "Detect deviations from the trend baseline quickly and route them to an owner, because unexplained spikes are usually the cheapest savings to recover.", "topics": ["anomaly", "spike", "alert"] },
+    { "id": "finops_unit", "phase": "Quantify", "title": "Unit economics", "practice": "Express cost per business unit such as cost per tenant or per transaction, so spending growth can be judged against value delivered rather than in absolute terms.", "topics": ["unit-economics", "value"] }
+  ],
+  "advisorMap": [
+    { "match": "reserved instance", "waf": ["waf_co05"], "finops": ["finops_rate"] },
+    { "match": "savings plan", "waf": ["waf_co05"], "finops": ["finops_rate"] },
+    { "match": "right-size", "waf": ["waf_co07", "waf_co12"], "finops": ["finops_workload"] },
+    { "match": "idle", "waf": ["waf_co07"], "finops": ["finops_workload"] },
+    { "match": "delete", "waf": ["waf_co07"], "finops": ["finops_workload"] },
+    { "match": "storage", "waf": ["waf_co10"], "finops": ["finops_workload"] },
+    { "match": "log", "waf": ["waf_co10"], "finops": ["finops_workload"] }
+  ]
+}

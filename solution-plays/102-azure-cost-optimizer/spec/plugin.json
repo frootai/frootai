@@ -1,0 +1,49 @@
+{
+    "name": "102-azure-cost-optimizer",
+    "description": "Complete Azure Cost Optimizer user product with deterministic financial truth, a grounded ACO Agent, typed read-only channels, evidence-backed reports, and optional Azure hosting.",
+    "version": "2.0.0",
+    "author": {
+        "name": "FrootAI",
+        "url": "https://frootai.dev"
+    },
+    "license": "MIT",
+    "keywords": [
+        "azure-cost-management",
+        "finops",
+        "focus",
+        "azure-advisor",
+        "microsoft-foundry",
+        "cost-optimization",
+        "agent"
+    ],
+    "plays": [
+        "102-azure-cost-optimizer"
+    ],
+    "primitives": {
+        "agents": [
+            "./.github/agents/builder.agent.md",
+            "./.github/agents/reviewer.agent.md",
+            "./.github/agents/tuner.agent.md"
+        ],
+        "instructions": [
+            "./.github/instructions/azure-cost-optimizer-patterns.instructions.md",
+            "./.github/instructions/azure-coding.instructions.md",
+            "./.github/instructions/security.instructions.md"
+        ],
+        "skills": [
+            "./.github/skills/build-azure-cost-optimizer/",
+            "./.github/skills/deploy-azure-cost-optimizer/",
+            "./.github/skills/evaluate-azure-cost-optimizer/",
+            "./.github/skills/tune-azure-cost-optimizer/"
+        ]
+    },
+    "waf": [
+        "cost-optimization",
+        "reliability",
+        "security",
+        "operational-excellence",
+        "performance-efficiency",
+        "responsible-ai"
+    ],
+    "install": "npx frootai install 102-azure-cost-optimizer"
+}

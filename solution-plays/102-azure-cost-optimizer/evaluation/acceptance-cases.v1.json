@@ -1,0 +1,360 @@
+{
+    "schema_version": "1.0.0",
+    "evidence_policy": {
+        "blueprint": "Validates declarations, cross-file invariants, schemas, and test requirements only.",
+        "derived_product": "Must execute behavioral cases before implementation or pilot claims."
+    },
+    "gates": [
+        {
+            "id": "ACI-001",
+            "blueprintAssertions": [
+                "snapshot first-paint threshold declared",
+                "dashboard reads validated snapshot"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-001-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "cold local start paints validated summary at p95 threshold"
+                },
+                {
+                    "id": "ACI-001-B",
+                    "profile": "hosted_demo",
+                    "behavior": "scale-to-zero cold start reads the Cosmos scope partition, validates Blob references, and paints the same report"
+                }
+            ]
+        },
+        {
+            "id": "ACI-002",
+            "blueprintAssertions": [
+                "provider calls per interaction equals zero",
+                "read-triggered refresh disabled"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-002-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "filter, sort, tab, chart, and pagination leave all provider counters at zero"
+                },
+                {
+                    "id": "ACI-002-B",
+                    "profile": "live_foundry",
+                    "behavior": "dashboard interaction makes no model call"
+                }
+            ]
+        },
+        {
+            "id": "ACI-003",
+            "blueprintAssertions": [
+                "coalescing key includes tenant, entitlement, scope, period, basis, source, and version"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-003-A",
+                    "profile": "live_azure",
+                    "behavior": "identical concurrent refreshes share one operation"
+                },
+                {
+                    "id": "ACI-003-B",
+                    "profile": "live_azure",
+                    "behavior": "different scope, basis, period, source, or version never coalesces"
+                }
+            ]
+        },
+        {
+            "id": "ACI-004",
+            "blueprintAssertions": [
+                "Retry-After and service quota accounting declared",
+                "validated fallback required"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-004-A",
+                    "profile": "live_azure",
+                    "behavior": "seconds and date Retry-After open bounded circuit and preserve prior revision"
+                },
+                {
+                    "id": "ACI-004-B",
+                    "profile": "live_azure",
+                    "behavior": "QPU, entity, tenant, and client-type quota headers are captured safely"
+                },
+                {
+                    "id": "ACI-004-C",
+                    "profile": "live_azure",
+                    "behavior": "Cost Details create operation is not automatically retried"
+                }
+            ]
+        },
+        {
+            "id": "ACI-005",
+            "blueprintAssertions": [
+                "shortest lossless canonical decimal string defined",
+                "source scale is separate metadata",
+                "semantic parity replaces byte equality"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-005-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "credits, small rates, and large totals retain decimal value while canonical output removes insignificant trailing zeros"
+                },
+                {
+                    "id": "ACI-005-B",
+                    "profile": "solution_snapshot",
+                    "behavior": "mixed currencies are rejected"
+                },
+                {
+                    "id": "ACI-005-C",
+                    "profile": "solution_snapshot",
+                    "behavior": "parsed JSON, CSV, HTML, and FOCUS outputs have canonical semantic parity"
+                }
+            ]
+        },
+        {
+            "id": "ACI-006",
+            "blueprintAssertions": [
+                "opportunity schema separates lifecycle values",
+                "rule catalog defines evidence and exclusions"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-006-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "Advisor estimate is not realized savings"
+                },
+                {
+                    "id": "ACI-006-B",
+                    "profile": "solution_snapshot",
+                    "behavior": "missing evidence withholds action rather than creating zero"
+                }
+            ]
+        },
+        {
+            "id": "ACI-007",
+            "blueprintAssertions": [
+                "runtime prompt and eight typed tools declared",
+                "no Azure write tools declared"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-007-A",
+                    "profile": "live_foundry",
+                    "behavior": "unsupported numeric claim is refused"
+                },
+                {
+                    "id": "ACI-007-B",
+                    "profile": "live_foundry",
+                    "behavior": "foreign scope and stale evidence are denied before model access"
+                },
+                {
+                    "id": "ACI-007-C",
+                    "profile": "live_foundry",
+                    "behavior": "resource mutation and commitment purchase requests are refused"
+                }
+            ]
+        },
+        {
+            "id": "ACI-008",
+            "blueprintAssertions": [
+                "snapshot profile requires no Azure or Foundry",
+                "core report formats declared",
+                "snapshot content hash canonicalization is exact"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-008-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "complete dashboard, optimization, health, and core reports run with blocked network"
+                },
+                {
+                    "id": "ACI-008-B",
+                    "profile": "solution_snapshot",
+                    "behavior": "sanitized snapshot contains no real tenant, subscription, resource, or principal identifiers"
+                }
+            ]
+        },
+        {
+            "id": "ACI-009",
+            "blueprintAssertions": [
+                "source receipt schema and authorization denial order declared",
+                "Foundry model input excludes raw cost rows"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-009-A",
+                    "profile": "live_azure",
+                    "behavior": "one approved refresh records scope, period, basis, versions, completeness, QPU, counts, and hashes"
+                },
+                {
+                    "id": "ACI-009-B",
+                    "profile": "live_foundry",
+                    "behavior": "one approved answer uses minimized evidence and cites every numeric claim"
+                }
+            ]
+        },
+        {
+            "id": "ACI-010",
+            "blueprintAssertions": [
+                "finite lifecycle and idempotent cleanup required",
+                "hosted Blob hydration contract declared"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-010-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "clean installed package starts, passes health, stops, and cleans twice"
+                },
+                {
+                    "id": "ACI-010-B",
+                    "profile": "hosted_demo",
+                    "behavior": "publish Blob objects and Cosmos hot views, scale to zero, restart, and reproduce report identity and canonical totals"
+                }
+            ]
+        },
+        {
+            "id": "ACI-011",
+            "blueprintAssertions": [
+                "experience tokens, layout, bundled fonts, and viewports are exact",
+                "minimum screenshot similarity is 0.95"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-011-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "desktop screenshot at 1366 by 768 has complete token and layout conformance and SSIM of at least 0.95 against the approved golden"
+                },
+                {
+                    "id": "ACI-011-B",
+                    "profile": "solution_snapshot",
+                    "behavior": "mobile screenshot at 390 by 844 has complete token and layout conformance, no overflow, and SSIM of at least 0.95 against the approved golden"
+                }
+            ]
+        },
+        {
+            "id": "ACI-012",
+            "blueprintAssertions": [
+                "agent answer label and section order are exact",
+                "numeric claims require evidence IDs"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-012-A",
+                    "profile": "solution_snapshot",
+                    "behavior": "a deterministic sample answer uses AI-generated plus Answer, Evidence, Data health, Risks, and Next action in order"
+                },
+                {
+                    "id": "ACI-012-B",
+                    "profile": "live_foundry",
+                    "behavior": "the same evidence produces the contracted answer structure with every numeric claim cited and every unknown explicit"
+                }
+            ]
+        },
+        {
+            "id": "ACI-013",
+            "blueprintAssertions": [
+                "doctor reports all missing user prerequisites once",
+                "packaged launch requires only the documented runtime and Azure CLI capabilities",
+                "source validation dependencies are clearly separated from user runtime dependencies",
+                "guided opening and the one doctor pass are included in the 1800-second target",
+                "missing-tool recovery never captures secrets or attempts interactive elevation"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-013-A",
+                    "profile": "installed",
+                    "behavior": "on a clean supported Windows machine the doctor reports missing .NET runtime, Azure CLI, authentication, and selected-track prerequisites together without requiring Docker"
+                },
+                {
+                    "id": "ACI-013-B",
+                    "profile": "installed",
+                    "behavior": "after guided recovery the doctor resumes without repeating completed checks and the supplied package can start without Python, Node, the .NET SDK, or Docker"
+                }
+            ]
+        },
+        {
+            "id": "ACI-014",
+            "blueprintAssertions": [
+                "user resource names are deterministically unique",
+                "all required governance tags resolve before what-if",
+                "organization values are requested once"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-014-A",
+                    "profile": "hosted_demo",
+                    "behavior": "twenty distinct user identities generate twenty distinct policy-compliant resource-group and registry names"
+                },
+                {
+                    "id": "ACI-014-B",
+                    "profile": "hosted_demo",
+                    "behavior": "missing organization values are returned together before what-if, while a complete input set produces all required governance tags without fabricated values"
+                }
+            ]
+        },
+        {
+            "id": "ACI-015",
+            "blueprintAssertions": [
+                "four local-first phases total 1800 seconds",
+                "guided opening, product connection, one MTD refresh and comparison, and local smoke are the solution outcomes",
+                "hosting, production certification, and tuning are separate optional milestones",
+                "thirty minutes is a target rather than a provisioning guarantee"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-015-A",
+                    "profile": "live_azure",
+                    "behavior": "the builder connects the supplied product to one explicitly selected subscription and runs the shipped frontend locally without regenerating application code"
+                },
+                {
+                    "id": "ACI-015-B",
+                    "profile": "live_foundry",
+                    "behavior": "the app displays authorized Azure evidence, completes one approved grounded answer or an explicit cost-only outcome, and records phase timing, external waits, and any target miss"
+                }
+            ]
+        },
+        {
+            "id": "ACI-016",
+            "blueprintAssertions": [
+                "ACO supervisor uses Microsoft Agent Framework and a Microsoft Foundry project model",
+                "activation requires eight typed read-only tools and validated live evidence",
+                "paid inference requires explicit approval and Azure identity",
+                "deterministic guard is fallback-only and cannot satisfy activation"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-016-A",
+                    "profile": "live_foundry",
+                    "behavior": "one approved ACO request invokes the Foundry model through Agent Framework, cites only the current live evidence revision, and produces an activation receipt with model, prompt, tool-schema, snapshot, response, and safe trace hashes"
+                },
+                {
+                    "id": "ACI-016-B",
+                    "profile": "live_foundry",
+                    "behavior": "when Foundry is disabled or unavailable the deterministic guard preserves safe read-only behavior but status and evidence explicitly remain not activated"
+                }
+            ]
+        },
+        {
+            "id": "ACI-017",
+            "blueprintAssertions": [
+                "Cost Management 429 is deferred-throttled rather than terminal when Advisor and Resource Graph are authorized",
+                "standard, QPU, entity, tenant, and client-type retry metadata determine one scheduled retry",
+                "independent backend/provider implementation, focused tests, deployment inputs, Bicep validation/what-if preparation, and frontend API-contract work continues without provisioning or materialization",
+                "receipts derive from validated hashed provider response artifacts rather than caller-supplied status",
+                "only exact-scope authorized live snapshots or user portal CSV/FOCUS exports preserve real-data continuity",
+                "sanitized samples never satisfy live evidence or ACO activation"
+            ],
+            "productCases": [
+                {
+                    "id": "ACI-017-A",
+                    "profile": "hosted_demo",
+                    "behavior": "Cost Management returns 429 while Advisor and Resource Graph are authorized; a hashed provider artifact produces deferred-throttled, the longest retry interval is scheduled once, Reviewer accepts non-mutating progression, and Builder does not stop or provision"
+                },
+                {
+                    "id": "ACI-017-B",
+                    "profile": "hosted_demo",
+                    "behavior": "an exact-scope live snapshot no older than 24 hours or a user-selected portal CSV/FOCUS export validates into the live revision; mismatched, stale, cross-principal, or sanitized sample data is rejected"
+                }
+            ]
+        }
+    ]
+}

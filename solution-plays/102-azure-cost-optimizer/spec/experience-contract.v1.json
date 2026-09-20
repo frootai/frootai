@@ -1,0 +1,71 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "aco-experience-v2",
+  "product_revision": "v99-user",
+  "brand": {
+    "platform": "Azure Cost Intelligence",
+    "product": "Azure Cost Optimizer",
+    "agent": "ACO",
+    "tone": "quiet, precise, operational, evidence-led"
+  },
+  "viewports": [
+    { "name": "desktop", "width": 1366, "height": 768 },
+    { "name": "mobile", "width": 390, "height": 844 }
+  ],
+  "layout": {
+    "first_route": "/",
+    "shell": "navigation, product header, period/freshness bar, conversation, persistent composer, evidence drawer",
+    "horizontal_overflow_allowed": false,
+    "cards_inside_cards": false
+  },
+  "prompts": {
+    "prepared": ["summary", "services", "recommendations", "daily", "diagram", "evidence"],
+    "guidance": ["full review", "WAF checklist", "FinOps practices", "Advisor checklist", "decision path", "ownership", "agile plan", "action items"],
+    "scope": ["7d", "30d", "mtd", "service", "resourceGroup", "daily"]
+  },
+  "response": {
+    "label": "AI-generated",
+    "sections": ["Answer", "Evidence", "Data health", "Risks", "Next action"],
+    "events": ["meta", "tool", "section", "delta", "reset", "artifact", "done", "error"],
+    "artifacts": ["table", "chart", "diagram", "flow", "actions"],
+    "success": "done.validated=true",
+    "partial_failure": "retain checked content with an incomplete warning",
+    "compose": "three animated Azure Cost Intelligence layers and three moving dots; no caret cursor",
+    "reveal": "checked words reveal progressively; reduced motion uses opacity only",
+    "auto_follow": "programmatic growth stays pinned until explicit upward user input",
+    "source_display": "group by source while preserving every evidence ID"
+  },
+  "advisor": {
+    "group_repeated_titles": true,
+    "preserve_individual_estimates": true,
+    "preserve_individual_evidence": true,
+    "never_sum_without_overlap_review": true,
+    "missing_target": "state once per family, never repeat as a row value",
+    "interpretation_labels": ["What it means", "Verify", "Decision guidance"]
+  },
+  "charts": {
+    "types": ["bar", "line", "pie"],
+    "accessible_values": true,
+    "png_export": true,
+    "local_controls_provider_calls": 0,
+    "local_controls_model_calls": 0
+  },
+  "reports": ["json", "csv", "html", "focus", "xlsx", "markdown", "pdf"],
+  "semantic_cache": {
+    "optional": true,
+    "scope": "principal plus current evidence revision",
+    "revalidation": true,
+    "label_cached_responses": true
+  },
+  "required_tests": [
+    "desktop and mobile",
+    "keyboard focus",
+    "reduced motion",
+    "no overflow",
+    "stream cancel/restart",
+    "validation retry",
+    "Advisor grouping",
+    "FinOps phase no-wrap",
+    "report links"
+  ]
+}

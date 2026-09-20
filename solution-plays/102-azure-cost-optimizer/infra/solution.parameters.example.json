@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": { "value": "eastus2" },
+    "environmentName": { "value": "demo" },
+    "projectName": { "value": "aco-solution" },
+    "containerImage": { "value": "<registry>.azurecr.io/azure-cost-optimizer@sha256:<digest>" },
+    "tenantId": { "value": "<tenant-id>" },
+    "authMode": { "value": "container-apps-easy-auth" },
+    "entraClientId": { "value": "<application-client-id>" },
+    "entraAudience": { "value": "api://<application-client-id>" },
+    "entraClientSecret": { "value": "<protected-secret-value>" },
+    "costSource": { "value": "query" },
+    "applicationInsightsConnectionString": { "value": "<application-insights-connection-string>" },
+    "contentSafetyEndpoint": { "value": "" },
+    "mcpEnabled": { "value": false },
+    "mcpAllowAnonymous": { "value": false },
+    "refreshIntervalMinutes": { "value": 0 },
+    "embeddingEndpoint": { "value": "" },
+    "embeddingDeployment": { "value": "text-embedding-3-small" },
+    "semanticCacheThresholdPercent": { "value": 88 },
+    "blobEndpoint": { "value": "https://<storage-account>.blob.core.windows.net/" },
+    "cosmosEndpoint": { "value": "https://<cosmos-account>.documents.azure.com:443/" },
+    "collectorPrincipalId": { "value": "<managed-identity-principal-id>" },
+    "analysisSubscriptionId": { "value": "<subscription-id>" },
+    "foundryProjectEndpoint": { "value": "https://<foundry-account>.services.ai.azure.com/api/projects/<project>" },
+    "foundryModelDeploymentName": { "value": "<deployment-name>" },
+    "intelligenceProvider": { "value": "foundry" },
+    "registryName": { "value": "<registry-name>" },
+    "registryResourceGroupName": { "value": "<registry-resource-group>" },
+    "managedIdentityName": { "value": "<managed-identity-name>" },
+    "managedEnvironmentName": { "value": "<container-apps-environment-name>" },
+    "allowedObjectIds": { "value": ["<allowed-user-object-id>"] },
+    "operatorObjectIds": { "value": ["<operator-object-id>"] },
+    "publicOrigin": { "value": "https://pending.invalid" },
+    "containerAppName": { "value": "<container-app-name>" },
+    "tags": {
+      "value": {
+        "application": "azure-cost-optimizer",
+        "environment": "solution",
+        "owner": "<owner-alias>",
+        "purpose": "user-solution",
+        "expires-on": "<yyyy-mm-dd>",
+        "managed-by": "bicep"
+      }
+    }
+  }
+}

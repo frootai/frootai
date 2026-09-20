@@ -1,0 +1,28 @@
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/jetbrains-mono';
+
+:root {
+  font-family: 'Manrope Variable', sans-serif;
+  color: #17212b;
+  background: #f3f6f8;
+  color-scheme: light dark;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { color: #e4ebe7; background: #0f1519; }
+  html { background: #0f1519; }
+}
+
+* { box-sizing: border-box; }
+/* The shell owns the viewport and only the conversation scrolls. Percentages resolve correctly in embedded browsers where vh units can exceed the visible area. */
+html, body, #root { height: 100%; min-width: 320px; }
+html { background: #f3f6f8; }
+body { margin: 0; overflow: hidden; overscroll-behavior: none; }
+button, input { font: inherit; letter-spacing: 0; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #005fb8; outline-offset: 2px; }
+h1, h2, p { margin: 0; }

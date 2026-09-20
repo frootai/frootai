@@ -1,0 +1,314 @@
+{
+  "schema_version": "1.5.0",
+  "contract_id": "aco-assembly-v1",
+  "goal": "Connect the supplied product to a selected subscription with model reuse, separately approved model bootstrap, or cost-only in a 30-minute local-first solution; default to no cloud writes and no unapproved spend.",
+  "default_delivery_contract": "spec/solution-delivery-contract.v1.json",
+  "product_bundle_manifest": "spec/product-bundle.v2.json",
+  "precedence": "The solution contract's fixed-artifact mode, approvals, and acceptance criteria supersede older skeleton, init/scaffold, dashboard regeneration, frontend-last, mandatory-model, and automatic deployment behavior. Never regenerate a missing bundle.",
+  "receipt_policy": "Reuse the bundle-declared local smoke receipt or session summary. Legacy .artifacts/deploy receipt paths below are optional hosted evidence, not a requirement to create solution scripts or certify deployment.",
+  "clock": {
+    "starts": "At the guided opening, including the one doctor pass.",
+    "stops": "When the supplied local smoke, MTD parity, and approved grounded answer or accepted cost-only outcome are reported; unfinished outcomes remain blocked or degraded.",
+    "target_total_seconds": 1800,
+    "external_wait_is_recorded_separately": true,
+    "wall_clock_includes_external_wait": true,
+    "reporting": "Record active time, external waits, total elapsed time, and target miss reasons in the supplied local result or session summary; no extra timing script. New resources, role propagation, and external provisioning or capacity waits cannot be guaranteed within 30 minutes."
+  },
+  "prerequisite_bootstrap": {
+    "runs_before_clock": false,
+    "contract": "spec/toolchain-contract.v1.json",
+    "local_override": "Packaged launch requires only .NET 10 ASP.NET Core Runtime and Azure CLI, not Node/npm or the .NET SDK; older source-build, deployment, and evaluator tool requirements do not apply.",
+    "doctor_required": true,
+    "collect_all_missing_tools_once": true,
+    "install_only_missing_supported_tools": true,
+    "installation_requires_explicit_approval": true,
+    "verify_after_install": true,
+    "required_capabilities": [
+      ".NET 10 ASP.NET Core Runtime for the supplied compiled app/frontend",
+      "Azure CLI authentication when user-authorized reads begin",
+      "supplied compiled app/frontend, source, and Bicep archives verified against bundle hashes and the matching producer receipt; user portal parity is separate"
+    ],
+    "on_path_change": "Restart the shell once, preserve completed checks, and run the exact resume command.",
+    "on_elevation_required": "Stop and print one exact operator command plus one exact resume command; never attempt interactive elevation.",
+    "secrets_through_chat_allowed": false,
+    "setup_time_recorded_as_external_wait": true
+  },
+  "phase_budgets": [
+    {
+      "id": "guided_opening",
+      "maximum_seconds": 300,
+      "required_outcome": "Target and existing work are confirmed; tools are checked once; the user selects an enabled subscription, declares grant authority, and chooses model reuse, deployment in an approved existing resource, resource/project and model creation if none exists, or cost-only; model authentication is selected separately."
+    },
+    {
+      "id": "connect_supplied_product",
+      "maximum_seconds": 300,
+      "required_outcome": "The verified bundle and matching receipt are consumed unchanged; only declared settings connect the existing .NET API and supplied frontend on loopback with explicit live mode and no automatic startup refresh."
+    },
+    {
+      "id": "refresh_mtd_and_compare",
+      "maximum_seconds": 720,
+      "required_outcome": "One bounded MTD refresh verifies actual Cost Management, Advisor Cost, and Resource Graph capabilities without duplicate preflight fetches; portal comparison uses identical dates, billed ActualCost, currency, and collection time."
+    },
+    {
+      "id": "local_smoke",
+      "maximum_seconds": 480,
+      "required_outcome": "One supplied local smoke and at most one explicitly approved grounded model response pass, or the user accepts cost-only with ACO activation false; exact blockers and timing are reported."
+    }
+  ],
+  "demo_fast_path": {
+    "fixed_artifact_mode": true,
+    "regenerate_product": false,
+    "budget_source": "spec/local-demo-delivery-contract.v1.json#solution",
+    "authoritative_for": [
+      "local build",
+      "local solution demo",
+      "local stage before any separately approved hosting"
+    ],
+    "outcomes_only": [
+      "guide target, explicit subscription, declared authority, and model lifecycle selection separately from the three model authentication choices",
+      "connect supplied backend, frontend, and infrastructure artifacts without regenerating code",
+      "verify one MTD refresh and user portal parity with truthful source provenance",
+      "smoke the local product and an approved grounded ACO response or explicit cost-only outcome"
+    ],
+    "minimum_product_surface": [
+      "GET /health/live",
+      "GET /health/ready",
+      "GET /api/v1/summary",
+      "GET /api/v1/advisor",
+      "GET /api/v1/data-health",
+      "POST /api/v1/refresh",
+      "POST /api/v1/agent/responses/stream when the selected model capability is available and approved",
+      "supplied frontend declared by spec/product-bundle.v1.json"
+    ],
+    "model_bootstrap_policy": "Follow spec/local-demo-delivery-contract.v1.json#user_flow/model_lifecycle_selection using current Microsoft Foundry skills/tools for approved region, model/deployment support, quota, and capacity discovery. Present exact resources, roles/principals/scopes, costs, capacity, and resource/grant expiry before explicit bootstrap/grant approval; honor matching current-run approval. Model bootstrap is the only local cloud-write exception with its approved grants, never app hosting, databases, or backend/frontend scaffolding.",
+    "defer_until_after_demo": [
+      "application hosting, database provisioning, remote builds, and grants unrelated to separately approved model bootstrap",
+      "provider adapter implementation and package relocation",
+      "extended report formats",
+      "Cosmos DB and Blob persistence when in-memory or local encrypted cache is sufficient",
+      "broad certification suites",
+      "optional channels",
+      "production hardening",
+      "documentation expansion",
+      "performance tuning without a measured blocker"
+    ],
+    "review_policy": "Optional focused review only; reuse producer and solution evidence without new scripts, broad browser checks, or a mandatory certification loop.",
+    "tuner_policy": "Do not invoke ACO Tuner during demo assembly; invoke only for a measured blocker or explicit user request.",
+    "coverage_policy": "Use local solution acceptance, not the full ACI ledger or supplied product acceptance suite; broader coverage is a separate later milestone.",
+    "stop_policy": "Continue independent authorized local work until acceptance or an exact external blocker. Do not enter hosting, regenerate code, repeat provider checks, or reset budgets to avoid reporting a blocker."
+  },
+  "azure_liveliness_gate": {
+    "must_be_first_delivery_action": false,
+    "trigger": "After the guided opening and verified bundle configuration, use the one user-authorized MTD refresh as the source capability check; do not collect twice.",
+    "read_only": true,
+    "resource_creation_allowed": false,
+    "owner_required_to_read": false,
+    "owner_implies_model_data_plane_roles": false,
+    "authority_selection_contract": "spec/local-demo-delivery-contract.v1.json#user_flow/authority_selection",
+    "required_checks": [
+      "Azure CLI authentication status is verified from structured output",
+      "subscription and tenant are selected explicitly",
+      "authorized analysis scope is verified",
+      "the selected Cost source, default Query or separately chosen Cost Details, returns authorized evidence; an authorized complete empty result is valid evidence",
+      "Advisor Cost recommendations return an authorized response; zero findings is valid evidence",
+      "Resource Graph returns an authorized inventory response",
+      "403 denial blocks the affected source; Cost Management 429 records quota metadata and enters deferred-throttled without stopping independent work"
+    ],
+    "authentication": {
+      "status_command": "az account show --output json",
+      "when_not_authenticated": "Run Azure CLI interactive browser authentication; use device-code authentication only when browser launch is unavailable.",
+      "user_completes_authentication_directly": true,
+      "credentials_or_tokens_through_chat_allowed": false,
+      "list_subscriptions_command": "az account list --all --output json",
+      "subscription_filter": "Enabled only; show names and masked IDs to the user.",
+      "zero_enabled_subscriptions": "Stop with one precise permission or tenant recovery message.",
+      "one_enabled_subscription": "Ask the user to select it explicitly, then verify tenant and state.",
+      "multiple_enabled_subscriptions": "Ask once for an explicit selection, showing names and masked identifiers only.",
+      "change_global_cli_default": false,
+      "selection_policy": "Pass the selected subscription explicitly to applicable management operations; bind the selected tenant and endpoint in data-plane adapters.",
+      "verification_command": "az account show --subscription <selected-subscription-id> --output json",
+      "record_full_identifiers": "Ignored local receipt only; never chat output or shared logs.",
+      "interactive_wait_recorded_as_external_wait": true
+    },
+    "outcomes": {
+      "passed": "Azure account, Advisor, Resource Graph, and Cost Management are authorized; Cost Management returned live data or an authorized empty result.",
+      "deferred_throttled": "Azure account, Advisor, and Resource Graph are authorized while Cost Management returned 429 with safe retry metadata; independent work continues.",
+      "blocked": "Record the exact denied or failed capability. A 403 does not authorize a grant; continue already-authorized independent work without claiming complete live evidence."
+    },
+    "cost_management_throttle_recovery": {
+      "data_refresh_interval_hours": 4,
+      "recommended_api_refresh_interval_hours": 24,
+      "capture_headers": [
+        "Retry-After",
+        "x-ms-ratelimit-microsoft.costmanagement-qpu-retry-after",
+        "x-ms-ratelimit-microsoft.costmanagement-entity-retry-after",
+        "x-ms-ratelimit-microsoft.costmanagement-tenant-retry-after",
+        "x-ms-ratelimit-microsoft.costmanagement-clienttype-retry-after",
+        "x-ms-ratelimit-microsoft.costmanagement-qpu-consumed",
+        "x-ms-ratelimit-microsoft.costmanagement-qpu-remaining"
+      ],
+      "retry_policy": "No automatic retry in the solution. Record the longest supplied retry-after deadline; a later attempt requires a new explicit refresh request after that deadline, with its own bounded budget.",
+      "retry_wait_recorded_as_external_wait": true,
+      "prework": "A separately obtained user-authorized snapshot may be reused; do not run an extra warmup refresh or hide provider calls before the solution clock.",
+      "real_data_fallback_order": [
+        "exact-scope validated authorized snapshot less than 24 hours old"
+      ],
+      "cost_details_recovery": "The supplied launcher supports the separately user-selected -CostSource cost-details fallback. For that explicit collection, replace Query with one generation POST, never blindly retry it, then use supplied bounded polling and Retry-After handling. Never start automatically on Query 429; default Query has zero retries. Newly collected Cost Details must have its own live-source provenance and collection time.",
+      "portal_import": "Not implemented by the current bundle; do not promise ready portal CSV/FOCUS ingestion. User portal/export comparison remains manual and separate from collection.",
+      "fallback_must_match": [
+        "tenant",
+        "principal entitlement",
+        "subscription or authorized scope",
+        "currency",
+        "financial basis",
+        "requested or disclosed actual period"
+      ],
+      "sanitized_sample_may_replace_real_data": false,
+      "fallback_provenance_required": true,
+      "fallback_proves_fresh_live_fetch": false,
+      "continue_independent_work": [
+        "verify supplied bundle paths, hashes, and producer receipt",
+        "connect already-approved declared settings without changing source",
+        "use supplied local checks against authorized evidence without new provider calls",
+        "prepare the user portal comparison or report exact blockers"
+      ],
+      "still_blocked_until_real_cost_evidence": [
+        "numeric ACO Foundry activation",
+        "live-cost hosted smoke",
+        "claiming live-data completion"
+      ],
+      "receipt_status": "deferred-throttled",
+      "builder_must_not_stop": true
+    },
+    "receipt_evidence": {
+      "caller_supplied_status_alone_is_evidence": false,
+      "required_provider_artifact_fields": [
+        "source",
+        "request scope and period",
+        "HTTP status",
+        "safe response or error code",
+        "captured retry and quota headers",
+        "collected-at timestamp",
+        "content SHA-256"
+      ],
+      "receipt_generator_must_validate_provider_artifact": true,
+      "fallback_path_string_alone_is_validation": false
+    },
+    "receipt": ".artifacts/deploy/azure-liveliness.json"
+  },
+  "aco_foundry_activation_gate": {
+    "topology": "supplied local Microsoft Agent Framework ACO supervisor connected through the verified adapter to the user's chosen reused or newly provisioned deployment",
+    "model_lifecycle_contract": "spec/local-demo-delivery-contract.v1.json#user_flow/model_lifecycle_selection",
+    "provider_selection_contract": "spec/local-demo-delivery-contract.v1.json#user_flow/intelligence_provider_selection",
+    "required_for_cost_only": false,
+    "tool_inventory_source": "the verified product bundle; preserve the eight shipped read-only tools rather than registering replacements",
+    "hosted_foundry_agent_required": false,
+    "requires_validated_live_evidence": true,
+    "foundry_environment_variables_apply_only_to_foundry": true,
+    "project_endpoint_environment_variable": "AZURE_AI_PROJECT_ENDPOINT",
+    "model_deployment_environment_variable": "AZURE_AI_MODEL_DEPLOYMENT_NAME",
+    "credential": "Verified selected-tenant Azure identity, or protected process-scoped API-key input only for the supported Azure OpenAI key adapter; never infer model access from subscription Owner.",
+    "paid_inference_requires_explicit_approval": true,
+    "maximum_approved_model_smokes": 1,
+    "unavailable_unsupported_denied_or_unapproved": "Offer cost-only with ACO activation false, or an explicit lifecycle choice for separately approved bootstrap; never provision automatically or implement an adapter. Bootstrap approval alone does not approve paid inference.",
+    "required_tools": [
+      "get_cost_summary",
+      "get_cost_breakdown",
+      "get_opportunities",
+      "get_advisor_findings",
+      "get_data_health",
+      "get_evidence",
+      "create_report",
+      "get_optimization_guidance"
+    ],
+    "write_tools_allowed": false,
+    "deterministic_guard_role": "fallback-only",
+    "activation_success": [
+      "Agent Framework runtime is loaded",
+      "the reused or newly provisioned deployment selected by the user is actually reachable through the shipped adapter; provisioning success or Owner is not inference access",
+      "one explicitly approved bounded model smoke completes without a separate invocation preflight",
+      "every numeric claim resolves to an evidence ID from the live revision",
+      "no raw billing rows, credentials, or cross-scope evidence enter the model context",
+      "model, prompt, tool-schema, live-revision, response, and trace hashes are recorded"
+    ],
+    "receipt": ".artifacts/deploy/aco-agent-activation.json"
+  },
+  "frontend_stop_rule": {
+    "requires_verified_product_bundle_and_receipt": true,
+    "materialize_before_reading_source": true,
+    "use_prebuilt_dist_first": true,
+    "maximum_source_edits": 0,
+    "maximum_builds_during_integration": 1,
+    "maximum_browser_smokes_during_integration": 1,
+    "requires_azure_liveliness": false,
+    "requires_live_intelligence": false,
+    "requires_aco_foundry_activation": false,
+    "prohibited_during_assembly": [
+      "frontend redesign",
+      "design-token changes",
+      "new chart selection",
+      "dependency upgrades",
+      "golden regeneration",
+      "accessibility expansion beyond shipped checks",
+      "performance tuning beyond a failed threshold"
+    ],
+    "on_verified_receipt": "Do not inspect or modify frontend source or repeat shipped build/browser validation. Connect declared settings and continue the local solution.",
+    "on_failure": "Repair only allowed configuration inputs and rerun the affected supplied check without another provider refresh. Report source or artifact defects to the producer; do not regenerate code."
+  },
+  "ordered_execution": [
+    "guided_opening",
+    "connect_supplied_product",
+    "refresh_mtd_and_compare",
+    "local_smoke"
+  ],
+  "throttled_execution_branch": [
+    "record_deferred_throttled_receipt_and_retry_headers",
+    "check_exact_scope_authorized_live_snapshot",
+    "offer_separately_selected_supplied_cost_details_recovery_without_automatic_generation",
+    "record_retry_deadline_without_scheduling_an_automatic_attempt",
+    "continue_independent_authorized_local_configuration_and_supplied_checks",
+    "publish_authorized_evidence_with_actual_provenance_and_freshness",
+    "run_one_approved_grounded_model_smoke_only_if_evidence_qualifies_otherwise_offer_cost_only",
+    "report_local_results_and_exact_degraded_or_blocked_sources"
+  ],
+  "pause_policy": {
+    "allowed": [
+      "interactive authentication",
+      "target, explicit subscription, declared authority, and provider selection",
+      "model lifecycle selection, exact bootstrap/grant approval, and external resource or capacity waits",
+      "missing bundle, receipt, runtime capability, or permission",
+      "explicit bounded model-spend approval or accepted cost-only",
+      "secret entered directly by the operator",
+      "ambiguous subscription or tenant",
+      "user portal comparison",
+      "separately requested hosting approval or destructive what-if"
+    ],
+    "not_allowed": [
+      "frontend server is running",
+      "an intermediate phase passed",
+      "optional documentation",
+      "optional refactoring",
+      "unrelated cost estimation; required model-bootstrap cost, capacity, and expiry disclosure remains mandatory",
+      "broad test expansion",
+      "sample-only success being presented as live user evidence",
+      "stopping solely because Cost Management returned a receipted 429 while Advisor and Resource Graph are authorized"
+    ]
+  },
+  "optional_hosting": {
+    "included_in_local_solution": false,
+    "requires_local_acceptance": true,
+    "requires_separate_explicit_approval": true,
+    "generic_build_and_deploy_wording_is_approval": false,
+    "permission_grants_are_automatic": false,
+    "approval_scope": "Each permission grant, app registration, provision, remote build, deployment, or spend needs explicit action, target principal/scope or resource, and cost-bound approval before execution.",
+    "infrastructure": "Reuse verified supplied Bicep and inputs; review non-destructive what-if before any approved deployment. Do not require or install Docker.",
+    "channels": "Supplied frontend by default; Inspector requires a verified compatible protocol adapter. Teams through Microsoft 365 Agents Toolkit is a separate optional later milestone, not an automatic supported deployment."
+  },
+  "truthfulness": {
+    "thirty_minutes_is_a_target_not_a_guarantee": true,
+    "record_target_miss_reason": true,
+    "never_skip_failed_required_check": true,
+    "never_claim_live_or_deployed_from_snapshot_evidence": true,
+    "never_claim_aco_activation_from_deterministic_fallback": true
+  }
+}

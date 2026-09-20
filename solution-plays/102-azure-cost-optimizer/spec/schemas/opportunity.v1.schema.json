@@ -1,0 +1,183 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://frootai.dev/schemas/102/opportunity.v1.json",
+    "title": "Azure Cost Optimizer Opportunity v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "opportunityId",
+        "ruleId",
+        "scopeAlias",
+        "category",
+        "title",
+        "financialBasis",
+        "observedCost",
+        "estimatedOpportunity",
+        "realizedSavings",
+        "confidence",
+        "complete",
+        "evidenceIds",
+        "risks",
+        "owner",
+        "reviewStatus",
+        "nextAction"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "const": "1.0.0"
+        },
+        "opportunityId": {
+            "type": "string",
+            "pattern": "^opp_[a-f0-9]{16,64}$"
+        },
+        "ruleId": {
+            "type": "string",
+            "pattern": "^aco-[a-z0-9-]+-v[0-9]+$"
+        },
+        "scopeAlias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "resourceAlias": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "maxLength": 128
+        },
+        "category": {
+            "enum": [
+                "advisor",
+                "idle",
+                "rightsizing",
+                "storage",
+                "monitor",
+                "schedule",
+                "commitment",
+                "governance"
+            ]
+        },
+        "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+        },
+        "financialBasis": {
+            "enum": [
+                "billed",
+                "effective"
+            ]
+        },
+        "currency": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^[A-Z]{3}$"
+        },
+        "observedCost": {
+            "$ref": "#/$defs/moneyOrUnknown"
+        },
+        "estimatedOpportunity": {
+            "$ref": "#/$defs/moneyOrUnknown"
+        },
+        "approvedTarget": {
+            "$ref": "#/$defs/moneyOrUnknown"
+        },
+        "realizedSavings": {
+            "$ref": "#/$defs/moneyOrUnknown"
+        },
+        "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+        },
+        "complete": {
+            "type": "boolean"
+        },
+        "evidenceIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "pattern": "^ev_[a-f0-9]{16,64}$"
+            }
+        },
+        "risks": {
+            "type": "array",
+            "items": {
+                "enum": [
+                    "cost",
+                    "reliability",
+                    "security",
+                    "operational-excellence",
+                    "performance-efficiency",
+                    "responsible-ai"
+                ]
+            },
+            "uniqueItems": true
+        },
+        "owner": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "maxLength": 128
+        },
+        "reviewStatus": {
+            "enum": [
+                "needs-review",
+                "approved",
+                "rejected",
+                "implemented",
+                "measuring",
+                "closed"
+            ]
+        },
+        "nextAction": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+        }
+    },
+    "$defs": {
+        "moneyOrUnknown": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "amount",
+                        "currency"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": "string",
+                            "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+                        },
+                        "currency": {
+                            "type": "string",
+                            "pattern": "^[A-Z]{3}$"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "unknownReason"
+                    ],
+                    "properties": {
+                        "unknownReason": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 160
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

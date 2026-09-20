@@ -1,0 +1,41 @@
+name: Validate Azure Cost Optimizer Solution
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: src/AzureCostOptimizer.Web/package-lock.json
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Validate user package
+        run: node scripts/validate-solution.mjs
+      - name: Restore and test backend
+        run: |
+          dotnet restore tests/AzureCostOptimizer.App.Tests/AzureCostOptimizer.App.Tests.csproj --locked-mode
+          dotnet test tests/AzureCostOptimizer.App.Tests/AzureCostOptimizer.App.Tests.csproj --configuration Release --no-restore
+      - name: Build frontend
+        run: |
+          npm --prefix src/AzureCostOptimizer.Web ci
+          npm --prefix src/AzureCostOptimizer.Web run build
+      - name: Install Playwright browser
+        run: npx --prefix src/AzureCostOptimizer.Web playwright install chromium
+      - name: Test desktop and mobile response layer
+        shell: powershell
+        run: .\scripts\test-web.ps1
+      - name: Compile Bicep
+        shell: powershell
+        run: .\scripts\test-bicep.ps1

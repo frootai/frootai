@@ -1,0 +1,79 @@
+{
+    "schema_version": "1.0.0",
+    "local": {
+        "listener": "127.0.0.1",
+        "principal": "local-os-operator",
+        "azure_identity": "explicit-cli-or-azd-development-credential",
+        "subscription_allowlist_required": true,
+        "host_header_validation": true,
+        "origin_validation": true,
+        "cross_site_requests_allowed": false
+    },
+    "hosted": {
+        "sign_in": "oauth2-authorization-code-with-pkce",
+        "single_tenant": true,
+        "app_role_assignment_required": true,
+        "token_validation": {
+            "issuer": "tenant-v2-endpoint",
+            "audience": "configured-api-audience",
+            "signature": "entra-openid-configuration",
+            "expiration_required": true,
+            "not_before_required": true,
+            "tenant_claim": "tid",
+            "principal_claim_priority": [
+                "oid",
+                "sub"
+            ],
+            "role_claim": "roles"
+        },
+        "app_roles": {
+            "CostOptimizer.Reader": [
+                "read-summary",
+                "read-costs",
+                "read-opportunities",
+                "read-advisor",
+                "read-data-health",
+                "ask-aco",
+                "download-owned-report"
+            ],
+            "CostOptimizer.Operator": [
+                "all-reader-capabilities",
+                "start-refresh",
+                "create-report"
+            ]
+        },
+        "entitlements": {
+            "key": "tenant-id + principal-id + app-role",
+            "value": "allowed subscription and descendant scope aliases",
+            "source": "deployment-owned authorization store or reviewed configuration",
+            "default": "deny",
+            "group_assignment": "Groups may receive app roles in Entra; runtime authorization uses resulting role claims and the principal entitlement mapping.",
+            "resource_tags_grant_access": false
+        },
+        "report_ownership": "tenant-id + principal-id + authorized-scope + report-id",
+        "platform_authentication": "Container Apps authentication returns 401 for unauthenticated requests as defense in depth; the application still validates bearer claims and entitlements."
+    },
+    "route_policy": {
+        "GET /health/live": "anonymous-no-dependencies-no-data",
+        "GET /health/ready": "anonymous-safe-status-no-identifiers",
+        "GET /api/v1/summary": "Reader",
+        "GET /api/v1/costs": "Reader",
+        "GET /api/v1/opportunities": "Reader",
+        "GET /api/v1/advisor": "Reader",
+        "GET /api/v1/data-health": "Reader",
+        "GET /api/v1/reports/{reportId}.{format}": "Reader-and-owner-and-scope",
+        "POST /api/v1/refresh": "Operator-and-scope",
+        "POST /api/v1/agent/responses": "Reader-and-scope",
+        "POST /api/v1/reports": "Operator-and-scope"
+    },
+    "denial_order": [
+        "validate-token",
+        "validate-tenant",
+        "validate-audience",
+        "validate-app-role",
+        "resolve-principal-entitlement",
+        "validate-requested-scope",
+        "validate-report-owner-when-applicable",
+        "only-then-read-artifacts-or-call-providers-or-model"
+    ]
+}

@@ -1,0 +1,226 @@
+{
+    "schema_version": "1.0.0",
+    "status": "reference-rules-require-product-tests",
+    "global": {
+        "money": "decimal",
+        "aggregate_rounding": "none",
+        "display_rounding": "currency-specific-only",
+        "mixed_currency": "reject",
+        "missing_evidence": "withhold",
+        "default_review_status": "needs-review",
+        "realized_savings_default": null
+    },
+    "rules": [
+        {
+            "id": "aco-advisor-normalize-v1",
+            "category": "advisor",
+            "requiredEvidence": [
+                "advisor-cost-finding",
+                "cost-summary",
+                "resource-or-subscription-scope"
+            ],
+            "eligibility": "Advisor category is Cost, scope is authorized, and finding is current.",
+            "estimate": "Use Advisor estimate only when currency, period, and method are supplied; otherwise estimated opportunity is unknown.",
+            "exclusions": [
+                "expired finding",
+                "foreign scope",
+                "unsupported currency",
+                "duplicate recommendation identity"
+            ],
+            "confidence": "minimum source completeness across Advisor and matching cost evidence",
+            "risks": [
+                "reliability",
+                "security",
+                "performance-efficiency"
+            ]
+        },
+        {
+            "id": "aco-idle-resource-review-v1",
+            "category": "idle",
+            "requiredEvidence": [
+                "resource-inventory",
+                "cost-window",
+                "resource-specific idle signal",
+                "owner",
+                "locks"
+            ],
+            "eligibility": "Resource exists, produces avoidable cost, idle signal covers the reviewed window, owner is known, and lock evidence is complete.",
+            "estimate": "avoidable recurring cost during the modeled window minus retained dependencies and transition cost",
+            "exclusions": [
+                "missing owner",
+                "incomplete utilization",
+                "denied lock evidence",
+                "shared dependency",
+                "recently created resource"
+            ],
+            "confidence": "weighted minimum of inventory, cost, idle-signal, owner, and lock coverage",
+            "risks": [
+                "reliability",
+                "security",
+                "operational-excellence"
+            ]
+        },
+        {
+            "id": "aco-vm-rightsize-v1",
+            "category": "rightsizing",
+            "requiredEvidence": [
+                "vm-inventory",
+                "14-to-28-day-cpu",
+                "memory",
+                "disk-io",
+                "network",
+                "sku-availability",
+                "price-evidence",
+                "owner",
+                "locks"
+            ],
+            "eligibility": "At least 95 percent metric coverage and every configured utilization ceiling passes for the proposed SKU.",
+            "estimate": "observed eligible compute cost minus modeled target cost using the same currency, basis, region, operating system, license, and period",
+            "exclusions": [
+                "missing metric dimension",
+                "burst or seasonality not reviewed",
+                "restricted target SKU",
+                "mixed price basis",
+                "active reservation impact unknown"
+            ],
+            "confidence": "minimum metric coverage multiplied by price-evidence confidence and workload-review confidence",
+            "risks": [
+                "reliability",
+                "performance-efficiency",
+                "operational-excellence"
+            ]
+        },
+        {
+            "id": "aco-storage-tier-review-v1",
+            "category": "storage",
+            "requiredEvidence": [
+                "storage-inventory",
+                "capacity",
+                "transactions",
+                "access-pattern",
+                "retention-policy",
+                "redundancy",
+                "price-evidence"
+            ],
+            "eligibility": "Observed access and retention pattern supports a reviewed tier or redundancy scenario.",
+            "estimate": "current storage, transaction, retrieval, and data-operation cost minus modeled scenario cost including transition and early-deletion charges",
+            "exclusions": [
+                "legal retention unknown",
+                "retrieval pattern incomplete",
+                "residency requirement unknown",
+                "redundancy objective unknown"
+            ],
+            "confidence": "minimum coverage across capacity, access, retention, redundancy, and price evidence",
+            "risks": [
+                "reliability",
+                "security",
+                "performance-efficiency"
+            ]
+        },
+        {
+            "id": "aco-unattached-disk-review-v1",
+            "category": "idle",
+            "requiredEvidence": [
+                "disk-inventory",
+                "attachment-state",
+                "cost-window",
+                "owner",
+                "locks",
+                "backup-or-retention-state"
+            ],
+            "eligibility": "Disk remains unattached for the reviewed window and no backup, recovery, retention, or migration need is recorded.",
+            "estimate": "observed recurring disk cost for the modeled period",
+            "exclusions": [
+                "recent detach",
+                "snapshot dependency",
+                "recovery hold",
+                "owner unknown",
+                "lock evidence incomplete"
+            ],
+            "confidence": "minimum inventory, attachment-history, owner, and retention coverage",
+            "risks": [
+                "reliability",
+                "security",
+                "operational-excellence"
+            ]
+        },
+        {
+            "id": "aco-monitor-ingestion-review-v1",
+            "category": "monitor",
+            "requiredEvidence": [
+                "workspace-inventory",
+                "table-ingestion",
+                "retention",
+                "query-or-alert-usage",
+                "price-evidence",
+                "owner"
+            ],
+            "eligibility": "A reviewed table or retention change preserves operational, security, and compliance requirements.",
+            "estimate": "current ingestion and retention cost minus modeled table-plan and retention scenario cost",
+            "exclusions": [
+                "security data",
+                "audit retention requirement",
+                "usage evidence missing",
+                "cross-workspace dependency unknown"
+            ],
+            "confidence": "minimum ingestion, usage, retention-policy, and price coverage",
+            "risks": [
+                "security",
+                "operational-excellence",
+                "reliability"
+            ]
+        },
+        {
+            "id": "aco-schedule-review-v1",
+            "category": "schedule",
+            "requiredEvidence": [
+                "resource-inventory",
+                "time-series-utilization",
+                "business-hours",
+                "startup-shutdown-dependency",
+                "owner",
+                "cost-window"
+            ],
+            "eligibility": "A repeatable idle window and safe start/stop procedure are reviewed.",
+            "estimate": "eligible observed runtime cost multiplied by the reviewed avoidable runtime fraction, minus startup or warmup cost",
+            "exclusions": [
+                "always-on requirement",
+                "unreviewed dependency",
+                "irregular workload",
+                "recovery objective conflict"
+            ],
+            "confidence": "minimum utilization, schedule, dependency, and owner coverage",
+            "risks": [
+                "reliability",
+                "operational-excellence",
+                "performance-efficiency"
+            ]
+        },
+        {
+            "id": "aco-commitment-scenario-v1",
+            "category": "commitment",
+            "requiredEvidence": [
+                "eligible-hourly-usage",
+                "existing-benefits",
+                "customer-or-reviewed-price-evidence",
+                "term",
+                "utilization-scenario",
+                "procurement-owner"
+            ],
+            "eligibility": "Stable eligible usage, existing coverage, term obligation, and procurement review are all explicit.",
+            "estimate": "modeled on-demand eligible cost minus modeled commitment-covered cost minus uncovered usage and full term obligation effects",
+            "exclusions": [
+                "list-price-only decision",
+                "currency mismatch",
+                "usage volatility unmodeled",
+                "existing commitment coverage incomplete",
+                "purchase approval absent"
+            ],
+            "confidence": "minimum usage stability, price, coverage, and scenario confidence",
+            "risks": [
+                "cost",
+                "operational-excellence"
+            ]
+        }
+    ]
+}

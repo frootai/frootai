@@ -1,0 +1,69 @@
+{
+  "play": "102-azure-cost-optimizer",
+  "version": "2.0.0",
+  "description": "Public Azure Cost Optimizer v99 solution with a Copilot delivery contract, Foundry channels, and an Azure deployment path.",
+  "context": {
+    "scope": "Azure Cost Intelligence operator analysis",
+    "knowledge": [
+      "T3-Production-Patterns",
+      "O5-AI-Infrastructure"
+    ],
+    "waf": [
+      "cost-optimization",
+      "reliability",
+      "security",
+      "operational-excellence",
+      "performance-efficiency",
+      "responsible-ai"
+    ]
+  },
+  "primitives": {
+    "agents": [
+      ".github/agents/builder.agent.md",
+      ".github/agents/reviewer.agent.md",
+      ".github/agents/tuner.agent.md"
+    ],
+    "instructions": [
+      ".github/instructions/azure-cost-optimizer-patterns.instructions.md",
+      ".github/instructions/azure-coding.instructions.md",
+      ".github/instructions/security.instructions.md"
+    ],
+    "skills": [
+      ".github/skills/build-azure-cost-optimizer/",
+      ".github/skills/deploy-azure-cost-optimizer/",
+      ".github/skills/evaluate-azure-cost-optimizer/",
+      ".github/skills/tune-azure-cost-optimizer/"
+    ],
+    "hooks": [
+      ".github/hooks/guardrails.json"
+    ],
+    "workflows": [
+      ".github/workflows/validate-solution.yml"
+    ],
+    "guardrails": {
+      "groundedness": 0.95,
+      "safety": 0,
+      "financial_parity": 1,
+      "provider_calls_per_ui_interaction": 0
+    }
+  },
+  "toolkit": {
+    "devkit": ".github/",
+    "tunekit": "config/",
+    "speckit": "spec/",
+    "frontend": "src/AzureCostOptimizer.Web/",
+    "solution_guide": "AzureCostOptimizerGuide.md",
+    "runtime_contract": "spec/runtime-contract.v1.json",
+    "delivery_contract": "spec/solution-delivery-contract.v1.json"
+  },
+  "infrastructure": {
+    "foundation": "infra/demo-foundation.bicep",
+    "bicep": "infra/main.bicep",
+    "registry": "infra/registry.bicep",
+    "solution_parameters": "infra/solution.parameters.example.json"
+  },
+  "evaluation": {
+    "entrypoint": "evaluation/run-eval.mjs",
+    "dataset": "evaluation/test-set.jsonl"
+  }
+}

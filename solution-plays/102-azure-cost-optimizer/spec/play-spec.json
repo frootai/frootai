@@ -1,0 +1,107 @@
+{
+    "schema_version": "2.0.0",
+    "name": "102-azure-cost-optimizer",
+    "play": "102-azure-cost-optimizer",
+    "version": "2.0.0",
+    "description": "Complete public Azure Cost Optimizer solution with cached evidence, deterministic financial analysis, a grounded ACO Agent, typed read-only channels, reports, and an optional Azure-hosted path.",
+    "scale": "public-solution",
+    "architecture": {
+        "pattern": "snapshot-first-single-agent-cost-intelligence",
+        "data_flow": "Read-only Azure cost, Advisor, and inventory evidence is normalized by the deterministic engine, published as an authorized snapshot, exposed through typed ACO Agent tools, and rendered in the React workspace and reports.",
+        "default_profile": "local-sample"
+    },
+    "config": {
+        "openai": "config/openai.json",
+        "guardrails": "config/guardrails.json",
+        "agents": "config/agents.json",
+        "data_sources": "config/data-sources.json",
+        "data_store": "config/data-store.json"
+    },
+    "delivery": {
+        "solution_guide": "AzureCostOptimizerGuide.md",
+        "solution_contract": "spec/solution-delivery-contract.v1.json",
+        "runtime_contract": "spec/runtime-contract.v1.json",
+        "experience_contract": "spec/experience-contract.v1.json",
+        "acceptance_matrix": "spec/acceptance-matrix.md",
+        "product_bundle": "spec/product-bundle.v2.json"
+    },
+    "official_sources": [
+        {
+            "title": "Choose a cost details solution",
+            "url": "https://learn.microsoft.com/azure/cost-management-billing/automate/usage-details-best-practices",
+            "claim": "Exports are preferred for scalable recurring ingestion; Cost Details is for smaller on-demand datasets and should generally be queried no more than daily.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "Manage costs with automation",
+            "url": "https://learn.microsoft.com/azure/cost-management-billing/costs/manage-automation",
+            "claim": "Cost data latency and API limits require caching, bounded collection, and rate-limit-aware automation.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "FinOps hubs overview",
+            "url": "https://learn.microsoft.com/cloud-computing/finops/toolkit/hubs/finops-hubs-overview",
+            "claim": "FinOps hubs provide an optional scalable analytics platform over Cost Management exports and FOCUS data.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "Agents in Microsoft Foundry",
+            "url": "https://learn.microsoft.com/azure/foundry/agents/overview",
+            "claim": "Microsoft Foundry supports prompt and hosted agents, build-test-deploy-monitor lifecycle, tools, tracing, identity, and evaluation.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "Use Azure Well-Architected Framework assessments",
+            "url": "https://learn.microsoft.com/azure/advisor/advisor-assessments",
+            "claim": "Advisor can surface Well-Architected assessment recommendations that complement resource and cost recommendations.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "Azure Cosmos DB serverless account type",
+            "url": "https://learn.microsoft.com/azure/cosmos-db/serverless",
+            "claim": "Cosmos DB Serverless fits intermittent low-traffic applications and development scenarios; partition-targeted access and explicit scale boundaries keep the solution lightweight.",
+            "tested_version": "documentation-snapshot-2026-09-16",
+            "status": "active"
+        },
+        {
+            "title": "FOCUS Microsoft Azure data generator",
+            "url": "https://focus.finops.org/docs/implementation/data-generators/microsoft/",
+            "claim": "The Azure data generator currently advertises FOCUS 1.2; newer general FOCUS releases do not imply Azure export conformance without explicit verification.",
+            "tested_version": "focus-azure-1.2-reviewed-2026-09-16",
+            "status": "active"
+        }
+    ],
+    "evaluation": {
+        "metrics": [
+            "financial_format_parity",
+            "evidence_claim_coverage",
+            "ui_provider_call_count",
+            "throttle_snapshot_survival",
+            "scope_isolation",
+            "snapshot_first_paint_ms",
+            "model_tool_budget_compliance"
+        ],
+        "thresholds": {
+            "financial_format_parity": 1,
+            "evidence_claim_coverage": 1,
+            "ui_provider_call_count": 0,
+            "throttle_snapshot_survival": 1,
+            "scope_isolation": 1,
+            "snapshot_first_paint_ms": 1000,
+            "model_tool_budget_compliance": 1
+        }
+    },
+    "waf_alignment": {
+        "cost-optimization": "Snapshot-first collection, model budgets, right-sized consumption hosting, and evidence-based recommendations",
+        "reliability": "Request coalescing, Retry-After handling, circuit breaking, immutable snapshots, and degraded reads",
+        "security": "Managed identity, Entra authentication, scope authorization, private financial artifacts, and read-only actions",
+        "operational-excellence": "Bicep, health endpoints, structured receipts, tracing, contract tests, and staged delivery evidence",
+        "performance-efficiency": "Partition-targeted Cosmos reads, client-side interaction, bounded concurrency, streaming chat, and static assets",
+        "responsible-ai": "Typed evidence tools, numeric citations, explicit uncertainty, content safety, and human approval"
+    }
+}

@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: Azure Cost Optimizer API
+  version: 2.0.0
+  description: Current read-only solution API. Collection occurs only through the explicit refresh route.
+servers:
+  - url: http://127.0.0.1:8080
+    description: Local solution
+paths:
+  /health/live:
+    get:
+      operationId: getLiveness
+      responses:
+        "200": { description: Process is responding. }
+  /health/ready:
+    get:
+      operationId: getReadiness
+      responses:
+        "200": { description: A validated snapshot is available. }
+        "503": { description: Snapshot restoration or collection has not completed. }
+  /auth/config:
+    get:
+      operationId: getAuthenticationConfiguration
+      responses:
+        "200": { description: Safe hosted/profile/provider configuration for the browser. }
+  /api/v1/cache-status:
+    get:
+      operationId: getCacheStatus
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200": { description: Snapshot, retry, durable-cache, and failure state. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /api/v1/summary:
+    get:
+      operationId: getCostSummary
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200":
+          description: Authoritative deterministic cost summary.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Summary" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/Warming" }
+  /api/v1/opportunities:
+    get:
+      operationId: getOpportunities
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200": { description: Normalized evidence-backed review opportunities. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/Warming" }
+  /api/v1/advisor:
+    get:
+      operationId: getAdvisorFindings
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200": { description: Distinct Azure Advisor Cost findings and Azure-supplied annual estimates. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/Warming" }
+  /api/v1/data-health:
+    get:
+      operationId: getDataHealth
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200": { description: Source provenance, completeness, freshness, exclusions, and cache state. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/Warming" }
+  /api/v1/refresh:
+    post:
+      operationId: startExplicitRefresh
+      parameters:
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "202": { description: One refresh operation accepted or coalesced. }
+        "200": { description: Refresh deferred until the provider Retry-After deadline. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /api/v1/agent/responses:
+    post:
+      operationId: createAcoResponse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AgentRequest" }
+      responses:
+        "200": { description: Complete grounded agent response. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/Warming" }
+  /api/v1/agent/responses/stream:
+    post:
+      operationId: streamAcoResponse
+      description: SSE events are meta, tool, section, delta, reset, artifact, done, and error. Only done.validated=true is success.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AgentRequest" }
+      responses:
+        "200":
+          description: Progressive grounded response.
+          content:
+            text/event-stream:
+              schema: { type: string }
+  /api/v1/reports/{reportId}.{format}:
+    get:
+      operationId: downloadReport
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema: { type: string, pattern: "^rpt_[a-f0-9]{32,64}$" }
+        - name: format
+          in: path
+          required: true
+          schema: { type: string, enum: [json, csv, html, focus, xlsx, markdown, pdf] }
+        - $ref: "#/components/parameters/Scope"
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200": { description: Report generated from the selected immutable snapshot. }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { description: Report ID does not match the selected authorized snapshot. }
+components:
+  parameters:
+    Scope:
+      name: scope
+      in: query
+      required: true
+      schema: { type: string, enum: [solution-scope] }
+    Period:
+      name: period
+      in: query
+      required: true
+      schema: { type: string, enum: [mtd, 7d, 30d, 3m] }
+  responses:
+    Forbidden:
+      description: Requested scope or operation is not authorized.
+    Warming:
+      description: No validated snapshot is available for the requested period. Missing is not zero.
+  schemas:
+    Money:
+      type: object
+      required: [amount, currency]
+      properties:
+        amount: { type: string, pattern: "^-?[0-9]+(?:\\.[0-9]+)?$" }
+        currency: { type: string, pattern: "^[A-Z]{3}$" }
+    Period:
+      type: object
+      required: [start, end]
+      properties:
+        start: { type: string }
+        end: { type: string }
+    Summary:
+      type: object
+      required: [reportId, scopeAlias, periodKey, periodLabel, requestedPeriod, financialBasis, totalCost, collectedAt, status]
+      properties:
+        reportId: { type: string }
+        scopeAlias: { type: string }
+        periodKey: { type: string }
+        periodLabel: { type: string }
+        requestedPeriod: { $ref: "#/components/schemas/Period" }
+        financialBasis: { type: string, enum: [billed, effective] }
+        totalCost: { $ref: "#/components/schemas/Money" }
+        totalEstimatedAnnualSavings: { type: [string, "null"] }
+        collectedAt: { type: string, format: date-time }
+        status: { type: string }
+        services: { type: array, items: { type: object } }
+        daily: { type: array, items: { type: object } }
+        resourceGroups: { type: array, items: { type: object } }
+    AgentRequest:
+      type: object
+      required: [message, scopeAlias, period]
+      properties:
+        message: { type: string, minLength: 1, maxLength: 2000 }
+        scopeAlias: { type: string, enum: [solution-scope] }
+        period: { type: string, enum: [mtd, 7d, 30d, 3m] }
+        conversationId: { type: [string, "null"] }
+        effort: { type: string, enum: [fast, thorough] }

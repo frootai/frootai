@@ -1,0 +1,120 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://frootai.dev/schemas/102/snapshot-manifest.v1.json",
+    "title": "Azure Cost Intelligence Snapshot Manifest v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "revisionId",
+        "tenantAlias",
+        "scopeAlias",
+        "financialBasis",
+        "period",
+        "publishedAt",
+        "complete",
+        "sourceReceipts",
+        "objects",
+        "reportId"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "const": "1.0.0"
+        },
+        "revisionId": {
+            "type": "string",
+            "pattern": "^rev_[a-f0-9]{32,64}$"
+        },
+        "previousRevisionId": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^rev_[a-f0-9]{32,64}$"
+        },
+        "tenantAlias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "scopeAlias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "financialBasis": {
+            "enum": [
+                "billed",
+                "effective"
+            ]
+        },
+        "period": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "start",
+                "end"
+            ],
+            "properties": {
+                "start": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "end": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "complete": {
+            "type": "boolean"
+        },
+        "sourceReceipts": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+            }
+        },
+        "objects": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "path",
+                    "sha256",
+                    "bytes",
+                    "mediaType"
+                ],
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "pattern": "^revisions/rev_[a-f0-9]{32,64}/[a-z0-9][a-z0-9._/-]+$"
+                    },
+                    "sha256": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "bytes": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "mediaType": {
+                        "type": "string",
+                        "minLength": 3
+                    }
+                }
+            }
+        },
+        "reportId": {
+            "type": "string",
+            "pattern": "^rpt_[a-f0-9]{32,64}$"
+        }
+    }
+}

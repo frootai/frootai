@@ -1,0 +1,147 @@
+{
+    "play": "102-azure-cost-optimizer",
+    "version": "1.0.0",
+    "mode": "read-only",
+    "defaults": {
+        "profile": "solution_snapshot",
+        "days": 30,
+        "financial_basis": "billed",
+        "paid_inference_enabled": false,
+        "cloud_remediation_enabled": false,
+        "new_finops_hub_enabled": false,
+        "public_anonymous_access": false
+    },
+    "collection": {
+        "maximum_days": 90,
+        "maximum_http_requests": 40,
+        "maximum_response_bytes": 4194304,
+        "maximum_pages_per_source": 10,
+        "maximum_query_processing_units": 20,
+        "manual_refresh_timeout_seconds": 120,
+        "minimum_cost_refresh_interval_hours": 24,
+        "coalesce_identical_refreshes": true,
+        "cost_details_generation_auto_retry": false,
+        "respect_retry_after": true,
+        "cost_management_429_state": "deferred-throttled",
+        "cost_management_429_stops_builder": false,
+        "maximum_scheduled_retries_after_429": 0,
+        "user_live_snapshot_fallback_max_age_hours": 24,
+        "user_portal_export_fallback_allowed": true,
+        "sanitized_sample_satisfies_live_evidence": false
+    },
+    "cache": {
+        "memory_ttl_seconds": 300,
+        "validated_snapshot_max_age_hours": 24,
+        "retail_price_ttl_seconds": 3600,
+        "closed_periods_immutable_until_revision": true,
+        "read_triggered_revalidation": false,
+        "stale_while_explicit_refresh": true,
+        "provider_calls_per_ui_interaction": 0,
+        "agent_responses": {
+            "enabled": true,
+            "mode": "semantic-current-revision",
+            "ttl_seconds": 1800,
+            "key_fields": [
+                "tenant",
+                "principal",
+                "scope",
+                "report-id",
+                "period",
+                "collected-at",
+                "source-receipt-hashes"
+            ],
+            "semantic_similarity_enabled": true,
+            "default_similarity_threshold": 0.88,
+            "revalidate_against_current_snapshot": true,
+            "cross_principal_reuse": false
+        }
+    },
+    "region": {
+        "geography": "US",
+        "default_candidate": "eastus2",
+        "fallback_candidates": [
+            "eastus",
+            "centralus",
+            "westus3"
+        ],
+        "require_foundry_model_capacity_preflight": true,
+        "require_cosmos_serverless_availability_preflight": true,
+        "require_container_apps_availability_preflight": true,
+        "automatic_cross_region_fallback": true,
+        "allow_non_us": false
+    },
+    "finance": {
+        "number_type": "decimal",
+        "allowed_bases": [
+            "billed",
+            "effective"
+        ],
+        "reject_mixed_currency_totals": true,
+        "preserve_negative_charges": true,
+        "missing_is_zero": false,
+        "realized_savings_requires_post_change_evidence": true,
+        "cross_format_parity": 1
+    },
+    "rightsizing": {
+        "minimum_observation_days": 14,
+        "maximum_observation_days": 28,
+        "maximum_evidence_age_hours": 24,
+        "minimum_metric_coverage": 0.95,
+        "maximum_cpu_percent": 70,
+        "maximum_memory_fraction": 0.8,
+        "maximum_io_fraction": 0.8,
+        "maximum_network_fraction": 0.8,
+        "cross_pillar_review_required": true
+    },
+    "agent": {
+        "maximum_model_calls": 6,
+        "fast_model_calls": 3,
+        "maximum_tool_rounds": 6,
+        "maximum_output_tokens": 32768,
+        "maximum_validated_characters": 16384,
+        "deadline_seconds": 150,
+        "groundedness_minimum": 0.95,
+        "numeric_claim_citation_coverage": 1,
+        "content_safety_required": true,
+        "raw_billing_rows_allowed": false,
+        "write_tools_allowed": false
+    },
+    "reports": {
+        "core_formats": [
+            "json",
+            "csv",
+            "html",
+            "focus"
+        ],
+        "extended_formats": [
+            "xlsx",
+            "markdown",
+            "pdf"
+        ],
+        "canonical_amount_encoding": "decimal-string-no-exponent",
+        "semantic_parity_required": true,
+        "maximum_download_bytes": 16777216,
+        "formula_injection_protection": true,
+        "owner_authorization_required": true,
+        "private_artifact_root_required": true
+    },
+    "experience": {
+        "contract_ref": "spec/experience-contract.v1.json",
+        "minimum_contract_coverage": 1,
+        "minimum_screenshot_similarity": 0.95,
+        "snapshot_first_paint_p95_ms": 1000,
+        "cached_api_p95_ms": 250,
+        "local_interaction_p95_ms": 100,
+        "agent_first_status_ms": 500,
+        "desktop_width": 1366,
+        "mobile_width": 390,
+        "horizontal_overflow_allowed": false,
+        "agent_response_section_order": [
+            "Answer",
+            "Evidence",
+            "Data health",
+            "Risks",
+            "Next action"
+        ]
+    }
+}

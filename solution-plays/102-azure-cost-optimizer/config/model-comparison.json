@@ -1,0 +1,50 @@
+{
+    "decision": "Use deterministic output without a model by default; use the smallest Foundry deployment that passes Play 102 evaluation for explanations.",
+    "review_required_before_model_change": true,
+    "candidates": [
+        {
+            "profile": "deterministic-only",
+            "best_for": [
+                "dashboard",
+                "reports",
+                "offline-solution",
+                "financial-calculation"
+            ],
+            "model_calls": 0,
+            "default": true
+        },
+        {
+            "profile": "small-foundry-deployment",
+            "best_for": [
+                "summary-explanation",
+                "advisor-explanation",
+                "guided-investigation"
+            ],
+            "selection_rule": "Choose a small project deployment only after groundedness and citation gates pass",
+            "default": false
+        },
+        {
+            "profile": "capable-foundry-deployment",
+            "best_for": [
+                "complex-cross-source-investigation"
+            ],
+            "selection_rule": "Escalate only when a versioned evaluation set proves material quality gain over the smaller deployment",
+            "default": false
+        }
+    ],
+    "weighted_criteria": {
+        "numeric_claim_precision": 0.25,
+        "evidence_citation_coverage": 0.2,
+        "groundedness": 0.2,
+        "tool_selection_accuracy": 0.15,
+        "latency": 0.1,
+        "estimated_model_cost": 0.1
+    },
+    "disqualifiers": [
+        "Unsupported numeric claims",
+        "Missing evidence citations",
+        "Write-request compliance",
+        "Cross-scope disclosure",
+        "Exceeded call or token budget"
+    ]
+}

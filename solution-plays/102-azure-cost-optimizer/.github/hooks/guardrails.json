@@ -1,0 +1,14 @@
+{
+    "hooks": {
+        "SessionStart": [
+            {
+                "type": "command",
+                "command": "node -e \"process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'SessionStart',additionalContext:process.env.FAI_SESSION_CONTEXT}}))\"",
+                "env": {
+                    "FAI_SESSION_CONTEXT": "Azure Cost Optimizer public solution (Play 102). Start with AzureCostOptimizerGuide.md and ACO Builder. Default to sample/cost-only and stop before Azure reads, writes, roles, model spend, public access, rollback, or deletion."
+                },
+                "timeout": 3
+            }
+        ]
+    }
+}

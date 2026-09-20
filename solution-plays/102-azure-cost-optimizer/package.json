@@ -1,0 +1,23 @@
+{
+  "name": "azure-cost-optimizer-solution",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Complete Play 102 public distribution for Azure Cost Optimizer v99",
+  "scripts": {
+    "setup": "npm --prefix src/AzureCostOptimizer.Web ci",
+    "validate:solution": "node scripts/validate-solution.mjs",
+    "test:backend": "dotnet test tests/AzureCostOptimizer.App.Tests/AzureCostOptimizer.App.Tests.csproj --configuration Release --no-restore",
+    "restore:backend": "dotnet restore tests/AzureCostOptimizer.App.Tests/AzureCostOptimizer.App.Tests.csproj --locked-mode",
+    "build:backend": "dotnet build src/AzureCostOptimizer.App/AzureCostOptimizer.App.csproj --configuration Release --no-restore",
+    "restore:web": "npm --prefix src/AzureCostOptimizer.Web ci",
+    "build:web": "npm --prefix src/AzureCostOptimizer.Web run build",
+    "test:web": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-web.ps1",
+    "bicep": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-bicep.ps1",
+    "verify:runtime": "powershell -NoProfile -ExecutionPolicy Bypass -File ops/solution-smoke.ps1",
+    "validate": "npm run validate:solution && npm run restore:backend && npm run test:backend && npm run restore:web && npm run build:web && npm run test:web && npm run bicep",
+    "package:solution": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-solution-package.ps1"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
