@@ -1,0 +1,123 @@
+{
+  "$schema": "https://frootai.dev/schemas/solution-play-certification-evidence.v1.json",
+  "schema_version": "1.0.0",
+  "subject": {
+    "play_id": "102",
+    "slug": "102-azure-cost-optimizer",
+    "canonical_id": "frootai__102-azure-cost-optimizer",
+    "repository": "https://github.com/frootai/frootai",
+    "commit_sha": "9972c8cf79a635fc172127c3523a25873ad9ffa9",
+    "content_sha256": "219b947f5b8d1dd472b3f6b8e6824351246089a89393058d2a784237293ec822",
+    "manifest_sha256": "69969b060c3ae2ed7036fbc19a890748b0feda2f1d875ac0f85bd86626157646",
+    "iac_sha256": "d80daf32ee865c90e17cac1ee9a329a2fdca395a2c59054be110f6b8763d4b97",
+    "evaluation_dataset_sha256": "ffabd35e2fbb90ce84c8e6951f267154d4fef4ede2f472af4d390f78f476b50a"
+  },
+  "policy": {
+    "profile": "design-v1",
+    "profile_sha256": "b0bc3c9e6fb86282d610e35b01b22e1d544f683f894f5ad73f2913aed7d7d0d0"
+  },
+  "generated_at": "2026-09-20T13:44:47.646Z",
+  "stages": {
+    "designed": {
+      "status": "passed",
+      "generated_at": "2026-09-20T13:44:47.646Z",
+      "expires_at": "2026-10-20T13:44:47.646Z",
+      "provenance": {
+        "workflow": "local",
+        "run_id": "local",
+        "attempt": 1
+      },
+      "environment": {
+        "class": "local",
+        "tools": {
+          "node": "v24.18.0"
+        }
+      },
+      "checks": [
+        {
+          "id": "manifest",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "4b5d9c05215c3928b23d67cb1b15b8bcd31554d6b3e25a7046b048fdffb99855",
+          "metrics": {
+            "detail": "engine loaded 102-azure-cost-optimizer"
+          }
+        },
+        {
+          "id": "references",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "860349291c97b5d74c32474d2d069f363387409acf79c1de7f0565c719e2b5d3",
+          "metrics": {
+            "detail": "all declared references resolve"
+          }
+        },
+        {
+          "id": "architecture",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "2d3f6064549b5e08b5c2358372a1083d445fd16eeb411e84d898a74e55da25ca",
+          "metrics": {
+            "detail": "diagram, service roles, and security are declared"
+          }
+        },
+        {
+          "id": "cost",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "ed2d3273acb8bbfc77e3c68d02e284233ad4b89570cb019e09c81477bb453655",
+          "metrics": {
+            "detail": "component totals reconcile for dev, prod, and enterprise"
+          }
+        },
+        {
+          "id": "iac-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "533beeafb83e3ff2ec9bf221618dabef7a8b1c6e79fe84c500d8df54d6b50656",
+          "metrics": {
+            "detail": "infra/main.bicep"
+          }
+        },
+        {
+          "id": "evaluation-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "6c30c9aa634504fe6e599d05f24a11004427d48f7668e75219e57ced06a67666",
+          "metrics": {
+            "detail": "evaluation/run-eval.mjs"
+          }
+        },
+        {
+          "id": "observability-declaration",
+          "status": "passed",
+          "blocking": true,
+          "output_sha256": "87c4f1fc19a687e2449603e5671695f27fd8c187c5fff7b738a324a9f75206c3",
+          "metrics": {
+            "detail": "observability service is present in architecture"
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "type": "manifest",
+          "url": "solution-plays/102-azure-cost-optimizer/spec/fai-manifest.json",
+          "sha256": "69969b060c3ae2ed7036fbc19a890748b0feda2f1d875ac0f85bd86626157646",
+          "media_type": "application/json"
+        },
+        {
+          "type": "architecture",
+          "url": "solution-plays/102-azure-cost-optimizer/architecture.md",
+          "sha256": "9107fbd0a47a9c37e2fea41296d18c0cf994b2a21a3dbe67bda7a349d7e4913f",
+          "media_type": "text/markdown"
+        },
+        {
+          "type": "cost",
+          "url": "solution-plays/102-azure-cost-optimizer/cost.json",
+          "sha256": "029fb89c4b1385023c9872e1b25c0027ba7ea81bb300e87ae8d30c2bf27a6bff",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  }
+}
