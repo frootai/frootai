@@ -1,7 +1,7 @@
 # FrootAI Skills — LLM-Readable Catalog (summaries)
 > 642 self-contained Agent Skills (Azure/AI-native) following the agentskills.io standard.
 > Install any skill into 70+ agents: npx skills add frootai/frootai
-> Browse: https://frootai.dev/primitives/skills · Generated: 2026-09-21
+> Browse: https://frootai.dev/primitives/skills · Generated: 2026-09-28
 
 
 ## Deploy & Infra (153)
