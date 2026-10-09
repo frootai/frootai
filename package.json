@@ -130,7 +130,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@modelcontextprotocol/conformance": "0.1.16",
     "@modelcontextprotocol/inspector-cli": "1.0.0",
     "ajv": "^8.20.0",
