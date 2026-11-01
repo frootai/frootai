@@ -6,7 +6,8 @@
  * reports drift; write mode regenerates.
  */
 
-import { existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { closeSync, constants, fstatSync, lstatSync, mkdirSync, openSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'fs';
+import { randomUUID } from 'crypto';
 import { dirname, isAbsolute, relative, resolve } from 'path';
 import { compileManifest, DEFAULT_PROFILES_ROOT } from './harness-resolver.js';
 
@@ -89,16 +90,34 @@ function applyRenderedFiles(rendered, { write = false } = {}) {
   const errors = [...rendered.errors];
   for (const file of rendered.files) {
     let status = 'missing';
-    if (existsSync(file.absolute)) {
-      if (lstatSync(file.absolute).isSymbolicLink()) {
+    let descriptor;
+    try {
+      descriptor = openSync(file.absolute, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+      const opened = fstatSync(descriptor);
+      const current = lstatSync(file.absolute);
+      if (current.isSymbolicLink() || current.dev !== opened.dev || current.ino !== opened.ino) {
+        errors.push(`${file.target} is a symbolic link or changed while opening; refusing to materialize`);
+        continue;
+      }
+      status = normalize(readFileSync(descriptor, 'utf8')) === file.content ? 'unchanged' : 'drift';
+    } catch (error) {
+      if (error.code === 'ELOOP') {
         errors.push(`${file.target} is a symbolic link; refusing to materialize`);
         continue;
       }
-      status = normalize(readFileSync(file.absolute, 'utf8')) === file.content ? 'unchanged' : 'drift';
+      if (error.code !== 'ENOENT') throw error;
+    } finally {
+      if (descriptor !== undefined) closeSync(descriptor);
     }
     if (write && status !== 'unchanged') {
       mkdirSync(dirname(file.absolute), { recursive: true });
-      writeFileSync(file.absolute, file.content, 'utf8');
+      const temporary = resolve(dirname(file.absolute), `.fai-harness-${randomUUID()}.tmp`);
+      try {
+        writeFileSync(temporary, file.content, { encoding: 'utf8', flag: 'wx', mode: 0o600 });
+        renameSync(temporary, file.absolute);
+      } finally {
+        try { unlinkSync(temporary); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      }
       status = status === 'missing' ? 'created' : 'updated';
     }
     results.push({ target: file.target, status });

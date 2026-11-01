@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { closeSync, existsSync, mkdirSync, openSync, writeFileSync } from 'node:fs';
 import { isAbsolute, relative, resolve } from 'node:path';
 
 const KINDS = new Set(['agent', 'product', 'platform']);
@@ -27,7 +27,13 @@ function scaffoldHarnessSubject({ repoRoot, subject, kind, root, owner, descript
 
   const descriptorPath = resolve(absoluteRoot, 'harness', 'subjects', `${subject}.json`);
   if (!within(absoluteRoot, descriptorPath)) errors.push('descriptor path escapes repository');
-  if (existsSync(descriptorPath)) errors.push(`subject descriptor already exists: harness/subjects/${subject}.json`);
+  if (!write) {
+    try {
+      const existing = openSync(descriptorPath, 'r');
+      closeSync(existing);
+      errors.push(`subject descriptor already exists: harness/subjects/${subject}.json`);
+    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  }
   const descriptor = {
     $schema: '../../schemas/fai-harness-subject.schema.json',
     subject,
@@ -43,7 +49,16 @@ function scaffoldHarnessSubject({ repoRoot, subject, kind, root, owner, descript
   };
   if (write && errors.length === 0) {
     mkdirSync(resolve(absoluteRoot, 'harness', 'subjects'), { recursive: true });
-    writeFileSync(descriptorPath, `${JSON.stringify(descriptor, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
+    let descriptorFile;
+    try {
+      descriptorFile = openSync(descriptorPath, 'wx', 0o600);
+      writeFileSync(descriptorFile, `${JSON.stringify(descriptor, null, 2)}\n`, 'utf8');
+    } catch (error) {
+      if (error.code !== 'EEXIST') throw error;
+      errors.push(`subject descriptor already exists: harness/subjects/${subject}.json`);
+    } finally {
+      if (descriptorFile !== undefined) closeSync(descriptorFile);
+    }
   }
   return { descriptor, descriptorPath, errors, written: write && errors.length === 0 };
 }

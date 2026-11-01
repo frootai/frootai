@@ -89,6 +89,23 @@ test('CRLF working-tree copies are not treated as drift', () => {
   }
 });
 
+test('regeneration atomically replaces a hard link without modifying its other name', () => {
+  const instance = fixture();
+  try {
+    instance.run(true);
+    fs.unlinkSync(instance.output);
+    const other = `${instance.output}.other`;
+    fs.writeFileSync(other, 'preserve the other file');
+    fs.linkSync(other, instance.output);
+    assert.deepEqual(instance.run(true).files, [{ target: TARGET, status: 'updated' }]);
+    assert.equal(fs.readFileSync(other, 'utf8'), 'preserve the other file');
+    assert.deepEqual(instance.run().files, [{ target: TARGET, status: 'unchanged' }]);
+    assert.equal(fs.readdirSync(path.dirname(instance.output)).some(name => name.endsWith('.tmp')), false);
+  } finally {
+    instance.cleanup();
+  }
+});
+
 test('unknown placeholders fail without writing', () => {
   const f = fixture({ template: '# {{play.owner}}\n' });
   try {
