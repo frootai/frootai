@@ -1,6 +1,7 @@
 {
   "play": "78-precision-agriculture-agent",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Satellite imagery and IoT sensor fusion for crop health monitoring, irrigation scheduling, fertilization optimization, and yield prediction using digital twin simulation of farmland.",
   "context": {
     "knowledge": [
@@ -29,11 +30,6 @@
       ".github/skills/deploy-precision-agriculture-agent/",
       ".github/skills/evaluate-precision-agriculture-agent/",
       ".github/skills/tune-precision-agriculture-agent/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -51,12 +47,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

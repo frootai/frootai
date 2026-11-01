@@ -1,0 +1,38 @@
+{
+  "profile": "agent-fai-standard",
+  "version": "1.0.0",
+  "description": "Default harness for standalone FAI agent subjects and agent catalogs, with prompt safety, governance hooks, quality gates, and responsible-AI evaluation.",
+  "extends": "harness-subject-standard@1",
+  "context": {
+    "waf": [
+      "responsible-ai",
+      "cost-optimization",
+      "performance-efficiency"
+    ]
+  },
+  "primitives": {
+    "instructions": [
+      "instructions/security-owasp.instructions.md",
+      "instructions/ai-prompt-safety-waf.instructions.md",
+      "instructions/responsible-ai-coding.instructions.md"
+    ],
+    "hooks": [
+      "hooks/fai-secrets-scanner/",
+      "hooks/fai-tool-guardian/",
+      "hooks/fai-governance-audit/"
+    ],
+    "guardrails": {
+      "groundedness": 0.85,
+      "coherence": 0.8,
+      "relevance": 0.8,
+      "safety": 0,
+      "costPerQuery": 0.05
+    }
+  },
+  "evaluation": {
+    "required": [
+      "groundedness",
+      "safety"
+    ]
+  }
+}

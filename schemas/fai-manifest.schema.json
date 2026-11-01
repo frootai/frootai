@@ -16,6 +16,38 @@
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.]+)?$",
       "description": "Semantic version of this manifest."
     },
+    "extends": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*@[1-9][0-9]*$",
+      "description": "Harness profile this play inherits, as name@major (e.g., 'azure-ai-standard@1'). Resolved from harness/profiles/<name>/v<major>.json. Profile WAF pillars, instructions and hooks are a minimum; profile guardrails are defaults that the play may only tighten unless a waiver applies."
+    },
+    "waivers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule", "reason", "expires"],
+        "properties": {
+          "rule": {
+            "type": "string",
+            "enum": ["guardrails.groundedness", "guardrails.coherence", "guardrails.relevance", "guardrails.costPerQuery"],
+            "description": "Profile rule this play is allowed to loosen."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Why the profile default does not fit this play."
+          },
+          "expires": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "description": "UTC date (YYYY-MM-DD) after which the waiver no longer applies."
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true,
+      "description": "Time-bounded exceptions to the extended harness profile. Only meaningful with 'extends'."
+    },
     "context": {
       "type": "object",
       "required": ["knowledge", "waf"],

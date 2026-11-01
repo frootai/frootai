@@ -16,6 +16,26 @@ const { execSync } = require("child_process");
 
 const REPO_ROOT = process.env.FROOTAI_PUBLIC_REPO || path.resolve(__dirname, "../..");
 
+let compileManifest = null;
+try {
+  ({ compileManifest } = require("../../engine/harness-resolver.js"));
+} catch {
+  // Node without require(esm) support: fall back to raw manifests (inherited primitives are not counted).
+}
+
+/**
+ * Read a play manifest with its harness profile applied, so inherited primitives count as used.
+ * @param {string} manifestPath
+ * @returns {{ manifest: any, harness: any }}
+ */
+function readEffectiveManifest(manifestPath) {
+  if (compileManifest) {
+    const compiled = compileManifest(manifestPath);
+    if (compiled.manifest) return { manifest: compiled.manifest, harness: compiled.harness };
+  }
+  return { manifest: JSON.parse(fs.readFileSync(manifestPath, "utf8")), harness: null };
+}
+
 function gitShortSha() {
   try {
     return execSync("git rev-parse --short HEAD", { cwd: REPO_ROOT, encoding: "utf8" }).trim();
@@ -75,7 +95,7 @@ function catalog() {
     if (!play.hasManifest) continue;
     const manifestPath = path.join(REPO_ROOT, "solution-plays", play.slug, "spec", "fai-manifest.json");
     try {
-      const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+      const { manifest } = readEffectiveManifest(manifestPath);
       const refs = [];
       const primitives = manifest.primitives || {};
       for (const type of ["agents", "instructions", "skills", "hooks"]) {
@@ -209,7 +229,7 @@ function catalog() {
       const manifestPath = path.join(playsDir, d, "spec", "fai-manifest.json");
       if (!fs.existsSync(manifestPath)) continue;
       try {
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+        const { manifest, harness } = readEffectiveManifest(manifestPath);
         const prims = manifest.primitives || {};
         const primCount =
           (Array.isArray(prims.agents) ? prims.agents.length : 0) +
@@ -222,6 +242,7 @@ function catalog() {
           primitiveCount: primCount,
           wafPillars: manifest.context?.waf || [],
           guardrails: manifest.primitives?.guardrails || null,
+          harness: harness ? { extends: harness.extends, sha256: harness.sha256 } : null,
           hasInfra: fs.existsSync(path.join(playsDir, d, "infra")),
           hasTuneKit: fs.existsSync(path.join(playsDir, d, "config")),
         };
@@ -240,4 +261,4 @@ if (require.main === module) {
   catalog();
 }
 
-module.exports = { catalog };
+module.exports = { catalog, readEffectiveManifest };

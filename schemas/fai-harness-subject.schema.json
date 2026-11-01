@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/fai-harness-subject.schema.json",
+  "title": "FAI Harness Subject",
+  "description": "Attaches a shared FAI harness profile to an agent, product, or platform root without turning that subject into a Solution Play.",
+  "type": "object",
+  "required": ["subject", "kind", "version", "root", "context"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "subject": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Stable kebab-case subject identifier."
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Human-readable subject name used in generated artifacts."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["agent", "product", "platform"],
+      "description": "Subject class used to select the platform default profile."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-z0-9.]+)?$"
+    },
+    "root": {
+      "type": "string",
+      "pattern": "^(?![./\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$))[A-Za-z0-9._-]+(?:[/\\\\][A-Za-z0-9._-]+)*$",
+      "description": "Repository-relative subject root beginning with a named directory. Absolute paths, dot-prefixed roots, and parent traversal are prohibited."
+    },
+    "extends": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*@[1-9][0-9]*$",
+      "description": "Optional explicit harness profile. When omitted, the platform registry default for kind applies."
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 2
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "context": {
+      "type": "object",
+      "required": ["knowledge", "waf"],
+      "additionalProperties": false,
+      "properties": {
+        "knowledge": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "waf": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+          }
+        }
+      }
+    },
+    "primitives": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instructions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "hooks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "guardrails": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "groundedness": { "type": "number", "minimum": 0, "maximum": 1 },
+            "coherence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "relevance": { "type": "number", "minimum": 0, "maximum": 1 },
+            "safety": { "type": "integer", "minimum": 0, "maximum": 0 },
+            "costPerQuery": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "requires": {
+      "type": "object",
+      "required": ["paths"],
+      "additionalProperties": false,
+      "properties": {
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*/?$"
+          }
+        }
+      }
+    },
+    "waivers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["rule", "reason", "expires"],
+        "additionalProperties": false,
+        "properties": {
+          "rule": {
+            "enum": ["guardrails.groundedness", "guardrails.coherence", "guardrails.relevance", "guardrails.costPerQuery"]
+          },
+          "reason": { "type": "string", "minLength": 10 },
+          "expires": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+        }
+      }
+    }
+  }
+}

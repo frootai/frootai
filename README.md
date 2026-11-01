@@ -113,6 +113,18 @@ A Solution Play is wired by `fai-manifest.json`. The manifest resolves compatibl
 - [Solution Plays](./solution-plays/)
 - [Public primitives](./agents/)
 
+### Platform harness
+
+The additive [FAI Platform Harness](./harness/) applies versioned minimum controls to Solution Plays, agent catalogs, products, and platform contracts. Solution Plays retain `fai-manifest.json`; other subjects use a small `harness/subjects/*.json` descriptor and inherit the registry default for their kind.
+
+```bash
+npm run test:harness
+npm run validate:platform-harness
+npm run platform:harness:report
+```
+
+The current public reference scenario governs 102 Solution Plays plus the public agent catalog, FAI Orchard, and the FAI Protocol. Separately owned hosted and distribution products must register and validate their authoritative roots before claiming harness coverage.
+
 ## Public repository scope
 
 This repository is the public home for the FAI Protocol, schemas, conformance assets, community primitives, Solution Plays, learning content, examples, governance, and public integration contracts.

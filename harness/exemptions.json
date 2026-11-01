@@ -1,0 +1,19 @@
+{
+  "$comment": "Plays that do not yet extend a harness profile. Every entry needs a reason and a review date; scripts/harness-migrate.mjs fails on unlisted, stale or overdue entries.",
+  "plays": {
+    "46-healthcare-clinical-ai": { "reason": "security.instructions.md carries healthcare-specific content; fold it into a domain profile before migrating.", "review_by": "2026-12-31" },
+    "84-citizen-services-chatbot": { "reason": "security.instructions.md carries public-sector-specific content; fold it into a domain profile before migrating.", "review_by": "2026-12-31" },
+    "85-policy-impact-analyzer": { "reason": "security.instructions.md carries public-sector-specific content; fold it into a domain profile before migrating.", "review_by": "2026-12-31" },
+    "86-public-safety-analytics": { "reason": "security.instructions.md carries public-sector-specific content; fold it into a domain profile before migrating.", "review_by": "2026-12-31" },
+    "101-pester-test-development": { "reason": "PowerShell testing play with its own security guidance and no Azure infrastructure.", "review_by": "2026-12-31" },
+    "102-azure-cost-optimizer": { "reason": "Product play with its own security guidance and delivery contracts.", "review_by": "2026-12-31" },
+    "93-continual-learning-agent": { "reason": "Declares costPerQuery looser than the profile default; needs an owner-approved waiver.", "review_by": "2026-11-30" },
+    "94-ai-podcast-generator": { "reason": "Declares groundedness and costPerQuery looser than the profile defaults; needs owner-approved waivers.", "review_by": "2026-11-30" },
+    "95-multimodal-search-v2": { "reason": "Declares costPerQuery looser than the profile default; needs an owner-approved waiver.", "review_by": "2026-11-30" },
+    "96-realtime-voice-agent-v2": { "reason": "Declares groundedness and costPerQuery looser than the profile defaults; needs owner-approved waivers.", "review_by": "2026-11-30" },
+    "97-ai-data-marketplace": { "reason": "Declares groundedness and costPerQuery looser than the profile defaults; needs owner-approved waivers.", "review_by": "2026-11-30" },
+    "98-agent-evaluation-platform": { "reason": "Declares costPerQuery looser than the profile default; needs an owner-approved waiver.", "review_by": "2026-11-30" },
+    "99-enterprise-ai-governance-hub": { "reason": "Declares costPerQuery looser than the profile default; needs an owner-approved waiver.", "review_by": "2026-11-30" },
+    "100-fai-meta-agent": { "reason": "Declares costPerQuery looser than the profile default; needs an owner-approved waiver.", "review_by": "2026-11-30" }
+  }
+}

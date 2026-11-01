@@ -7,6 +7,17 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'solution-plays/**'
+      - 'harness/**'
+      - 'engine/harness-*.js'
+      - 'engine/platform-harness*.js'
+      - 'engine/evaluator*.js'
+      - 'engine/manifest-reader.js'
+      - 'schemas/fai-manifest.schema.json'
+      - 'schemas/fai-harness-*.schema.json'
+      - 'schemas/fai-platform-harness.schema.json'
+      - 'scripts/harness-*.mjs'
+      - 'scripts/platform-harness-*.mjs'
+      - 'scripts/generate-missing-manifests.js'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
       - 'scripts/solution-play-*.mjs'
@@ -33,6 +44,17 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'solution-plays/**'
+      - 'harness/**'
+      - 'engine/harness-*.js'
+      - 'engine/platform-harness*.js'
+      - 'engine/evaluator*.js'
+      - 'engine/manifest-reader.js'
+      - 'schemas/fai-manifest.schema.json'
+      - 'schemas/fai-harness-*.schema.json'
+      - 'schemas/fai-platform-harness.schema.json'
+      - 'scripts/harness-*.mjs'
+      - 'scripts/platform-harness-*.mjs'
+      - 'scripts/generate-missing-manifests.js'
       - 'scripts/build-solution-play-index.mjs'
       - 'scripts/test-solution-play-index.mjs'
       - 'scripts/solution-play-*.mjs'
@@ -68,6 +90,10 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Validate vNext contracts and reviewed debt
         run: |
+          npm run test:harness
+          npm run validate:harness
+          npm run harness:report
+          npm run validate:platform-harness
           npm run test:solution-play-schemas
           npm run test:solution-play-delivery-profile
           npm run validate:solution-play-delivery-profile

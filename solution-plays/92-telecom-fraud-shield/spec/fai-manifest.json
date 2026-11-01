@@ -1,6 +1,7 @@
 {
   "play": "92-telecom-fraud-shield",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Real-time telecom fraud detection covering SIM swap attacks, international revenue share fraud, subscription fraud, Wangiri callbacks, and toll fraud with sub-second blocking and explainable alert generation.",
   "context": {
     "knowledge": [
@@ -28,11 +29,6 @@
       ".github/skills/deploy-telecom-fraud-shield/",
       ".github/skills/evaluate-telecom-fraud-shield/",
       ".github/skills/tune-telecom-fraud-shield/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -50,12 +46,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

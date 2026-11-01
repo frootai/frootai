@@ -77,7 +77,17 @@ function runPlay(params) {
     context: engine.context,
     wiring: engine.wiring?.stats,
     guardrails: engine.evaluator?.thresholds,
+    harness: engine.harness
+      ? {
+          extends: engine.harness.extends,
+          profiles: engine.harness.profiles.map(profile => `${profile.reference} ${profile.version}`),
+          requiredMetrics: engine.harness.evaluation.required,
+          waivers: engine.harness.waivers,
+          sha256: engine.harness.sha256
+        }
+      : null,
     errors: engine.errors,
+    warnings: engine.warnings || [],
     duration: engine.duration
   };
 }

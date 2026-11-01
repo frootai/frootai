@@ -1,6 +1,7 @@
 {
   "play": "21-agentic-rag",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "R2-RAG-Architecture",
@@ -30,16 +31,10 @@
       "./.github/skills/evaluate-agentic-rag/",
       "./.github/skills/tune-agentic-rag/"
     ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
     "guardrails": {
       "groundedness": 0.95,
       "coherence": 0.9,
       "relevance": 0.9,
-      "safety": 0,
       "costPerQuery": 0.02
     }
   },

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fai-harness-subject.schema.json",
+  "subject": "fai-orchard",
+  "display_name": "FAI Orchard",
+  "kind": "product",
+  "version": "1.0.0",
+  "root": "orchard",
+  "owner": "FAI Orchard",
+  "description": "Public cross-cloud accelerator registry, schemas, examples, and validators.",
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "security",
+      "operational-excellence"
+    ]
+  },
+  "primitives": {},
+  "requires": {
+    "paths": [
+      "README.md",
+      "schema/",
+      "registry/",
+      "validators/"
+    ]
+  }
+}

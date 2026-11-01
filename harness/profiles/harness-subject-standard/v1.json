@@ -1,0 +1,19 @@
+{
+  "profile": "harness-subject-standard",
+  "version": "1.0.0",
+  "description": "Shared physical-artifact and operational baseline for non-play FAI subjects such as agent catalogs, products, and protocol platforms.",
+  "extends": "fai-standard@1",
+  "files": [
+    ".github/instructions/fai-harness.instructions.md"
+  ],
+  "requires": {
+    "paths": [
+      "README.md"
+    ]
+  },
+  "context": {
+    "waf": [
+      "operational-excellence"
+    ]
+  }
+}

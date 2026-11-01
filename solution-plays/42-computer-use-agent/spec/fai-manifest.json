@@ -1,6 +1,7 @@
 {
   "play": "42-computer-use-agent",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "O2-AI-Agents",
@@ -30,19 +31,7 @@
       "./.github/skills/deploy-computer-use-agent/",
       "./.github/skills/evaluate-computer-use-agent/",
       "./.github/skills/tune-computer-use-agent/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",

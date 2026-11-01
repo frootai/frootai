@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PLAYS_DIR = path.join(__dirname, '..', 'solution-plays');
+const PLATFORM_HARNESS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'harness', 'platform.json'), 'utf8'));
 
 const playDefs = [
   { num: '02', slug: 'ai-landing-zone', title: 'AI Landing Zone', knowledge: ['O5-GPU-Infra', 'T3-Production-Patterns'], waf: ['security', 'reliability', 'cost-optimization', 'operational-excellence'] },
@@ -76,9 +77,12 @@ for (const p of playDefs) {
     });
   }
 
+  const hasBicep = fs.existsSync(path.join(dir, 'infra', 'main.bicep'));
+  // Harness by default: hooks, guardrails and security rules are inherited from the profile.
   const manifest = {
     play: `${p.num}-${p.slug}`,
     version: '1.0.0',
+    extends: hasBicep ? 'azure-ai-standard@1' : PLATFORM_HARNESS.defaults['solution-play'],
     context: {
       knowledge: p.knowledge,
       waf: p.waf,
@@ -87,22 +91,10 @@ for (const p of playDefs) {
     primitives: {
       agents: agents.length > 0 ? agents : [`./.github/agents/builder.agent.md`],
       instructions: instructions.length > 0 ? instructions : [],
-      skills: skills.length > 0 ? skills : [],
-      hooks: [
-        '../../hooks/frootai-secrets-scanner/',
-        '../../hooks/frootai-tool-guardian/',
-        '../../hooks/frootai-governance-audit/'
-      ],
-      guardrails: {
-        groundedness: 0.85,
-        coherence: 0.80,
-        relevance: 0.80,
-        safety: 0,
-        costPerQuery: 0.05
-      }
+      skills: skills.length > 0 ? skills : []
     },
     infrastructure: {
-      bicep: fs.existsSync(path.join(dir, 'infra', 'main.bicep')) ? './infra/main.bicep' : null,
+      bicep: hasBicep ? './infra/main.bicep' : null,
       parameters: fs.existsSync(path.join(dir, 'infra', 'parameters.json')) ? './infra/parameters.json' : null
     },
     toolkit: {
@@ -122,6 +114,7 @@ for (const p of playDefs) {
 }
 
 console.log(`\nCreated: ${created} manifests`);
+if (created > 0) console.log('Run npm run harness:write to generate harness-owned play files, then npm run validate:harness.');
 console.log(`Total plays with manifests: ${fs.readdirSync(PLAYS_DIR).filter(f => {
   try {
     return fs.statSync(path.join(PLAYS_DIR, f)).isDirectory() &&

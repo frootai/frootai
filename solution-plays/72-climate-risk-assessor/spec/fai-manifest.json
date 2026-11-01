@@ -1,6 +1,7 @@
 {
   "play": "72-climate-risk-assessor",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Climate scenario modeling for financial risk assessment — physical risk, transition risk, and insurance underwriting with explainable AI decisions.",
   "context": {
     "knowledge": [
@@ -29,11 +30,6 @@
       ".github/skills/deploy-climate-risk-assessor/",
       ".github/skills/evaluate-climate-risk-assessor/",
       ".github/skills/tune-climate-risk-assessor/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -51,12 +47,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

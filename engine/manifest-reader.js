@@ -39,10 +39,35 @@ function loadManifest(manifestPath) {
   }
 
   // playDir is the play root — if manifest is in spec/, go up one level
-  let playDir = dirname(absPath);
-  if (basename(playDir) === 'spec') {
-    playDir = dirname(playDir);
-  }
+  const playDir = playDirFor(absPath);
+
+  errors.push(...validateManifest(manifest));
+
+  return { manifest, playDir, errors };
+}
+
+/**
+ * Play root for a manifest path (manifests may live in the play root or in spec/).
+ * @param {string} manifestPath
+ * @returns {string}
+ */
+function playDirFor(manifestPath) {
+  const dir = dirname(resolve(manifestPath));
+  return basename(dir) === 'spec' ? dirname(dir) : dir;
+}
+
+const HARNESS_REFERENCE = /^[a-z][a-z0-9-]*@[1-9][0-9]*$/;
+const WAIVABLE_RULES = new Set([
+  'guardrails.groundedness', 'guardrails.coherence', 'guardrails.relevance', 'guardrails.costPerQuery'
+]);
+
+/**
+ * Validate the required fields and quality gates of a parsed manifest.
+ * @param {object} manifest - Parsed (or harness-compiled) fai-manifest.json
+ * @returns {string[]} Validation errors
+ */
+function validateManifest(manifest) {
+  const errors = [];
 
   // Validate required fields
   if (!manifest.play || !/^[0-9]{2,3}-[a-z0-9-]+$/.test(manifest.play)) {
@@ -51,6 +76,37 @@ function loadManifest(manifestPath) {
 
   if (!manifest.version || !/^[0-9]+\.[0-9]+\.[0-9]+/.test(manifest.version)) {
     errors.push(`version must be semver (got "${manifest.version}")`);
+  }
+
+  if (manifest.extends !== undefined && (typeof manifest.extends !== 'string' || !HARNESS_REFERENCE.test(manifest.extends))) {
+    errors.push(`extends must be "profile-name@major" (got "${manifest.extends}")`);
+  }
+
+  if (manifest.waivers !== undefined) {
+    if (manifest.extends === undefined) {
+      errors.push('waivers require extends');
+    } else if (!Array.isArray(manifest.waivers)) {
+      errors.push('waivers must be an array');
+    } else {
+      const rules = new Set();
+      for (const waiver of manifest.waivers) {
+        const keys = waiver && typeof waiver === 'object' ? Object.keys(waiver) : [];
+        if (keys.some(k => !['rule', 'reason', 'expires'].includes(k))) {
+          errors.push(`waiver has unknown fields: ${keys.join(', ')}`);
+          continue;
+        }
+        if (!WAIVABLE_RULES.has(waiver.rule)) errors.push(`waiver rule is not waivable (got "${waiver.rule}")`);
+        if (rules.has(waiver.rule)) errors.push(`duplicate waiver for ${waiver.rule}`);
+        rules.add(waiver.rule);
+        if (typeof waiver.reason !== 'string' || waiver.reason.trim().length < 10) {
+          errors.push(`waiver ${waiver.rule} needs a reason of at least 10 characters`);
+        }
+        if (typeof waiver.expires !== 'string' || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(waiver.expires)
+          || Number.isNaN(Date.parse(`${waiver.expires}T00:00:00Z`))) {
+          errors.push(`waiver ${waiver.rule} expires must be a YYYY-MM-DD date (got "${waiver.expires}")`);
+        }
+      }
+    }
   }
 
   // Context validation
@@ -84,7 +140,7 @@ function loadManifest(manifestPath) {
     }
   }
 
-  return { manifest, playDir, errors };
+  return errors;
 }
 
 /**
@@ -145,4 +201,4 @@ function resolvePaths(manifest, playDir) {
   return { resolved, missing };
 }
 
-export { loadManifest, resolvePaths };
+export { loadManifest, validateManifest, resolvePaths, playDirFor, WAF_PILLARS };

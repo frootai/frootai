@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fai-harness-subject.schema.json",
+  "subject": "agent-catalog",
+  "display_name": "FAI Agent Catalog",
+  "kind": "agent",
+  "version": "1.0.0",
+  "root": "agents",
+  "owner": "FAI primitives",
+  "description": "Public catalog of reusable FAI agent primitives and lifecycle roles.",
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "security",
+      "responsible-ai"
+    ]
+  },
+  "primitives": {},
+  "requires": {
+    "paths": [
+      "README.md",
+      "AGENTS.md",
+      "fai-play-dispatcher.agent.md"
+    ]
+  }
+}

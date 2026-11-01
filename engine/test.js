@@ -119,7 +119,7 @@ test('loadManifest — validates primitives section exists', () => {
 test('loadManifest — loads all play manifests without errors', () => {
   const playsDir = path.join(ROOT, 'solution-plays');
   const plays = fs.readdirSync(playsDir).filter(f => /^\d{2,3}-/.test(f) && fs.statSync(path.join(playsDir, f)).isDirectory());
-  assertEqual(plays.length, 101, 'all 101 play directories should enter manifest validation');
+  assertEqual(plays.length, 102, 'all 102 play directories should enter manifest validation');
   let failures = [];
   for (const play of plays) {
     // Check both root and spec/ locations

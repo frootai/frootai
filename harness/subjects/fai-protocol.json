@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fai-harness-subject.schema.json",
+  "subject": "fai-protocol",
+  "display_name": "FAI Protocol",
+  "kind": "platform",
+  "version": "1.0.0",
+  "root": "fai-protocol",
+  "owner": "FAI Protocol",
+  "description": "Canonical public protocol specification, versioning policy, and conformance examples.",
+  "context": {
+    "knowledge": [
+      "F1-GenAI-Foundations"
+    ],
+    "waf": [
+      "security",
+      "reliability",
+      "operational-excellence"
+    ]
+  },
+  "primitives": {},
+  "requires": {
+    "paths": [
+      "README.md",
+      "VERSIONING.md",
+      "examples/"
+    ]
+  }
+}

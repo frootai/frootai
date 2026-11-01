@@ -1,6 +1,7 @@
 {
   "play": "09-ai-search-portal",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "R2-RAG-Architecture",
@@ -29,19 +30,7 @@
       "./.github/skills/deploy-ai-search-portal/",
       "./.github/skills/evaluate-ai-search-portal/",
       "./.github/skills/tune-ai-search-portal/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",

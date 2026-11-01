@@ -268,6 +268,25 @@ function checkRecord(id, status, command, startedAt, finishedAt, exitCode, outpu
   return { id, status, blocking: true, command, started_at: startedAt, finished_at: finishedAt, exit_code: exitCode, output_sha256: sha256(output) };
 }
 
+function isRetryableWindowsRenameError(error) {
+  return process.platform === 'win32' && ['EPERM', 'EACCES', 'EBUSY'].includes(error?.code);
+}
+
+async function renameWithRetry(sourcePath, targetPath, { attempts = 12, baseDelayMilliseconds = 25 } = {}) {
+  let lastError;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      fs.renameSync(sourcePath, targetPath);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (!isRetryableWindowsRenameError(error) || attempt === attempts - 1) throw error;
+      await new Promise((resolve) => setTimeout(resolve, baseDelayMilliseconds * (attempt + 1)));
+    }
+  }
+  throw lastError;
+}
+
 function verifyEvidenceIntegrity(document) {
   const copy = structuredClone(document);
   const expected = copy.integrity.evidence_sha256;
@@ -275,12 +294,12 @@ function verifyEvidenceIntegrity(document) {
   return expected === sha256(stableJson(copy));
 }
 
-function writeAtomicFailure(outputRoot, targetName, payload) {
+async function writeAtomicFailure(outputRoot, targetName, payload) {
   const suffix = crypto.randomUUID();
   const temp = path.join(outputRoot, `${targetName}.failure-${suffix}.tmp`);
   const final = path.join(outputRoot, `${targetName}.failure-${suffix}.json`);
   fs.writeFileSync(temp, stableJson(payload), { encoding: 'utf8', flag: 'wx' });
-  fs.renameSync(temp, final);
+  await renameWithRetry(temp, final, { attempts: 8, baseDelayMilliseconds: 20 });
   return final;
 }
 
@@ -334,10 +353,10 @@ export async function certifyCleanCheckout({
         let alive = true;
         try { process.kill(existing?.pid, 0); } catch { alive = false; }
         if (attempt === 0 && existing && existing.source_sha === sourceSha && Number.isFinite(age) && age > lockTimeoutSeconds * 1000 && !alive) {
-          fs.renameSync(lockPath, path.join(outputRoot, `${targetName}.stale-lock-${crypto.randomUUID()}.json`));
+          await renameWithRetry(lockPath, path.join(outputRoot, `${targetName}.stale-lock-${crypto.randomUUID()}.json`), { attempts: 8, baseDelayMilliseconds: 20 });
           continue;
         }
-        const receipt = writeAtomicFailure(outputRoot, targetName, { status: 'contended', source_sha: sourceSha, lock: existing, stale: !alive });
+        const receipt = await writeAtomicFailure(outputRoot, targetName, { status: 'contended', source_sha: sourceSha, lock: existing, stale: !alive });
         return { status: 'contended', failure_receipt: receipt };
       }
     }
@@ -466,12 +485,12 @@ export async function certifyCleanCheckout({
     const bundleSha = sha256(stableJson(manifest));
     writeJson(path.join(stagingRoot, 'bundle-manifest.json'), manifest);
     writeJson(path.join(stagingRoot, 'verdict.json'), { schema_version: '1.0.0', status: 'passed', certification_scope: 'fixture-only', public_state: 'Designed', promotion_allowed: false, source_sha: sourceSha, generated_at: generatedAt, expires_at: new Date(generatedTime + policy.ttl_hours * 3600000).toISOString(), structural_digest: source.structural_digest, bundle_sha256: bundleSha });
-    fs.renameSync(stagingRoot, targetRoot);
+    await renameWithRetry(stagingRoot, targetRoot);
     stagingRoot = null;
     return { status: 'passed', bundle_path: targetRoot, bundle_sha256: bundleSha, structural_digest: source.structural_digest };
   } catch (error) {
     if (stagingRoot && fs.existsSync(stagingRoot)) fs.rmSync(stagingRoot, { recursive: true, force: true });
-    const failureReceipt = writeAtomicFailure(outputRoot, targetName, { status: 'failed', source_sha: sourceSha, reason: error.message, cleanup_attempted: cleanupAttempted, published: false });
+    const failureReceipt = await writeAtomicFailure(outputRoot, targetName, { status: 'failed', source_sha: sourceSha, reason: error.message, cleanup_attempted: cleanupAttempted, published: false });
     return { status: 'failed', reason: error.message, failure_receipt: failureReceipt };
   } finally {
     if (checkoutRoot && fs.existsSync(checkoutRoot)) fs.rmSync(checkoutRoot, { recursive: true, force: true });
