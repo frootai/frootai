@@ -1,0 +1,18 @@
+{
+  "profile": "azure-ai-standard",
+  "version": "1.0.0",
+  "description": "Agent baseline plus Azure delivery rules: cost and operational excellence pillars, Azure Verified Module Bicep and Cloud Adoption Framework security instructions.",
+  "extends": "solution-play-standard@1",
+  "context": {
+    "waf": [
+      "cost-optimization",
+      "operational-excellence"
+    ]
+  },
+  "primitives": {
+    "instructions": [
+      "instructions/azure-bicep-avm.instructions.md",
+      "instructions/caf-security.instructions.md"
+    ]
+  }
+}

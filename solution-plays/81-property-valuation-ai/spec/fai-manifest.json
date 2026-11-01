@@ -1,6 +1,7 @@
 {
   "play": "81-property-valuation-ai",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Automated property appraisal combining comparable sales analysis, market trend prediction, neighborhood scoring, and satellite imagery assessment for real estate valuation and mortgage underwriting.",
   "context": {
     "knowledge": [
@@ -28,11 +29,6 @@
       ".github/skills/deploy-property-valuation-ai/",
       ".github/skills/evaluate-property-valuation-ai/",
       ".github/skills/tune-property-valuation-ai/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -50,12 +46,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

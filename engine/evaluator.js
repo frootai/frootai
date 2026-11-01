@@ -20,25 +20,37 @@ const DEFAULTS = {
 /**
  * Create an evaluator with guardrail thresholds from a manifest.
  * @param {object} guardrails - manifest.primitives.guardrails
+ * @param {{ required?: string[] }} [options] - metrics that must be scored for a pass
  * @returns {object} Evaluator instance
  */
-function createEvaluator(guardrails = {}) {
+function createEvaluator(guardrails = {}, { required = [] } = {}) {
   const thresholds = { ...DEFAULTS, ...guardrails };
+  const requiredMetrics = [...new Set(required)];
 
   return {
     thresholds,
+    required: requiredMetrics,
 
     /**
      * Evaluate a response against guardrail thresholds.
+     * A pass needs at least one scored gate, numeric scores, and every required metric.
      * @param {object} scores - { groundedness, coherence, relevance, safety, cost }
      * @returns {{ pass: boolean, results: object[], summary: string }}
      */
-    evaluate(scores) {
+    evaluate(scores = {}) {
       const results = [];
       let allPass = true;
 
+      for (const [metric, value] of Object.entries(scores || {})) {
+        if (value !== undefined && (typeof value !== 'number' || !Number.isFinite(value))) {
+          results.push({ metric: metric === 'cost' ? 'costPerQuery' : metric, score: value, threshold: null, pass: false, action: 'invalid' });
+          allPass = false;
+        }
+      }
+      const numeric = (metric) => typeof scores?.[metric] === 'number' && Number.isFinite(scores[metric]);
+
       // Groundedness check
-      if (scores.groundedness !== undefined) {
+      if (numeric('groundedness')) {
         const pass = scores.groundedness >= thresholds.groundedness;
         results.push({
           metric: 'groundedness',
@@ -51,7 +63,7 @@ function createEvaluator(guardrails = {}) {
       }
 
       // Coherence check
-      if (scores.coherence !== undefined) {
+      if (numeric('coherence')) {
         const pass = scores.coherence >= thresholds.coherence;
         results.push({
           metric: 'coherence',
@@ -64,7 +76,7 @@ function createEvaluator(guardrails = {}) {
       }
 
       // Relevance check
-      if (scores.relevance !== undefined) {
+      if (numeric('relevance')) {
         const pass = scores.relevance >= thresholds.relevance;
         results.push({
           metric: 'relevance',
@@ -77,7 +89,7 @@ function createEvaluator(guardrails = {}) {
       }
 
       // Safety check (must be exactly 0 violations)
-      if (scores.safety !== undefined) {
+      if (numeric('safety')) {
         const pass = scores.safety <= thresholds.safety;
         results.push({
           metric: 'safety',
@@ -90,7 +102,7 @@ function createEvaluator(guardrails = {}) {
       }
 
       // Cost check
-      if (scores.cost !== undefined && thresholds.costPerQuery) {
+      if (numeric('cost') && thresholds.costPerQuery) {
         const pass = scores.cost <= thresholds.costPerQuery;
         results.push({
           metric: 'costPerQuery',
@@ -102,10 +114,22 @@ function createEvaluator(guardrails = {}) {
         if (!pass) allPass = false;
       }
 
+      for (const metric of requiredMetrics) {
+        const key = metric === 'costPerQuery' ? 'cost' : metric;
+        if (!(key in (scores || {})) || scores[key] === undefined) {
+          results.push({ metric, score: null, threshold: thresholds[metric] ?? null, pass: false, action: 'not-evaluated' });
+          allPass = false;
+        }
+      }
+
+      if (results.length === 0) {
+        return { pass: false, results, summary: '❌ No quality gates were evaluated' };
+      }
+
       const failed = results.filter(r => !r.pass);
       const summary = allPass
         ? `✅ All ${results.length} quality gates passed`
-        : `❌ ${failed.length}/${results.length} quality gates failed: ${failed.map(f => `${f.metric} (${f.score} < ${f.threshold})`).join(', ')}`;
+        : `❌ ${failed.length}/${results.length} quality gates failed: ${failed.map(f => f.action === 'not-evaluated' ? `${f.metric} (not evaluated)` : f.action === 'invalid' ? `${f.metric} (invalid score)` : `${f.metric} (${f.score} vs ${f.threshold})`).join(', ')}`;
 
       return { pass: allPass, results, summary };
     },
@@ -117,7 +141,7 @@ function createEvaluator(guardrails = {}) {
       const lines = ['📊 FAI Quality Evaluation Report', '─'.repeat(40)];
       for (const r of evalResult.results) {
         const icon = r.pass ? '✅' : '❌';
-        const pct = typeof r.score === 'number' && r.score <= 1 ? `${(r.score * 100).toFixed(1)}%` : r.score;
+        const pct = r.score === null ? 'n/a' : typeof r.score === 'number' && r.score <= 1 ? `${(r.score * 100).toFixed(1)}%` : r.score;
         lines.push(`  ${icon} ${r.metric}: ${pct} (threshold: ${r.threshold}, action: ${r.action})`);
       }
       lines.push('─'.repeat(40));

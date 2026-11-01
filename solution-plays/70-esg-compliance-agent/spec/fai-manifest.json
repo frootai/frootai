@@ -1,6 +1,7 @@
 {
   "play": "70-esg-compliance-agent",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Environmental, Social, and Governance reporting automation with regulatory framework compliance (GRI, SASB, TCFD, EU CSRD) and stakeholder dashboard generation.",
   "context": {
     "knowledge": [
@@ -28,11 +29,6 @@
       ".github/skills/deploy-esg-compliance-agent/",
       ".github/skills/evaluate-esg-compliance-agent/",
       ".github/skills/tune-esg-compliance-agent/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -50,12 +46,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

@@ -1,6 +1,7 @@
 {
   "play": "38-document-understanding-v2",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "F1-GenAI-Foundations",
@@ -28,19 +29,7 @@
       "./.github/skills/deploy-document-understanding-v2/",
       "./.github/skills/evaluate-document-understanding-v2/",
       "./.github/skills/tune-document-understanding-v2/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",

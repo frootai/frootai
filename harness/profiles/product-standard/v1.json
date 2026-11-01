@@ -1,0 +1,12 @@
+{
+  "profile": "product-standard",
+  "version": "1.0.0",
+  "description": "Default harness for FAI products, adding cost and performance accountability to the shared security, reliability, and operational baseline.",
+  "extends": "harness-subject-standard@1",
+  "context": {
+    "waf": [
+      "cost-optimization",
+      "performance-efficiency"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/fai-platform-harness.schema.json",
+  "schema_version": "1.0.0",
+  "defaults": {
+    "solution-play": "solution-play-standard@1",
+    "agent": "agent-fai-standard@1",
+    "product": "product-standard@1",
+    "platform": "platform-standard@1"
+  },
+  "subjects_directory": "harness/subjects",
+  "solution_plays": {
+    "root": "solution-plays",
+    "manifest": "spec/fai-manifest.json",
+    "exemptions": "harness/exemptions.json"
+  }
+}

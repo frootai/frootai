@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/fai-platform-harness.schema.json",
+  "title": "FAI Platform Harness Registry",
+  "description": "Repository-level defaults and discovery rules for Solution Plays and generic harness subjects.",
+  "type": "object",
+  "required": ["schema_version", "defaults", "subjects_directory", "solution_plays"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "format": "uri-reference" },
+    "schema_version": { "const": "1.0.0" },
+    "defaults": {
+      "type": "object",
+      "required": ["solution-play", "agent", "product", "platform"],
+      "additionalProperties": false,
+      "properties": {
+        "solution-play": { "$ref": "#/definitions/profileReference" },
+        "agent": { "$ref": "#/definitions/profileReference" },
+        "product": { "$ref": "#/definitions/profileReference" },
+        "platform": { "$ref": "#/definitions/profileReference" }
+      }
+    },
+    "subjects_directory": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$"
+    },
+    "solution_plays": {
+      "type": "object",
+      "required": ["root", "manifest", "exemptions"],
+      "additionalProperties": false,
+      "properties": {
+        "root": { "type": "string", "pattern": "^[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$" },
+        "manifest": { "const": "spec/fai-manifest.json" },
+        "exemptions": { "type": "string", "pattern": "^[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*\\.json$" }
+      }
+    }
+  },
+  "definitions": {
+    "profileReference": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*@[1-9][0-9]*$"
+    }
+  }
+}

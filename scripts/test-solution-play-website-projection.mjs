@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, readSolutionPlayArtifact, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
+const { buildSolutionPlayArtifactManifest, buildSolutionPlayProjection, readSolutionPlayArtifact, renderSolutionPlayDetails, renderSolutionPlayProjection, repositoryCommitSha } = require("./factory/adapters/website.js");
 const index = JSON.parse(fs.readFileSync(path.join(root, "orchard", "registry", "solution-play-index.json"), "utf8"));
 
 test("generates a deterministic typed projection for all 102 canonical identities", () => {
@@ -61,6 +61,20 @@ test("rendered TypeScript is stable and excludes unsupported readiness claims", 
   assert.equal(source.includes('status: "Ready"'), false);
   assert.doesNotMatch(source, /production[- ](?:ready|grade)/i);
   assert.match(source, /export const solutionPlays = solutionPlayProjection\.plays/);
+});
+
+test("all inherited guardrails remain lossless within the detail module budget", () => {
+  const metadata = index.plays.map((play) => ({
+    slug: play.slug,
+    architecturePattern: "documented-solution",
+    wafPillars: ["security", "reliability", "operational-excellence", "responsible-ai"],
+    sourceInventory: { manifest: true, rootAgent: true, configuration: true, infrastructure: true, evaluation: true, agents: 3, skills: 3, instructions: 3, hooks: 1 },
+    guardrails: { groundedness: 0.9, coherence: 0.85, relevance: 0.85, safety: 0, costPerQuery: 0.05 },
+    runtime: null,
+  }));
+  const source = renderSolutionPlayDetails({ details: metadata, source: index.source, count: 102, runtimeContractCount: 0 });
+  assert.ok(Buffer.byteLength(source) < 100_000);
+  assert.ok(source.includes(JSON.stringify(metadata)), "the compact representation preserves every inherited value");
 });
 
 test("artifact manifest binds the three projections to one full source commit", () => {

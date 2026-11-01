@@ -1,6 +1,7 @@
 {
   "play": "76-accessibility-learning-agent",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Screen reader-first, dyslexia-aware learning platform with multi-modal content adaptation, text-to-speech, and personalized accessibility profiles.",
   "context": {
     "knowledge": [
@@ -28,11 +29,6 @@
       ".github/skills/deploy-accessibility-learning-agent/",
       ".github/skills/evaluate-accessibility-learning-agent/",
       ".github/skills/tune-accessibility-learning-agent/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -50,12 +46,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

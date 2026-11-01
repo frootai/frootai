@@ -1,0 +1,6 @@
+{
+  "profile": "solution-play-standard",
+  "version": "1.0.0",
+  "description": "Neutral Solution Play default that preserves the established agent-play controls while giving the platform registry a stable kind-level attachment point.",
+  "extends": "agent-standard@1"
+}

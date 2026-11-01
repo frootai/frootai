@@ -1,6 +1,7 @@
 {
   "play": "01-enterprise-rag",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "R2-RAG-Architecture",
@@ -30,11 +31,6 @@
       "./.github/skills/deploy-enterprise-rag/",
       "./.github/skills/evaluate-enterprise-rag/",
       "./.github/skills/tune-enterprise-rag/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ],
     "guardrails": {
       "groundedness": 0.95,

@@ -1,0 +1,11 @@
+{
+  "profile": "platform-standard",
+  "version": "1.0.0",
+  "description": "Default harness for FAI platform contracts, completing all six Well-Architected pillars on top of the shared product baseline.",
+  "extends": "product-standard@1",
+  "context": {
+    "waf": [
+      "responsible-ai"
+    ]
+  }
+}

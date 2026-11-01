@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://frootai.dev/schemas/fai-harness-profile.schema.json",
+  "title": "FAI Harness Profile",
+  "description": "A versioned, inheritable harness that solution plays adopt with `extends`. Lives at harness/profiles/<profile>/v<major>.json.",
+  "type": "object",
+  "required": ["profile", "version", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "profile": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Profile name; must equal the folder name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version; the major must equal the file name (v<major>.json)."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "extends": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*@[1-9][0-9]*$",
+      "description": "Parent profile as name@major."
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "waf": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["security", "reliability", "cost-optimization", "operational-excellence", "performance-efficiency", "responsible-ai"]
+          },
+          "description": "Minimum WAF pillars every adopting play enforces."
+        }
+      }
+    },
+    "primitives": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instructions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[^/\\\\].*\\.instructions\\.md$" },
+          "description": "Repository-relative instruction files every adopting play inherits."
+        },
+        "hooks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^hooks/[a-z0-9-]+/$" },
+          "description": "Repository-relative hook folders every adopting play inherits."
+        },
+        "guardrails": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "groundedness": { "type": "number", "minimum": 0, "maximum": 1 },
+            "coherence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "relevance": { "type": "number", "minimum": 0, "maximum": 1 },
+            "safety": { "type": "integer", "minimum": 0, "maximum": 0 },
+            "costPerQuery": { "type": "number", "minimum": 0 }
+          },
+          "description": "Default quality gates; plays may only tighten them without a waiver."
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^\\.github/[A-Za-z0-9._/-]+\\.md$" },
+      "description": "Play files generated from harness/profiles/<profile>/files/<target>."
+    },
+    "requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths"],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*/?$" },
+          "description": "Play-relative files or folders that must exist."
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required"],
+      "properties": {
+        "required": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["groundedness", "coherence", "relevance", "safety", "costPerQuery"] },
+          "description": "Metrics that must be scored before an evaluation can pass."
+        }
+      }
+    }
+  }
+}

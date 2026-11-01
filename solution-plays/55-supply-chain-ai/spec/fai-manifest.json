@@ -1,6 +1,7 @@
 {
   "play": "55-supply-chain-ai",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "T3-Production-Patterns",
@@ -28,19 +29,7 @@
       "./.github/skills/deploy-supply-chain-ai/",
       "./.github/skills/evaluate-supply-chain-ai/",
       "./.github/skills/tune-supply-chain-ai/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",

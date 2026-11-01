@@ -1,6 +1,7 @@
 {
   "play": "75-exam-generation-engine",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Auto-generate exams from curriculum with difficulty calibration, rubric generation, answer key creation, and anti-cheating question variation.",
   "context": {
     "knowledge": [
@@ -27,11 +28,6 @@
       ".github/skills/deploy-exam-generation-engine/",
       ".github/skills/evaluate-exam-generation-engine/",
       ".github/skills/tune-exam-generation-engine/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -48,12 +44,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

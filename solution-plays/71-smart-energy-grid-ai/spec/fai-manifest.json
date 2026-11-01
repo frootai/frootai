@@ -1,6 +1,7 @@
 {
   "play": "71-smart-energy-grid-ai",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "AI-driven energy demand prediction, renewable source optimization, and grid balancing using digital twin simulation and real-time IoT telemetry.",
   "context": {
     "knowledge": [
@@ -30,11 +31,6 @@
       ".github/skills/deploy-smart-energy-grid-ai/",
       ".github/skills/evaluate-smart-energy-grid-ai/",
       ".github/skills/tune-smart-energy-grid-ai/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -52,12 +48,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

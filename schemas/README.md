@@ -1,8 +1,8 @@
 # FrootAI — JSON Schemas
 
-> Validation schemas for all FrootAI primitive types. 7 schemas enforcing structure across 770+ files.
+> Validation schemas for FrootAI primitives, play wiring, and platform harness subjects. 10 core schemas enforcing structure across 770+ files.
 
-## Schema Inventory (7 schemas)
+## Schema Inventory (10 schemas)
 
 | Schema | Validates | Required Fields | Status |
 |--------|-----------|-----------------|--------|
@@ -13,14 +13,17 @@
 | `plugin.schema.json` | `plugin.json` metadata | `name`, `description`, `version`, `author.name`, `license` | ✅ Done |
 | `fai-manifest.schema.json` | FAI Protocol play wiring | `play`, `version`, `context`, `primitives` | ✅ Done |
 | `fai-context.schema.json` | LEGO block context | (none required — all optional) | ✅ Done |
+| `fai-harness-profile.schema.json` | Versioned harness profiles | `profile`, `version`, `description` | ✅ Done |
+| `fai-harness-subject.schema.json` | Agent, product, and platform roots | `subject`, `kind`, `version`, `root`, `context` | ✅ Done |
+| `fai-platform-harness.schema.json` | Repository harness registry | `schema_version`, `defaults`, discovery roots | ✅ Done |
 
 ## Competitor Comparison
 
 | Aspect | Awesome-Copilot | FrootAI | Delta |
 |--------|----------------|---------|-------|
-| JSON Schemas | 3 | **7** | +4 |
-| Primitive coverage | 3 types | **7 types** | +4 |
-| FAI Protocol schemas | 0 | **2** (manifest + context) | +2 |
+| JSON Schemas | 3 | **10** | +7 |
+| Primitive and harness coverage | 3 types | **10 types** | +7 |
+| FAI Protocol schemas | 0 | **5** (manifest + context + harness contracts) | +5 |
 | WAF enum validation | 0 | **1** (6-pillar enum) | +1 |
 
 ## Usage
@@ -36,6 +39,41 @@ node scripts/validate-primitives.js plugins/
 # Verbose output (shows each check)
 node scripts/validate-primitives.js --verbose
 ```
+
+## Harness Profiles (`extends`)
+
+A play can inherit a shared harness instead of copying it:
+
+```json
+{ "play": "78-precision-agriculture-agent", "version": "1.0.0", "extends": "azure-ai-standard@1" }
+```
+
+- Profiles live in `harness/profiles/<name>/v<major>.json` and may extend one another (`azure-ai-standard@1` extends `agent-standard@1`).
+- Profile WAF pillars, instructions and hooks are a **minimum**; the play adds its own.
+- Profile guardrails are **defaults**. A play may tighten them freely. Loosening needs a `waivers` entry with `rule`, `reason` and a UTC `expires` date; expired or unnecessary waivers fail.
+- Manifests without `extends` behave exactly as before.
+- Profiles may own generated play files (`files`, `.github/**/*.md` only), rendered from `harness/profiles/<name>/files/` with `{{play.title}}` / `{{play.id}}`. Generated files carry a marker; edit the template, not the play copy.
+
+Inspect the compiled result, including where every value came from and a deterministic `sha256`:
+
+```bash
+node engine/index.js solution-plays/78-precision-agriculture-agent/spec/fai-manifest.json --effective
+npm run test:harness
+npm run validate:harness   # fails on drift in generated play files
+npm run harness:write      # regenerate them
+```
+
+## Platform Harness Subjects
+
+Agents, products, and platform contracts use `harness/subjects/*.json` rather than pretending to be numbered Solution Plays. The repository registry in `harness/platform.json` applies a default profile by subject kind, auto-discovers descriptors, and combines them with Solution Play health in one report.
+
+```bash
+npm run platform:harness:report
+npm run validate:platform-harness
+npm run platform:harness:init -- --id my-product --kind product --root products/my-product --owner "Product team" --description "My governed FAI product"
+```
+
+See [`harness/README.md`](../harness/README.md) for the contract layers, default profile hierarchy, onboarding flow, and current working subjects.
 
 ## Solution Play vNext Contracts
 

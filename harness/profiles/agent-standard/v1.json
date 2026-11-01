@@ -1,0 +1,47 @@
+{
+  "profile": "agent-standard",
+  "version": "1.2.0",
+  "description": "Baseline harness for every FrootAI agent play: security, responsible AI and reliability pillars, prompt-safety and OWASP instructions, shared guard hooks and default quality gates.",
+  "extends": "fai-standard@1",
+  "files": [
+    ".github/instructions/security.instructions.md"
+  ],
+  "requires": {
+    "paths": [
+      "evaluation/",
+      "config/guardrails.json"
+    ]
+  },
+  "evaluation": {
+    "required": [
+      "groundedness",
+      "safety"
+    ]
+  },
+  "context": {
+    "waf": [
+      "security",
+      "responsible-ai",
+      "reliability"
+    ]
+  },
+  "primitives": {
+    "instructions": [
+      "instructions/security-owasp.instructions.md",
+      "instructions/ai-prompt-safety-waf.instructions.md",
+      "instructions/responsible-ai-coding.instructions.md"
+    ],
+    "hooks": [
+      "hooks/fai-secrets-scanner/",
+      "hooks/fai-tool-guardian/",
+      "hooks/fai-governance-audit/"
+    ],
+    "guardrails": {
+      "groundedness": 0.85,
+      "coherence": 0.8,
+      "relevance": 0.8,
+      "safety": 0,
+      "costPerQuery": 0.05
+    }
+  }
+}

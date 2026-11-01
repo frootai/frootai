@@ -1,6 +1,7 @@
 {
   "play": "69-carbon-footprint-tracker",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "description": "Real-time carbon accounting across cloud resources and supply chain with automated ESG reporting and reduction recommendations.",
   "context": {
     "knowledge": [
@@ -28,11 +29,6 @@
       ".github/skills/deploy-carbon-footprint-tracker/",
       ".github/skills/evaluate-carbon-footprint-tracker/",
       ".github/skills/tune-carbon-footprint-tracker/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
     ]
   },
   "infrastructure": {
@@ -50,12 +46,5 @@
     "devkit": ".github/",
     "tunekit": "config/",
     "speckit": "spec/"
-  },
-  "guardrails": {
-    "groundedness": 0.85,
-    "coherence": 0.8,
-    "relevance": 0.8,
-    "safety": 0,
-    "costPerQuery": 0.05
   }
 }

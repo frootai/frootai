@@ -1,6 +1,7 @@
 {
   "play": "64-ai-sales-assistant",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "O2-AI-Agents",
@@ -29,19 +30,7 @@
       "./.github/skills/deploy-ai-sales-assistant/",
       "./.github/skills/evaluate-ai-sales-assistant/",
       "./.github/skills/tune-ai-sales-assistant/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",

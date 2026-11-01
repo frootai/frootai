@@ -12,17 +12,21 @@
  *   node engine/index.js <path-to-fai-manifest.json>           # Load + validate
  *   node engine/index.js <path-to-fai-manifest.json> --status  # Show wiring status
  *   node engine/index.js <path-to-fai-manifest.json> --eval    # Run evaluation check
+ *   node engine/index.js <path-to-fai-manifest.json> --effective  # Print compiled harness JSON
  *
  * This v0.1 focuses on: manifest loading, context resolution, primitive wiring,
  * and evaluation. Full runtime execution (hook running, agent dispatch) comes in v0.2.
  */
 
-import { loadManifest, resolvePaths } from './manifest-reader.js';
+import { resolvePaths } from './manifest-reader.js';
+import { compileManifest, listProfiles } from './harness-resolver.js';
 import { buildContext } from './context-resolver.js';
 import { wirePrimitives } from './primitive-wirer.js';
 import { createEvaluator } from './evaluator.js';
 import { runHooksForEvent } from './hook-runner.js';
 import { createRequire } from 'module';
+import { resolve } from 'path';
+import { pathToFileURL } from 'url';
 
 // ESM/CJS bridge: The engine is ESM but moonshot/ is a CommonJS module
 // (third-party code that uses require/module.exports). Node's ESM loader
@@ -45,14 +49,16 @@ function initEngine(manifestPath) {
   const startTime = Date.now();
   const allErrors = [];
 
-  // Step 1: Load and validate manifest — parse JSON, check required fields
-  const { manifest, playDir, errors: loadErrors } = loadManifest(manifestPath);
+  // Step 1: Load and validate manifest — parse JSON, check required fields, and
+  // compile any `extends` harness profile into the effective manifest
+  const { manifest, playDir, errors: loadErrors, warnings = [], harness } = compileManifest(manifestPath);
   allErrors.push(...loadErrors);
 
   if (!manifest) {
     return {
       success: false,
       errors: allErrors,
+      warnings,
       duration: Date.now() - startTime
     };
   }
@@ -77,7 +83,7 @@ function initEngine(manifestPath) {
   // Step 5: Create evaluator — build a quality gate checker from the manifest's
   // guardrails thresholds (groundedness, coherence, relevance, safety, cost)
   const guardrails = manifest.primitives?.guardrails || {};
-  const evaluator = createEvaluator(guardrails);
+  const evaluator = createEvaluator(guardrails, { required: harness?.evaluation?.required || [] });
 
   // Step 6: Initialize moonshot contracts (v2.0 — optional, backwards-compatible)
   // Moonshot adds advanced capabilities (memory, observability, cost tracking, etc.)
@@ -97,6 +103,7 @@ function initEngine(manifestPath) {
     success: allErrors.length === 0,
     manifest,
     playDir,
+    harness,
     context: {
       scope: context.scope,
       knowledgeCount: context.knowledge.length,
@@ -111,6 +118,7 @@ function initEngine(manifestPath) {
     moonshot: moonshotSuite,
     hookPaths: resolved.hooks,
     errors: allErrors,
+    warnings,
     duration: Date.now() - startTime
   };
 }
@@ -133,6 +141,9 @@ function printStatus(engine) {
   console.log(`  Scope:     ${engine.context.scope}`);
   console.log(`  Knowledge: ${engine.context.knowledgeCount} FROOT modules`);
   console.log(`  WAF:       ${engine.context.wafCount} pillars enforced`);
+  if (engine.harness) {
+    console.log(`  Harness:   ${engine.harness.extends} (${engine.harness.sha256.slice(0, 12)})`);
+  }
   console.log('');
 
   // Wiring stats
@@ -163,6 +174,10 @@ function printStatus(engine) {
   } else {
     console.log('  ✅ All primitives wired, context resolved, guardrails set');
   }
+  if (engine.warnings?.length > 0) {
+    console.log(`  ⚠️  ${engine.warnings.length} warning(s):`);
+    engine.warnings.forEach(w => console.log(`    • ${w}`));
+  }
 
   // Moonshot contracts (v2.0)
   if (engine.moonshot) {
@@ -185,11 +200,17 @@ function printStatus(engine) {
 
 // ─── CLI Entry Point ──────────────────────────────────
 
-if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\\\/g, '/'))) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const args = process.argv.slice(2);
   const manifestPath = args.find(a => !a.startsWith('-'));
   const showStatus = args.includes('--status') || !args.find(a => a.startsWith('--'));
   const runEval = args.includes('--eval');
+  const showEffective = args.includes('--effective');
+
+  if (args.includes('--profiles')) {
+    console.log(JSON.stringify(listProfiles(), null, 2));
+    process.exit(0);
+  }
 
   if (!manifestPath) {
     console.log('🍊 FAI Engine v0.1');
@@ -198,6 +219,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\\\/g,
     console.log('  node engine/index.js <path-to-fai-manifest.json>');
     console.log('  node engine/index.js <path> --status   Show wiring status');
     console.log('  node engine/index.js <path> --eval     Run evaluation check');
+    console.log('  node engine/index.js <path> --effective  Print the compiled harness as JSON');
+    console.log('  node engine/index.js --profiles        List available harness profiles');
     console.log('');
     console.log('The FAI Engine reads fai-manifest.json and orchestrates the FAI Protocol.');
     console.log('It resolves context, wires primitives, runs hooks, and evaluates quality.');
@@ -208,6 +231,17 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\\\/g,
 
   if (showStatus) {
     printStatus(engine);
+  }
+
+  if (showEffective) {
+    console.log(JSON.stringify({
+      success: engine.success,
+      play: engine.manifest?.play,
+      harness: engine.harness,
+      effective: engine.manifest,
+      errors: engine.errors,
+      warnings: engine.warnings
+    }, null, 2));
   }
 
   if (runEval) {

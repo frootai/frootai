@@ -1,0 +1,21 @@
+{
+  "profile": "fai-standard",
+  "version": "1.0.0",
+  "description": "Platform-wide minimum for every FAI-governed subject: security and reliability alignment, zero safety violations, and a required safety evaluation.",
+  "context": {
+    "waf": [
+      "security",
+      "reliability"
+    ]
+  },
+  "primitives": {
+    "guardrails": {
+      "safety": 0
+    }
+  },
+  "evaluation": {
+    "required": [
+      "safety"
+    ]
+  }
+}

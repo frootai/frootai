@@ -1,6 +1,7 @@
 {
   "play": "19-edge-ai-phi4",
   "version": "1.0.0",
+  "extends": "azure-ai-standard@1",
   "context": {
     "knowledge": [
       "F2-LLM-Landscape",
@@ -28,19 +29,7 @@
       "./.github/skills/deploy-edge-ai-phi4/",
       "./.github/skills/evaluate-edge-ai-phi4/",
       "./.github/skills/tune-edge-ai-phi4/"
-    ],
-    "hooks": [
-      "../../hooks/fai-secrets-scanner/",
-      "../../hooks/fai-tool-guardian/",
-      "../../hooks/fai-governance-audit/"
-    ],
-    "guardrails": {
-      "groundedness": 0.85,
-      "coherence": 0.8,
-      "relevance": 0.8,
-      "safety": 0,
-      "costPerQuery": 0.05
-    }
+    ]
   },
   "infrastructure": {
     "bicep": "./infra/main.bicep",
